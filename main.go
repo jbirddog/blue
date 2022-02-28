@@ -8,8 +8,7 @@ import (
 )
 
 type Instr interface {
-	Compile(*Environment)
-	Interpret(*Environment)
+	Run(*Environment)
 }
 
 type GoCaller func(*Environment)
@@ -18,11 +17,7 @@ type CallGoInstr struct {
 	F GoCaller
 }
 
-func (i *CallGoInstr) Compile(env *Environment) {
-	log.Fatal("TODO: compile call go instr")
-}
-
-func (i *CallGoInstr) Interpret(env *Environment) {
+func (i *CallGoInstr) Run(env *Environment) {
 	i.F(env)
 }
 
@@ -63,9 +58,22 @@ func DefaultDictionary() *Dictionary {
 	}
 }
 
+func (d *Dictionary) Find(wordName string) *Word {
+	wordsLen := len(d.Words)
+
+	for i := wordsLen - 1; i >= 0; i-- {
+		if d.Words[i].Name == wordName {
+			return d.Words[i]
+		}
+	}
+
+	return nil
+}
+
 type Environment struct {
 	Compiling  bool
 	Dictionary *Dictionary
+	DataStack  []Instr
 	InputBuf   string
 }
 
@@ -86,11 +94,31 @@ func (e *Environment) ReadNextWord() string {
 	return word
 }
 
+func (e *Environment) ParseNextWord() {
+	name := e.ReadNextWord()
+	if len(name) == 0 {
+		return
+	}
+
+	if word := e.Dictionary.Find(name); word != nil {
+		for _, instr := range word.Code {
+			if e.Compiling {
+				log.Fatal("TODO: Compile Instr")
+			} else {
+				instr.Run(e)
+			}
+		}
+		return
+	}
+
+	// TODO push number to stack
+
+}
+
 func main() {
 	env := NewEnvironmentForFile("blue/sys.blue")
+	env.ParseNextWord()
 
-	fmt.Println(env.ReadNextWord())
-	fmt.Println(env.ReadNextWord())
 	fmt.Println("ok")
 }
 
@@ -105,5 +133,18 @@ func Split2(s string, delim string) (string, string) {
 }
 
 func kernel_colon(env *Environment) {
-	fmt.Println("KERNEL_COLON")
+	if env.Compiling {
+		log.Fatal(": expects interpretation mode")
+	}
+
+	env.Compiling = true
+
+	name := env.ReadNextWord()
+	if len(name) == 0 {
+		log.Fatal(": expects a name")
+	}
+
+	word := NewWord(name)
+
+	fmt.Println("KERNEL_COLON", word.Name)
 }
