@@ -70,6 +70,14 @@ func (i *LiteralIntInstr) Run(env *Environment) {
 	log.Fatal("Cannot run literal int instructions")
 }
 
+type CallWordInstr struct {
+	Word *Word
+}
+
+func (i *CallWordInstr) Run(env *Environment) {
+	log.Fatal("Cannot run call word instructions")
+}
+
 const (
 	WordFlag_Immediate = 1 << iota
 )
@@ -112,7 +120,7 @@ func (w *Word) IsImmediate() bool {
 	return w.Flags&WordFlag_Immediate == WordFlag_Immediate
 }
 
-func CallGoWord(name string, f GoCaller) *Word {
+func NewCallGoWord(name string, f GoCaller) *Word {
 	return &Word{
 		Name: name,
 		Code: []Instr{&CallGoInstr{F: f}},
@@ -132,9 +140,9 @@ func DefaultDictionary() *Dictionary {
 	return &Dictionary{
 		Name: "default",
 		Words: []*Word{
-			CallGoWord(":", kernel_colon),
-			CallGoWord("(", kernel_lparen).Immediate(),
-			CallGoWord(";", kernel_semi).Immediate(),
+			NewCallGoWord(":", kernel_colon),
+			NewCallGoWord("(", kernel_lparen).Immediate(),
+			NewCallGoWord(";", kernel_semi).Immediate(),
 		},
 	}
 }
@@ -183,6 +191,10 @@ func (e *Environment) ReadNextWord() string {
 		wordEnd = len(buf) - 1
 	}
 
+	if wordEnd == -1 {
+		return ""
+	}
+
 	word := buf[:wordEnd]
 	e.InputBuf = buf[wordEnd:]
 
@@ -198,14 +210,14 @@ func (e *Environment) ParseNextWord() bool {
 	var instr Instr
 
 	if word := e.Dictionary.Find(name); word != nil {
-		for _, instr := range word.Code {
-			if !e.Compiling || word.IsImmediate() {
+		if !e.Compiling || word.IsImmediate() {
+			for _, instr := range word.Code {
 				instr.Run(e)
-			} else {
-				log.Fatal("TODO: Compile Instr", name)
 			}
+			return true
 		}
-		return true
+
+		instr = &CallWordInstr{Word: word}
 	}
 
 	if x8664Mnemonics[name] {
