@@ -4,34 +4,9 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"strconv"
 	"strings"
 )
-
-type Instr interface {
-	Run(*Environment)
-}
-
-type GoCaller func(*Environment)
-
-type CallGoInstr struct {
-	F GoCaller
-}
-
-func (i *CallGoInstr) Run(env *Environment) {
-	i.F(env)
-}
-
-var x8664Mnemonics = map[string]bool{
-	"syscall": true,
-}
-
-type X8664Instr struct {
-	Mnemonic string
-}
-
-func (i *X8664Instr) Run(env *Environment) {
-	log.Fatal("Cannot run x8664 instructions")
-}
 
 // TODO R8D..., RAX..., R8...
 const (
@@ -59,6 +34,40 @@ var registers = map[string]int{
 type RegisterRef struct {
 	Name string
 	Reg  string
+}
+
+type Instr interface {
+	Run(*Environment)
+}
+
+type GoCaller func(*Environment)
+
+type CallGoInstr struct {
+	F GoCaller
+}
+
+func (i *CallGoInstr) Run(env *Environment) {
+	i.F(env)
+}
+
+var x8664Mnemonics = map[string]bool{
+	"syscall": true,
+}
+
+type X8664Instr struct {
+	Mnemonic string
+}
+
+func (i *X8664Instr) Run(env *Environment) {
+	log.Fatal("Cannot run x8664 instructions")
+}
+
+type LiteralIntInstr struct {
+	I int
+}
+
+func (i *LiteralIntInstr) Run(env *Environment) {
+	log.Fatal("Cannot run literal int instructions")
 }
 
 const (
@@ -171,7 +180,7 @@ func (e *Environment) ReadNextWord() string {
 	wordEnd := strings.IndexAny(buf, " \t\r\n")
 
 	if wordEnd == -1 {
-		wordEnd = len(buf)-1
+		wordEnd = len(buf) - 1
 	}
 
 	word := buf[:wordEnd]
@@ -186,6 +195,8 @@ func (e *Environment) ParseNextWord() bool {
 		return false
 	}
 
+	var instr Instr
+
 	if word := e.Dictionary.Find(name); word != nil {
 		for _, instr := range word.Code {
 			if !e.Compiling || word.IsImmediate() {
@@ -198,21 +209,25 @@ func (e *Environment) ParseNextWord() bool {
 	}
 
 	if x8664Mnemonics[name] {
-		instr := &X8664Instr{Mnemonic: name}
-
-		if e.Compiling {
-			e.Dictionary.Latest().PushInstr(instr)
-		} else {
-			instr.Run(e)
-		}
-
-		return true
+		instr = &X8664Instr{Mnemonic: name}
 	}
 
-	fmt.Println("Did not find", name)
+	if i, err := strconv.Atoi(name); err == nil {
+		instr = &LiteralIntInstr{I: i}
+	}
 
-	// TODO push number to stack
-	return false
+	if instr == nil {
+		fmt.Println("Did not find", name)
+		return false
+	}
+
+	if e.Compiling {
+		e.Dictionary.Latest().PushInstr(instr)
+	} else {
+		instr.Run(e)
+	}
+
+	return true
 }
 
 func main() {
