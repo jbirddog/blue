@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"os"
 	"strconv"
 	"strings"
+	"bufio"
 )
 
 // TODO R8D..., RAX..., R8...
@@ -80,6 +82,7 @@ func (i *CallWordInstr) Run(env *Environment) {
 
 const (
 	WordFlag_Immediate = 1 << iota
+	WordFlag_HiddenFromAsm
 )
 
 const (
@@ -100,6 +103,10 @@ func (w *Word) PushInstr(instr Instr) {
 }
 
 func (w *Word) PushRegisterRef(name, reg string, target int) {
+	if _, found := registers[reg]; !found {
+		log.Fatal("Unknown register", reg)
+	}
+
 	ref := &RegisterRef{Name: name, Reg: reg}
 
 	if target == RegisterRefTarget_Input {
@@ -120,10 +127,15 @@ func (w *Word) IsImmediate() bool {
 	return w.Flags&WordFlag_Immediate == WordFlag_Immediate
 }
 
+func (w *Word) IsHiddenFromAsm() bool {
+	return w.Flags&WordFlag_HiddenFromAsm == WordFlag_HiddenFromAsm
+}
+
 func NewCallGoWord(name string, f GoCaller) *Word {
 	return &Word{
-		Name: name,
-		Code: []Instr{&CallGoInstr{F: f}},
+		Name:  name,
+		Flags: WordFlag_HiddenFromAsm,
+		Code:  []Instr{&CallGoInstr{F: f}},
 	}
 }
 
@@ -165,6 +177,16 @@ func (d *Dictionary) Find(wordName string) *Word {
 
 func (d *Dictionary) Latest() *Word {
 	return d.Words[len(d.Words)-1]
+}
+
+func (d *Dictionary) WriteGlobalDeclarations(w *bufio.Writer) {
+	for _, word := range d.Words {
+		if word.IsHiddenFromAsm() {
+			continue
+		}
+
+		fmt.Fprintf(w, "global %s\n", word.Name)
+	}
 }
 
 type Environment struct {
@@ -242,17 +264,34 @@ func (e *Environment) ParseNextWord() bool {
 	return true
 }
 
+func (e *Environment) Validate() {
+	if e.Compiling {
+		log.Fatal("Still compiling")
+	}
+}
+
+func (e *Environment) WriteAsm(filename string) {
+	file, err := os.Create(filename)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+
+	writer := bufio.NewWriter(file)
+	defer writer.Flush()
+
+	e.Dictionary.WriteGlobalDeclarations(writer)
+}
+
 func main() {
 	env := NewEnvironmentForFile("blue/sys.blue")
 
 	for env.ParseNextWord() {
 	}
 
-	fmt.Println(len(env.Dictionary.Words))
-	fmt.Println(env.Dictionary.Latest().Name)
-	fmt.Println(len(env.Dictionary.Latest().Inputs))
-	fmt.Println(len(env.Dictionary.Latest().Outputs))
-	fmt.Println(len(env.Dictionary.Latest().Code))
+	env.Validate()
+	env.WriteAsm("blue/sys.asm")
+
 	fmt.Println("ok")
 }
 
@@ -276,8 +315,6 @@ func kernel_colon(env *Environment) {
 
 	word := NewWord(name)
 	env.Dictionary.Append(word)
-
-	fmt.Println("KERNEL_COLON", word.Name)
 }
 
 func kernel_lparen(env *Environment) {
@@ -295,6 +332,11 @@ func kernel_lparen(env *Environment) {
 			continue
 		}
 
+		if nextWord == "noret" {
+			// TODO need to surface
+			continue
+		}
+
 		if nextWord == ")" {
 			break
 		}
@@ -302,12 +344,8 @@ func kernel_lparen(env *Environment) {
 		parts := strings.SplitN(nextWord, ":", 2)
 		latest.PushRegisterRef(parts[0], parts[len(parts)-1], target)
 	}
-
-	fmt.Println("KERNEL_LPAREN")
 }
 
 func kernel_semi(env *Environment) {
 	env.Compiling = false
-
-	fmt.Println("KERNEL_SEMI")
 }
