@@ -21,6 +21,18 @@ func (i *CallGoInstr) Run(env *Environment) {
 	i.F(env)
 }
 
+var x8664Mnemonics = map[string]bool{
+	"syscall": true,
+}
+
+type X8664Instr struct {
+	Mnemonic string
+}
+
+func (i *X8664Instr) Run(env *Environment) {
+	log.Fatal("Cannot run x8664 instructions")
+}
+
 // TODO R8D..., RAX..., R8...
 const (
 	eax = iota
@@ -53,12 +65,33 @@ const (
 	WordFlag_Immediate = 1 << iota
 )
 
+const (
+	RegisterRefTarget_Input = iota
+	RegisterRefTarget_Output
+)
+
 type Word struct {
 	Name    string
 	Flags   uint
 	Inputs  []*RegisterRef
 	Outputs []*RegisterRef
 	Code    []Instr
+}
+
+func (w *Word) PushInstr(instr Instr) {
+	w.Code = append(w.Code, instr)
+}
+
+func (w *Word) PushRegisterRef(name, reg string, target int) {
+	ref := &RegisterRef{Name: name, Reg: reg}
+
+	if target == RegisterRefTarget_Input {
+		w.Inputs = append(w.Inputs, ref)
+	} else if target == RegisterRefTarget_Output {
+		w.Outputs = append(w.Outputs, ref)
+	} else {
+		log.Fatal("Invalid register ref target")
+	}
 }
 
 func (w *Word) Immediate() *Word {
@@ -92,6 +125,7 @@ func DefaultDictionary() *Dictionary {
 		Words: []*Word{
 			CallGoWord(":", kernel_colon),
 			CallGoWord("(", kernel_lparen).Immediate(),
+			CallGoWord(";", kernel_semi).Immediate(),
 		},
 	}
 }
@@ -134,8 +168,14 @@ func NewEnvironmentForFile(filename string) *Environment {
 
 func (e *Environment) ReadNextWord() string {
 	buf := strings.TrimLeft(e.InputBuf, " \t\r\n")
-	word, buf := Split2(buf, " ")
-	e.InputBuf = buf
+	wordEnd := strings.IndexAny(buf, " \t\r\n")
+
+	if wordEnd == -1 {
+		wordEnd = len(buf)-1
+	}
+
+	word := buf[:wordEnd]
+	e.InputBuf = buf[wordEnd:]
 
 	return word
 }
@@ -151,9 +191,21 @@ func (e *Environment) ParseNextWord() bool {
 			if !e.Compiling || word.IsImmediate() {
 				instr.Run(e)
 			} else {
-				log.Fatal("TODO: Compile Instr")
+				log.Fatal("TODO: Compile Instr", name)
 			}
 		}
+		return true
+	}
+
+	if x8664Mnemonics[name] {
+		instr := &X8664Instr{Mnemonic: name}
+
+		if e.Compiling {
+			e.Dictionary.Latest().PushInstr(instr)
+		} else {
+			instr.Run(e)
+		}
+
 		return true
 	}
 
@@ -169,6 +221,11 @@ func main() {
 	for env.ParseNextWord() {
 	}
 
+	fmt.Println(len(env.Dictionary.Words))
+	fmt.Println(env.Dictionary.Latest().Name)
+	fmt.Println(len(env.Dictionary.Latest().Inputs))
+	fmt.Println(len(env.Dictionary.Latest().Outputs))
+	fmt.Println(len(env.Dictionary.Latest().Code))
 	fmt.Println("ok")
 }
 
@@ -197,5 +254,33 @@ func kernel_colon(env *Environment) {
 }
 
 func kernel_lparen(env *Environment) {
-	fmt.Println("kERNEL_LPAREN")
+	target := RegisterRefTarget_Input
+	latest := env.Dictionary.Latest()
+
+	for {
+		nextWord := env.ReadNextWord()
+		if len(nextWord) == 0 {
+			log.Fatal("( unexpected eof")
+		}
+
+		if nextWord == "--" {
+			target = RegisterRefTarget_Output
+			continue
+		}
+
+		if nextWord == ")" {
+			break
+		}
+
+		parts := strings.SplitN(nextWord, ":", 2)
+		latest.PushRegisterRef(parts[0], parts[len(parts)-1], target)
+	}
+
+	fmt.Println("KERNEL_LPAREN")
+}
+
+func kernel_semi(env *Environment) {
+	env.Compiling = false
+
+	fmt.Println("KERNEL_SEMI")
 }
