@@ -21,16 +21,53 @@ func (i *CallGoInstr) Run(env *Environment) {
 	i.F(env)
 }
 
+// TODO R8D..., RAX..., R8...
+const (
+	eax = iota
+	ecx
+	edx
+	ebx
+	esp
+	ebp
+	esi
+	edi
+)
+
+var registers = map[string]int{
+	"eax": eax,
+	"ecx": ecx,
+	"edx": edx,
+	"ebx": ebx,
+	"esp": esp,
+	"ebp": ebp,
+	"esi": esi,
+	"edi": edi,
+}
+
 type RegisterRef struct {
 	Name string
 	Reg  string
 }
 
+const (
+	WordFlag_Immediate = 1 << iota
+)
+
 type Word struct {
 	Name    string
+	Flags   uint
 	Inputs  []*RegisterRef
 	Outputs []*RegisterRef
 	Code    []Instr
+}
+
+func (w *Word) Immediate() *Word {
+	w.Flags |= WordFlag_Immediate
+	return w
+}
+
+func (w *Word) IsImmediate() bool {
+	return w.Flags&WordFlag_Immediate == WordFlag_Immediate
 }
 
 func CallGoWord(name string, f GoCaller) *Word {
@@ -54,8 +91,13 @@ func DefaultDictionary() *Dictionary {
 		Name: "default",
 		Words: []*Word{
 			CallGoWord(":", kernel_colon),
+			CallGoWord("(", kernel_lparen).Immediate(),
 		},
 	}
+}
+
+func (d *Dictionary) Append(word *Word) {
+	d.Words = append(d.Words, word)
 }
 
 func (d *Dictionary) Find(wordName string) *Word {
@@ -68,6 +110,10 @@ func (d *Dictionary) Find(wordName string) *Word {
 	}
 
 	return nil
+}
+
+func (d *Dictionary) Latest() *Word {
+	return d.Words[len(d.Words)-1]
 }
 
 type Environment struct {
@@ -94,30 +140,34 @@ func (e *Environment) ReadNextWord() string {
 	return word
 }
 
-func (e *Environment) ParseNextWord() {
+func (e *Environment) ParseNextWord() bool {
 	name := e.ReadNextWord()
 	if len(name) == 0 {
-		return
+		return false
 	}
 
 	if word := e.Dictionary.Find(name); word != nil {
 		for _, instr := range word.Code {
-			if e.Compiling {
-				log.Fatal("TODO: Compile Instr")
-			} else {
+			if !e.Compiling || word.IsImmediate() {
 				instr.Run(e)
+			} else {
+				log.Fatal("TODO: Compile Instr")
 			}
 		}
-		return
+		return true
 	}
 
-	// TODO push number to stack
+	fmt.Println("Did not find", name)
 
+	// TODO push number to stack
+	return false
 }
 
 func main() {
 	env := NewEnvironmentForFile("blue/sys.blue")
-	env.ParseNextWord()
+
+	for env.ParseNextWord() {
+	}
 
 	fmt.Println("ok")
 }
@@ -133,10 +183,6 @@ func Split2(s string, delim string) (string, string) {
 }
 
 func kernel_colon(env *Environment) {
-	if env.Compiling {
-		log.Fatal(": expects interpretation mode")
-	}
-
 	env.Compiling = true
 
 	name := env.ReadNextWord()
@@ -145,6 +191,11 @@ func kernel_colon(env *Environment) {
 	}
 
 	word := NewWord(name)
+	env.Dictionary.Append(word)
 
 	fmt.Println("KERNEL_COLON", word.Name)
+}
+
+func kernel_lparen(env *Environment) {
+	fmt.Println("kERNEL_LPAREN")
 }
