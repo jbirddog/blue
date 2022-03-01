@@ -53,7 +53,7 @@ func (i *CallGoInstr) Run(env *Environment) {
 }
 
 var x8664Mnemonics = map[string]bool{
-	"ret": true,
+	"ret":     true,
 	"syscall": true,
 }
 
