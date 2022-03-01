@@ -1,13 +1,13 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
 	"strconv"
 	"strings"
-	"bufio"
 )
 
 // TODO R8D..., RAX..., R8...
@@ -53,6 +53,7 @@ func (i *CallGoInstr) Run(env *Environment) {
 }
 
 var x8664Mnemonics = map[string]bool{
+	"ret": true,
 	"syscall": true,
 }
 
@@ -187,6 +188,19 @@ func (d *Dictionary) WriteGlobalDeclarations(w *bufio.Writer) {
 
 		fmt.Fprintf(w, "global %s\n", word.Name)
 	}
+
+	fmt.Fprint(w, "\n")
+}
+
+func (d *Dictionary) WriteWords(w *bufio.Writer) {
+	for _, word := range d.Words {
+		if word.IsHiddenFromAsm() {
+			continue
+		}
+
+		fmt.Fprintf(w, "%s:\n", word.Name)
+		fmt.Fprint(w, "\n")
+	}
 }
 
 type Environment struct {
@@ -281,6 +295,7 @@ func (e *Environment) WriteAsm(filename string) {
 	defer writer.Flush()
 
 	e.Dictionary.WriteGlobalDeclarations(writer)
+	e.Dictionary.WriteWords(writer)
 }
 
 func main() {
@@ -348,4 +363,8 @@ func kernel_lparen(env *Environment) {
 
 func kernel_semi(env *Environment) {
 	env.Compiling = false
+	instr := &X8664Instr{Mnemonic: "ret"}
+	latest := env.Dictionary.Latest()
+
+	latest.PushInstr(instr)
 }
