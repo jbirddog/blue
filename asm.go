@@ -8,14 +8,14 @@ import (
 )
 
 type AsmInstr interface {
-	StringRepresentation() string
+	String() string
 }
 
 type AsmGlobalInstr struct {
 	Label string
 }
 
-func (i *AsmGlobalInstr) StringRepresentation() string {
+func (i *AsmGlobalInstr) String() string {
 	return fmt.Sprintf("global %s\n", i.Label)
 }
 
@@ -23,7 +23,7 @@ type AsmLabelInstr struct {
 	Name string
 }
 
-func (i *AsmLabelInstr) StringRepresentation() string {
+func (i *AsmLabelInstr) String() string {
 	return fmt.Sprintf("\n%s:\n", i.Name)
 }
 
@@ -31,7 +31,7 @@ type AsmCallInstr struct {
 	Label string
 }
 
-func (i *AsmCallInstr) StringRepresentation() string {
+func (i *AsmCallInstr) String() string {
 	return fmt.Sprintf("\tcall %s\n", i.Label)
 }
 
@@ -39,7 +39,7 @@ type AsmNoOperandInstr struct {
 	Mnemonic string
 }
 
-func (i *AsmNoOperandInstr) StringRepresentation() string {
+func (i *AsmNoOperandInstr) String() string {
 	return fmt.Sprintf("\t%s\n", i.Mnemonic)
 }
 
@@ -49,7 +49,7 @@ type AsmBinaryInstr struct {
 	Op2      string
 }
 
-func (i *AsmBinaryInstr) StringRepresentation() string {
+func (i *AsmBinaryInstr) String() string {
 	return fmt.Sprintf("\t%s %s, %s\n", i.Mnemonic, i.Op1, i.Op2)
 }
 
@@ -57,9 +57,9 @@ type AsmWriter struct {
 	sb strings.Builder
 }
 
-func (w *AsmWriter) WriteStringRepresentationToFile(filename string, instrs []AsmInstr) {
+func (w *AsmWriter) WriteStringToFile(filename string, instrs []AsmInstr) {
 	for _, instr := range instrs {
-		w.sb.WriteString(instr.StringRepresentation())
+		w.sb.WriteString(instr.String())
 	}
 
 	output := []byte(w.sb.String())
