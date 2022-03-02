@@ -16,7 +16,7 @@ type AsmGlobalInstr struct {
 }
 
 func (i *AsmGlobalInstr) StringRepresentation() string {
-	return "global " + i.Label
+	return fmt.Sprintf("global %s\n", i.Label)
 }
 
 type AsmLabelInstr struct {

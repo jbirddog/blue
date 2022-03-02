@@ -1,11 +1,9 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"io/ioutil"
 	"log"
-	"os"
 	"strconv"
 	"strings"
 )
@@ -180,27 +178,28 @@ func (d *Dictionary) Latest() *Word {
 	return d.Words[len(d.Words)-1]
 }
 
-func (d *Dictionary) WriteGlobalDeclarations(w *bufio.Writer) {
+func (d *Dictionary) AppendGlobalDecls(asmInstrs []AsmInstr) []AsmInstr {
 	for _, word := range d.Words {
 		if word.IsHiddenFromAsm() {
 			continue
 		}
 
-		fmt.Fprintf(w, "global %s\n", word.Name)
+		asmInstrs = append(asmInstrs, &AsmGlobalInstr{Label: word.Name})
 	}
 
-	fmt.Fprint(w, "\n")
+	return asmInstrs
 }
 
-func (d *Dictionary) WriteWords(w *bufio.Writer) {
+func (d *Dictionary) AppendWords(asmInstrs []AsmInstr) []AsmInstr {
 	for _, word := range d.Words {
 		if word.IsHiddenFromAsm() {
 			continue
 		}
 
-		fmt.Fprintf(w, "%s:\n", word.Name)
-		fmt.Fprint(w, "\n")
+		asmInstrs = append(asmInstrs, &AsmLabelInstr{Name: word.Name})
 	}
+
+	return asmInstrs
 }
 
 type Environment struct {
@@ -285,17 +284,13 @@ func (e *Environment) Validate() {
 }
 
 func (e *Environment) WriteAsm(filename string) {
-	file, err := os.Create(filename)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer file.Close()
+	var asmInstrs []AsmInstr
+	var asmWriter AsmWriter
 
-	writer := bufio.NewWriter(file)
-	defer writer.Flush()
+	asmInstrs = e.Dictionary.AppendGlobalDecls(asmInstrs)
+	asmInstrs = e.Dictionary.AppendWords(asmInstrs)
 
-	e.Dictionary.WriteGlobalDeclarations(writer)
-	e.Dictionary.WriteWords(writer)
+	asmWriter.WriteStringRepresentationToFile(filename, asmInstrs)
 }
 
 func main() {
