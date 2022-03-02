@@ -390,13 +390,13 @@ func (e *Environment) WriteAsm(filename string) {
 }
 
 func main() {
-	env := NewEnvironmentForFile("blue/sys.blue")
+	env := NewEnvironmentForFile("blue/examples/exit33.blue")
 
 	for env.ParseNextWord() {
 	}
 
 	env.Validate()
-	env.WriteAsm("blue/sys.asm")
+	env.WriteAsm("blue/examples/exit33.asm")
 
 	fmt.Println("ok")
 }
