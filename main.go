@@ -120,6 +120,9 @@ func (i *CallWordInstr) Lower(context *LowerContext) {
 		}
 	}
 
+	calledWordOutputs := i.Word.OutputRegisters()
+	context.Inputs = append(context.Inputs, calledWordOutputs...)
+
 	context.AppendAsmInstr(&AsmCallInstr{Label: i.Word.Name})
 }
 
@@ -130,6 +133,7 @@ func (i *CallWordInstr) Run(env *Environment) {
 const (
 	WordFlag_Immediate = 1 << iota
 	WordFlag_HiddenFromAsm
+	WordFlag_NoReturn
 )
 
 const (
@@ -170,12 +174,21 @@ func (w *Word) Immediate() *Word {
 	return w
 }
 
+func (w *Word) NoReturn() *Word {
+	w.Flags |= WordFlag_NoReturn
+	return w
+}
+
 func (w *Word) IsImmediate() bool {
 	return w.Flags&WordFlag_Immediate == WordFlag_Immediate
 }
 
 func (w *Word) IsHiddenFromAsm() bool {
 	return w.Flags&WordFlag_HiddenFromAsm == WordFlag_HiddenFromAsm
+}
+
+func (w *Word) IsNoReturn() bool {
+	return w.Flags&WordFlag_NoReturn == WordFlag_NoReturn
 }
 
 func (w *Word) InputRegisters() []string {
@@ -426,7 +439,7 @@ func kernel_lparen(env *Environment) {
 		}
 
 		if nextWord == "noret" {
-			// TODO need to surface
+			latest.NoReturn()
 			continue
 		}
 
@@ -441,8 +454,9 @@ func kernel_lparen(env *Environment) {
 
 func kernel_semi(env *Environment) {
 	env.Compiling = false
-	instr := &X8664Instr{Mnemonic: "ret"}
 	latest := env.Dictionary.Latest()
 
-	latest.PushInstr(instr)
+	if !latest.IsNoReturn() {
+		latest.PushInstr(&X8664Instr{Mnemonic: "ret"})
+	}
 }

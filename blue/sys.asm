@@ -25,4 +25,3 @@ write:
 exit:
 	mov eax, 60
 	call syscall1
-	ret
