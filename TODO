@@ -1,3 +1,0 @@
-Instr needs RegisterRefs
-Compute Word In/Out Refs, compare to declared
-Lower Word Instr to AsmInstr
