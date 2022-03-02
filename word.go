@@ -105,4 +105,3 @@ func NewCallGoWord(name string, f GoCaller) *Word {
 func NewWord(name string) *Word {
 	return &Word{Name: name}
 }
-

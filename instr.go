@@ -99,4 +99,3 @@ func (i *CallWordInstr) Lower(context *LowerContext) {
 func (i *CallWordInstr) Run(env *Environment) {
 	log.Fatal("Cannot run call word instructions")
 }
-

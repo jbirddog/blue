@@ -2,6 +2,7 @@
 
 1. Instr needs RegisterRefs
 1. compute Word In/Out Refs, compare to declared
+1. validate needs to check for lingering refs/stack items
 
 ## blue
 

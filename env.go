@@ -98,4 +98,3 @@ func (e *Environment) WriteAsm(filename string) {
 
 	asmWriter.WriteStringToFile(filename, asmInstrs)
 }
-

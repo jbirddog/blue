@@ -60,4 +60,3 @@ func (d *Dictionary) AppendWords(asmInstrs []AsmInstr) []AsmInstr {
 
 	return asmInstrs
 }
-
