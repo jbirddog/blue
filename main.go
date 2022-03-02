@@ -36,8 +36,22 @@ type RegisterRef struct {
 	Reg  string
 }
 
+type LowerContext struct {
+	Inputs    []string
+	Outputs   []string
+	AsmInstrs []AsmInstr
+}
+
+func (c *LowerContext) AppendAsmInstr(i AsmInstr) {
+	c.AsmInstrs = append(c.AsmInstrs, i)
+}
+
+func (c *LowerContext) AppendInput(i string) {
+	c.Inputs = append(c.Inputs, i)
+}
+
 type Instr interface {
-	Lower() AsmInstr
+	Lower(*LowerContext)
 	Run(*Environment)
 }
 
@@ -47,8 +61,7 @@ type CallGoInstr struct {
 	F GoCaller
 }
 
-func (i *CallGoInstr) Lower() AsmInstr {
-	return nil
+func (i *CallGoInstr) Lower(context *LowerContext) {
 }
 
 func (i *CallGoInstr) Run(env *Environment) {
@@ -64,8 +77,8 @@ type X8664Instr struct {
 	Mnemonic string
 }
 
-func (i *X8664Instr) Lower() AsmInstr {
-	return &AsmNoOperandInstr{Mnemonic: i.Mnemonic}
+func (i *X8664Instr) Lower(context *LowerContext) {
+	context.AppendAsmInstr(&AsmNoOperandInstr{Mnemonic: i.Mnemonic})
 }
 
 func (i *X8664Instr) Run(env *Environment) {
@@ -76,8 +89,9 @@ type LiteralIntInstr struct {
 	I int
 }
 
-func (i *LiteralIntInstr) Lower() AsmInstr {
-	return nil
+func (i *LiteralIntInstr) Lower(context *LowerContext) {
+	// TODO this is a hack during prototyping
+	context.AppendInput(strconv.Itoa(i.I))
 }
 
 func (i *LiteralIntInstr) Run(env *Environment) {
@@ -88,8 +102,25 @@ type CallWordInstr struct {
 	Word *Word
 }
 
-func (i *CallWordInstr) Lower() AsmInstr {
-	return &AsmCallInstr{Label: i.Word.Name}
+func (i *CallWordInstr) Lower(context *LowerContext) {
+	expectedInputs := i.Word.InputRegisters()
+
+	need := len(expectedInputs)
+	have := len(context.Inputs)
+	neededInputs := context.Inputs[have-need:]
+	context.Inputs = context.Inputs[:have-need]
+
+	for i := need - 1; i >= 0; i-- {
+		if expectedInputs[i] != neededInputs[i] {
+			context.AppendAsmInstr(&AsmBinaryInstr{
+				Mnemonic: "mov",
+				Op1:      expectedInputs[i],
+				Op2:      neededInputs[i],
+			})
+		}
+	}
+
+	context.AppendAsmInstr(&AsmCallInstr{Label: i.Word.Name})
 }
 
 func (i *CallWordInstr) Run(env *Environment) {
@@ -147,14 +178,38 @@ func (w *Word) IsHiddenFromAsm() bool {
 	return w.Flags&WordFlag_HiddenFromAsm == WordFlag_HiddenFromAsm
 }
 
-func (w *Word) AppendCode(asmInstrs []AsmInstr) []AsmInstr {
-	for _, instr := range w.Code {
-		if asmInstr := instr.Lower(); asmInstr != nil {
-			asmInstrs = append(asmInstrs, asmInstr)
-		}
+func (w *Word) InputRegisters() []string {
+	var registers []string
+
+	for _, i := range w.Inputs {
+		registers = append(registers, i.Reg)
 	}
 
-	return asmInstrs
+	return registers
+}
+
+func (w *Word) OutputRegisters() []string {
+	var registers []string
+
+	for _, o := range w.Outputs {
+		registers = append(registers, o.Reg)
+	}
+
+	return registers
+}
+
+func (w *Word) AppendCode(asmInstrs []AsmInstr) []AsmInstr {
+	context := &LowerContext{
+		AsmInstrs: asmInstrs,
+		Inputs:    w.InputRegisters(),
+		Outputs:   w.OutputRegisters(),
+	}
+
+	for _, instr := range w.Code {
+		instr.Lower(context)
+	}
+
+	return context.AsmInstrs
 }
 
 func NewCallGoWord(name string, f GoCaller) *Word {

@@ -43,6 +43,16 @@ func (i *AsmNoOperandInstr) StringRepresentation() string {
 	return fmt.Sprintf("\t%s\n", i.Mnemonic)
 }
 
+type AsmBinaryInstr struct {
+	Mnemonic string
+	Op1      string
+	Op2      string
+}
+
+func (i *AsmBinaryInstr) StringRepresentation() string {
+	return fmt.Sprintf("\t%s %s, %s\n", i.Mnemonic, i.Op1, i.Op2)
+}
+
 type AsmWriter struct {
 	sb strings.Builder
 }

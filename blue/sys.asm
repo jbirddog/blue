@@ -13,13 +13,16 @@ syscall3:
 	ret
 
 read:
+	mov eax, 0
 	call syscall3
 	ret
 
 write:
+	mov eax, 1
 	call syscall3
 	ret
 
 exit:
+	mov eax, 60
 	call syscall1
 	ret
