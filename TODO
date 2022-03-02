@@ -1,4 +1,3 @@
 Instr needs RegisterRefs
 Compute Word In/Out Refs, compare to declared
-Lower Environment to AsmInstr
-Write AsmInstr
+Lower Word Instr to AsmInstr

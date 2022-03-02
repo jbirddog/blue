@@ -24,7 +24,23 @@ type AsmLabelInstr struct {
 }
 
 func (i *AsmLabelInstr) StringRepresentation() string {
-	return fmt.Sprintf("\n%s:", i.Name)
+	return fmt.Sprintf("\n%s:\n", i.Name)
+}
+
+type AsmCallInstr struct {
+	Label string
+}
+
+func (i *AsmCallInstr) StringRepresentation() string {
+	return fmt.Sprintf("\tcall %s\n", i.Label)
+}
+
+type AsmNoOperandInstr struct {
+	Mnemonic string
+}
+
+func (i *AsmNoOperandInstr) StringRepresentation() string {
+	return fmt.Sprintf("\t%s\n", i.Mnemonic)
 }
 
 type AsmWriter struct {

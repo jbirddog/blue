@@ -37,6 +37,7 @@ type RegisterRef struct {
 }
 
 type Instr interface {
+	Lower() AsmInstr
 	Run(*Environment)
 }
 
@@ -44,6 +45,10 @@ type GoCaller func(*Environment)
 
 type CallGoInstr struct {
 	F GoCaller
+}
+
+func (i *CallGoInstr) Lower() AsmInstr {
+	return nil
 }
 
 func (i *CallGoInstr) Run(env *Environment) {
@@ -59,6 +64,10 @@ type X8664Instr struct {
 	Mnemonic string
 }
 
+func (i *X8664Instr) Lower() AsmInstr {
+	return &AsmNoOperandInstr{Mnemonic: i.Mnemonic}
+}
+
 func (i *X8664Instr) Run(env *Environment) {
 	log.Fatal("Cannot run x8664 instructions")
 }
@@ -67,12 +76,20 @@ type LiteralIntInstr struct {
 	I int
 }
 
+func (i *LiteralIntInstr) Lower() AsmInstr {
+	return nil
+}
+
 func (i *LiteralIntInstr) Run(env *Environment) {
 	log.Fatal("Cannot run literal int instructions")
 }
 
 type CallWordInstr struct {
 	Word *Word
+}
+
+func (i *CallWordInstr) Lower() AsmInstr {
+	return &AsmCallInstr{Label: i.Word.Name}
 }
 
 func (i *CallWordInstr) Run(env *Environment) {
@@ -128,6 +145,16 @@ func (w *Word) IsImmediate() bool {
 
 func (w *Word) IsHiddenFromAsm() bool {
 	return w.Flags&WordFlag_HiddenFromAsm == WordFlag_HiddenFromAsm
+}
+
+func (w *Word) AppendCode(asmInstrs []AsmInstr) []AsmInstr {
+	for _, instr := range w.Code {
+		if asmInstr := instr.Lower(); asmInstr != nil {
+			asmInstrs = append(asmInstrs, asmInstr)
+		}
+	}
+
+	return asmInstrs
 }
 
 func NewCallGoWord(name string, f GoCaller) *Word {
@@ -197,6 +224,7 @@ func (d *Dictionary) AppendWords(asmInstrs []AsmInstr) []AsmInstr {
 		}
 
 		asmInstrs = append(asmInstrs, &AsmLabelInstr{Name: word.Name})
+		asmInstrs = word.AppendCode(asmInstrs)
 	}
 
 	return asmInstrs
