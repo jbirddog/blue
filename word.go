@@ -4,6 +4,12 @@ import (
 	"log"
 )
 
+const (
+	WordFlag_Immediate = 1 << iota
+	WordFlag_HiddenFromAsm
+	WordFlag_NoReturn
+)
+
 type Word struct {
 	Name    string
 	Flags   uint
