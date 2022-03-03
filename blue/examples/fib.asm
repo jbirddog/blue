@@ -12,6 +12,8 @@ exit:
 	call syscall1
 
 fib:
+	mov edi, 0
+	mov eax, 1
 
 .compute:
 	xadd

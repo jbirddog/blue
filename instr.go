@@ -73,7 +73,7 @@ type FlowWordInstr struct {
 }
 
 func (i *FlowWordInstr) Lower(context *LowerContext) {
-	log.Println("Need to flow: " + i.Word.Name)
+	flowWord(i.Word, context)
 }
 
 func (i *FlowWordInstr) Run(env *Environment) {
@@ -85,7 +85,16 @@ type CallWordInstr struct {
 }
 
 func (i *CallWordInstr) Lower(context *LowerContext) {
-	expectedInputs := i.Word.InputRegisters()
+	flowWord(i.Word, context)
+	context.AppendAsmInstr(&AsmCallInstr{Label: i.Word.AsmLabel()})
+}
+
+func (i *CallWordInstr) Run(env *Environment) {
+	log.Fatal("Cannot run call word instructions")
+}
+
+func flowWord(word *Word, context *LowerContext) {
+	expectedInputs := word.InputRegisters()
 
 	need := len(expectedInputs)
 	have := len(context.Inputs)
@@ -102,12 +111,6 @@ func (i *CallWordInstr) Lower(context *LowerContext) {
 		}
 	}
 
-	calledWordOutputs := i.Word.OutputRegisters()
-	context.Inputs = append(context.Inputs, calledWordOutputs...)
-
-	context.AppendAsmInstr(&AsmCallInstr{Label: i.Word.AsmLabel()})
-}
-
-func (i *CallWordInstr) Run(env *Environment) {
-	log.Fatal("Cannot run call word instructions")
+	wordOutputs := word.OutputRegisters()
+	context.Inputs = append(context.Inputs, wordOutputs...)
 }
