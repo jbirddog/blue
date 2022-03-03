@@ -10,6 +10,7 @@ func DefaultDictionary() *Dictionary {
 		Name: "default",
 		Words: []*Word{
 			NewCallGoWord(":", kernel_colon),
+			NewCallGoWord(":>", kernel_colon_gt).Immediate(),
 			NewCallGoWord("(", kernel_lparen).Immediate(),
 			NewCallGoWord(";", kernel_semi).Immediate(),
 		},
@@ -24,7 +25,13 @@ func (d *Dictionary) Find(wordName string) *Word {
 	wordsLen := len(d.Words)
 
 	for i := wordsLen - 1; i >= 0; i-- {
-		if d.Words[i].Name == wordName {
+		word := d.Words[i]
+
+		if word.IsHidden() {
+			continue
+		}
+
+		if word.Name == wordName {
 			return d.Words[i]
 		}
 	}
@@ -32,8 +39,40 @@ func (d *Dictionary) Find(wordName string) *Word {
 	return nil
 }
 
+func (d *Dictionary) HideLocalWords() {
+	wordsLen := len(d.Words)
+
+	for i := wordsLen - 1; i >= 0; i-- {
+		word := d.Words[i]
+
+		if !word.IsLocal() {
+			break
+		}
+
+		word.Hidden()
+	}
+}
+
 func (d *Dictionary) Latest() *Word {
 	return d.Words[len(d.Words)-1]
+}
+
+func (d *Dictionary) LatestNonLocal() *Word {
+	wordsLen := len(d.Words)
+
+	for i := wordsLen - 1; i >= 0; i-- {
+		word := d.Words[i]
+
+		if word.IsHidden() {
+			continue
+		}
+
+		if !word.IsLocal() {
+			return word
+		}
+	}
+
+	return nil
 }
 
 func (d *Dictionary) AppendGlobalDecls(asmInstrs []AsmInstr) []AsmInstr {

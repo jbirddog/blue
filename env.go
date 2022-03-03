@@ -75,7 +75,7 @@ func (e *Environment) ParseNextWord() bool {
 	}
 
 	if e.Compiling {
-		e.Dictionary.Latest().PushInstr(instr)
+		e.Dictionary.Latest().AppendInstr(instr)
 	} else {
 		instr.Run(e)
 	}

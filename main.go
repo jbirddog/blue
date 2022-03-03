@@ -32,19 +32,14 @@ type RegisterRef struct {
 	Reg  string
 }
 
-const (
-	RegisterRefTarget_Input = iota
-	RegisterRefTarget_Output
-)
-
 func main() {
-	env := NewEnvironmentForFile("blue/examples/exit33.blue")
+	env := NewEnvironmentForFile("blue/examples/fib.blue")
 
 	for env.ParseNextWord() {
 	}
 
 	env.Validate()
-	env.WriteAsm("blue/examples/exit33.asm")
+	env.WriteAsm("blue/examples/fib.asm")
 
 	fmt.Println("ok")
 }
