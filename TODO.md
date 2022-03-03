@@ -6,7 +6,11 @@
 1. mnemonics need in/out counts?
 1. compile fib.blue
 
-### peephole optimizations
+### optimizations
+
+1. inlining
+
+#### peephole
 
 1. jmp vs call ret at tail of word
 1. mov xxx, 0 -> xor xxx, xxx
@@ -15,3 +19,5 @@
 
 1. imports
 1. global
+1. local word flow
+1. comment to eol

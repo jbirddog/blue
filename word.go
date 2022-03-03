@@ -104,6 +104,14 @@ func (w *Word) OutputRegisters() []string {
 	return registers
 }
 
+func (w *Word) AsmLabel() string {
+	if w.IsLocal() {
+		return "." + w.Name
+	}
+
+	return w.Name
+}
+
 func (w *Word) AppendCode(asmInstrs []AsmInstr) []AsmInstr {
 	context := &LowerContext{
 		AsmInstrs: asmInstrs,

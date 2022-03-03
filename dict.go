@@ -77,7 +77,7 @@ func (d *Dictionary) LatestNonLocal() *Word {
 
 func (d *Dictionary) AppendGlobalDecls(asmInstrs []AsmInstr) []AsmInstr {
 	for _, word := range d.Words {
-		if word.IsHiddenFromAsm() {
+		if word.IsHiddenFromAsm() || word.IsLocal() {
 			continue
 		}
 
@@ -93,7 +93,7 @@ func (d *Dictionary) AppendWords(asmInstrs []AsmInstr) []AsmInstr {
 			continue
 		}
 
-		asmInstrs = append(asmInstrs, &AsmLabelInstr{Name: word.Name})
+		asmInstrs = append(asmInstrs, &AsmLabelInstr{Name: word.AsmLabel()})
 		asmInstrs = word.AppendCode(asmInstrs)
 	}
 

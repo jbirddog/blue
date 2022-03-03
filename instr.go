@@ -40,6 +40,7 @@ func (i *CallGoInstr) Run(env *Environment) {
 var x8664Mnemonics = map[string]bool{
 	"ret":     true,
 	"syscall": true,
+	"xadd":    true,
 }
 
 type X8664Instr struct {
@@ -93,7 +94,7 @@ func (i *CallWordInstr) Lower(context *LowerContext) {
 	calledWordOutputs := i.Word.OutputRegisters()
 	context.Inputs = append(context.Inputs, calledWordOutputs...)
 
-	context.AppendAsmInstr(&AsmCallInstr{Label: i.Word.Name})
+	context.AppendAsmInstr(&AsmCallInstr{Label: i.Word.AsmLabel()})
 }
 
 func (i *CallWordInstr) Run(env *Environment) {

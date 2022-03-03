@@ -72,6 +72,7 @@ func kernel_lparen(env *Environment) {
 	}
 }
 
+// TODO move to util.go or similar
 func buildRegisterRef(rawRef string, parentRefs []*RegisterRef) *RegisterRef {
 	parts := strings.SplitN(rawRef, ":", 2)
 	partsLen := len(parts)
