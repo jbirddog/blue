@@ -20,6 +20,11 @@ type Word struct {
 	Code    []Instr
 }
 
+func LocalWord(name string) *Word {
+	w := &Word{Name: name}
+	return w.Local()
+}
+
 func (w *Word) AppendInstr(instr Instr) {
 	w.Code = append(w.Code, instr)
 }

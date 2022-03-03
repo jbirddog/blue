@@ -9,10 +9,9 @@ func DefaultDictionary() *Dictionary {
 	return &Dictionary{
 		Name: "default",
 		Words: []*Word{
-			NewCallGoWord(":", kernel_colon),
-			NewCallGoWord(":>", kernel_colon_gt).Immediate(),
-			NewCallGoWord("(", kernel_lparen).Immediate(),
-			NewCallGoWord(";", kernel_semi).Immediate(),
+			NewCallGoWord(":", KernelColon),
+			NewCallGoWord(":>", KernelColonGT).Immediate(),
+			NewCallGoWord(";", KernelSemi).Immediate(),
 		},
 	}
 }

@@ -68,6 +68,18 @@ func (i *LiteralIntInstr) Run(env *Environment) {
 	log.Fatal("Cannot run literal int instructions")
 }
 
+type FlowWordInstr struct {
+	Word *Word
+}
+
+func (i *FlowWordInstr) Lower(context *LowerContext) {
+	log.Println("Need to flow: " + i.Word.Name)
+}
+
+func (i *FlowWordInstr) Run(env *Environment) {
+	log.Fatal("Cannot run flow word instructions")
+}
+
 type CallWordInstr struct {
 	Word *Word
 }
