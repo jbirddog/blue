@@ -80,7 +80,6 @@ func (i *CallWordInstr) Lower(context *LowerContext) {
 	neededInputs := context.Inputs[have-need:]
 	context.Inputs = context.Inputs[:have-need]
 
-	// TODO probably doesn't need to be backwards
 	for i := need - 1; i >= 0; i-- {
 		if expectedInputs[i] != neededInputs[i] {
 			context.AppendAsmInstr(&AsmBinaryInstr{

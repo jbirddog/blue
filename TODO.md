@@ -4,7 +4,7 @@
 1. compute Word In/Out Refs, compare to declared
 1. validate needs to check for lingering refs/stack items
 1. mnemonics need in/out counts?
-1. compile fib.blue
+1. compile fib.blue (latest, loop, local word flow)
 
 ### optimizations
 
@@ -19,5 +19,5 @@
 
 1. imports
 1. global
-1. local word flow
 1. comment to eol
+1. db, dw, const, etc
