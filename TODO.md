@@ -4,8 +4,8 @@
 1. compute Word In/Out Refs, compare to declared
 1. validate needs to check for lingering refs/stack items
 1. consider making flow instr not implicit from call instr
-1. unit tests
-1. test.sh that run go tests, builds blue files, runs examples
+1. more unit tests
+1. gfe.sh - run examples
 
 ### optimizations
 
@@ -22,3 +22,4 @@
 1. comment to eol
 1. sections
 1. db, dw, const, etc
+1. word local dictionaries (or similar to support parsers)

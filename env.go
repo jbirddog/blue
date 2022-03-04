@@ -42,6 +42,25 @@ func (e *Environment) ReadNextWord() string {
 	return word
 }
 
+func (e *Environment) ReadTil(s string) string {
+	buf, read := "", ""
+
+	parts := strings.SplitN(e.InputBuf, s, 2)
+	lenParts := len(parts)
+
+	if lenParts > 0 {
+		read = parts[0]
+
+		if lenParts > 1 {
+			buf = parts[1]
+		}
+	}
+
+	e.InputBuf = buf
+
+	return read
+}
+
 func (e *Environment) ParseNextWord() bool {
 	name := e.ReadNextWord()
 	if len(name) == 0 {
