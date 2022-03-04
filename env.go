@@ -24,9 +24,14 @@ func NewEnvironmentForFile(filename string) *Environment {
 	return &Environment{Dictionary: DefaultDictionary(), InputBuf: string(bytes)}
 }
 
+func (e *Environment) LTrimBuf() {
+	e.InputBuf = strings.TrimLeft(e.InputBuf, " \t\n")
+}
+
 func (e *Environment) ReadNextWord() string {
-	buf := strings.TrimLeft(e.InputBuf, " \t\r\n")
-	wordEnd := strings.IndexAny(buf, " \t\r\n")
+	e.LTrimBuf()
+	buf := e.InputBuf
+	wordEnd := strings.IndexAny(buf, " \t\n")
 
 	if wordEnd == -1 {
 		wordEnd = len(buf) - 1

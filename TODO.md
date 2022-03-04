@@ -6,6 +6,7 @@
 1. consider making flow instr not implicit from call instr
 1. more unit tests
 1. gfe.sh - run examples
+1. move to code buf instead of lowering from the dictionary - needed for sections
 
 ### optimizations
 

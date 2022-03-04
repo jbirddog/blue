@@ -57,9 +57,9 @@ func KernelLatest(env *Environment) {
 
 func KernelSemi(env *Environment) {
 	env.Compiling = false
-	latest := env.Dictionary.Latest()
 
-	if !latest.IsNoReturn() {
+	if !env.Dictionary.LatestNonLocal().IsNoReturn() {
+		latest := env.Dictionary.Latest()
 		latest.AppendInstr(&X8664Instr{Mnemonic: "ret"})
 	}
 
