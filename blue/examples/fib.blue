@@ -1,0 +1,7 @@
+: syscall1 ( edi eax -- result:eax ) syscall ;
+: exit ( status:edi -- noret ) 60 syscall1 ;
+
+: fib ( nth:ecx -- result:edi ) 1 0 
+:> compute ( accum:eax scratch:edi -- result ) xadd latest loop ;
+
+: _start ( -- noret ) 11 fib exit ;
