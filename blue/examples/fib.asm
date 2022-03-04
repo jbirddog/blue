@@ -1,12 +1,5 @@
 global _start
-
-syscall1:
-	syscall
-	ret
-
-exit:
-	mov eax, 60
-	call syscall1
+extern exit
 
 fib:
 	mov edi, 0

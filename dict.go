@@ -9,6 +9,7 @@ func DefaultDictionary() *Dictionary {
 	return &Dictionary{
 		Name: "default",
 		Words: []*Word{
+			NewCallGoWord("extern", KernelExtern),
 			NewCallGoWord(":", KernelColon),
 			NewCallGoWord(":>", KernelColonGT).Immediate(),
 			NewCallGoWord("latest", KernelLatest).Immediate(),
@@ -88,9 +89,19 @@ func (d *Dictionary) AppendGlobalDecls(asmInstrs []AsmInstr) []AsmInstr {
 	return asmInstrs
 }
 
+func (d *Dictionary) AppendExternDecls(asmInstrs []AsmInstr) []AsmInstr {
+	for _, word := range d.Words {
+		if word.IsExtern() {
+			asmInstrs = append(asmInstrs, &AsmExternInstr{Label: word.Name})
+		}
+	}
+
+	return asmInstrs
+}
+
 func (d *Dictionary) AppendWords(asmInstrs []AsmInstr) []AsmInstr {
 	for _, word := range d.Words {
-		if word.IsHiddenFromAsm() {
+		if word.IsHiddenFromAsm() || word.IsExtern() {
 			continue
 		}
 

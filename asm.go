@@ -19,6 +19,14 @@ func (i *AsmGlobalInstr) String() string {
 	return fmt.Sprintf("global %s\n", i.Label)
 }
 
+type AsmExternInstr struct {
+	Label string
+}
+
+func (i *AsmExternInstr) String() string {
+	return fmt.Sprintf("extern %s\n", i.Label)
+}
+
 type AsmLabelInstr struct {
 	Name string
 }

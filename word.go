@@ -11,6 +11,7 @@ const (
 	wordFlag_Local
 	wordFlag_Hidden
 	wordFlag_Global
+	wordFlag_Extern
 )
 
 type Word struct {
@@ -19,6 +20,11 @@ type Word struct {
 	Inputs  []*RegisterRef
 	Outputs []*RegisterRef
 	Code    []Instr
+}
+
+func ExternWord(name string) *Word {
+	w := &Word{Name: name}
+	return w.Extern()
 }
 
 func LocalWord(name string) *Word {
@@ -71,6 +77,10 @@ func (w *Word) Global() *Word {
 	return w.setFlag(wordFlag_Global)
 }
 
+func (w *Word) Extern() *Word {
+	return w.setFlag(wordFlag_Extern)
+}
+
 func (w *Word) hasFlag(flag uint) bool {
 	return w.Flags&flag == flag
 }
@@ -97,6 +107,10 @@ func (w *Word) IsHidden() bool {
 
 func (w *Word) IsGlobal() bool {
 	return w.hasFlag(wordFlag_Global)
+}
+
+func (w *Word) IsExtern() bool {
+	return w.hasFlag(wordFlag_Extern)
 }
 
 func (w *Word) InputRegisters() []string {

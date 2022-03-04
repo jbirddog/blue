@@ -94,6 +94,7 @@ func (e *Environment) WriteAsm(filename string) {
 	var asmWriter AsmWriter
 
 	asmInstrs = e.Dictionary.AppendGlobalDecls(asmInstrs)
+	asmInstrs = e.Dictionary.AppendExternDecls(asmInstrs)
 	asmInstrs = e.Dictionary.AppendWords(asmInstrs)
 
 	asmWriter.WriteStringToFile(filename, asmInstrs)

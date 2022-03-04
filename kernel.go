@@ -6,7 +6,6 @@ import (
 )
 
 func KernelColon(env *Environment) {
-	// needToFlowWords := env.Compiling
 	env.Compiling = true
 
 	name := env.ReadNextWord()
@@ -37,6 +36,17 @@ func KernelColonGT(env *Environment) {
 	previous := env.Dictionary.Latest()
 	previous.AppendInstr(&FlowWordInstr{Word: word})
 
+	env.Dictionary.Append(word)
+}
+
+func KernelExtern(env *Environment) {
+	name := env.ReadNextWord()
+	if len(name) == 0 {
+		log.Fatal("extern expects a name")
+	}
+
+	word := ExternWord(name)
+	parseRefs(word, env)
 	env.Dictionary.Append(word)
 }
 
