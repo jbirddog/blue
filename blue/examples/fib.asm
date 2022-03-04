@@ -17,6 +17,7 @@ fib:
 
 .compute:
 	xadd
+	call .compute
 	ret
 
 _start:

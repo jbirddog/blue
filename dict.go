@@ -11,6 +11,7 @@ func DefaultDictionary() *Dictionary {
 		Words: []*Word{
 			NewCallGoWord(":", KernelColon),
 			NewCallGoWord(":>", KernelColonGT).Immediate(),
+			NewCallGoWord("latest", KernelLatest).Immediate(),
 			NewCallGoWord(";", KernelSemi).Immediate(),
 		},
 	}
