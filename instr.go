@@ -73,7 +73,14 @@ func ops_2(mnemonic string, context *LowerContext) AsmInstr {
 	return &AsmBinaryInstr{Mnemonic: mnemonic, Op1: op1, Op2: op2}
 }
 
+func op_label(mnemonic string, context *LowerContext) AsmInstr {
+	op := context.PopRefWord().Word.AsmLabel()
+
+	return &AsmUnaryInstr{Mnemonic: mnemonic, Op: op}
+}
+
 var x8664Mnemonics = map[string]x8664Lowerer{
+	"loop":    op_label,
 	"ret":     ops_0,
 	"syscall": ops_0,
 	"xadd":    ops_2,

@@ -17,6 +17,7 @@ fib:
 
 .compute:
 	xadd eax, edi
+	loop .compute
 	ret
 
 _start:

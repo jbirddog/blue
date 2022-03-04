@@ -1,11 +1,9 @@
 ## gfe
 
-1. Instr needs RegisterRefs
+1. Instr needs RegisterRefs?
 1. compute Word In/Out Refs, compare to declared
 1. validate needs to check for lingering refs/stack items
-1. mnemonics need in/out counts? - no think different handlers (loop, jmp vs mov)
 1. consider making flow instr not implicit from call instr
-1. compile fib.blue (loop, xadd needs to take 2)
 
 ### optimizations
 
