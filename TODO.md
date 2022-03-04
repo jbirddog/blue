@@ -5,7 +5,7 @@
 1. validate needs to check for lingering refs/stack items
 1. mnemonics need in/out counts? - no think different handlers (loop, jmp vs mov)
 1. consider making flow instr not implicit from call instr
-1. compile fib.blue (latest, loop, xadd needs to take 2)
+1. compile fib.blue (loop, xadd needs to take 2)
 
 ### optimizations
 

@@ -16,8 +16,7 @@ fib:
 	mov eax, 1
 
 .compute:
-	xadd
-	call .compute
+	xadd eax, edi
 	ret
 
 _start:

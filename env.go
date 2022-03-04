@@ -61,7 +61,7 @@ func (e *Environment) ParseNextWord() bool {
 		instr = &CallWordInstr{Word: word}
 	}
 
-	if x8664Mnemonics[name] {
+	if _, found := x8664Mnemonics[name]; found {
 		instr = &X8664Instr{Mnemonic: name}
 	}
 

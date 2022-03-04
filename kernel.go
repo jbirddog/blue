@@ -42,8 +42,7 @@ func KernelColonGT(env *Environment) {
 
 func KernelLatest(env *Environment) {
 	latest := env.Dictionary.Latest()
-	log.Println("latest: ", latest.Name)
-	latest.AppendInstr(&CallWordInstr{Word: latest})
+	latest.AppendInstr(&RefWordInstr{Word: latest})
 }
 
 func KernelSemi(env *Environment) {

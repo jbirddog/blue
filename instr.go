@@ -8,6 +8,7 @@ import (
 type LowerContext struct {
 	Inputs    []string
 	Outputs   []string
+	RefWords  []*RefWordInstr
 	AsmInstrs []AsmInstr
 }
 
@@ -17,6 +18,29 @@ func (c *LowerContext) AppendAsmInstr(i AsmInstr) {
 
 func (c *LowerContext) AppendInput(i string) {
 	c.Inputs = append(c.Inputs, i)
+}
+
+func (c *LowerContext) AppendRefWord(i *RefWordInstr) {
+	c.RefWords = append(c.RefWords, i)
+}
+
+func (c *LowerContext) PopRefWord() *RefWordInstr {
+	refWordsLen := len(c.RefWords)
+	instr := c.RefWords[refWordsLen-1]
+
+	c.RefWords = c.RefWords[:refWordsLen-1]
+
+	return instr
+}
+
+func (c *LowerContext) Take2Inputs() (string, string) {
+	inputsLen := len(c.Inputs)
+	first := c.Inputs[inputsLen-2]
+	second := c.Inputs[inputsLen-1]
+
+	c.Inputs = c.Inputs[:inputsLen-2]
+
+	return first, second
 }
 
 type Instr interface {
@@ -37,10 +61,22 @@ func (i *CallGoInstr) Run(env *Environment) {
 	i.F(env)
 }
 
-var x8664Mnemonics = map[string]bool{
-	"ret":     true,
-	"syscall": true,
-	"xadd":    true,
+type x8664Lowerer = func(string, *LowerContext) AsmInstr
+
+func ops_0(mnemonic string, context *LowerContext) AsmInstr {
+	return &AsmNoOperandInstr{Mnemonic: mnemonic}
+}
+
+func ops_2(mnemonic string, context *LowerContext) AsmInstr {
+	op1, op2 := context.Take2Inputs()
+
+	return &AsmBinaryInstr{Mnemonic: mnemonic, Op1: op1, Op2: op2}
+}
+
+var x8664Mnemonics = map[string]x8664Lowerer{
+	"ret":     ops_0,
+	"syscall": ops_0,
+	"xadd":    ops_2,
 }
 
 type X8664Instr struct {
@@ -48,7 +84,9 @@ type X8664Instr struct {
 }
 
 func (i *X8664Instr) Lower(context *LowerContext) {
-	context.AppendAsmInstr(&AsmNoOperandInstr{Mnemonic: i.Mnemonic})
+	lowerer := x8664Mnemonics[i.Mnemonic]
+	asmInstr := lowerer(i.Mnemonic, context)
+	context.AppendAsmInstr(asmInstr)
 }
 
 func (i *X8664Instr) Run(env *Environment) {
@@ -91,6 +129,18 @@ func (i *CallWordInstr) Lower(context *LowerContext) {
 
 func (i *CallWordInstr) Run(env *Environment) {
 	log.Fatal("Cannot run call word instructions")
+}
+
+type RefWordInstr struct {
+	Word *Word
+}
+
+func (i *RefWordInstr) Lower(context *LowerContext) {
+	context.AppendRefWord(i)
+}
+
+func (i *RefWordInstr) Run(env *Environment) {
+	log.Fatal("Cannot run reference word instructions")
 }
 
 func flowWord(word *Word, context *LowerContext) {
