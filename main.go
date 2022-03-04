@@ -33,13 +33,22 @@ type RegisterRef struct {
 }
 
 func main() {
-	env := NewEnvironmentForFile("blue/examples/fib.blue")
-
-	for env.ParseNextWord() {
+	examples := []string{
+		"blue/examples/exit33.blue",
+		"blue/examples/fib.blue",
 	}
 
-	env.Validate()
-	env.WriteAsm("blue/examples/fib.asm")
+	for _, example := range examples {
+		output := example[:len(example)-5] + ".asm"
+
+		env := NewEnvironmentForFile(example)
+
+		for env.ParseNextWord() {
+		}
+
+		env.Validate()
+		env.WriteAsm(output)
+	}
 
 	fmt.Println("ok")
 }

@@ -17,6 +17,5 @@
 ## blue
 
 1. imports
-1. global
 1. comment to eol
 1. db, dw, const, etc

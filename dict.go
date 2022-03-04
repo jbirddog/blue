@@ -13,6 +13,7 @@ func DefaultDictionary() *Dictionary {
 			NewCallGoWord(":>", KernelColonGT).Immediate(),
 			NewCallGoWord("latest", KernelLatest).Immediate(),
 			NewCallGoWord(";", KernelSemi).Immediate(),
+			NewCallGoWord("global", KernelGlobal),
 		},
 	}
 }
@@ -77,7 +78,7 @@ func (d *Dictionary) LatestNonLocal() *Word {
 
 func (d *Dictionary) AppendGlobalDecls(asmInstrs []AsmInstr) []AsmInstr {
 	for _, word := range d.Words {
-		if word.IsHiddenFromAsm() || word.IsLocal() {
+		if word.IsHiddenFromAsm() || !word.IsGlobal() {
 			continue
 		}
 

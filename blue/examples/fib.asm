@@ -1,6 +1,3 @@
-global syscall1
-global exit
-global fib
 global _start
 
 syscall1:

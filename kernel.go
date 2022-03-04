@@ -56,6 +56,11 @@ func KernelSemi(env *Environment) {
 	env.Dictionary.HideLocalWords()
 }
 
+func KernelGlobal(env *Environment) {
+	latest := env.Dictionary.LatestNonLocal()
+	latest.Global()
+}
+
 func buildRegisterRef(rawRef string, parentRefs []*RegisterRef) *RegisterRef {
 	parts := strings.SplitN(rawRef, ":", 2)
 	partsLen := len(parts)

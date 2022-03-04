@@ -1,5 +1,3 @@
-global syscall1
-global exit
 global _start
 
 syscall1:

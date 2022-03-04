@@ -5,11 +5,12 @@ import (
 )
 
 const (
-	WordFlag_Immediate = 1 << iota
-	WordFlag_HiddenFromAsm
-	WordFlag_NoReturn
-	WordFlag_Local
-	WordFlag_Hidden
+	wordFlag_Immediate = 1 << iota
+	wordFlag_HiddenFromAsm
+	wordFlag_NoReturn
+	wordFlag_Local
+	wordFlag_Hidden
+	wordFlag_Global
 )
 
 type Word struct {
@@ -45,24 +46,29 @@ func (w *Word) AppendOutput(r *RegisterRef) {
 	w.Outputs = append(w.Outputs, r)
 }
 
-func (w *Word) Immediate() *Word {
-	w.Flags |= WordFlag_Immediate
+func (w *Word) setFlag(flag uint) *Word {
+	w.Flags |= flag
 	return w
+}
+
+func (w *Word) Immediate() *Word {
+	return w.setFlag(wordFlag_Immediate)
 }
 
 func (w *Word) NoReturn() *Word {
-	w.Flags |= WordFlag_NoReturn
-	return w
+	return w.setFlag(wordFlag_NoReturn)
 }
 
 func (w *Word) Local() *Word {
-	w.Flags |= WordFlag_Local
-	return w
+	return w.setFlag(wordFlag_Local)
 }
 
 func (w *Word) Hidden() *Word {
-	w.Flags |= WordFlag_Hidden
-	return w
+	return w.setFlag(wordFlag_Hidden)
+}
+
+func (w *Word) Global() *Word {
+	return w.setFlag(wordFlag_Global)
 }
 
 func (w *Word) hasFlag(flag uint) bool {
@@ -70,23 +76,27 @@ func (w *Word) hasFlag(flag uint) bool {
 }
 
 func (w *Word) IsImmediate() bool {
-	return w.hasFlag(WordFlag_Immediate)
+	return w.hasFlag(wordFlag_Immediate)
 }
 
 func (w *Word) IsHiddenFromAsm() bool {
-	return w.hasFlag(WordFlag_HiddenFromAsm)
+	return w.hasFlag(wordFlag_HiddenFromAsm)
 }
 
 func (w *Word) IsNoReturn() bool {
-	return w.hasFlag(WordFlag_NoReturn)
+	return w.hasFlag(wordFlag_NoReturn)
 }
 
 func (w *Word) IsLocal() bool {
-	return w.hasFlag(WordFlag_Local)
+	return w.hasFlag(wordFlag_Local)
 }
 
 func (w *Word) IsHidden() bool {
-	return w.hasFlag(WordFlag_Hidden)
+	return w.hasFlag(wordFlag_Hidden)
+}
+
+func (w *Word) IsGlobal() bool {
+	return w.hasFlag(wordFlag_Global)
 }
 
 func (w *Word) InputRegisters() []string {
@@ -134,7 +144,7 @@ func (w *Word) AppendCode(asmInstrs []AsmInstr) []AsmInstr {
 func NewCallGoWord(name string, f GoCaller) *Word {
 	return &Word{
 		Name:  name,
-		Flags: WordFlag_HiddenFromAsm,
+		Flags: wordFlag_HiddenFromAsm,
 		Code:  []Instr{&CallGoInstr{F: f}},
 	}
 }
