@@ -136,23 +136,9 @@ func (w *Word) AsmLabel() string {
 	return w.Name
 }
 
-func (w *Word) AppendCode(asmInstrs []AsmInstr) []AsmInstr {
-	context := &LowerContext{
-		AsmInstrs: asmInstrs,
-		Inputs:    w.InputRegisters(),
-		Outputs:   w.OutputRegisters(),
-	}
-
-	for _, instr := range w.Code {
-		instr.Lower(context)
-	}
-
-	return context.AsmInstrs
-}
-
 func NewCallGoWord(name string, f GoCaller) *Word {
 	return &Word{
-		Name:  name,
-		Code:  []Instr{&CallGoInstr{F: f}},
+		Name: name,
+		Code: []Instr{&CallGoInstr{F: f}},
 	}
 }

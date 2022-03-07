@@ -76,4 +76,3 @@ func (d *Dictionary) LatestNonLocal() *Word {
 
 	return nil
 }
-
