@@ -11,7 +11,7 @@ import (
 type Environment struct {
 	Compiling  bool
 	Dictionary *Dictionary
-	DataStack  []Instr
+	CodeBuf    []Instr
 	InputBuf   string
 }
 
@@ -107,6 +107,10 @@ func (e *Environment) ParseNextWord() bool {
 	return true
 }
 
+func (e *Environment) AppendInstr(i Instr) {
+	e.CodeBuf = append(e.CodeBuf, i)
+}
+
 func (e *Environment) Validate() {
 	if e.Compiling {
 		log.Fatal("Still compiling")
@@ -114,12 +118,14 @@ func (e *Environment) Validate() {
 }
 
 func (e *Environment) WriteAsm(filename string) {
-	var asmInstrs []AsmInstr
+	context := &LowerContext{}
 	var asmWriter AsmWriter
 
-	asmInstrs = e.Dictionary.AppendGlobalDecls(asmInstrs)
-	asmInstrs = e.Dictionary.AppendExternDecls(asmInstrs)
-	asmInstrs = e.Dictionary.AppendWords(asmInstrs)
+	for _, instr := range e.CodeBuf {
+		instr.Lower(context)
+	}
 
-	asmWriter.WriteStringToFile(filename, asmInstrs)
+	// asmInstrs := e.Dictionary.AppendWords(context.AsmInstrs)
+
+	asmWriter.WriteStringToFile(filename, context.AsmInstrs)
 }

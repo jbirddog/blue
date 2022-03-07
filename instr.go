@@ -150,6 +150,49 @@ func (i *RefWordInstr) Run(env *Environment) {
 	log.Fatal("Cannot run reference word instructions")
 }
 
+type ExternWordInstr struct {
+	Word *Word
+}
+
+func (i *ExternWordInstr) Lower(context *LowerContext) {
+	context.AppendAsmInstr(&AsmExternInstr{Label: i.Word.AsmLabel()})
+}
+
+func (i *ExternWordInstr) Run(env *Environment) {
+	log.Fatal("Cannot run extern word instructions")
+}
+
+type GlobalWordInstr struct {
+	Word *Word
+}
+
+func (i *GlobalWordInstr) Lower(context *LowerContext) {
+	context.AppendAsmInstr(&AsmGlobalInstr{Label: i.Word.AsmLabel()})
+}
+
+func (i *GlobalWordInstr) Run(env *Environment) {
+	log.Fatal("Cannot run global word instructions")
+}
+
+type DeclWordInstr struct {
+	Word *Word
+}
+
+func (i *DeclWordInstr) Lower(context *LowerContext) {
+	context.AppendAsmInstr(&AsmLabelInstr{Name: i.Word.AsmLabel()})
+
+	context.Inputs = i.Word.InputRegisters()
+	context.Outputs = i.Word.OutputRegisters()
+
+	for _, instr := range i.Word.Code {
+		instr.Lower(context)
+	}
+}
+
+func (i *DeclWordInstr) Run(env *Environment) {
+	log.Fatal("Cannot run decl word instructions")
+}
+
 func flowWord(word *Word, context *LowerContext) {
 	expectedInputs := word.InputRegisters()
 

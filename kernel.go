@@ -16,6 +16,7 @@ func KernelColon(env *Environment) {
 	word := &Word{Name: name}
 	parseRefs(word, env)
 	env.Dictionary.Append(word)
+	env.AppendInstr(&DeclWordInstr{Word: word})
 }
 
 func KernelColonGT(env *Environment) {
@@ -37,6 +38,7 @@ func KernelColonGT(env *Environment) {
 	previous.AppendInstr(&FlowWordInstr{Word: word})
 
 	env.Dictionary.Append(word)
+	env.AppendInstr(&DeclWordInstr{Word: word})
 }
 
 func KernelExtern(env *Environment) {
@@ -48,6 +50,7 @@ func KernelExtern(env *Environment) {
 	word := ExternWord(name)
 	parseRefs(word, env)
 	env.Dictionary.Append(word)
+	env.AppendInstr(&ExternWordInstr{Word: word})
 }
 
 func KernelLatest(env *Environment) {
@@ -69,6 +72,7 @@ func KernelSemi(env *Environment) {
 func KernelGlobal(env *Environment) {
 	latest := env.Dictionary.LatestNonLocal()
 	latest.Global()
+	env.AppendInstr(&GlobalWordInstr{Word: latest})
 }
 
 func buildRegisterRef(rawRef string, parentRefs []*RegisterRef) *RegisterRef {

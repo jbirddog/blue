@@ -1,4 +1,3 @@
-global _start
 extern exit
 
 fib:
@@ -14,3 +13,4 @@ _start:
 	mov ecx, 11
 	call fib
 	call exit
+global _start

@@ -8,6 +8,7 @@
 1. gfe.sh - run examples
 1. move to code buf instead of lowering from the dictionary - needed for sections
 1. higher level refs where registers are inferred from called words
+1. remove explict CallGoWord, make user define words have a "runner"
 
 ### optimizations
 
