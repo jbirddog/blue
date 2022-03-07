@@ -193,6 +193,18 @@ func (i *DeclWordInstr) Run(env *Environment) {
 	log.Fatal("Cannot run decl word instructions")
 }
 
+type SectionInstr struct {
+	Info string
+}
+
+func (i *SectionInstr) Lower(context *LowerContext) {
+	context.AppendAsmInstr(&AsmSectionInstr{Info: i.Info})
+}
+
+func (i *SectionInstr) Run(env *Environment) {
+	log.Fatal("Cannot run section instructions")
+}
+
 func flowWord(word *Word, context *LowerContext) {
 	expectedInputs := word.InputRegisters()
 

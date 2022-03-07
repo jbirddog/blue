@@ -10,6 +10,7 @@ func DefaultDictionary() *Dictionary {
 		Name: "default",
 		Words: []*Word{
 			NewCallGoWord("extern", KernelExtern),
+			NewCallGoWord("section", KernelSection),
 			NewCallGoWord(":", KernelColon),
 			NewCallGoWord(":>", KernelColonGT).Immediate(),
 			NewCallGoWord("latest", KernelLatest).Immediate(),

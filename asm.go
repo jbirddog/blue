@@ -11,6 +11,14 @@ type AsmInstr interface {
 	String() string
 }
 
+type AsmSectionInstr struct {
+	Info string
+}
+
+func (i *AsmSectionInstr) String() string {
+	return fmt.Sprintf("\nsection %s\n", i.Info)
+}
+
 type AsmGlobalInstr struct {
 	Label string
 }

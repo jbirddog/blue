@@ -75,6 +75,12 @@ func KernelGlobal(env *Environment) {
 	env.AppendInstr(&GlobalWordInstr{Word: latest})
 }
 
+func KernelSection(env *Environment) {
+	env.LTrimBuf()
+	info := env.ReadTil("\n")
+	env.AppendInstr(&SectionInstr{Info: info})
+}
+
 func buildRegisterRef(rawRef string, parentRefs []*RegisterRef) *RegisterRef {
 	parts := strings.SplitN(rawRef, ":", 2)
 	partsLen := len(parts)

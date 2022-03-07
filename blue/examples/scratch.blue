@@ -1,0 +1,8 @@
+extern exit ( status:edi -- noret )
+
+section .rodata
+section .data
+section .bss
+section .text
+
+: _start ( -- noret ) 0 exit ; global

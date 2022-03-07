@@ -37,6 +37,7 @@ func main() {
 		"blue/sys.blue",
 		"blue/examples/exit33.blue",
 		"blue/examples/fib.blue",
+		"blue/examples/scratch.blue",
 	}
 
 	for _, blueFile := range blueFiles {
