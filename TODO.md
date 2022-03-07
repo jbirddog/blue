@@ -7,6 +7,7 @@
 1. more unit tests
 1. gfe.sh - run examples
 1. move to code buf instead of lowering from the dictionary - needed for sections
+1. higher level refs where registers are inferred from called words
 
 ### optimizations
 
