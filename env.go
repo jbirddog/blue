@@ -125,7 +125,5 @@ func (e *Environment) WriteAsm(filename string) {
 		instr.Lower(context)
 	}
 
-	// asmInstrs := e.Dictionary.AppendWords(context.AsmInstrs)
-
 	asmWriter.WriteStringToFile(filename, context.AsmInstrs)
 }

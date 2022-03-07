@@ -16,7 +16,7 @@ type AsmGlobalInstr struct {
 }
 
 func (i *AsmGlobalInstr) String() string {
-	return fmt.Sprintf("global %s\n", i.Label)
+	return fmt.Sprintf("\nglobal %s\n", i.Label)
 }
 
 type AsmExternInstr struct {

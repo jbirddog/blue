@@ -77,15 +77,3 @@ func (d *Dictionary) LatestNonLocal() *Word {
 	return nil
 }
 
-func (d *Dictionary) AppendWords(asmInstrs []AsmInstr) []AsmInstr {
-	for _, word := range d.Words {
-		if word.IsHiddenFromAsm() || word.IsExtern() {
-			continue
-		}
-
-		// asmInstrs = append(asmInstrs, &AsmLabelInstr{Name: word.AsmLabel()})
-		asmInstrs = word.AppendCode(asmInstrs)
-	}
-
-	return asmInstrs
-}
