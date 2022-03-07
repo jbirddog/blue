@@ -76,9 +76,12 @@ func (e *Environment) ParseNextWord() bool {
 
 	if word := e.Dictionary.Find(name); word != nil {
 		if !e.Compiling || word.IsImmediate() {
+			context := &LowerContext{}
+
 			for _, instr := range word.Code {
-				instr.Run(e)
+				instr.Lower(e, context)
 			}
+
 			return true
 		}
 
@@ -98,10 +101,10 @@ func (e *Environment) ParseNextWord() bool {
 		return false
 	}
 
-	if e.Compiling {
-		e.Dictionary.Latest().AppendInstr(instr)
+	if !e.Compiling {
+		e.AppendInstr(instr)
 	} else {
-		instr.Run(e)
+		e.Dictionary.Latest().AppendInstr(instr)
 	}
 
 	return true
@@ -117,13 +120,18 @@ func (e *Environment) Validate() {
 	}
 }
 
-func (e *Environment) WriteAsm(filename string) {
+func (e *Environment) Lower() []AsmInstr {
 	context := &LowerContext{}
-	var asmWriter AsmWriter
 
 	for _, instr := range e.CodeBuf {
-		instr.Lower(context)
+		instr.Lower(e, context)
 	}
 
-	asmWriter.WriteStringToFile(filename, context.AsmInstrs)
+	return context.AsmInstrs
+}
+
+func (e *Environment) WriteAsm(filename string) {
+	var asmWriter AsmWriter
+
+	asmWriter.WriteStringToFile(filename, e.Lower())
 }

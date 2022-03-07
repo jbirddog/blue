@@ -8,7 +8,6 @@
 1. gfe.sh - run examples
 1. higher level refs where registers are inferred from called words
 1. remove explict CallGoWord, make user define words have a "runner"
-1. overhaul run in instr, may tie in to above
 
 ### optimizations
 
@@ -24,4 +23,5 @@
 1. imports
 1. comment to eol
 1. db, dw, const, etc (const is just db/dw in .text to start?)
+1. resb/w
 1. word local dictionaries (or similar to support parsers)

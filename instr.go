@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"strconv"
 )
 
@@ -44,8 +43,7 @@ func (c *LowerContext) Take2Inputs() (string, string) {
 }
 
 type Instr interface {
-	Lower(*LowerContext)
-	Run(*Environment)
+	Lower(*Environment, *LowerContext)
 }
 
 type GoCaller func(*Environment)
@@ -54,10 +52,7 @@ type CallGoInstr struct {
 	F GoCaller
 }
 
-func (i *CallGoInstr) Lower(context *LowerContext) {
-}
-
-func (i *CallGoInstr) Run(env *Environment) {
+func (i *CallGoInstr) Lower(env *Environment, context *LowerContext) {
 	i.F(env)
 }
 
@@ -90,119 +85,93 @@ type X8664Instr struct {
 	Mnemonic string
 }
 
-func (i *X8664Instr) Lower(context *LowerContext) {
+func (i *X8664Instr) Lower(env *Environment, context *LowerContext) {
 	lowerer := x8664Mnemonics[i.Mnemonic]
 	asmInstr := lowerer(i.Mnemonic, context)
 	context.AppendAsmInstr(asmInstr)
-}
-
-func (i *X8664Instr) Run(env *Environment) {
-	log.Fatal("Cannot run x8664 instructions")
 }
 
 type LiteralIntInstr struct {
 	I int
 }
 
-func (i *LiteralIntInstr) Lower(context *LowerContext) {
+func (i *LiteralIntInstr) Lower(env *Environment, context *LowerContext) {
 	// TODO this is a hack during prototyping
 	context.AppendInput(strconv.Itoa(i.I))
-}
-
-func (i *LiteralIntInstr) Run(env *Environment) {
-	log.Fatal("Cannot run literal int instructions")
 }
 
 type FlowWordInstr struct {
 	Word *Word
 }
 
-func (i *FlowWordInstr) Lower(context *LowerContext) {
+func (i *FlowWordInstr) Lower(env *Environment, context *LowerContext) {
 	flowWord(i.Word, context)
-}
-
-func (i *FlowWordInstr) Run(env *Environment) {
-	log.Fatal("Cannot run flow word instructions")
 }
 
 type CallWordInstr struct {
 	Word *Word
 }
 
-func (i *CallWordInstr) Lower(context *LowerContext) {
-	flowWord(i.Word, context)
-	context.AppendAsmInstr(&AsmCallInstr{Label: i.Word.AsmLabel()})
-}
+func (i *CallWordInstr) Lower(env *Environment, context *LowerContext) {
+	if env.Compiling {
+		flowWord(i.Word, context)
+		context.AppendAsmInstr(&AsmCallInstr{Label: i.Word.AsmLabel()})
+		return
+	}
 
-func (i *CallWordInstr) Run(env *Environment) {
-	log.Fatal("Cannot run call word instructions")
+	for _, instr := range i.Word.Code {
+		instr.Lower(env, context)
+	}
 }
 
 type RefWordInstr struct {
 	Word *Word
 }
 
-func (i *RefWordInstr) Lower(context *LowerContext) {
+func (i *RefWordInstr) Lower(env *Environment, context *LowerContext) {
 	context.AppendRefWord(i)
-}
-
-func (i *RefWordInstr) Run(env *Environment) {
-	log.Fatal("Cannot run reference word instructions")
 }
 
 type ExternWordInstr struct {
 	Word *Word
 }
 
-func (i *ExternWordInstr) Lower(context *LowerContext) {
+func (i *ExternWordInstr) Lower(env *Environment, context *LowerContext) {
 	context.AppendAsmInstr(&AsmExternInstr{Label: i.Word.AsmLabel()})
-}
-
-func (i *ExternWordInstr) Run(env *Environment) {
-	log.Fatal("Cannot run extern word instructions")
 }
 
 type GlobalWordInstr struct {
 	Word *Word
 }
 
-func (i *GlobalWordInstr) Lower(context *LowerContext) {
+func (i *GlobalWordInstr) Lower(env *Environment, context *LowerContext) {
 	context.AppendAsmInstr(&AsmGlobalInstr{Label: i.Word.AsmLabel()})
-}
-
-func (i *GlobalWordInstr) Run(env *Environment) {
-	log.Fatal("Cannot run global word instructions")
 }
 
 type DeclWordInstr struct {
 	Word *Word
 }
 
-func (i *DeclWordInstr) Lower(context *LowerContext) {
+func (i *DeclWordInstr) Lower(env *Environment, context *LowerContext) {
 	context.AppendAsmInstr(&AsmLabelInstr{Name: i.Word.AsmLabel()})
 
 	context.Inputs = i.Word.InputRegisters()
 	context.Outputs = i.Word.OutputRegisters()
+	env.Compiling = true
 
 	for _, instr := range i.Word.Code {
-		instr.Lower(context)
+		instr.Lower(env, context)
 	}
-}
 
-func (i *DeclWordInstr) Run(env *Environment) {
-	log.Fatal("Cannot run decl word instructions")
+	env.Compiling = false
 }
 
 type SectionInstr struct {
 	Info string
 }
 
-func (i *SectionInstr) Lower(context *LowerContext) {
+func (i *SectionInstr) Lower(env *Environment, context *LowerContext) {
 	context.AppendAsmInstr(&AsmSectionInstr{Info: i.Info})
-}
-
-func (i *SectionInstr) Run(env *Environment) {
-	log.Fatal("Cannot run section instructions")
 }
 
 func flowWord(word *Word, context *LowerContext) {
