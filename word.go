@@ -6,7 +6,6 @@ import (
 
 const (
 	wordFlag_Immediate = 1 << iota
-	wordFlag_HiddenFromAsm
 	wordFlag_NoReturn
 	wordFlag_Local
 	wordFlag_Hidden
@@ -89,10 +88,6 @@ func (w *Word) IsImmediate() bool {
 	return w.hasFlag(wordFlag_Immediate)
 }
 
-func (w *Word) IsHiddenFromAsm() bool {
-	return w.hasFlag(wordFlag_HiddenFromAsm)
-}
-
 func (w *Word) IsNoReturn() bool {
 	return w.hasFlag(wordFlag_NoReturn)
 }
@@ -158,7 +153,6 @@ func (w *Word) AppendCode(asmInstrs []AsmInstr) []AsmInstr {
 func NewCallGoWord(name string, f GoCaller) *Word {
 	return &Word{
 		Name:  name,
-		Flags: wordFlag_HiddenFromAsm,
 		Code:  []Instr{&CallGoInstr{F: f}},
 	}
 }
