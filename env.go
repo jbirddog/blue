@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"io/ioutil"
 	"log"
 	"strconv"
@@ -131,8 +130,7 @@ func (e *Environment) ParseNextWord() bool {
 	}
 
 	if instr == nil {
-		fmt.Println("Did not find", name)
-		return false
+		log.Fatal("Did not find ", name)
 	}
 
 	if !e.Compiling {
@@ -150,6 +148,14 @@ func (c *Environment) AppendAsmInstr(i AsmInstr) {
 
 func (e *Environment) AppendInstr(i Instr) {
 	e.CodeBuf = append(e.CodeBuf, i)
+}
+
+func (e *Environment) PopInstr() Instr {
+	last := len(e.CodeBuf) - 1
+	instr := e.CodeBuf[last]
+	e.CodeBuf = e.CodeBuf[:last]
+
+	return instr
 }
 
 func (e *Environment) Validate() {

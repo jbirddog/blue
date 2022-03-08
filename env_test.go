@@ -34,3 +34,16 @@ func TestReadTil(t *testing.T) {
 		}
 	}
 }
+
+func TestConstDeclGeneratesNoAsmInstrs(t *testing.T) {
+	prog := "1024 constant tib.cap"
+	e := &Environment{Dictionary: DefaultDictionary(), InputBuf: prog}
+
+	for e.ParseNextWord() {
+	}
+	instrs := e.Run()
+
+	if len(instrs) != 0 {
+		t.Fatalf("Expected no asm instrs, go: %v", instrs)
+	}
+}
