@@ -1,4 +1,3 @@
-: syscall1 ( edi eax -- result:eax ) syscall ;
-: exit ( status:edi -- noret ) 60 syscall1 ;
+extern exit ( status:edi -- noret )
 
-: _start ( -- noret ) 33 exit ;
+: _start ( -- noret ) 33 exit ; global

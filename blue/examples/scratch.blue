@@ -1,0 +1,12 @@
+extern exit ( status:edi -- noret )
+
+section .rodata
+section .data
+section .bss
+section .text
+
+\
+\ Entry point into the program
+\ Only explaining this to test comments
+\
+: _start ( -- noret ) 0 exit ; global

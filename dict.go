@@ -9,10 +9,14 @@ func DefaultDictionary() *Dictionary {
 	return &Dictionary{
 		Name: "default",
 		Words: []*Word{
+			NewCallGoWord("extern", KernelExtern),
+			NewCallGoWord("section", KernelSection),
 			NewCallGoWord(":", KernelColon),
 			NewCallGoWord(":>", KernelColonGT).Immediate(),
 			NewCallGoWord("latest", KernelLatest).Immediate(),
 			NewCallGoWord(";", KernelSemi).Immediate(),
+			NewCallGoWord("global", KernelGlobal),
+			NewCallGoWord("\\", KernelCommentToEol),
 		},
 	}
 }
@@ -73,29 +77,4 @@ func (d *Dictionary) LatestNonLocal() *Word {
 	}
 
 	return nil
-}
-
-func (d *Dictionary) AppendGlobalDecls(asmInstrs []AsmInstr) []AsmInstr {
-	for _, word := range d.Words {
-		if word.IsHiddenFromAsm() || word.IsLocal() {
-			continue
-		}
-
-		asmInstrs = append(asmInstrs, &AsmGlobalInstr{Label: word.Name})
-	}
-
-	return asmInstrs
-}
-
-func (d *Dictionary) AppendWords(asmInstrs []AsmInstr) []AsmInstr {
-	for _, word := range d.Words {
-		if word.IsHiddenFromAsm() {
-			continue
-		}
-
-		asmInstrs = append(asmInstrs, &AsmLabelInstr{Name: word.AsmLabel()})
-		asmInstrs = word.AppendCode(asmInstrs)
-	}
-
-	return asmInstrs
 }

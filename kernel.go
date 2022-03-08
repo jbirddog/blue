@@ -6,7 +6,6 @@ import (
 )
 
 func KernelColon(env *Environment) {
-	// needToFlowWords := env.Compiling
 	env.Compiling = true
 
 	name := env.ReadNextWord()
@@ -17,6 +16,7 @@ func KernelColon(env *Environment) {
 	word := &Word{Name: name}
 	parseRefs(word, env)
 	env.Dictionary.Append(word)
+	env.AppendInstr(&DeclWordInstr{Word: word})
 }
 
 func KernelColonGT(env *Environment) {
@@ -38,6 +38,19 @@ func KernelColonGT(env *Environment) {
 	previous.AppendInstr(&FlowWordInstr{Word: word})
 
 	env.Dictionary.Append(word)
+	env.AppendInstr(&DeclWordInstr{Word: word})
+}
+
+func KernelExtern(env *Environment) {
+	name := env.ReadNextWord()
+	if len(name) == 0 {
+		log.Fatal("extern expects a name")
+	}
+
+	word := ExternWord(name)
+	parseRefs(word, env)
+	env.Dictionary.Append(word)
+	env.AppendInstr(&ExternWordInstr{Word: word})
 }
 
 func KernelLatest(env *Environment) {
@@ -47,13 +60,30 @@ func KernelLatest(env *Environment) {
 
 func KernelSemi(env *Environment) {
 	env.Compiling = false
-	latest := env.Dictionary.Latest()
 
-	if !latest.IsNoReturn() {
+	if !env.Dictionary.LatestNonLocal().IsNoReturn() {
+		latest := env.Dictionary.Latest()
 		latest.AppendInstr(&X8664Instr{Mnemonic: "ret"})
 	}
 
 	env.Dictionary.HideLocalWords()
+}
+
+func KernelGlobal(env *Environment) {
+	latest := env.Dictionary.LatestNonLocal()
+	latest.Global()
+	env.AppendInstr(&GlobalWordInstr{Word: latest})
+}
+
+func KernelSection(env *Environment) {
+	env.LTrimBuf()
+	info := env.ReadTil("\n")
+	env.AppendInstr(&SectionInstr{Info: info})
+}
+
+func KernelCommentToEol(env *Environment) {
+	comment := env.ReadTil("\n")
+	env.AppendInstr(&CommentInstr{Comment: comment})
 }
 
 func buildRegisterRef(rawRef string, parentRefs []*RegisterRef) *RegisterRef {

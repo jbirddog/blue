@@ -11,12 +11,28 @@ type AsmInstr interface {
 	String() string
 }
 
+type AsmSectionInstr struct {
+	Info string
+}
+
+func (i *AsmSectionInstr) String() string {
+	return fmt.Sprintf("\nsection %s\n", i.Info)
+}
+
 type AsmGlobalInstr struct {
 	Label string
 }
 
 func (i *AsmGlobalInstr) String() string {
-	return fmt.Sprintf("global %s\n", i.Label)
+	return fmt.Sprintf("\nglobal %s\n", i.Label)
+}
+
+type AsmExternInstr struct {
+	Label string
+}
+
+func (i *AsmExternInstr) String() string {
+	return fmt.Sprintf("extern %s\n", i.Label)
 }
 
 type AsmLabelInstr struct {
@@ -60,6 +76,14 @@ type AsmBinaryInstr struct {
 
 func (i *AsmBinaryInstr) String() string {
 	return fmt.Sprintf("\t%s %s, %s\n", i.Mnemonic, i.Op1, i.Op2)
+}
+
+type AsmCommentInstr struct {
+	Comment string
+}
+
+func (i *AsmCommentInstr) String() string {
+	return fmt.Sprintf("\n; %s", i.Comment)
 }
 
 type AsmWriter struct {
