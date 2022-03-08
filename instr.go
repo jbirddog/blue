@@ -141,7 +141,7 @@ type CommentInstr struct {
 }
 
 func (i *CommentInstr) Run(env *Environment, context *RunContext) {
-	env.AppendAsmInstr(&AsmCommentInstr{Comment: i.Comment})
+	// env.AppendAsmInstr(&AsmCommentInstr{Comment: i.Comment})
 }
 
 func flowWord(word *Word, env *Environment, context *RunContext) {

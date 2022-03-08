@@ -4,10 +4,6 @@ import (
 	"testing"
 )
 
-func env(buf string) *Environment {
-	return &Environment{InputBuf: buf}
-}
-
 func TestReadTil(t *testing.T) {
 	cases := []struct {
 		env       *Environment
@@ -35,15 +31,15 @@ func TestReadTil(t *testing.T) {
 	}
 }
 
-func TestConstDeclGeneratesNoAsmInstrs(t *testing.T) {
-	prog := "1024 constant tib.cap"
-	e := &Environment{Dictionary: DefaultDictionary(), InputBuf: prog}
+func env(buf string) *Environment {
+	return &Environment{Dictionary: DefaultDictionary(), InputBuf: buf}
+}
+
+func run(buf string) []AsmInstr {
+	e := env(buf)
 
 	for e.ParseNextWord() {
 	}
-	instrs := e.Run()
 
-	if len(instrs) != 0 {
-		t.Fatalf("Expected no asm instrs, go: %v", instrs)
-	}
+	return e.Run()
 }
