@@ -4,44 +4,6 @@ import (
 	"strconv"
 )
 
-type LowerContext struct {
-	Inputs    []string
-	Outputs   []string
-	RefWords  []*RefWordInstr
-	AsmInstrs []AsmInstr
-}
-
-func (c *LowerContext) AppendAsmInstr(i AsmInstr) {
-	c.AsmInstrs = append(c.AsmInstrs, i)
-}
-
-func (c *LowerContext) AppendInput(i string) {
-	c.Inputs = append(c.Inputs, i)
-}
-
-func (c *LowerContext) AppendRefWord(i *RefWordInstr) {
-	c.RefWords = append(c.RefWords, i)
-}
-
-func (c *LowerContext) PopRefWord() *RefWordInstr {
-	refWordsLen := len(c.RefWords)
-	instr := c.RefWords[refWordsLen-1]
-
-	c.RefWords = c.RefWords[:refWordsLen-1]
-
-	return instr
-}
-
-func (c *LowerContext) Take2Inputs() (string, string) {
-	inputsLen := len(c.Inputs)
-	first := c.Inputs[inputsLen-2]
-	second := c.Inputs[inputsLen-1]
-
-	c.Inputs = c.Inputs[:inputsLen-2]
-
-	return first, second
-}
-
 type Instr interface {
 	Lower(*Environment, *LowerContext)
 }
@@ -88,7 +50,7 @@ type X8664Instr struct {
 func (i *X8664Instr) Lower(env *Environment, context *LowerContext) {
 	lowerer := x8664Mnemonics[i.Mnemonic]
 	asmInstr := lowerer(i.Mnemonic, context)
-	context.AppendAsmInstr(asmInstr)
+	env.AppendAsmInstr(asmInstr)
 }
 
 type LiteralIntInstr struct {
@@ -105,7 +67,7 @@ type FlowWordInstr struct {
 }
 
 func (i *FlowWordInstr) Lower(env *Environment, context *LowerContext) {
-	flowWord(i.Word, context)
+	flowWord(i.Word, env, context)
 }
 
 type CallWordInstr struct {
@@ -114,8 +76,8 @@ type CallWordInstr struct {
 
 func (i *CallWordInstr) Lower(env *Environment, context *LowerContext) {
 	if env.Compiling {
-		flowWord(i.Word, context)
-		context.AppendAsmInstr(&AsmCallInstr{Label: i.Word.AsmLabel()})
+		flowWord(i.Word, env, context)
+		env.AppendAsmInstr(&AsmCallInstr{Label: i.Word.AsmLabel()})
 		return
 	}
 
@@ -137,7 +99,7 @@ type ExternWordInstr struct {
 }
 
 func (i *ExternWordInstr) Lower(env *Environment, context *LowerContext) {
-	context.AppendAsmInstr(&AsmExternInstr{Label: i.Word.AsmLabel()})
+	env.AppendAsmInstr(&AsmExternInstr{Label: i.Word.AsmLabel()})
 }
 
 type GlobalWordInstr struct {
@@ -145,7 +107,7 @@ type GlobalWordInstr struct {
 }
 
 func (i *GlobalWordInstr) Lower(env *Environment, context *LowerContext) {
-	context.AppendAsmInstr(&AsmGlobalInstr{Label: i.Word.AsmLabel()})
+	env.AppendAsmInstr(&AsmGlobalInstr{Label: i.Word.AsmLabel()})
 }
 
 type DeclWordInstr struct {
@@ -153,7 +115,7 @@ type DeclWordInstr struct {
 }
 
 func (i *DeclWordInstr) Lower(env *Environment, context *LowerContext) {
-	context.AppendAsmInstr(&AsmLabelInstr{Name: i.Word.AsmLabel()})
+	env.AppendAsmInstr(&AsmLabelInstr{Name: i.Word.AsmLabel()})
 
 	context.Inputs = i.Word.InputRegisters()
 	context.Outputs = i.Word.OutputRegisters()
@@ -171,10 +133,10 @@ type SectionInstr struct {
 }
 
 func (i *SectionInstr) Lower(env *Environment, context *LowerContext) {
-	context.AppendAsmInstr(&AsmSectionInstr{Info: i.Info})
+	env.AppendAsmInstr(&AsmSectionInstr{Info: i.Info})
 }
 
-func flowWord(word *Word, context *LowerContext) {
+func flowWord(word *Word, env *Environment, context *LowerContext) {
 	expectedInputs := word.InputRegisters()
 
 	need := len(expectedInputs)
@@ -184,7 +146,7 @@ func flowWord(word *Word, context *LowerContext) {
 
 	for i := need - 1; i >= 0; i-- {
 		if expectedInputs[i] != neededInputs[i] {
-			context.AppendAsmInstr(&AsmBinaryInstr{
+			env.AppendAsmInstr(&AsmBinaryInstr{
 				Mnemonic: "mov",
 				Op1:      expectedInputs[i],
 				Op2:      neededInputs[i],

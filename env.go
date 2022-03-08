@@ -8,11 +8,45 @@ import (
 	"strings"
 )
 
+type LowerContext struct {
+	Inputs   []string
+	Outputs  []string
+	RefWords []*RefWordInstr
+}
+
+func (c *LowerContext) AppendInput(i string) {
+	c.Inputs = append(c.Inputs, i)
+}
+
+func (c *LowerContext) AppendRefWord(i *RefWordInstr) {
+	c.RefWords = append(c.RefWords, i)
+}
+
+func (c *LowerContext) PopRefWord() *RefWordInstr {
+	refWordsLen := len(c.RefWords)
+	instr := c.RefWords[refWordsLen-1]
+
+	c.RefWords = c.RefWords[:refWordsLen-1]
+
+	return instr
+}
+
+func (c *LowerContext) Take2Inputs() (string, string) {
+	inputsLen := len(c.Inputs)
+	first := c.Inputs[inputsLen-2]
+	second := c.Inputs[inputsLen-1]
+
+	c.Inputs = c.Inputs[:inputsLen-2]
+
+	return first, second
+}
+
 type Environment struct {
 	Compiling  bool
+	InputBuf   string
 	Dictionary *Dictionary
 	CodeBuf    []Instr
-	InputBuf   string
+	AsmInstrs  []AsmInstr
 }
 
 func NewEnvironmentForFile(filename string) *Environment {
@@ -110,6 +144,10 @@ func (e *Environment) ParseNextWord() bool {
 	return true
 }
 
+func (c *Environment) AppendAsmInstr(i AsmInstr) {
+	c.AsmInstrs = append(c.AsmInstrs, i)
+}
+
 func (e *Environment) AppendInstr(i Instr) {
 	e.CodeBuf = append(e.CodeBuf, i)
 }
@@ -127,7 +165,7 @@ func (e *Environment) Lower() []AsmInstr {
 		instr.Lower(e, context)
 	}
 
-	return context.AsmInstrs
+	return e.AsmInstrs
 }
 
 func (e *Environment) WriteAsm(filename string) {
