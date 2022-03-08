@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"os"
 )
 
 // TODO R8D..., RAX..., R8...
@@ -33,24 +35,19 @@ type RegisterRef struct {
 }
 
 func main() {
-	blueFiles := []string{
-		"blue/sys.blue",
-		"blue/examples/exit33.blue",
-		"blue/examples/fib.blue",
-		"blue/examples/scratch.blue",
+	if len(os.Args) != 2 {
+		log.Fatal("Usage: gfe blueFile")
 	}
 
-	for _, blueFile := range blueFiles {
-		asmFile := blueFile[:len(blueFile)-5] + ".asm"
+	blueFile := os.Args[1]
+	asmFile := blueFile[:len(blueFile)-5] + ".asm"
+	env := NewEnvironmentForFile(blueFile)
 
-		env := NewEnvironmentForFile(blueFile)
-
-		for env.ParseNextWord() {
-		}
-
-		env.Validate()
-		env.WriteAsm(asmFile)
+	for env.ParseNextWord() {
 	}
 
-	fmt.Println("ok")
+	env.Validate()
+	env.WriteAsm(asmFile)
+
+	fmt.Printf("ok\t%s\n", blueFile)
 }
