@@ -8,21 +8,21 @@ import (
 	"strings"
 )
 
-type LowerContext struct {
+type RunContext struct {
 	Inputs   []string
 	Outputs  []string
 	RefWords []*RefWordInstr
 }
 
-func (c *LowerContext) AppendInput(i string) {
+func (c *RunContext) AppendInput(i string) {
 	c.Inputs = append(c.Inputs, i)
 }
 
-func (c *LowerContext) AppendRefWord(i *RefWordInstr) {
+func (c *RunContext) AppendRefWord(i *RefWordInstr) {
 	c.RefWords = append(c.RefWords, i)
 }
 
-func (c *LowerContext) PopRefWord() *RefWordInstr {
+func (c *RunContext) PopRefWord() *RefWordInstr {
 	refWordsLen := len(c.RefWords)
 	instr := c.RefWords[refWordsLen-1]
 
@@ -31,7 +31,7 @@ func (c *LowerContext) PopRefWord() *RefWordInstr {
 	return instr
 }
 
-func (c *LowerContext) Take2Inputs() (string, string) {
+func (c *RunContext) Take2Inputs() (string, string) {
 	inputsLen := len(c.Inputs)
 	first := c.Inputs[inputsLen-2]
 	second := c.Inputs[inputsLen-1]
@@ -110,10 +110,10 @@ func (e *Environment) ParseNextWord() bool {
 
 	if word := e.Dictionary.Find(name); word != nil {
 		if !e.Compiling || word.IsImmediate() {
-			context := &LowerContext{}
+			context := &RunContext{}
 
 			for _, instr := range word.Code {
-				instr.Lower(e, context)
+				instr.Run(e, context)
 			}
 
 			return true
@@ -158,11 +158,11 @@ func (e *Environment) Validate() {
 	}
 }
 
-func (e *Environment) Lower() []AsmInstr {
-	context := &LowerContext{}
+func (e *Environment) Run() []AsmInstr {
+	context := &RunContext{}
 
 	for _, instr := range e.CodeBuf {
-		instr.Lower(e, context)
+		instr.Run(e, context)
 	}
 
 	return e.AsmInstrs
@@ -171,5 +171,5 @@ func (e *Environment) Lower() []AsmInstr {
 func (e *Environment) WriteAsm(filename string) {
 	var asmWriter AsmWriter
 
-	asmWriter.WriteStringToFile(filename, e.Lower())
+	asmWriter.WriteStringToFile(filename, e.Run())
 }
