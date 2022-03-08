@@ -81,6 +81,11 @@ func KernelSection(env *Environment) {
 	env.AppendInstr(&SectionInstr{Info: info})
 }
 
+func KernelCommentToEol(env *Environment) {
+	comment := env.ReadTil("\n")
+	env.AppendInstr(&CommentInstr{Comment: comment})
+}
+
 func buildRegisterRef(rawRef string, parentRefs []*RegisterRef) *RegisterRef {
 	parts := strings.SplitN(rawRef, ":", 2)
 	partsLen := len(parts)

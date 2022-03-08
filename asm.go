@@ -78,6 +78,14 @@ func (i *AsmBinaryInstr) String() string {
 	return fmt.Sprintf("\t%s %s, %s\n", i.Mnemonic, i.Op1, i.Op2)
 }
 
+type AsmCommentInstr struct {
+	Comment string
+}
+
+func (i *AsmCommentInstr) String() string {
+	return fmt.Sprintf("\n; %s", i.Comment)
+}
+
 type AsmWriter struct {
 	sb strings.Builder
 }
