@@ -33,7 +33,7 @@ func TestReadTil(t *testing.T) {
 	}
 }
 
-func TestCanResb(t *testing.T) {
+func TestCanDeclResb(t *testing.T) {
 	cases := []struct {
 		asm  []AsmInstr
 		name string
@@ -56,6 +56,15 @@ func TestCanResb(t *testing.T) {
 		if instr.Size != c.size {
 			t.Fatalf("Expected size '%d', got '%d'", c.size, instr.Size)
 		}
+	}
+}
+
+func TestCanFindResbRef(t *testing.T) {
+	asm := run("1024 resb buf : xyz ( -- ) buf loop ;\n")
+	loopInstr := asm[2].(*AsmUnaryInstr)
+
+	if loopInstr.Op != "buf" {
+		t.Fatalf("Expected buf, got '%s'", loopInstr.Op)
 	}
 }
 

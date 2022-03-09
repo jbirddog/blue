@@ -123,7 +123,12 @@ func (e *Environment) ParseNextWord() bool {
 			return true
 		}
 
-		instr = &CallWordInstr{Word: word}
+		// TODO hack to get resb working.
+		if word.IsInline() {
+			instr = word.Code[0]
+		} else {
+			instr = &CallWordInstr{Word: word}
+		}
 	}
 
 	if _, found := x8664Mnemonics[name]; found {
