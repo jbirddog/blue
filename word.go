@@ -151,3 +151,12 @@ func NewCallGoWord(name string, f GoCaller) *Word {
 		Code: []Instr{&CallGoInstr{F: f}},
 	}
 }
+
+func NewInlineWord(name string, instr Instr) *Word {
+	word := &Word{
+		Name: name,
+		Code: []Instr{instr},
+	}
+
+	return word.Inline()
+}

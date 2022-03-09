@@ -19,6 +19,7 @@ func DefaultDictionary() *Dictionary {
 			NewCallGoWord("global", KernelGlobal),
 			NewCallGoWord("\\", KernelCommentToEol),
 			NewCallGoWord("resb", KernelResb),
+			NewInlineWord("drop", &DropInstr{}),
 		},
 	}
 }

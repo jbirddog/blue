@@ -23,7 +23,7 @@
 ## blue
 
 1. db, dw, const, etc (const is just db/dw in .text to start?)
-1. resb/w
+1. resw
 1. word local dictionaries (or similar to support parsers) - just non globals in files?
 1. handle name collisons when importing
 1. hide non global words before merging dictionaries when importing
@@ -31,13 +31,5 @@
 
 # Targets
 
-### f3
+### f4
 
-f3.blue
-
-read at most n bytes from stdin, write back to stdout. Will be prep for starting 
-to parse blue files from blue.
-
-requires
-
-1. resb/variable support

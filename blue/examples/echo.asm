@@ -52,8 +52,14 @@ stdin2buf:
 	call read.stdin
 	ret
 
+buf2stdout:
+	call write.stdout
+	ret
+
 _start:
 	call stdin2buf
+	mov edx, eax
+	call buf2stdout
 	mov edi, 0
 	call exit
 

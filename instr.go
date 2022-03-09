@@ -25,7 +25,7 @@ func ops_0(mnemonic string, context *RunContext) AsmInstr {
 }
 
 func ops_2(mnemonic string, context *RunContext) AsmInstr {
-	op1, op2 := context.Take2Inputs()
+	op1, op2 := context.Pop2Inputs()
 
 	return &AsmBinaryInstr{Mnemonic: mnemonic, Op1: op1, Op2: op2}
 }
@@ -151,6 +151,12 @@ type ResbInstr struct {
 
 func (i *ResbInstr) Run(env *Environment, context *RunContext) {
 	env.AppendAsmInstr(&AsmResbInstr{Name: i.Name, Size: i.Size})
+}
+
+type DropInstr struct {}
+
+func (i *DropInstr) Run(env *Environment, context *RunContext) {
+	context.PopInput()
 }
 
 func flowWord(word *Word, env *Environment, context *RunContext) {

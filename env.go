@@ -24,14 +24,14 @@ func (c *RunContext) PopInput() string {
 	return input
 }
 
-func (c *RunContext) Take2Inputs() (string, string) {
+func (c *RunContext) Pop2Inputs() (string, string) {
 	inputsLen := len(c.Inputs)
-	first := c.Inputs[inputsLen-2]
-	second := c.Inputs[inputsLen-1]
+	second := c.Inputs[inputsLen-2]
+	first := c.Inputs[inputsLen-1]
 
 	c.Inputs = c.Inputs[:inputsLen-2]
 
-	return first, second
+	return second, first
 }
 
 type Environment struct {
