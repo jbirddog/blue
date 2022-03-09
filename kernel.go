@@ -107,8 +107,15 @@ func KernelResb(env *Environment) {
 	sizeInstr := env.CodeBuf[lastIdx].(*LiteralIntInstr)
 	size := uint(sizeInstr.I)
 
-	instr := &ResbInstr{Name: name, Size: size}
-	env.CodeBuf[lastIdx] = instr
+	resbInstr := &ResbInstr{Name: name, Size: size}
+	env.CodeBuf[lastIdx] = resbInstr
+
+	word := &Word{Name: name}
+	instr := &RefWordInstr{Word: word}
+	word.AppendInstr(instr)
+	word.Inline()
+
+	env.Dictionary.Append(word)
 }
 
 func buildRegisterRef(rawRef string, parentRefs []*RegisterRef) *RegisterRef {

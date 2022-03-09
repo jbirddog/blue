@@ -11,6 +11,7 @@ const (
 	wordFlag_Hidden
 	wordFlag_Global
 	wordFlag_Extern
+	wordFlag_Inline
 )
 
 type Word struct {
@@ -80,6 +81,10 @@ func (w *Word) Extern() *Word {
 	return w.setFlag(wordFlag_Extern)
 }
 
+func (w *Word) Inline() *Word {
+	return w.setFlag(wordFlag_Inline)
+}
+
 func (w *Word) hasFlag(flag uint) bool {
 	return w.Flags&flag == flag
 }
@@ -106,6 +111,10 @@ func (w *Word) IsGlobal() bool {
 
 func (w *Word) IsExtern() bool {
 	return w.hasFlag(wordFlag_Extern)
+}
+
+func (w *Word) IsInline() bool {
+	return w.hasFlag(wordFlag_Inline)
 }
 
 func (w *Word) InputRegisters() []string {
