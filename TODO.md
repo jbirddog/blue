@@ -27,6 +27,7 @@
 1. word local dictionaries (or similar to support parsers) - just non globals in files?
 1. handle name collisons when importing
 1. hide non global words before merging dictionaries when importing
+1. make names asm friendly (stdin>buf is not a valid label)
 
 # Targets
 

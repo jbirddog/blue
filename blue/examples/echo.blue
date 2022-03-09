@@ -6,6 +6,6 @@ section .bss
 
 section .text
 
-\ : stdin>buf ( -- buf:esi read:edx status:eax ) buf 1024 read.stdin ;
+: stdin2buf ( -- buf:esi read:edx status:eax ) buf 1024 read.stdin ;
 
-: _start ( -- noret ) 0 exit ; global
+: _start ( -- noret ) stdin2buf 0 exit ; global

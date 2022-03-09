@@ -46,7 +46,14 @@ section .bss
 buf: resb 1024
 section .text
 
+stdin2buf:
+	mov edx, 1024
+	mov esi, buf
+	call read.stdin
+	ret
+
 _start:
+	call stdin2buf
 	mov edi, 0
 	call exit
 
