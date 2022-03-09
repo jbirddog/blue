@@ -8,6 +8,7 @@
 1. gfe.sh - run examples
 1. higher level refs where registers are inferred from called words
 1. compile time dup, tuck, nip, etc when refs calculations get more strict
+1. mangage sections when resp or : ?
 
 ### optimizations
 
@@ -25,14 +26,15 @@
 1. resb/w
 1. word local dictionaries (or similar to support parsers) - just non globals in files?
 1. handle name collisons when importing
+1. hide non global words before merging dictionaries when importing
 
-## Targets
+# Targets
 
 ### f3
 
 f3.blue
 
-read at most `cap` bytes from stdin, write back to stdout. Will be prep for starting 
+read at most n bytes from stdin, write back to stdout. Will be prep for starting 
 to parse blue files from blue.
 
 requires

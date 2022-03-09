@@ -2,9 +2,10 @@ import sys
 
 section .bss
 
-\ 1 resd buf.len
-\ buf.cap resb buf
+1024 resb buf
 
 section .text
+
+: stdin>buf ( -- buf:esi read:edx status:eax ) buf 1024 read.stdin ;
 
 : _start ( -- noret ) 0 exit ; global
