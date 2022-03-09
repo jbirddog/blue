@@ -24,7 +24,7 @@
 1. db, dw, const, etc (const is just db/dw in .text to start?)
 1. resb/w
 1. word local dictionaries (or similar to support parsers) - just non globals in files?
-1. should imports only import global words?
+1. handle name collisons when importing
 
 ## Targets
 

@@ -1,3 +1,17 @@
 import sys
 
+\ 1024 equd buf.cap
+
+section .bss
+
+\ 1 resd buf.len
+\ buf.cap resb buf
+
+section .text
+
+: buf.cap ( -- cap:edx ) 1024 ;
+
+\ TODO move to sys
+: read.stdin ( buf:esi len:edx -- result:eax ) 0 read ;
+
 : _start ( -- noret ) 0 exit ; global

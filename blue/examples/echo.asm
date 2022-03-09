@@ -27,6 +27,18 @@ exit:
 
 global exit
 
+section .bss
+
+section .text
+
+buf.cap:
+	ret
+
+read.stdin:
+	mov edi, 0
+	call read
+	ret
+
 _start:
 	mov edi, 0
 	call exit
