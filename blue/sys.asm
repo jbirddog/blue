@@ -14,12 +14,26 @@ read:
 
 global read
 
+read.stdin:
+	mov edi, 0
+	call read
+	ret
+
+global read.stdin
+
 write:
 	mov eax, 1
 	call syscall3
 	ret
 
 global write
+
+write.stdout:
+	mov edi, 1
+	call write
+	ret
+
+global write.stdout
 
 exit:
 	mov eax, 60

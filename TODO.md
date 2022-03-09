@@ -38,4 +38,3 @@ to parse blue files from blue.
 requires
 
 1. resb/variable support
-1. const for cap/stdin/stdout? and/or readStdIn writeStdout
