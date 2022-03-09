@@ -18,6 +18,7 @@ func DefaultDictionary() *Dictionary {
 			NewCallGoWord(";", KernelSemi).Immediate(),
 			NewCallGoWord("global", KernelGlobal),
 			NewCallGoWord("\\", KernelCommentToEol),
+			NewCallGoWord("resb", KernelResb),
 		},
 	}
 }

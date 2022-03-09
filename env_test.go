@@ -4,6 +4,8 @@ import (
 	"testing"
 )
 
+// TODO test ReadNextWord, there is a bug when last word runs to eof
+
 func TestReadTil(t *testing.T) {
 	cases := []struct {
 		env       *Environment
@@ -33,11 +35,11 @@ func TestReadTil(t *testing.T) {
 
 func TestCanResb(t *testing.T) {
 	cases := []struct {
-		asm []AsmInstr
+		asm  []AsmInstr
 		name string
-		size int
+		size uint
 	}{
-		{run("1024 resb buf"), "buf", 1024},
+		{run("1024 resb buf\n"), "buf", 1024},
 	}
 
 	for _, c := range cases {

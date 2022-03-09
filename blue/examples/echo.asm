@@ -43,6 +43,7 @@ global exit
 
 section .bss
 
+buf: resb 1024
 section .text
 
 _start:

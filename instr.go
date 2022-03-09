@@ -144,6 +144,15 @@ func (i *CommentInstr) Run(env *Environment, context *RunContext) {
 	// env.AppendAsmInstr(&AsmCommentInstr{Comment: i.Comment})
 }
 
+type ResbInstr struct {
+	Name string
+	Size uint
+}
+
+func (i *ResbInstr) Run(env *Environment, context *RunContext) {
+	env.AppendAsmInstr(&AsmResbInstr{Name: i.Name, Size: i.Size})
+}
+
 func flowWord(word *Word, env *Environment, context *RunContext) {
 	expectedInputs := word.InputRegisters()
 

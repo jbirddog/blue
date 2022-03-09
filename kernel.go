@@ -101,6 +101,16 @@ func KernelImport(env *Environment) {
 	env.Dictionary.Words = append(env.Dictionary.Words, importEnv.Dictionary.Words...)
 }
 
+func KernelResb(env *Environment) {
+	name := env.ReadNextWord()
+	lastIdx := len(env.CodeBuf) - 1
+	sizeInstr := env.CodeBuf[lastIdx].(*LiteralIntInstr)
+	size := uint(sizeInstr.I)
+
+	instr := &ResbInstr{Name: name, Size: size}
+	env.CodeBuf[lastIdx] = instr
+}
+
 func buildRegisterRef(rawRef string, parentRefs []*RegisterRef) *RegisterRef {
 	parts := strings.SplitN(rawRef, ":", 2)
 	partsLen := len(parts)
