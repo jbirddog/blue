@@ -8,26 +8,20 @@ import (
 )
 
 type RunContext struct {
-	Inputs   []string
-	Outputs  []string
-	RefWords []*RefWordInstr
+	Inputs  []string
+	Outputs []string
 }
 
 func (c *RunContext) AppendInput(i string) {
 	c.Inputs = append(c.Inputs, i)
 }
 
-func (c *RunContext) AppendRefWord(i *RefWordInstr) {
-	c.RefWords = append(c.RefWords, i)
-}
+func (c *RunContext) PopInput() string {
+	lastIdx := len(c.Inputs) - 1
+	input := c.Inputs[lastIdx]
+	c.Inputs = c.Inputs[:lastIdx]
 
-func (c *RunContext) PopRefWord() *RefWordInstr {
-	refWordsLen := len(c.RefWords)
-	instr := c.RefWords[refWordsLen-1]
-
-	c.RefWords = c.RefWords[:refWordsLen-1]
-
-	return instr
+	return input
 }
 
 func (c *RunContext) Take2Inputs() (string, string) {

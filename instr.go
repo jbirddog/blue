@@ -31,7 +31,7 @@ func ops_2(mnemonic string, context *RunContext) AsmInstr {
 }
 
 func op_label(mnemonic string, context *RunContext) AsmInstr {
-	op := context.PopRefWord().Word.AsmLabel()
+	op := context.PopInput()
 
 	return &AsmUnaryInstr{Mnemonic: mnemonic, Op: op}
 }
@@ -91,7 +91,7 @@ type RefWordInstr struct {
 }
 
 func (i *RefWordInstr) Run(env *Environment, context *RunContext) {
-	context.AppendRefWord(i)
+	context.AppendInput(i.Word.AsmLabel())
 }
 
 type ExternWordInstr struct {
