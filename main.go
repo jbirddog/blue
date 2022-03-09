@@ -41,12 +41,8 @@ func main() {
 
 	blueFile := os.Args[1]
 	asmFile := blueFile[:len(blueFile)-5] + ".asm"
-	env := NewEnvironmentForFile(blueFile)
+	env := ParseFileInNewEnvironment(blueFile)
 
-	for env.ParseNextWord() {
-	}
-
-	env.Validate()
 	env.WriteAsm(asmFile)
 
 	fmt.Printf("ok\t%s\n", blueFile)

@@ -9,6 +9,7 @@ func DefaultDictionary() *Dictionary {
 	return &Dictionary{
 		Name: "default",
 		Words: []*Word{
+			NewCallGoWord("import", KernelImport),
 			NewCallGoWord("extern", KernelExtern),
 			NewCallGoWord("section", KernelSection),
 			NewCallGoWord(":", KernelColon),

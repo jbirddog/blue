@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"strings"
 )
@@ -86,7 +87,18 @@ func KernelCommentToEol(env *Environment) {
 	env.AppendInstr(&CommentInstr{Comment: comment})
 }
 
-func KernelConstant(env *Environment) {
+func KernelImport(env *Environment) {
+	env.LTrimBuf()
+	file := env.ReadNextWord()
+	if len(file) == 0 {
+		log.Fatal("import expects a file")
+	}
+
+	file = fmt.Sprintf("%s.blue", file)
+	importEnv := ParseFileInNewEnvironment(file)
+
+	env.CodeBuf = append(env.CodeBuf, importEnv.CodeBuf...)
+	env.Dictionary.Words = append(env.Dictionary.Words, importEnv.Dictionary.Words...)
 }
 
 func buildRegisterRef(rawRef string, parentRefs []*RegisterRef) *RegisterRef {

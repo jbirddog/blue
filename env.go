@@ -57,6 +57,17 @@ func NewEnvironmentForFile(filename string) *Environment {
 	return &Environment{Dictionary: DefaultDictionary(), InputBuf: string(bytes)}
 }
 
+func ParseFileInNewEnvironment(filename string) *Environment {
+	env := NewEnvironmentForFile(filename)
+
+	for env.ParseNextWord() {
+	}
+
+	env.Validate()
+
+	return env
+}
+
 func (e *Environment) LTrimBuf() {
 	e.InputBuf = strings.TrimLeft(e.InputBuf, " \t\n")
 }

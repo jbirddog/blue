@@ -13,3 +13,6 @@ ld -o bin/fib obj/fib.o obj/sys.o
 
 nasm -f elf64 -o obj/scratch.o examples/scratch.asm
 ld -o bin/scratch obj/scratch.o obj/sys.o
+
+nasm -f elf64 -o obj/echo.o examples/echo.asm
+ld -o bin/echo obj/echo.o
