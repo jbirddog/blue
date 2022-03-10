@@ -2,13 +2,16 @@ import sys
 
 section .bss
 
+\ TODO equ for constants
 1024 resb buf
 
 section .text
 
-: stdin2buf ( -- buf:esi read:eax ) buf 1024 read.stdin ;
-: buf2stdout ( buf:esi len:edx -- result:eax ) write.stdout ;
+\ : or-exit ( result:eax -- value:eax ) dup 0<? exit.syserr ;
+
+: buf.read ( -- buf:esi read:eax ) buf 1024 read.stdin ;
+: buf.write ( buf:esi len:edx -- result:eax ) write.stdout ;
 
 \ TODO for now we just assume the result of the read syscall is > 0
 \ TODO also still a bit loose with effect handling as seen with exit
-: _start ( -- noret ) stdin2buf buf2stdout exit ; global
+: _start ( -- noret ) buf.read buf.write exit ; global

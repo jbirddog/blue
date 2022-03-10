@@ -48,6 +48,12 @@ exit:
 
 global exit
 
+exit.syserr:
+	neg eax
+	mov edi, eax
+	call exit
+	ret
+
 _start:
 	mov edi, 33
 	call exit

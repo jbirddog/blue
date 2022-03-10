@@ -47,3 +47,9 @@ exit:
 	call syscall1
 
 global exit
+
+exit.syserr:
+	neg eax
+	mov edi, eax
+	call exit
+	ret

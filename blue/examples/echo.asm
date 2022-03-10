@@ -48,25 +48,31 @@ exit:
 
 global exit
 
+exit.syserr:
+	neg eax
+	mov edi, eax
+	call exit
+	ret
+
 section .bss
 
 buf: resb 1024
 section .text
 
-stdin2buf:
+buf.read:
 	mov edx, 1024
 	mov esi, buf
 	call read.stdin
 	ret
 
-buf2stdout:
+buf.write:
 	call write.stdout
 	ret
 
 _start:
-	call stdin2buf
+	call buf.read
 	mov edx, eax
-	call buf2stdout
+	call buf.write
 	mov edi, eax
 	call exit
 

@@ -16,6 +16,10 @@ func (c *RunContext) AppendInput(i string) {
 	c.Inputs = append(c.Inputs, i)
 }
 
+func (c *RunContext) Peek() string {
+	return c.Inputs[len(c.Inputs)-1]
+}
+
 func (c *RunContext) PopInput() string {
 	lastIdx := len(c.Inputs) - 1
 	input := c.Inputs[lastIdx]

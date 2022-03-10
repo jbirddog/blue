@@ -9,3 +9,4 @@
 : write.stderr ( buf:esi len:edx -- result:eax ) 3 write ; global
 
 : exit ( status:edi -- noret ) 60 syscall1 ; global
+: exit.syserr ( err:eax -- ) neg exit ;
