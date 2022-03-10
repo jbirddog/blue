@@ -36,6 +36,10 @@ func (w *Word) AppendInstr(instr Instr) {
 	w.Code = append(w.Code, instr)
 }
 
+func (w *Word) AppendInstrs(instrs []Instr) {
+	w.Code = append(w.Code, instrs...)
+}
+
 func (w *Word) PopInstr() Instr {
 	idx := len(w.Code) - 1
 	instr := w.Code[idx]

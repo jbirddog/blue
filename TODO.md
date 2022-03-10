@@ -11,7 +11,6 @@
 1. CondCall is not flowing yet
 1. Only 1 CondCall is supported per word
 1. If array is used per word, redeclarations work and map can be used at the top level
-1. Syntax is currently tied to nasm, not sure if that matters or not
 
 ### optimizations
 
@@ -46,4 +45,5 @@ readability improvements from f3
 1. ^ location of fd for read in sys doesn't help composability
 1. ^ after more code is written the right abstraction may emerge
 1. word names being restricted by valid nasm labels hurts readability
+1. infer section, no manual override for now?
 1. const - first via inline support

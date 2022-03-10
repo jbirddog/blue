@@ -183,9 +183,11 @@ func (i *CondCallInstr) Run(env *Environment, context *RunContext) {
 	ccLabel := "..@donecc"
 
 	// TODO AppendAsmInstrs
-	env.AppendAsmInstr(&AsmUnaryInstr{Mnemonic: i.Jmp, Op: ccLabel})
-	env.AppendAsmInstr(&AsmCallInstr{Label: i.Target.Word.AsmLabel()})
-	env.AppendAsmInstr(&AsmLabelInstr{Name: ccLabel})
+	env.AppendAsmInstrs([]AsmInstr{
+		&AsmUnaryInstr{Mnemonic: i.Jmp, Op: ccLabel},
+		&AsmCallInstr{Label: i.Target.Word.AsmLabel()},
+		&AsmLabelInstr{Name: ccLabel},
+	})
 }
 
 func flowWord(word *Word, env *Environment, context *RunContext) {

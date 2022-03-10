@@ -114,7 +114,7 @@ func (e *Environment) ParseNextWord() bool {
 		return false
 	}
 
-	var instr Instr
+	var instrs []Instr
 
 	if word := e.Dictionary.Find(name); word != nil {
 		if !e.Compiling || word.IsImmediate() {
@@ -127,30 +127,29 @@ func (e *Environment) ParseNextWord() bool {
 			return true
 		}
 
-		// TODO hack to get resb working.
 		if word.IsInline() {
-			instr = word.Code[0]
+			instrs = word.Code
 		} else {
-			instr = &CallWordInstr{Word: word}
+			instrs = []Instr{&CallWordInstr{Word: word}}
 		}
 	}
 
 	if _, found := x8664Mnemonics[name]; found {
-		instr = &X8664Instr{Mnemonic: name}
+		instrs = []Instr{&X8664Instr{Mnemonic: name}}
 	}
 
 	if i, err := strconv.Atoi(name); err == nil {
-		instr = &LiteralIntInstr{I: i}
+		instrs = []Instr{&LiteralIntInstr{I: i}}
 	}
 
-	if instr == nil {
+	if len(instrs) == 0 {
 		log.Fatal("Did not find ", name)
 	}
 
 	if !e.Compiling {
-		e.AppendInstr(instr)
+		e.AppendInstrs(instrs)
 	} else {
-		e.Dictionary.Latest().AppendInstr(instr)
+		e.Dictionary.Latest().AppendInstrs(instrs)
 	}
 
 	return true
@@ -160,8 +159,16 @@ func (c *Environment) AppendAsmInstr(i AsmInstr) {
 	c.AsmInstrs = append(c.AsmInstrs, i)
 }
 
+func (c *Environment) AppendAsmInstrs(i []AsmInstr) {
+	c.AsmInstrs = append(c.AsmInstrs, i...)
+}
+
 func (e *Environment) AppendInstr(i Instr) {
 	e.CodeBuf = append(e.CodeBuf, i)
+}
+
+func (e *Environment) AppendInstrs(i []Instr) {
+	e.CodeBuf = append(e.CodeBuf, i...)
 }
 
 func (e *Environment) PopInstr() Instr {
