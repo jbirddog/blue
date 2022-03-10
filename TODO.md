@@ -7,10 +7,16 @@
 1. more unit tests
 1. gfe.sh - run examples
 1. higher level refs where registers are inferred from called words
+1. mangage sections when resp or : ?
+1. CondCall is not flowing yet
+1. Only 1 CondCall is supported per word
+1. If array is used per word, redeclarations work and map can be used at the top level
+1. Syntax is currently tied to nasm, not sure if that matters or not
 
 ### optimizations
 
 1. inlining
+1. remove unused words before asm
 
 #### peephole
 
@@ -19,7 +25,25 @@
 
 ## blue
 
-1. imports
-1. db, dw, const, etc (const is just db/dw in .text to start?)
-1. resb/w
-1. word local dictionaries (or similar to support parsers)
+1. resX, decX
+1. word local dictionaries (or similar to support parsers) - just non globals in files?
+1. handle name collisons for asm labels when importing/redeclaring
+1. hide non global words before merging dictionaries when importing
+1. make names asm friendly (stdin>buf is not a valid label)
+1. structs
+
+# Targets
+
+### f3
+
+echo
+
+### f4
+
+readability improvements from f3
+
+1. thinking less about imports like sys and more about rolling it to suite needs
+1. ^ location of fd for read in sys doesn't help composability
+1. ^ after more code is written the right abstraction may emerge
+1. word names being restricted by valid nasm labels hurts readability
+1. const - first via inline support

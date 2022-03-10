@@ -24,23 +24,31 @@ func ops_0(mnemonic string, context *RunContext) AsmInstr {
 	return &AsmNoOperandInstr{Mnemonic: mnemonic}
 }
 
+func ops_1_1(mnemonic string, context *RunContext) AsmInstr {
+	op := context.Peek()
+
+	return &AsmUnaryInstr{Mnemonic: mnemonic, Op: op}
+}
+
 func ops_2(mnemonic string, context *RunContext) AsmInstr {
-	op1, op2 := context.Take2Inputs()
+	op1, op2 := context.Pop2Inputs()
 
 	return &AsmBinaryInstr{Mnemonic: mnemonic, Op1: op1, Op2: op2}
 }
 
 func op_label(mnemonic string, context *RunContext) AsmInstr {
-	op := context.PopRefWord().Word.AsmLabel()
+	op := context.PopInput()
 
 	return &AsmUnaryInstr{Mnemonic: mnemonic, Op: op}
 }
 
 var x8664Mnemonics = map[string]x8664Lowerer{
+	"cmp":     ops_2,
 	"loop":    op_label,
+	"neg":     ops_1_1,
 	"ret":     ops_0,
 	"syscall": ops_0,
-	"xadd":    ops_2,
+	"xadd":    ops_2, // TODO needs to push op1 back
 }
 
 type X8664Instr struct {
@@ -91,7 +99,7 @@ type RefWordInstr struct {
 }
 
 func (i *RefWordInstr) Run(env *Environment, context *RunContext) {
-	context.AppendRefWord(i)
+	context.AppendInput(i.Word.AsmLabel())
 }
 
 type ExternWordInstr struct {
@@ -141,7 +149,43 @@ type CommentInstr struct {
 }
 
 func (i *CommentInstr) Run(env *Environment, context *RunContext) {
-	env.AppendAsmInstr(&AsmCommentInstr{Comment: i.Comment})
+	// env.AppendAsmInstr(&AsmCommentInstr{Comment: i.Comment})
+}
+
+type ResbInstr struct {
+	Name string
+	Size uint
+}
+
+func (i *ResbInstr) Run(env *Environment, context *RunContext) {
+	env.AppendAsmInstr(&AsmResbInstr{Name: i.Name, Size: i.Size})
+}
+
+type DropInstr struct{}
+
+func (i *DropInstr) Run(env *Environment, context *RunContext) {
+	context.PopInput()
+}
+
+type DupInstr struct{}
+
+func (i *DupInstr) Run(env *Environment, context *RunContext) {
+	context.AppendInput(context.Peek())
+}
+
+type CondCallInstr struct {
+	Jmp    string
+	Target *RefWordInstr
+}
+
+func (i *CondCallInstr) Run(env *Environment, context *RunContext) {
+	// TODO needs to support multiple CondCalls in one word
+	ccLabel := "..@donecc"
+
+	// TODO AppendAsmInstrs
+	env.AppendAsmInstr(&AsmUnaryInstr{Mnemonic: i.Jmp, Op: ccLabel})
+	env.AppendAsmInstr(&AsmCallInstr{Label: i.Target.Word.AsmLabel()})
+	env.AppendAsmInstr(&AsmLabelInstr{Name: ccLabel})
 }
 
 func flowWord(word *Word, env *Environment, context *RunContext) {

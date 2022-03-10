@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"io/ioutil"
 	"log"
 	"strconv"
@@ -9,36 +8,34 @@ import (
 )
 
 type RunContext struct {
-	Inputs   []string
-	Outputs  []string
-	RefWords []*RefWordInstr
+	Inputs  []string
+	Outputs []string
 }
 
 func (c *RunContext) AppendInput(i string) {
 	c.Inputs = append(c.Inputs, i)
 }
 
-func (c *RunContext) AppendRefWord(i *RefWordInstr) {
-	c.RefWords = append(c.RefWords, i)
+func (c *RunContext) Peek() string {
+	return c.Inputs[len(c.Inputs)-1]
 }
 
-func (c *RunContext) PopRefWord() *RefWordInstr {
-	refWordsLen := len(c.RefWords)
-	instr := c.RefWords[refWordsLen-1]
+func (c *RunContext) PopInput() string {
+	lastIdx := len(c.Inputs) - 1
+	input := c.Inputs[lastIdx]
+	c.Inputs = c.Inputs[:lastIdx]
 
-	c.RefWords = c.RefWords[:refWordsLen-1]
-
-	return instr
+	return input
 }
 
-func (c *RunContext) Take2Inputs() (string, string) {
+func (c *RunContext) Pop2Inputs() (string, string) {
 	inputsLen := len(c.Inputs)
-	first := c.Inputs[inputsLen-2]
-	second := c.Inputs[inputsLen-1]
+	second := c.Inputs[inputsLen-2]
+	first := c.Inputs[inputsLen-1]
 
 	c.Inputs = c.Inputs[:inputsLen-2]
 
-	return first, second
+	return second, first
 }
 
 type Environment struct {
@@ -56,6 +53,17 @@ func NewEnvironmentForFile(filename string) *Environment {
 	}
 
 	return &Environment{Dictionary: DefaultDictionary(), InputBuf: string(bytes)}
+}
+
+func ParseFileInNewEnvironment(filename string) *Environment {
+	env := NewEnvironmentForFile(filename)
+
+	for env.ParseNextWord() {
+	}
+
+	env.Validate()
+
+	return env
 }
 
 func (e *Environment) LTrimBuf() {
@@ -119,7 +127,12 @@ func (e *Environment) ParseNextWord() bool {
 			return true
 		}
 
-		instr = &CallWordInstr{Word: word}
+		// TODO hack to get resb working.
+		if word.IsInline() {
+			instr = word.Code[0]
+		} else {
+			instr = &CallWordInstr{Word: word}
+		}
 	}
 
 	if _, found := x8664Mnemonics[name]; found {
@@ -131,8 +144,7 @@ func (e *Environment) ParseNextWord() bool {
 	}
 
 	if instr == nil {
-		fmt.Println("Did not find", name)
-		return false
+		log.Fatal("Did not find ", name)
 	}
 
 	if !e.Compiling {
@@ -150,6 +162,14 @@ func (c *Environment) AppendAsmInstr(i AsmInstr) {
 
 func (e *Environment) AppendInstr(i Instr) {
 	e.CodeBuf = append(e.CodeBuf, i)
+}
+
+func (e *Environment) PopInstr() Instr {
+	last := len(e.CodeBuf) - 1
+	instr := e.CodeBuf[last]
+	e.CodeBuf = e.CodeBuf[:last]
+
+	return instr
 }
 
 func (e *Environment) Validate() {

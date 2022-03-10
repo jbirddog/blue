@@ -11,6 +11,7 @@ const (
 	wordFlag_Hidden
 	wordFlag_Global
 	wordFlag_Extern
+	wordFlag_Inline
 )
 
 type Word struct {
@@ -33,6 +34,14 @@ func LocalWord(name string) *Word {
 
 func (w *Word) AppendInstr(instr Instr) {
 	w.Code = append(w.Code, instr)
+}
+
+func (w *Word) PopInstr() Instr {
+	idx := len(w.Code) - 1
+	instr := w.Code[idx]
+	w.Code = w.Code[:idx]
+
+	return instr
 }
 
 func (w *Word) AppendInput(r *RegisterRef) {
@@ -80,6 +89,10 @@ func (w *Word) Extern() *Word {
 	return w.setFlag(wordFlag_Extern)
 }
 
+func (w *Word) Inline() *Word {
+	return w.setFlag(wordFlag_Inline)
+}
+
 func (w *Word) hasFlag(flag uint) bool {
 	return w.Flags&flag == flag
 }
@@ -106,6 +119,10 @@ func (w *Word) IsGlobal() bool {
 
 func (w *Word) IsExtern() bool {
 	return w.hasFlag(wordFlag_Extern)
+}
+
+func (w *Word) IsInline() bool {
+	return w.hasFlag(wordFlag_Inline)
 }
 
 func (w *Word) InputRegisters() []string {
@@ -141,4 +158,13 @@ func NewCallGoWord(name string, f GoCaller) *Word {
 		Name: name,
 		Code: []Instr{&CallGoInstr{F: f}},
 	}
+}
+
+func NewInlineWord(name string, instr Instr) *Word {
+	word := &Word{
+		Name: name,
+		Code: []Instr{instr},
+	}
+
+	return word.Inline()
 }

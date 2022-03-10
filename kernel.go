@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"strings"
 )
@@ -84,6 +85,59 @@ func KernelSection(env *Environment) {
 func KernelCommentToEol(env *Environment) {
 	comment := env.ReadTil("\n")
 	env.AppendInstr(&CommentInstr{Comment: comment})
+}
+
+func KernelImport(env *Environment) {
+	env.LTrimBuf()
+	file := env.ReadNextWord()
+	if len(file) == 0 {
+		log.Fatal("import expects a file")
+	}
+
+	file = fmt.Sprintf("%s.blue", file)
+	importEnv := ParseFileInNewEnvironment(file)
+
+	env.CodeBuf = append(env.CodeBuf, importEnv.CodeBuf...)
+	env.Dictionary.Words = append(env.Dictionary.Words, importEnv.Dictionary.Words...)
+}
+
+func KernelResb(env *Environment) {
+	name := env.ReadNextWord()
+	if len(name) == 0 {
+		log.Fatal("resb expects a name")
+	}
+
+	lastIdx := len(env.CodeBuf) - 1
+	sizeInstr := env.CodeBuf[lastIdx].(*LiteralIntInstr)
+	size := uint(sizeInstr.I)
+
+	resbInstr := &ResbInstr{Name: name, Size: size}
+	env.CodeBuf[lastIdx] = resbInstr
+
+	word := &Word{Name: name}
+	instr := &RefWordInstr{Word: word}
+	word.AppendInstr(instr)
+	word.Inline()
+
+	env.Dictionary.Append(word)
+}
+
+func KernelTick(env *Environment) {
+	word := env.Dictionary.Find(env.ReadNextWord())
+	if word == nil {
+		log.Fatal("' expects a valid word")
+	}
+
+	instr := &RefWordInstr{Word: word}
+	// TODO won't work when not compiling
+	env.Dictionary.Latest().AppendInstr(instr)
+}
+
+func KernelXl(env *Environment) {
+	latest := env.Dictionary.Latest()
+	refWord := latest.PopInstr().(*RefWordInstr)
+	condCall := &CondCallInstr{Jmp: "jge", Target: refWord}
+	latest.AppendInstr(condCall)
 }
 
 func buildRegisterRef(rawRef string, parentRefs []*RegisterRef) *RegisterRef {

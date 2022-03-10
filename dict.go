@@ -9,6 +9,7 @@ func DefaultDictionary() *Dictionary {
 	return &Dictionary{
 		Name: "default",
 		Words: []*Word{
+			NewCallGoWord("import", KernelImport),
 			NewCallGoWord("extern", KernelExtern),
 			NewCallGoWord("section", KernelSection),
 			NewCallGoWord(":", KernelColon),
@@ -17,6 +18,11 @@ func DefaultDictionary() *Dictionary {
 			NewCallGoWord(";", KernelSemi).Immediate(),
 			NewCallGoWord("global", KernelGlobal),
 			NewCallGoWord("\\", KernelCommentToEol),
+			NewCallGoWord("resb", KernelResb),
+			NewInlineWord("drop", &DropInstr{}),
+			NewInlineWord("dup", &DupInstr{}),
+			NewCallGoWord("'", KernelTick).Immediate(),
+			NewCallGoWord("xl", KernelXl).Immediate(),
 		},
 	}
 }

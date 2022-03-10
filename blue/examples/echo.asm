@@ -54,8 +54,36 @@ exit.syserr:
 	call exit
 	ret
 
+section .bss
+
+buf: resb 1024
+section .text
+
+orexit:
+	cmp eax, 0
+	jge ..@donecc
+	call exit.syserr
+
+..@donecc:
+	ret
+
+buf.read:
+	mov edx, 1024
+	mov esi, buf
+	call read.stdin
+	call orexit
+	ret
+
+buf.write:
+	call write.stdout
+	call orexit
+	ret
+
 _start:
-	mov edi, 33
+	call buf.read
+	mov edx, eax
+	call buf.write
+	mov edi, 0
 	call exit
 
 global _start

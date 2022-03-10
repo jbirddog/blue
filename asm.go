@@ -86,6 +86,15 @@ func (i *AsmCommentInstr) String() string {
 	return fmt.Sprintf("\n; %s", i.Comment)
 }
 
+type AsmResbInstr struct {
+	Name string
+	Size uint
+}
+
+func (i *AsmResbInstr) String() string {
+	return fmt.Sprintf("\n%s: resb %d", i.Name, i.Size)
+}
+
 type AsmWriter struct {
 	sb strings.Builder
 }
