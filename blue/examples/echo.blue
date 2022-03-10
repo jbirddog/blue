@@ -6,9 +6,9 @@ section .bss
 
 section .text
 
-: stdin2buf ( -- buf:esi result:eax ) buf 1024 read.stdin ;
+: stdin2buf ( -- buf:esi read:eax ) buf 1024 read.stdin ;
 : buf2stdout ( buf:esi len:edx -- result:eax ) write.stdout ;
 
 \ TODO for now we just assume the result of the read syscall is > 0
-\ TODO also still a bit loose with effect handling as seen with 0 exit
-: _start ( -- noret ) stdin2buf buf2stdout 0 exit ; global
+\ TODO also still a bit loose with effect handling as seen with exit
+: _start ( -- noret ) stdin2buf buf2stdout exit ; global

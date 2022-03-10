@@ -35,6 +35,13 @@ write.stdout:
 
 global write.stdout
 
+write.stderr:
+	mov edi, 3
+	call write
+	ret
+
+global write.stderr
+
 exit:
 	mov eax, 60
 	call syscall1
@@ -60,7 +67,7 @@ _start:
 	call stdin2buf
 	mov edx, eax
 	call buf2stdout
-	mov edi, 0
+	mov edi, eax
 	call exit
 
 global _start

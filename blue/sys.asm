@@ -35,6 +35,13 @@ write.stdout:
 
 global write.stdout
 
+write.stderr:
+	mov edi, 3
+	call write
+	ret
+
+global write.stderr
+
 exit:
 	mov eax, 60
 	call syscall1

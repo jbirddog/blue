@@ -6,5 +6,6 @@
 
 : write ( buf:esi len:edx fd:edi -- result:eax ) 1 syscall3 ; global
 : write.stdout ( buf:esi len:edx -- result:eax ) 1 write ; global
+: write.stderr ( buf:esi len:edx -- result:eax ) 3 write ; global
 
 : exit ( status:edi -- noret ) 60 syscall1 ; global
