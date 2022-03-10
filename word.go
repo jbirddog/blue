@@ -36,6 +36,14 @@ func (w *Word) AppendInstr(instr Instr) {
 	w.Code = append(w.Code, instr)
 }
 
+func (w *Word) PopInstr() Instr {
+	idx := len(w.Code) - 1
+	instr := w.Code[idx]
+	w.Code = w.Code[:idx]
+
+	return instr
+}
+
 func (w *Word) AppendInput(r *RegisterRef) {
 	if _, found := registers[r.Reg]; !found {
 		log.Fatal("Unknown input register: ", r.Reg)

@@ -20,6 +20,9 @@ func DefaultDictionary() *Dictionary {
 			NewCallGoWord("\\", KernelCommentToEol),
 			NewCallGoWord("resb", KernelResb),
 			NewInlineWord("drop", &DropInstr{}),
+			NewInlineWord("dup", &DupInstr{}),
+			NewCallGoWord("'", KernelTick).Immediate(),
+			NewCallGoWord("xle", KernelXle).Immediate(),
 		},
 	}
 }

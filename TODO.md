@@ -31,5 +31,14 @@
 
 # Targets
 
+### f3
+
+echo
+
+1. thinking less about imports like sys and more about rolling it to suite needs
+1. ^ location of fd for read in sys doesn't help composability
+1. ^ after more code is written the right abstraction may emerge
+1. word names being restricted by valid nasm labels hurts readability
+
 ### f4
 

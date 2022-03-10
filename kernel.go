@@ -103,6 +103,10 @@ func KernelImport(env *Environment) {
 
 func KernelResb(env *Environment) {
 	name := env.ReadNextWord()
+	if len(name) == 0 {
+		log.Fatal("resb expects a name")
+	}
+
 	lastIdx := len(env.CodeBuf) - 1
 	sizeInstr := env.CodeBuf[lastIdx].(*LiteralIntInstr)
 	size := uint(sizeInstr.I)
@@ -116,6 +120,24 @@ func KernelResb(env *Environment) {
 	word.Inline()
 
 	env.Dictionary.Append(word)
+}
+
+func KernelTick(env *Environment) {
+	word := env.Dictionary.Find(env.ReadNextWord())
+	if word == nil {
+		log.Fatal("' expects a valid word")
+	}
+
+	instr := &RefWordInstr{Word: word}
+	// TODO won't work when not compiling
+	env.Dictionary.Latest().AppendInstr(instr)
+}
+
+func KernelXle(env *Environment) {
+	latest := env.Dictionary.Latest()
+	refWord := latest.PopInstr().(*RefWordInstr)
+	condCall := &CondCallInstr{Jmp: "jge", Target: refWord}
+	latest.AppendInstr(condCall)
 }
 
 func buildRegisterRef(rawRef string, parentRefs []*RegisterRef) *RegisterRef {

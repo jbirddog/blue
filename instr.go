@@ -43,6 +43,7 @@ func op_label(mnemonic string, context *RunContext) AsmInstr {
 }
 
 var x8664Mnemonics = map[string]x8664Lowerer{
+	"cmp":     ops_2,
 	"loop":    op_label,
 	"neg":     ops_1_1,
 	"ret":     ops_0,
@@ -164,6 +165,27 @@ type DropInstr struct{}
 
 func (i *DropInstr) Run(env *Environment, context *RunContext) {
 	context.PopInput()
+}
+
+type DupInstr struct{}
+
+func (i *DupInstr) Run(env *Environment, context *RunContext) {
+	context.AppendInput(context.Peek())
+}
+
+type CondCallInstr struct {
+	Jmp    string
+	Target *RefWordInstr
+}
+
+func (i *CondCallInstr) Run(env *Environment, context *RunContext) {
+	// TODO needs to support multiple CondCalls in one word
+	ccLabel := "..@donecc"
+
+	// TODO AppendAsmInstrs
+	env.AppendAsmInstr(&AsmUnaryInstr{Mnemonic: i.Jmp, Op: ccLabel})
+	env.AppendAsmInstr(&AsmCallInstr{Label: i.Target.Word.AsmLabel()})
+	env.AppendAsmInstr(&AsmLabelInstr{Name: ccLabel})
 }
 
 func flowWord(word *Word, env *Environment, context *RunContext) {
