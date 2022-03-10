@@ -76,6 +76,7 @@ buf.read:
 
 buf.write:
 	call write.stdout
+	call orexit
 	ret
 
 _start:

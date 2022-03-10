@@ -7,8 +7,10 @@
 1. more unit tests
 1. gfe.sh - run examples
 1. higher level refs where registers are inferred from called words
-1. compile time dup, tuck, nip, etc when refs calculations get more strict
 1. mangage sections when resp or : ?
+1. CondCall is not flowing yet
+1. Only 1 CondCall is supported per word
+1. If array is used per word, redeclarations work and map can be used at the top level
 
 ### optimizations
 
@@ -28,6 +30,7 @@
 1. handle name collisons for asm labels when importing/redeclaring
 1. hide non global words before merging dictionaries when importing
 1. make names asm friendly (stdin>buf is not a valid label)
+1. structs
 
 # Targets
 

@@ -22,7 +22,7 @@ func DefaultDictionary() *Dictionary {
 			NewInlineWord("drop", &DropInstr{}),
 			NewInlineWord("dup", &DupInstr{}),
 			NewCallGoWord("'", KernelTick).Immediate(),
-			NewCallGoWord("xle", KernelXle).Immediate(),
+			NewCallGoWord("xl", KernelXl).Immediate(),
 		},
 	}
 }

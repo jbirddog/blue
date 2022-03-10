@@ -7,12 +7,10 @@ section .bss
 
 section .text
 
-\ : or-exit ( result:eax -- value:eax ) dup <0? exit.syserr ;
-: orexit ( result:eax -- value:eax ) dup 0 cmp ' exit.syserr xle ;
+: orexit ( result:eax -- value:eax ) dup 0 cmp ' exit.syserr xl ;
 
 : buf.read ( -- buf:esi read:eax ) buf 1024 read.stdin orexit ;
-: buf.write ( buf:esi len:edx -- result:eax ) write.stdout ;
+: buf.write ( buf:esi len:edx -- result:eax ) write.stdout orexit ;
 
-\ TODO for now we just assume the result of the read syscall is > 0
 \ TODO also still a bit loose with effect handling as seen with exit
 : _start ( -- noret ) buf.read buf.write 0 exit ; global
