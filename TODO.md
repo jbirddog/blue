@@ -11,6 +11,7 @@
 1. CondCall is not flowing yet
 1. Only 1 CondCall is supported per word
 1. If array is used per word, redeclarations work and map can be used at the top level
+1. ^ still needs array declaration order for writes to be stable
 
 ### optimizations
 

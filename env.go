@@ -108,6 +108,21 @@ func (e *Environment) ReadTil(s string) string {
 	return read
 }
 
+func instrsForWord(word *Word) []Instr {
+	if !word.IsInline() {
+		return []Instr{&CallWordInstr{Word: word}}
+	}
+
+	lastIdx := len(word.Code)
+	if instr, x8664 := word.Code[lastIdx-1].(*X8664Instr); x8664 {
+		if instr.Mnemonic == "ret" {
+			lastIdx -= 1
+		}
+	}
+
+	return word.Code[:lastIdx]
+}
+
 func (e *Environment) ParseNextWord() bool {
 	name := e.ReadNextWord()
 	if len(name) == 0 {
@@ -127,11 +142,7 @@ func (e *Environment) ParseNextWord() bool {
 			return true
 		}
 
-		if word.IsInline() {
-			instrs = word.Code
-		} else {
-			instrs = []Instr{&CallWordInstr{Word: word}}
-		}
+		instrs = instrsForWord(word)
 	}
 
 	if _, found := x8664Mnemonics[name]; found {

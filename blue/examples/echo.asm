@@ -54,6 +54,9 @@ exit.syserr:
 	call exit
 	ret
 
+buf.cap:
+	ret
+
 section .bss
 
 buf: resb 1024

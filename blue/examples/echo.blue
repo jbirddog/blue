@@ -1,15 +1,16 @@
 import sys
 
+: buf.cap ( -- ) 1024 ; inline
+
 section .bss
 
-\ TODO equ for constants
 1024 resb buf
 
 section .text
 
 : orexit ( result:eax -- value:eax ) dup 0 cmp ' exit.syserr xl ;
 
-: buf.read ( -- buf:esi read:eax ) buf 1024 read.stdin orexit ;
+: buf.read ( -- buf:esi read:eax ) buf buf.cap read.stdin orexit ;
 : buf.write ( buf:esi len:edx -- wrote:eax ) write.stdout orexit ;
 
 \ TODO also still a bit loose with effect handling as seen with exit

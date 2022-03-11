@@ -76,6 +76,10 @@ func KernelGlobal(env *Environment) {
 	env.AppendInstr(&GlobalWordInstr{Word: latest})
 }
 
+func KernelInline(env *Environment) {
+	env.Dictionary.LatestNonLocal().Inline()
+}
+
 func KernelSection(env *Environment) {
 	env.LTrimBuf()
 	info := env.ReadTil("\n")
