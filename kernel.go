@@ -26,7 +26,7 @@ func KernelColon(env *Environment) {
 }
 
 func KernelColonGT(env *Environment) {
-	parent := env.Dictionary.LatestNonLocal()
+	parent := env.Dictionary.LatestNonLocal
 
 	if parent == nil || !env.Compiling {
 		log.Fatal(":> expects to be nested")
@@ -40,7 +40,7 @@ func KernelColonGT(env *Environment) {
 	word := LocalWord(name)
 	rawRefs := parseRefs(word, env)
 
-	previous := env.Dictionary.Latest()
+	previous := env.Dictionary.Latest
 	previous.AppendInstr(&FlowWordInstr{Word: word})
 
 	env.Dictionary.Append(word)
@@ -65,15 +65,15 @@ func KernelExtern(env *Environment) {
 }
 
 func KernelLatest(env *Environment) {
-	latest := env.Dictionary.Latest()
+	latest := env.Dictionary.Latest
 	latest.AppendInstr(&RefWordInstr{Word: latest})
 }
 
 func KernelSemi(env *Environment) {
 	env.Compiling = false
 
-	if !env.Dictionary.LatestNonLocal().IsNoReturn() {
-		latest := env.Dictionary.Latest()
+	if !env.Dictionary.LatestNonLocal.IsNoReturn() {
+		latest := env.Dictionary.Latest
 		latest.AppendInstr(&X8664Instr{Mnemonic: "ret"})
 	}
 
@@ -91,7 +91,7 @@ func KernelGlobal(env *Environment) {
 }
 
 func KernelInline(env *Environment) {
-	env.Dictionary.LatestNonLocal().Inline()
+	env.Dictionary.LatestNonLocal.Inline()
 }
 
 func KernelSection(env *Environment) {
@@ -116,7 +116,11 @@ func KernelImport(env *Environment) {
 	importEnv := ParseFileInNewEnvironment(file)
 
 	env.CodeBuf = append(env.CodeBuf, importEnv.CodeBuf...)
-	env.Dictionary.Words = append(env.Dictionary.Words, importEnv.Dictionary.Words...)
+
+	for _, val := range importEnv.Dictionary.Words {
+		word := val.(*Word)
+		env.Dictionary.Append(word)
+	}
 }
 
 func KernelResb(env *Environment) {
@@ -148,11 +152,11 @@ func KernelTick(env *Environment) {
 
 	instr := &RefWordInstr{Word: word}
 	// TODO won't work when not compiling
-	env.Dictionary.Latest().AppendInstr(instr)
+	env.Dictionary.Latest.AppendInstr(instr)
 }
 
 func KernelXl(env *Environment) {
-	latest := env.Dictionary.Latest()
+	latest := env.Dictionary.Latest
 	refWord := latest.PopInstr().(*RefWordInstr)
 	condCall := &CondCallInstr{Jmp: "jge", Target: refWord}
 	latest.AppendInstr(condCall)
@@ -190,7 +194,7 @@ func parseRefs(word *Word, env *Environment) []string {
 	var parentOutputs []*RegisterRef
 
 	if word.IsLocal() {
-		parent := env.Dictionary.LatestNonLocal()
+		parent := env.Dictionary.LatestNonLocal
 		parentInputs = parent.Inputs
 		parentOutputs = parent.Outputs
 	}

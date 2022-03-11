@@ -168,7 +168,7 @@ func (e *Environment) ParseNextWord() bool {
 	if !e.Compiling {
 		e.AppendInstrs(instrs)
 	} else {
-		e.Dictionary.Latest().AppendInstrs(instrs)
+		e.Dictionary.Latest.AppendInstrs(instrs)
 	}
 
 	return true

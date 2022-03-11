@@ -4,7 +4,6 @@ import (
 	"testing"
 )
 
-
 func TestCanFindDefaultWord(t *testing.T) {
 	d := DefaultDictionary()
 	if d.Find(":") == nil {
@@ -32,7 +31,7 @@ func TestCanReturnTheLastestWord(t *testing.T) {
 	d := DefaultDictionary()
 	d.Append(&Word{Name: "test__bob"})
 
-	if d.Latest().Name != "test__bob" {
+	if d.Latest.Name != "test__bob" {
 		t.Fatal("Unexpected latest word")
 	}
 }
@@ -42,7 +41,7 @@ func TestCanReturnTheLastestNonLocalWord(t *testing.T) {
 	d.Append(&Word{Name: "test__bob"})
 	d.Append(LocalWord("localword"))
 
-	if d.LatestNonLocal().Name != "test__bob" {
+	if d.LatestNonLocal.Name != "test__bob" {
 		t.Fatal("Unexpected latest non local word")
 	}
 }
