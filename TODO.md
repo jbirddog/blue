@@ -11,10 +11,6 @@
 1. mangage sections when resp or : ?
 1. CondCall is not flowing yet
 1. Only 1 CondCall is supported per word (unique labels will fix this)
-1. If array is used per word, redeclarations work and map can be used at the top level
-1. ^ still needs array declaration order for writes to be stable
-1. ^ word decls in instrs should support this
-1. ^ think map doesn't need array since word decs in instrs will own previous words
 1. import vs use - one brings in externs other all code from file
 1. better newline support when generating asm
 
