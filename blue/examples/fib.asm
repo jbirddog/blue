@@ -1,5 +1,7 @@
 extern exit
 
+global _start
+
 ; : fib ( nth:ecx -- result:edi )
 fib:
 	mov edi, 0
@@ -16,5 +18,3 @@ _start:
 	mov ecx, 11
 	call fib
 	call exit
-
-global _start

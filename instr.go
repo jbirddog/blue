@@ -111,11 +111,11 @@ func (i *ExternWordInstr) Run(env *Environment, context *RunContext) {
 }
 
 type GlobalWordInstr struct {
-	Word *Word
+	Name string
 }
 
 func (i *GlobalWordInstr) Run(env *Environment, context *RunContext) {
-	env.AppendAsmInstr(&AsmGlobalInstr{Label: i.Word.AsmLabel()})
+	env.AppendAsmInstr(&AsmGlobalInstr{Label: i.Name})
 }
 
 type DeclWordInstr struct {

@@ -44,6 +44,11 @@ type Environment struct {
 	Dictionary *Dictionary
 	CodeBuf    []Instr
 	AsmInstrs  []AsmInstr
+	Globals    map[string]bool
+}
+
+func DefaultEnvironment() *Environment {
+	return &Environment{Dictionary: DefaultDictionary(), Globals: make(map[string]bool)}
 }
 
 func NewEnvironmentForFile(filename string) *Environment {
@@ -52,7 +57,10 @@ func NewEnvironmentForFile(filename string) *Environment {
 		log.Fatal(err)
 	}
 
-	return &Environment{Dictionary: DefaultDictionary(), InputBuf: string(bytes)}
+	env := DefaultEnvironment()
+	env.InputBuf = string(bytes)
+
+	return env
 }
 
 func ParseFileInNewEnvironment(filename string) *Environment {

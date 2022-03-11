@@ -1,12 +1,18 @@
+global read
+global read.stdin
+global write
+global write.stdin
+global exit
+
 : syscall1 ( edi eax -- result:eax ) syscall ;
 : syscall3 ( esi edx edi eax -- result:eax ) syscall ;
 
-: read ( buf:esi len:edx fd:edi -- result:eax ) 0 syscall3 ; global
-: read.stdin ( buf:esi len:edx -- result:eax ) 0 read ; global
+: read ( buf:esi len:edx fd:edi -- result:eax ) 0 syscall3 ;
+: read.stdin ( buf:esi len:edx -- result:eax ) 0 read ;
 
-: write ( buf:esi len:edx fd:edi -- result:eax ) 1 syscall3 ; global
-: write.stdout ( buf:esi len:edx -- result:eax ) 1 write ; global
-: write.stderr ( buf:esi len:edx -- result:eax ) 3 write ; global
+: write ( buf:esi len:edx fd:edi -- result:eax ) 1 syscall3 ;
+: write.stdout ( buf:esi len:edx -- result:eax ) 1 write ;
+: write.stderr ( buf:esi len:edx -- result:eax ) 3 write ;
 
-: exit ( status:edi -- noret ) 60 syscall1 ; global
+: exit ( status:edi -- noret ) 60 syscall1 ;
 : exit.syserr ( err:eax -- ) neg exit ;

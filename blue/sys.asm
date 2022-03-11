@@ -1,4 +1,14 @@
 
+global read
+
+global read.stdin
+
+global write
+
+global write.stdin
+
+global exit
+
 ; : syscall1 ( edi eax -- result:eax )
 syscall1:
 	syscall
@@ -15,15 +25,11 @@ read:
 	call syscall3
 	ret
 
-global read
-
 ; : read.stdin ( buf:esi len:edx -- result:eax )
 read.stdin:
 	mov edi, 0
 	call read
 	ret
-
-global read.stdin
 
 ; : write ( buf:esi len:edx fd:edi -- result:eax )
 write:
@@ -31,15 +37,11 @@ write:
 	call syscall3
 	ret
 
-global write
-
 ; : write.stdout ( buf:esi len:edx -- result:eax )
 write.stdout:
 	mov edi, 1
 	call write
 	ret
-
-global write.stdout
 
 ; : write.stderr ( buf:esi len:edx -- result:eax )
 write.stderr:
@@ -47,14 +49,10 @@ write.stderr:
 	call write
 	ret
 
-global write.stderr
-
 ; : exit ( status:edi -- noret )
 exit:
 	mov eax, 60
 	call syscall1
-
-global exit
 
 ; : exit.syserr ( err:eax -- )
 exit.syserr:

@@ -81,9 +81,13 @@ func KernelSemi(env *Environment) {
 }
 
 func KernelGlobal(env *Environment) {
-	latest := env.Dictionary.LatestNonLocal()
-	latest.Global()
-	env.AppendInstr(&GlobalWordInstr{Word: latest})
+	name := env.ReadNextWord()
+	if len(name) == 0 {
+		log.Fatal("global expects a name")
+	}
+
+	env.Globals[name] = true
+	env.AppendInstr(&GlobalWordInstr{Name: name})
 }
 
 func KernelInline(env *Environment) {

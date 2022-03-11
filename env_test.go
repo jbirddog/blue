@@ -69,7 +69,10 @@ func TestCanFindResbRef(t *testing.T) {
 }
 
 func env(buf string) *Environment {
-	return &Environment{Dictionary: DefaultDictionary(), InputBuf: buf}
+	env := DefaultEnvironment()
+	env.InputBuf = buf
+
+	return env
 }
 
 func run(buf string) []AsmInstr {

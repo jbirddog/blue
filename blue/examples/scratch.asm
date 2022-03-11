@@ -1,5 +1,7 @@
 extern exit
 
+global _start
+
 section .rodata
 
 section .data
@@ -16,5 +18,3 @@ section .text
 _start:
 	mov edi, 0
 	call exit
-
-global _start
