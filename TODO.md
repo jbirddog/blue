@@ -13,6 +13,7 @@
 1. Only 1 CondCall is supported per word (unique labels will fix this)
 1. If array is used per word, redeclarations work and map can be used at the top level
 1. ^ still needs array declaration order for writes to be stable
+1. ^ word decls in instrs should support this
 1. import vs use - one brings in externs other all code from file
 1. better newline support when generating asm
 
@@ -37,11 +38,11 @@
 
 # Targets
 
-### f3
+### f5
 
-echo
+1. see about calling blue object files from Go, start migrating some logic
 
-### f4
+### f4 (current)
 
 readability improvements from f3
 
@@ -50,6 +51,11 @@ readability improvements from f3
 1. ^ after more code is written the right abstraction may emerge
 1. infer section, no manual override for now? (unless section has been specified)
 1. generate unique asm label per word unless global, then verbatim
-1. collapse multiple extern/global/imports to one line
-1. ^ global{ start read bob joe }
-1. const when not compiling (run word issue)
+1. collapse multiple extern/global/imports to one 
+1. ^ global( start read bob joe )
+1. const
+1. inlined literal int when not compiling (run word issue)
+
+### f3
+
+echo

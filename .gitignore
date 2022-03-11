@@ -6,6 +6,7 @@
 *.dylib
 *.o
 blue/bin/*
+gfe
 
 # Test binary, built with `go test -c`
 *.test
