@@ -15,9 +15,14 @@ func KernelColon(env *Environment) {
 	}
 
 	word := &Word{Name: name}
-	parseRefs(word, env)
+	rawRefs := parseRefs(word, env)
 	env.Dictionary.Append(word)
-	env.AppendInstr(&DeclWordInstr{Word: word})
+
+	declComment := fmt.Sprintf(": %s %s", name, strings.Join(rawRefs, " "))
+	env.AppendInstrs([]Instr{
+		&CommentInstr{Comment: declComment},
+		&DeclWordInstr{Word: word},
+	})
 }
 
 func KernelColonGT(env *Environment) {
@@ -33,13 +38,18 @@ func KernelColonGT(env *Environment) {
 	}
 
 	word := LocalWord(name)
-	parseRefs(word, env)
+	rawRefs := parseRefs(word, env)
 
 	previous := env.Dictionary.Latest()
 	previous.AppendInstr(&FlowWordInstr{Word: word})
 
 	env.Dictionary.Append(word)
-	env.AppendInstr(&DeclWordInstr{Word: word})
+
+	declComment := fmt.Sprintf(":> %s %s", name, strings.Join(rawRefs, " "))
+	env.AppendInstrs([]Instr{
+		&CommentInstr{Comment: declComment},
+		&DeclWordInstr{Word: word},
+	})
 }
 
 func KernelExtern(env *Environment) {
@@ -164,11 +174,12 @@ func buildRegisterRef(rawRef string, parentRefs []*RegisterRef) *RegisterRef {
 	return &RegisterRef{Name: parts[0], Reg: parts[1]}
 }
 
-func parseRefs(word *Word, env *Environment) {
+func parseRefs(word *Word, env *Environment) []string {
 	if env.ReadNextWord() != "(" {
 		log.Fatal("Expected (")
 	}
 
+	rawParts := []string{"("}
 	parsingInputs := true
 
 	var parentInputs []*RegisterRef
@@ -185,6 +196,8 @@ func parseRefs(word *Word, env *Environment) {
 		if len(nextWord) == 0 {
 			log.Fatal("unexpected eof")
 		}
+
+		rawParts = append(rawParts, nextWord)
 
 		if nextWord == "--" {
 			parsingInputs = false
@@ -208,4 +221,6 @@ func parseRefs(word *Word, env *Environment) {
 			word.AppendOutput(ref)
 		}
 	}
+
+	return rawParts
 }

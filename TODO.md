@@ -12,6 +12,7 @@
 1. Only 1 CondCall is supported per word
 1. If array is used per word, redeclarations work and map can be used at the top level
 1. ^ still needs array declaration order for writes to be stable
+1. import vs use - one brings in externs other all code from file
 
 ### optimizations
 
@@ -31,6 +32,7 @@
 1. hide non global words before merging dictionaries when importing
 1. make names asm friendly (stdin>buf is not a valid label)
 1. structs
+1. nasm docs say globals need to come first, testing seems to prove otherwise
 
 # Targets
 
@@ -45,6 +47,8 @@ readability improvements from f3
 1. thinking less about imports like sys and more about rolling it to suite needs
 1. ^ location of fd for read in sys doesn't help composability
 1. ^ after more code is written the right abstraction may emerge
-1. word names being restricted by valid nasm labels hurts readability
 1. infer section, no manual override for now?
-1. const - first via inline support
+1. generate unique asm label per word unless global, then verbatim
+1. separate global, make it a parsing word that is defined before a word
+1. ^ or g: global: glbl:
+1. const

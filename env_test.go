@@ -61,7 +61,7 @@ func TestCanDeclResb(t *testing.T) {
 
 func TestCanFindResbRef(t *testing.T) {
 	asm := run("1024 resb buf : xyz ( -- ) buf loop ;\n")
-	loopInstr := asm[2].(*AsmUnaryInstr)
+	loopInstr := asm[3].(*AsmUnaryInstr)
 
 	if loopInstr.Op != "buf" {
 		t.Fatalf("Expected buf, got '%s'", loopInstr.Op)
