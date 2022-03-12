@@ -140,7 +140,7 @@ func (e *Environment) ParseNextWord() bool {
 	var instrs []Instr
 
 	if word := e.Dictionary.Find(name); word != nil {
-		if !e.Compiling || word.IsImmediate() {
+		if (!e.Compiling || word.IsImmediate()) && !word.IsInline() {
 			context := &RunContext{}
 
 			for _, instr := range word.Code {

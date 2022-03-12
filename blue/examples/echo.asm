@@ -69,7 +69,6 @@ buf.cap:
 
 section .bss
 
-;  TODO resolve run issue with using buf.cap below
 buf: resb 1024
 section .text
 

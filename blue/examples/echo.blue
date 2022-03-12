@@ -6,8 +6,7 @@ global _start
 
 section .bss
 
-\ TODO resolve run issue with using buf.cap below
-1024 resb buf
+buf.cap resb buf
 
 section .text
 

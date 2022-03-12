@@ -51,7 +51,6 @@ readability improvements from f3
 1. collapse multiple extern/global/imports to one 
 1. ^ global( start read bob joe )
 1. const
-1. inlined literal int when not compiling (run word issue)
 
 ### f3
 
