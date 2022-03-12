@@ -63,10 +63,6 @@ exit.syserr:
 
 global _start
 
-; : buf.cap ( -- )
-buf.cap:
-	ret
-
 section .bss
 
 buf: resb 1024

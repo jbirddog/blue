@@ -144,6 +144,18 @@ func KernelResb(env *Environment) {
 	env.Dictionary.Append(word)
 }
 
+func KernelConst(env *Environment) {
+	name := env.ReadNextWord()
+	if len(name) == 0 {
+		log.Fatal("const expects a name")
+	}
+
+	instr := env.PopInstr().(*LiteralIntInstr)
+	word := NewInlineWord(name, instr)
+
+	env.Dictionary.Append(word)
+}
+
 func KernelTick(env *Environment) {
 	word := env.Dictionary.Find(env.ReadNextWord())
 	if word == nil {

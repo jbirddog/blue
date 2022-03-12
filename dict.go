@@ -28,6 +28,7 @@ func DefaultDictionary() *Dictionary {
 		NewInlineWord("dup", &DupInstr{}),
 		NewCallGoWord("'", KernelTick).Immediate(),
 		NewCallGoWord("xl", KernelXl).Immediate(),
+		NewCallGoWord("const", KernelConst),
 	})
 
 	return d

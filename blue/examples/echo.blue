@@ -2,7 +2,7 @@ import sys
 
 global _start
 
-: buf.cap ( -- ) 1024 ; inline
+1024 const buf.cap
 
 section .bss
 

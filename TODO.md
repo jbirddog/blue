@@ -50,7 +50,6 @@ readability improvements from f3
 1. generate unique asm label per word unless global, then verbatim
 1. collapse multiple extern/global/imports to one 
 1. ^ global( start read bob joe )
-1. const
 
 ### f3
 
