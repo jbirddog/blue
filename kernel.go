@@ -18,6 +18,8 @@ func KernelColon(env *Environment) {
 	rawRefs := parseRefs(word, env)
 	env.Dictionary.Append(word)
 
+	env.SuggestSection(".text")
+
 	declComment := fmt.Sprintf(": %s %s", name, strings.Join(rawRefs, " "))
 	env.AppendInstrs([]Instr{
 		&CommentInstr{Comment: declComment},
@@ -98,6 +100,7 @@ func KernelSection(env *Environment) {
 	env.LTrimBuf()
 	info := env.ReadTil("\n")
 	env.AppendInstr(&SectionInstr{Info: info})
+	env.UserSpecifiedSection = true
 }
 
 func KernelCommentToEol(env *Environment) {
@@ -129,12 +132,13 @@ func KernelResb(env *Environment) {
 		log.Fatal("resb expects a name")
 	}
 
-	lastIdx := len(env.CodeBuf) - 1
-	sizeInstr := env.CodeBuf[lastIdx].(*LiteralIntInstr)
+	sizeInstr := env.PopInstr().(*LiteralIntInstr)
 	size := uint(sizeInstr.I)
 
+	env.SuggestSection(".bss")
+
 	resbInstr := &ResbInstr{Name: name, Size: size}
-	env.CodeBuf[lastIdx] = resbInstr
+	env.AppendInstr(resbInstr)
 
 	word := &Word{Name: name}
 	instr := &RefWordInstr{Word: word}

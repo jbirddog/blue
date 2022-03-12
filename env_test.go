@@ -43,11 +43,11 @@ func TestCanDeclResb(t *testing.T) {
 	}
 
 	for _, c := range cases {
-		if len(c.asm) != 1 {
-			t.Fatalf("Expected 1 asm instr, got %d", len(c.asm))
+		if len(c.asm) != 2 {
+			t.Fatalf("Expected 2 asms instr, got %d", len(c.asm))
 		}
 
-		instr := c.asm[0].(*AsmResbInstr)
+		instr := c.asm[1].(*AsmResbInstr)
 
 		if instr.Name != c.name {
 			t.Fatalf("Expected name '%s', got '%s'", c.name, instr.Name)
@@ -61,7 +61,7 @@ func TestCanDeclResb(t *testing.T) {
 
 func TestCanFindResbRef(t *testing.T) {
 	asm := run("1024 resb buf : xyz ( -- ) buf loop ;\n")
-	loopInstr := asm[3].(*AsmUnaryInstr)
+	loopInstr := asm[5].(*AsmUnaryInstr)
 
 	if loopInstr.Op != "buf" {
 		t.Fatalf("Expected buf, got '%s'", loopInstr.Op)

@@ -39,12 +39,14 @@ func (c *RunContext) Pop2Inputs() (string, string) {
 }
 
 type Environment struct {
-	Compiling  bool
-	InputBuf   string
-	Dictionary *Dictionary
-	CodeBuf    []Instr
-	AsmInstrs  []AsmInstr
-	Globals    map[string]bool
+	Compiling            bool
+	InputBuf             string
+	Dictionary           *Dictionary
+	CodeBuf              []Instr
+	AsmInstrs            []AsmInstr
+	Globals              map[string]bool
+	Section              string
+	UserSpecifiedSection bool
 }
 
 func DefaultEnvironment() *Environment {
@@ -196,6 +198,23 @@ func (e *Environment) PopInstr() Instr {
 	e.CodeBuf = e.CodeBuf[:last]
 
 	return instr
+}
+
+func (e *Environment) SuggestSection(section string) {
+	if e.UserSpecifiedSection {
+		return
+	}
+
+	if len(e.Section) == 0 {
+		e.Section = ".text"
+	}
+
+	if e.Section == section {
+		return
+	}
+
+		e.AppendInstr(&SectionInstr{Info: section})
+		e.Section = section
 }
 
 func (e *Environment) Validate() {

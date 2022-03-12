@@ -4,11 +4,7 @@ global _start
 
 1024 const buf.cap
 
-section .bss
-
 buf.cap resb buf
-
-section .text
 
 : orexit ( result:eax -- value:eax ) dup 0 cmp ' exit.syserr xl ;
 
