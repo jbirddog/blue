@@ -32,6 +32,7 @@
 1. structs
 1. comment to eol don't parse inside words
 1. support fallthrough between word decls (flow from previous latest)
+1. ^ exit.syserr
 1. pmaxud, pminud for clamp in echo's write
 
 # Targets
@@ -44,9 +45,9 @@
 
 readability improvements from f3
 
-1. collapse multiple extern/global/imports to one 
+1. collapse multiple extern/global/imports/const/resb to one 
 1. ^ global( start read bob joe )
-1. prep echo's 2nd write for clamp, leverage 1 syscall3 via swap
+1. ^ const( 0 stdin 1 stdout ) (only works for literals)
 
 ### f3
 

@@ -1,27 +1,43 @@
 
-global _start
+global exit
 
-; : syscall1 ( edi num:eax -- result:eax )
+global exit.syserr
+
+global stdin
+
+global stdout
+
+global stderr
+
+; : syscall1 ( arg1:edi num:eax -- result:eax )
 __blue_1506205745_0:
 	syscall
 	ret
+
+; : exit ( status:edi -- noret )
+__blue_3454868101_0:
+	mov eax, 60
+	call __blue_1506205745_0
+
+; : exit.syserr ( err:eax -- )
+__blue_1490145965_0:
+	neg eax
+	mov edi, eax
+	call __blue_3454868101_0
+	ret
+
+global _start
 
 ; : syscall3 ( edi edx esi num:eax -- result:eax )
 __blue_1472650507_0:
 	syscall
 	ret
 
-; : fail ( err:edi -- noret )
-__blue_508790637_0:
-	neg edi
-	mov eax, 60
-	call __blue_1506205745_0
-
 ; : unwrap ( result:eax -- value:eax )
 __blue_4055961022_0:
 	cmp eax, 0
 	jge __blue_2157056155_0
-	call __blue_508790637_0
+	call __blue_1490145965_0
 
 __blue_2157056155_0:
 	ret
@@ -60,11 +76,6 @@ __blue_3190202204_1:
 	call __blue_3190202204_0
 	call __blue_4055961022_0
 	ret
-
-; : exit ( status:edi -- noret )
-__blue_3454868101_0:
-	mov eax, 60
-	call __blue_1506205745_0
 
 ;  TODO compare read/write bytes for exit status
 ; : _start ( -- noret )

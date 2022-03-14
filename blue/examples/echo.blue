@@ -1,10 +1,10 @@
+import sys
+
 global _start
 
-: syscall1 ( edi num:eax -- result:eax ) syscall ;
 : syscall3 ( edi edx esi num:eax -- result:eax ) syscall ;
 
-: fail ( err:edi -- noret ) neg 60 syscall1 ;
-: unwrap ( result:eax -- value:eax ) dup 0 cmp ' fail xl ;
+: unwrap ( result:eax -- value:eax ) dup 0 cmp ' exit.syserr xl ;
 
 : read ( fd:edi len:edx buf:esi -- result:eax ) 0 syscall3 ;
 : write ( fd:edi len:edx buf:esi -- result:eax ) 1 syscall3 ;
@@ -20,11 +20,6 @@ buf.cap resb buf
 : write ( len:edx fd:edi -- wrote:eax ) swap buf write unwrap ;
 
 hide buf
-
-0 const stdin
-1 const stdout
-
-: exit ( status:edi -- noret ) 60 syscall1 ;
 
 \ TODO compare read/write bytes for exit status
 : _start ( -- noret ) stdin read stdout write 0 exit ; 
