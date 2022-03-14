@@ -7,7 +7,6 @@ import (
 const (
 	wordFlag_Immediate = 1 << iota
 	wordFlag_NoReturn
-	wordFlag_Local
 	wordFlag_Hidden
 	wordFlag_Global
 	wordFlag_Extern
@@ -26,11 +25,6 @@ type Word struct {
 func ExternWord(name string) *Word {
 	w := &Word{Name: name}
 	return w.Extern()
-}
-
-func LocalWord(name string) *Word {
-	w := &Word{Name: name}
-	return w.Local()
 }
 
 func (w *Word) AppendInstr(instr Instr) {
@@ -66,7 +60,7 @@ func (w *Word) AppendOutput(r *RegisterRef) {
 }
 
 func (w *Word) clearFlag(flag uint) *Word {
-	w.Flags &=^ flag
+	w.Flags &= ^flag
 	return w
 }
 
@@ -81,10 +75,6 @@ func (w *Word) Immediate() *Word {
 
 func (w *Word) NoReturn() *Word {
 	return w.setFlag(wordFlag_NoReturn)
-}
-
-func (w *Word) Local() *Word {
-	return w.setFlag(wordFlag_Local)
 }
 
 func (w *Word) Hidden() *Word {
@@ -117,10 +107,6 @@ func (w *Word) IsImmediate() bool {
 
 func (w *Word) IsNoReturn() bool {
 	return w.hasFlag(wordFlag_NoReturn)
-}
-
-func (w *Word) IsLocal() bool {
-	return w.hasFlag(wordFlag_Local)
 }
 
 func (w *Word) IsHidden() bool {

@@ -129,13 +129,9 @@ func (e *Environment) AsmLabelForName(name string) string {
 func (e *Environment) AppendWord(word *Word) {
 	label := word.Name
 
-	if word.IsLocal() {
-		label = "." + label
-	}
-
 	if !word.IsExtern() {
-	label = e.AsmLabelForName(word.Name)
-}
+		label = e.AsmLabelForName(word.Name)
+	}
 
 	word.AsmLabel = label
 	e.Dictionary.Append(word)

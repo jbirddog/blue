@@ -48,7 +48,6 @@ readability improvements from f3
 1. collapse multiple extern/global/imports to one 
 1. ^ global( start read bob joe )
 1. when redeclaring, finding self in dictionary causes errors. hide until ; (can use latest)
-1. ^ drop current :> impl, simplify wrt latestNonLocal
 
 ### f3
 

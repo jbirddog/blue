@@ -36,16 +36,6 @@ func TestCanReturnTheLastestWord(t *testing.T) {
 	}
 }
 
-func TestCanReturnTheLastestNonLocalWord(t *testing.T) {
-	d := DefaultDictionary()
-	d.Append(&Word{Name: "test__bob"})
-	d.Append(LocalWord("localword"))
-
-	if d.LatestNonLocal.Name != "test__bob" {
-		t.Fatal("Unexpected latest non local word")
-	}
-}
-
 func TestDoesNotFindHiddenWords(t *testing.T) {
 	d := DefaultDictionary()
 	w := &Word{Name: "hidden"}
@@ -53,20 +43,5 @@ func TestDoesNotFindHiddenWords(t *testing.T) {
 
 	if d.Find("hidden") != nil {
 		t.Fatal("Did not expect to find hidden word")
-	}
-}
-
-func TestCanHidePreviouslyDefinedLocalWords(t *testing.T) {
-	d := DefaultDictionary()
-	d.Append(LocalWord("localword"))
-
-	if d.Find("localword") == nil {
-		t.Fatal("Expected to find localword before hiding")
-	}
-
-	d.HideLocalWords()
-
-	if d.Find("localword") != nil {
-		t.Fatal("Did not expect to find localword after hiding")
 	}
 }

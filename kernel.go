@@ -27,33 +27,6 @@ func KernelColon(env *Environment) {
 	})
 }
 
-func KernelColonGT(env *Environment) {
-	parent := env.Dictionary.LatestNonLocal
-
-	if parent == nil || !env.Compiling {
-		log.Fatal(":> expects to be nested")
-	}
-
-	name := env.ReadNextWord()
-	if len(name) == 0 {
-		log.Fatal(":> expects a name")
-	}
-
-	word := LocalWord(name)
-	rawRefs := parseRefs(word, env)
-
-	previous := env.Dictionary.Latest
-	previous.AppendInstr(&FlowWordInstr{Word: word})
-
-	env.AppendWord(word)
-
-	declComment := fmt.Sprintf(":> %s %s", name, strings.Join(rawRefs, " "))
-	env.AppendInstrs([]Instr{
-		&CommentInstr{Comment: declComment},
-		&DeclWordInstr{Word: word},
-	})
-}
-
 func KernelExtern(env *Environment) {
 	name := env.ReadNextWord()
 	if len(name) == 0 {
@@ -73,13 +46,11 @@ func KernelLatest(env *Environment) {
 
 func KernelSemi(env *Environment) {
 	env.Compiling = false
+	latest := env.Dictionary.Latest
 
-	if !env.Dictionary.LatestNonLocal.IsNoReturn() {
-		latest := env.Dictionary.Latest
+	if !latest.IsNoReturn() {
 		latest.AppendInstr(&X8664Instr{Mnemonic: "ret"})
 	}
-
-	env.Dictionary.HideLocalWords()
 }
 
 func KernelGlobal(env *Environment) {
@@ -93,7 +64,7 @@ func KernelGlobal(env *Environment) {
 }
 
 func KernelInline(env *Environment) {
-	env.Dictionary.LatestNonLocal.Inline()
+	env.Dictionary.Latest.Inline()
 }
 
 func KernelSection(env *Environment) {
@@ -137,7 +108,7 @@ func KernelResb(env *Environment) {
 
 	env.AppendInstrs([]Instr{
 		&CommentInstr{Comment: fmt.Sprintf("; %d resb %s", size, name)},
-	&ResbInstr{Name: word.AsmLabel, Size: size},
+		&ResbInstr{Name: word.AsmLabel, Size: size},
 	})
 
 	instr := &RefWordInstr{Word: word}
@@ -175,21 +146,12 @@ func KernelXl(env *Environment) {
 	latest.AppendInstr(condCall)
 }
 
-func buildRegisterRef(rawRef string, parentRefs []*RegisterRef) *RegisterRef {
+func buildRegisterRef(rawRef string) *RegisterRef {
 	parts := strings.SplitN(rawRef, ":", 2)
 	partsLen := len(parts)
 
 	if partsLen == 1 {
-		reg := parts[0]
-
-		for _, parentRef := range parentRefs {
-			if parentRef.Name == parts[0] {
-				reg = parentRef.Reg
-				break
-			}
-		}
-
-		return &RegisterRef{Name: parts[0], Reg: reg}
+		return &RegisterRef{Name: parts[0], Reg: parts[0]}
 	}
 
 	return &RegisterRef{Name: parts[0], Reg: parts[1]}
@@ -202,15 +164,6 @@ func parseRefs(word *Word, env *Environment) []string {
 
 	rawParts := []string{"("}
 	parsingInputs := true
-
-	var parentInputs []*RegisterRef
-	var parentOutputs []*RegisterRef
-
-	if word.IsLocal() {
-		parent := env.Dictionary.LatestNonLocal
-		parentInputs = parent.Inputs
-		parentOutputs = parent.Outputs
-	}
 
 	for {
 		nextWord := env.ReadNextWord()
@@ -235,10 +188,10 @@ func parseRefs(word *Word, env *Environment) []string {
 		}
 
 		if parsingInputs {
-			ref := buildRegisterRef(nextWord, parentInputs)
+			ref := buildRegisterRef(nextWord)
 			word.AppendInput(ref)
 		} else {
-			ref := buildRegisterRef(nextWord, parentOutputs)
+			ref := buildRegisterRef(nextWord)
 			word.AppendOutput(ref)
 		}
 	}

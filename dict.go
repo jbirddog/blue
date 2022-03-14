@@ -1,11 +1,9 @@
 package main
 
 type Dictionary struct {
-	Name           string
-	Words          map[string]interface{}
-	VisibleLocals  []*Word
-	Latest         *Word
-	LatestNonLocal *Word
+	Name   string
+	Words  map[string]interface{}
+	Latest *Word
 }
 
 func DefaultDictionary() *Dictionary {
@@ -17,7 +15,6 @@ func DefaultDictionary() *Dictionary {
 		NewCallGoWord("extern", KernelExtern),
 		NewCallGoWord("section", KernelSection),
 		NewCallGoWord(":", KernelColon),
-		NewCallGoWord(":>", KernelColonGT).Immediate(),
 		NewCallGoWord("latest", KernelLatest).Immediate(),
 		NewCallGoWord(";", KernelSemi).Immediate(),
 		NewCallGoWord("global", KernelGlobal),
@@ -37,12 +34,6 @@ func DefaultDictionary() *Dictionary {
 func (d *Dictionary) Append(word *Word) {
 	d.Words[word.Name] = word
 	d.Latest = word
-
-	if word.IsLocal() {
-		d.VisibleLocals = append(d.VisibleLocals, word)
-	} else {
-		d.LatestNonLocal = word
-	}
 }
 
 func (d *Dictionary) appendWords(words []*Word) {
@@ -64,12 +55,4 @@ func (d *Dictionary) Find(wordName string) *Word {
 	}
 
 	return word
-}
-
-func (d *Dictionary) HideLocalWords() {
-	for _, word := range d.VisibleLocals {
-		word.Hidden()
-	}
-
-	d.VisibleLocals = nil
 }
