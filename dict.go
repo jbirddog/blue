@@ -19,7 +19,7 @@ func DefaultDictionary() *Dictionary {
 		NewCallGoWord(";", KernelSemi).Immediate(),
 		NewCallGoWord("global", KernelGlobal),
 		NewCallGoWord("inline", KernelInline),
-		NewCallGoWord("\\", KernelCommentToEol),
+		NewCallGoWord("\\", KernelCommentToEol).Immediate(),
 		NewCallGoWord("resb", KernelResb),
 		NewInlineWord("drop", &DropInstr{}),
 		NewInlineWord("dup", &DupInstr{}),

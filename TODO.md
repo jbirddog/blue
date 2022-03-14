@@ -12,6 +12,7 @@
 1. inline is not flowing yet
 1. import vs use - one brings in externs other all code from file
 1. better newline support when generating asm
+1. better placement of comments in asm
 1. outputs don't flow
 
 ### optimizations
@@ -30,7 +31,6 @@
 1. word local dictionaries (or similar to support parsers) - just non globals in files?
 1. hide non global words before merging dictionaries when importing
 1. structs
-1. comment to eol don't parse inside words
 1. support fallthrough between word decls (flow from previous latest)
 1. ^ exit.syserr
 1. pmaxud, pminud for clamp in echo's write

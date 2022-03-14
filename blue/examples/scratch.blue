@@ -13,4 +13,7 @@ section .text
 \ Entry point into the program
 \ Only explaining this to test comments
 \
-: _start ( -- noret ) 0 #!@$% ;
+: _start ( -- noret ) 
+	0 \ set the exit code 
+	#!@$% \ call exit wrapper, just testing comments in words here 
+;
