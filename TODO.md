@@ -9,6 +9,7 @@
 1. gfe.sh - stop the process if a step errors out
 1. higher level refs where registers are inferred from called words
 1. CondCall is not flowing yet
+1. inline is not flowing yet
 1. Only 1 CondCall is supported per word (unique labels will fix this)
 1. import vs use - one brings in externs other all code from file
 1. better newline support when generating asm
@@ -31,6 +32,7 @@
 1. hide non global words before merging dictionaries when importing
 1. make names asm friendly (stdin>buf is not a valid label)
 1. structs
+1. comment to eol don't parse inside words
 
 # Targets
 

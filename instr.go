@@ -180,7 +180,7 @@ type CondCallInstr struct {
 
 func (i *CondCallInstr) Run(env *Environment, context *RunContext) {
 	// TODO needs to support multiple CondCalls in one word
-	ccLabel := "..@donecc"
+	ccLabel := ".donecc"
 
 	// TODO AppendAsmInstrs
 	env.AppendAsmInstrs([]AsmInstr{
