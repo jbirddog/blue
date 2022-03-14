@@ -89,6 +89,15 @@ func (e *Environment) Merge(e2 *Environment) {
 		word := val.(*Word)
 		e.AppendWord(word)
 	}
+
+	for name, _ := range e2.Globals {
+		e.Globals[name] = true
+	}
+
+	// TODO this could be unsafe
+	for name, count := range e2.Labels {
+		e.Labels[name] = count
+	}
 }
 
 func (e *Environment) AsmLabelForName(name string) string {
@@ -97,8 +106,9 @@ func (e *Environment) AsmLabelForName(name string) string {
 
 	if prevCount > 0 {
 		label = fmt.Sprintf("%s_%d", name, prevCount)
-		e.Labels[name] = prevCount + 1
 	}
+
+	e.Labels[name] = prevCount + 1
 
 	return label
 }

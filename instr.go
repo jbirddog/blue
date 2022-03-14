@@ -179,8 +179,7 @@ type CondCallInstr struct {
 }
 
 func (i *CondCallInstr) Run(env *Environment, context *RunContext) {
-	// TODO needs to support multiple CondCalls in one word
-	ccLabel := ".donecc"
+	ccLabel := env.AsmLabelForName(".donecc")
 
 	env.AppendAsmInstrs([]AsmInstr{
 		&AsmUnaryInstr{Mnemonic: i.Jmp, Op: ccLabel},

@@ -10,7 +10,6 @@
 1. higher level refs where registers are inferred from called words
 1. CondCall is not flowing yet
 1. inline is not flowing yet
-1. Only 1 CondCall is supported per word (unique labels will fix this)
 1. import vs use - one brings in externs other all code from file
 1. better newline support when generating asm
 
