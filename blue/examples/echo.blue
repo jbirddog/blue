@@ -1,15 +1,25 @@
-import sys
-
 global _start
 
-1024 const buf.cap
+\ import sys
 
+: syscall1 ( edi num:eax -- result:eax ) syscall ;
+: exit ( status:edi -- noret ) 60 syscall1 ;
+
+: syscall3 ( edi esi edx eax -- result:eax ) syscall ;
+
+: _read ( fd:edi buf:esi len:edx -- result:eax ) 0 syscall3 ;
+: _write ( fd:edi buf:esi len:edx -- result:eax ) 1 syscall3 ;
+
+1024 const buf.cap
 buf.cap resb buf
 
-: orexit ( result:eax -- value:eax ) dup 0 cmp ' exit.syserr xl ;
+: read ( fd:edi -- result:eax ) buf buf.cap _read ;
+: write ( fd:edi -- result:eax ) buf buf.cap _write ;
 
-: read ( -- buf:esi read:eax ) buf buf.cap read.stdin orexit ;
-: write ( buf:esi len:edx -- wrote:eax ) write.stdout orexit ;
+\ : die? ( result:eax -- value:eax ) dup 0 cmp ' exit.syserr xl ;
 
-\ TODO also still a bit loose with effect handling as seen with exit
-: _start ( -- noret ) read write 0 exit ; 
+0 const stdin
+1 const stdout
+
+\ TODO compare read/write bytes for exit status
+: _start ( -- noret ) stdin read stdout write 0 exit ; 

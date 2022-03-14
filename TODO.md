@@ -46,6 +46,7 @@ readability improvements from f3
 1. ^ after more code is written the right abstraction may emerge
 1. collapse multiple extern/global/imports to one 
 1. ^ global( start read bob joe )
+1. when redeclaring, finding self in dictionary causes errors. hide until ; (can use latest)
 
 ### f3
 
