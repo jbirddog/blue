@@ -76,6 +76,16 @@ func ParseFileInNewEnvironment(filename string) *Environment {
 	return env
 }
 
+func (e *Environment) AppendWord(word *Word) {
+	if word.IsLocal() {
+		word.AsmLabel = "." + word.Name
+	} else {
+		word.AsmLabel = word.Name
+	}
+
+	e.Dictionary.Append(word)
+}
+
 func (e *Environment) LTrimBuf() {
 	e.InputBuf = strings.TrimLeft(e.InputBuf, " \t\n")
 }
@@ -213,8 +223,8 @@ func (e *Environment) SuggestSection(section string) {
 		return
 	}
 
-		e.AppendInstr(&SectionInstr{Info: section})
-		e.Section = section
+	e.AppendInstr(&SectionInstr{Info: section})
+	e.Section = section
 }
 
 func (e *Environment) Validate() {

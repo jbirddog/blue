@@ -16,7 +16,7 @@ func KernelColon(env *Environment) {
 
 	word := &Word{Name: name}
 	rawRefs := parseRefs(word, env)
-	env.Dictionary.Append(word)
+	env.AppendWord(word)
 
 	env.SuggestSection(".text")
 
@@ -45,7 +45,7 @@ func KernelColonGT(env *Environment) {
 	previous := env.Dictionary.Latest
 	previous.AppendInstr(&FlowWordInstr{Word: word})
 
-	env.Dictionary.Append(word)
+	env.AppendWord(word)
 
 	declComment := fmt.Sprintf(":> %s %s", name, strings.Join(rawRefs, " "))
 	env.AppendInstrs([]Instr{
@@ -62,7 +62,7 @@ func KernelExtern(env *Environment) {
 
 	word := ExternWord(name)
 	parseRefs(word, env)
-	env.Dictionary.Append(word)
+	env.AppendWord(word)
 	env.AppendInstr(&ExternWordInstr{Word: word})
 }
 
@@ -122,7 +122,7 @@ func KernelImport(env *Environment) {
 
 	for _, val := range importEnv.Dictionary.Words {
 		word := val.(*Word)
-		env.Dictionary.Append(word)
+		env.AppendWord(word)
 	}
 }
 
@@ -145,7 +145,7 @@ func KernelResb(env *Environment) {
 	word.AppendInstr(instr)
 	word.Inline()
 
-	env.Dictionary.Append(word)
+	env.AppendWord(word)
 }
 
 func KernelConst(env *Environment) {
@@ -157,7 +157,7 @@ func KernelConst(env *Environment) {
 	instr := env.PopInstr().(*LiteralIntInstr)
 	word := NewInlineWord(name, instr)
 
-	env.Dictionary.Append(word)
+	env.AppendWord(word)
 }
 
 func KernelTick(env *Environment) {

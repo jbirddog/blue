@@ -71,10 +71,10 @@ section .text
 ; : orexit ( result:eax -- value:eax )
 orexit:
 	cmp eax, 0
-	jge ..@donecc
+	jge .donecc
 	call exit.syserr
 
-..@donecc:
+.donecc:
 	ret
 
 ; : buf.read ( -- buf:esi read:eax )

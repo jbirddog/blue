@@ -85,7 +85,7 @@ type CallWordInstr struct {
 func (i *CallWordInstr) Run(env *Environment, context *RunContext) {
 	if env.Compiling {
 		flowWord(i.Word, env, context)
-		env.AppendAsmInstr(&AsmCallInstr{Label: i.Word.AsmLabel()})
+		env.AppendAsmInstr(&AsmCallInstr{Label: i.Word.AsmLabel})
 		return
 	}
 
@@ -99,7 +99,7 @@ type RefWordInstr struct {
 }
 
 func (i *RefWordInstr) Run(env *Environment, context *RunContext) {
-	context.AppendInput(i.Word.AsmLabel())
+	context.AppendInput(i.Word.AsmLabel)
 }
 
 type ExternWordInstr struct {
@@ -107,7 +107,7 @@ type ExternWordInstr struct {
 }
 
 func (i *ExternWordInstr) Run(env *Environment, context *RunContext) {
-	env.AppendAsmInstr(&AsmExternInstr{Label: i.Word.AsmLabel()})
+	env.AppendAsmInstr(&AsmExternInstr{Label: i.Word.AsmLabel})
 }
 
 type GlobalWordInstr struct {
@@ -123,7 +123,7 @@ type DeclWordInstr struct {
 }
 
 func (i *DeclWordInstr) Run(env *Environment, context *RunContext) {
-	env.AppendAsmInstr(&AsmLabelInstr{Name: i.Word.AsmLabel()})
+	env.AppendAsmInstr(&AsmLabelInstr{Name: i.Word.AsmLabel})
 
 	context.Inputs = i.Word.InputRegisters()
 	context.Outputs = i.Word.OutputRegisters()
@@ -185,7 +185,7 @@ func (i *CondCallInstr) Run(env *Environment, context *RunContext) {
 	// TODO AppendAsmInstrs
 	env.AppendAsmInstrs([]AsmInstr{
 		&AsmUnaryInstr{Mnemonic: i.Jmp, Op: ccLabel},
-		&AsmCallInstr{Label: i.Target.Word.AsmLabel()},
+		&AsmCallInstr{Label: i.Target.Word.AsmLabel},
 		&AsmLabelInstr{Name: ccLabel},
 	})
 }

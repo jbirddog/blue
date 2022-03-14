@@ -15,11 +15,12 @@ const (
 )
 
 type Word struct {
-	Name    string
-	Flags   uint
-	Inputs  []*RegisterRef
-	Outputs []*RegisterRef
-	Code    []Instr
+	Name     string
+	Flags    uint
+	Inputs   []*RegisterRef
+	Outputs  []*RegisterRef
+	Code     []Instr
+	AsmLabel string
 }
 
 func ExternWord(name string) *Word {
@@ -147,14 +148,6 @@ func (w *Word) OutputRegisters() []string {
 	}
 
 	return registers
-}
-
-func (w *Word) AsmLabel() string {
-	if w.IsLocal() {
-		return "." + w.Name
-	}
-
-	return w.Name
 }
 
 func NewCallGoWord(name string, f GoCaller) *Word {
