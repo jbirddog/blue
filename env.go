@@ -76,6 +76,15 @@ func ParseFileInNewEnvironment(filename string) *Environment {
 	return env
 }
 
+func (e *Environment) Merge(e2 *Environment) {
+	e.CodeBuf = append(e.CodeBuf, e2.CodeBuf...)
+
+	for _, val := range e2.Dictionary.Words {
+		word := val.(*Word)
+		e.AppendWord(word)
+	}
+}
+
 func (e *Environment) AppendWord(word *Word) {
 	if word.IsLocal() {
 		word.AsmLabel = "." + word.Name

@@ -118,12 +118,7 @@ func KernelImport(env *Environment) {
 	file = fmt.Sprintf("%s.blue", file)
 	importEnv := ParseFileInNewEnvironment(file)
 
-	env.CodeBuf = append(env.CodeBuf, importEnv.CodeBuf...)
-
-	for _, val := range importEnv.Dictionary.Words {
-		word := val.(*Word)
-		env.AppendWord(word)
-	}
+	env.Merge(importEnv)
 }
 
 func KernelResb(env *Environment) {
