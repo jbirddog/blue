@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"hash/fnv"
 	"io/ioutil"
 	"log"
 	"strconv"
@@ -90,9 +91,10 @@ func (e *Environment) Merge(e2 *Environment) {
 		e.AppendWord(word)
 	}
 
-	for name, _ := range e2.Globals {
-		e.Globals[name] = true
-	}
+	// Don't merge globals
+	//for name, _ := range e2.Globals {
+	//	e.Globals[name] = true
+	//}
 
 	// TODO this could be unsafe
 	for name, count := range e2.Labels {
@@ -100,27 +102,42 @@ func (e *Environment) Merge(e2 *Environment) {
 	}
 }
 
-func (e *Environment) AsmLabelForName(name string) string {
-	prevCount := e.Labels[name]
-	label := name
+func (e *Environment) AsmLabelForWordNamed(name string) string {
+	val := e.Dictionary.Words[name]
+	word := val.(*Word)
 
-	if prevCount > 0 {
-		label = fmt.Sprintf("%s_%d", name, prevCount)
+	return word.AsmLabel
+}
+
+func (e *Environment) AsmLabelForName(name string) string {
+	if e.Globals[name] {
+		return name
 	}
 
+	prevCount := e.Labels[name]
+
+	hasher := fnv.New32a()
+	hasher.Write([]byte(name))
+	hash := hasher.Sum32()
+
+	label := fmt.Sprintf("__blue_%d_%d", hash, prevCount)
 	e.Labels[name] = prevCount + 1
 
 	return label
 }
 
 func (e *Environment) AppendWord(word *Word) {
-	label := e.AsmLabelForName(word.Name)
+	label := word.Name
 
 	if word.IsLocal() {
 		label = "." + label
 	}
 
-		word.AsmLabel = label
+	if !word.IsExtern() {
+	label = e.AsmLabelForName(word.Name)
+}
+
+	word.AsmLabel = label
 	e.Dictionary.Append(word)
 }
 

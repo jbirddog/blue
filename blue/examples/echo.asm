@@ -10,92 +10,93 @@ global write.stdin
 global exit
 
 ; : syscall1 ( edi eax -- result:eax )
-syscall1:
+__blue_1506205745_0:
 	syscall
 	ret
 
 ; : syscall3 ( esi edx edi eax -- result:eax )
-syscall3:
+__blue_1472650507_0:
 	syscall
 	ret
 
 ; : read ( buf:esi len:edx fd:edi -- result:eax )
-read:
+__blue_3470762949_0:
 	mov eax, 0
-	call syscall3
+	call __blue_1472650507_0
 	ret
 
 ; : read.stdin ( buf:esi len:edx -- result:eax )
-read.stdin:
+__blue_1792571673_0:
 	mov edi, 0
-	call read
+	call __blue_3470762949_0
 	ret
 
 ; : write ( buf:esi len:edx fd:edi -- result:eax )
-write:
+__blue_3190202204_0:
 	mov eax, 1
-	call syscall3
+	call __blue_1472650507_0
 	ret
 
 ; : write.stdout ( buf:esi len:edx -- result:eax )
-write.stdout:
+__blue_2973566241_0:
 	mov edi, 1
-	call write
+	call __blue_3190202204_0
 	ret
 
 ; : write.stderr ( buf:esi len:edx -- result:eax )
-write.stderr:
+__blue_3820697666_0:
 	mov edi, 3
-	call write
+	call __blue_3190202204_0
 	ret
 
 ; : exit ( status:edi -- noret )
-exit:
+__blue_3454868101_0:
 	mov eax, 60
-	call syscall1
+	call __blue_1506205745_0
 
 ; : exit.syserr ( err:eax -- )
-exit.syserr:
+__blue_1490145965_0:
 	neg eax
 	mov edi, eax
-	call exit
+	call __blue_3454868101_0
 	ret
 
 global _start
 
 section .bss
 
-buf: resb 1024
+; ; 1024 resb buf
+__blue_1926597602_0: resb 1024
 section .text
 
 ; : orexit ( result:eax -- value:eax )
-orexit:
+__blue_1846591124_0:
 	cmp eax, 0
-	jge .donecc
-	call exit.syserr
+	jge __blue_2157056155_0
+	call __blue_1490145965_0
 
-.donecc:
+__blue_2157056155_0:
 	ret
 
 ; : read ( -- buf:esi read:eax )
-read_1:
+__blue_3470762949_1:
 	mov edx, 1024
-	mov esi, buf
-	call read.stdin
-	call orexit
+	mov esi, __blue_1926597602_0
+	call __blue_1792571673_0
+	call __blue_1846591124_0
 	ret
 
 ; : write ( buf:esi len:edx -- wrote:eax )
-write_1:
-	call write.stdout
-	call orexit
+__blue_3190202204_1:
+	call __blue_2973566241_0
+	call __blue_1846591124_0
 	ret
 
 ;  TODO also still a bit loose with effect handling as seen with exit
 ; : _start ( -- noret )
 _start:
-	call read_1
+	call __blue_3470762949_1
 	mov edx, eax
-	call write_1
+	call __blue_3190202204_1
 	mov edi, 0
-	call exit
+	call __blue_3454868101_0

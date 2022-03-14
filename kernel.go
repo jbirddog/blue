@@ -132,15 +132,17 @@ func KernelResb(env *Environment) {
 
 	env.SuggestSection(".bss")
 
-	resbInstr := &ResbInstr{Name: name, Size: size}
-	env.AppendInstr(resbInstr)
-
 	word := &Word{Name: name}
+	env.AppendWord(word)
+
+	env.AppendInstrs([]Instr{
+		&CommentInstr{Comment: fmt.Sprintf("; %d resb %s", size, name)},
+	&ResbInstr{Name: word.AsmLabel, Size: size},
+	})
+
 	instr := &RefWordInstr{Word: word}
 	word.AppendInstr(instr)
 	word.Inline()
-
-	env.AppendWord(word)
 }
 
 func KernelConst(env *Environment) {

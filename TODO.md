@@ -27,7 +27,6 @@
 
 1. resX, decX
 1. word local dictionaries (or similar to support parsers) - just non globals in files?
-1. handle name collisons for asm labels when importing/redeclaring
 1. hide non global words before merging dictionaries when importing
 1. make names asm friendly (stdin>buf is not a valid label)
 1. structs
@@ -46,7 +45,6 @@ readability improvements from f3
 1. thinking less about imports like sys and more about rolling it to suite needs
 1. ^ location of fd for read in sys doesn't help composability
 1. ^ after more code is written the right abstraction may emerge
-1. generate unique asm label per word unless global, then verbatim
 1. collapse multiple extern/global/imports to one 
 1. ^ global( start read bob joe )
 
