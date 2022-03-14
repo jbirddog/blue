@@ -77,16 +77,16 @@ orexit:
 .donecc:
 	ret
 
-; : buf.read ( -- buf:esi read:eax )
-buf.read:
+; : read ( -- buf:esi read:eax )
+read_1:
 	mov edx, 1024
 	mov esi, buf
 	call read.stdin
 	call orexit
 	ret
 
-; : buf.write ( buf:esi len:edx -- wrote:eax )
-buf.write:
+; : write ( buf:esi len:edx -- wrote:eax )
+write_1:
 	call write.stdout
 	call orexit
 	ret
@@ -94,8 +94,8 @@ buf.write:
 ;  TODO also still a bit loose with effect handling as seen with exit
 ; : _start ( -- noret )
 _start:
-	call buf.read
+	call read_1
 	mov edx, eax
-	call buf.write
+	call write_1
 	mov edi, 0
 	call exit
