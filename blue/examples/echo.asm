@@ -64,7 +64,6 @@ __blue_3190202204_1:
 	call __blue_4055961022_0
 	ret
 
-;  TODO hide buf
 ; : exit ( status:edi -- noret )
 __blue_3454868101_0:
 	mov eax, 60

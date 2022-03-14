@@ -26,6 +26,7 @@ func DefaultDictionary() *Dictionary {
 		NewCallGoWord("'", KernelTick).Immediate(),
 		NewCallGoWord("xl", KernelXl).Immediate(),
 		NewCallGoWord("const", KernelConst),
+		NewCallGoWord("hide", KernelHide),
 	})
 
 	return d

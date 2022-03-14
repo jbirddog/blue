@@ -17,7 +17,7 @@ buf.cap resb buf
 : read ( fd:edi -- read:eax ) buf buf.cap read unwrap ;
 : write ( len:edx fd:edi -- wrote:eax ) buf write unwrap ;
 
-\ TODO hide buf
+hide buf
 
 0 const stdin
 1 const stdout

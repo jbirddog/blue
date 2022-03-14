@@ -146,6 +146,15 @@ func KernelXl(env *Environment) {
 	latest.AppendInstr(condCall)
 }
 
+func KernelHide(env *Environment) {
+	word := env.Dictionary.Find(env.ReadNextWord())
+	if word == nil {
+		log.Fatal("hide expects a valid word")
+	}
+
+	word.Hidden()
+}
+
 func buildRegisterRef(rawRef string) *RegisterRef {
 	parts := strings.SplitN(rawRef, ":", 2)
 	partsLen := len(parts)
