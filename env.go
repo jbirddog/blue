@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"log"
 	"strconv"
@@ -45,12 +46,17 @@ type Environment struct {
 	CodeBuf              []Instr
 	AsmInstrs            []AsmInstr
 	Globals              map[string]bool
+	Labels               map[string]int
 	Section              string
 	UserSpecifiedSection bool
 }
 
 func DefaultEnvironment() *Environment {
-	return &Environment{Dictionary: DefaultDictionary(), Globals: make(map[string]bool)}
+	return &Environment{
+		Dictionary: DefaultDictionary(),
+		Globals:    map[string]bool{},
+		Labels:     map[string]int{},
+	}
 }
 
 func NewEnvironmentForFile(filename string) *Environment {
@@ -83,6 +89,18 @@ func (e *Environment) Merge(e2 *Environment) {
 		word := val.(*Word)
 		e.AppendWord(word)
 	}
+}
+
+func (e *Environment) AsmLabelForName(name string) string {
+	prevCount := e.Labels[name]
+	label := name
+
+	if prevCount > 0 {
+		label = fmt.Sprintf("%s_%d", name, prevCount)
+		e.Labels[name] = prevCount + 1
+	}
+
+	return label
 }
 
 func (e *Environment) AppendWord(word *Word) {

@@ -182,7 +182,6 @@ func (i *CondCallInstr) Run(env *Environment, context *RunContext) {
 	// TODO needs to support multiple CondCalls in one word
 	ccLabel := ".donecc"
 
-	// TODO AppendAsmInstrs
 	env.AppendAsmInstrs([]AsmInstr{
 		&AsmUnaryInstr{Mnemonic: i.Jmp, Op: ccLabel},
 		&AsmCallInstr{Label: i.Target.Word.AsmLabel},
