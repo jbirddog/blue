@@ -10,6 +10,10 @@ section .bss
 
 section .text
 
+; : #!@$% ( num:edi -- noret )
+__blue_3160614312_0:
+	call exit
+
 ; 
 ;  Entry point into the program
 ;  Only explaining this to test comments
@@ -17,4 +21,4 @@ section .text
 ; : _start ( -- noret )
 _start:
 	mov edi, 0
-	call exit
+	call __blue_3160614312_0

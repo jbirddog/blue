@@ -28,7 +28,6 @@
 1. resX, decX
 1. word local dictionaries (or similar to support parsers) - just non globals in files?
 1. hide non global words before merging dictionaries when importing
-1. make names asm friendly (stdin>buf is not a valid label)
 1. structs
 1. comment to eol don't parse inside words
 
