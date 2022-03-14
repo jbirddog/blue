@@ -6,15 +6,18 @@ global _start
 : unwrap ( result:eax -- value:eax ) dup 0 cmp ' fail xl ;
 
 : syscall3 ( edi esi edx eax -- result:eax ) syscall ;
-
 : read ( fd:edi buf:esi len:edx -- result:eax ) 0 syscall3 ;
-: write ( fd:edi buf:esi len:edx -- result:eax ) 1 syscall3 ;
+
+: syscall3 ( edx edi esi eax -- result:eax ) syscall ;
+: write ( len:edx fd:edi buf:esi -- result:eax ) 1 syscall3 ;
 
 1024 const buf.cap
 buf.cap resb buf
 
 : read ( fd:edi -- read:eax ) buf buf.cap read unwrap ;
-: write ( fd:edi -- result:eax ) buf buf.cap write ;
+: write ( len:edx fd:edi -- wrote:eax ) buf write unwrap ;
+
+\ TODO hide buf
 
 0 const stdin
 1 const stdout

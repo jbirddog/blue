@@ -32,10 +32,15 @@ __blue_3470762949_0:
 	call __blue_1472650507_0
 	ret
 
-; : write ( fd:edi buf:esi len:edx -- result:eax )
+; : syscall3 ( edx edi esi eax -- result:eax )
+__blue_1472650507_1:
+	syscall
+	ret
+
+; : write ( len:edx fd:edi buf:esi -- result:eax )
 __blue_3190202204_0:
 	mov eax, 1
-	call __blue_1472650507_0
+	call __blue_1472650507_1
 	ret
 
 section .bss
@@ -52,13 +57,14 @@ __blue_3470762949_1:
 	call __blue_4055961022_0
 	ret
 
-; : write ( fd:edi -- result:eax )
+; : write ( len:edx fd:edi -- wrote:eax )
 __blue_3190202204_1:
-	mov edx, 1024
 	mov esi, __blue_1926597602_0
 	call __blue_3190202204_0
+	call __blue_4055961022_0
 	ret
 
+;  TODO hide buf
 ; : exit ( status:edi -- noret )
 __blue_3454868101_0:
 	mov eax, 60
@@ -70,6 +76,7 @@ _start:
 	mov edi, 0
 	call __blue_3470762949_1
 	mov edi, 1
+	mov edx, eax
 	call __blue_3190202204_1
 	mov edi, 0
 	call __blue_3454868101_0
