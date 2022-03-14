@@ -6,10 +6,20 @@ __blue_1506205745_0:
 	syscall
 	ret
 
-; : exit ( status:edi -- noret )
-__blue_3454868101_0:
+; : fail ( err:edi -- noret )
+__blue_508790637_0:
+	neg edi
 	mov eax, 60
 	call __blue_1506205745_0
+
+; : unwrap ( result:eax -- value:eax )
+__blue_4055961022_0:
+	cmp eax, 0
+	jge __blue_2157056155_0
+	call __blue_508790637_0
+
+__blue_2157056155_0:
+	ret
 
 ; : syscall3 ( edi esi edx eax -- result:eax )
 __blue_1472650507_0:
@@ -34,11 +44,12 @@ section .bss
 __blue_1926597602_0: resb 1024
 section .text
 
-; : read ( fd:edi -- result:eax )
+; : read ( fd:edi -- read:eax )
 __blue_3470762949_1:
 	mov edx, 1024
 	mov esi, __blue_1926597602_0
 	call __blue_3470762949_0
+	call __blue_4055961022_0
 	ret
 
 ; : write ( fd:edi -- result:eax )
@@ -48,7 +59,11 @@ __blue_3190202204_1:
 	call __blue_3190202204_0
 	ret
 
-;  : die? ( result:eax -- value:eax ) dup 0 cmp ' exit.syserr xl ;
+; : exit ( status:edi -- noret )
+__blue_3454868101_0:
+	mov eax, 60
+	call __blue_1506205745_0
+
 ;  TODO compare read/write bytes for exit status
 ; : _start ( -- noret )
 _start:
