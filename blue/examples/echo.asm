@@ -1,7 +1,6 @@
 
 global _start
 
-;  import sys
 ; : syscall1 ( edi num:eax -- result:eax )
 __blue_1506205745_0:
 	syscall
