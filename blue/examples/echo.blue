@@ -5,14 +5,14 @@ global _start
 
 : syscall3 ( edi esi edx eax -- result:eax ) syscall ;
 
-: _read ( fd:edi buf:esi len:edx -- result:eax ) 0 syscall3 ;
-: _write ( fd:edi buf:esi len:edx -- result:eax ) 1 syscall3 ;
+: read ( fd:edi buf:esi len:edx -- result:eax ) 0 syscall3 ;
+: write ( fd:edi buf:esi len:edx -- result:eax ) 1 syscall3 ;
 
 1024 const buf.cap
 buf.cap resb buf
 
-: read ( fd:edi -- result:eax ) buf buf.cap _read ;
-: write ( fd:edi -- result:eax ) buf buf.cap _write ;
+: read ( fd:edi -- result:eax ) buf buf.cap read ;
+: write ( fd:edi -- result:eax ) buf buf.cap write ;
 
 \ : die? ( result:eax -- value:eax ) dup 0 cmp ' exit.syserr xl ;
 

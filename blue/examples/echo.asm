@@ -16,14 +16,14 @@ __blue_1472650507_0:
 	syscall
 	ret
 
-; : _read ( fd:edi buf:esi len:edx -- result:eax )
-__blue_346717030_0:
+; : read ( fd:edi buf:esi len:edx -- result:eax )
+__blue_3470762949_0:
 	mov eax, 0
 	call __blue_1472650507_0
 	ret
 
-; : _write ( fd:edi buf:esi len:edx -- result:eax )
-__blue_2215462825_0:
+; : write ( fd:edi buf:esi len:edx -- result:eax )
+__blue_3190202204_0:
 	mov eax, 1
 	call __blue_1472650507_0
 	ret
@@ -35,17 +35,17 @@ __blue_1926597602_0: resb 1024
 section .text
 
 ; : read ( fd:edi -- result:eax )
-__blue_3470762949_0:
+__blue_3470762949_1:
 	mov edx, 1024
 	mov esi, __blue_1926597602_0
-	call __blue_346717030_0
+	call __blue_3470762949_0
 	ret
 
 ; : write ( fd:edi -- result:eax )
-__blue_3190202204_0:
+__blue_3190202204_1:
 	mov edx, 1024
 	mov esi, __blue_1926597602_0
-	call __blue_2215462825_0
+	call __blue_3190202204_0
 	ret
 
 ;  : die? ( result:eax -- value:eax ) dup 0 cmp ' exit.syserr xl ;
@@ -53,8 +53,8 @@ __blue_3190202204_0:
 ; : _start ( -- noret )
 _start:
 	mov edi, 0
-	call __blue_3470762949_0
+	call __blue_3470762949_1
 	mov edi, 1
-	call __blue_3190202204_0
+	call __blue_3190202204_1
 	mov edi, 0
 	call __blue_3454868101_0

@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"strings"
 )
 
 const (
@@ -20,6 +22,7 @@ type Word struct {
 	Outputs  []*RegisterRef
 	Code     []Instr
 	AsmLabel string
+	RawRefs  []string
 }
 
 func ExternWord(name string) *Word {
@@ -57,6 +60,10 @@ func (w *Word) AppendOutput(r *RegisterRef) {
 	}
 
 	w.Outputs = append(w.Outputs, r)
+}
+
+func (w *Word) DeclString() string {
+	return fmt.Sprintf(": %s %s", w.Name, strings.Join(w.RawRefs, " "))
 }
 
 func (w *Word) clearFlag(flag uint) *Word {

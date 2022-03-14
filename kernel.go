@@ -15,16 +15,10 @@ func KernelColon(env *Environment) {
 	}
 
 	word := &Word{Name: name}
-	rawRefs := parseRefs(word, env)
-	env.AppendWord(word)
+	word.RawRefs = parseRefs(word, env)
+	env.Dictionary.Latest = word
 
 	env.SuggestSection(".text")
-
-	declComment := fmt.Sprintf(": %s %s", name, strings.Join(rawRefs, " "))
-	env.AppendInstrs([]Instr{
-		&CommentInstr{Comment: declComment},
-		&DeclWordInstr{Word: word},
-	})
 }
 
 func KernelExtern(env *Environment) {
@@ -51,6 +45,12 @@ func KernelSemi(env *Environment) {
 	if !latest.IsNoReturn() {
 		latest.AppendInstr(&X8664Instr{Mnemonic: "ret"})
 	}
+
+	env.AppendWord(latest)
+	env.AppendInstrs([]Instr{
+		&CommentInstr{Comment: latest.DeclString()},
+		&DeclWordInstr{Word: latest},
+	})
 }
 
 func KernelGlobal(env *Environment) {
