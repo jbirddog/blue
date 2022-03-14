@@ -65,6 +65,11 @@ func (w *Word) AppendOutput(r *RegisterRef) {
 	w.Outputs = append(w.Outputs, r)
 }
 
+func (w *Word) clearFlag(flag uint) *Word {
+	w.Flags &=^ flag
+	return w
+}
+
 func (w *Word) setFlag(flag uint) *Word {
 	w.Flags |= flag
 	return w
@@ -84,6 +89,10 @@ func (w *Word) Local() *Word {
 
 func (w *Word) Hidden() *Word {
 	return w.setFlag(wordFlag_Hidden)
+}
+
+func (w *Word) Reveal() *Word {
+	return w.clearFlag(wordFlag_Hidden)
 }
 
 func (w *Word) Global() *Word {
