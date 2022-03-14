@@ -23,6 +23,7 @@ func DefaultDictionary() *Dictionary {
 		NewCallGoWord("resb", KernelResb),
 		NewInlineWord("drop", &DropInstr{}),
 		NewInlineWord("dup", &DupInstr{}),
+		NewInlineWord("swap", &SwapInstr{}),
 		NewCallGoWord("'", KernelTick).Immediate(),
 		NewCallGoWord("xl", KernelXl).Immediate(),
 		NewCallGoWord("const", KernelConst),

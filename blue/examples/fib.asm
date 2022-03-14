@@ -2,7 +2,7 @@ extern exit
 
 global _start
 
-; : compute ( accum:eax scratch:edi -- result:edi )
+; : compute ( times:ecx accum:eax scratch:edi -- result:edi )
 __blue_1147400058_0:
 	xadd eax, edi
 	loop __blue_1147400058_0

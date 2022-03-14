@@ -173,6 +173,16 @@ func (i *DupInstr) Run(env *Environment, context *RunContext) {
 	context.AppendInput(context.Peek())
 }
 
+type SwapInstr struct{}
+
+func (i *SwapInstr) Run(env *Environment, context *RunContext) {
+	a := context.PopInput()
+	b := context.PopInput()
+
+	context.AppendInput(a)
+	context.AppendInput(b)
+}
+
 type CondCallInstr struct {
 	Jmp    string
 	Target *RefWordInstr

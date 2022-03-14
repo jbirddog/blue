@@ -10,7 +10,7 @@ section .bss
 
 section .text
 
-; : #!@$% ( num:edi -- noret )
+; : #!@$% ( status:edi -- noret )
 __blue_3160614312_0:
 	call exit
 

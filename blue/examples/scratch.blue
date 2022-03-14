@@ -7,7 +7,7 @@ section .data
 section .bss
 section .text
 
-: #!@$% ( num:edi -- noret ) exit ;
+: #!@$% ( status:edi -- noret ) exit ;
 
 \
 \ Entry point into the program
