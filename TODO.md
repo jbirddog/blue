@@ -42,9 +42,6 @@
 
 readability improvements from f3
 
-1. thinking less about imports like sys and more about rolling it to suite needs
-1. ^ location of fd for read in sys doesn't help composability
-1. ^ after more code is written the right abstraction may emerge
 1. collapse multiple extern/global/imports to one 
 1. ^ global( start read bob joe )
 
