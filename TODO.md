@@ -12,6 +12,7 @@
 1. better placement of comments in asm
 1. outputs don't flow
 1. collapse multiple extern/imports to one (const/resb/etc?) 
+1. when importing, can drop the global decls from the imported env?
 
 ### things
 

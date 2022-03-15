@@ -1,10 +1,4 @@
 
-global stdin
-
-global stdout
-
-global stderr
-
 global read
 
 global write

@@ -1,4 +1,4 @@
-global( stdin stdout stderr read write exit exit.syserr )
+global( read write exit exit.syserr )
 
 0 const stdin
 1 const stdout
