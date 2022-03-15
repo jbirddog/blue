@@ -1,4 +1,8 @@
 
+global read
+
+global write
+
 global exit
 
 global exit.syserr
@@ -12,6 +16,23 @@ global stderr
 ; : syscall1 ( arg1:edi num:eax -- result:eax )
 __blue_1506205745_0:
 	syscall
+	ret
+
+; : syscall3 ( arg3:edx arg2:esi arg1:edi num:eax -- result:eax )
+__blue_1472650507_0:
+	syscall
+	ret
+
+; : read ( len:edx buf:esi fd:edi -- result:eax )
+__blue_3470762949_0:
+	mov eax, 0
+	call __blue_1472650507_0
+	ret
+
+; : write ( len:edx buf:esi fd:edi -- result:eax )
+__blue_3190202204_0:
+	mov eax, 1
+	call __blue_1472650507_0
 	ret
 
 ; : exit ( status:edi -- noret )

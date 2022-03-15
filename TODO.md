@@ -15,6 +15,15 @@
 1. better placement of comments in asm
 1. outputs don't flow
 
+### things
+
+want a quick movement from low to high level
+general solutions overwritten by optimal specific versions
+^ some clamp operation that uses branching vs sse override
+^ sys read/write vs echo's read/write
+import linux
+import sse
+
 ### optimizations
 
 1. inlining
@@ -40,6 +49,7 @@
 ### f5
 
 1. see about calling blue object files from Go, start migrating some logic
+1. ^ might be easier to just start from scratch else bootstrap problem?
 
 ### f4 (current)
 
