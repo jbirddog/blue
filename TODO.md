@@ -14,6 +14,8 @@
 1. better newline support when generating asm
 1. better placement of comments in asm
 1. outputs don't flow
+1. collapse multiple extern/imports to one (const/resb/etc?) 
+1. parser bug seen in env_test.go
 
 ### things
 
@@ -54,10 +56,6 @@ import sse
 ### f4 (current)
 
 readability improvements from f3
-
-1. collapse multiple extern/global/imports/const/resb to one 
-1. ^ global( start read bob joe )
-1. ^ const( 0 stdin 1 stdout ) (only works for literals)
 
 ### f3
 

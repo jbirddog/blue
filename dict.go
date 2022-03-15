@@ -18,6 +18,7 @@ func DefaultDictionary() *Dictionary {
 		NewCallGoWord("latest", KernelLatest).Immediate(),
 		NewCallGoWord(";", KernelSemi).Immediate(),
 		NewCallGoWord("global", KernelGlobal),
+		NewCallGoWord("global(", KernelGlobalLParen),
 		NewCallGoWord("inline", KernelInline),
 		NewCallGoWord("\\", KernelCommentToEol).Immediate(),
 		NewCallGoWord("resb", KernelResb),

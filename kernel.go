@@ -63,6 +63,22 @@ func KernelGlobal(env *Environment) {
 	env.AppendInstr(&GlobalWordInstr{Name: name})
 }
 
+func KernelGlobalLParen(env *Environment) {
+	for {
+		name := env.ReadNextWord()
+		if len(name) == 0 {
+			log.Fatal("global( expects a name")
+		}
+
+		if name == ")" {
+			break
+		}
+
+		env.Globals[name] = true
+		env.AppendInstr(&GlobalWordInstr{Name: name})
+	}
+}
+
 func KernelInline(env *Environment) {
 	env.Dictionary.Latest.Inline()
 }

@@ -1,4 +1,10 @@
 
+global stdin
+
+global stdout
+
+global stderr
+
 global read
 
 global write
@@ -6,12 +12,6 @@ global write
 global exit
 
 global exit.syserr
-
-global stdin
-
-global stdout
-
-global stderr
 
 ; : syscall1 ( arg1:edi num:eax -- result:eax )
 __blue_1506205745_0:
