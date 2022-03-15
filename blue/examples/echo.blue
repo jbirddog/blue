@@ -3,7 +3,6 @@ import sys
 global _start
 
 : syscall3 ( edi edx esi num:eax -- result:eax ) syscall ;
-
 : unwrap ( result:eax -- value:eax ) dup 0 cmp ' exit.syserr xl ;
 
 : read ( fd:edi len:edx buf:esi -- result:eax ) 0 syscall3 ;

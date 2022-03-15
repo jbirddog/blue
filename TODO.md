@@ -16,6 +16,7 @@
 1. outputs don't flow
 1. collapse multiple extern/imports to one (const/resb/etc?) 
 1. parser bug seen in env_test.go
+1. push/pop
 
 ### things
 
