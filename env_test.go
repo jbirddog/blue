@@ -33,48 +33,47 @@ func TestReadTil(t *testing.T) {
 	}
 }
 
+// TODO these are fragile
 func TestCanDeclResb(t *testing.T) {
-	cases := []struct {
-		asm  []AsmInstr
-		name string
-		size uint
-	}{
-		{run("1024 resb buf\n"), "buf", 1024},
+	e := env("1024 resb buf\n")
+	asm := run(e)
+
+	if len(asm) != 3 {
+		t.Fatalf("Expected 3 asms instr, got %d", len(asm))
 	}
 
-	for _, c := range cases {
-		if len(c.asm) != 1 {
-			t.Fatalf("Expected 1 asm instr, got %d", len(c.asm))
-		}
+	instr := asm[2].(*AsmResbInstr)
+	label := e.AsmLabelForWordNamed("buf")
 
-		instr := c.asm[0].(*AsmResbInstr)
+	if instr.Name != label {
+		t.Fatalf("Expected buf, got '%s'", instr.Name)
+	}
 
-		if instr.Name != c.name {
-			t.Fatalf("Expected name '%s', got '%s'", c.name, instr.Name)
-		}
-
-		if instr.Size != c.size {
-			t.Fatalf("Expected size '%d', got '%d'", c.size, instr.Size)
-		}
+	if instr.Size != 1024 {
+		t.Fatalf("Expected size 1024, got '%d'", instr.Size)
 	}
 }
 
 func TestCanFindResbRef(t *testing.T) {
-	asm := run("1024 resb buf : xyz ( -- ) buf loop ;\n")
-	loopInstr := asm[2].(*AsmUnaryInstr)
+	e := env("1024 resb buf : xyz ( -- ) buf loop ;\n")
+	asm := run(e)
 
-	if loopInstr.Op != "buf" {
+	loopInstr := asm[6].(*AsmUnaryInstr)
+	label := e.AsmLabelForWordNamed("buf")
+
+	if loopInstr.Op != label {
 		t.Fatalf("Expected buf, got '%s'", loopInstr.Op)
 	}
 }
 
 func env(buf string) *Environment {
-	return &Environment{Dictionary: DefaultDictionary(), InputBuf: buf}
+	env := DefaultEnvironment()
+	env.InputBuf = buf
+
+	return env
 }
 
-func run(buf string) []AsmInstr {
-	e := env(buf)
-
+func run(e *Environment) []AsmInstr {
 	for e.ParseNextWord() {
 	}
 

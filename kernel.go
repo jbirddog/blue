@@ -15,31 +15,10 @@ func KernelColon(env *Environment) {
 	}
 
 	word := &Word{Name: name}
-	parseRefs(word, env)
-	env.Dictionary.Append(word)
-	env.AppendInstr(&DeclWordInstr{Word: word})
-}
+	word.RawRefs = parseRefs(word, env)
+	env.Dictionary.Latest = word
 
-func KernelColonGT(env *Environment) {
-	parent := env.Dictionary.LatestNonLocal()
-
-	if parent == nil || !env.Compiling {
-		log.Fatal(":> expects to be nested")
-	}
-
-	name := env.ReadNextWord()
-	if len(name) == 0 {
-		log.Fatal(":> expects a name")
-	}
-
-	word := LocalWord(name)
-	parseRefs(word, env)
-
-	previous := env.Dictionary.Latest()
-	previous.AppendInstr(&FlowWordInstr{Word: word})
-
-	env.Dictionary.Append(word)
-	env.AppendInstr(&DeclWordInstr{Word: word})
+	env.SuggestSection(".text")
 }
 
 func KernelExtern(env *Environment) {
@@ -50,36 +29,65 @@ func KernelExtern(env *Environment) {
 
 	word := ExternWord(name)
 	parseRefs(word, env)
-	env.Dictionary.Append(word)
+	env.AppendWord(word)
 	env.AppendInstr(&ExternWordInstr{Word: word})
 }
 
 func KernelLatest(env *Environment) {
-	latest := env.Dictionary.Latest()
+	latest := env.Dictionary.Latest
 	latest.AppendInstr(&RefWordInstr{Word: latest})
 }
 
 func KernelSemi(env *Environment) {
 	env.Compiling = false
+	latest := env.Dictionary.Latest
 
-	if !env.Dictionary.LatestNonLocal().IsNoReturn() {
-		latest := env.Dictionary.Latest()
+	if !latest.IsNoReturn() {
 		latest.AppendInstr(&X8664Instr{Mnemonic: "ret"})
 	}
 
-	env.Dictionary.HideLocalWords()
+	env.AppendWord(latest)
+	env.AppendInstrs([]Instr{
+		&CommentInstr{Comment: latest.DeclString()},
+		&DeclWordInstr{Word: latest},
+	})
 }
 
 func KernelGlobal(env *Environment) {
-	latest := env.Dictionary.LatestNonLocal()
-	latest.Global()
-	env.AppendInstr(&GlobalWordInstr{Word: latest})
+	name := env.ReadNextWord()
+	if len(name) == 0 {
+		log.Fatal("global expects a name")
+	}
+
+	env.Globals[name] = true
+	env.AppendInstr(&GlobalWordInstr{Name: name})
+}
+
+func KernelGlobalLParen(env *Environment) {
+	for {
+		name := env.ReadNextWord()
+		if len(name) == 0 {
+			log.Fatal("global( expects a name")
+		}
+
+		if name == ")" {
+			break
+		}
+
+		env.Globals[name] = true
+		env.AppendInstr(&GlobalWordInstr{Name: name})
+	}
+}
+
+func KernelInline(env *Environment) {
+	env.Dictionary.Latest.Inline()
 }
 
 func KernelSection(env *Environment) {
 	env.LTrimBuf()
 	info := env.ReadTil("\n")
 	env.AppendInstr(&SectionInstr{Info: info})
+	env.UserSpecifiedSection = true
 }
 
 func KernelCommentToEol(env *Environment) {
@@ -97,8 +105,7 @@ func KernelImport(env *Environment) {
 	file = fmt.Sprintf("%s.blue", file)
 	importEnv := ParseFileInNewEnvironment(file)
 
-	env.CodeBuf = append(env.CodeBuf, importEnv.CodeBuf...)
-	env.Dictionary.Words = append(env.Dictionary.Words, importEnv.Dictionary.Words...)
+	env.Merge(importEnv)
 }
 
 func KernelResb(env *Environment) {
@@ -107,19 +114,34 @@ func KernelResb(env *Environment) {
 		log.Fatal("resb expects a name")
 	}
 
-	lastIdx := len(env.CodeBuf) - 1
-	sizeInstr := env.CodeBuf[lastIdx].(*LiteralIntInstr)
+	sizeInstr := env.PopInstr().(*LiteralIntInstr)
 	size := uint(sizeInstr.I)
 
-	resbInstr := &ResbInstr{Name: name, Size: size}
-	env.CodeBuf[lastIdx] = resbInstr
+	env.SuggestSection(".bss")
 
 	word := &Word{Name: name}
+	env.AppendWord(word)
+
+	env.AppendInstrs([]Instr{
+		&CommentInstr{Comment: fmt.Sprintf("; %d resb %s", size, name)},
+		&ResbInstr{Name: word.AsmLabel, Size: size},
+	})
+
 	instr := &RefWordInstr{Word: word}
 	word.AppendInstr(instr)
 	word.Inline()
+}
 
-	env.Dictionary.Append(word)
+func KernelConst(env *Environment) {
+	name := env.ReadNextWord()
+	if len(name) == 0 {
+		log.Fatal("const expects a name")
+	}
+
+	instr := env.PopInstr().(*LiteralIntInstr)
+	word := NewInlineWord(name, instr)
+
+	env.AppendWord(word)
 }
 
 func KernelTick(env *Environment) {
@@ -130,57 +152,51 @@ func KernelTick(env *Environment) {
 
 	instr := &RefWordInstr{Word: word}
 	// TODO won't work when not compiling
-	env.Dictionary.Latest().AppendInstr(instr)
+	env.Dictionary.Latest.AppendInstr(instr)
 }
 
 func KernelXl(env *Environment) {
-	latest := env.Dictionary.Latest()
+	latest := env.Dictionary.Latest
 	refWord := latest.PopInstr().(*RefWordInstr)
 	condCall := &CondCallInstr{Jmp: "jge", Target: refWord}
 	latest.AppendInstr(condCall)
 }
 
-func buildRegisterRef(rawRef string, parentRefs []*RegisterRef) *RegisterRef {
+func KernelHide(env *Environment) {
+	word := env.Dictionary.Find(env.ReadNextWord())
+	if word == nil {
+		log.Fatal("hide expects a valid word")
+	}
+
+	word.Hidden()
+}
+
+func buildRegisterRef(rawRef string) *RegisterRef {
 	parts := strings.SplitN(rawRef, ":", 2)
 	partsLen := len(parts)
 
 	if partsLen == 1 {
-		reg := parts[0]
-
-		for _, parentRef := range parentRefs {
-			if parentRef.Name == parts[0] {
-				reg = parentRef.Reg
-				break
-			}
-		}
-
-		return &RegisterRef{Name: parts[0], Reg: reg}
+		return &RegisterRef{Name: parts[0], Reg: parts[0]}
 	}
 
 	return &RegisterRef{Name: parts[0], Reg: parts[1]}
 }
 
-func parseRefs(word *Word, env *Environment) {
+func parseRefs(word *Word, env *Environment) []string {
 	if env.ReadNextWord() != "(" {
 		log.Fatal("Expected (")
 	}
 
+	rawParts := []string{"("}
 	parsingInputs := true
-
-	var parentInputs []*RegisterRef
-	var parentOutputs []*RegisterRef
-
-	if word.IsLocal() {
-		parent := env.Dictionary.LatestNonLocal()
-		parentInputs = parent.Inputs
-		parentOutputs = parent.Outputs
-	}
 
 	for {
 		nextWord := env.ReadNextWord()
 		if len(nextWord) == 0 {
 			log.Fatal("unexpected eof")
 		}
+
+		rawParts = append(rawParts, nextWord)
 
 		if nextWord == "--" {
 			parsingInputs = false
@@ -197,11 +213,13 @@ func parseRefs(word *Word, env *Environment) {
 		}
 
 		if parsingInputs {
-			ref := buildRegisterRef(nextWord, parentInputs)
+			ref := buildRegisterRef(nextWord)
 			word.AppendInput(ref)
 		} else {
-			ref := buildRegisterRef(nextWord, parentOutputs)
+			ref := buildRegisterRef(nextWord)
 			word.AppendOutput(ref)
 		}
 	}
+
+	return rawParts
 }

@@ -1,89 +1,110 @@
 
-syscall1:
-	syscall
-	ret
+global stdin
 
-syscall3:
-	syscall
-	ret
+global stdout
 
-read:
-	mov eax, 0
-	call syscall3
-	ret
+global stderr
 
 global read
 
-read.stdin:
-	mov edi, 0
-	call read
-	ret
-
-global read.stdin
-
-write:
-	mov eax, 1
-	call syscall3
-	ret
-
 global write
-
-write.stdout:
-	mov edi, 1
-	call write
-	ret
-
-global write.stdout
-
-write.stderr:
-	mov edi, 3
-	call write
-	ret
-
-global write.stderr
-
-exit:
-	mov eax, 60
-	call syscall1
 
 global exit
 
-exit.syserr:
+global exit.syserr
+
+; : syscall1 ( arg1:edi num:eax -- result:eax )
+__blue_1506205745_0:
+	syscall
+	ret
+
+; : syscall3 ( arg3:edx arg2:esi arg1:edi num:eax -- result:eax )
+__blue_1472650507_0:
+	syscall
+	ret
+
+; : read ( len:edx buf:esi fd:edi -- result:eax )
+__blue_3470762949_0:
+	mov eax, 0
+	call __blue_1472650507_0
+	ret
+
+; : write ( len:edx buf:esi fd:edi -- result:eax )
+__blue_3190202204_0:
+	mov eax, 1
+	call __blue_1472650507_0
+	ret
+
+; : exit ( status:edi -- noret )
+__blue_3454868101_0:
+	mov eax, 60
+	call __blue_1506205745_0
+
+; : exit.syserr ( err:eax -- )
+__blue_1490145965_0:
 	neg eax
 	mov edi, eax
-	call exit
+	call __blue_3454868101_0
 	ret
-
-section .bss
-
-buf: resb 1024
-section .text
-
-orexit:
-	cmp eax, 0
-	jge ..@donecc
-	call exit.syserr
-
-..@donecc:
-	ret
-
-buf.read:
-	mov edx, 1024
-	mov esi, buf
-	call read.stdin
-	call orexit
-	ret
-
-buf.write:
-	call write.stdout
-	call orexit
-	ret
-
-_start:
-	call buf.read
-	mov edx, eax
-	call buf.write
-	mov edi, 0
-	call exit
 
 global _start
+
+; : syscall3 ( edi edx esi num:eax -- result:eax )
+__blue_1472650507_1:
+	syscall
+	ret
+
+; : unwrap ( result:eax -- value:eax )
+__blue_4055961022_0:
+	cmp eax, 0
+	jge __blue_2157056155_0
+	call __blue_1490145965_0
+
+__blue_2157056155_0:
+	ret
+
+; : read ( fd:edi len:edx buf:esi -- result:eax )
+__blue_3470762949_1:
+	mov eax, 0
+	call __blue_1472650507_1
+	ret
+
+; : write ( fd:edi len:edx buf:esi -- result:eax )
+__blue_3190202204_1:
+	mov eax, 1
+	call __blue_1472650507_1
+	ret
+
+;  TODO clamp for 0 <= len <= buf.cap for write's variable len
+;  pmaxud, pminud?
+section .bss
+
+; ; 1024 resb buf
+__blue_1926597602_0: resb 1024
+section .text
+
+; : read ( fd:edi -- read:eax )
+__blue_3470762949_2:
+	mov esi, __blue_1926597602_0
+	mov edx, 1024
+	call __blue_3470762949_1
+	call __blue_4055961022_0
+	ret
+
+; : write ( len:edx fd:edi -- wrote:eax )
+__blue_3190202204_2:
+	mov esi, __blue_1926597602_0
+	call __blue_3190202204_1
+	call __blue_4055961022_0
+	ret
+
+;  TODO compare read/write bytes for exit status
+; : _start ( -- noret )
+_start:
+	mov edi, 0
+	call __blue_3470762949_2
+	mov edi, 1
+	mov edx, eax
+	call __blue_3190202204_2
+	mov edi, 0
+	call __blue_3454868101_0

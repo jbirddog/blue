@@ -1,61 +1,55 @@
 
-syscall1:
-	syscall
-	ret
+global stdin
 
-syscall3:
-	syscall
-	ret
+global stdout
 
-read:
-	mov eax, 0
-	call syscall3
-	ret
+global stderr
 
 global read
 
-read.stdin:
-	mov edi, 0
-	call read
-	ret
-
-global read.stdin
-
-write:
-	mov eax, 1
-	call syscall3
-	ret
-
 global write
-
-write.stdout:
-	mov edi, 1
-	call write
-	ret
-
-global write.stdout
-
-write.stderr:
-	mov edi, 3
-	call write
-	ret
-
-global write.stderr
-
-exit:
-	mov eax, 60
-	call syscall1
 
 global exit
 
-exit.syserr:
-	neg eax
-	mov edi, eax
-	call exit
+global exit.syserr
+
+; : syscall1 ( arg1:edi num:eax -- result:eax )
+__blue_1506205745_0:
+	syscall
 	ret
 
-_start:
-	mov edi, 33
-	call exit
+; : syscall3 ( arg3:edx arg2:esi arg1:edi num:eax -- result:eax )
+__blue_1472650507_0:
+	syscall
+	ret
+
+; : read ( len:edx buf:esi fd:edi -- result:eax )
+__blue_3470762949_0:
+	mov eax, 0
+	call __blue_1472650507_0
+	ret
+
+; : write ( len:edx buf:esi fd:edi -- result:eax )
+__blue_3190202204_0:
+	mov eax, 1
+	call __blue_1472650507_0
+	ret
+
+; : exit ( status:edi -- noret )
+__blue_3454868101_0:
+	mov eax, 60
+	call __blue_1506205745_0
+
+; : exit.syserr ( err:eax -- )
+__blue_1490145965_0:
+	neg eax
+	mov edi, eax
+	call __blue_3454868101_0
+	ret
 
 global _start
+
+; : _start ( -- noret )
+_start:
+	mov edi, 33
+	call __blue_3454868101_0

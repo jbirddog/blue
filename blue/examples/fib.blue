@@ -1,6 +1,8 @@
 extern exit ( status:edi -- noret )
 
-: fib ( nth:ecx -- result:edi ) 1 0 
-:> compute ( accum:eax scratch:edi -- result ) xadd latest loop ;
+global _start
 
-: _start ( -- noret ) 11 fib exit ; global
+: compute ( times:ecx accum:eax scratch:edi -- result:edi ) xadd latest loop ;
+: fib ( nth:ecx -- result:edi ) 1 0 compute ;
+
+: _start ( -- noret ) 11 fib exit ;

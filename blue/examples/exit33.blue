@@ -1,3 +1,5 @@
 import sys
 
-: _start ( -- noret ) 33 exit ; global
+global _start
+
+: _start ( -- noret ) 33 exit ;

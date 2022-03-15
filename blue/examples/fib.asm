@@ -1,17 +1,22 @@
 extern exit
 
-fib:
-	mov edi, 0
-	mov eax, 1
+global _start
 
-.compute:
+; : compute ( times:ecx accum:eax scratch:edi -- result:edi )
+__blue_1147400058_0:
 	xadd eax, edi
-	loop .compute
+	loop __blue_1147400058_0
 	ret
 
+; : fib ( nth:ecx -- result:edi )
+__blue_3169096246_0:
+	mov edi, 0
+	mov eax, 1
+	call __blue_1147400058_0
+	ret
+
+; : _start ( -- noret )
 _start:
 	mov ecx, 11
-	call fib
+	call __blue_3169096246_0
 	call exit
-
-global _start

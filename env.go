@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"hash/fnv"
 	"io/ioutil"
 	"log"
 	"strconv"
@@ -39,11 +41,23 @@ func (c *RunContext) Pop2Inputs() (string, string) {
 }
 
 type Environment struct {
-	Compiling  bool
-	InputBuf   string
-	Dictionary *Dictionary
-	CodeBuf    []Instr
-	AsmInstrs  []AsmInstr
+	Compiling            bool
+	InputBuf             string
+	Dictionary           *Dictionary
+	CodeBuf              []Instr
+	AsmInstrs            []AsmInstr
+	Globals              map[string]bool
+	Labels               map[string]int
+	Section              string
+	UserSpecifiedSection bool
+}
+
+func DefaultEnvironment() *Environment {
+	return &Environment{
+		Dictionary: DefaultDictionary(),
+		Globals:    map[string]bool{},
+		Labels:     map[string]int{},
+	}
 }
 
 func NewEnvironmentForFile(filename string) *Environment {
@@ -52,7 +66,10 @@ func NewEnvironmentForFile(filename string) *Environment {
 		log.Fatal(err)
 	}
 
-	return &Environment{Dictionary: DefaultDictionary(), InputBuf: string(bytes)}
+	env := DefaultEnvironment()
+	env.InputBuf = string(bytes)
+
+	return env
 }
 
 func ParseFileInNewEnvironment(filename string) *Environment {
@@ -64,6 +81,60 @@ func ParseFileInNewEnvironment(filename string) *Environment {
 	env.Validate()
 
 	return env
+}
+
+func (e *Environment) Merge(e2 *Environment) {
+	e.CodeBuf = append(e.CodeBuf, e2.CodeBuf...)
+
+	for _, val := range e2.Dictionary.Words {
+		word := val.(*Word)
+		e.AppendWord(word)
+	}
+
+	// Don't merge globals
+	//for name, _ := range e2.Globals {
+	//	e.Globals[name] = true
+	//}
+
+	// TODO this could be unsafe
+	for name, count := range e2.Labels {
+		e.Labels[name] = count
+	}
+}
+
+func (e *Environment) AsmLabelForWordNamed(name string) string {
+	val := e.Dictionary.Words[name]
+	word := val.(*Word)
+
+	return word.AsmLabel
+}
+
+func (e *Environment) AsmLabelForName(name string) string {
+	if e.Globals[name] {
+		return name
+	}
+
+	prevCount := e.Labels[name]
+
+	hasher := fnv.New32a()
+	hasher.Write([]byte(name))
+	hash := hasher.Sum32()
+
+	label := fmt.Sprintf("__blue_%d_%d", hash, prevCount)
+	e.Labels[name] = prevCount + 1
+
+	return label
+}
+
+func (e *Environment) AppendWord(word *Word) {
+	label := word.Name
+
+	if !word.IsExtern() {
+		label = e.AsmLabelForName(word.Name)
+	}
+
+	word.AsmLabel = label
+	e.Dictionary.Append(word)
 }
 
 func (e *Environment) LTrimBuf() {
@@ -108,16 +179,31 @@ func (e *Environment) ReadTil(s string) string {
 	return read
 }
 
+func instrsForWord(word *Word) []Instr {
+	if !word.IsInline() {
+		return []Instr{&CallWordInstr{Word: word}}
+	}
+
+	lastIdx := len(word.Code)
+	if instr, x8664 := word.Code[lastIdx-1].(*X8664Instr); x8664 {
+		if instr.Mnemonic == "ret" {
+			lastIdx -= 1
+		}
+	}
+
+	return word.Code[:lastIdx]
+}
+
 func (e *Environment) ParseNextWord() bool {
 	name := e.ReadNextWord()
 	if len(name) == 0 {
 		return false
 	}
 
-	var instr Instr
+	var instrs []Instr
 
 	if word := e.Dictionary.Find(name); word != nil {
-		if !e.Compiling || word.IsImmediate() {
+		if (!e.Compiling || word.IsImmediate()) && !word.IsInline() {
 			context := &RunContext{}
 
 			for _, instr := range word.Code {
@@ -127,30 +213,25 @@ func (e *Environment) ParseNextWord() bool {
 			return true
 		}
 
-		// TODO hack to get resb working.
-		if word.IsInline() {
-			instr = word.Code[0]
-		} else {
-			instr = &CallWordInstr{Word: word}
-		}
+		instrs = instrsForWord(word)
 	}
 
 	if _, found := x8664Mnemonics[name]; found {
-		instr = &X8664Instr{Mnemonic: name}
+		instrs = []Instr{&X8664Instr{Mnemonic: name}}
 	}
 
 	if i, err := strconv.Atoi(name); err == nil {
-		instr = &LiteralIntInstr{I: i}
+		instrs = []Instr{&LiteralIntInstr{I: i}}
 	}
 
-	if instr == nil {
+	if len(instrs) == 0 {
 		log.Fatal("Did not find ", name)
 	}
 
 	if !e.Compiling {
-		e.AppendInstr(instr)
+		e.AppendInstrs(instrs)
 	} else {
-		e.Dictionary.Latest().AppendInstr(instr)
+		e.Dictionary.Latest.AppendInstrs(instrs)
 	}
 
 	return true
@@ -160,8 +241,16 @@ func (c *Environment) AppendAsmInstr(i AsmInstr) {
 	c.AsmInstrs = append(c.AsmInstrs, i)
 }
 
+func (c *Environment) AppendAsmInstrs(i []AsmInstr) {
+	c.AsmInstrs = append(c.AsmInstrs, i...)
+}
+
 func (e *Environment) AppendInstr(i Instr) {
 	e.CodeBuf = append(e.CodeBuf, i)
+}
+
+func (e *Environment) AppendInstrs(i []Instr) {
+	e.CodeBuf = append(e.CodeBuf, i...)
 }
 
 func (e *Environment) PopInstr() Instr {
@@ -170,6 +259,23 @@ func (e *Environment) PopInstr() Instr {
 	e.CodeBuf = e.CodeBuf[:last]
 
 	return instr
+}
+
+func (e *Environment) SuggestSection(section string) {
+	if e.UserSpecifiedSection {
+		return
+	}
+
+	if len(e.Section) == 0 {
+		e.Section = ".text"
+	}
+
+	if e.Section == section {
+		return
+	}
+
+	e.AppendInstr(&SectionInstr{Info: section})
+	e.Section = section
 }
 
 func (e *Environment) Validate() {

@@ -85,7 +85,7 @@ type CallWordInstr struct {
 func (i *CallWordInstr) Run(env *Environment, context *RunContext) {
 	if env.Compiling {
 		flowWord(i.Word, env, context)
-		env.AppendAsmInstr(&AsmCallInstr{Label: i.Word.AsmLabel()})
+		env.AppendAsmInstr(&AsmCallInstr{Label: i.Word.AsmLabel})
 		return
 	}
 
@@ -99,7 +99,7 @@ type RefWordInstr struct {
 }
 
 func (i *RefWordInstr) Run(env *Environment, context *RunContext) {
-	context.AppendInput(i.Word.AsmLabel())
+	context.AppendInput(i.Word.AsmLabel)
 }
 
 type ExternWordInstr struct {
@@ -107,15 +107,15 @@ type ExternWordInstr struct {
 }
 
 func (i *ExternWordInstr) Run(env *Environment, context *RunContext) {
-	env.AppendAsmInstr(&AsmExternInstr{Label: i.Word.AsmLabel()})
+	env.AppendAsmInstr(&AsmExternInstr{Label: i.Word.AsmLabel})
 }
 
 type GlobalWordInstr struct {
-	Word *Word
+	Name string
 }
 
 func (i *GlobalWordInstr) Run(env *Environment, context *RunContext) {
-	env.AppendAsmInstr(&AsmGlobalInstr{Label: i.Word.AsmLabel()})
+	env.AppendAsmInstr(&AsmGlobalInstr{Label: i.Name})
 }
 
 type DeclWordInstr struct {
@@ -123,7 +123,7 @@ type DeclWordInstr struct {
 }
 
 func (i *DeclWordInstr) Run(env *Environment, context *RunContext) {
-	env.AppendAsmInstr(&AsmLabelInstr{Name: i.Word.AsmLabel()})
+	env.AppendAsmInstr(&AsmLabelInstr{Name: i.Word.AsmLabel})
 
 	context.Inputs = i.Word.InputRegisters()
 	context.Outputs = i.Word.OutputRegisters()
@@ -149,7 +149,7 @@ type CommentInstr struct {
 }
 
 func (i *CommentInstr) Run(env *Environment, context *RunContext) {
-	// env.AppendAsmInstr(&AsmCommentInstr{Comment: i.Comment})
+	env.AppendAsmInstr(&AsmCommentInstr{Comment: i.Comment})
 }
 
 type ResbInstr struct {
@@ -173,19 +173,29 @@ func (i *DupInstr) Run(env *Environment, context *RunContext) {
 	context.AppendInput(context.Peek())
 }
 
+type SwapInstr struct{}
+
+func (i *SwapInstr) Run(env *Environment, context *RunContext) {
+	a := context.PopInput()
+	b := context.PopInput()
+
+	context.AppendInput(a)
+	context.AppendInput(b)
+}
+
 type CondCallInstr struct {
 	Jmp    string
 	Target *RefWordInstr
 }
 
 func (i *CondCallInstr) Run(env *Environment, context *RunContext) {
-	// TODO needs to support multiple CondCalls in one word
-	ccLabel := "..@donecc"
+	ccLabel := env.AsmLabelForName(".donecc")
 
-	// TODO AppendAsmInstrs
-	env.AppendAsmInstr(&AsmUnaryInstr{Mnemonic: i.Jmp, Op: ccLabel})
-	env.AppendAsmInstr(&AsmCallInstr{Label: i.Target.Word.AsmLabel()})
-	env.AppendAsmInstr(&AsmLabelInstr{Name: ccLabel})
+	env.AppendAsmInstrs([]AsmInstr{
+		&AsmUnaryInstr{Mnemonic: i.Jmp, Op: ccLabel},
+		&AsmCallInstr{Label: i.Target.Word.AsmLabel},
+		&AsmLabelInstr{Name: ccLabel},
+	})
 }
 
 func flowWord(word *Word, env *Environment, context *RunContext) {

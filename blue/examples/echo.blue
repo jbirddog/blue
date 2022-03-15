@@ -1,16 +1,24 @@
 import sys
 
-section .bss
+global _start
 
-\ TODO equ for constants
-1024 resb buf
+: syscall3 ( edi edx esi num:eax -- result:eax ) syscall ;
+: unwrap ( result:eax -- value:eax ) dup 0 cmp ' exit.syserr xl ;
 
-section .text
+: read ( fd:edi len:edx buf:esi -- result:eax ) 0 syscall3 ;
+: write ( fd:edi len:edx buf:esi -- result:eax ) 1 syscall3 ;
 
-: orexit ( result:eax -- value:eax ) dup 0 cmp ' exit.syserr xl ;
+1024 const buf.cap
 
-: buf.read ( -- buf:esi read:eax ) buf 1024 read.stdin orexit ;
-: buf.write ( buf:esi len:edx -- wrote:eax ) write.stdout orexit ;
+\ TODO clamp for 0 <= len <= buf.cap for write's variable len
+\ pmaxud, pminud?
 
-\ TODO also still a bit loose with effect handling as seen with exit
-: _start ( -- noret ) buf.read buf.write 0 exit ; global
+buf.cap resb buf
+
+: read ( fd:edi -- read:eax ) buf.cap buf read unwrap ;
+: write ( len:edx fd:edi -- wrote:eax ) swap buf write unwrap ;
+
+hide buf
+
+\ TODO compare read/write bytes for exit status
+: _start ( -- noret ) stdin read stdout write 0 exit ; 

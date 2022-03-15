@@ -1,13 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"strings"
 )
 
 const (
 	wordFlag_Immediate = 1 << iota
 	wordFlag_NoReturn
-	wordFlag_Local
 	wordFlag_Hidden
 	wordFlag_Global
 	wordFlag_Extern
@@ -15,11 +16,13 @@ const (
 )
 
 type Word struct {
-	Name    string
-	Flags   uint
-	Inputs  []*RegisterRef
-	Outputs []*RegisterRef
-	Code    []Instr
+	Name     string
+	Flags    uint
+	Inputs   []*RegisterRef
+	Outputs  []*RegisterRef
+	Code     []Instr
+	AsmLabel string
+	RawRefs  []string
 }
 
 func ExternWord(name string) *Word {
@@ -27,13 +30,12 @@ func ExternWord(name string) *Word {
 	return w.Extern()
 }
 
-func LocalWord(name string) *Word {
-	w := &Word{Name: name}
-	return w.Local()
-}
-
 func (w *Word) AppendInstr(instr Instr) {
 	w.Code = append(w.Code, instr)
+}
+
+func (w *Word) AppendInstrs(instrs []Instr) {
+	w.Code = append(w.Code, instrs...)
 }
 
 func (w *Word) PopInstr() Instr {
@@ -60,6 +62,15 @@ func (w *Word) AppendOutput(r *RegisterRef) {
 	w.Outputs = append(w.Outputs, r)
 }
 
+func (w *Word) DeclString() string {
+	return fmt.Sprintf(": %s %s", w.Name, strings.Join(w.RawRefs, " "))
+}
+
+func (w *Word) clearFlag(flag uint) *Word {
+	w.Flags &= ^flag
+	return w
+}
+
 func (w *Word) setFlag(flag uint) *Word {
 	w.Flags |= flag
 	return w
@@ -73,12 +84,12 @@ func (w *Word) NoReturn() *Word {
 	return w.setFlag(wordFlag_NoReturn)
 }
 
-func (w *Word) Local() *Word {
-	return w.setFlag(wordFlag_Local)
-}
-
 func (w *Word) Hidden() *Word {
 	return w.setFlag(wordFlag_Hidden)
+}
+
+func (w *Word) Reveal() *Word {
+	return w.clearFlag(wordFlag_Hidden)
 }
 
 func (w *Word) Global() *Word {
@@ -103,10 +114,6 @@ func (w *Word) IsImmediate() bool {
 
 func (w *Word) IsNoReturn() bool {
 	return w.hasFlag(wordFlag_NoReturn)
-}
-
-func (w *Word) IsLocal() bool {
-	return w.hasFlag(wordFlag_Local)
 }
 
 func (w *Word) IsHidden() bool {
@@ -143,14 +150,6 @@ func (w *Word) OutputRegisters() []string {
 	}
 
 	return registers
-}
-
-func (w *Word) AsmLabel() string {
-	if w.IsLocal() {
-		return "." + w.Name
-	}
-
-	return w.Name
 }
 
 func NewCallGoWord(name string, f GoCaller) *Word {
