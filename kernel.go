@@ -123,7 +123,7 @@ func KernelResb(env *Environment) {
 	env.AppendWord(word)
 
 	env.AppendInstrs([]Instr{
-		&CommentInstr{Comment: fmt.Sprintf("; %d resb %s", size, name)},
+		&CommentInstr{Comment: fmt.Sprintf("%d resb %s", size, name)},
 		&ResbInstr{Name: word.AsmLabel, Size: size},
 	})
 

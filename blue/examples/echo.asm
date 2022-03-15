@@ -79,7 +79,7 @@ __blue_3190202204_1:
 ;  pmaxud, pminud?
 section .bss
 
-; ; 1024 resb buf
+; 1024 resb buf
 __blue_1926597602_0: resb 1024
 section .text
 

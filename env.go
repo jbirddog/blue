@@ -91,11 +91,6 @@ func (e *Environment) Merge(e2 *Environment) {
 		e.AppendWord(word)
 	}
 
-	// Don't merge globals
-	//for name, _ := range e2.Globals {
-	//	e.Globals[name] = true
-	//}
-
 	// TODO this could be unsafe
 	for name, count := range e2.Labels {
 		e.Labels[name] = count
@@ -147,11 +142,7 @@ func (e *Environment) ReadNextWord() string {
 	wordEnd := strings.IndexAny(buf, " \t\n")
 
 	if wordEnd == -1 {
-		wordEnd = len(buf) - 1
-	}
-
-	if wordEnd == -1 {
-		return ""
+		wordEnd = len(buf)
 	}
 
 	word := buf[:wordEnd]

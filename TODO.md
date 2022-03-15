@@ -44,16 +44,16 @@ import sse
 
 ### f5 (current)
 
+1. some bit of code that would help push the gfe conversion to blue along
+1 ^ f4 looked at read/write support
 1. start to infer registers from word body
 1. ^ if fully specified, validate
 1. ^ echo's first read/write should be the first target
 1. ^ echo's second read should be next
 1. ^ echo's second write needs thinking re: swap
 1. validate needs to check for lingering refs/stack items
-1. hide non global words before merging dictionaries when importing
 1. support fallthrough between word decls (flow from previous latest)
 1. ^ exit.syserr
-1. parser bug seen in env_test.go
 1. push/pop
 
 ### f4

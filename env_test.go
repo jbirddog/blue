@@ -4,7 +4,35 @@ import (
 	"testing"
 )
 
-// TODO test ReadNextWord, there is a bug when last word runs to eof
+func TestReadNextWord(t *testing.T) {
+	cases := []struct {
+		env      *Environment
+		expected []string
+	}{
+		{env(""), []string{}},
+		{env("1024 resb buf"), []string{"1024", "resb", "buf"}},
+		{env("1024 resb buf\n"), []string{"1024", "resb", "buf"}},
+		{env("\n\n1024 resb buf  \t  "), []string{"1024", "resb", "buf"}},
+		{
+			env(": xyz ( -- ) buf loop ;"),
+			[]string{":", "xyz", "(", "--", ")", "buf", "loop", ";"},
+		},
+		{
+			env("\n\t\n\t: xyz ( -- ) buf loop ;           \n\n"),
+			[]string{":", "xyz", "(", "--", ")", "buf", "loop", ";"},
+		},
+	}
+
+	for _, c := range cases {
+		for _, expected := range c.expected {
+			read := c.env.ReadNextWord()
+
+			if read != expected {
+				t.Fatalf("Expected '%s' got '%s'", expected, read)
+			}
+		}
+	}
+}
 
 func TestReadTil(t *testing.T) {
 	cases := []struct {
@@ -35,7 +63,7 @@ func TestReadTil(t *testing.T) {
 
 // TODO these are fragile
 func TestCanDeclResb(t *testing.T) {
-	e := env("1024 resb buf\n")
+	e := env("1024 resb buf")
 	asm := run(e)
 
 	if len(asm) != 3 {
@@ -55,7 +83,7 @@ func TestCanDeclResb(t *testing.T) {
 }
 
 func TestCanFindResbRef(t *testing.T) {
-	e := env("1024 resb buf : xyz ( -- ) buf loop ;\n")
+	e := env("1024 resb buf : xyz ( -- ) buf loop ;")
 	asm := run(e)
 
 	loopInstr := asm[6].(*AsmUnaryInstr)
