@@ -31,7 +31,7 @@ __blue_3190202204_0:
 	call __blue_1472650507_0
 	ret
 
-; : exit.syserr ( err:eax -- )
+; : exit.syserr ( err:eax -- noret )
 __blue_1490145965_0:
 	neg eax
 	mov edi, eax
