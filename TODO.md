@@ -53,7 +53,6 @@ import sse
 1. ^ echo's second read should be next
 1. ^ echo's second write needs thinking re: swap
 1. validate needs to check for lingering refs/stack items
-1. support fallthrough between word decls (flow from previous latest)
 1. ^ exit.syserr
 1. push/pop
 

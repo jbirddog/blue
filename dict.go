@@ -14,7 +14,7 @@ func DefaultDictionary() *Dictionary {
 		NewCallGoWord("import", KernelImport),
 		NewCallGoWord("extern", KernelExtern),
 		NewCallGoWord("section", KernelSection),
-		NewCallGoWord(":", KernelColon),
+		NewCallGoWord(":", KernelColon).Immediate(),
 		NewCallGoWord("latest", KernelLatest).Immediate(),
 		NewCallGoWord(";", KernelSemi).Immediate(),
 		NewCallGoWord("global", KernelGlobal),

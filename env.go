@@ -132,6 +132,14 @@ func (e *Environment) AppendWord(word *Word) {
 	e.Dictionary.Append(word)
 }
 
+func (e *Environment) DeclWord(word *Word) {
+	e.AppendWord(word)
+	e.AppendInstrs([]Instr{
+		&CommentInstr{Comment: word.DeclString()},
+		&DeclWordInstr{Word: word},
+	})
+}
+
 func (e *Environment) LTrimBuf() {
 	e.InputBuf = strings.TrimLeft(e.InputBuf, " \t\n")
 }

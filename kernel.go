@@ -7,6 +7,7 @@ import (
 )
 
 func KernelColon(env *Environment) {
+	flowPreviousWord := env.Compiling
 	env.Compiling = true
 
 	name := env.ReadNextWord()
@@ -16,6 +17,13 @@ func KernelColon(env *Environment) {
 
 	word := &Word{Name: name}
 	word.RawRefs = parseRefs(word, env)
+
+	if flowPreviousWord {
+		previous := env.Dictionary.Latest
+		previous.AppendInstr(&FlowWordInstr{Word: word})
+		env.DeclWord(previous)
+	}
+
 	env.Dictionary.Latest = word
 
 	env.SuggestSection(".text")
@@ -46,11 +54,7 @@ func KernelSemi(env *Environment) {
 		latest.AppendInstr(&X8664Instr{Mnemonic: "ret"})
 	}
 
-	env.AppendWord(latest)
-	env.AppendInstrs([]Instr{
-		&CommentInstr{Comment: latest.DeclString()},
-		&DeclWordInstr{Word: latest},
-	})
+	env.DeclWord(latest)
 }
 
 func KernelGlobal(env *Environment) {
