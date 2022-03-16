@@ -53,6 +53,21 @@ func (w *Word) AppendOutput(r *RegisterRef) {
 	w.Outputs = append(w.Outputs, r)
 }
 
+// TODO move when registers/refs get their own file
+func refsAreComplete(refs []*RegisterRef) bool {
+	for _, r := range refs {
+		if len(r.Reg) == 0 {
+			return false
+		}
+	}
+
+	return true
+}
+
+func (w *Word) HasCompleteRefs() bool {
+	return refsAreComplete(w.Inputs) && refsAreComplete(w.Outputs)
+}
+
 func (w *Word) DeclString() string {
 	return fmt.Sprintf(": %s %s", w.Name, strings.Join(w.RawRefs, " "))
 }
