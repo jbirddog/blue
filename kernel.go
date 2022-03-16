@@ -180,7 +180,13 @@ func buildRegisterRef(rawRef string) *RegisterRef {
 	partsLen := len(parts)
 
 	if partsLen == 1 {
-		return &RegisterRef{Name: parts[0], Reg: parts[0]}
+		part := parts[0]
+
+		if _, found := registers[part]; found {
+			return &RegisterRef{Name: part, Reg: part}
+		}
+
+		return &RegisterRef{Name: part, Reg: ""}
 	}
 
 	return &RegisterRef{Name: parts[0], Reg: parts[1]}

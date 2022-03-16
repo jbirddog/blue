@@ -132,7 +132,18 @@ func (e *Environment) AppendWord(word *Word) {
 	e.Dictionary.Append(word)
 }
 
+func (e *Environment) ValidateRegisterRefs(refs []*RegisterRef) {
+	for _, r := range refs {
+		if _, found := registers[r.Reg]; !found {
+			log.Fatalf("Unable to map '%s' to register '%s': ", r.Name, r.Reg)
+		}
+	}
+}
+
 func (e *Environment) DeclWord(word *Word) {
+	e.ValidateRegisterRefs(word.Inputs)
+	e.ValidateRegisterRefs(word.Outputs)
+
 	e.AppendWord(word)
 	e.AppendInstrs([]Instr{
 		&CommentInstr{Comment: word.DeclString()},
