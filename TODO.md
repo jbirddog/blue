@@ -16,11 +16,11 @@
 
 ### things
 
-want a quick movement from low to high level
-^ infer registers is good first step
+want a quick movement from low to high level 
+infer registers is good first step
 general solutions overwritten by optimal specific versions
-^ some clamp operation that uses branching vs sse override
-^ sys read/write vs echo's read/write
+some clamp operation that uses branching vs sse override
+sys read/write vs echo's read/write
 import linux
 import sse
 
@@ -46,14 +46,14 @@ import sse
 ### f5 (current)
 
 1. some bit of code that would help push the gfe conversion to blue along
-1 ^ f4 looked at read/write support
+1. ^ f4 looked at read/write support
+1. ^ mmap for file reads/writes?
 1. start to infer registers from word body
 1. ^ if fully specified, validate
 1. ^ echo's first read/write should be the first target
 1. ^ echo's second read should be next
 1. ^ echo's second write needs thinking re: swap
 1. validate needs to check for lingering refs/stack items
-1. ^ exit.syserr
 1. push/pop
 
 ### f4
