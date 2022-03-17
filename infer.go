@@ -55,9 +55,16 @@ func min(a, b int) int {
 func attemptInference(word *Word) (bool, []string, []string) {
 	var inputs []string
 	var outputs []string
+	pendingSwapIdx := -1
 
-	for _, code := range word.Code {
+	for i, code := range word.Code {
 		switch instr := code.(type) {
+		case *SwapInstr:
+			if pendingSwapIdx >= 0 {
+				return false, nil, nil
+			}
+
+			pendingSwapIdx = i
 		case *LiteralIntInstr:
 			outputs = append(outputs, "I")
 		case *RefWordInstr:
@@ -79,6 +86,17 @@ func attemptInference(word *Word) (bool, []string, []string) {
 			outputs = outputs[:outputsLen-outputsConsumed]
 			outputs = append(outputs, wordOutputs...)
 		}
+
+		if pendingSwapIdx >= 0 && len(inputs) > pendingSwapIdx+1 {
+			i := pendingSwapIdx
+			j := pendingSwapIdx + 1
+			inputs[i], inputs[j] = inputs[j], inputs[i]
+			pendingSwapIdx = -1
+		}
+	}
+
+	if pendingSwapIdx >= 0 {
+		return false, nil, nil
 	}
 
 	return true, inputs, outputs
