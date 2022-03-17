@@ -14,16 +14,12 @@
 1. collapse multiple extern/imports to one (const/resb/etc?) 
 1. when importing, can drop the global decls from the imported env?
 1. move to go 1.18
+1. ability to compute echo's buf.clamp at compile time
 
 ### things
 
 want a quick movement from low to high level 
-infer registers is good first step
 general solutions overwritten by optimal specific versions
-some clamp operation that uses branching vs sse override
-sys read/write vs echo's read/write
-import linux
-import sse
 
 ### optimizations
 
