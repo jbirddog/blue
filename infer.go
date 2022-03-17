@@ -22,39 +22,60 @@ func InferRegisterRefs(word *Word) {
 	}
 
 	if len(inputs) != len(word.Inputs) {
-		log.Fatal("Inferred different input len than declared")
+		log.Printf("Inferred different input len (%d) than declared (%d)", len(inputs), len(word.Inputs))
+		return
 	}
 
 	if len(outputs) != len(word.Outputs) {
-		log.Fatal("Inferred different output len than declared")
+		log.Print("Inferred different output len than declared")
+		return
 	}
 
 	for i, r := range word.Inputs {
 		if r.Reg == "" {
-			r.Reg = inputs[i].Reg
+			r.Reg = inputs[i]
 		}
 	}
 
 	for i, r := range word.Outputs {
 		if r.Reg == "" {
-			r.Reg = outputs[i].Reg
+			r.Reg = outputs[i]
 		}
 	}
 }
 
-func attemptInference(word *Word) (bool, []*RegisterRef, []*RegisterRef) {
-	var inputs []*RegisterRef
-	var outputs []*RegisterRef
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+
+	return b
+}
+
+func attemptInference(word *Word) (bool, []string, []string) {
+	var inputs []string
+	var outputs []string
 
 	for _, code := range word.Code {
 		switch instr := code.(type) {
+		case *LiteralIntInstr:
+			outputs = append(outputs, "I")
 		case *CallWordInstr:
 			if !instr.Word.HasCompleteRefs() {
 				return false, nil, nil
 			}
 
-			inputs = instr.Word.Inputs
-			outputs = instr.Word.Outputs
+			wordInputs := instr.Word.InputRegisters()
+			wordInputsLen := len(wordInputs)
+			outputsLen := len(outputs)
+			outputsConsumed := min(outputsLen, wordInputsLen)
+
+			wordInputs = wordInputs[:wordInputsLen-outputsConsumed]
+			inputs = append(inputs, wordInputs...)
+
+			wordOutputs := instr.Word.OutputRegisters()
+			outputs = outputs[:outputsLen-outputsConsumed]
+			outputs = append(outputs, wordOutputs...)
 		}
 	}
 
