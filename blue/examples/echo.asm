@@ -62,13 +62,13 @@ __blue_4055961022_0:
 __blue_2157056155_0:
 	ret
 
-; : read ( fd:edi len:edx buf:esi -- result:eax )
+; : read ( fd len buf -- result )
 __blue_3470762949_1:
 	mov eax, 0
 	call __blue_1472650507_1
 	ret
 
-; : write ( fd:edi len:edx buf:esi -- result:eax )
+; : write ( fd len buf -- result )
 __blue_3190202204_1:
 	mov eax, 1
 	call __blue_1472650507_1

@@ -142,7 +142,7 @@ func (e *Environment) ValidateRegisterRefs(refs []*RegisterRef) {
 
 func (e *Environment) DeclWord(word *Word) {
 	if !word.HasCompleteRefs() {
-		log.Fatal("TODO infer refs in this case")
+		InferRegisterRefs(word)
 	}
 
 	e.ValidateRegisterRefs(word.Inputs)

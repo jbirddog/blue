@@ -49,9 +49,8 @@ import sse
 1. some bit of code that would help push the gfe conversion to blue along
 1. ^ f4 looked at read/write support
 1. ^ mmap for file reads/writes?
-1. start to infer registers from word body
+1. continue to infer registers from word body
 1. ^ if fully specified, validate
-1. ^ echo's first read/write should be the first target
 1. ^ echo's second read should be next
 1. ^ echo's second write needs thinking re: swap
 1. validate needs to check for lingering refs/stack items
