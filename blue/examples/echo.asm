@@ -93,8 +93,9 @@ __blue_3470762949_2:
 	call __blue_4055961022_0
 	ret
 
-; : write ( len fd -- wrote )
+; : write ( len:edx fd:edi -- wrote:eax )
 __blue_3190202204_2:
+	call __blue_2821651644_0
 	mov esi, __blue_1926597602_0
 	call __blue_3190202204_1
 	call __blue_4055961022_0
@@ -108,5 +109,4 @@ _start:
 	mov edi, 1
 	mov edx, eax
 	call __blue_3190202204_2
-	mov edi, 0
-	call __blue_3454868101_0
+	call __blue_3274522691_0
