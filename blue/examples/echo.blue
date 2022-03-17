@@ -16,7 +16,7 @@ global _start
 buf.cap resb buf
 
 : read ( fd -- read ) buf.cap buf read unwrap ;
-: write ( len:edx fd:edi -- wrote:eax ) swap buf write unwrap ;
+: write ( len fd -- wrote ) swap buf write unwrap ;
 
 hide buf
 

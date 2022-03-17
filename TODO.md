@@ -51,7 +51,6 @@ import sse
 1. ^ mmap for file reads/writes?
 1. continue to infer registers from word body
 1. ^ if fully specified, validate
-1. ^ echo's second write needs thinking re: swap
 1. ^ infer during word fallthrough? whole program infer?
 1. validate needs to check for lingering refs/stack items
 1. push/pop
