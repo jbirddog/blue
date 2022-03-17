@@ -60,6 +60,8 @@ func attemptInference(word *Word) (bool, []string, []string) {
 		switch instr := code.(type) {
 		case *LiteralIntInstr:
 			outputs = append(outputs, "I")
+		case *RefWordInstr:
+			outputs = append(outputs, "RW")
 		case *CallWordInstr:
 			if !instr.Word.HasCompleteRefs() {
 				return false, nil, nil

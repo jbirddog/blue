@@ -82,7 +82,7 @@ section .bss
 __blue_1926597602_0: resb 1024
 section .text
 
-; : read ( fd:edi -- read:eax )
+; : read ( fd -- read )
 __blue_3470762949_2:
 	mov esi, __blue_1926597602_0
 	mov edx, 1024
