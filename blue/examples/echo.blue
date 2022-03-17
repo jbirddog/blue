@@ -9,9 +9,9 @@ global _start
 : write ( fd len buf -- result ) 1 syscall3 ;
 
 1024 const buf.cap
+2047 const buf.clamp
 
-\ TODO clamp for 0 <= len <= buf.cap for write's variable len
-\ pmaxud, pminud?
+: clamp ( len:edx -- clamped:edx ) buf.clamp and ;
 
 buf.cap resb buf
 

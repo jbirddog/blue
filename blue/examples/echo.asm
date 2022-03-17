@@ -74,8 +74,11 @@ __blue_3190202204_1:
 	call __blue_1472650507_1
 	ret
 
-;  TODO clamp for 0 <= len <= buf.cap for write's variable len
-;  pmaxud, pminud?
+; : clamp ( len:edx -- clamped:edx )
+__blue_2821651644_0:
+	and edx, 2047
+	ret
+
 section .bss
 
 ; 1024 resb buf
