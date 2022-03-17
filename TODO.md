@@ -13,6 +13,7 @@
 1. outputs don't flow
 1. collapse multiple extern/imports to one (const/resb/etc?) 
 1. when importing, can drop the global decls from the imported env?
+1. move to go 1.18
 
 ### things
 

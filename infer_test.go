@@ -6,8 +6,8 @@ import (
 
 func TestDoesNothingIfRefsAreComplete(t *testing.T) {
 	w := &Word{
-		Name: "bob",
-		Inputs: []*RegisterRef{&RegisterRef{Name: "eax", Reg: "eax"}},
+		Name:    "bob",
+		Inputs:  []*RegisterRef{&RegisterRef{Name: "eax", Reg: "eax"}},
 		Outputs: []*RegisterRef{&RegisterRef{Name: "edi", Reg: "edi"}},
 	}
 
@@ -25,15 +25,15 @@ func TestDoesNothingIfRefsAreComplete(t *testing.T) {
 func TestInfersBasicInputRegs(t *testing.T) {
 	// : bob ( eax -- ) ;
 	w1 := &Word{
-		Name: "bob",
+		Name:   "bob",
 		Inputs: []*RegisterRef{&RegisterRef{Name: "eax", Reg: "eax"}},
 	}
 
 	// : sue ( joe -- ) bob ;
 	w2 := &Word{
-		Name: "sue",
+		Name:   "sue",
 		Inputs: []*RegisterRef{&RegisterRef{Name: "joe", Reg: ""}},
-		Code: []Instr{&CallWordInstr{Word: w1}},
+		Code:   []Instr{&CallWordInstr{Word: w1}},
 	}
 
 	InferRegisterRefs(w2)
@@ -42,4 +42,3 @@ func TestInfersBasicInputRegs(t *testing.T) {
 		t.Fatalf("Failed to infer eax")
 	}
 }
-
