@@ -16,6 +16,10 @@
 1. move to go 1.18
 1. ability to compute echo's buf.clamp (RIP, was 1024 -> 2047 for and) at compile time
 1. push/pop
+1. continue to infer registers from word body
+1. ^ if fully specified, validate
+1. ^ infer during word fallthrough? whole program infer?
+1. validate needs to check for lingering refs/stack items
 
 ### optimizations
 
@@ -36,13 +40,10 @@
 
 ### f5 (current)
 
-1. some bit of code that would help push the gfe conversion to blue along
-1. ^ f4 looked at read/write support
-1. ^ mmap for file reads/writes?
-1. continue to infer registers from word body
-1. ^ if fully specified, validate
-1. ^ infer during word fallthrough? whole program infer?
-1. validate needs to check for lingering refs/stack items
+1. Some form of testing support
+1. ^ test fib first
+1. decb
+1. decb(
 
 ### f4
 
