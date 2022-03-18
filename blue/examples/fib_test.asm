@@ -72,7 +72,7 @@ __blue_770635013_0:
 	mov ecx, 1
 	call __blue_3169096246_0
 	cmp edi, 1
-	jge __blue_2157056155_0
+	je __blue_2157056155_0
 	call __blue_232847397_0
 
 __blue_2157056155_0:
@@ -84,7 +84,7 @@ __blue_2200699100_0:
 	mov ecx, 11
 	call __blue_3169096246_0
 	cmp edi, 89
-	jge __blue_2157056155_1
+	je __blue_2157056155_1
 	call __blue_232847397_0
 
 __blue_2157056155_1:
@@ -96,7 +96,7 @@ __blue_2150366243_0:
 	mov ecx, 14
 	call __blue_3169096246_0
 	cmp edi, 377
-	jge __blue_2157056155_2
+	je __blue_2157056155_2
 	call __blue_232847397_0
 
 __blue_2157056155_2:

@@ -27,6 +27,7 @@ func DefaultDictionary() *Dictionary {
 		NewInlineWord("swap", &SwapInstr{}),
 		NewCallGoWord("'", KernelTick).Immediate(),
 		NewCallGoWord("xl", KernelXl).Immediate(),
+		NewCallGoWord("xne", KernelXne).Immediate(),
 		NewCallGoWord("const", KernelConst),
 		NewCallGoWord("hide", KernelHide),
 	})

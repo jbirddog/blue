@@ -159,11 +159,19 @@ func KernelTick(env *Environment) {
 	env.Dictionary.Latest.AppendInstr(instr)
 }
 
-func KernelXl(env *Environment) {
+func condCallLatest(env *Environment, jmp string) {
 	latest := env.Dictionary.Latest
 	refWord := latest.PopInstr().(*RefWordInstr)
-	condCall := &CondCallInstr{Jmp: "jge", Target: refWord}
+	condCall := &CondCallInstr{Jmp: jmp, Target: refWord}
 	latest.AppendInstr(condCall)
+}
+
+func KernelXl(env *Environment) {
+	condCallLatest(env, "jge")
+}
+
+func KernelXne(env *Environment) {
+	condCallLatest(env, "je")
 }
 
 func KernelHide(env *Environment) {
