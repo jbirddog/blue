@@ -15,11 +15,7 @@
 1. when importing, can drop the global decls from the imported env?
 1. move to go 1.18
 1. ability to compute echo's buf.clamp at compile time
-
-### things
-
-want a quick movement from low to high level 
-general solutions overwritten by optimal specific versions
+1. push/pop
 
 ### optimizations
 
@@ -34,9 +30,7 @@ general solutions overwritten by optimal specific versions
 ## blue
 
 1. resX, decX
-1. word local dictionaries (or similar to support parsers) - just non globals in files?
 1. structs
-1. pmaxud, pminud for clamp in echo's write
 
 # Targets
 
@@ -50,7 +44,6 @@ general solutions overwritten by optimal specific versions
 1. ^ if fully specified, validate
 1. ^ infer during word fallthrough? whole program infer?
 1. validate needs to check for lingering refs/stack items
-1. push/pop
 
 ### f4
 
