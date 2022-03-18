@@ -16,6 +16,3 @@ ld -o bin/scratch obj/scratch.o obj/sys.o
 
 nasm -f elf64 -o obj/echo.o examples/echo.asm
 ld -o bin/echo obj/echo.o
-
-nasm -f elf64 -o obj/tokenize.o examples/tokenize.asm
-ld -o bin/tokenize obj/tokenize.o

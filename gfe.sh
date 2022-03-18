@@ -9,6 +9,5 @@ gfe examples/exit33.blue
 gfe examples/fib.blue
 gfe examples/scratch.blue
 gfe examples/echo.blue
-gfe examples/tokenize.blue
 ./build.sh
 cd ..
