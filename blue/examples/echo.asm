@@ -74,11 +74,6 @@ __blue_3190202204_1:
 	call __blue_1472650507_1
 	ret
 
-; : clamp ( len:edx -- clamped:edx )
-__blue_2821651644_0:
-	and edx, 2047
-	ret
-
 section .bss
 
 ; 1024 resb buf
@@ -93,9 +88,8 @@ __blue_3470762949_2:
 	call __blue_4055961022_0
 	ret
 
-; : write ( len:edx fd:edi -- wrote:eax )
+; : write ( len fd -- wrote )
 __blue_3190202204_2:
-	call __blue_2821651644_0
 	mov esi, __blue_1926597602_0
 	call __blue_3190202204_1
 	call __blue_4055961022_0

@@ -14,7 +14,7 @@
 1. collapse multiple extern/imports to one (const/resb/etc?) 
 1. when importing, can drop the global decls from the imported env?
 1. move to go 1.18
-1. ability to compute echo's buf.clamp at compile time
+1. ability to compute echo's buf.clamp (RIP, was 1024 -> 2047 for and) at compile time
 1. push/pop
 
 ### optimizations
@@ -40,7 +40,6 @@
 1. ^ f4 looked at read/write support
 1. ^ mmap for file reads/writes?
 1. continue to infer registers from word body
-1. ^ echo's 2nd write failed again after clamp
 1. ^ if fully specified, validate
 1. ^ infer during word fallthrough? whole program infer?
 1. validate needs to check for lingering refs/stack items
