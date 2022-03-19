@@ -59,8 +59,9 @@ __blue_1147400058_0:
 
 global _start
 
-; : exit.failure ( -- )
-__blue_232847397_0:
+;  TODO failure code is test number that failed
+; : test.failure ( -- )
+__blue_1516647173_0:
 	mov edi, 1
 	call __blue_3454868101_0
 	ret
@@ -69,48 +70,28 @@ __blue_232847397_0:
 __blue_2636330760_0:
 	cmp eax, edi
 	je __blue_2157056155_0
-	call __blue_232847397_0
+	call __blue_1516647173_0
 
 __blue_2157056155_0:
 	ret
 
 ;  TODO test cases - declare input and expected output
-;  TODO failure code is test number that failed
-; : testFib1 ( -- )
-__blue_770635013_0:
+; : _start ( -- noret )
+_start:
 	mov ecx, 1
 	call __blue_3169096246_0
 	mov eax, 1
 	call __blue_2636330760_0
-	ret
-
-; : testFib11 ( -- )
-__blue_2200699100_0:
 	mov ecx, 11
 	call __blue_3169096246_0
 	mov eax, 89
 	call __blue_2636330760_0
-	ret
-
-; : testFib14 ( -- )
-__blue_2150366243_0:
 	mov ecx, 14
 	call __blue_3169096246_0
 	mov eax, 377
 	call __blue_2636330760_0
-	ret
-
-; : testFib31 ( -- )
-__blue_388422058_0:
 	mov ecx, 31
 	call __blue_3169096246_0
 	mov eax, 1346269
 	call __blue_2636330760_0
-	ret
-
-; : _start ( -- noret )
-_start:
-	call __blue_770635013_0
-	call __blue_2200699100_0
-	call __blue_2150366243_0
 	call __blue_3274522691_0

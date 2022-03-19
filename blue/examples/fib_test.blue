@@ -4,20 +4,16 @@ import examples/fib
 global _start
 
 \ TODO failure code is test number that failed
-: exit.failure ( -- ) 1 exit ;
 
-: test= ( actual:edi expected:eax -- ) swap cmp ' exit.failure xne ;
+: test.failure ( -- ) 1 exit ;
+: test= ( actual:edi expected:eax -- ) swap cmp ' test.failure xne ;
 
 \ TODO test cases - declare input and expected output
 
-: testFib1 ( -- ) 1 fib 1 test= ;
-: testFib11 ( -- ) 11 fib 89 test= ;
-: testFib14 ( -- ) 14 fib 377 test= ;
-: testFib31 ( -- ) 31 fib 1346269 test= ;
-
 : _start ( -- noret )
-	testFib1
-	testFib11
-	testFib14
+	1 fib 1 test=
+	11 fib 89 test=
+	14 fib 377 test=
+	31 fib 1346269 test=
 	exit.ok
 ;
