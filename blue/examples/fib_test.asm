@@ -65,44 +65,49 @@ __blue_232847397_0:
 	call __blue_3454868101_0
 	ret
 
-;  TODO test cases - declare input and expected output
-;  TODO failure code is test number that failed
-; : testFib1 ( -- )
-__blue_770635013_0:
-	mov ecx, 1
-	call __blue_3169096246_0
-	cmp edi, 1
+; : test= ( actual:edi expected:eax -- )
+__blue_2636330760_0:
+	cmp eax, edi
 	je __blue_2157056155_0
 	call __blue_232847397_0
 
 __blue_2157056155_0:
 	ret
 
-;  TODO xne
+;  TODO test cases - declare input and expected output
+;  TODO failure code is test number that failed
+; : testFib1 ( -- )
+__blue_770635013_0:
+	mov ecx, 1
+	call __blue_3169096246_0
+	mov eax, 1
+	call __blue_2636330760_0
+	ret
+
 ; : testFib11 ( -- )
 __blue_2200699100_0:
 	mov ecx, 11
 	call __blue_3169096246_0
-	cmp edi, 89
-	je __blue_2157056155_1
-	call __blue_232847397_0
-
-__blue_2157056155_1:
+	mov eax, 89
+	call __blue_2636330760_0
 	ret
 
-;  TODO xne
 ; : testFib14 ( -- )
 __blue_2150366243_0:
 	mov ecx, 14
 	call __blue_3169096246_0
-	cmp edi, 377
-	je __blue_2157056155_2
-	call __blue_232847397_0
-
-__blue_2157056155_2:
+	mov eax, 377
+	call __blue_2636330760_0
 	ret
 
-;  TODO xne
+; : testFib31 ( -- )
+__blue_388422058_0:
+	mov ecx, 31
+	call __blue_3169096246_0
+	mov eax, 1346269
+	call __blue_2636330760_0
+	ret
+
 ; : _start ( -- noret )
 _start:
 	call __blue_770635013_0
