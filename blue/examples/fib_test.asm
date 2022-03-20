@@ -75,7 +75,6 @@ __blue_2636330760_0:
 __blue_2157056155_0:
 	ret
 
-;  TODO test cases - declare input and expected output
 ; : _start ( -- noret )
 _start:
 	mov ecx, 1
