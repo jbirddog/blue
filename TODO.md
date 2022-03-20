@@ -40,8 +40,8 @@
 
 ### f5 (current)
 
-1. Some form of testing support
-1. ^ test fib first
+1. Some form of testing lib (import testing)
+1. ^ some tests in fib_test
 1. decb
 1. decb(
 

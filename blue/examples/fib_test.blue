@@ -8,8 +8,6 @@ global _start
 : test.failure ( -- ) 1 exit ;
 : test= ( actual:edi expected:eax -- ) swap cmp ' test.failure xne ;
 
-\ TODO test cases - declare input and expected output
-
 : _start ( -- noret )
 	1 fib 1 test=
 	11 fib 89 test=
