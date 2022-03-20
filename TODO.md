@@ -38,10 +38,16 @@
 
 # Targets
 
+### f6
+
+1. Some tooling
+1. ^ automatically build/ld if no externs and global \_global start defined?
+
 ### f5 (current)
 
 1. Some form of testing lib (import testing)
 1. ^ some tests in fib_test
+1. Some code to help the migration of blue to blue
 1. decb
 1. decb(
 
