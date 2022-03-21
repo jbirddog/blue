@@ -52,7 +52,7 @@ func op_label(mnemonic string, context *RunContext) AsmInstr {
 var x8664Mnemonics = map[string]x8664Lowerer{
 	"and":     ops_2, // TODO needs to push op1 back
 	"cmp":     ops_2,
-	"dec": ops_1_1,
+	"dec":     ops_1_1,
 	"lodsb":   ops_0_al, // TODO hack
 	"loop":    op_label,
 	"neg":     ops_1_1,
@@ -169,6 +169,14 @@ type ResbInstr struct {
 
 func (i *ResbInstr) Run(env *Environment, context *RunContext) {
 	env.AppendAsmInstr(&AsmResbInstr{Name: i.Name, Size: i.Size})
+}
+
+type DecbInstr struct {
+	Value int
+}
+
+func (i *DecbInstr) Run(env *Environment, context *RunContext) {
+	env.AppendAsmInstr(&AsmDecbInstr{Value: i.Value})
 }
 
 type DropInstr struct{}

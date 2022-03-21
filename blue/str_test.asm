@@ -59,6 +59,39 @@ __blue_2106723298_0:
 
 global _start
 
+;  TODO fail with test number as exit code
+; : fail ( -- noret )
+__blue_508790637_0:
+	mov edi, 1
+	call __blue_3454868101_0
+
+; : data ( -- )
+__blue_3631407781_0:
+
+db 32
+db 108
+db 117
+db 120
+; : no-ws ( -- )
+__blue_2134074831_0:
+	mov esi, __blue_3631407781_0
+	mov ecx, 4
+	call __blue_2423487636_0
+	cmp esi, __blue_3631407781_0
+	je __blue_2157056155_0
+	call __blue_508790637_0
+
+__blue_2157056155_0:
+	cmp ecx, 4
+	je __blue_2157056155_1
+	call __blue_508790637_0
+
+__blue_2157056155_1:
+	ret
+
+;  4 const no-ws.len
+;  1718383992 const no-ws.expected
 ; : _start ( -- noret )
 _start:
+	call __blue_2134074831_0
 	call __blue_3274522691_0

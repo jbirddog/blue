@@ -95,6 +95,14 @@ func (i *AsmResbInstr) String() string {
 	return fmt.Sprintf("\n%s: resb %d", i.Name, i.Size)
 }
 
+type AsmDecbInstr struct {
+	Value int
+}
+
+func (i *AsmDecbInstr) String() string {
+	return fmt.Sprintf("\ndb %d", i.Value)
+}
+
 type AsmWriter struct {
 	sb strings.Builder
 }

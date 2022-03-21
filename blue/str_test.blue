@@ -3,4 +3,21 @@ import str
 
 global _start
 
-: _start ( -- noret ) exit.ok ;
+\ TODO fail with test number as exit code
+
+: fail ( -- noret ) 1 exit ;
+
+4 const data.len
+
+: data ( -- ) 102 decb 108 decb 117 decb 120 decb
+: no-ws ( -- ) 
+	data.len ' data skipws
+	' data cmp ' fail xne
+	data.len cmp ' fail xne
+; 
+
+\ 1718383992 const no-ws.expected
+
+: _start ( -- noret )
+	no-ws 
+	exit.ok ;

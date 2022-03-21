@@ -136,6 +136,14 @@ func KernelResb(env *Environment) {
 	word.Inline()
 }
 
+func KernelDecb(env *Environment) {
+	latest := env.Dictionary.Latest
+	valueInstr := latest.PopInstr().(*LiteralIntInstr)
+	value := valueInstr.I
+
+	latest.AppendInstr(&DecbInstr{Value: value})
+}
+
 func KernelConst(env *Environment) {
 	name := env.ReadNextWord()
 	if len(name) == 0 {
