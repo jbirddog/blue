@@ -174,6 +174,17 @@ func KernelXne(env *Environment) {
 	condCallLatest(env, "je")
 }
 
+func condLoopLatest(env *Environment, jmp string) {
+	latest := env.Dictionary.Latest
+	refWord := latest.PopInstr().(*RefWordInstr)
+	condLoop := &CondLoopInstr{Jmp: jmp, Target: refWord}
+	latest.AppendInstr(condLoop)
+}
+
+func KernelLoople(env *Environment) {
+	condLoopLatest(env, "jg")
+}
+
 func KernelHide(env *Environment) {
 	word := env.Dictionary.Find(env.ReadNextWord())
 	if word == nil {

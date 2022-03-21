@@ -1,6 +1,6 @@
 import sys
-import strings
+import str
 
 global _start
 
-_start: ( -- noret ) exit.ok ;
+: _start ( -- noret ) exit.ok ;

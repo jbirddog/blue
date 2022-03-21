@@ -52,6 +52,7 @@ func op_label(mnemonic string, context *RunContext) AsmInstr {
 var x8664Mnemonics = map[string]x8664Lowerer{
 	"and":     ops_2, // TODO needs to push op1 back
 	"cmp":     ops_2,
+	"dec": ops_1_1,
 	"lodsb":   ops_0_al, // TODO hack
 	"loop":    op_label,
 	"neg":     ops_1_1,
@@ -204,6 +205,21 @@ func (i *CondCallInstr) Run(env *Environment, context *RunContext) {
 		&AsmUnaryInstr{Mnemonic: i.Jmp, Op: ccLabel},
 		&AsmCallInstr{Label: i.Target.Word.AsmLabel},
 		&AsmLabelInstr{Name: ccLabel},
+	})
+}
+
+type CondLoopInstr struct {
+	Jmp    string
+	Target *RefWordInstr
+}
+
+func (i *CondLoopInstr) Run(env *Environment, context *RunContext) {
+	clLabel := env.AsmLabelForName(".donecl")
+
+	env.AppendAsmInstrs([]AsmInstr{
+		&AsmUnaryInstr{Mnemonic: i.Jmp, Op: clLabel},
+		&AsmUnaryInstr{Mnemonic: "loop", Op: i.Target.Word.AsmLabel},
+		&AsmLabelInstr{Name: clLabel},
 	})
 }
 

@@ -5,7 +5,7 @@ mkdir -p obj
 
 nasm -f elf64 -o obj/sys.o sys.asm
 
-nasm -f elf64 -o obj/str_test.o examples/str_test.asm
+nasm -f elf64 -o obj/str_test.o str_test.asm
 ld -o bin/str_test obj/str_test.o
 
 nasm -f elf64 -o obj/exit33.o examples/exit33.asm
