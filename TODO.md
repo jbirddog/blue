@@ -13,7 +13,6 @@
 1. outputs don't flow
 1. collapse multiple extern/imports to one (const/resb/etc?) 
 1. when importing, can drop the global decls from the imported env?
-1. move to go 1.18
 1. ability to compute echo's buf.clamp (RIP, was 1024 -> 2047 for and) at compile time
 1. push/pop
 1. continue to infer registers from word body
@@ -41,13 +40,15 @@
 ### f6
 
 1. Some tooling
-1. ^ automatically build/ld if no externs and global \_global start defined?
+1. ^ build
+1. ^ test
 
 ### f5 (current)
 
 1. Some form of testing lib (import testing)
 1. ^ some tests in fib_test
 1. Some code to help the migration of blue to blue
+1. ^ parsing: skipws readtil str=
 1. decb
 1. decb(
 

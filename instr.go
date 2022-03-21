@@ -24,6 +24,13 @@ func ops_0(mnemonic string, context *RunContext) AsmInstr {
 	return &AsmNoOperandInstr{Mnemonic: mnemonic}
 }
 
+// TODO hack
+func ops_0_al(mnemonic string, context *RunContext) AsmInstr {
+	context.AppendInput("al")
+
+	return &AsmNoOperandInstr{Mnemonic: mnemonic}
+}
+
 func ops_1_1(mnemonic string, context *RunContext) AsmInstr {
 	op := context.Peek()
 
@@ -45,6 +52,7 @@ func op_label(mnemonic string, context *RunContext) AsmInstr {
 var x8664Mnemonics = map[string]x8664Lowerer{
 	"and":     ops_2, // TODO needs to push op1 back
 	"cmp":     ops_2,
+	"lodsb":   ops_0_al, // TODO hack
 	"loop":    op_label,
 	"neg":     ops_1_1,
 	"ret":     ops_0,

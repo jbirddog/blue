@@ -1,0 +1,6 @@
+import sys
+import strings
+
+global _start
+
+_start: ( -- noret ) exit.ok ;
