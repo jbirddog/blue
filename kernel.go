@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"strconv"
 	"strings"
 )
 
@@ -142,6 +143,21 @@ func KernelDecb(env *Environment) {
 	value := valueInstr.I
 
 	latest.AppendInstr(&DecbInstr{Value: value})
+}
+
+func KernelDecbLParen(env *Environment) {
+	for {
+		name := env.ReadNextWord()
+		if name == ")" {
+			break
+		}
+		if value, err := strconv.Atoi(name); err == nil {
+			env.Dictionary.Latest.AppendInstr(&DecbInstr{Value: value})
+			continue
+		}
+
+		log.Fatal("decb( expects a numeric value")
+	}
 }
 
 func KernelConst(env *Environment) {

@@ -9,7 +9,7 @@ global _start
 
 4 const data.len
 
-: data ( -- ) 102 decb 108 decb 117 decb 120 decb
+: data ( -- ) decb( 102 108 117 120 )
 : no-ws ( -- ) 
 	data.len ' data skipws
 	' data cmp ' fail xne

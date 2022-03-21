@@ -68,7 +68,7 @@ __blue_508790637_0:
 ; : data ( -- )
 __blue_3631407781_0:
 
-db 32
+db 102
 db 108
 db 117
 db 120
@@ -89,7 +89,6 @@ __blue_2157056155_0:
 __blue_2157056155_1:
 	ret
 
-;  4 const no-ws.len
 ;  1718383992 const no-ws.expected
 ; : _start ( -- noret )
 _start:

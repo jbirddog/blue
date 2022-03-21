@@ -49,7 +49,6 @@
 1. ^ some tests in fib_test
 1. Some code to help the migration of blue to blue
 1. ^ parsing: skipws readtil str=
-1. decb(
 
 ### f4
 
