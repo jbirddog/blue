@@ -1,0 +1,5 @@
+global _start
+
+: syscall ( num:eax -- result:eax ) syscall ;
+
+: _start ( -- noret ) 60 syscall ;

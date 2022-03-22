@@ -21,3 +21,6 @@ ld -o bin/scratch obj/scratch.o obj/sys.o
 
 nasm -f elf64 -o obj/echo.o examples/echo.asm
 ld -o bin/echo obj/echo.o
+
+nasm -f elf64 -o obj/blue.o blue.asm
+ld -o bin/blue obj/blue.o

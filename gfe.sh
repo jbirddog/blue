@@ -4,6 +4,7 @@ go test
 go install .
 
 cd blue
+gfe blue.blue
 gfe str_test.blue
 gfe sys.blue
 gfe examples/exit33.blue

@@ -48,7 +48,8 @@
 1. Some form of testing lib (import testing)
 1. ^ some tests in fib_test
 1. Some code to help the migration of blue to blue
-1. ^ parsing: skipws readtil str=
+1. ^ parsing: skipws
+1. ^ main driver for blue
 
 ### f4
 

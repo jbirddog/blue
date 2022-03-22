@@ -228,13 +228,9 @@ func (e *Environment) ParseNextWord() bool {
 		}
 
 		instrs = instrsForWord(word)
-	}
-
-	if _, found := x8664Mnemonics[name]; found {
+	} else if _, found := x8664Mnemonics[name]; found {
 		instrs = []Instr{&X8664Instr{Mnemonic: name}}
-	}
-
-	if i, err := strconv.Atoi(name); err == nil {
+	} else if i, err := strconv.Atoi(name); err == nil {
 		instrs = []Instr{&LiteralIntInstr{I: i}}
 	}
 
