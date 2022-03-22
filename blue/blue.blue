@@ -1,5 +1,6 @@
 global _start
 
 : syscall ( num:eax -- result:eax ) syscall ;
+: exit ( status:rdi -- noret ) 60 syscall ;
 
-: _start ( -- noret ) 60 syscall ;
+: _start ( rsp -- noret ) exit ;
