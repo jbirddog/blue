@@ -245,6 +245,7 @@ func (i *BracketInstr) Run(env *Environment, context *RunContext) {
 		replacements := context.Inputs[divide:]
 		context.Inputs = context.Inputs[:divide]
 
+		// TODO believe this won't work with multiple replacements
 		newInput = fmt.Sprintf(newInput, replacements)
 	}
 

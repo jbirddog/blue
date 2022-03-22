@@ -241,6 +241,10 @@ func KernelLBracket(env *Environment) {
 		parts = append(parts, name)
 	}
 
+	if len(parts) == 0 {
+		log.Fatal("[ expects a word before ]")
+	}
+
 	env.Dictionary.Latest.AppendInstr(&BracketInstr{
 		Value:        strings.Join(parts, " "),
 		Replacements: replacements,

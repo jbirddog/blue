@@ -52,10 +52,7 @@ lea 16(%rsp, %rdi, 8), %rdx ; env?
 
 ### f5 (current)
 
-1. Some form of testing lib (import testing)
-1. ^ some tests in fib_test
 1. Some code to help the migration of blue to blue
-1. ^ parsing: skipws
 1. ^ main driver for blue
 
 ### f4

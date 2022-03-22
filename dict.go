@@ -34,6 +34,7 @@ func DefaultDictionary() *Dictionary {
 		NewCallGoWord("const", KernelConst),
 		NewCallGoWord("hide", KernelHide),
 		NewCallGoWord("[", KernelLBracket).Immediate(),
+		NewInlineWord("[]", &BracketInstr{Value: "%s", Replacements: 1}),
 	})
 
 	return d
