@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strconv"
 )
 
@@ -229,6 +230,25 @@ func (i *CondLoopInstr) Run(env *Environment, context *RunContext) {
 		&AsmUnaryInstr{Mnemonic: "loop", Op: i.Target.Word.AsmLabel},
 		&AsmLabelInstr{Name: clLabel},
 	})
+}
+
+type BracketInstr struct {
+	Value        string
+	Replacements int
+}
+
+func (i *BracketInstr) Run(env *Environment, context *RunContext) {
+	newInput := i.Value
+
+	if i.Replacements > 0 {
+		divide := len(context.Inputs) - i.Replacements
+		replacements := context.Inputs[divide:]
+		context.Inputs = context.Inputs[:divide]
+
+		newInput = fmt.Sprintf(newInput, replacements)
+	}
+
+	context.AppendInput(newInput)
 }
 
 func flowWord(word *Word, env *Environment, context *RunContext) {

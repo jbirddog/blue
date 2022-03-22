@@ -13,5 +13,5 @@ __blue_3454868101_0:
 
 ; : _start ( rsp -- noret )
 _start:
-	mov rdi, rsp
+	mov rdi, [rsp]
 	call __blue_3454868101_0

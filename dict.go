@@ -33,6 +33,7 @@ func DefaultDictionary() *Dictionary {
 		NewCallGoWord("loople", KernelLoople).Immediate(),
 		NewCallGoWord("const", KernelConst),
 		NewCallGoWord("hide", KernelHide),
+		NewCallGoWord("[", KernelLBracket).Immediate(),
 	})
 
 	return d

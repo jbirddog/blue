@@ -19,6 +19,7 @@
 1. ^ if fully specified, validate
 1. ^ infer during word fallthrough? whole program infer?
 1. validate needs to check for lingering refs/stack items
+1. check env.AppendInstr usage to see if compiling check can be moved there
 
 ### random notes
 
@@ -56,7 +57,6 @@ lea 16(%rsp, %rdi, 8), %rdx ; env?
 1. Some code to help the migration of blue to blue
 1. ^ parsing: skipws
 1. ^ main driver for blue
-1. ^ need [ ] support mov a, [b]/lea eax, [ eax + ebx + 8 ]
 
 ### f4
 
