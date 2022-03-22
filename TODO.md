@@ -54,6 +54,8 @@ lea 16(%rsp, %rdi, 8), %rdx ; env?
 
 1. Some code to help the migration of blue to blue
 1. ^ main driver for blue
+1. ^^ lea
+1. ^^ print args to stdout
 
 ### f4
 
