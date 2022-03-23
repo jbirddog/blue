@@ -3,4 +3,15 @@ global _start
 : syscall ( num:eax -- result:eax ) syscall ;
 : exit ( status:rdi -- noret ) 60 syscall ;
 
-: _start ( rsp -- noret ) [] exit ;
+: locate ( str:rdi chr:eax -- str:rdi ) scasb repne ;
+: len ( arg:rsi -- len:rdi ) dup 0 locate swap sub ; 
+
+: argv0 ( rsi -- argv0:rsi ) 8 add ;
+
+: _start ( rsp -- noret ) argv0 len exit ;
+
+\ argc [rsp] -> rcx for looping over argv
+\ argv lea rsi, [rsp+8], lodsq loop will load each string ptr into rax
+\ scan rax til 0 to find length
+\ print with length
+\ print new line

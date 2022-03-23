@@ -20,6 +20,9 @@
 1. ^ infer during word fallthrough? whole program infer?
 1. validate needs to check for lingering refs/stack items
 1. check env.AppendInstr usage to see if compiling check can be moved there
+1. rosetta code examples
+1. ^ command line arguments
+1. flow should not mov esi, rsi - etc
 
 ### random notes
 

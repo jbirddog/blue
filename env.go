@@ -255,6 +255,14 @@ func (c *Environment) AppendAsmInstrs(i []AsmInstr) {
 	c.AsmInstrs = append(c.AsmInstrs, i...)
 }
 
+func (e *Environment) PopAsmInstr() AsmInstr {
+	last := len(e.AsmInstrs) - 1
+	instr := e.AsmInstrs[last]
+	e.AsmInstrs = e.AsmInstrs[:last]
+
+	return instr
+}
+
 func (e *Environment) AppendInstr(i Instr) {
 	e.CodeBuf = append(e.CodeBuf, i)
 }
