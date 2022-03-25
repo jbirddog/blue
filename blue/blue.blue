@@ -7,20 +7,17 @@ global _start
 
 \ : write ( buf:rsi len:edx fd:edi -- result:eax ) 1 syscall3 ;
 
-\ : locate ( str:rdi chr:eax -- str:rdi ) scasb repne ;
-\ : len ( arg:rsi -- len:rdi ) dup [] 0 locate swap sub ; 
+: find0 ( start:rsi max:rcx -- end:rsi ) lodsb 0 cmp latest loopne ; 
 
-: len ( arg:rsi -- len:rdi ) dup -1
-: while!0 ( arg:rsi begin:rdi max:rcx -- end:rdi ) lodsb 0 cmp latest loopne drop
-: compute ( begin:rsi end:rdi -- len:rdi ) sub 
-: tmp ( len:rdi -- len:rdi ) dec ;
+: range-len ( start:rdi end:rsi -- len:rsi ) swap sub dec ;
+: cstr-range ( start:rdi -- begin:rdi end:rsi ) dup -1 find0 ;
+: strlen ( str:rsi -- len:rsi ) cstr-range range-len ; \ xchg before dec 
 
 \ TODO lea
 : argv0 ( rsi -- argv0:rsi ) 8 add [] 
 : deref ( **char:rsi -- *char:rsi ) ; \ TODO ideally shouldn't need this
 
-\ : _start ( rsp -- noret ) argv0 5 swap 1 write 0 exit ;
-: _start ( rsp -- noret ) argv0 len exit ;
+: _start ( rsp -- noret ) argv0 strlen exit ;
 
 \ argc [rsp] -> rcx for looping over argv
 \ argv lea rsi, [rsp+8], lodsq loop will load each string ptr into rax
