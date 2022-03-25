@@ -68,8 +68,9 @@ var x8664Mnemonics = map[string]x8664Lowerer{
 	"and":     ops_2, // TODO needs to push op1 back
 	"cmp":     ops_2,
 	"dec":     ops_1_1,
-	"lodsb":   ops_0_al, // TODO hack
-	"loop":    op_label,
+	"lodsb":   ops_0_al, // TODO hack - needs to consume esi, assumes al
+	"loop":    op_label, // TODO hack - needs to consume ecx
+	"loopne":  op_label, // TODO hack - needs to consume ecx
 	"neg":     ops_1_1,
 	"repne":   consume_previous,
 	"ret":     ops_0,

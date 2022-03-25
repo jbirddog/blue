@@ -27,8 +27,8 @@
 ### random notes
 
 mov 0(%rsp), %rdi ; argc
-lea 8(%rsp), %rsi ; argv
-lea 16(%rsp, %rdi, 8), %rdx ; env?
+lea 8(%rsp), %rsi ; argv0
+lea 16(%rsp, %rdi, 8), %rdx ; argv1
 
 ### optimizations
 

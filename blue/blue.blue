@@ -3,11 +3,23 @@ global _start
 : syscall ( num:eax -- result:eax ) syscall ;
 : exit ( status:rdi -- noret ) 60 syscall ;
 
-: locate ( str:rdi chr:eax -- str:rdi ) scasb repne ;
-: len ( arg:rsi -- len:rdi ) dup 0 locate swap sub ; 
+\ : syscall3 ( arg2:rsi arg3:edx arg1:edi num:eax -- result:eax ) syscall ;
 
-: argv0 ( rsi -- argv0:rsi ) 8 add ;
+\ : write ( buf:rsi len:edx fd:edi -- result:eax ) 1 syscall3 ;
 
+\ : locate ( str:rdi chr:eax -- str:rdi ) scasb repne ;
+\ : len ( arg:rsi -- len:rdi ) dup [] 0 locate swap sub ; 
+
+: len ( arg:rsi -- len:rdi ) dup -1
+: while!0 ( arg:rsi begin:rdi max:rcx -- end:rdi ) lodsb 0 cmp latest loopne drop
+: compute ( begin:rsi end:rdi -- len:rdi ) sub 
+: tmp ( len:rdi -- len:rdi ) dec ;
+
+\ TODO lea
+: argv0 ( rsi -- argv0:rsi ) 8 add [] 
+: deref ( **char:rsi -- *char:rsi ) ; \ TODO ideally shouldn't need this
+
+\ : _start ( rsp -- noret ) argv0 5 swap 1 write 0 exit ;
 : _start ( rsp -- noret ) argv0 len exit ;
 
 \ argc [rsp] -> rcx for looping over argv
