@@ -13,6 +13,7 @@ __blue_3454868101_0:
 
 ;  : syscall3 ( arg2:rsi arg3:edx arg1:edi num:eax -- result:eax ) syscall ;
 ;  : write ( buf:rsi len:edx fd:edi -- result:eax ) 1 syscall3 ;
+;  TODO this is hacky
 ; : find0 ( start:rsi max:rcx -- end:rsi )
 __blue_1805780446_0:
 	lodsb
@@ -40,22 +41,22 @@ __blue_1488600471_0:
 	call __blue_3477417540_0
 	ret
 
-;  xchg before dec 
 ;  TODO lea
-; : argv0 ( rsi -- argv0:rsi )
-__blue_834543561_0:
-	add rsi, 8
-	mov rsi, [rsi]
+; : next-arg ( rsp -- argv:rsi )
+__blue_2499737933_0:
+	add rsp, 8
+	mov rsi, [rsp]
 
-; : deref ( **char:rsi -- *char:rsi )
+; : deref ( rsi -- rsi )
 __blue_655036747_0:
 	ret
 
 ;  TODO ideally shouldn't need this
+;  need to next-arg dup len writeln
+;  
 ; : _start ( rsp -- noret )
 _start:
-	mov rsi, rsp
-	call __blue_834543561_0
+	call __blue_2499737933_0
 	call __blue_1488600471_0
 	mov rdi, rsi
 	call __blue_3454868101_0
