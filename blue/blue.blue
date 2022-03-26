@@ -1,13 +1,13 @@
 global _start
 
-: syscall ( num:eax -- result:eax ) syscall ;
+: syscall ( num:rax -- result:rax ) syscall ;
 : exit ( status:rdi -- noret ) 60 syscall ;
 
-\ : syscall3 ( arg2:rsi arg3:edx arg1:edi num:eax -- result:eax ) syscall ;
+: syscall3 ( arg2:rsi arg3:rdx arg1:edi num:rax -- result:eax ) syscall ;
+: write ( buf:rsi len:rdx fd:edi -- result:rax ) 1 syscall3 ;
+\ TODO unwrap
 
-\ : write ( buf:rsi len:edx fd:edi -- result:eax ) 1 syscall3 ;
-
-\ TODO this is an example of hacky stack handling due to lodsb/loopne
+\ TODO this is an example of invalid stack handling due to lodsb/loopne
 : find0 ( start:rsi max:rcx -- end:rsi ) lodsb 0 cmp latest loopne ; 
 
 : range-len ( start:rdi end:rsi -- len:rsi ) swap sub dec ;
@@ -15,11 +15,13 @@ global _start
 : strlen ( str:rsi -- len:rsi ) cstr-range range-len ;
 
 \ TODO lea
-: next-arg ( argv:rsp -- arg:rsi ) 8 add [] 
-: deref ( rsi -- rsi ) ; \ TODO ideally shouldn't need this
+\ TODO ideally shouldn't need these empty words
+: argv ( rbp -- rbp ) ;
+: next-arg ( argv:rbp -- arg:rdx ) 8 add [] 
+: deref ( rdx -- rdx ) ; 
 
 \ need to next-arg dup len writeln
-: _start ( rsp -- noret ) next-arg strlen exit ;
+: _start ( rsp -- noret ) argv next-arg dup strlen xchg 1 write exit ;
 
 \ argc [rsp] -> rcx for looping over argv
 \ argv lea rsi, [rsp+8], lodsq loop will load each string ptr into rax

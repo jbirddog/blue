@@ -1,19 +1,29 @@
 
 global _start
 
-; : syscall ( num:eax -- result:eax )
+; : syscall ( num:rax -- result:rax )
 __blue_4057121178_0:
 	syscall
 	ret
 
 ; : exit ( status:rdi -- noret )
 __blue_3454868101_0:
-	mov eax, 60
+	mov rax, 60
 	call __blue_4057121178_0
 
-;  : syscall3 ( arg2:rsi arg3:edx arg1:edi num:eax -- result:eax ) syscall ;
-;  : write ( buf:rsi len:edx fd:edi -- result:eax ) 1 syscall3 ;
-;  TODO this is hacky
+; : syscall3 ( arg2:rsi arg3:rdx arg1:edi num:rax -- result:eax )
+__blue_1472650507_0:
+	call __blue_4057121178_0
+	ret
+
+; : write ( buf:rsi len:rdx fd:edi -- result:rax )
+__blue_3190202204_0:
+	mov rax, 1
+	call __blue_1472650507_0
+	ret
+
+;  TODO unwrap
+;  TODO this is an example of invalid stack handling due to lodsb/loopne
 ; : find0 ( start:rsi max:rcx -- end:rsi )
 __blue_1805780446_0:
 	lodsb
@@ -42,23 +52,32 @@ __blue_1488600471_0:
 	ret
 
 ;  TODO lea
-; : next-arg ( rsp -- argv:rsi )
-__blue_2499737933_0:
-	add rsp, 8
-	mov rsi, [rsp]
+;  TODO ideally shouldn't need these empty words
+; : argv ( rbp -- rbp )
+__blue_2584388227_0:
+	ret
 
-; : deref ( rsi -- rsi )
+; : next-arg ( argv:rbp -- arg:rdx )
+__blue_2499737933_0:
+	add rbp, 8
+	mov rdx, [rbp]
+
+; : deref ( rdx -- rdx )
 __blue_655036747_0:
 	ret
 
-;  TODO ideally shouldn't need this
 ;  need to next-arg dup len writeln
-;  
 ; : _start ( rsp -- noret )
 _start:
+	mov rbp, rsp
+	call __blue_2584388227_0
 	call __blue_2499737933_0
+	mov rsi, rdx
 	call __blue_1488600471_0
-	mov rdi, rsi
+	xchg rdx, rsi
+	mov edi, 1
+	call __blue_3190202204_0
+	mov rdi, rax
 	call __blue_3454868101_0
 
 ;  argc [rsp] -> rcx for looping over argv

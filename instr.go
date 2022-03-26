@@ -51,9 +51,10 @@ func ops_2_1(mnemonic string, env *Environment, context *RunContext) AsmInstr {
 	return &AsmBinaryInstr{Mnemonic: mnemonic, Op1: op1, Op2: op2}
 }
 
-func ops_2_1_2(mnemonic string, env *Environment, context *RunContext) AsmInstr {
+func ops_2_x2(mnemonic string, env *Environment, context *RunContext) AsmInstr {
 	op1, op2 := context.Pop2Inputs()
 	context.AppendInput(op2)
+	context.AppendInput(op1)
 
 	return &AsmBinaryInstr{Mnemonic: mnemonic, Op1: op1, Op2: op2}
 }
@@ -85,7 +86,7 @@ var x8664Mnemonics = map[string]x8664Lowerer{
 	"sub":     ops_2_1,
 	"syscall": ops_0,
 	"xadd":    ops_2, // TODO needs to push op1 back
-	"xchg":    ops_2_1_2,
+	"xchg":    ops_2_x2,
 }
 
 type X8664Instr struct {
