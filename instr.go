@@ -190,13 +190,14 @@ func (i *CommentInstr) Run(env *Environment, context *RunContext) {
 	env.AppendAsmInstr(&AsmCommentInstr{Comment: i.Comment})
 }
 
-type ResbInstr struct {
-	Name string
-	Size uint
+type ResInstr struct {
+	Name  string
+	Size  string
+	Count uint
 }
 
-func (i *ResbInstr) Run(env *Environment, context *RunContext) {
-	env.AppendAsmInstr(&AsmResbInstr{Name: i.Name, Size: i.Size})
+func (i *ResInstr) Run(env *Environment, context *RunContext) {
+	env.AppendAsmInstr(&AsmResInstr{Name: i.Name, Size: i.Size, Count: i.Count})
 }
 
 type DecbInstr struct {

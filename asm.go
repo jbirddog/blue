@@ -86,13 +86,14 @@ func (i *AsmCommentInstr) String() string {
 	return fmt.Sprintf("\n; %s", i.Comment)
 }
 
-type AsmResbInstr struct {
-	Name string
-	Size uint
+type AsmResInstr struct {
+	Name  string
+	Size  string
+	Count uint
 }
 
-func (i *AsmResbInstr) String() string {
-	return fmt.Sprintf("\n%s: resb %d", i.Name, i.Size)
+func (i *AsmResInstr) String() string {
+	return fmt.Sprintf("\n%s: res%s %d", i.Name, i.Size, i.Count)
 }
 
 type AsmDecbInstr struct {

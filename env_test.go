@@ -70,15 +70,19 @@ func TestCanDeclResb(t *testing.T) {
 		t.Fatalf("Expected 3 asms instr, got %d", len(asm))
 	}
 
-	instr := asm[2].(*AsmResbInstr)
+	instr := asm[2].(*AsmResInstr)
 	label := e.AsmLabelForWordNamed("buf")
 
 	if instr.Name != label {
 		t.Fatalf("Expected buf, got '%s'", instr.Name)
 	}
 
-	if instr.Size != 1024 {
-		t.Fatalf("Expected size 1024, got '%d'", instr.Size)
+	if instr.Count != 1024 {
+		t.Fatalf("Expected count 1024, got '%d'", instr.Count)
+	}
+
+	if instr.Size != "b" {
+		t.Fatalf("Expected size b, got '%s'", instr.Size)
 	}
 }
 

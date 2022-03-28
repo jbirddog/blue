@@ -113,15 +113,14 @@ func KernelImport(env *Environment) {
 	env.Merge(importEnv)
 }
 
-func res(env *Environment, class string) {
+func res(env *Environment, size string) {
 	name := env.ReadNextWord()
-	res := "res" + class
 	if len(name) == 0 {
-		log.Fatal(res, " expects a name")
+		log.Fatal("res", size, "expects a name")
 	}
 
-	sizeInstr := env.PopInstr().(*LiteralIntInstr)
-	size := uint(sizeInstr.I)
+	countInstr := env.PopInstr().(*LiteralIntInstr)
+	count := uint(countInstr.I)
 
 	env.SuggestSection(".bss")
 
@@ -129,8 +128,8 @@ func res(env *Environment, class string) {
 	env.AppendWord(word)
 
 	env.AppendInstrs([]Instr{
-		&CommentInstr{Comment: fmt.Sprintf("%d %s %s", size, res, name)},
-		&ResbInstr{Name: word.AsmLabel, Size: size},
+		&CommentInstr{Comment: fmt.Sprintf("%d res%s %s", count, size, name)},
+		&ResInstr{Name: word.AsmLabel, Size: size, Count: count},
 	})
 
 	instr := &RefWordInstr{Word: word}

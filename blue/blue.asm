@@ -104,11 +104,16 @@ __blue_2499737933_0:
 __blue_655036747_0:
 	ret
 
-;  1 resq argc
+section .bss
+
+; 1 resq argc
+__blue_2366279180_0: resq 1
 ;  1 resq argv
 ;  : argc! ( rsp -- ) argc ! ;
 ;  : argv! ( rbp -- ) 8 add argv ! ;
 ;  need to next-arg dup len writeln
+section .text
+
 ; : _start ( rsp -- noret )
 _start:
 	mov rbp, rsp

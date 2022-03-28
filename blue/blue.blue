@@ -17,8 +17,10 @@ global _start
 
 \ TODO writeln
 
+1 const lf.len
+
 : lf ( -- ) 10 decb 
-: lf ( -- wrote ) ' lf 1 write! ;
+: lf ( -- wrote ) ' lf lf.len write! ;
 
 \ TODO this is an example of invalid stack handling due to lodsb/loopne
 : find0 ( start:rsi max:rcx -- end:rsi ) lodsb 0 cmp latest loopne ; 
@@ -33,7 +35,7 @@ global _start
 : next-arg ( argv:rbp -- arg:rdx ) 8 add [] 
 : deref ( rdx -- rdx ) ; 
 
-\ 1 resq argc
+1 resq argc
 \ 1 resq argv
 
 \ : argc! ( rsp -- ) argc ! ;

@@ -13,7 +13,7 @@
 1. outputs don't flow
 1. collapse multiple extern/imports to one (const/resb/etc?) 
 1. when importing, can drop the global decls from the imported env?
-1. ability to compute echo's buf.clamp (RIP, was 1024 -> 2047 for and) at compile time
+1. ability to compute echo's buf.clamp (was 1024 -> 2047 for and) at compile time
 1. push/pop
 1. continue to infer registers from word body
 1. ^ if fully specified, validate
@@ -22,9 +22,9 @@
 1. check env.AppendInstr usage to see if compiling check can be moved there
 1. rosetta code examples
 1. ^ command line arguments
-1. resq emits ResbInstr
 1. push/pops based on called words indirect register usage
 1. mov edx, rax
+1. treat words with only decb more like resb
 
 ### random notes
 
@@ -44,7 +44,6 @@ lea 16(%rsp, %rdi, 8), %rdx ; argv1
 
 ## blue
 
-1. resX, decX
 1. structs
 
 # Targets
