@@ -87,11 +87,18 @@ __blue_2411088989_0:
 	call __blue_1805780446_0
 	ret
 
-; : strlen ( str:rsi -- len:rsi )
-__blue_1488600471_0:
+; : cstrlen ( str:rsi -- len:rsi )
+__blue_1939608060_0:
 	mov rdi, rsi
 	call __blue_2411088989_0
 	call __blue_3477417540_0
+	ret
+
+; : cstr>str ( cstr:rdx -- str:rsi len:rdx )
+__blue_3207375596_0:
+	mov rsi, rdx
+	call __blue_1939608060_0
+	xchg rdx, rsi
 	ret
 
 ;  TODO lea
@@ -129,8 +136,6 @@ __blue_549324038_0:
 _start:
 	mov rbp, rsp
 	call __blue_2499737933_0
-	mov rsi, rdx
-	call __blue_1488600471_0
-	xchg rdx, rsi
+	call __blue_3207375596_0
 	call __blue_840226778_0
 	call __blue_3274522691_0

@@ -30,7 +30,9 @@ global _start
 
 : range-len ( start:rdi end:rsi -- len:rsi ) swap sub dec ;
 : cstr-range ( start:rdi -- begin:rdi end:rsi ) dup -1 find0 ;
-: strlen ( str:rsi -- len:rsi ) cstr-range range-len ;
+: cstrlen ( str:rsi -- len:rsi ) cstr-range range-len ;
+
+: cstr>str ( cstr:rdx -- str:rsi len:rdx ) dup cstrlen xchg ;
 
 \ TODO lea
 : next-arg ( argv:rbp -- arg:rdx ) 8 add [] 
@@ -43,4 +45,4 @@ global _start
 : argv! ( rbp -- ) 8 add argv ! ;
 
 \ need to next-arg dup len writeln
-: _start ( rsp -- noret ) next-arg dup strlen xchg writeln exit.ok ;
+: _start ( rsp -- noret ) next-arg cstr>str writeln exit.ok ;
