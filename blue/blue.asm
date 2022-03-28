@@ -49,7 +49,6 @@ __blue_3553432007_0:
 	call __blue_4055961022_0
 	ret
 
-;  TODO writeln
 ; : lf ( -- )
 __blue_1261555351_0:
 
