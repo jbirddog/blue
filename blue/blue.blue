@@ -1,12 +1,24 @@
 global _start
 
 : syscall ( num:eax -- result:eax ) syscall ;
+
 : exit ( status:edi -- noret ) 60 syscall ;
+: exit.ok ( -- noret ) 0 exit ;
+: exit.syserr ( err:eax -- noret ) neg exit ;
+
+: unwrap ( result:eax -- value:eax ) dup 0 cmp ' exit.syserr xl ;
 
 : syscall3 ( arg2:esi arg3:edx arg1:edi num:eax -- result:eax ) syscall ;
-: write ( buf:esi len:edx fd:edi -- result:eax ) 1 syscall3 ;
-\ TODO unwrap
+
+1 const stdout
+
+: write ( buf len -- result ) stdout 1 syscall3 ;
+: write! ( buf len -- wrote ) write unwrap ;
+
 \ TODO writeln
+
+: lf ( -- ) 10 decb 
+: lf ( -- wrote ) ' lf 1 write! ;
 
 \ TODO this is an example of invalid stack handling due to lodsb/loopne
 : find0 ( start:rsi max:rcx -- end:rsi ) lodsb 0 cmp latest loopne ; 
@@ -28,7 +40,7 @@ global _start
 \ : argv! ( rbp -- ) 8 add argv ! ;
 
 \ need to next-arg dup len writeln
-: _start ( rsp -- noret ) argv next-arg dup strlen xchg 1 write exit ;
+: _start ( rsp -- noret ) argv next-arg dup strlen xchg write! lf exit.ok ;
 
 \ argc [rsp] -> rcx for looping over argv
 \ argv lea rsi, [rsp+8], lodsq loop will load each string ptr into rax
