@@ -1,10 +1,10 @@
 global _start
 
-: syscall ( num:rax -- result:rax ) syscall ;
-: exit ( status:rdi -- noret ) 60 syscall ;
+: syscall ( num:eax -- result:eax ) syscall ;
+: exit ( status:edi -- noret ) 60 syscall ;
 
-: syscall3 ( arg2:rsi arg3:rdx arg1:edi num:rax -- result:eax ) syscall ;
-: write ( buf:rsi len:rdx fd:edi -- result:rax ) 1 syscall3 ;
+: syscall3 ( arg2:esi arg3:edx arg1:edi num:eax -- result:eax ) syscall ;
+: write ( buf:esi len:edx fd:edi -- result:eax ) 1 syscall3 ;
 \ TODO unwrap
 \ TODO writeln
 

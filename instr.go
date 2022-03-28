@@ -297,13 +297,26 @@ func flowWord(word *Word, env *Environment, context *RunContext) {
 	context.Inputs = context.Inputs[:have-need]
 
 	for i := need - 1; i >= 0; i-- {
-		if expectedInputs[i] != neededInputs[i] {
-			env.AppendAsmInstr(&AsmBinaryInstr{
-				Mnemonic: "mov",
-				Op1:      expectedInputs[i],
-				Op2:      neededInputs[i],
-			})
+		op1 := expectedInputs[i]
+		op2 := neededInputs[i]
+
+		if op1 == op2 {
+			continue
 		}
+
+		if op2RegIndex, found := registers[op2]; found {
+			if op1RegIndex, found := registers[op1]; found {
+				if op1RegIndex == op2RegIndex {
+					continue
+				}
+			}
+		}
+
+		env.AppendAsmInstr(&AsmBinaryInstr{
+			Mnemonic: "mov",
+			Op1:      op1,
+			Op2:      op2,
+		})
 	}
 
 	wordOutputs := word.OutputRegisters()

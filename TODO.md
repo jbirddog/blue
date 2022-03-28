@@ -22,7 +22,9 @@
 1. check env.AppendInstr usage to see if compiling check can be moved there
 1. rosetta code examples
 1. ^ command line arguments
-1. flow should not mov esi, rsi - etc
+1. resq emits ResbInstr
+1. push/pops based on called words indirect register usage
+1. mov edx, rax
 
 ### random notes
 

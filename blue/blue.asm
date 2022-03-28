@@ -1,24 +1,24 @@
 
 global _start
 
-; : syscall ( num:rax -- result:rax )
+; : syscall ( num:eax -- result:eax )
 __blue_4057121178_0:
 	syscall
 	ret
 
-; : exit ( status:rdi -- noret )
+; : exit ( status:edi -- noret )
 __blue_3454868101_0:
-	mov rax, 60
+	mov eax, 60
 	call __blue_4057121178_0
 
-; : syscall3 ( arg2:rsi arg3:rdx arg1:edi num:rax -- result:eax )
+; : syscall3 ( arg2:esi arg3:edx arg1:edi num:eax -- result:eax )
 __blue_1472650507_0:
 	call __blue_4057121178_0
 	ret
 
-; : write ( buf:rsi len:rdx fd:edi -- result:rax )
+; : write ( buf:esi len:edx fd:edi -- result:eax )
 __blue_3190202204_0:
-	mov rax, 1
+	mov eax, 1
 	call __blue_1472650507_0
 	ret
 
@@ -82,7 +82,7 @@ _start:
 	xchg rdx, rsi
 	mov edi, 1
 	call __blue_3190202204_0
-	mov rdi, rax
+	mov edi, eax
 	call __blue_3454868101_0
 
 ;  argc [rsp] -> rcx for looping over argv
