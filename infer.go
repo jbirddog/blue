@@ -59,6 +59,8 @@ func attemptInference(word *Word) (bool, []string, []string) {
 
 	for i, code := range word.Code {
 		switch instr := code.(type) {
+		case *DropInstr:
+			outputs = outputs[:len(outputs)-1]
 		case *SwapInstr:
 			if pendingSwapIdx >= 0 {
 				return false, nil, nil
