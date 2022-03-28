@@ -66,14 +66,17 @@ __blue_840226778_0:
 	call __blue_4281549323_0
 	ret
 
-;  TODO this is an example of invalid stack handling due to lodsb/loopne
-; : find0 ( start:rsi max:rcx -- end:rsi )
+; : find0 ( start:rsi -- end:rsi )
 __blue_1805780446_0:
 	lodsb
 	cmp al, 0
-	loopne __blue_1805780446_0
+	je __blue_2157056155_1
+	call __blue_1805780446_0
+
+__blue_2157056155_1:
 	ret
 
+;  TODO cleaner way to write this, can't user inference due to required movs
 ; : range-len ( start:rdi end:rsi -- len:rsi )
 __blue_3477417540_0:
 	sub rsi, rdi
@@ -82,7 +85,6 @@ __blue_3477417540_0:
 
 ; : cstr-range ( start:rdi -- begin:rdi end:rsi )
 __blue_2411088989_0:
-	mov rcx, -1
 	mov rsi, rdi
 	call __blue_1805780446_0
 	ret

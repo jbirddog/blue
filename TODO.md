@@ -22,9 +22,11 @@
 1. check env.AppendInstr usage to see if compiling check can be moved there
 1. rosetta code examples
 1. ^ command line arguments
+1. ^ prog name
 1. push/pops based on called words indirect register usage
 1. mov edx, rax
 1. treat words with only decb more like resb
+1. lea
 
 ### random notes
 
@@ -58,7 +60,6 @@ lea 16(%rsp, %rdi, 8), %rdx ; argv1
 
 1. Some code to help the migration of blue to blue
 1. ^ main driver for blue
-1. ^^ lea
 1. ^^ print args to stdout
 
 ### f4
