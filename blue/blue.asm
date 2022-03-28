@@ -91,7 +91,6 @@ __blue_3207375596_0:
 	xchg rdx, rsi
 	ret
 
-;  TODO lea
 ; : next-arg ( argv:rbp -- arg:rdx )
 __blue_2499737933_0:
 	add rbp, 8
@@ -121,7 +120,6 @@ __blue_549324038_0:
 	mov [__blue_2584388227_0], rbp
 	ret
 
-;  need to next-arg dup len writeln
 ; : _start ( rsp -- noret )
 _start:
 	mov rbp, rsp
