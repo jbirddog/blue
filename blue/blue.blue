@@ -8,16 +8,15 @@ global _start
 : exit.ok ( -- noret ) 0 exit ;
 : exit.syserr ( err:eax -- noret ) neg exit ;
 
-: syscall ( arg2:esi arg3:edx arg1:edi num:eax -- result:eax ) syscall ;
-
 : unwrap ( result:eax -- value:eax ) dup 0 cmp ' exit.syserr xl ;
 : ordie ( result:eax -- ) unwrap drop ;
+
+: syscall ( arg2:esi arg3:edx arg1:edi num:eax -- result:eax ) syscall ;
 
 1 const stdout
 1 const write
 
-: write.stdout ( buf len -- wrote ) stdout write syscall ;
-: write ( buf len -- ) write.stdout ordie ;
+: write ( buf len -- ) stdout write syscall ordie ;
 
 1 const lf.len
 

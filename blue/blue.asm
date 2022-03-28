@@ -22,11 +22,6 @@ __blue_1490145965_0:
 	mov edi, eax
 	call __blue_3454868101_1
 
-; : syscall ( arg2:esi arg3:edx arg1:edi num:eax -- result:eax )
-__blue_4057121178_1:
-	call __blue_4057121178_0
-	ret
-
 ; : unwrap ( result:eax -- value:eax )
 __blue_4055961022_0:
 	cmp eax, 0
@@ -41,16 +36,16 @@ __blue_1614081290_0:
 	call __blue_4055961022_0
 	ret
 
-; : write.stdout ( buf len -- wrote )
-__blue_2973566241_0:
-	mov eax, 1
-	mov edi, 1
-	call __blue_4057121178_1
+; : syscall ( arg2:esi arg3:edx arg1:edi num:eax -- result:eax )
+__blue_4057121178_1:
+	call __blue_4057121178_0
 	ret
 
 ; : write ( buf len -- )
 __blue_3190202204_1:
-	call __blue_2973566241_0
+	mov eax, 1
+	mov edi, 1
+	call __blue_4057121178_1
 	call __blue_1614081290_0
 	ret
 
