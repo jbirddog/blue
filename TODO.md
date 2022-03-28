@@ -25,6 +25,7 @@
 1. push/pops based on called words indirect register usage
 1. mov edx, rax
 1. treat words with only decb more like resb
+1. drop during infer
 
 ### random notes
 

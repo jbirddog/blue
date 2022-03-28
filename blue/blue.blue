@@ -15,12 +15,12 @@ global _start
 : write ( buf len -- result ) stdout 1 syscall3 ;
 : write! ( buf len -- wrote ) write unwrap ;
 
-\ TODO writeln
-
 1 const lf.len
 
 : lf ( -- ) 10 decb 
 : lf ( -- wrote ) ' lf lf.len write! ;
+
+: writeln! ( buf len -- x x ) write lf ; 
 
 \ TODO this is an example of invalid stack handling due to lodsb/loopne
 : find0 ( start:rsi max:rcx -- end:rsi ) lodsb 0 cmp latest loopne ; 
@@ -30,22 +30,15 @@ global _start
 : strlen ( str:rsi -- len:rsi ) cstr-range range-len ;
 
 \ TODO lea
-\ TODO ideally shouldn't need these empty words
-: argv ( rbp -- rbp ) ;
 : next-arg ( argv:rbp -- arg:rdx ) 8 add [] 
-: deref ( rdx -- rdx ) ; 
+: _ ( rdx -- rdx ) ; \ TODO ideally shouldn't need
 
 1 resq argc
-\ 1 resq argv
+1 resq argv
 
-\ : argc! ( rsp -- ) argc ! ;
-\ : argv! ( rbp -- ) 8 add argv ! ;
+: argc! ( rsp -- ) argc ! ;
+: argv! ( rbp -- ) 8 add argv ! ;
 
 \ need to next-arg dup len writeln
-: _start ( rsp -- noret ) argv next-arg dup strlen xchg write! lf exit.ok ;
+: _start ( rsp -- noret ) next-arg dup strlen xchg writeln! exit.ok ;
 
-\ argc [rsp] -> rcx for looping over argv
-\ argv lea rsi, [rsp+8], lodsq loop will load each string ptr into rax
-\ scan rax til 0 to find length
-\ print with length
-\ print new line

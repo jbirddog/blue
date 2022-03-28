@@ -61,6 +61,12 @@ __blue_1261555351_1:
 	call __blue_3553432007_0
 	ret
 
+; : writeln! ( buf len -- x x )
+__blue_3520069665_0:
+	call __blue_3190202204_0
+	call __blue_1261555351_1
+	ret
+
 ;  TODO this is an example of invalid stack handling due to lodsb/loopne
 ; : find0 ( start:rsi max:rcx -- end:rsi )
 __blue_1805780446_0:
@@ -90,44 +96,42 @@ __blue_1488600471_0:
 	ret
 
 ;  TODO lea
-;  TODO ideally shouldn't need these empty words
-; : argv ( rbp -- rbp )
-__blue_2584388227_0:
-	ret
-
 ; : next-arg ( argv:rbp -- arg:rdx )
 __blue_2499737933_0:
 	add rbp, 8
 	mov rdx, [rbp]
 
-; : deref ( rdx -- rdx )
-__blue_655036747_0:
+; : _ ( rdx -- rdx )
+__blue_3658226030_0:
 	ret
 
+;  TODO ideally shouldn't need
 section .bss
 
 ; 1 resq argc
 __blue_2366279180_0: resq 1
-;  1 resq argv
-;  : argc! ( rsp -- ) argc ! ;
-;  : argv! ( rbp -- ) 8 add argv ! ;
-;  need to next-arg dup len writeln
+; 1 resq argv
+__blue_2584388227_0: resq 1
 section .text
 
+; : argc! ( rsp -- )
+__blue_882757847_0:
+	mov [__blue_2366279180_0], rsp
+	ret
+
+; : argv! ( rbp -- )
+__blue_549324038_0:
+	add rbp, 8
+	mov [__blue_2584388227_0], rbp
+	ret
+
+;  need to next-arg dup len writeln
 ; : _start ( rsp -- noret )
 _start:
 	mov rbp, rsp
-	call __blue_2584388227_0
 	call __blue_2499737933_0
 	mov rsi, rdx
 	call __blue_1488600471_0
 	xchg rdx, rsi
-	call __blue_3553432007_0
-	call __blue_1261555351_1
+	call __blue_3520069665_0
 	call __blue_3274522691_0
-
-;  argc [rsp] -> rcx for looping over argv
-;  argv lea rsi, [rsp+8], lodsq loop will load each string ptr into rax
-;  scan rax til 0 to find length
-;  print with length
-;  print new line
