@@ -9,7 +9,7 @@ global _start
 : exit.syserr ( err:eax -- noret ) neg exit ;
 
 : unwrap ( result:eax -- value:eax ) dup 0 cmp ' exit.syserr xl ;
-: ordie ( result:eax -- ) unwrap drop ;
+: ordie ( result -- ) unwrap drop ;
 
 : syscall ( arg2:esi arg3:edx arg1:edi num:eax -- result:eax ) syscall ;
 
@@ -18,12 +18,10 @@ global _start
 
 : write ( buf len -- ) stdout write syscall ordie ;
 
-1 const lf.len
-
 : lf ( -- ) 10 decb 
-: lf ( -- ) ' lf lf.len write ;
+: newline ( -- ) ' lf 1 write ;
 
-: writeln ( buf len -- ) write lf ; 
+: writeln ( buf len -- ) write newline ; 
 
 \ TODO this is an example of invalid stack handling due to lodsb/loopne
 : find0 ( start:rsi max:rcx -- end:rsi ) lodsb 0 cmp latest loopne ; 

@@ -31,7 +31,7 @@ __blue_4055961022_0:
 __blue_2157056155_0:
 	ret
 
-; : ordie ( result:eax -- )
+; : ordie ( result -- )
 __blue_1614081290_0:
 	call __blue_4055961022_0
 	ret
@@ -53,8 +53,8 @@ __blue_3190202204_1:
 __blue_1261555351_0:
 
 db 10
-; : lf ( -- )
-__blue_1261555351_1:
+; : newline ( -- )
+__blue_4281549323_0:
 	mov edx, 1
 	mov esi, __blue_1261555351_0
 	call __blue_3190202204_1
@@ -63,7 +63,7 @@ __blue_1261555351_1:
 ; : writeln ( buf len -- )
 __blue_840226778_0:
 	call __blue_3190202204_1
-	call __blue_1261555351_1
+	call __blue_4281549323_0
 	ret
 
 ;  TODO this is an example of invalid stack handling due to lodsb/loopne
