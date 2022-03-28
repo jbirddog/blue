@@ -6,6 +6,7 @@ global _start
 : syscall3 ( arg2:rsi arg3:rdx arg1:edi num:rax -- result:eax ) syscall ;
 : write ( buf:rsi len:rdx fd:edi -- result:rax ) 1 syscall3 ;
 \ TODO unwrap
+\ TODO writeln
 
 \ TODO this is an example of invalid stack handling due to lodsb/loopne
 : find0 ( start:rsi max:rcx -- end:rsi ) lodsb 0 cmp latest loopne ; 
@@ -19,6 +20,12 @@ global _start
 : argv ( rbp -- rbp ) ;
 : next-arg ( argv:rbp -- arg:rdx ) 8 add [] 
 : deref ( rdx -- rdx ) ; 
+
+\ 1 resq argc
+\ 1 resq argv
+
+\ : argc! ( rsp -- ) argc ! ;
+\ : argv! ( rbp -- ) 8 add argv ! ;
 
 \ need to next-arg dup len writeln
 : _start ( rsp -- noret ) argv next-arg dup strlen xchg 1 write exit ;

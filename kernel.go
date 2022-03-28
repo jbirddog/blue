@@ -113,10 +113,11 @@ func KernelImport(env *Environment) {
 	env.Merge(importEnv)
 }
 
-func KernelResb(env *Environment) {
+func res(env *Environment, class string) {
 	name := env.ReadNextWord()
+	res := "res" + class
 	if len(name) == 0 {
-		log.Fatal("resb expects a name")
+		log.Fatal(res, " expects a name")
 	}
 
 	sizeInstr := env.PopInstr().(*LiteralIntInstr)
@@ -128,13 +129,21 @@ func KernelResb(env *Environment) {
 	env.AppendWord(word)
 
 	env.AppendInstrs([]Instr{
-		&CommentInstr{Comment: fmt.Sprintf("%d resb %s", size, name)},
+		&CommentInstr{Comment: fmt.Sprintf("%d %s %s", size, res, name)},
 		&ResbInstr{Name: word.AsmLabel, Size: size},
 	})
 
 	instr := &RefWordInstr{Word: word}
 	word.AppendInstr(instr)
 	word.Inline()
+}
+
+func KernelResb(env *Environment) {
+	res(env, "b")
+}
+
+func KernelResq(env *Environment) {
+	res(env, "q")
 }
 
 func KernelDecb(env *Environment) {

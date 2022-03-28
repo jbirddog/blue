@@ -229,6 +229,15 @@ func (i *SwapInstr) Run(env *Environment, context *RunContext) {
 	context.AppendInput(b)
 }
 
+type SetInstr struct{}
+
+func (i *SetInstr) Run(env *Environment, context *RunContext) {
+	op2, op1 := context.Pop2Inputs()
+	op1 = fmt.Sprintf("[%s]", op1)
+
+	env.AppendAsmInstr(&AsmBinaryInstr{Mnemonic: "mov", Op1: op1, Op2: op2})
+}
+
 type CondCallInstr struct {
 	Jmp    string
 	Target *RefWordInstr

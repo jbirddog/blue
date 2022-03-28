@@ -23,6 +23,7 @@ __blue_3190202204_0:
 	ret
 
 ;  TODO unwrap
+;  TODO writeln
 ;  TODO this is an example of invalid stack handling due to lodsb/loopne
 ; : find0 ( start:rsi max:rcx -- end:rsi )
 __blue_1805780446_0:
@@ -66,6 +67,10 @@ __blue_2499737933_0:
 __blue_655036747_0:
 	ret
 
+;  1 resq argc
+;  1 resq argv
+;  : argc! ( rsp -- ) argc ! ;
+;  : argv! ( rbp -- ) 8 add argv ! ;
 ;  need to next-arg dup len writeln
 ; : _start ( rsp -- noret )
 _start:
