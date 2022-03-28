@@ -24,12 +24,7 @@ global _start
 : writeln ( buf len -- ) write newline ; 
 
 : find0 ( start:rsi -- end:rsi ) lodsb 0 cmp latest xne ; 
-
-\ TODO cleaner way to write this, can't user inference due to required movs
-: range-len ( start:rdi end:rsi -- len:rsi ) swap sub dec ;
-: cstr-range ( start:rdi -- begin:rdi end:rsi ) dup find0 ;
-: cstrlen ( str:rsi -- len:rsi ) cstr-range range-len ;
-
+: cstrlen ( str:rdi -- len:rsi ) dup find0 swap sub dec ;
 : cstr>str ( cstr:rdx -- str:rsi len:rdx ) dup cstrlen xchg ;
 
 \ TODO lea

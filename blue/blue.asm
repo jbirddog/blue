@@ -76,29 +76,17 @@ __blue_1805780446_0:
 __blue_2157056155_1:
 	ret
 
-;  TODO cleaner way to write this, can't user inference due to required movs
-; : range-len ( start:rdi end:rsi -- len:rsi )
-__blue_3477417540_0:
+; : cstrlen ( str:rdi -- len:rsi )
+__blue_1939608060_0:
+	mov rsi, rdi
+	call __blue_1805780446_0
 	sub rsi, rdi
 	dec rsi
 	ret
 
-; : cstr-range ( start:rdi -- begin:rdi end:rsi )
-__blue_2411088989_0:
-	mov rsi, rdi
-	call __blue_1805780446_0
-	ret
-
-; : cstrlen ( str:rsi -- len:rsi )
-__blue_1939608060_0:
-	mov rdi, rsi
-	call __blue_2411088989_0
-	call __blue_3477417540_0
-	ret
-
 ; : cstr>str ( cstr:rdx -- str:rsi len:rdx )
 __blue_3207375596_0:
-	mov rsi, rdx
+	mov rdi, rdx
 	call __blue_1939608060_0
 	xchg rdx, rsi
 	ret
