@@ -91,6 +91,12 @@ __blue_3207375596_0:
 	xchg rdx, rsi
 	ret
 
+; : print-arg ( arg -- )
+__blue_2701174125_0:
+	call __blue_3207375596_0
+	call __blue_840226778_0
+	ret
+
 ; : next-arg ( argv:rbp -- arg:rdx )
 __blue_2499737933_0:
 	add rbp, 8
@@ -124,6 +130,5 @@ __blue_549324038_0:
 _start:
 	mov rbp, rsp
 	call __blue_2499737933_0
-	call __blue_3207375596_0
-	call __blue_840226778_0
+	call __blue_2701174125_0
 	call __blue_3274522691_0

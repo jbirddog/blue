@@ -27,6 +27,8 @@ global _start
 : cstrlen ( str:rdi -- len:rsi ) dup find0 swap sub dec ;
 : cstr>str ( cstr:rdx -- str:rsi len:rdx ) dup cstrlen xchg ;
 
+: print-arg ( arg -- ) cstr>str writeln ;
+
 : next-arg ( argv:rbp -- arg:rdx ) 8 add [] 
 : _ ( rdx -- rdx ) ; \ TODO ideally shouldn't need
 
@@ -36,4 +38,4 @@ global _start
 : argc! ( rsp -- ) argc ! ;
 : argv! ( rbp -- ) 8 add argv ! ;
 
-: _start ( rsp -- noret ) next-arg cstr>str writeln exit.ok ;
+: _start ( rsp -- noret ) next-arg print-arg exit.ok ;
