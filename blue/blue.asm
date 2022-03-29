@@ -97,38 +97,24 @@ __blue_2701174125_0:
 	call __blue_840226778_0
 	ret
 
-; : next-arg ( argv:rbp -- arg:rdx )
-__blue_2499737933_0:
-	add rbp, 8
-	mov rdx, [rbp]
-
-; : _ ( rdx -- rdx )
-__blue_3658226030_0:
-	ret
-
-;  TODO ideally shouldn't need
-section .bss
-
-; 1 resq argc
-__blue_2366279180_0: resq 1
-; 1 resq argv
-__blue_2584388227_0: resq 1
-section .text
-
-; : argc! ( rsp -- )
-__blue_882757847_0:
-	mov [__blue_2366279180_0], rsp
-	ret
-
-; : argv! ( rbp -- )
-__blue_549324038_0:
-	add rbp, 8
-	mov [__blue_2584388227_0], rbp
-	ret
-
+;  : next-arg ( argv:rbp -- arg:rdx ) 8 add [] 
+;  : _ ( rdx -- rdx ) ; \ TODO ideally shouldn't need
+;  1 resq argc
+;  1 resq argv
+;  : argc! ( rsp -- ) argc ! ;
+;  : argv! ( rbp -- ) 8 add argv ! ;
+;  : _start ( rsp -- noret ) next-arg print-arg exit.ok ;
+;  : args ( argv:rsp argc:rcx -- ) dec swap
 ; : _start ( rsp -- noret )
 _start:
-	mov rbp, rsp
-	call __blue_2499737933_0
+	mov rcx, [rsp]
+
+; : each-arg ( argc:rcx argv:rsp -- noret )
+__blue_1722112269_0:
+	add rsp, 8
+	mov rdx, [rsp]
+push rcx
 	call __blue_2701174125_0
+pop rcx
+	loop __blue_1722112269_0
 	call __blue_3274522691_0

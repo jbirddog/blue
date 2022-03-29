@@ -29,13 +29,18 @@ global _start
 
 : print-arg ( arg -- ) cstr>str writeln ;
 
-: next-arg ( argv:rbp -- arg:rdx ) 8 add [] 
-: _ ( rdx -- rdx ) ; \ TODO ideally shouldn't need
+\ : next-arg ( argv:rbp -- arg:rdx ) 8 add [] 
+\ : _ ( rdx -- rdx ) ; \ TODO ideally shouldn't need
 
-1 resq argc
-1 resq argv
+\ 1 resq argc
+\ 1 resq argv
 
-: argc! ( rsp -- ) argc ! ;
-: argv! ( rbp -- ) 8 add argv ! ;
+\ : argc! ( rsp -- ) argc ! ;
+\ : argv! ( rbp -- ) 8 add argv ! ;
 
-: _start ( rsp -- noret ) next-arg print-arg exit.ok ;
+\ : _start ( rsp -- noret ) next-arg print-arg exit.ok ;
+
+: _start ( rsp -- noret ) dup [] swap 
+\ : args ( argv:rsp argc:rcx -- ) dec swap
+: each-arg ( argc:rcx argv:rsp -- noret ) 8 add [] print-arg latest loop 
+exit.ok ;
