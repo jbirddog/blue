@@ -1,2 +1,2 @@
-# gfe
-Go Forth Environment
+# Blue
+Compiler for the Blue Language
