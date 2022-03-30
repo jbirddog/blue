@@ -3,10 +3,12 @@ package main
 import (
 	"fmt"
 	"log"
+	"strconv"
 	"strings"
 )
 
 func KernelColon(env *Environment) {
+	flowPreviousWord := env.Compiling
 	env.Compiling = true
 
 	name := env.ReadNextWord()
@@ -16,6 +18,13 @@ func KernelColon(env *Environment) {
 
 	word := &Word{Name: name}
 	word.RawRefs = parseRefs(word, env)
+
+	if flowPreviousWord {
+		previous := env.Dictionary.Latest
+		previous.AppendInstr(&FlowWordInstr{Word: word})
+		env.DeclWord(previous)
+	}
+
 	env.Dictionary.Latest = word
 
 	env.SuggestSection(".text")
@@ -46,11 +55,7 @@ func KernelSemi(env *Environment) {
 		latest.AppendInstr(&X8664Instr{Mnemonic: "ret"})
 	}
 
-	env.AppendWord(latest)
-	env.AppendInstrs([]Instr{
-		&CommentInstr{Comment: latest.DeclString()},
-		&DeclWordInstr{Word: latest},
-	})
+	env.DeclWord(latest)
 }
 
 func KernelGlobal(env *Environment) {
@@ -108,14 +113,14 @@ func KernelImport(env *Environment) {
 	env.Merge(importEnv)
 }
 
-func KernelResb(env *Environment) {
+func res(env *Environment, size string) {
 	name := env.ReadNextWord()
 	if len(name) == 0 {
-		log.Fatal("resb expects a name")
+		log.Fatal("res", size, "expects a name")
 	}
 
-	sizeInstr := env.PopInstr().(*LiteralIntInstr)
-	size := uint(sizeInstr.I)
+	countInstr := env.PopInstr().(*LiteralIntInstr)
+	count := uint(countInstr.I)
 
 	env.SuggestSection(".bss")
 
@@ -123,13 +128,44 @@ func KernelResb(env *Environment) {
 	env.AppendWord(word)
 
 	env.AppendInstrs([]Instr{
-		&CommentInstr{Comment: fmt.Sprintf("; %d resb %s", size, name)},
-		&ResbInstr{Name: word.AsmLabel, Size: size},
+		&CommentInstr{Comment: fmt.Sprintf("%d res%s %s", count, size, name)},
+		&ResInstr{Name: word.AsmLabel, Size: size, Count: count},
 	})
 
 	instr := &RefWordInstr{Word: word}
 	word.AppendInstr(instr)
 	word.Inline()
+}
+
+func KernelResb(env *Environment) {
+	res(env, "b")
+}
+
+func KernelResq(env *Environment) {
+	res(env, "q")
+}
+
+func KernelDecb(env *Environment) {
+	latest := env.Dictionary.Latest
+	valueInstr := latest.PopInstr().(*LiteralIntInstr)
+	value := valueInstr.I
+
+	latest.AppendInstr(&DecbInstr{Value: value})
+}
+
+func KernelDecbLParen(env *Environment) {
+	for {
+		name := env.ReadNextWord()
+		if name == ")" {
+			break
+		}
+		if value, err := strconv.Atoi(name); err == nil {
+			env.Dictionary.Latest.AppendInstr(&DecbInstr{Value: value})
+			continue
+		}
+
+		log.Fatal("decb( expects a numeric value")
+	}
 }
 
 func KernelConst(env *Environment) {
@@ -155,11 +191,30 @@ func KernelTick(env *Environment) {
 	env.Dictionary.Latest.AppendInstr(instr)
 }
 
-func KernelXl(env *Environment) {
+func condCallLatest(env *Environment, jmp string) {
 	latest := env.Dictionary.Latest
 	refWord := latest.PopInstr().(*RefWordInstr)
-	condCall := &CondCallInstr{Jmp: "jge", Target: refWord}
+	condCall := &CondCallInstr{Jmp: jmp, Target: refWord}
 	latest.AppendInstr(condCall)
+}
+
+func KernelXl(env *Environment) {
+	condCallLatest(env, "jge")
+}
+
+func KernelXne(env *Environment) {
+	condCallLatest(env, "je")
+}
+
+func condLoopLatest(env *Environment, jmp string) {
+	latest := env.Dictionary.Latest
+	refWord := latest.PopInstr().(*RefWordInstr)
+	condLoop := &CondLoopInstr{Jmp: jmp, Target: refWord}
+	latest.AppendInstr(condLoop)
+}
+
+func KernelLoople(env *Environment) {
+	condLoopLatest(env, "jg")
 }
 
 func KernelHide(env *Environment) {
@@ -171,12 +226,51 @@ func KernelHide(env *Environment) {
 	word.Hidden()
 }
 
+func KernelLBracket(env *Environment) {
+	var parts []string
+	replacements := 0
+
+	for {
+		name := env.ReadNextWord()
+		if len(name) == 0 {
+			log.Fatal("[ expects a ]")
+		}
+
+		if name == "]" {
+			break
+		}
+
+		if name == "_" {
+			replacements += 1
+			parts = append(parts, "%s")
+			continue
+		}
+
+		parts = append(parts, name)
+	}
+
+	if len(parts) == 0 {
+		log.Fatal("[ expects a word before ]")
+	}
+
+	env.Dictionary.Latest.AppendInstr(&BracketInstr{
+		Value:        strings.Join(parts, " "),
+		Replacements: replacements,
+	})
+}
+
 func buildRegisterRef(rawRef string) *RegisterRef {
 	parts := strings.SplitN(rawRef, ":", 2)
 	partsLen := len(parts)
 
 	if partsLen == 1 {
-		return &RegisterRef{Name: parts[0], Reg: parts[0]}
+		part := parts[0]
+
+		if _, found := registers[part]; found {
+			return &RegisterRef{Name: part, Reg: part}
+		}
+
+		return &RegisterRef{Name: part, Reg: ""}
 	}
 
 	return &RegisterRef{Name: parts[0], Reg: parts[1]}

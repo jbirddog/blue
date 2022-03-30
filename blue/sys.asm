@@ -1,15 +1,11 @@
 
-global stdin
-
-global stdout
-
-global stderr
-
 global read
 
 global write
 
 global exit
+
+global exit.ok
 
 global exit.syserr
 
@@ -35,14 +31,17 @@ write:
 	call __blue_1472650507_0
 	ret
 
+; : exit.syserr ( err:eax -- noret )
+exit.syserr:
+	neg eax
+	mov edi, eax
+
 ; : exit ( status:edi -- noret )
 exit:
 	mov eax, 60
 	call __blue_1506205745_0
 
-; : exit.syserr ( err:eax -- )
-exit.syserr:
-	neg eax
-	mov edi, eax
+; : exit.ok ( -- noret )
+exit.ok:
+	mov edi, 0
 	call exit
-	ret

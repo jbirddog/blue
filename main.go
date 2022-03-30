@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-// TODO R8D..., RAX..., R8...
+// TODO R8D..., R8...
 const (
 	eax = iota
 	ecx
@@ -18,6 +18,17 @@ const (
 	edi
 )
 
+const (
+	rax = iota
+	rcx
+	rdx
+	rbx
+	rsp
+	rbp
+	rsi
+	rdi
+)
+
 var registers = map[string]int{
 	"eax": eax,
 	"ecx": ecx,
@@ -27,6 +38,15 @@ var registers = map[string]int{
 	"ebp": ebp,
 	"esi": esi,
 	"edi": edi,
+
+	"rax": rax,
+	"rcx": rcx,
+	"rdx": rdx,
+	"rbx": rbx,
+	"rsp": rsp,
+	"rbp": rbp,
+	"rsi": rsi,
+	"rdi": rdi,
 }
 
 type RegisterRef struct {

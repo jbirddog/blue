@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strconv"
 )
 
@@ -18,37 +19,74 @@ func (i *CallGoInstr) Run(env *Environment, context *RunContext) {
 	i.F(env)
 }
 
-type x8664Lowerer = func(string, *RunContext) AsmInstr
+type x8664Lowerer = func(string, *Environment, *RunContext) AsmInstr
 
-func ops_0(mnemonic string, context *RunContext) AsmInstr {
+func ops_0(mnemonic string, env *Environment, context *RunContext) AsmInstr {
 	return &AsmNoOperandInstr{Mnemonic: mnemonic}
 }
 
-func ops_1_1(mnemonic string, context *RunContext) AsmInstr {
+// TODO hack
+func ops_0_al(mnemonic string, env *Environment, context *RunContext) AsmInstr {
+	context.AppendInput("al")
+
+	return &AsmNoOperandInstr{Mnemonic: mnemonic}
+}
+
+func ops_1_1(mnemonic string, env *Environment, context *RunContext) AsmInstr {
 	op := context.Peek()
 
 	return &AsmUnaryInstr{Mnemonic: mnemonic, Op: op}
 }
 
-func ops_2(mnemonic string, context *RunContext) AsmInstr {
+func ops_2(mnemonic string, env *Environment, context *RunContext) AsmInstr {
 	op1, op2 := context.Pop2Inputs()
 
 	return &AsmBinaryInstr{Mnemonic: mnemonic, Op1: op1, Op2: op2}
 }
 
-func op_label(mnemonic string, context *RunContext) AsmInstr {
+func ops_2_1(mnemonic string, env *Environment, context *RunContext) AsmInstr {
+	op1, op2 := context.Pop2Inputs()
+	context.AppendInput(op1)
+
+	return &AsmBinaryInstr{Mnemonic: mnemonic, Op1: op1, Op2: op2}
+}
+
+func ops_2_x2(mnemonic string, env *Environment, context *RunContext) AsmInstr {
+	op1, op2 := context.Pop2Inputs()
+	context.AppendInput(op2)
+	context.AppendInput(op1)
+
+	return &AsmBinaryInstr{Mnemonic: mnemonic, Op1: op1, Op2: op2}
+}
+
+func op_label(mnemonic string, env *Environment, context *RunContext) AsmInstr {
 	op := context.PopInput()
 
 	return &AsmUnaryInstr{Mnemonic: mnemonic, Op: op}
 }
 
+func consume_previous(mnemonic string, env *Environment, context *RunContext) AsmInstr {
+	previous := env.PopAsmInstr().(*AsmNoOperandInstr)
+
+	return &AsmUnaryInstr{Mnemonic: mnemonic, Op: previous.Mnemonic}
+}
+
 var x8664Mnemonics = map[string]x8664Lowerer{
+	"add":     ops_2_1,
+	"and":     ops_2, // TODO needs to push op1 back
 	"cmp":     ops_2,
-	"loop":    op_label,
+	"dec":     ops_1_1,
+	"lodsb":   ops_0_al, // TODO hack - needs to consume esi, assumes al
+	"loop":    op_label, // TODO hack - needs to consume ecx
+	"loopne":  op_label, // TODO hack - needs to consume ecx
 	"neg":     ops_1_1,
+	"repne":   consume_previous,
 	"ret":     ops_0,
+	"scasb":   ops_0,
+	"sub":     ops_2_1,
 	"syscall": ops_0,
 	"xadd":    ops_2, // TODO needs to push op1 back
+	"xchg":    ops_2_x2,
 }
 
 type X8664Instr struct {
@@ -57,7 +95,7 @@ type X8664Instr struct {
 
 func (i *X8664Instr) Run(env *Environment, context *RunContext) {
 	lowerer := x8664Mnemonics[i.Mnemonic]
-	asmInstr := lowerer(i.Mnemonic, context)
+	asmInstr := lowerer(i.Mnemonic, env, context)
 	env.AppendAsmInstr(asmInstr)
 }
 
@@ -152,13 +190,22 @@ func (i *CommentInstr) Run(env *Environment, context *RunContext) {
 	env.AppendAsmInstr(&AsmCommentInstr{Comment: i.Comment})
 }
 
-type ResbInstr struct {
-	Name string
-	Size uint
+type ResInstr struct {
+	Name  string
+	Size  string
+	Count uint
 }
 
-func (i *ResbInstr) Run(env *Environment, context *RunContext) {
-	env.AppendAsmInstr(&AsmResbInstr{Name: i.Name, Size: i.Size})
+func (i *ResInstr) Run(env *Environment, context *RunContext) {
+	env.AppendAsmInstr(&AsmResInstr{Name: i.Name, Size: i.Size, Count: i.Count})
+}
+
+type DecbInstr struct {
+	Value int
+}
+
+func (i *DecbInstr) Run(env *Environment, context *RunContext) {
+	env.AppendAsmInstr(&AsmDecbInstr{Value: i.Value})
 }
 
 type DropInstr struct{}
@@ -183,6 +230,15 @@ func (i *SwapInstr) Run(env *Environment, context *RunContext) {
 	context.AppendInput(b)
 }
 
+type SetInstr struct{}
+
+func (i *SetInstr) Run(env *Environment, context *RunContext) {
+	op2, op1 := context.Pop2Inputs()
+	op1 = fmt.Sprintf("[%s]", op1)
+
+	env.AppendAsmInstr(&AsmBinaryInstr{Mnemonic: "mov", Op1: op1, Op2: op2})
+}
+
 type CondCallInstr struct {
 	Jmp    string
 	Target *RefWordInstr
@@ -198,6 +254,41 @@ func (i *CondCallInstr) Run(env *Environment, context *RunContext) {
 	})
 }
 
+type CondLoopInstr struct {
+	Jmp    string
+	Target *RefWordInstr
+}
+
+func (i *CondLoopInstr) Run(env *Environment, context *RunContext) {
+	clLabel := env.AsmLabelForName(".donecl")
+
+	env.AppendAsmInstrs([]AsmInstr{
+		&AsmUnaryInstr{Mnemonic: i.Jmp, Op: clLabel},
+		&AsmUnaryInstr{Mnemonic: "loop", Op: i.Target.Word.AsmLabel},
+		&AsmLabelInstr{Name: clLabel},
+	})
+}
+
+type BracketInstr struct {
+	Value        string
+	Replacements int
+}
+
+func (i *BracketInstr) Run(env *Environment, context *RunContext) {
+	newInput := i.Value
+
+	if i.Replacements > 0 {
+		divide := len(context.Inputs) - i.Replacements
+		replacements := context.Inputs[divide:]
+		context.Inputs = context.Inputs[:divide]
+
+		// TODO believe this won't work with multiple replacements
+		newInput = fmt.Sprintf(newInput, replacements)
+	}
+
+	context.AppendInput(newInput)
+}
+
 func flowWord(word *Word, env *Environment, context *RunContext) {
 	expectedInputs := word.InputRegisters()
 
@@ -207,13 +298,26 @@ func flowWord(word *Word, env *Environment, context *RunContext) {
 	context.Inputs = context.Inputs[:have-need]
 
 	for i := need - 1; i >= 0; i-- {
-		if expectedInputs[i] != neededInputs[i] {
-			env.AppendAsmInstr(&AsmBinaryInstr{
-				Mnemonic: "mov",
-				Op1:      expectedInputs[i],
-				Op2:      neededInputs[i],
-			})
+		op1 := expectedInputs[i]
+		op2 := neededInputs[i]
+
+		if op1 == op2 {
+			continue
 		}
+
+		if op2RegIndex, found := registers[op2]; found {
+			if op1RegIndex, found := registers[op1]; found {
+				if op1RegIndex == op2RegIndex {
+					continue
+				}
+			}
+		}
+
+		env.AppendAsmInstr(&AsmBinaryInstr{
+			Mnemonic: "mov",
+			Op1:      op1,
+			Op2:      op2,
+		})
 	}
 
 	wordOutputs := word.OutputRegisters()

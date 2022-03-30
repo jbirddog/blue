@@ -91,11 +91,6 @@ func (e *Environment) Merge(e2 *Environment) {
 		e.AppendWord(word)
 	}
 
-	// Don't merge globals
-	//for name, _ := range e2.Globals {
-	//	e.Globals[name] = true
-	//}
-
 	// TODO this could be unsafe
 	for name, count := range e2.Labels {
 		e.Labels[name] = count
@@ -137,6 +132,29 @@ func (e *Environment) AppendWord(word *Word) {
 	e.Dictionary.Append(word)
 }
 
+func (e *Environment) ValidateRegisterRefs(refs []*RegisterRef) {
+	for _, r := range refs {
+		if _, found := registers[r.Reg]; !found {
+			log.Fatalf("Unable to map '%s' to register '%s': ", r.Name, r.Reg)
+		}
+	}
+}
+
+func (e *Environment) DeclWord(word *Word) {
+	if !word.HasCompleteRefs() {
+		InferRegisterRefs(word)
+	}
+
+	e.ValidateRegisterRefs(word.Inputs)
+	e.ValidateRegisterRefs(word.Outputs)
+
+	e.AppendWord(word)
+	e.AppendInstrs([]Instr{
+		&CommentInstr{Comment: word.DeclString()},
+		&DeclWordInstr{Word: word},
+	})
+}
+
 func (e *Environment) LTrimBuf() {
 	e.InputBuf = strings.TrimLeft(e.InputBuf, " \t\n")
 }
@@ -147,11 +165,7 @@ func (e *Environment) ReadNextWord() string {
 	wordEnd := strings.IndexAny(buf, " \t\n")
 
 	if wordEnd == -1 {
-		wordEnd = len(buf) - 1
-	}
-
-	if wordEnd == -1 {
-		return ""
+		wordEnd = len(buf)
 	}
 
 	word := buf[:wordEnd]
@@ -214,13 +228,9 @@ func (e *Environment) ParseNextWord() bool {
 		}
 
 		instrs = instrsForWord(word)
-	}
-
-	if _, found := x8664Mnemonics[name]; found {
+	} else if _, found := x8664Mnemonics[name]; found {
 		instrs = []Instr{&X8664Instr{Mnemonic: name}}
-	}
-
-	if i, err := strconv.Atoi(name); err == nil {
+	} else if i, err := strconv.Atoi(name); err == nil {
 		instrs = []Instr{&LiteralIntInstr{I: i}}
 	}
 
@@ -243,6 +253,14 @@ func (c *Environment) AppendAsmInstr(i AsmInstr) {
 
 func (c *Environment) AppendAsmInstrs(i []AsmInstr) {
 	c.AsmInstrs = append(c.AsmInstrs, i...)
+}
+
+func (e *Environment) PopAsmInstr() AsmInstr {
+	last := len(e.AsmInstrs) - 1
+	instr := e.AsmInstrs[last]
+	e.AsmInstrs = e.AsmInstrs[:last]
+
+	return instr
 }
 
 func (e *Environment) AppendInstr(i Instr) {

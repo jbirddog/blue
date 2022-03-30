@@ -1,13 +1,10 @@
 ## gfe
 
 1. Instr needs RegisterRefs?
-1. compute Word In/Out Refs, compare to declared
-1. validate needs to check for lingering refs/stack items
 1. consider making flow instr not implicit via call instr
 1. more unit tests
 1. gfe.sh - run examples
 1. gfe.sh - stop the process if a step errors out
-1. higher level refs where registers are inferred from called words
 1. CondCall is not flowing yet
 1. inline is not flowing yet
 1. import vs use - one brings in externs other all code from file
@@ -15,17 +12,27 @@
 1. better placement of comments in asm
 1. outputs don't flow
 1. collapse multiple extern/imports to one (const/resb/etc?) 
-1. parser bug seen in env_test.go
+1. when importing, can drop the global decls from the imported env?
+1. ability to compute echo's buf.clamp (was 1024 -> 2047 for and) at compile time
 1. push/pop
+1. continue to infer registers from word body
+1. ^ if fully specified, validate
+1. ^ infer during word fallthrough? whole program infer?
+1. validate needs to check for lingering refs/stack items
+1. check env.AppendInstr usage to see if compiling check can be moved there
+1. rosetta code examples
+1. ^ command line arguments
+1. ^ prog name
+1. push/pops based on called words indirect register usage (syscall steps on rcx)
+1. mov edx, rax
+1. treat words with only decb more like resb
+1. lea
 
-### things
+### random notes
 
-want a quick movement from low to high level
-general solutions overwritten by optimal specific versions
-^ some clamp operation that uses branching vs sse override
-^ sys read/write vs echo's read/write
-import linux
-import sse
+mov 0(%rsp), %rdi ; argc
+lea 8(%rsp), %rsi ; argv0
+lea 16(%rsp, %rdi, 8), %rdx ; argv1
 
 ### optimizations
 
@@ -39,22 +46,23 @@ import sse
 
 ## blue
 
-1. resX, decX
-1. word local dictionaries (or similar to support parsers) - just non globals in files?
-1. hide non global words before merging dictionaries when importing
 1. structs
-1. support fallthrough between word decls (flow from previous latest)
-1. ^ exit.syserr
-1. pmaxud, pminud for clamp in echo's write
 
 # Targets
 
-### f5
+### f6
 
-1. see about calling blue object files from Go, start migrating some logic
-1. ^ might be easier to just start from scratch else bootstrap problem?
+1. Some tooling
+1. ^ build
+1. ^ test
 
-### f4 (current)
+### f5 (current)
+
+1. Some code to help the migration of blue to blue
+1. ^ main driver for blue
+1. ^^ print args to stdout
+
+### f4
 
 readability improvements from f3
 

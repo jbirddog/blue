@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"strings"
 )
 
@@ -47,19 +46,26 @@ func (w *Word) PopInstr() Instr {
 }
 
 func (w *Word) AppendInput(r *RegisterRef) {
-	if _, found := registers[r.Reg]; !found {
-		log.Fatal("Unknown input register: ", r.Reg)
-	}
-
 	w.Inputs = append(w.Inputs, r)
 }
 
 func (w *Word) AppendOutput(r *RegisterRef) {
-	if _, found := registers[r.Reg]; !found {
-		log.Fatal("Unknown ouput register: ", r.Reg)
+	w.Outputs = append(w.Outputs, r)
+}
+
+// TODO move when registers/refs get their own file
+func refsAreComplete(refs []*RegisterRef) bool {
+	for _, r := range refs {
+		if len(r.Reg) == 0 {
+			return false
+		}
 	}
 
-	w.Outputs = append(w.Outputs, r)
+	return true
+}
+
+func (w *Word) HasCompleteRefs() bool {
+	return refsAreComplete(w.Inputs) && refsAreComplete(w.Outputs)
 }
 
 func (w *Word) DeclString() string {

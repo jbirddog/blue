@@ -4,7 +4,35 @@ import (
 	"testing"
 )
 
-// TODO test ReadNextWord, there is a bug when last word runs to eof
+func TestReadNextWord(t *testing.T) {
+	cases := []struct {
+		env      *Environment
+		expected []string
+	}{
+		{env(""), []string{}},
+		{env("1024 resb buf"), []string{"1024", "resb", "buf"}},
+		{env("1024 resb buf\n"), []string{"1024", "resb", "buf"}},
+		{env("\n\n1024 resb buf  \t  "), []string{"1024", "resb", "buf"}},
+		{
+			env(": xyz ( -- ) buf loop ;"),
+			[]string{":", "xyz", "(", "--", ")", "buf", "loop", ";"},
+		},
+		{
+			env("\n\t\n\t: xyz ( -- ) buf loop ;           \n\n"),
+			[]string{":", "xyz", "(", "--", ")", "buf", "loop", ";"},
+		},
+	}
+
+	for _, c := range cases {
+		for _, expected := range c.expected {
+			read := c.env.ReadNextWord()
+
+			if read != expected {
+				t.Fatalf("Expected '%s' got '%s'", expected, read)
+			}
+		}
+	}
+}
 
 func TestReadTil(t *testing.T) {
 	cases := []struct {
@@ -35,27 +63,31 @@ func TestReadTil(t *testing.T) {
 
 // TODO these are fragile
 func TestCanDeclResb(t *testing.T) {
-	e := env("1024 resb buf\n")
+	e := env("1024 resb buf")
 	asm := run(e)
 
 	if len(asm) != 3 {
 		t.Fatalf("Expected 3 asms instr, got %d", len(asm))
 	}
 
-	instr := asm[2].(*AsmResbInstr)
+	instr := asm[2].(*AsmResInstr)
 	label := e.AsmLabelForWordNamed("buf")
 
 	if instr.Name != label {
 		t.Fatalf("Expected buf, got '%s'", instr.Name)
 	}
 
-	if instr.Size != 1024 {
-		t.Fatalf("Expected size 1024, got '%d'", instr.Size)
+	if instr.Count != 1024 {
+		t.Fatalf("Expected count 1024, got '%d'", instr.Count)
+	}
+
+	if instr.Size != "b" {
+		t.Fatalf("Expected size b, got '%s'", instr.Size)
 	}
 }
 
 func TestCanFindResbRef(t *testing.T) {
-	e := env("1024 resb buf : xyz ( -- ) buf loop ;\n")
+	e := env("1024 resb buf : xyz ( -- ) buf loop ;")
 	asm := run(e)
 
 	loopInstr := asm[6].(*AsmUnaryInstr)
