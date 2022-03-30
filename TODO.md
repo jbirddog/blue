@@ -1,4 +1,4 @@
-## gfe
+## compiler
 
 1. Instr needs RegisterRefs?
 1. consider making flow instr not implicit via call instr
@@ -15,18 +15,12 @@
 1. ability to compute echo's buf.clamp (was 1024 -> 2047 for and) at compile time
 1. push/pop
 1. continue to infer registers from word body
-1. ^ if fully specified, validate
-1. ^ infer during word fallthrough? whole program infer?
+   1. if fully specified, validate
+   1. infer during word fallthrough? whole program infer?
 1. validate needs to check for lingering refs/stack items
 1. check env.AppendInstr usage to see if compiling check can be moved there
 1. treat words with only decb more like resb
 1. lea
-
-### random notes
-
-mov 0(%rsp), %rdi ; argc
-lea 8(%rsp), %rsi ; argv0
-lea 16(%rsp, %rdi, 8), %rdx ; argv1
 
 ### optimizations
 
@@ -38,7 +32,7 @@ lea 16(%rsp, %rdi, 8), %rdx ; argv1
 1. jmp vs call ret at tail of word
 1. mov xxx, 0 -> xor xxx, xxx
 
-## blue
+## language
 
 1. structs
 
@@ -46,22 +40,19 @@ lea 16(%rsp, %rdi, 8), %rdx ; argv1
 
 ### f6 (current)
 
-1. Rename gfe -> blue
-  1. gfe.sh
-  1. binary
 1. Clobber detection/handling, blue.blue is example of issue
-  1. push/pops based on called words indirect register usage (syscall steps on rcx)
+   1. push/pops based on called words indirect register usage (syscall steps on rcx)
 1. Rosettacode task `Command-line arguments`
-  1. blocked on clobber detection/handling
+   1. blocked on clobber detection/handling
 1. Rosettacode task `Read entire file`
-  1. open system call
-  1. stat system call
-  1. mmap system call
-  1. close system call
-  1. struct for stat
+   1. open system call
+   1. stat system call
+   1. mmap system call
+   1. close system call
+   1. struct for stat
 1. Rosettacode task `Create a file`
 1. Rosettacode task `Terminal control/Clear the screen`
-  1. string literals
+   1. string literals
 1. mov edx, rax bug
 
 ### f5

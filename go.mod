@@ -1,3 +1,3 @@
-module github.com/jbirddog/gfe
+module github.com/jbirddog/blue
 
-go 1.17
+go 1.18
