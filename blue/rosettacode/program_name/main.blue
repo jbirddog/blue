@@ -6,17 +6,13 @@ global _start
 
 : exit ( status:edi -- noret ) exit syscall ;
 : exit.ok ( -- noret ) 0 exit ;
-: exit.syserr ( err:eax -- noret ) neg exit ;
-
-: unwrap ( result:eax -- value:eax ) dup 0 cmp ' exit.syserr xl ;
-: ordie ( result -- ) unwrap drop ;
 
 : syscall ( arg2:esi arg3:edx arg1:edi num:eax -- result:eax ) syscall ;
 
 1 const stdout
 1 const write
 
-: write ( buf len -- ) stdout write syscall ordie ;
+: write ( buf len -- ) stdout write syscall drop ;
 
 : lf ( -- ) 10 decb 
 : newline ( -- ) ' lf 1 write ;
@@ -29,4 +25,6 @@ global _start
 
 : print-arg ( arg -- ) cstr>str writeln ;
 
-: _start ( rsp -- noret ) 8 add [] print-arg exit.ok ;
+: arg0 ( rsp -- rsp ) 8 add [] ; inline
+
+: _start ( rsp -- noret ) arg0 print-arg exit.ok ;

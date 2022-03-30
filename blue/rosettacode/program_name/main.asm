@@ -16,26 +16,6 @@ __blue_3274522691_0:
 	mov edi, 0
 	call __blue_3454868101_1
 
-; : exit.syserr ( err:eax -- noret )
-__blue_1490145965_0:
-	neg eax
-	mov edi, eax
-	call __blue_3454868101_1
-
-; : unwrap ( result:eax -- value:eax )
-__blue_4055961022_0:
-	cmp eax, 0
-	jge __blue_2157056155_0
-	call __blue_1490145965_0
-
-__blue_2157056155_0:
-	ret
-
-; : ordie ( result -- )
-__blue_1614081290_0:
-	call __blue_4055961022_0
-	ret
-
 ; : syscall ( arg2:esi arg3:edx arg1:edi num:eax -- result:eax )
 __blue_4057121178_1:
 	call __blue_4057121178_0
@@ -46,7 +26,6 @@ __blue_3190202204_1:
 	mov eax, 1
 	mov edi, 1
 	call __blue_4057121178_1
-	call __blue_1614081290_0
 	ret
 
 ; : lf ( -- )
@@ -70,10 +49,10 @@ __blue_840226778_0:
 __blue_1805780446_0:
 	lodsb
 	cmp al, 0
-	je __blue_2157056155_1
+	je __blue_2157056155_0
 	call __blue_1805780446_0
 
-__blue_2157056155_1:
+__blue_2157056155_0:
 	ret
 
 ; : cstrlen ( str:rdi -- len:rsi )
@@ -95,6 +74,11 @@ __blue_3207375596_0:
 __blue_2701174125_0:
 	call __blue_3207375596_0
 	call __blue_840226778_0
+	ret
+
+; : arg0 ( rsp -- rsp )
+__blue_1611286325_0:
+	add rsp, 8
 	ret
 
 ; : _start ( rsp -- noret )
