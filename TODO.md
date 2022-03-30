@@ -49,7 +49,6 @@ lea 16(%rsp, %rdi, 8), %rdx ; argv1
 1. Rename gfe -> blue
   1. gfe.sh
   1. binary
-  1. repo
 1. Clobber detection/handling, blue.blue is example of issue
   1. push/pops based on called words indirect register usage (syscall steps on rcx)
 1. Rosettacode task `Command-line arguments`
