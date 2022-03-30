@@ -97,24 +97,14 @@ __blue_2701174125_0:
 	call __blue_840226778_0
 	ret
 
-;  : next-arg ( argv:rbp -- arg:rdx ) 8 add [] 
-;  : _ ( rdx -- rdx ) ; \ TODO ideally shouldn't need
-;  1 resq argc
-;  1 resq argv
-;  : argc! ( rsp -- ) argc ! ;
-;  : argv! ( rbp -- ) 8 add argv ! ;
-;  : _start ( rsp -- noret ) next-arg print-arg exit.ok ;
-;  : args ( argv:rsp argc:rcx -- ) dec swap
 ; : _start ( rsp -- noret )
 _start:
 	mov rcx, [rsp]
 
-; : each-arg ( argc:rcx argv:rsp -- noret )
-__blue_1722112269_0:
+; : print-args ( argc:rcx argv:rsp -- noret )
+__blue_2449731130_0:
 	add rsp, 8
 	mov rdx, [rsp]
-push rcx
 	call __blue_2701174125_0
-pop rcx
-	loop __blue_1722112269_0
+	loop __blue_2449731130_0
 	call __blue_3274522691_0
