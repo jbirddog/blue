@@ -11,7 +11,6 @@
 1. better newline support when generating asm
 1. better placement of comments in asm
 1. outputs don't flow
-1. collapse multiple extern/imports to one (const/resb/etc?) 
 1. when importing, can drop the global decls from the imported env?
 1. ability to compute echo's buf.clamp (was 1024 -> 2047 for and) at compile time
 1. push/pop
@@ -20,11 +19,6 @@
 1. ^ infer during word fallthrough? whole program infer?
 1. validate needs to check for lingering refs/stack items
 1. check env.AppendInstr usage to see if compiling check can be moved there
-1. rosetta code examples
-1. ^ command line arguments
-1. ^ prog name
-1. push/pops based on called words indirect register usage (syscall steps on rcx)
-1. mov edx, rax
 1. treat words with only decb more like resb
 1. lea
 
@@ -50,17 +44,30 @@ lea 16(%rsp, %rdi, 8), %rdx ; argv1
 
 # Targets
 
-### f6
+### f6 (current)
 
-1. Some tooling
-1. ^ build
-1. ^ test
+1. Rename gfe -> blue
+  1. gfe.sh
+  1. binary
+  1. repo
+1. Clobber detection/handling, blue.blue is example of issue
+  1. push/pops based on called words indirect register usage (syscall steps on rcx)
+1. Rosettacode task `Command-line arguments`
+  1. blocked on clobber detection/handling
+1. Rosettacode task `Read entire file`
+  1. open system call
+  1. stat system call
+  1. mmap system call
+  1. close system call
+  1. struct for stat
+1. Rosettacode task `Create a file`
+1. Rosettacode task `Terminal control/Clear the screen`
+  1. string literals
+1. mov edx, rax bug
 
-### f5 (current)
+### f5
 
-1. Some code to help the migration of blue to blue
-1. ^ main driver for blue
-1. ^^ print args to stdout
+language ergonomic improvements
 
 ### f4
 
