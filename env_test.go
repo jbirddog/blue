@@ -98,6 +98,15 @@ func TestCanFindResbRef(t *testing.T) {
 	}
 }
 
+func TestCanFindSQuote(t *testing.T) {
+	e := env(`: xyz ( -- ) s" testing" ;`)
+	asm := run(e)
+
+	if len(asm) == 0 {
+		t.Fatal("Expected asm instrs, got none")
+	}
+}
+
 func env(buf string) *Environment {
 	env := DefaultEnvironment()
 	env.InputBuf = buf

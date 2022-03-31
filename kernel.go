@@ -259,6 +259,12 @@ func KernelLBracket(env *Environment) {
 	})
 }
 
+func KernelSQuote(env *Environment) {
+	// TODO this won't handle nested quotes
+	str := env.ReadTil(`"`)
+	env.Dictionary.Latest.AppendInstr(&AsciiStrInstr{Str: str})
+}
+
 func buildRegisterRef(rawRef string) *RegisterRef {
 	parts := strings.SplitN(rawRef, ":", 2)
 	partsLen := len(parts)

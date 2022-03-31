@@ -201,7 +201,7 @@ func (i *ResInstr) Run(env *Environment, context *RunContext) {
 }
 
 type DecbInstr struct {
-	Value int
+	Value int // TODO why isn't this a byte?
 }
 
 func (i *DecbInstr) Run(env *Environment, context *RunContext) {
@@ -287,6 +287,31 @@ func (i *BracketInstr) Run(env *Environment, context *RunContext) {
 	}
 
 	context.AppendInput(newInput)
+}
+
+type AsciiStrInstr struct {
+	Str string
+}
+
+func (i *AsciiStrInstr) Run(env *Environment, context *RunContext) {
+	bytes := []byte(i.Str)
+	refLabel := env.AsmLabelForName("<str>")
+	jmpLabel := env.AsmLabelForName("</str>")
+
+	asmInstrs := []AsmInstr{
+		&AsmUnaryInstr{Mnemonic: "jmp", Op: jmpLabel},
+		&AsmLabelInstr{Name: refLabel},
+	}
+
+	for _, b := range bytes {
+		asmInstrs = append(asmInstrs, &AsmDecbInstr{Value: int(b)})
+	}
+
+	asmInstrs = append(asmInstrs, &AsmLabelInstr{Name: jmpLabel})
+
+	env.AppendAsmInstrs(asmInstrs)
+	context.AppendInput(refLabel)
+	context.AppendInput(fmt.Sprint(len(bytes)))
 }
 
 func flowWord(word *Word, env *Environment, context *RunContext) {

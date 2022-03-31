@@ -37,6 +37,7 @@ func DefaultDictionary() *Dictionary {
 		NewCallGoWord("[", KernelLBracket).Immediate(),
 		NewInlineWord("[]", &BracketInstr{Value: "%s", Replacements: 1}),
 		NewInlineWord("!", &SetInstr{}),
+		NewCallGoWord(`s"`, KernelSQuote).Immediate(),
 	})
 
 	return d
