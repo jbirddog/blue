@@ -36,4 +36,8 @@ nasm -f elf64 -o obj/rosettacode-fibonacci_sequence.o examples/rosettacode/fibon
 
 cd examples/rosettacode/terminal_control/clear_the_screen
 ./build.sh
-cd -
+cd ../../../../
+
+cd examples/rosettacode/hello_world/text
+./build.sh
+cd ../../../../

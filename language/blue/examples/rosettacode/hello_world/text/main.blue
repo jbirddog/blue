@@ -1,0 +1,24 @@
+global _start
+
+: syscall ( num:eax -- result:eax ) syscall ;
+
+60 const exit
+
+: exit ( status:edi -- noret ) exit syscall ;
+: exit.ok ( -- noret ) 0 exit ;
+
+: syscall ( arg2:esi arg3:edx arg1:edi num:eax -- result:eax ) syscall ;
+
+1 const stdout
+1 const write
+
+: write ( buf len -- ) stdout write syscall drop ;
+
+: lf ( -- ) 10 decb
+: newline ( -- ) ' lf 1 write ;
+
+\ TODO string literals - s" Hello world!\n"
+: hello-world ( -- ) decb( 72 101 108 108 111 32 119 111 114 108 100 33 )
+: hello-world ( -- ) ' hello-world 12 write newline ;
+
+: _start ( -- noret ) hello-world exit.ok ;
