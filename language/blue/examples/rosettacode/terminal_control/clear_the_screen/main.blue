@@ -1,0 +1,21 @@
+global _start
+
+: syscall ( num:eax -- result:eax ) syscall ;
+
+60 const exit
+
+: exit ( status:edi -- noret ) exit syscall ;
+: exit.ok ( -- noret ) 0 exit ;
+
+: syscall ( arg2:esi arg3:edx arg1:edi num:eax -- result:eax ) syscall ;
+
+1 const stdout
+1 const write
+
+: write ( buf len -- ) stdout write syscall drop ;
+
+\ TODO string literals - s" \033[2J"
+: cls ( -- ) decb( 27 91 50 74 27 91 72 )
+: cls ( -- ) ' cls 7 write ;
+
+: _start ( -- noret ) cls exit.ok ;

@@ -29,7 +29,11 @@ ld -o bin/blue obj/blue.o
 # rosetta code examples
 #
 
-nasm -f elf64 -o obj/rosettacode-program_name.o rosettacode/program_name/main.asm
+nasm -f elf64 -o obj/rosettacode-program_name.o examples/rosettacode/program_name/main.asm
 ld -o bin/rosettacode-program_name obj/rosettacode-program_name.o
 
-nasm -f elf64 -o obj/rosettacode-fibonacci_sequence.o rosettacode/fibonacci_sequence/lib.asm
+nasm -f elf64 -o obj/rosettacode-fibonacci_sequence.o examples/rosettacode/fibonacci_sequence/lib.asm
+
+cd examples/rosettacode/terminal_control/clear_the_screen
+./build.sh
+cd -

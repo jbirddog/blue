@@ -5,7 +5,9 @@
 *.so
 *.dylib
 *.o
-language/blue/bin
+*/bin
+*/obj
+*.build
 blue
 !language/blue
 
