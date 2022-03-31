@@ -1,0 +1,3 @@
+global _start
+
+_start ( -- noret ) 0 exit ;

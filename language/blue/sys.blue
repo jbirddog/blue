@@ -1,0 +1,15 @@
+global( read write exit exit.ok exit.syserr )
+
+0 const stdin
+1 const stdout
+2 const stderr
+
+: syscall1 ( arg1:edi num:eax -- result:eax ) syscall ;
+: syscall3 ( arg3:edx arg2:esi arg1:edi num:eax -- result:eax ) syscall ;
+
+: read ( len:edx buf:esi fd:edi -- result:eax ) 0 syscall3 ;
+: write ( len:edx buf:esi fd:edi -- result:eax ) 1 syscall3 ;
+
+: exit.syserr ( err:eax -- noret ) neg 
+: exit ( status:edi -- noret ) 60 syscall1 ;
+: exit.ok ( -- noret ) 0 exit ;

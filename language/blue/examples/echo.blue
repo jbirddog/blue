@@ -1,0 +1,21 @@
+import sys
+
+global _start
+
+: syscall3 ( edi edx esi num:eax -- result:eax ) syscall ;
+: unwrap ( result:eax -- value:eax ) dup 0 cmp ' exit.syserr xl ;
+
+: read ( fd len buf -- result ) 0 syscall3 ;
+: write ( fd len buf -- result ) 1 syscall3 ;
+
+1024 const buf.cap
+
+buf.cap resb buf
+
+: read ( fd -- read ) buf.cap buf read unwrap ;
+: write ( len fd -- wrote ) swap buf write unwrap ;
+
+hide buf
+
+\ TODO compare read/write bytes for exit status
+: _start ( -- noret ) stdin read stdout write exit.ok ; 

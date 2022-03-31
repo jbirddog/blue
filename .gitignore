@@ -5,8 +5,9 @@
 *.so
 *.dylib
 *.o
-language/blue/bin/*
+language/blue/bin
 blue
+!language/blue
 
 # Test binary, built with `go test -c`
 *.test

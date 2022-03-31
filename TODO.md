@@ -54,6 +54,7 @@
 1. Rosettacode task `Terminal control/Clear the screen`
    1. string literals
 1. mov edx, rax bug
+1. README
 
 ### f5
 
