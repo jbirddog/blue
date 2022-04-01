@@ -28,14 +28,16 @@ __blue_3190202204_1:
 	call __blue_4057121178_1
 	ret
 
-; : lf ( -- )
-__blue_1261555351_0:
-
-db 10
 ; : newline ( -- )
 __blue_4281549323_0:
+	jmp __blue_1223589535_0
+
+__blue_855163316_0:
+
+db 10
+__blue_1223589535_0:
 	mov edx, 1
-	mov esi, __blue_1261555351_0
+	mov esi, __blue_855163316_0
 	call __blue_3190202204_1
 	ret
 

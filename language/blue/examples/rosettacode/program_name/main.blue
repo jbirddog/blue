@@ -14,8 +14,7 @@ global _start
 
 : write ( buf len -- ) stdout write syscall drop ;
 
-: lf ( -- ) 10 decb 
-: newline ( -- ) ' lf 1 write ;
+: newline ( -- ) s" \n" write ;
 
 : writeln ( buf len -- ) write newline ; 
 
