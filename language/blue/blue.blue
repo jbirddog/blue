@@ -1,6 +1,6 @@
 global _start
 
-: syscall ( num:eax -- result:eax ) syscall ;
+: syscall ( num:eax -- result:eax | rcx ) syscall ;
 
 60 const exit
 

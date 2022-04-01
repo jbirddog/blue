@@ -297,8 +297,14 @@ func parseRefs(word *Word, env *Environment) []string {
 		log.Fatal("Expected (")
 	}
 
+	const (
+		inputs = iota
+		outputs
+		clobbers
+	)
+
 	rawParts := []string{"("}
-	parsingInputs := true
+	parsing := inputs
 
 	for {
 		nextWord := env.ReadNextWord()
@@ -309,7 +315,12 @@ func parseRefs(word *Word, env *Environment) []string {
 		rawParts = append(rawParts, nextWord)
 
 		if nextWord == "--" {
-			parsingInputs = false
+			parsing = outputs
+			continue
+		}
+
+		if nextWord == "|" {
+			parsing = clobbers
 			continue
 		}
 
@@ -322,12 +333,20 @@ func parseRefs(word *Word, env *Environment) []string {
 			break
 		}
 
-		if parsingInputs {
+		switch parsing {
+		case inputs:
 			ref := buildRegisterRef(nextWord)
 			word.AppendInput(ref)
-		} else {
+		case outputs:
 			ref := buildRegisterRef(nextWord)
 			word.AppendOutput(ref)
+		case clobbers:
+			regIndex, found := registers[nextWord]
+			if !found {
+				log.Fatal("Clobber expects a register")
+			}
+
+			word.Clobbers |= 1 << regIndex
 		}
 	}
 

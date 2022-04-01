@@ -29,6 +29,17 @@ const (
 	rdi
 )
 
+var reg64Names = []string{
+	"rax",
+	"rcx",
+	"rdx",
+	"rbx",
+	"rsp",
+	"rbp",
+	"rsi",
+	"rdi",
+}
+
 var registers = map[string]int{
 	"eax": eax,
 	"ecx": ecx,

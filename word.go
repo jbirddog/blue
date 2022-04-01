@@ -22,6 +22,7 @@ type Word struct {
 	Code     []Instr
 	AsmLabel string
 	RawRefs  []string
+	Clobbers uint
 }
 
 func ExternWord(name string) *Word {
