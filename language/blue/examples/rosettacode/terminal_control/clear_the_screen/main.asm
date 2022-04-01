@@ -28,8 +28,6 @@ __blue_3190202204_1:
 	call __blue_4057121178_1
 	ret
 
-;  TODO string literals - s" \033[2J"
-;  : cls ( -- ) decb( 27 91 50 74 27 91 72 )
 ; : cls ( -- )
 __blue_59780555_0:
 	jmp __blue_1223589535_0

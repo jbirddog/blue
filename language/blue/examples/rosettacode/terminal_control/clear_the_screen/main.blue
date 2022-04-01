@@ -14,8 +14,6 @@ global _start
 
 : write ( buf len -- ) stdout write syscall drop ;
 
-\ TODO string literals - s" \033[2J"
-\ : cls ( -- ) decb( 27 91 50 74 27 91 72 )
 : cls ( -- ) s" \033[2J\033[H" write ;
 
 : _start ( -- noret ) cls exit.ok ;
