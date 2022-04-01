@@ -122,7 +122,6 @@ type CallWordInstr struct {
 
 func (i *CallWordInstr) Run(env *Environment, context *RunContext) {
 	if env.Compiling {
-		flowWord(i.Word, env, context)
 		env.AppendAsmInstr(&AsmCallInstr{Label: i.Word.AsmLabel})
 		return
 	}

@@ -1,7 +1,6 @@
 ## compiler
 
 1. Instr needs RegisterRefs?
-1. consider making flow instr not implicit via call instr
 1. more unit tests
 1. CondCall is not flowing yet
 1. inline is not flowing yet
