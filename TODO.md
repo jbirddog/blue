@@ -53,7 +53,6 @@
 1. Rosettacode task `Create a file`
 1. mov edx, rax bug
 1. README
-1. Remove language/blue/bin from git
 
 ### f5
 
