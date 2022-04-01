@@ -262,6 +262,16 @@ func KernelLBracket(env *Environment) {
 func KernelSQuote(env *Environment) {
 	// TODO this won't handle nested quotes
 	str := env.ReadTil(`"`)
+	strLen := len(str)
+
+	if strLen < 1 {
+		log.Fatal(`s" expects closing "`)
+	}
+
+	if strLen > 2 {
+		str = str[1:]
+	}
+
 	env.Dictionary.Latest.AppendInstr(&AsciiStrInstr{Str: str})
 }
 

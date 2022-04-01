@@ -18,7 +18,5 @@ global _start
 : newline ( -- ) ' lf 1 write ;
 
 \ TODO string literals - s" Hello world!\n"
-: hello-world ( -- ) decb( 72 101 108 108 111 32 119 111 114 108 100 33 )
-: hello-world ( -- ) ' hello-world 12 write newline ;
 
-: _start ( -- noret ) hello-world exit.ok ;
+: _start ( -- noret ) s" Hello world!" write newline exit.ok ;
