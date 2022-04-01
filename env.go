@@ -10,8 +10,9 @@ import (
 )
 
 type RunContext struct {
-	Inputs  []string
-	Outputs []string
+	Inputs        []string
+	Outputs       []string
+	ClobberGuards []string
 }
 
 func (c *RunContext) AppendInput(i string) {
@@ -38,6 +39,10 @@ func (c *RunContext) Pop2Inputs() (string, string) {
 	c.Inputs = c.Inputs[:inputsLen-2]
 
 	return second, first
+}
+
+func (c *RunContext) AppendClobberGuard(regIdx int) {
+	c.ClobberGuards = append(c.ClobberGuards, reg64Names[regIdx])
 }
 
 type Environment struct {
@@ -247,6 +252,7 @@ func (e *Environment) ParseNextWord() bool {
 		e.AppendInstrs(instrs)
 	} else {
 		// TODO actually implement
+		// TODO only set clobbers if clobbered reg is not in inputs/outputs
 		e.Dictionary.Latest.Clobbers |= clobbers
 
 		e.Dictionary.Latest.AppendInstrs(instrs)

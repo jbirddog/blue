@@ -371,6 +371,17 @@ func flowWord(word *Word, env *Environment, context *RunContext) {
 		})
 	}
 
+	// TODO compute clobberGuards
+	for _, input := range context.Inputs {
+		if regIdx, found := registers[input]; found {
+			if word.Clobbers&(1<<regIdx) == 0 {
+				continue
+			}
+
+			context.AppendClobberGuard(regIdx)
+		}
+	}
+
 	wordOutputs := word.OutputRegisters()
 	context.Inputs = append(context.Inputs, wordOutputs...)
 }
