@@ -326,6 +326,10 @@ func unescape(bytes []byte) []byte {
 			switch bytes[i+1] {
 			case 'n':
 				b = 10
+			case '0':
+				b = (bytes[i+2] - 48) * 8
+				b += bytes[i+3] - 48
+				i += 2
 			}
 
 			i += 1

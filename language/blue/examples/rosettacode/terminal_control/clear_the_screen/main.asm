@@ -29,8 +29,12 @@ __blue_3190202204_1:
 	ret
 
 ;  TODO string literals - s" \033[2J"
+;  : cls ( -- ) decb( 27 91 50 74 27 91 72 )
 ; : cls ( -- )
 __blue_59780555_0:
+	jmp __blue_1223589535_0
+
+__blue_855163316_0:
 
 db 27
 db 91
@@ -39,14 +43,13 @@ db 74
 db 27
 db 91
 db 72
-; : cls ( -- )
-__blue_59780555_1:
+__blue_1223589535_0:
 	mov edx, 7
-	mov esi, __blue_59780555_0
+	mov esi, __blue_855163316_0
 	call __blue_3190202204_1
 	ret
 
 ; : _start ( -- noret )
 _start:
-	call __blue_59780555_1
+	call __blue_59780555_0
 	call __blue_3274522691_0

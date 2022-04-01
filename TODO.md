@@ -51,10 +51,6 @@
    1. close system call
    1. struct for stat
 1. Rosettacode task `Create a file`
-1. Rosettacode task `Terminal control/Clear the screen`
-   1. string literals
-1. Rosettacode task `Hello world/Text`
-   1. string literals
 1. mov edx, rax bug
 1. README
 
