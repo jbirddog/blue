@@ -14,9 +14,6 @@ global _start
 
 : write ( buf len -- ) stdout write syscall drop ;
 
-: lf ( -- ) 10 decb
-: newline ( -- ) ' lf 1 write ;
+: greet ( -- ) s" Hello world!\n" write ;
 
-\ TODO string literals - s" Hello world!\n"
-
-: _start ( -- noret ) s" Hello world!" write newline exit.ok ;
+: _start ( -- noret ) greet exit.ok ;

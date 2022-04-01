@@ -295,6 +295,7 @@ type AsciiStrInstr struct {
 
 func (i *AsciiStrInstr) Run(env *Environment, context *RunContext) {
 	bytes := []byte(i.Str)
+	bytes = unescape(bytes)
 	refLabel := env.AsmLabelForName("<str>")
 	jmpLabel := env.AsmLabelForName("</str>")
 
@@ -312,6 +313,28 @@ func (i *AsciiStrInstr) Run(env *Environment, context *RunContext) {
 	env.AppendAsmInstrs(asmInstrs)
 	context.AppendInput(refLabel)
 	context.AppendInput(fmt.Sprint(len(bytes)))
+}
+
+func unescape(bytes []byte) []byte {
+	bytesLen := len(bytes)
+	unescaped := make([]byte, 0, bytesLen)
+
+	for i := 0; i < bytesLen; i++ {
+		b := bytes[i]
+
+		if b == '\\' {
+			switch bytes[i+1] {
+			case 'n':
+				b = 10
+			}
+
+			i += 1
+		}
+
+		unescaped = append(unescaped, b)
+	}
+
+	return unescaped
 }
 
 func flowWord(word *Word, env *Environment, context *RunContext) {

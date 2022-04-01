@@ -28,20 +28,8 @@ __blue_3190202204_1:
 	call __blue_4057121178_1
 	ret
 
-; : lf ( -- )
-__blue_1261555351_0:
-
-db 10
-; : newline ( -- )
-__blue_4281549323_0:
-	mov edx, 1
-	mov esi, __blue_1261555351_0
-	call __blue_3190202204_1
-	ret
-
-;  TODO string literals - s" Hello world!\n"
-; : _start ( -- noret )
-_start:
+; : greet ( -- )
+__blue_4213039946_0:
 	jmp __blue_1223589535_0
 
 __blue_855163316_0:
@@ -53,14 +41,19 @@ db 108
 db 111
 db 32
 db 119
-db 111
+db 88
 db 114
 db 108
 db 100
 db 33
+db 10
 __blue_1223589535_0:
-	mov edx, 12
+	mov edx, 13
 	mov esi, __blue_855163316_0
 	call __blue_3190202204_1
-	call __blue_4281549323_0
+	ret
+
+; : _start ( -- noret )
+_start:
+	call __blue_4213039946_0
 	call __blue_3274522691_0
