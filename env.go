@@ -41,6 +41,10 @@ func (c *RunContext) Pop2Inputs() (string, string) {
 	return second, first
 }
 
+func (c *RunContext) ClearClobberGuards() {
+	c.ClobberGuards = nil
+}
+
 func (c *RunContext) AppendClobberGuard(regIdx int) {
 	c.ClobberGuards = append(c.ClobberGuards, reg64Names[regIdx])
 }
@@ -266,7 +270,9 @@ func (c *Environment) AppendAsmInstr(i AsmInstr) {
 }
 
 func (c *Environment) AppendAsmInstrs(i []AsmInstr) {
-	c.AsmInstrs = append(c.AsmInstrs, i...)
+	if len(i) > 0 {
+		c.AsmInstrs = append(c.AsmInstrs, i...)
+	}
 }
 
 func (e *Environment) PopAsmInstr() AsmInstr {

@@ -107,6 +107,10 @@ _start:
 __blue_2449731130_0:
 	add rsp, 8
 	mov rdx, [rsp]
+	push rcx
 	call __blue_2701174125_0
+	pop rcx
 	loop __blue_2449731130_0
+	push rcx
 	call __blue_3274522691_0
+	pop rcx

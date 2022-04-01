@@ -122,7 +122,10 @@ type CallWordInstr struct {
 
 func (i *CallWordInstr) Run(env *Environment, context *RunContext) {
 	if env.Compiling {
+		pushes, pops := clobberGuardInstrs(context)
+		env.AppendAsmInstrs(pushes)
 		env.AppendAsmInstr(&AsmCallInstr{Label: i.Word.AsmLabel})
+		env.AppendAsmInstrs(pops)
 		return
 	}
 
@@ -340,6 +343,38 @@ func unescape(bytes []byte) []byte {
 	return unescaped
 }
 
+func buildClobberGuards(word *Word, context *RunContext) {
+	context.ClearClobberGuards()
+
+	for _, input := range context.Inputs {
+		if regIdx, found := registers[input]; found {
+			if word.Clobbers&(1<<regIdx) == 0 {
+				continue
+			}
+
+			context.AppendClobberGuard(regIdx)
+		}
+	}
+}
+
+func clobberGuardInstrs(context *RunContext) ([]AsmInstr, []AsmInstr) {
+	var pushes []AsmInstr
+	var pops []AsmInstr
+
+	for _, guard := range context.ClobberGuards {
+		pushes = append(pushes, &AsmUnaryInstr{Mnemonic: "push", Op: guard})
+	}
+
+	guardsLen := len(context.ClobberGuards)
+
+	for i := guardsLen - 1; i >= 0; i -= 1 {
+		guard := context.ClobberGuards[i]
+		pops = append(pops, &AsmUnaryInstr{Mnemonic: "pop", Op: guard})
+	}
+
+	return pushes, pops
+}
+
 func flowWord(word *Word, env *Environment, context *RunContext) {
 	expectedInputs := word.InputRegisters()
 
@@ -371,16 +406,7 @@ func flowWord(word *Word, env *Environment, context *RunContext) {
 		})
 	}
 
-	// TODO compute clobberGuards
-	for _, input := range context.Inputs {
-		if regIdx, found := registers[input]; found {
-			if word.Clobbers&(1<<regIdx) == 0 {
-				continue
-			}
-
-			context.AppendClobberGuard(regIdx)
-		}
-	}
+	buildClobberGuards(word, context)
 
 	wordOutputs := word.OutputRegisters()
 	context.Inputs = append(context.Inputs, wordOutputs...)

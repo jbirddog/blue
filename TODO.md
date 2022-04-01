@@ -10,14 +10,13 @@
 1. outputs don't flow
 1. when importing, can drop the global decls from the imported env?
 1. ability to compute echo's buf.clamp (was 1024 -> 2047 for and) at compile time
-1. push/pop
 1. continue to infer registers from word body
    1. if fully specified, validate
    1. infer during word fallthrough? whole program infer?
 1. validate needs to check for lingering refs/stack items
 1. check env.AppendInstr usage to see if compiling check can be moved there
 1. treat words with only decb more like resb
-1. lea
+1. consider manual push/pop/mov/lea as escape hatch?
 
 ### optimizations
 
@@ -43,8 +42,7 @@
 
 ### f6 (current)
 
-1. Clobber detection/handling, blue.blue is example of issue
-   1. push/pops based on called words indirect register usage (syscall steps on rcx)
+1. Clobbers incorrectly bubbles when register is in inputs/outputs
 1. Rosettacode task `Command-line arguments`
    1. blocked on clobber detection/handling
 1. Rosettacode task `Read entire file`
