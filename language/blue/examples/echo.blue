@@ -18,4 +18,5 @@ buf.cap resb buf
 hide buf
 
 \ TODO compare read/write bytes for exit status
+\ TODO loop until read 0
 : _start ( -- noret ) stdin read stdout write exit.ok ; 
