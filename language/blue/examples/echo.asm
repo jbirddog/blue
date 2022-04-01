@@ -96,6 +96,7 @@ __blue_3190202204_2:
 	ret
 
 ;  TODO compare read/write bytes for exit status
+;  TODO loop until read 0
 ; : _start ( -- noret )
 _start:
 	mov edi, 0
