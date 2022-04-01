@@ -3,8 +3,6 @@
 1. Instr needs RegisterRefs?
 1. consider making flow instr not implicit via call instr
 1. more unit tests
-1. gfe.sh - run examples
-1. gfe.sh - stop the process if a step errors out
 1. CondCall is not flowing yet
 1. inline is not flowing yet
 1. import vs use - one brings in externs other all code from file
@@ -34,9 +32,15 @@
 
 ## language
 
-1. structs
+1. structs - some basic support will be in f6
 
 # Targets
+
+### f7
+
+1. Build process overhaul
+   1. blue.sh - run examples
+   1. blue.sh - stop the process if a step errors out
 
 ### f6 (current)
 

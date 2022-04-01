@@ -215,6 +215,7 @@ func (e *Environment) ParseNextWord() bool {
 	}
 
 	var instrs []Instr
+	var clobbers uint
 
 	if word := e.Dictionary.Find(name); word != nil {
 		if (!e.Compiling || word.IsImmediate()) && !word.IsInline() {
@@ -241,6 +242,9 @@ func (e *Environment) ParseNextWord() bool {
 	if !e.Compiling {
 		e.AppendInstrs(instrs)
 	} else {
+		// TODO actually implement
+		e.Dictionary.Latest.Clobbers |= clobbers
+
 		e.Dictionary.Latest.AppendInstrs(instrs)
 	}
 
