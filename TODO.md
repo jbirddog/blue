@@ -26,7 +26,9 @@
 #### peephole
 
 1. jmp vs call ret at tail of word
+1. jmp vs call noret word
 1. mov xxx, 0 -> xor xxx, xxx
+1. mov rxx, 1 -> xor exx, exx ; inc exx
 
 ## language
 
@@ -37,13 +39,12 @@
 ### f7
 
 1. Build process overhaul
+   1. tedious to add new files/builds
    1. blue.sh - run examples
    1. blue.sh - stop the process if a step errors out
 
 ### f6 (current)
 
-1. Rosettacode task `Command-line arguments`
-   1. blocked on clobber detection/handling
 1. Rosettacode task `Read entire file`
    1. open system call
    1. stat system call

@@ -34,6 +34,10 @@ ld -o .build/bin/rosettacode-program_name .build/obj/rosettacode-program_name.o
 
 nasm -f elf64 -o .build/obj/rosettacode-fibonacci_sequence.o examples/rosettacode/fibonacci_sequence/lib.asm
 
+cd examples/rosettacode/command-line_arguments
+./build.sh
+cd ../../../
+
 cd examples/rosettacode/terminal_control/clear_the_screen
 ./build.sh
 cd ../../../../
