@@ -111,6 +111,4 @@ __blue_2449731130_0:
 	call __blue_2701174125_0
 	pop rcx
 	loop __blue_2449731130_0
-	push rcx
 	call __blue_3274522691_0
-	pop rcx

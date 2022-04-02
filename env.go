@@ -255,8 +255,10 @@ func (e *Environment) ParseNextWord() bool {
 	if !e.Compiling {
 		e.AppendInstrs(instrs)
 	} else {
+		if !e.Dictionary.Latest.IsNoReturn() {
 		clobbers &= ^e.Dictionary.Latest.Registers
 		e.Dictionary.Latest.Clobbers |= clobbers
+	}
 
 		e.Dictionary.Latest.AppendInstrs(instrs)
 	}

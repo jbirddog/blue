@@ -325,6 +325,10 @@ func parseRefs(word *Word, env *Environment) []string {
 		}
 
 		if nextWord == "noret" {
+			if parsing != outputs {
+				log.Fatal("noret in non output position")
+			}
+
 			word.NoReturn()
 			continue
 		}
