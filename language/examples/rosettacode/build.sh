@@ -1,0 +1,23 @@
+#!/usr/bin/sh
+
+mkdir -p .build/bin
+mkdir -p .build/obj
+
+blue clear_the_screen.blue
+nasm -f elf64 -o .build/obj/clear_the_screen.o clear_the_screen.asm
+ld -o .build/bin/clear_the_screen .build/obj/clear_the_screen.o
+
+blue commandline_args.blue
+nasm -f elf64 -o .build/obj/commandline_args.o commandline_args.asm
+ld -o .build/bin/commandline_args .build/obj/commandline_args.o
+
+blue fibonacci.blue
+nasm -f elf64 -o .build/obj/fibonacci.o fibonacci.asm
+
+blue hello_world.blue
+nasm -f elf64 -o .build/obj/hello_world.o hello_world.asm
+ld -o .build/bin/hello_world .build/obj/hello_world.o
+
+blue program_name.blue
+nasm -f elf64 -o .build/obj/program_name.o program_name.asm
+ld -o .build/bin/program_name .build/obj/program_name.o
