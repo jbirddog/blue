@@ -255,8 +255,7 @@ func (e *Environment) ParseNextWord() bool {
 	if !e.Compiling {
 		e.AppendInstrs(instrs)
 	} else {
-		// TODO actually implement
-		// TODO only set clobbers if clobbered reg is not in inputs/outputs
+		clobbers &= ^e.Dictionary.Latest.Registers
 		e.Dictionary.Latest.Clobbers |= clobbers
 
 		e.Dictionary.Latest.AppendInstrs(instrs)

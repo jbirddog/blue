@@ -15,14 +15,15 @@ const (
 )
 
 type Word struct {
-	Name     string
-	Flags    uint
-	Inputs   []*RegisterRef
-	Outputs  []*RegisterRef
-	Code     []Instr
-	AsmLabel string
-	RawRefs  []string
-	Clobbers uint
+	Name      string
+	Flags     uint
+	Inputs    []*RegisterRef
+	Outputs   []*RegisterRef
+	Code      []Instr
+	AsmLabel  string
+	RawRefs   []string
+	Clobbers  uint
+	Registers uint
 }
 
 func ExternWord(name string) *Word {

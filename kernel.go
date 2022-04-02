@@ -333,15 +333,19 @@ func parseRefs(word *Word, env *Environment) []string {
 			break
 		}
 
+		ref := buildRegisterRef(nextWord)
+		regIndex, found := registers[ref.Reg]
+
+		if found && parsing != clobbers {
+			word.Registers |= 1 << regIndex
+		}
+
 		switch parsing {
 		case inputs:
-			ref := buildRegisterRef(nextWord)
 			word.AppendInput(ref)
 		case outputs:
-			ref := buildRegisterRef(nextWord)
 			word.AppendOutput(ref)
 		case clobbers:
-			regIndex, found := registers[nextWord]
 			if !found {
 				log.Fatal("Clobber expects a register")
 			}

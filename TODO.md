@@ -42,7 +42,6 @@
 
 ### f6 (current)
 
-1. Clobbers incorrectly bubbles when register is in inputs/outputs
 1. Rosettacode task `Command-line arguments`
    1. blocked on clobber detection/handling
 1. Rosettacode task `Read entire file`
