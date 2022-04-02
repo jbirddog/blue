@@ -52,6 +52,7 @@
    1. close system call
    1. struct for stat
 1. Rosettacode task `Create a file`
+1. Factor some imports for rosettacode tasks
 1. mov edx, rax bug
 1. README
 

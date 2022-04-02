@@ -29,6 +29,17 @@ const (
 	rdi
 )
 
+var reg32Names = []string{
+	"eax",
+	"ecx",
+	"edx",
+	"ebx",
+	"esp",
+	"ebp",
+	"esi",
+	"edi",
+}
+
 var reg64Names = []string{
 	"rax",
 	"rcx",
