@@ -107,11 +107,34 @@ func TestCanFindSQuote(t *testing.T) {
 	}
 }
 
+func TestCanEvaluateRuntimeOr(t *testing.T) {
+	instrs := parse("1 2 or")
+	instrsLen := len(instrs)
+
+	if instrsLen != 1 {
+		t.Fatalf("Expected one instr, got %d", instrsLen)
+	}
+
+	litInstr := instrs[0].(*LiteralIntInstr)
+
+	if litInstr.I != 3 {
+		t.Fatalf("Expected 1 2 or to be 3, got %d", litInstr.I)
+	}
+}
+
 func env(buf string) *Environment {
 	env := DefaultEnvironment()
 	env.InputBuf = buf
 
 	return env
+}
+
+func parse(buf string) []Instr {
+	e := env(buf)
+	for e.ParseNextWord() {
+	}
+
+	return e.CodeBuf
 }
 
 func run(e *Environment) []AsmInstr {

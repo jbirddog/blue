@@ -61,6 +61,7 @@ var x8664Lowerers = map[string]x8664Lowerer{
 	"loop":    op_label, // TODO hack - needs to consume ecx
 	"loopne":  op_label, // TODO hack - needs to consume ecx
 	"neg":     ops_1_1,
+	"or":      ops_2_1,
 	"repne":   consume_previous,
 	"ret":     ops_0,
 	"scasb":   ops_0,
@@ -68,4 +69,19 @@ var x8664Lowerers = map[string]x8664Lowerer{
 	"syscall": ops_0,
 	"xadd":    ops_2, // TODO needs to push op1 back
 	"xchg":    ops_2_x2,
+}
+
+type x8664Evaluator = func(*Environment) Instr
+
+func eval_or(env *Environment) Instr {
+	instr1, instr2 := env.Pop2Instrs()
+	lit1 := instr1.(*LiteralIntInstr)
+	lit2 := instr2.(*LiteralIntInstr)
+	result := lit1.I | lit2.I
+
+	return &LiteralIntInstr{I: result}
+}
+
+var x8664Evaluators = map[string]x8664Evaluator{
+	"or": eval_or,
 }

@@ -220,6 +220,8 @@ func instrsForWord(word *Word) []Instr {
 	return word.Code[:lastIdx]
 }
 
+// TODO there is a more general form of this compile time evalation
+// will think more during the bootstrapping phase
 func instrsForMnemonic(mnemonic string, compiling bool) []Instr {
 	return []Instr{&X8664Instr{Mnemonic: mnemonic}}
 }
@@ -302,6 +304,16 @@ func (e *Environment) PopInstr() Instr {
 	e.CodeBuf = e.CodeBuf[:last]
 
 	return instr
+}
+
+func (e *Environment) Pop2Instrs() (Instr, Instr) {
+	codeBufLen := len(e.CodeBuf)
+	second := e.CodeBuf[codeBufLen-2]
+	first := e.CodeBuf[codeBufLen-1]
+
+	e.CodeBuf = e.CodeBuf[:codeBufLen-2]
+
+	return second, first
 }
 
 func (e *Environment) SuggestSection(section string) {
