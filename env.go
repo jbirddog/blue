@@ -242,7 +242,7 @@ func (e *Environment) ParseNextWord() bool {
 
 		clobbers = word.Clobbers
 		instrs = instrsForWord(word)
-	} else if _, found := x8664Mnemonics[name]; found {
+	} else if _, found := x8664Lowerers[name]; found {
 		instrs = []Instr{&X8664Instr{Mnemonic: name}}
 	} else if i, err := strconv.Atoi(name); err == nil {
 		instrs = []Instr{&LiteralIntInstr{I: i}}

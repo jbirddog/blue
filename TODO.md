@@ -9,7 +9,6 @@
 1. better placement of comments in asm
 1. outputs don't flow
 1. when importing, can drop the global decls from the imported env?
-1. ability to compute echo's buf.clamp (was 1024 -> 2047 for and) at compile time
 1. continue to infer registers from word body
    1. if fully specified, validate
    1. infer during word fallthrough? whole program infer?
@@ -55,6 +54,8 @@
    1. open system call
    1. close system call
    1. mkdir system call
+1. compile time or
+   1. open's mode/perms
 1. Factor some imports for rosettacode tasks
 1. mov edx, rax bug
 1. README
