@@ -220,6 +220,10 @@ func instrsForWord(word *Word) []Instr {
 	return word.Code[:lastIdx]
 }
 
+func instrsForMnemonic(mnemonic string, compiling bool) []Instr {
+	return []Instr{&X8664Instr{Mnemonic: mnemonic}}
+}
+
 func (e *Environment) ParseNextWord() bool {
 	name := e.ReadNextWord()
 	if len(name) == 0 {
@@ -243,7 +247,7 @@ func (e *Environment) ParseNextWord() bool {
 		clobbers = word.Clobbers
 		instrs = instrsForWord(word)
 	} else if _, found := x8664Lowerers[name]; found {
-		instrs = []Instr{&X8664Instr{Mnemonic: name}}
+		instrs = instrsForMnemonic(name, e.Compiling)
 	} else if i, err := strconv.Atoi(name); err == nil {
 		instrs = []Instr{&LiteralIntInstr{I: i}}
 	}
