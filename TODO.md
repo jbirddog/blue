@@ -5,6 +5,7 @@
 1. CondCall is not flowing yet
 1. inline is not flowing yet
 1. import vs use - one brings in externs other all code from file
+   1. link vs include? - use to determine how to build via dsl?
 1. better newline support when generating asm
 1. better placement of comments in asm
 1. outputs don't flow
@@ -54,8 +55,6 @@
    1. open system call
    1. close system call
    1. mkdir system call
-1. compile time or
-   1. open's mode/perms
 1. Factor some imports for rosettacode tasks
 1. mov edx, rax bug
 1. README
