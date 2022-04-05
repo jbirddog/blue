@@ -11,6 +11,10 @@ blue commandline_args.blue
 nasm -f elf64 -o .build/obj/commandline_args.o commandline_args.asm
 ld -o .build/bin/commandline_args .build/obj/commandline_args.o
 
+blue create_file.blue
+nasm -f elf64 -o .build/obj/create_file.o create_file.asm
+ld -o .build/bin/create_file .build/obj/create_file.o
+
 blue fibonacci.blue
 nasm -f elf64 -o .build/obj/fibonacci.o fibonacci.asm
 

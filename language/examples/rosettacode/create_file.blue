@@ -1,0 +1,10 @@
+global _start
+
+: syscall ( num:eax -- result:eax | rcx ) syscall ;
+
+60 const exit
+
+: exit ( status:edi -- noret ) exit syscall ;
+: exit.ok ( -- noret ) 0 exit ;
+
+: _start ( -- noret ) exit.ok ;
