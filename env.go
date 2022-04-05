@@ -228,6 +228,7 @@ func (e *Environment) ParseNextWord() bool {
 
 	var instrs []Instr
 	var clobbers uint
+	shouldOptimize := false
 
 	if word := e.Dictionary.Find(name); word != nil {
 		if (!e.Compiling || word.IsImmediate()) && !word.IsInline() {
@@ -244,6 +245,7 @@ func (e *Environment) ParseNextWord() bool {
 		instrs = instrsForWord(word)
 	} else if _, found := x8664Lowerers[name]; found {
 		instrs = []Instr{&X8664Instr{Mnemonic: name}}
+		shouldOptimize = true
 	} else if i, err := strconv.Atoi(name); err == nil {
 		instrs = []Instr{&LiteralIntInstr{I: i}}
 	}
@@ -254,7 +256,10 @@ func (e *Environment) ParseNextWord() bool {
 
 	if !e.Compiling {
 		e.AppendInstrs(instrs)
-		e.OptimizeInstrs()
+
+		if shouldOptimize {
+			e.OptimizeInstrs()
+		}
 	} else {
 		if !e.Dictionary.Latest.IsNoReturn() {
 			clobbers &= ^e.Dictionary.Latest.Registers
