@@ -220,13 +220,6 @@ func instrsForWord(word *Word) []Instr {
 	return word.Code[:lastIdx]
 }
 
-// TODO there is a more general form of this compile time evalation
-// will think more during the bootstrapping phase
-func instrsForMnemonic(mnemonic string, env *Environment) []Instr {
-	instrs := []Instr{&X8664Instr{Mnemonic: mnemonic}}
-	return PerformPeepholeOptimizations(instrs)
-}
-
 func (e *Environment) ParseNextWord() bool {
 	name := e.ReadNextWord()
 	if len(name) == 0 {
@@ -250,7 +243,7 @@ func (e *Environment) ParseNextWord() bool {
 		clobbers = word.Clobbers
 		instrs = instrsForWord(word)
 	} else if _, found := x8664Lowerers[name]; found {
-		instrs = instrsForMnemonic(name, e)
+		instrs = []Instr{&X8664Instr{Mnemonic: name}}
 	} else if i, err := strconv.Atoi(name); err == nil {
 		instrs = []Instr{&LiteralIntInstr{I: i}}
 	}
@@ -261,6 +254,7 @@ func (e *Environment) ParseNextWord() bool {
 
 	if !e.Compiling {
 		e.AppendInstrs(instrs)
+		e.OptimizeInstrs()
 	} else {
 		if !e.Dictionary.Latest.IsNoReturn() {
 			clobbers &= ^e.Dictionary.Latest.Registers
@@ -297,6 +291,10 @@ func (e *Environment) AppendInstr(i Instr) {
 
 func (e *Environment) AppendInstrs(i []Instr) {
 	e.CodeBuf = append(e.CodeBuf, i...)
+}
+
+func (e *Environment) OptimizeInstrs() {
+	e.CodeBuf = PerformPeepholeOptimizationsAtEnd(e.CodeBuf)
 }
 
 func (e *Environment) PopInstr() Instr {

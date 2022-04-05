@@ -11,7 +11,7 @@ func TestCanConstantFoldOr(t *testing.T) {
 		&X8664Instr{Mnemonic: "or"},
 	}
 
-	optimized := PerformPeepholeOptimizations(instrs)
+	optimized := PerformPeepholeOptimizationsAtEnd(instrs)
 
 	if len(optimized) != 1 {
 		t.Fatalf("Expected 1 optimized instr, got %d", len(optimized))

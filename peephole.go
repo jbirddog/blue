@@ -1,9 +1,5 @@
 package main
 
-import (
-	"log"
-)
-
 type InstrMatcher interface {
 	Matches(instr Instr) bool
 }
@@ -31,7 +27,6 @@ func (p InstrPattern) Matches(instrs []Instr) bool {
 	instrsLen := len(instrs)
 
 	if patternLen > instrsLen {
-		log.Print("patternLen > instrsLen")
 		return false
 	}
 
@@ -72,13 +67,12 @@ var optimizations = []PeepholeOptimization{
 	&ConstantFoldOrOptimization{},
 }
 
-// TODO not very efficient or correct for anything but the constant
-// folding of asm instructions at this stage
-func PerformPeepholeOptimizations(instrs []Instr) []Instr {
+// TODO not very efficient or correct at this stage
+// only used for folding of asm instructions currently
+func PerformPeepholeOptimizationsAtEnd(instrs []Instr) []Instr {
 	for _, optimization := range optimizations {
 		pattern := optimization.Pattern()
 		if !pattern.Matches(instrs) {
-			log.Print("Pattern does not match")
 			continue
 		}
 
@@ -88,8 +82,6 @@ func PerformPeepholeOptimizations(instrs []Instr) []Instr {
 		optimized := optimization.Optimize(optimize)
 		return append(keep, optimized...)
 	}
-
-	log.Print("Exit with no match")
 
 	return instrs
 }
