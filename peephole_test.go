@@ -16,4 +16,10 @@ func TestCanConstantFoldOr(t *testing.T) {
 	if len(optimized) != 1 {
 		t.Fatalf("Expected 1 optimized instr, got %d", len(optimized))
 	}
+
+	value := optimized[0].(*LiteralIntInstr).I
+
+	if value != 3 {
+		t.Fatalf("Expected optimized value of 3, got %d", value)
+	}
 }

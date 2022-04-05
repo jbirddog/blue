@@ -31,10 +31,19 @@ func (p InstrPattern) Matches(instrs []Instr) bool {
 	instrsLen := len(instrs)
 
 	if patternLen > instrsLen {
+		log.Print("patternLen > instrsLen")
 		return false
 	}
 
-	return false
+	start := instrsLen - patternLen
+
+	for i, pattern := range p {
+		if !pattern.Matches(instrs[start+i]) {
+			return false
+		}
+	}
+
+	return true
 }
 
 type PeepholeOptimization interface {
@@ -69,6 +78,7 @@ func PerformPeepholeOptimizations(instrs []Instr) []Instr {
 	for _, optimization := range optimizations {
 		pattern := optimization.Pattern()
 		if !pattern.Matches(instrs) {
+			log.Print("Pattern does not match")
 			continue
 		}
 
