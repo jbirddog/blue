@@ -70,18 +70,3 @@ var x8664Lowerers = map[string]x8664Lowerer{
 	"xadd":    ops_2, // TODO needs to push op1 back
 	"xchg":    ops_2_x2,
 }
-
-type x8664Evaluator = func(*Environment) Instr
-
-func eval_or(env *Environment) Instr {
-	instr1, instr2 := env.Pop2Instrs()
-	lit1 := instr1.(*LiteralIntInstr)
-	lit2 := instr2.(*LiteralIntInstr)
-	result := lit1.I | lit2.I
-
-	return &LiteralIntInstr{I: result}
-}
-
-var x8664Evaluators = map[string]x8664Evaluator{
-	"or": eval_or,
-}

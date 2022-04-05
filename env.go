@@ -223,7 +223,7 @@ func instrsForWord(word *Word) []Instr {
 // TODO there is a more general form of this compile time evalation
 // will think more during the bootstrapping phase
 func instrsForMnemonic(mnemonic string, compiling bool) []Instr {
-	return []Instr{&X8664Instr{Mnemonic: mnemonic}}
+	return PerformPeepholeOptimizations([]Instr{&X8664Instr{Mnemonic: mnemonic}})
 }
 
 func (e *Environment) ParseNextWord() bool {
