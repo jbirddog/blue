@@ -1,23 +1,27 @@
 package main
 
+import (
+	"log"
+)
+
 type InstrMatcher interface {
 	Matches(instr Instr) bool
 }
 
-type AnyLiteralIntMatcher struct {}
+type AnyLiteralIntMatcher struct{}
 
 func (m *AnyLiteralIntMatcher) Matches(instr Instr) bool {
 	_, matches := instr.(*LiteralIntInstr)
 
-return matches
+	return matches
 }
 
-type OrMatcher struct {}
+type OrMatcher struct{}
 
 func (m *OrMatcher) Matches(instr Instr) bool {
 	x8664, matches := instr.(*X8664Instr)
 
-return matches && x8664.Mnemonic == "or"
+	return matches && x8664.Mnemonic == "or"
 }
 
 type InstrPattern []InstrMatcher
@@ -38,7 +42,7 @@ type PeepholeOptimization interface {
 	Optimize([]Instr) []Instr
 }
 
-type ConstantFoldOrOptimization struct {}
+type ConstantFoldOrOptimization struct{}
 
 func (o *ConstantFoldOrOptimization) Pattern() InstrPattern {
 	return InstrPattern{
@@ -59,7 +63,7 @@ var optimizations = []PeepholeOptimization{
 	&ConstantFoldOrOptimization{},
 }
 
-// TODO not very efficient or correct for anything but the constant 
+// TODO not very efficient or correct for anything but the constant
 // folding of asm instructions at this stage
 func PerformPeepholeOptimizations(instrs []Instr) []Instr {
 	for _, optimization := range optimizations {
@@ -68,12 +72,14 @@ func PerformPeepholeOptimizations(instrs []Instr) []Instr {
 			continue
 		}
 
-		splitIdx := len(instrs)-len(pattern)
+		splitIdx := len(instrs) - len(pattern)
 		keep := instrs[:splitIdx]
 		optimize := instrs[splitIdx:]
 		optimized := optimization.Optimize(optimize)
 		return append(keep, optimized...)
 	}
+
+	log.Print("Exit with no match")
 
 	return instrs
 }

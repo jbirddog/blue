@@ -222,8 +222,9 @@ func instrsForWord(word *Word) []Instr {
 
 // TODO there is a more general form of this compile time evalation
 // will think more during the bootstrapping phase
-func instrsForMnemonic(mnemonic string, compiling bool) []Instr {
-	return PerformPeepholeOptimizations([]Instr{&X8664Instr{Mnemonic: mnemonic}})
+func instrsForMnemonic(mnemonic string, env *Environment) []Instr {
+	instrs := []Instr{&X8664Instr{Mnemonic: mnemonic}}
+	return PerformPeepholeOptimizations(instrs)
 }
 
 func (e *Environment) ParseNextWord() bool {
@@ -249,7 +250,7 @@ func (e *Environment) ParseNextWord() bool {
 		clobbers = word.Clobbers
 		instrs = instrsForWord(word)
 	} else if _, found := x8664Lowerers[name]; found {
-		instrs = instrsForMnemonic(name, e.Compiling)
+		instrs = instrsForMnemonic(name, e)
 	} else if i, err := strconv.Atoi(name); err == nil {
 		instrs = []Instr{&LiteralIntInstr{I: i}}
 	}
