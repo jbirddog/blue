@@ -41,6 +41,7 @@ db 74
 db 27
 db 91
 db 72
+db 0
 __blue_1223589535_0:
 	mov edx, 7
 	mov esi, __blue_855163316_0

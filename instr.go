@@ -240,6 +240,7 @@ func (i *AsciiStrInstr) Run(env *Environment, context *RunContext) {
 		asmInstrs = append(asmInstrs, &AsmDecbInstr{Value: int(b)})
 	}
 
+	asmInstrs = append(asmInstrs, &AsmDecbInstr{Value: 0})
 	asmInstrs = append(asmInstrs, &AsmLabelInstr{Name: jmpLabel})
 
 	env.AppendAsmInstrs(asmInstrs)
