@@ -1,6 +1,6 @@
 global _start
 
-: syscall ( num:eax -- result:eax | rcx ) syscall ;
+: syscall ( num:eax -- result:eax ) syscall ;
 
 60 const exit
 
@@ -17,6 +17,22 @@ global _start
 
 : open ( pathname flags mode -- fd ) open syscall unwrap ;
 
+hide syscall
+
+: syscall ( arg1:edi num:eax -- result:eax ) syscall ;
+
+3 const close
+
+: close ( fd -- ) close syscall ordie ;
+
+hide syscall
+
+: syscall ( arg1:edi arg2:esi num:eax -- result:eax ) syscall ;
+
+83 const mkdir
+
+: mkdir ( pathname mode -- ) mkdir syscall ordie ;
+
 \ TODO base 8 would be interesting here
 
 1 const forWriting
@@ -27,13 +43,19 @@ create forWriting or truncate or const flags
 
 256 const userCanRead
 128 const userCanWrite
+64 const userCanExecute
 32 const groupCanRead
+8 const groupCanExecute
 
 userCanRead userCanWrite or groupCanRead or const mode
 
-: create-file ( pathname -- fd ) flags mode open ;
+: create-file ( pathname -- ) flags mode open close ;
+
+mode userCanExecute or groupCanExecute or const mode
+
+: make-directory ( pathname -- ) mode mkdir ;
 
 : create-files ( -- ) s" output.txt" drop create-file ;
-: make-directories ( -- ) s" /docs" drop dup ;
+: make-directories ( -- ) s" docs" drop make-directory ;
 
 : _start ( -- noret ) create-files make-directories exit.ok ;

@@ -11,6 +11,7 @@
 blue
 !language/blue
 language/examples/rosettacode/output.txt
+language/examples/rosettacode/docs
 
 # Test binary, built with `go test -c`
 *.test

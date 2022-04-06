@@ -1,7 +1,7 @@
 
 global _start
 
-; : syscall ( num:eax -- result:eax | rcx )
+; : syscall ( num:eax -- result:eax )
 __blue_4057121178_0:
 	syscall
 	ret
@@ -48,12 +48,44 @@ __blue_3546203337_1:
 	call __blue_4055961022_0
 	ret
 
+; : syscall ( arg1:edi num:eax -- result:eax )
+__blue_4057121178_2:
+	syscall
+	ret
+
+; : close ( fd -- )
+__blue_667630371_1:
+	mov eax, 3
+	call __blue_4057121178_2
+	call __blue_1614081290_0
+	ret
+
+; : syscall ( arg1:edi arg2:esi num:eax -- result:eax )
+__blue_4057121178_3:
+	syscall
+	ret
+
+; : mkdir ( pathname mode -- )
+__blue_2883839448_1:
+	mov eax, 83
+	call __blue_4057121178_3
+	call __blue_1614081290_0
+	ret
+
 ;  TODO base 8 would be interesting here
-; : create-file ( pathname -- fd )
+; : create-file ( pathname -- )
 __blue_3101971046_0:
 	mov edx, 416
 	mov esi, 577
 	call __blue_3546203337_1
+	mov edi, eax
+	call __blue_667630371_1
+	ret
+
+; : make-directory ( pathname -- )
+__blue_2358895277_0:
+	mov esi, 488
+	call __blue_2883839448_1
 	ret
 
 ; : create-files ( -- )
@@ -84,13 +116,14 @@ __blue_2048448097_0:
 
 __blue_855163316_1:
 
-db 47
 db 100
 db 111
 db 99
 db 115
 db 0
 __blue_1223589535_1:
+	mov edi, __blue_855163316_1
+	call __blue_2358895277_0
 	ret
 
 ; : _start ( -- noret )
