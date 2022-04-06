@@ -11,19 +11,15 @@ global _start
 : unwrap ( result:eax -- value:eax ) dup 0 cmp ' exit.syserr xl ;
 : ordie ( result -- ) unwrap drop ;
 
-: syscall ( arg1:edi arg2:esi arg3:edx num:eax -- result:eax ) syscall ;
-
 2 const open
 
-: open ( pathname flags mode -- fd ) open syscall unwrap ;
-
-hide syscall
-
-: syscall ( arg1:edi num:eax -- result:eax ) syscall ;
+: syscall.open ( arg1:edi arg2:esi arg3:edx -- result:eax ) open syscall ;
+: open ( pathname flags mode -- fd ) syscall.open unwrap ;
 
 3 const close
 
-: close ( fd -- ) close syscall ordie ;
+: syscall.close ( arg1:edi -- result:eax ) close syscall ;
+: close ( fd -- ) syscall.close ordie ;
 
 hide syscall
 

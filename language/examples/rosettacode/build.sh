@@ -3,6 +3,9 @@
 mkdir -p .build/bin
 mkdir -p .build/obj
 
+rm -f output.txt
+rm -rf docs
+
 blue clear_the_screen.blue
 nasm -f elf64 -o .build/obj/clear_the_screen.o clear_the_screen.asm
 ld -o .build/bin/clear_the_screen .build/obj/clear_the_screen.o

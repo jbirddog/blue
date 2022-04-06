@@ -36,39 +36,39 @@ __blue_1614081290_0:
 	call __blue_4055961022_0
 	ret
 
-; : syscall ( arg1:edi arg2:esi arg3:edx num:eax -- result:eax )
-__blue_4057121178_1:
+; : syscall.open ( arg1:edi arg2:esi arg3:edx -- result:eax )
+__blue_1115899260_0:
+	mov eax, 2
 	call __blue_4057121178_0
 	ret
 
 ; : open ( pathname flags mode -- fd )
 __blue_3546203337_1:
-	mov eax, 2
-	call __blue_4057121178_1
+	call __blue_1115899260_0
 	call __blue_4055961022_0
 	ret
 
-; : syscall ( arg1:edi num:eax -- result:eax )
-__blue_4057121178_2:
-	syscall
+; : syscall.close ( arg1:edi -- result:eax )
+__blue_3613472032_0:
+	mov eax, 3
+	call __blue_4057121178_0
 	ret
 
 ; : close ( fd -- )
 __blue_667630371_1:
-	mov eax, 3
-	call __blue_4057121178_2
+	call __blue_3613472032_0
 	call __blue_1614081290_0
 	ret
 
 ; : syscall ( arg1:edi arg2:esi num:eax -- result:eax )
-__blue_4057121178_3:
+__blue_4057121178_1:
 	syscall
 	ret
 
 ; : mkdir ( pathname mode -- )
 __blue_2883839448_1:
 	mov eax, 83
-	call __blue_4057121178_3
+	call __blue_4057121178_1
 	call __blue_1614081290_0
 	ret
 
