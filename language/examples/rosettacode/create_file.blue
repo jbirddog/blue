@@ -6,5 +6,26 @@ global _start
 
 : exit ( status:edi -- noret ) exit syscall ;
 : exit.ok ( -- noret ) 0 exit ;
+: exit.syserr ( err:eax -- noret ) neg exit ;
 
-: _start ( -- noret ) exit.ok ;
+: unwrap ( result:eax -- value:eax ) dup 0 cmp ' exit.syserr xl ;
+: ordie ( result -- ) unwrap drop ;
+
+\ TODO base 8 would be interesting here
+
+1 const forWriting
+64 const create
+512 const truncate
+
+create forWriting or truncate or const flags
+
+256 const userCanRead
+128 const userCanWrite
+32 const groupCanRead
+
+userCanRead userCanWrite or groupCanRead or const mode
+
+: create-files ( -- ) s" /output.txt" drop dup ;
+: make-directories ( -- ) s" /docs" drop dup ;
+
+: _start ( -- noret ) create-files make-directories exit.ok ;
