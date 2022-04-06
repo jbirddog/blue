@@ -10,6 +10,7 @@
 *.build
 blue
 !language/blue
+language/examples/rosettacode/output.txt
 
 # Test binary, built with `go test -c`
 *.test

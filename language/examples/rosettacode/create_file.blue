@@ -11,6 +11,12 @@ global _start
 : unwrap ( result:eax -- value:eax ) dup 0 cmp ' exit.syserr xl ;
 : ordie ( result -- ) unwrap drop ;
 
+: syscall ( arg1:edi arg2:esi arg3:edx num:eax -- result:eax ) syscall ;
+
+2 const open
+
+: open ( pathname flags mode -- fd ) open syscall unwrap ;
+
 \ TODO base 8 would be interesting here
 
 1 const forWriting
@@ -25,7 +31,9 @@ create forWriting or truncate or const flags
 
 userCanRead userCanWrite or groupCanRead or const mode
 
-: create-files ( -- ) s" /output.txt" drop dup ;
+: create-file ( pathname -- fd ) flags mode open ;
+
+: create-files ( -- ) s" output.txt" drop create-file ;
 : make-directories ( -- ) s" /docs" drop dup ;
 
 : _start ( -- noret ) create-files make-directories exit.ok ;

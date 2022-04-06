@@ -36,14 +36,32 @@ __blue_1614081290_0:
 	call __blue_4055961022_0
 	ret
 
+; : syscall ( arg1:edi arg2:esi arg3:edx num:eax -- result:eax )
+__blue_4057121178_1:
+	call __blue_4057121178_0
+	ret
+
+; : open ( pathname flags mode -- fd )
+__blue_3546203337_1:
+	mov eax, 2
+	call __blue_4057121178_1
+	call __blue_4055961022_0
+	ret
+
 ;  TODO base 8 would be interesting here
+; : create-file ( pathname -- fd )
+__blue_3101971046_0:
+	mov edx, 416
+	mov esi, 577
+	call __blue_3546203337_1
+	ret
+
 ; : create-files ( -- )
 __blue_611137295_0:
 	jmp __blue_1223589535_0
 
 __blue_855163316_0:
 
-db 47
 db 111
 db 117
 db 116
@@ -56,6 +74,8 @@ db 120
 db 116
 db 0
 __blue_1223589535_0:
+	mov edi, __blue_855163316_0
+	call __blue_3101971046_0
 	ret
 
 ; : make-directories ( -- )
