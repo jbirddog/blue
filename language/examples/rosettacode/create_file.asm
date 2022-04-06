@@ -60,15 +60,15 @@ __blue_667630371_1:
 	call __blue_1614081290_0
 	ret
 
-; : syscall ( arg1:edi arg2:esi num:eax -- result:eax )
-__blue_4057121178_1:
-	syscall
+; : syscall.mkdir ( arg1:edi arg2:esi -- result:eax )
+__blue_702559823_0:
+	mov eax, 83
+	call __blue_4057121178_0
 	ret
 
 ; : mkdir ( pathname mode -- )
 __blue_2883839448_1:
-	mov eax, 83
-	call __blue_4057121178_1
+	call __blue_702559823_0
 	call __blue_1614081290_0
 	ret
 
