@@ -2,12 +2,8 @@ global _start
 
 : syscall ( num:eax -- result:eax ) syscall ;
 
-\ TODO syscall1 for exit, close, mkdir
-\ syscall3 for open
-
 60 const exit
 
-: syscall ( arg1:edi num:eax -- result:eax ) syscall ;
 : exit ( status:edi -- noret ) exit syscall ;
 : exit.ok ( -- noret ) 0 exit ;
 : exit.syserr ( err:eax -- noret ) neg exit ;
@@ -17,18 +13,15 @@ global _start
 
 2 const open
 
-: syscall.open ( arg1:edi arg2:esi arg3:edx -- result:eax ) open syscall ;
-: open ( pathname flags mode -- fd ) syscall.open unwrap ;
+: open ( pathname:edi flags:esi mode:edx -- fd:eax ) open syscall unwrap ;
 
 3 const close
 
-: syscall.close ( arg1:edi -- result:eax ) close syscall ;
-: close ( fd -- ) syscall.close ordie ;
+: close ( fd:edi -- ) close syscall ordie ;
 
 83 const mkdir
 
-: syscall.mkdir ( arg1:edi arg2:esi -- result:eax ) mkdir syscall ;
-: mkdir ( pathname mode -- ) syscall.mkdir ordie ;
+: mkdir ( pathname:edi mode:esi -- ) mkdir syscall ordie ;
 
 \ TODO base 8 would be interesting here
 
