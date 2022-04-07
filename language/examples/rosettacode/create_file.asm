@@ -11,8 +11,8 @@ __blue_3454868101_0:
 	mov eax, 60
 	call __blue_4057121178_0
 
-; : exit.ok ( -- noret )
-__blue_3274522691_0:
+; : bye ( -- noret )
+__blue_1911791459_0:
 	mov edi, 0
 	call __blue_3454868101_0
 
@@ -57,7 +57,6 @@ __blue_2883839448_0:
 	call __blue_1614081290_0
 	ret
 
-;  TODO base 8 would be interesting here
 ; : create-file ( pathname -- )
 __blue_3101971046_0:
 	mov edx, 416
@@ -115,4 +114,4 @@ __blue_1223589535_1:
 _start:
 	call __blue_611137295_0
 	call __blue_2048448097_0
-	call __blue_3274522691_0
+	call __blue_1911791459_0

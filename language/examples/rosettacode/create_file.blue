@@ -3,7 +3,7 @@ global _start
 : syscall ( num:eax -- result:eax ) syscall ;
 
 : exit ( status:edi -- noret ) 60 syscall ;
-: exit.ok ( -- noret ) 0 exit ;
+: bye ( -- noret ) 0 exit ;
 : exit.syserr ( err:eax -- noret ) neg exit ;
 
 : unwrap ( result:eax -- value:eax ) dup 0 cmp ' exit.syserr xl ;
@@ -14,29 +14,16 @@ global _start
 
 : mkdir ( pathname:edi mode:esi -- ) 83 syscall ordie ;
 
-\ TODO base 8 would be interesting here
-
-1 const forWriting
-64 const create
-512 const truncate
+00001 const forWriting
+00100 const create
+01000 const truncate
 
 create forWriting or truncate or const flags
 
-256 const userCanRead
-128 const userCanWrite
-64 const userCanExecute
-32 const groupCanRead
-8 const groupCanExecute
-
-userCanRead userCanWrite or groupCanRead or const mode
-
-: create-file ( pathname -- ) flags mode open close ;
-
-mode userCanExecute or groupCanExecute or const mode
-
-: make-directory ( pathname -- ) mode mkdir ;
+: create-file ( pathname -- ) flags 0640 open close ;
+: make-directory ( pathname -- ) 0750 mkdir ;
 
 : create-files ( -- ) s" output.txt" drop create-file ;
 : make-directories ( -- ) s" docs" drop make-directory ;
 
-: _start ( -- noret ) create-files make-directories exit.ok ;
+: _start ( -- noret ) create-files make-directories bye ;
