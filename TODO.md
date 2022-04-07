@@ -16,7 +16,8 @@
 1. validate needs to check for lingering refs/stack items
 1. check env.AppendInstr usage to see if compiling check can be moved there
 1. treat words with only decb more like resb
-1. consider manual push/pop/mov/lea as escape hatch?
+1. mov edx, rax bug
+1. peephole doesn't run when compiling a word
 
 ### optimizations
 
@@ -51,12 +52,6 @@
    1. mmap system call
    1. close system call
    1. struct for stat
-1. Rosettacode task `Create a file`
-   1. open system call
-   1. close system call
-   1. mkdir system call
-1. Factor some imports for rosettacode tasks
-1. mov edx, rax bug
 1. README
 
 ### f5
