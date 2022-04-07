@@ -7,20 +7,20 @@ __blue_4057121178_0:
 	ret
 
 ; : exit ( status:edi -- noret )
-__blue_3454868101_1:
+__blue_3454868101_0:
 	mov eax, 60
 	call __blue_4057121178_0
 
 ; : exit.ok ( -- noret )
 __blue_3274522691_0:
 	mov edi, 0
-	call __blue_3454868101_1
+	call __blue_3454868101_0
 
 ; : exit.syserr ( err:eax -- noret )
 __blue_1490145965_0:
 	neg eax
 	mov edi, eax
-	call __blue_3454868101_1
+	call __blue_3454868101_0
 
 ; : unwrap ( result:eax -- value:eax )
 __blue_4055961022_0:
@@ -37,21 +37,21 @@ __blue_1614081290_0:
 	ret
 
 ; : open ( pathname:edi flags:esi mode:edx -- fd:eax )
-__blue_3546203337_1:
+__blue_3546203337_0:
 	mov eax, 2
 	call __blue_4057121178_0
 	call __blue_4055961022_0
 	ret
 
 ; : close ( fd:edi -- )
-__blue_667630371_1:
+__blue_667630371_0:
 	mov eax, 3
 	call __blue_4057121178_0
 	call __blue_1614081290_0
 	ret
 
 ; : mkdir ( pathname:edi mode:esi -- )
-__blue_2883839448_1:
+__blue_2883839448_0:
 	mov eax, 83
 	call __blue_4057121178_0
 	call __blue_1614081290_0
@@ -62,15 +62,15 @@ __blue_2883839448_1:
 __blue_3101971046_0:
 	mov edx, 416
 	mov esi, 577
-	call __blue_3546203337_1
+	call __blue_3546203337_0
 	mov edi, eax
-	call __blue_667630371_1
+	call __blue_667630371_0
 	ret
 
 ; : make-directory ( pathname -- )
 __blue_2358895277_0:
 	mov esi, 488
-	call __blue_2883839448_1
+	call __blue_2883839448_0
 	ret
 
 ; : create-files ( -- )
