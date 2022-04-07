@@ -16,8 +16,8 @@ __blue_1911791459_0:
 	mov edi, 0
 	call __blue_3454868101_0
 
-; : exit.syserr ( err:eax -- noret )
-__blue_1490145965_0:
+; : die ( err:eax -- noret )
+__blue_3630339793_0:
 	neg eax
 	mov edi, eax
 	call __blue_3454868101_0
@@ -26,7 +26,7 @@ __blue_1490145965_0:
 __blue_4055961022_0:
 	cmp eax, 0
 	jge __blue_2157056155_0
-	call __blue_1490145965_0
+	call __blue_3630339793_0
 
 __blue_2157056155_0:
 	ret
@@ -72,8 +72,8 @@ __blue_2358895277_0:
 	call __blue_2883839448_0
 	ret
 
-; : create-files ( -- )
-__blue_611137295_0:
+; : create-output-file ( -- )
+__blue_2468950182_0:
 	jmp __blue_1223589535_0
 
 __blue_855163316_0:
@@ -94,8 +94,8 @@ __blue_1223589535_0:
 	call __blue_3101971046_0
 	ret
 
-; : make-directories ( -- )
-__blue_2048448097_0:
+; : make-docs-directory ( -- )
+__blue_2374470879_0:
 	jmp __blue_1223589535_1
 
 __blue_855163316_1:
@@ -112,6 +112,6 @@ __blue_1223589535_1:
 
 ; : _start ( -- noret )
 _start:
-	call __blue_611137295_0
-	call __blue_2048448097_0
+	call __blue_2468950182_0
+	call __blue_2374470879_0
 	call __blue_1911791459_0
