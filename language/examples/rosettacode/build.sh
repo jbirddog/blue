@@ -28,3 +28,7 @@ ld -o .build/bin/hello_world .build/obj/hello_world.o
 blue program_name.blue
 nasm -f elf64 -o .build/obj/program_name.o program_name.asm
 ld -o .build/bin/program_name .build/obj/program_name.o
+
+blue read_entire_file.blue
+nasm -f elf64 -o .build/obj/read_entire_file.o read_entire_file.asm
+ld -o .build/bin/read_entire_file .build/obj/read_entire_file.o

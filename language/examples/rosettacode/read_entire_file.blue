@@ -1,0 +1,27 @@
+global _start
+
+: syscall ( num:eax -- result:eax ) syscall ;
+
+: exit ( status:edi -- noret ) 60 syscall ;
+: bye ( -- noret ) 0 exit ;
+: die ( err:eax -- noret ) neg exit ;
+
+: unwrap ( result:eax -- value:eax ) dup 0 cmp ' die xl ;
+: ordie ( result -- ) unwrap drop ;
+
+144 const sizeof(stat)
+48 const offsetof(stat.st_size)
+8 const sizeof(stat.st_size)
+
+48 resb stat_buf
+8 resb st_size
+88 resb padding
+
+: open ( pathname:edi flags:esi -- fd:eax ) 2 syscall unwrap ;
+: close ( fd:edi -- ) 3 syscall ordie ;
+
+0 const read-only
+
+: open-this-file ( -- fd:eax ) s" read_entire_file.blue" drop read-only open ;
+
+: _start ( -- noret ) open-this-file close bye ;
