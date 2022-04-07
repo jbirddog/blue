@@ -50,6 +50,7 @@
    1. open system call
    1. stat system call
    1. mmap system call
+   1. munmap system call
    1. close system call
    1. struct for stat
 1. README
