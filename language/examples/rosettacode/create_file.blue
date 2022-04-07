@@ -2,16 +2,17 @@ global _start
 
 : syscall ( num:eax -- result:eax ) syscall ;
 
-: open ( pathname:edi flags:esi mode:edx -- fd:eax ) 2 syscall unwrap ;
-: close ( fd:edi -- ) 3 syscall ordie ;
-: mkdir ( pathname:edi mode:esi -- ) 83 syscall ordie ;
 : exit ( status:edi -- noret ) 60 syscall ;
-
 : exit.ok ( -- noret ) 0 exit ;
 : exit.syserr ( err:eax -- noret ) neg exit ;
 
 : unwrap ( result:eax -- value:eax ) dup 0 cmp ' exit.syserr xl ;
 : ordie ( result -- ) unwrap drop ;
+
+: open ( pathname:edi flags:esi mode:edx -- fd:eax ) 2 syscall unwrap ;
+: close ( fd:edi -- ) 3 syscall ordie ;
+
+: mkdir ( pathname:edi mode:esi -- ) 83 syscall ordie ;
 
 \ TODO base 8 would be interesting here
 

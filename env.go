@@ -246,8 +246,8 @@ func (e *Environment) ParseNextWord() bool {
 	} else if _, found := x8664Lowerers[name]; found {
 		instrs = []Instr{&X8664Instr{Mnemonic: name}}
 		shouldOptimize = true
-	} else if i, err := strconv.Atoi(name); err == nil {
-		instrs = []Instr{&LiteralIntInstr{I: i}}
+	} else if i, err := strconv.ParseInt(name, 10, 0); err == nil {
+		instrs = []Instr{&LiteralIntInstr{I: int(i)}}
 	}
 
 	if len(instrs) == 0 {
