@@ -9,33 +9,33 @@ global _start
 : unwrap ( result:eax -- value:eax ) dup 0 cmp ' die xl ;
 : ordie ( result -- ) unwrap drop ;
 
-144 const sizeof(stat)
-48 const offsetof(stat.st_size)
-8 const sizeof(stat.st_size)
-
-1 resd openfd
-
-48 resb stat_buf
-8 resb st_size
-88 resb padding
-
 : open ( pathname:edi flags:esi -- fd:eax ) 2 syscall unwrap ;
-: fstat ( fd:edi buf:esi -- ) 5 syscall ordie ;
 : close ( fd:edi -- ) 3 syscall ordie ;
 
-: file-size ( stat:esi -- size:esi ) 48 add ;
+48 resb stat_buf
+8 resb file-size
+88 resb padding
+
+: fstat ( fd:edi buf:esi -- ) 5 syscall ordie ;
 
 1 const prot_read
 2 const map_private
 
-: mmap ( addr:edi len:esi prot:edx flags:r10d fd:r8d off:r9d -- buf:eax ) 9 syscall unwrap ;
-
+: mmap ( fd:r8d len:esi addr:edi off:r9d prot:edx flags:r10d -- buf:eax ) 9 syscall unwrap ;
 : munmap ( addr:edi len:esi -- ) 11 syscall ordie ;
 
+1 resd fd
 0 const read-only
 
-: open-this-file ( -- fd:eax ) s" read_entire_file.blue" drop read-only open ;
+: open-file ( pathname:edi -- ) read-only open fd ! ;
+: read-file-size ( -- ) fd @ stat_buf fstat ;
+: mmap-file ( fd:r8d len:esi -- buf:eax ) 0 0 prot_read map_private mmap ;
+: close-file ( -- ) fd @ close ;
 
-: _start ( -- noret ) open-this-file openfd ! openfd @ close bye ;
+: open-this-file ( -- ) s" read_entire_file.blue" drop open-file ;
 
-\ stat_buf fstat stat_buf file-size @ exit ;
+: _start ( -- noret ) 
+	open-this-file
+	read-file-size
+	close-file 
+	file-size @ exit ;

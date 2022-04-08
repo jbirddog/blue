@@ -36,30 +36,11 @@ __blue_1614081290_0:
 	call __blue_4055961022_0
 	ret
 
-section .bss
-
-; 1 resd openfd
-__blue_4210521179_0: resd 1
-; 48 resb stat_buf
-__blue_1200943365_0: resb 48
-; 8 resb st_size
-__blue_1358860734_0: resb 8
-; 88 resb padding
-__blue_2157316278_0: resb 88
-section .text
-
 ; : open ( pathname:edi flags:esi -- fd:eax )
 __blue_3546203337_0:
 	mov eax, 2
 	call __blue_4057121178_0
 	call __blue_4055961022_0
-	ret
-
-; : fstat ( fd:edi buf:esi -- )
-__blue_1508683483_0:
-	mov eax, 5
-	call __blue_4057121178_0
-	call __blue_1614081290_0
 	ret
 
 ; : close ( fd:edi -- )
@@ -69,12 +50,24 @@ __blue_667630371_0:
 	call __blue_1614081290_0
 	ret
 
-; : file-size ( stat:esi -- size:esi )
-__blue_1140937235_0:
-	add esi, 48
+section .bss
+
+; 48 resb stat_buf
+__blue_1200943365_0: resb 48
+; 8 resb file-size
+__blue_1140937235_0: resb 8
+; 88 resb padding
+__blue_2157316278_0: resb 88
+section .text
+
+; : fstat ( fd:edi buf:esi -- )
+__blue_1508683483_0:
+	mov eax, 5
+	call __blue_4057121178_0
+	call __blue_1614081290_0
 	ret
 
-; : mmap ( addr:edi len:esi prot:edx flags:r10d fd:r8d off:r9d -- buf:eax )
+; : mmap ( fd:r8d len:esi addr:edi off:r9d prot:edx flags:r10d -- buf:eax )
 __blue_776417966_0:
 	mov eax, 9
 	call __blue_4057121178_0
@@ -88,7 +81,42 @@ __blue_287864331_0:
 	call __blue_1614081290_0
 	ret
 
-; : open-this-file ( -- fd:eax )
+section .bss
+
+; 1 resd fd
+__blue_1763898183_0: resd 1
+section .text
+
+; : open-file ( pathname:edi -- )
+__blue_3225053210_0:
+	mov esi, 0
+	call __blue_3546203337_0
+	mov [__blue_1763898183_0], eax
+	ret
+
+; : read-file-size ( -- )
+__blue_1039529288_0:
+	mov esi, __blue_1200943365_0
+	mov edi, [__blue_1763898183_0]
+	call __blue_1508683483_0
+	ret
+
+; : mmap-file ( fd:r8d len:esi -- buf:eax )
+__blue_1738544255_0:
+	mov r10d, 2
+	mov edx, 1
+	mov r9d, 0
+	mov edi, 0
+	call __blue_776417966_0
+	ret
+
+; : close-file ( -- )
+__blue_2161677324_0:
+	mov edi, [__blue_1763898183_0]
+	call __blue_667630371_0
+	ret
+
+; : open-this-file ( -- )
 __blue_822887505_0:
 	jmp __blue_1223589535_0
 
@@ -117,17 +145,14 @@ db 117
 db 101
 db 0
 __blue_1223589535_0:
-	mov esi, 0
 	mov edi, __blue_855163316_0
-	call __blue_3546203337_0
+	call __blue_3225053210_0
 	ret
 
 ; : _start ( -- noret )
 _start:
 	call __blue_822887505_0
-	mov [__blue_4210521179_0], eax
-	mov edi, [__blue_4210521179_0]
-	call __blue_667630371_0
-	call __blue_1911791459_0
-
-;  stat_buf fstat stat_buf file-size [] exit ;
+	call __blue_1039529288_0
+	call __blue_2161677324_0
+	mov edi, [__blue_1140937235_0]
+	call __blue_3454868101_0
