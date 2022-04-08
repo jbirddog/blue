@@ -53,6 +53,12 @@ __blue_3546203337_0:
 	call __blue_4055961022_0
 	ret
 
+; : fstat ( fd:edi buf:esi -- result:eax )
+__blue_1508683483_0:
+	mov eax, 5
+	call __blue_4057121178_0
+	ret
+
 ; : close ( fd:edi -- )
 __blue_667630371_0:
 	mov eax, 3
@@ -97,6 +103,7 @@ __blue_1223589535_0:
 ; : _start ( -- noret )
 _start:
 	call __blue_822887505_0
+	mov esi, __blue_1200943365_0
 	mov edi, eax
-	call __blue_667630371_0
+	call __blue_1508683483_0
 	call __blue_1911791459_0

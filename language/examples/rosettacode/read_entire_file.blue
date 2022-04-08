@@ -18,10 +18,18 @@ global _start
 88 resb padding
 
 : open ( pathname:edi flags:esi -- fd:eax ) 2 syscall unwrap ;
+: fstat ( fd:edi buf:esi -- ) 5 syscall ordie ;
 : close ( fd:edi -- ) 3 syscall ordie ;
+
+1 const prot_read
+2 const map_private
+
+: mmap ( addr:edi len:esi prot:edx flags:r10 fd:r8 off:r9 -- buf:eax ) 9 syscall unwrap ;
+
+: munmap ( addr:edi len:esi -- ) 11 syscall or die ;
 
 0 const read-only
 
 : open-this-file ( -- fd:eax ) s" read_entire_file.blue" drop read-only open ;
 
-: _start ( -- noret ) open-this-file close bye ;
+: _start ( -- noret ) open-this-file stat_buf fstat bye ;
