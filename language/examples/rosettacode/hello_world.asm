@@ -7,25 +7,25 @@ __blue_4057121178_0:
 	ret
 
 ; : exit ( status:edi -- noret )
-__blue_3454868101_1:
+__blue_3454868101_0:
 	mov eax, 60
 	call __blue_4057121178_0
 
-; : exit.ok ( -- noret )
-__blue_3274522691_0:
+; : bye ( -- noret )
+__blue_1911791459_0:
 	mov edi, 0
-	call __blue_3454868101_1
+	call __blue_3454868101_0
 
-; : syscall ( arg2:esi arg3:edx arg1:edi num:eax -- result:eax )
-__blue_4057121178_1:
+; : write ( buf:esi len:edx fd:edi -- )
+__blue_3190202204_0:
+	mov eax, 1
 	call __blue_4057121178_0
 	ret
 
 ; : write ( buf len -- )
 __blue_3190202204_1:
-	mov eax, 1
 	mov edi, 1
-	call __blue_4057121178_1
+	call __blue_3190202204_0
 	ret
 
 ; : greet ( -- )
@@ -57,4 +57,4 @@ __blue_1223589535_0:
 ; : _start ( -- noret )
 _start:
 	call __blue_4213039946_0
-	call __blue_3274522691_0
+	call __blue_1911791459_0
