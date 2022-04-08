@@ -101,13 +101,26 @@ __blue_1039529288_0:
 	call __blue_1508683483_0
 	ret
 
-; : mmap-file ( fd:r8d len:esi -- buf:eax )
-__blue_1738544255_0:
+; : map-file ( fd len -- buf )
+__blue_2864669986_0:
 	mov r10d, 2
 	mov edx, 1
 	mov r9d, 0
 	mov edi, 0
 	call __blue_776417966_0
+	ret
+
+; : map-file ( -- buf )
+__blue_2864669986_1:
+	mov esi, [__blue_1140937235_0]
+	mov r8d, [__blue_1763898183_0]
+	call __blue_2864669986_0
+	ret
+
+; : unmap-file ( buf -- )
+__blue_255719461_0:
+	mov esi, [__blue_1140937235_0]
+	call __blue_287864331_0
 	ret
 
 ; : close-file ( -- )
@@ -149,10 +162,13 @@ __blue_1223589535_0:
 	call __blue_3225053210_0
 	ret
 
+;  do something ...
 ; : _start ( -- noret )
 _start:
 	call __blue_822887505_0
 	call __blue_1039529288_0
+	call __blue_2864669986_1
+	mov edi, eax
+	call __blue_255719461_0
 	call __blue_2161677324_0
-	mov edi, [__blue_1140937235_0]
-	call __blue_3454868101_0
+	call __blue_1911791459_0

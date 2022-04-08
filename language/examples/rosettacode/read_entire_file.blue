@@ -29,7 +29,9 @@ global _start
 
 : open-file ( pathname:edi -- ) read-only open fd ! ;
 : read-file-size ( -- ) fd @ stat_buf fstat ;
-: mmap-file ( fd:r8d len:esi -- buf:eax ) 0 0 prot_read map_private mmap ;
+: map-file ( fd len -- buf ) 0 0 prot_read map_private mmap ;
+: map-file ( -- buf ) fd @ file-size @ map-file ;
+: unmap-file ( buf -- ) file-size @ munmap ;
 : close-file ( -- ) fd @ close ;
 
 : open-this-file ( -- ) s" read_entire_file.blue" drop open-file ;
@@ -37,5 +39,9 @@ global _start
 : _start ( -- noret ) 
 	open-this-file
 	read-file-size
+	map-file
+	\ do something ...
+	unmap-file
 	close-file 
-	file-size @ exit ;
+	bye 
+;
