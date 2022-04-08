@@ -22,6 +22,12 @@ __blue_3190202204_0:
 	call __blue_4057121178_0
 	ret
 
+; : write ( buf len -- )
+__blue_3190202204_1:
+	mov edi, 1
+	call __blue_3190202204_0
+	ret
+
 ; : clear-screen ( -- )
 __blue_1703174329_0:
 	jmp __blue_1223589535_0
@@ -37,10 +43,9 @@ db 91
 db 72
 db 0
 __blue_1223589535_0:
-	mov edi, 1
 	mov edx, 7
 	mov esi, __blue_855163316_0
-	call __blue_3190202204_0
+	call __blue_3190202204_1
 	ret
 
 ; : _start ( -- noret )
