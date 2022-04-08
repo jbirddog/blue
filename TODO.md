@@ -33,7 +33,7 @@
 
 ## language
 
-1. structs - some basic support will be in f6
+1. structs - some basic support is in f6
 
 # Targets
 
@@ -46,13 +46,6 @@
 
 ### f6 (current)
 
-1. Rosettacode task `Read entire file`
-   1. open system call
-   1. stat system call
-   1. mmap system call
-   1. munmap system call
-   1. close system call
-   1. struct for stat
 1. README
 
 ### f5
