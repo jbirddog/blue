@@ -141,6 +141,10 @@ func KernelResb(env *Environment) {
 	res(env, "b")
 }
 
+func KernelResd(env *Environment) {
+	res(env, "d")
+}
+
 func KernelResq(env *Environment) {
 	res(env, "q")
 }

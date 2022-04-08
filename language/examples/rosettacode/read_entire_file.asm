@@ -38,6 +38,8 @@ __blue_1614081290_0:
 
 section .bss
 
+; 1 resd openfd
+__blue_4210521179_0: resd 1
 ; 48 resb stat_buf
 __blue_1200943365_0: resb 48
 ; 8 resb st_size
@@ -67,7 +69,12 @@ __blue_667630371_0:
 	call __blue_1614081290_0
 	ret
 
-; : mmap ( addr:edi len:esi prot:edx flags:r10 fd:r8 off:r9 -- buf:eax )
+; : file-size ( stat:esi -- size:esi )
+__blue_1140937235_0:
+	add esi, 48
+	ret
+
+; : mmap ( addr:edi len:esi prot:edx flags:r10d fd:r8d off:r9d -- buf:eax )
 __blue_776417966_0:
 	mov eax, 9
 	call __blue_4057121178_0
@@ -78,9 +85,7 @@ __blue_776417966_0:
 __blue_287864331_0:
 	mov eax, 11
 	call __blue_4057121178_0
-	or esi, eax
-	mov eax, esi
-	call __blue_3630339793_0
+	call __blue_1614081290_0
 	ret
 
 ; : open-this-file ( -- fd:eax )
@@ -120,7 +125,9 @@ __blue_1223589535_0:
 ; : _start ( -- noret )
 _start:
 	call __blue_822887505_0
-	mov esi, __blue_1200943365_0
-	mov edi, eax
-	call __blue_1508683483_0
+	mov [__blue_4210521179_0], eax
+	mov edi, [__blue_4210521179_0]
+	call __blue_667630371_0
 	call __blue_1911791459_0
+
+;  stat_buf fstat stat_buf file-size [] exit ;

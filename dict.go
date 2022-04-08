@@ -22,6 +22,7 @@ func DefaultDictionary() *Dictionary {
 		NewCallGoWord("inline", KernelInline),
 		NewCallGoWord("\\", KernelCommentToEol).Immediate(),
 		NewCallGoWord("resb", KernelResb),
+		NewCallGoWord("resd", KernelResd),
 		NewCallGoWord("resq", KernelResq),
 		NewCallGoWord("decb", KernelDecb).Immediate(),
 		NewCallGoWord("decb(", KernelDecbLParen).Immediate(),
@@ -36,6 +37,7 @@ func DefaultDictionary() *Dictionary {
 		NewCallGoWord("hide", KernelHide),
 		NewCallGoWord("[", KernelLBracket).Immediate(),
 		NewInlineWord("[]", &BracketInstr{Value: "%s", Replacements: 1}),
+		NewInlineWord("@", &BracketInstr{Value: "%s", Replacements: 1}),
 		NewInlineWord("!", &SetInstr{}),
 		NewCallGoWord(`s"`, KernelSQuote).Immediate(),
 	})

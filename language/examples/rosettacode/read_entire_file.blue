@@ -13,6 +13,8 @@ global _start
 48 const offsetof(stat.st_size)
 8 const sizeof(stat.st_size)
 
+1 resd openfd
+
 48 resb stat_buf
 8 resb st_size
 88 resb padding
@@ -21,15 +23,19 @@ global _start
 : fstat ( fd:edi buf:esi -- ) 5 syscall ordie ;
 : close ( fd:edi -- ) 3 syscall ordie ;
 
+: file-size ( stat:esi -- size:esi ) 48 add ;
+
 1 const prot_read
 2 const map_private
 
-: mmap ( addr:edi len:esi prot:edx flags:r10 fd:r8 off:r9 -- buf:eax ) 9 syscall unwrap ;
+: mmap ( addr:edi len:esi prot:edx flags:r10d fd:r8d off:r9d -- buf:eax ) 9 syscall unwrap ;
 
-: munmap ( addr:edi len:esi -- ) 11 syscall or die ;
+: munmap ( addr:edi len:esi -- ) 11 syscall ordie ;
 
 0 const read-only
 
 : open-this-file ( -- fd:eax ) s" read_entire_file.blue" drop read-only open ;
 
-: _start ( -- noret ) open-this-file stat_buf fstat bye ;
+: _start ( -- noret ) open-this-file openfd ! openfd @ close bye ;
+
+\ stat_buf fstat stat_buf file-size @ exit ;
