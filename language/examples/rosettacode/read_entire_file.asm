@@ -53,10 +53,11 @@ __blue_3546203337_0:
 	call __blue_4055961022_0
 	ret
 
-; : fstat ( fd:edi buf:esi -- result:eax )
+; : fstat ( fd:edi buf:esi -- )
 __blue_1508683483_0:
 	mov eax, 5
 	call __blue_4057121178_0
+	call __blue_1614081290_0
 	ret
 
 ; : close ( fd:edi -- )
@@ -64,6 +65,22 @@ __blue_667630371_0:
 	mov eax, 3
 	call __blue_4057121178_0
 	call __blue_1614081290_0
+	ret
+
+; : mmap ( addr:edi len:esi prot:edx flags:r10 fd:r8 off:r9 -- buf:eax )
+__blue_776417966_0:
+	mov eax, 9
+	call __blue_4057121178_0
+	call __blue_4055961022_0
+	ret
+
+; : munmap ( addr:edi len:esi -- )
+__blue_287864331_0:
+	mov eax, 11
+	call __blue_4057121178_0
+	or esi, eax
+	mov eax, esi
+	call __blue_3630339793_0
 	ret
 
 ; : open-this-file ( -- fd:eax )
