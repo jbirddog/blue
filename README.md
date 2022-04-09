@@ -225,6 +225,16 @@ global _start
 : _start ( -- noret ) greet bye ;
 ```
 
+We can move `syscall`, `exit` and `bye` to a common location. `write`, `stdout` and `print` look like candidates for moving but are currently only used in one location. Moving or leaving them will be a judgement call based on personal preference. For this tutorial we will just move the shared words.
+
+Create a new file called `vocab.blue` and copy over the common words:
+
+```
+: syscall ( num:eax -- result:eax ) syscall ;
+: exit ( status:edi -- noret ) 60 syscall ;
+: bye ( -- noret ) 0 exit ;
+```
+
 ## Compiler
 
 To build run `./build` in the repo root. The build script will compile, test and install the Blue compiler then build all language examples.
