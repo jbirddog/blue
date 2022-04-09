@@ -113,6 +113,8 @@ That's it. The assembly is currently unoptimized but the basic idea is it is ver
 
 ## Compiler
 
+To build run `./build` in the repo root.
+
 The Blue compiler requires `go`, `nasm` and `ld`. Versions used for development are:
 
 ```
