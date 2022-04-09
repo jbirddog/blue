@@ -154,7 +154,15 @@ Hello world!
 Working but once again not quite ideal from a readability standpoint. There are a couple hardcoded `1`s that mean different things. Let's factor some:
 
 ```
+1 const stdout
+
+: print ( buf len -- ) stdout write ;
+: greet ( -- ) s" Hello world!\n" print ;
+
+: _start ( -- noret ) greet bye ;
 ```
+
+Here we define a constant for the stdout file descriptor and create a new word `print` that is a partial application of `write` - it is a call to write where the file descriptor is always `stdout`. We then defined `greet` that builds the string and prints it. `_start` simply calls the high level words. You might notice that `print` does not need to specify registers. This is because they can be inferred since write already fully specified its registers. This is what I alluded to earlier - once you start building up a vocabulary your program starts to look more like a traditional Forth.
 
 While Blue has no standard library that does not mean that you cannot build your own reusable vocabulary that is used in your programs. In fact you are encouraged to. Instead of creating abstractions for abstraction sake, work out the scope of your problem and factor out words. When a pattern emerges move them into a shared location in your project.
 
