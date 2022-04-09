@@ -188,25 +188,9 @@ global _start
 
 Here we define a constant for the stdout file descriptor and create a new word `print` that is a partial application of `write` - it is a call to write where the file descriptor is always `stdout`. We then defined `greet` that builds the string and prints it. `_start` simply calls the high level words. You might notice that `print` does not need to specify registers for its parameters. This is because they can be inferred since write already fully specified its registers. This is what was alluded to earlier - once you start building up a vocabulary your program starts to look more like a traditional Forth.
 
-#### Tutorial 3: Sharing code between `tutorial1` and `tutorial2`
+#### Tutorial 3: `clear` executable for Linux and reuse some code
 
-While Blue has no standard library that does not mean that you cannot build your own reusable vocabulary that is used in your programs. In fact you are encouraged to. Instead of creating abstractions for abstraction sake, work out the scope of your problem and factor out words. Simplify both the design and implementation and factor again. When a pattern emerges move common words into a shared location in your project.
-
-If you got this far you probably noticed the code for `tutorial1` and `tutorial2` had some words in common. To recap:
-
-`tutorial1.blue`:
-
-```
-global _start
-
-: syscall ( num:eax -- result:eax ) syscall ;
-: exit ( status:edi -- noret ) 60 syscall ;
-: bye ( -- noret ) 0 exit ;
-
-: _start ( -- noret ) bye ;
-```
-
-`tutorial2.blue`:
+To write a `clear` clone we will need `exit` and `write` system calls so we can write a terminal escape sequence to clear the screen and return the cursor to the home position. Our `print` and `bye` higher level words will also be useful. To begin:
 
 ```
 global _start
@@ -220,19 +204,38 @@ global _start
 1 const stdout
 
 : print ( buf len -- ) stdout write ;
-: greet ( -- ) s" Hello world!\n" print ;
+: clear-screen ( -- ) s" \033[2J\033[H" print ;
 
-: _start ( -- noret ) greet bye ;
+: _start ( -- noret ) clear-screen bye ;
 ```
 
-We can move `syscall`, `exit` and `bye` to a common location. `write`, `stdout` and `print` look like candidates for moving but are currently only used in one location. Moving or leaving them will be a judgement call based on personal preference. For this tutorial we will just move the shared words.
+Compile and Run:
 
-Create a new file called `vocab.blue` and copy over the common words:
+```
+$ blue tutorial3.blue
+$ nasm -f elf64 -o tutorial3.o tutorial3.asm
+$ ld -o tutorial3 tutorial3.o
+$ ./tutorial3
+```
+
+The console should be cleared. 
+
+While Blue has no standard library that does not mean that you cannot build your own reusable vocabulary that is used in your programs. In fact you are encouraged to. Instead of creating abstractions for abstraction sake, work out the scope of your problem and factor out words. Simplify both the design and implementation and factor again. When a pattern emerges move common words into a shared location in your project.
+
+If you have been following along the three tutorials so far we ended up having some shared words which have proven to have utility for us. We can move `syscall`, `exit`, `bye`, `write`, `stdout` and `print` to a common location and include them in our program.
+
+Create a new file called `vocab.blue` and copy over the words we want to reuse:
 
 ```
 : syscall ( num:eax -- result:eax ) syscall ;
 : exit ( status:edi -- noret ) 60 syscall ;
 : bye ( -- noret ) 0 exit ;
+
+: write ( buf:esi len:edx fd:edi -- ) 1 syscall drop ;
+
+1 const stdout
+
+: print ( buf len -- ) stdout write ;
 ```
 
 ## Compiler
