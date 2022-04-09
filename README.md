@@ -23,8 +23,39 @@ global _start
 
 : _start ( -- ) ;
 ```
+We will get into the syntax more throughout the tutorial but if you are familar with Forth this works as expected. `:` begins compilation of a new word (think function of not familar), in this case named `_start`. `(` begins a stack comment which describes the expected inputs. `--` begins the description of the outputs. `;` ends compilation and makes the word visible in the dictionary.
 
+By itself this is not a useful program - in fact it won't even execute properly. On Linux an executable needs to call the `exit` system call to properly exit the process. Do do this first we create a word that describes how to tell the Linux kernel which system call we want to execute. This is done by placing a known number in `eax`:
 
+```
+: syscall ( num:eax -- result:eax ) syscall ;
+```
+
+Next we can call our new version of `x86-64`'s `syscall` mnemonic to tell the Linux kernel we are ready to exit (via system call #60):
+
+```
+global _start
+
+: syscall ( num:eax -- result:eax ) syscall ;
+
+: _start ( -- noret ) 60 syscall ;
+```
+
+Then compile:
+
+```
+blue tutorial1.blue
+nasm -f elf64 -o tutorial1.o tutorial1.asm
+ld -o tutorial1 tutorial1.o
+```
+
+Run and check the exit code:
+
+```
+$ ./tutorial1 
+$ echo $?
+0
+```
 
 ## Compiler
 
