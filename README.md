@@ -25,7 +25,7 @@ global _start
 ```
 We will get into the syntax more throughout the tutorial but if you are familar with Forth this works as expected. `:` begins compilation of a new word (think function of not familar), in this case named `_start`. `(` begins a stack comment which describes the expected inputs. `--` begins the description of the outputs. `;` ends compilation and makes the word visible in the dictionary.
 
-By itself this is not a useful program - in fact it won't even execute properly. On Linux an executable needs to call the `exit` system call to properly exit the process. To do this first we create a word that describes how to tell the Linux kernel which system call we want to execute. This is done by placing a known number in `eax`:
+By itself this is not a useful program - in fact it won't even execute properly. On Linux an executable needs to call the `exit` system call to properly exit the process. To do this first we create a word that describes how to tell the Linux kernel which system call we want to execute. This is done by placing a known number in `eax` and issuing a `x86-64` `syscall` instruction. We will redifine `syscall` to have this behavior:
 
 ```
 : syscall ( num:eax -- result:eax ) syscall ;
@@ -33,7 +33,7 @@ By itself this is not a useful program - in fact it won't even execute properly.
 
 _Here we see our first real departure from a traditional Forth. The stack comments are required and specify the register that is expected to hold the data. More on this as the tutorial progresses._
 
-Next we can call our new version of `x86-64`'s `syscall` mnemonic to tell the Linux kernel we are ready to exit (via system call #60):
+Next we can call our new version of `syscall` to tell the Linux kernel we are ready to exit (via system call #60):
 
 ```
 global _start
