@@ -238,6 +238,30 @@ Create a new file called `vocab.blue` and copy over the words we want to reuse:
 : print ( buf len -- ) stdout write ;
 ```
 
+Our `clear` clone can now include `vocab` instead of redefining the words:
+
+```
+import vocab
+
+global _start
+
+: clear-screen ( -- ) s" \033[2J\033[H" print ;
+
+: _start ( -- noret ) clear-screen bye ;
+```
+
+Similarly, our example from `tutorial2` could now become:
+
+```
+import vocab
+
+global _start
+
+: greet ( -- ) s" Hello world!\n" print ;
+
+: _start ( -- noret ) greet bye ;
+```
+
 ## Compiler
 
 To build run `./build` in the repo root. The build script will compile, test and install the Blue compiler then build all language examples.
