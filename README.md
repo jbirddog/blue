@@ -46,9 +46,9 @@ global _start
 Compile:
 
 ```
-blue tutorial1.blue
-nasm -f elf64 -o tutorial1.o tutorial1.asm
-ld -o tutorial1 tutorial1.o
+$ blue tutorial1.blue
+$ nasm -f elf64 -o tutorial1.o tutorial1.asm
+$ ld -o tutorial1 tutorial1.o
 ```
 
 Run and check the exit code:
@@ -125,20 +125,6 @@ global _start
 : _start ( -- noret ) bye ;
 ```
 
-Compile:
-
-```
-blue tutorial2.blue
-nasm -f elf64 -o tutorial2.o tutorial2.asm
-ld -o tutorial2 tutorial2.o
-```
-
-Run:
-
-```
-$ ./tutorial2
-```
-
 Now we need to define a word to perform the `write` system call. The Linux kernel expects a file descriptor to write to along with a buffer of data and the number of bytes to write. Upon completion the result will be a negative values describing an error or the number of bytes written. For this program will we discard the result value and manually test the presence of characters in the terminal. For other programs this may not suffice.
 
 ```
@@ -146,6 +132,29 @@ Now we need to define a word to perform the `write` system call. The Linux kerne
 ```
 
 `1` is the system call number for `write`, `esi`, `edx` and `edi` are the registers that the Linux kernel expects to hold the relevant data. `drop` removes the value in `eax` from the compile time data flow. It does not actually alter the value of the register at run time.
+
+Next we need something to write:
+
+```
+: _start ( -- noret ) s" Hello world!\n" 1 write bye ;
+```
+
+`s"` reads until the next `"` and adds a byte array and length to the compile time data flow "stack". `1` is the global file descriptor for `stdout`. These three parameters are then flowed into `esi`, `edx` and `edi` as needed by our `write` word. We then call `write` and exit with `bye`.
+
+Compile and Run:
+
+```
+$ blue tutorial2.blue
+$ nasm -f elf64 -o tutorial2.o tutorial2.asm
+$ ld -o tutorial2 tutorial2.o
+$ ./tutorial2
+Hello world!
+```
+
+Working but once again not quite ideal from a readability standpoint. There are a couple hardcoded `1`s that mean different things. Let's factor some:
+
+```
+```
 
 While Blue has no standard library that does not mean that you cannot build your own reusable vocabulary that is used in your programs. In fact you are encouraged to. Instead of creating abstractions for abstraction sake, work out the scope of your problem and factor out words. When a pattern emerges move them into a shared location in your project.
 
