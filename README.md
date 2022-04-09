@@ -23,7 +23,7 @@ global _start
 
 : _start ( -- ) ;
 ```
-We will get into the syntax more throughout the tutorial but if you are familar with Forth this works as expected. `:` begins compilation of a new word (think function of not familar), in this case named `_start`. `(` begins a stack comment which describes the expected inputs. `--` begins the description of the outputs. `;` ends compilation and makes the word visible in the dictionary.
+We will get into the syntax more throughout the tutorial but if you are familar with Forth this works as expected. `:` begins compilation of a new word (think function if not familar), in this case named `_start`. `(` begins a stack comment which describes the expected inputs. `--` begins the description of the outputs. `;` ends compilation and makes the word visible in the dictionary.
 
 By itself this is not a useful program - in fact it won't even execute properly. On Linux an executable needs to call the `exit` system call to properly exit the process. To do this first we create a word that describes how to tell the Linux kernel which system call we want to execute. This is done by placing a known number in `eax` and issuing a `x86-64` `syscall` instruction. We will redefine `syscall` to have this behavior:
 
