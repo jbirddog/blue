@@ -10,9 +10,25 @@ Blue is a compiled low level Forth-like language that is designed for building m
 
 The Blue Language is very Forth-like in appearance, but instead of a traditional data/return stack, stack comments and manipulation words are used to describe the flow of data into registers. Stack manipulation words run at compile time and are not included in the resulting binary. When using the Blue Language you are in direct control of memory layout/allocation and register usage. As you develop a vocabulary to describe the program at hand, Blue quickly starts to look like a traditional Forth.
 
+### Code examples via a quick tutorial
+
+_Note: code can be found in `languages/tutorial`._
+
+#### Tutorial 1: `bye` executable for Linux
+
+For an introduction to Blue we will start by creating an executable to run on Linux which will simply exit. Since this program does not link against a standard library there is no main. A global `_start` word needs to be defined which will be the entry point to your program:
+
+```
+global _start
+
+: _start ( -- ) ;
+```
+
+
+
 ## Compiler
 
-The Blue compiler requires `go`, `nasm` and `ld`. Version used for development are:
+The Blue compiler requires `go`, `nasm` and `ld`. Versions used for development are:
 
 ```
 $ go version
