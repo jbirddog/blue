@@ -188,7 +188,42 @@ global _start
 
 Here we define a constant for the stdout file descriptor and create a new word `print` that is a partial application of `write` - it is a call to write where the file descriptor is always `stdout`. We then defined `greet` that builds the string and prints it. `_start` simply calls the high level words. You might notice that `print` does not need to specify registers for its parameters. This is because they can be inferred since write already fully specified its registers. This is what was alluded to earlier - once you start building up a vocabulary your program starts to look more like a traditional Forth.
 
+#### Tutorial 3: Sharing code between `tutorial1` and `tutorial2`
+
 While Blue has no standard library that does not mean that you cannot build your own reusable vocabulary that is used in your programs. In fact you are encouraged to. Instead of creating abstractions for abstraction sake, work out the scope of your problem and factor out words. Simplify both the design and implementation and factor again. When a pattern emerges move common words into a shared location in your project.
+
+If you got this far you probably noticed the code for `tutorial1` and `tutorial2` had some words in common. To recap:
+
+`tutorial1.blue`:
+
+```
+global _start
+
+: syscall ( num:eax -- result:eax ) syscall ;
+: exit ( status:edi -- noret ) 60 syscall ;
+: bye ( -- noret ) 0 exit ;
+
+: _start ( -- noret ) bye ;
+```
+
+`tutorial2.blue`:
+
+```
+global _start
+
+: syscall ( num:eax -- result:eax ) syscall ;
+: exit ( status:edi -- noret ) 60 syscall ;
+: bye ( -- noret ) 0 exit ;
+
+: write ( buf:esi len:edx fd:edi -- ) 1 syscall drop ;
+
+1 const stdout
+
+: print ( buf len -- ) stdout write ;
+: greet ( -- ) s" Hello world!\n" print ;
+
+: _start ( -- noret ) greet bye ;
+```
 
 ## Compiler
 
