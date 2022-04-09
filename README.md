@@ -77,7 +77,7 @@ global _start
 
 : syscall ( num:eax -- result:eax ) syscall ;
 : exit ( status:edi -- noret ) 60 syscall ;
-: bye ( -- noret ) 0 exit  ;
+: bye ( -- noret ) 0 exit ;
 
 : _start ( -- noret ) bye ;
 ```
@@ -110,6 +110,10 @@ _start:
 ```
 
 That's it. The assembly is currently unoptimized but the basic idea is it is very close to a 1:1 mapping of the words and data flow described in the Blue program. Non `global` label names are mangled to support redefining words and words whose names are not valid nasm labels. 
+
+#### Tutorial 2: `Hello World!` executable for Linux
+
+Now it is time for one of the greatest programming achievements - printing `Hello World!` to the screen.
 
 ## Compiler
 
