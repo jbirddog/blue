@@ -125,10 +125,18 @@ global _start
 : _start ( -- noret ) bye ;
 ```
 
-Now we need to define a word to perform the `write` system call. The Linux kernel expects a file descriptor to write to along with a buffer of data and the number of bytes to write. Upon completion the result will be a negative values describing an error or the number of bytes written. For this program will we discard the result value and manually test the presence of characters in the terminal. For other programs this may not suffice.
+Now we need to define a word to perform the `write` system call. The Linux kernel expects a file descriptor to write to along with a buffer of data and the number of bytes to write. The result from the kernel will be a negative value describing an error or the number of bytes written. For this program we will discard the result value and visually test the presence of characters in the terminal. For other programs this may not suffice.
 
 ```
+global _start
+
+: syscall ( num:eax -- result:eax ) syscall ;
+: exit ( status:edi -- noret ) 60 syscall ;
+: bye ( -- noret ) 0 exit ;
+
 : write ( buf:esi len:edx fd:edi -- ) 1 syscall drop ;
+
+: _start ( -- noret ) bye ;
 ```
 
 `1` is the system call number for `write`, `esi`, `edx` and `edi` are the registers that the Linux kernel expects to hold the relevant data. `drop` removes the value in `eax` from the compile time data flow. It does not actually alter the value of the register at run time.
@@ -136,6 +144,14 @@ Now we need to define a word to perform the `write` system call. The Linux kerne
 Next we need something to write:
 
 ```
+global _start
+
+: syscall ( num:eax -- result:eax ) syscall ;
+: exit ( status:edi -- noret ) 60 syscall ;
+: bye ( -- noret ) 0 exit ;
+
+: write ( buf:esi len:edx fd:edi -- ) 1 syscall drop ;
+
 : _start ( -- noret ) s" Hello world!\n" 1 write bye ;
 ```
 
@@ -154,6 +170,14 @@ Hello world!
 Working but once again not quite ideal from a readability standpoint. There are a couple hardcoded `1`s that mean different things. Let's factor some:
 
 ```
+global _start
+
+: syscall ( num:eax -- result:eax ) syscall ;
+: exit ( status:edi -- noret ) 60 syscall ;
+: bye ( -- noret ) 0 exit ;
+
+: write ( buf:esi len:edx fd:edi -- ) 1 syscall drop ;
+
 1 const stdout
 
 : print ( buf len -- ) stdout write ;
@@ -162,9 +186,9 @@ Working but once again not quite ideal from a readability standpoint. There are 
 : _start ( -- noret ) greet bye ;
 ```
 
-Here we define a constant for the stdout file descriptor and create a new word `print` that is a partial application of `write` - it is a call to write where the file descriptor is always `stdout`. We then defined `greet` that builds the string and prints it. `_start` simply calls the high level words. You might notice that `print` does not need to specify registers. This is because they can be inferred since write already fully specified its registers. This is what I alluded to earlier - once you start building up a vocabulary your program starts to look more like a traditional Forth.
+Here we define a constant for the stdout file descriptor and create a new word `print` that is a partial application of `write` - it is a call to write where the file descriptor is always `stdout`. We then defined `greet` that builds the string and prints it. `_start` simply calls the high level words. You might notice that `print` does not need to specify registers for its parameters. This is because they can be inferred since write already fully specified its registers. This is what was alluded to earlier - once you start building up a vocabulary your program starts to look more like a traditional Forth.
 
-While Blue has no standard library that does not mean that you cannot build your own reusable vocabulary that is used in your programs. In fact you are encouraged to. Instead of creating abstractions for abstraction sake, work out the scope of your problem and factor out words. When a pattern emerges move them into a shared location in your project.
+While Blue has no standard library that does not mean that you cannot build your own reusable vocabulary that is used in your programs. In fact you are encouraged to. Instead of creating abstractions for abstraction sake, work out the scope of your problem and factor out words. Simplify both the design and implementation and factor again. When a pattern emerges move common words into a shared location in your project.
 
 ## Compiler
 
