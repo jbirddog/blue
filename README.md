@@ -25,7 +25,7 @@ global _start
 ```
 We will get into the syntax more throughout the tutorial but if you are familar with Forth this works as expected. `:` begins compilation of a new word (think function if not familar), in this case named `_start`. `(` begins a stack comment which describes the expected inputs. `--` begins the description of the outputs. `;` ends compilation and makes the word visible in the dictionary.
 
-By itself this is not a useful program - in fact it won't even execute properly. On Linux an executable needs to call the `exit` system call to properly exit the process. To do this first we create a word that describes how to tell the Linux kernel which system call we want to execute. This is done by placing a known number in `eax` and issuing a `x86-64` `syscall` instruction. We will redefine `syscall` to have this behavior:
+By itself this is not a useful program - in fact it won't even execute properly. On Linux an executable needs to call the `exit` system call to properly exit the process. To do this first we create a word that describes how to tell the Linux kernel which system call we want to execute. This is done by placing a known number in `eax` and issuing a `x86-64` `syscall` instruction. When complete the kernel will set the result in `eax`. We will redefine `syscall` to have this behavior:
 
 ```
 : syscall ( num:eax -- result:eax ) syscall ;
@@ -46,9 +46,9 @@ global _start
 Compile:
 
 ```
-blue tutorial1.blue
-nasm -f elf64 -o tutorial1.o tutorial1.asm
-ld -o tutorial1 tutorial1.o
+$ blue tutorial1.blue
+$ nasm -f elf64 -o tutorial1.o tutorial1.asm
+$ ld -o tutorial1 tutorial1.o
 ```
 
 Run and check the exit code:
@@ -113,11 +113,86 @@ That's it. The assembly is currently unoptimized but the basic idea is it is ver
 
 #### Tutorial 2: `Hello World!` executable for Linux
 
-Now it is time for one of the greatest programming achievements - printing `Hello World!` to the screen.
+Now it is time to unlock one of the greatest programming achievements - printing `Hello World!` to the screen. As you recall from tutorial 1 Blue is not linked against a standard library and has no traditional `main` function. For this program we will need to define some system calls to interact with the Linux kernel, namely `exit` and `write`. Let's start with a quick program that simply exits to get started:
+
+```
+global _start
+
+: syscall ( num:eax -- result:eax ) syscall ;
+: exit ( status:edi -- noret ) 60 syscall ;
+: bye ( -- noret ) 0 exit ;
+
+: _start ( -- noret ) bye ;
+```
+
+Now we need to define a word to perform the `write` system call. The Linux kernel expects a file descriptor to write to along with a buffer of data and the number of bytes to write. The result from the kernel will be a negative value describing an error or the number of bytes written. For this program we will discard the result value and visually test the presence of characters in the terminal. For other programs this may not suffice.
+
+```
+global _start
+
+: syscall ( num:eax -- result:eax ) syscall ;
+: exit ( status:edi -- noret ) 60 syscall ;
+: bye ( -- noret ) 0 exit ;
+
+: write ( buf:esi len:edx fd:edi -- ) 1 syscall drop ;
+
+: _start ( -- noret ) bye ;
+```
+
+`1` is the system call number for `write`, `esi`, `edx` and `edi` are the registers that the Linux kernel expects to hold the relevant data. `drop` removes the value in `eax` from the compile time data flow. It does not actually alter the value of the register at run time.
+
+Next we need something to write:
+
+```
+global _start
+
+: syscall ( num:eax -- result:eax ) syscall ;
+: exit ( status:edi -- noret ) 60 syscall ;
+: bye ( -- noret ) 0 exit ;
+
+: write ( buf:esi len:edx fd:edi -- ) 1 syscall drop ;
+
+: _start ( -- noret ) s" Hello world!\n" 1 write bye ;
+```
+
+`s"` reads until the next `"` and adds a byte array and length to the compile time data flow "stack". `1` is the global file descriptor for `stdout`. These three parameters are then flowed into `esi`, `edx` and `edi` as needed by our `write` word. We then call `write` and exit with `bye`.
+
+Compile and Run:
+
+```
+$ blue tutorial2.blue
+$ nasm -f elf64 -o tutorial2.o tutorial2.asm
+$ ld -o tutorial2 tutorial2.o
+$ ./tutorial2
+Hello world!
+```
+
+Working but once again not quite ideal from a readability standpoint. There are a couple hardcoded `1`s that mean different things. Let's factor some:
+
+```
+global _start
+
+: syscall ( num:eax -- result:eax ) syscall ;
+: exit ( status:edi -- noret ) 60 syscall ;
+: bye ( -- noret ) 0 exit ;
+
+: write ( buf:esi len:edx fd:edi -- ) 1 syscall drop ;
+
+1 const stdout
+
+: print ( buf len -- ) stdout write ;
+: greet ( -- ) s" Hello world!\n" print ;
+
+: _start ( -- noret ) greet bye ;
+```
+
+Here we define a constant for the stdout file descriptor and create a new word `print` that is a partial application of `write` - it is a call to write where the file descriptor is always `stdout`. We then defined `greet` that builds the string and prints it. `_start` simply calls the high level words. You might notice that `print` does not need to specify registers for its parameters. This is because they can be inferred since write already fully specified its registers. This is what was alluded to earlier - once you start building up a vocabulary your program starts to look more like a traditional Forth.
+
+While Blue has no standard library that does not mean that you cannot build your own reusable vocabulary that is used in your programs. In fact you are encouraged to. Instead of creating abstractions for abstraction sake, work out the scope of your problem and factor out words. Simplify both the design and implementation and factor again. When a pattern emerges move common words into a shared location in your project.
 
 ## Compiler
 
-To build run `./build` in the repo root.
+To build run `./build` in the repo root. The build script will compile, test and install the Blue compiler then build all language examples.
 
 The Blue compiler requires `go`, `nasm` and `ld`. Versions used for development are:
 
