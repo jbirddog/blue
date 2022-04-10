@@ -26,4 +26,8 @@ create for-writing or truncate or const flags
 : create-output-file ( -- ) s" output.txt" drop create-file ;
 : make-docs-directory ( -- ) s" docs" drop make-directory ;
 
-: _start ( -- noret ) create-output-file make-docs-directory bye ;
+: _start ( -- noret ) 
+	create-output-file 
+	make-docs-directory 
+	bye 
+;
