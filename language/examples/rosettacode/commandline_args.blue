@@ -23,7 +23,8 @@ global _start
 
 : print-arg ( arg -- ) cstr>str println ;
 
-: _start ( rsp -- noret ) dup [] swap 
-: print-args ( argc:rcx argv:rsp -- noret ) 8 add [] print-arg latest loop 
-
-bye ;
+: _start ( rsp -- noret ) dup @ swap 
+: print-args ( argc:rcx argv:rsp -- noret ) 
+	8 add @ print-arg latest loop 
+	bye 
+;
