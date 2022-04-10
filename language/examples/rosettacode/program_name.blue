@@ -2,28 +2,25 @@ global _start
 
 : syscall ( num:eax -- result:eax ) syscall ;
 
-60 const exit
+: exit ( status:edi -- noret ) 60 syscall ;
+: bye ( -- noret ) 0 exit ;
 
-: exit ( status:edi -- noret ) exit syscall ;
-: exit.ok ( -- noret ) 0 exit ;
-
-: syscall ( arg2:esi arg3:edx arg1:edi num:eax -- result:eax ) syscall ;
+: write ( buf:esi len:edx fd:edi -- ) 1 syscall drop ;
 
 1 const stdout
-1 const write
 
-: write ( buf len -- ) stdout write syscall drop ;
+: print ( buf len -- ) stdout write ;
 
-: newline ( -- ) s" \n" write ;
+: newline ( -- ) s" \n" print ;
 
-: writeln ( buf len -- ) write newline ; 
+: println ( buf len -- ) print newline ; 
 
 : find0 ( start:rsi -- end:rsi ) lodsb 0 cmp latest xne ; 
 : cstrlen ( str:rdi -- len:rsi ) dup find0 swap sub dec ;
 : cstr>str ( cstr:rdx -- str:rsi len:rdx ) dup cstrlen xchg ;
 
-: print-arg ( arg -- ) cstr>str writeln ;
+: print-arg ( arg -- ) cstr>str println ;
 
-: arg0 ( rsp -- rsp ) 8 add [] ; inline
+: arg0 ( rsp -- rsp ) 8 add @ ; inline
 
-: _start ( rsp -- noret ) arg0 print-arg exit.ok ;
+: _start ( rsp -- noret ) arg0 print-arg bye ;
