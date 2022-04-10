@@ -40,6 +40,25 @@ __blue_2347908769_0:
         ret
 ```
 
+A more complete example is `Hello World!` for Linux x86-64. As detailed in the tutorial Blue does not link to a standard library:
+
+```
+global _start
+
+: syscall ( num:eax -- result:eax ) syscall ;
+: exit ( status:edi -- noret ) 60 syscall ;
+: bye ( -- noret ) 0 exit ;
+
+: write ( buf:esi len:edx fd:edi -- ) 1 syscall drop ;
+
+1 const stdout
+
+: print ( buf len -- ) stdout write ;
+: greet ( -- ) s" Hello world!\n" print ;
+
+: _start ( -- noret ) greet bye ;
+```
+
 ### Code examples via a quick tutorial
 
 A brief [tutorial is available](language/tutorial/README.md) with examples of creating simple programs that leverage Linux system calls.
