@@ -6,14 +6,6 @@ mkdir -p .build/obj
 blue sys.blue
 nasm -f elf64 -o .build/obj/sys.o sys.asm
 
-blue str_test.blue
-nasm -f elf64 -o .build/obj/str_test.o str_test.asm
-ld -o .build/bin/str_test .build/obj/str_test.o
-
-blue blue.blue
-nasm -f elf64 -o .build/obj/blue.o blue.asm
-ld -o .build/bin/blue .build/obj/blue.o
-
 #
 # move these to examples/build.sh when import search paths
 #
