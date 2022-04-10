@@ -8,8 +8,8 @@ global _start
 1 const stdout
 
 : write ( buf:esi len:edx fd:edi -- ) 1 syscall drop ;
-: write ( buf len -- ) stdout write ;
+: print ( buf len -- ) stdout write ;
 
-: clear-screen ( -- ) s" \033[2J\033[H" write ;
+: clear-screen ( -- ) s" \033[2J\033[H" print ;
 
 : _start ( -- noret ) clear-screen bye ;
