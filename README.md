@@ -2,7 +2,7 @@
 
 Compiler for the Blue Language
 
-_Please note the language and compiler are in an early stage of development. Working programs can be compiled but rough spots can easily be encountered._
+_Please note the language and compiler are in an early stage of development. Working programs can be compiled but rough spots, TODOs and deficiencies can easily be encountered._
 
 Blue is a compiled low level Forth-like language that is designed for building programs without a standard library. Currently the x86-64 instruction set is supported. Example programs utilize Linux system calls but nothing in the language requires or assumes an operating system. A familarity with the x86-64 instruction set is advised and some knowledge of Forth or a similar stack based language will help.
 
