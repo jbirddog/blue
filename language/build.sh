@@ -21,10 +21,6 @@ blue examples/fib_test.blue
 nasm -f elf64 -o .build/obj/fib_test.o examples/fib_test.asm
 ld -o .build/bin/fib_test .build/obj/fib_test.o
 
-blue examples/scratch.blue
-nasm -f elf64 -o .build/obj/scratch.o examples/scratch.asm
-ld -o .build/bin/scratch .build/obj/scratch.o .build/obj/sys.o
-
 blue examples/echo.blue
 nasm -f elf64 -o .build/obj/echo.o examples/echo.asm
 ld -o .build/bin/echo .build/obj/echo.o
