@@ -7,26 +7,26 @@ __blue_4057121178_0:
 	ret
 
 ; : exit ( status:edi -- noret )
-__blue_3454868101_1:
+__blue_3454868101_0:
 	mov eax, 60
 	call __blue_4057121178_0
 
-; : exit.ok ( -- noret )
-__blue_3274522691_0:
+; : bye ( -- noret )
+__blue_1911791459_0:
 	mov edi, 0
-	call __blue_3454868101_1
+	call __blue_3454868101_0
 
-; : exit.syserr ( err:eax -- noret )
-__blue_1490145965_0:
+; : die ( err:eax -- noret )
+__blue_3630339793_0:
 	neg eax
 	mov edi, eax
-	call __blue_3454868101_1
+	call __blue_3454868101_0
 
 ; : unwrap ( result:eax -- value:eax )
 __blue_4055961022_0:
 	cmp eax, 0
 	jge __blue_2157056155_0
-	call __blue_1490145965_0
+	call __blue_3630339793_0
 
 __blue_2157056155_0:
 	ret
@@ -36,17 +36,17 @@ __blue_1614081290_0:
 	call __blue_4055961022_0
 	ret
 
-; : syscall ( arg2:esi arg3:edx arg1:edi num:eax -- result:eax )
-__blue_4057121178_1:
+; : write ( buf:esi len:edx fd:edi -- )
+__blue_3190202204_0:
+	mov eax, 1
 	call __blue_4057121178_0
+	call __blue_1614081290_0
 	ret
 
-; : write ( buf len -- )
-__blue_3190202204_1:
-	mov eax, 1
+; : print ( buf len -- )
+__blue_372738696_0:
 	mov edi, 1
-	call __blue_4057121178_1
-	call __blue_1614081290_0
+	call __blue_3190202204_0
 	ret
 
 ; : newline ( -- )
@@ -60,12 +60,12 @@ db 0
 __blue_1223589535_0:
 	mov edx, 1
 	mov esi, __blue_855163316_0
-	call __blue_3190202204_1
+	call __blue_372738696_0
 	ret
 
-; : writeln ( buf len -- )
-__blue_840226778_0:
-	call __blue_3190202204_1
+; : println ( buf len -- )
+__blue_415234214_0:
+	call __blue_372738696_0
 	call __blue_4281549323_0
 	ret
 
@@ -97,7 +97,7 @@ __blue_3207375596_0:
 ; : print-arg ( arg -- )
 __blue_2701174125_0:
 	call __blue_3207375596_0
-	call __blue_840226778_0
+	call __blue_415234214_0
 	ret
 
 ; : _start ( rsp -- noret )
@@ -112,4 +112,4 @@ __blue_2449731130_0:
 	call __blue_2701174125_0
 	pop rcx
 	loop __blue_2449731130_0
-	call __blue_3274522691_0
+	call __blue_1911791459_0
