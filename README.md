@@ -4,7 +4,7 @@ Compiler for the Blue Language
 
 _Please note the language and compiler are in an early stage of development. Working programs can be compiled but rough spots can easily be encountered._
 
-Blue is a compiled low level Forth-like language that is designed for building minimal programs without a standard library. Currently the x86-64 instruction set is supported. Example programs utilize Linux system calls but nothing in the language requires or assumes an operating system. A familarity with the x86-64 instruction set is advised and some knowledge of Forth or a similar stack based language will help.
+Blue is a compiled low level Forth-like language that is designed for building programs without a standard library. Currently the x86-64 instruction set is supported. Example programs utilize Linux system calls but nothing in the language requires or assumes an operating system. A familarity with the x86-64 instruction set is advised and some knowledge of Forth or a similar stack based language will help.
 
 ## Language
 
@@ -155,7 +155,7 @@ global _start
 : _start ( -- noret ) s" Hello world!\n" 1 write bye ;
 ```
 
-`s"` reads until the next `"` and adds a byte array and length to the compile time data flow "stack". `1` is the global file descriptor for `stdout`. These three parameters are then flowed into `esi`, `edx` and `edi` as needed by our `write` word. We then call `write` and exit with `bye`.
+`s"` reads until the next `"` and adds a byte array and length to the compile time data flow stack. `1` is the global file descriptor for `stdout`. These three parameters are then flowed into `esi`, `edx` and `edi` as needed by our `write` word. We then call `write` and exit with `bye`.
 
 Compile and Run:
 
@@ -188,7 +188,79 @@ global _start
 
 Here we define a constant for the stdout file descriptor and create a new word `print` that is a partial application of `write` - it is a call to write where the file descriptor is always `stdout`. We then defined `greet` that builds the string and prints it. `_start` simply calls the high level words. You might notice that `print` does not need to specify registers for its parameters. This is because they can be inferred since write already fully specified its registers. This is what was alluded to earlier - once you start building up a vocabulary your program starts to look more like a traditional Forth.
 
+#### Tutorial 3: `clear` executable for Linux and reuse some code
+
+To write a `clear` clone we will need `exit` and `write` system calls so we can write a terminal escape sequence to clear the screen and return the cursor to the home position. Our `print` and `bye` higher level words will also be useful. To begin:
+
+```
+global _start
+
+: syscall ( num:eax -- result:eax ) syscall ;
+: exit ( status:edi -- noret ) 60 syscall ;
+: bye ( -- noret ) 0 exit ;
+
+: write ( buf:esi len:edx fd:edi -- ) 1 syscall drop ;
+
+1 const stdout
+
+: print ( buf len -- ) stdout write ;
+: clear-screen ( -- ) s" \033[2J\033[H" print ;
+
+: _start ( -- noret ) clear-screen bye ;
+```
+
+Compile and Run:
+
+```
+$ blue tutorial3.blue
+$ nasm -f elf64 -o tutorial3.o tutorial3.asm
+$ ld -o tutorial3 tutorial3.o
+$ ./tutorial3
+```
+
+The console should be cleared. 
+
 While Blue has no standard library that does not mean that you cannot build your own reusable vocabulary that is used in your programs. In fact you are encouraged to. Instead of creating abstractions for abstraction sake, work out the scope of your problem and factor out words. Simplify both the design and implementation and factor again. When a pattern emerges move common words into a shared location in your project.
+
+If you have been following along the three tutorials so far we ended up having some shared words which have proven to have utility for us. We can move `syscall`, `exit`, `bye`, `write`, `stdout` and `print` to a common location and include them in our program.
+
+Create a new file called `vocab.blue` and copy over the words we want to reuse:
+
+```
+: syscall ( num:eax -- result:eax ) syscall ;
+: exit ( status:edi -- noret ) 60 syscall ;
+: bye ( -- noret ) 0 exit ;
+
+: write ( buf:esi len:edx fd:edi -- ) 1 syscall drop ;
+
+1 const stdout
+
+: print ( buf len -- ) stdout write ;
+```
+
+Our `clear` clone can now include `vocab` instead of redefining the words:
+
+```
+import vocab
+
+global _start
+
+: clear-screen ( -- ) s" \033[2J\033[H" print ;
+
+: _start ( -- noret ) clear-screen bye ;
+```
+
+Similarly, our example from `tutorial2` could now become:
+
+```
+import vocab
+
+global _start
+
+: greet ( -- ) s" Hello world!\n" print ;
+
+: _start ( -- noret ) greet bye ;
+```
 
 ## Compiler
 
