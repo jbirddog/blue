@@ -141,6 +141,10 @@ func KernelResb(env *Environment) {
 	res(env, "b")
 }
 
+func KernelResd(env *Environment) {
+	res(env, "d")
+}
+
 func KernelResq(env *Environment) {
 	res(env, "q")
 }
@@ -259,6 +263,22 @@ func KernelLBracket(env *Environment) {
 	})
 }
 
+func KernelSQuote(env *Environment) {
+	// TODO this won't handle nested quotes
+	str := env.ReadTil(`"`)
+	strLen := len(str)
+
+	if strLen < 1 {
+		log.Fatal(`s" expects closing "`)
+	}
+
+	if strLen > 2 {
+		str = str[1:]
+	}
+
+	env.Dictionary.Latest.AppendInstr(&AsciiStrInstr{Str: str})
+}
+
 func buildRegisterRef(rawRef string) *RegisterRef {
 	parts := strings.SplitN(rawRef, ":", 2)
 	partsLen := len(parts)
@@ -281,8 +301,14 @@ func parseRefs(word *Word, env *Environment) []string {
 		log.Fatal("Expected (")
 	}
 
+	const (
+		inputs = iota
+		outputs
+		clobbers
+	)
+
 	rawParts := []string{"("}
-	parsingInputs := true
+	parsing := inputs
 
 	for {
 		nextWord := env.ReadNextWord()
@@ -293,11 +319,20 @@ func parseRefs(word *Word, env *Environment) []string {
 		rawParts = append(rawParts, nextWord)
 
 		if nextWord == "--" {
-			parsingInputs = false
+			parsing = outputs
+			continue
+		}
+
+		if nextWord == "|" {
+			parsing = clobbers
 			continue
 		}
 
 		if nextWord == "noret" {
+			if parsing != outputs {
+				log.Fatal("noret in non output position")
+			}
+
 			word.NoReturn()
 			continue
 		}
@@ -306,12 +341,24 @@ func parseRefs(word *Word, env *Environment) []string {
 			break
 		}
 
-		if parsingInputs {
-			ref := buildRegisterRef(nextWord)
+		ref := buildRegisterRef(nextWord)
+		regIndex, found := registers[ref.Reg]
+
+		if found && parsing != clobbers {
+			word.Registers |= 1 << regIndex
+		}
+
+		switch parsing {
+		case inputs:
 			word.AppendInput(ref)
-		} else {
-			ref := buildRegisterRef(nextWord)
+		case outputs:
 			word.AppendOutput(ref)
+		case clobbers:
+			if !found {
+				log.Fatal("Clobber expects a register")
+			}
+
+			word.Clobbers |= 1 << regIndex
 		}
 	}
 

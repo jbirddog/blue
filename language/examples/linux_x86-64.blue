@@ -1,0 +1,11 @@
+global( exit bye die )
+
+0 const stdin
+1 const stdout
+2 const stderr
+
+: syscall ( num:eax -- result:eax ) syscall ;
+
+: die ( err:eax -- noret ) neg
+: exit ( status:edi -- noret ) 60 syscall ;
+: bye ( -- noret ) 0 exit ;

@@ -1,2 +1,0 @@
-
-: skipws ( len:ecx buf:esi -- len:ecx buf:esi ) lodsb 32 cmp latest loople dec ;

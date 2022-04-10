@@ -1,0 +1,16 @@
+import examples/rosettacode/fibonacci
+import examples/linux_x86-64
+
+global _start
+
+\ TODO exit with the test # that failed
+: test.failure ( -- ) 1 exit ;
+: test= ( actual:edi expected:eax -- ) swap cmp ' test.failure xne ;
+
+: _start ( -- noret )
+	1 fib 1 test=
+	11 fib 89 test=
+	14 fib 377 test=
+	31 fib 1346269 test=
+	bye
+;

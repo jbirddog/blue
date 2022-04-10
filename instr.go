@@ -19,82 +19,12 @@ func (i *CallGoInstr) Run(env *Environment, context *RunContext) {
 	i.F(env)
 }
 
-type x8664Lowerer = func(string, *Environment, *RunContext) AsmInstr
-
-func ops_0(mnemonic string, env *Environment, context *RunContext) AsmInstr {
-	return &AsmNoOperandInstr{Mnemonic: mnemonic}
-}
-
-// TODO hack
-func ops_0_al(mnemonic string, env *Environment, context *RunContext) AsmInstr {
-	context.AppendInput("al")
-
-	return &AsmNoOperandInstr{Mnemonic: mnemonic}
-}
-
-func ops_1_1(mnemonic string, env *Environment, context *RunContext) AsmInstr {
-	op := context.Peek()
-
-	return &AsmUnaryInstr{Mnemonic: mnemonic, Op: op}
-}
-
-func ops_2(mnemonic string, env *Environment, context *RunContext) AsmInstr {
-	op1, op2 := context.Pop2Inputs()
-
-	return &AsmBinaryInstr{Mnemonic: mnemonic, Op1: op1, Op2: op2}
-}
-
-func ops_2_1(mnemonic string, env *Environment, context *RunContext) AsmInstr {
-	op1, op2 := context.Pop2Inputs()
-	context.AppendInput(op1)
-
-	return &AsmBinaryInstr{Mnemonic: mnemonic, Op1: op1, Op2: op2}
-}
-
-func ops_2_x2(mnemonic string, env *Environment, context *RunContext) AsmInstr {
-	op1, op2 := context.Pop2Inputs()
-	context.AppendInput(op2)
-	context.AppendInput(op1)
-
-	return &AsmBinaryInstr{Mnemonic: mnemonic, Op1: op1, Op2: op2}
-}
-
-func op_label(mnemonic string, env *Environment, context *RunContext) AsmInstr {
-	op := context.PopInput()
-
-	return &AsmUnaryInstr{Mnemonic: mnemonic, Op: op}
-}
-
-func consume_previous(mnemonic string, env *Environment, context *RunContext) AsmInstr {
-	previous := env.PopAsmInstr().(*AsmNoOperandInstr)
-
-	return &AsmUnaryInstr{Mnemonic: mnemonic, Op: previous.Mnemonic}
-}
-
-var x8664Mnemonics = map[string]x8664Lowerer{
-	"add":     ops_2_1,
-	"and":     ops_2, // TODO needs to push op1 back
-	"cmp":     ops_2,
-	"dec":     ops_1_1,
-	"lodsb":   ops_0_al, // TODO hack - needs to consume esi, assumes al
-	"loop":    op_label, // TODO hack - needs to consume ecx
-	"loopne":  op_label, // TODO hack - needs to consume ecx
-	"neg":     ops_1_1,
-	"repne":   consume_previous,
-	"ret":     ops_0,
-	"scasb":   ops_0,
-	"sub":     ops_2_1,
-	"syscall": ops_0,
-	"xadd":    ops_2, // TODO needs to push op1 back
-	"xchg":    ops_2_x2,
-}
-
 type X8664Instr struct {
 	Mnemonic string
 }
 
 func (i *X8664Instr) Run(env *Environment, context *RunContext) {
-	lowerer := x8664Mnemonics[i.Mnemonic]
+	lowerer := x8664Lowerers[i.Mnemonic]
 	asmInstr := lowerer(i.Mnemonic, env, context)
 	env.AppendAsmInstr(asmInstr)
 }
@@ -122,8 +52,10 @@ type CallWordInstr struct {
 
 func (i *CallWordInstr) Run(env *Environment, context *RunContext) {
 	if env.Compiling {
-		flowWord(i.Word, env, context)
+		pushes, pops := clobberGuardInstrs(context)
+		env.AppendAsmInstrs(pushes)
 		env.AppendAsmInstr(&AsmCallInstr{Label: i.Word.AsmLabel})
+		env.AppendAsmInstrs(pops)
 		return
 	}
 
@@ -201,7 +133,7 @@ func (i *ResInstr) Run(env *Environment, context *RunContext) {
 }
 
 type DecbInstr struct {
-	Value int
+	Value int // TODO why isn't this a byte?
 }
 
 func (i *DecbInstr) Run(env *Environment, context *RunContext) {
@@ -289,6 +221,91 @@ func (i *BracketInstr) Run(env *Environment, context *RunContext) {
 	context.AppendInput(newInput)
 }
 
+type AsciiStrInstr struct {
+	Str string
+}
+
+func (i *AsciiStrInstr) Run(env *Environment, context *RunContext) {
+	bytes := []byte(i.Str)
+	bytes = unescape(bytes)
+	refLabel := env.AsmLabelForName("<str>")
+	jmpLabel := env.AsmLabelForName("</str>")
+
+	asmInstrs := []AsmInstr{
+		&AsmUnaryInstr{Mnemonic: "jmp", Op: jmpLabel},
+		&AsmLabelInstr{Name: refLabel},
+	}
+
+	for _, b := range bytes {
+		asmInstrs = append(asmInstrs, &AsmDecbInstr{Value: int(b)})
+	}
+
+	asmInstrs = append(asmInstrs, &AsmDecbInstr{Value: 0})
+	asmInstrs = append(asmInstrs, &AsmLabelInstr{Name: jmpLabel})
+
+	env.AppendAsmInstrs(asmInstrs)
+	context.AppendInput(refLabel)
+	context.AppendInput(fmt.Sprint(len(bytes)))
+}
+
+func unescape(bytes []byte) []byte {
+	bytesLen := len(bytes)
+	unescaped := make([]byte, 0, bytesLen)
+
+	for i := 0; i < bytesLen; i++ {
+		b := bytes[i]
+
+		if b == '\\' {
+			switch bytes[i+1] {
+			case 'n':
+				b = 10
+			case '0':
+				b = (bytes[i+2] - 48) * 8
+				b += bytes[i+3] - 48
+				i += 2
+			}
+
+			i += 1
+		}
+
+		unescaped = append(unescaped, b)
+	}
+
+	return unescaped
+}
+
+func buildClobberGuards(word *Word, context *RunContext) {
+	context.ClearClobberGuards()
+
+	for _, input := range context.Inputs {
+		if regIdx, found := registers[input]; found {
+			if word.Clobbers&(1<<regIdx) == 0 {
+				continue
+			}
+
+			context.AppendClobberGuard(regIdx)
+		}
+	}
+}
+
+func clobberGuardInstrs(context *RunContext) ([]AsmInstr, []AsmInstr) {
+	var pushes []AsmInstr
+	var pops []AsmInstr
+
+	for _, guard := range context.ClobberGuards {
+		pushes = append(pushes, &AsmUnaryInstr{Mnemonic: "push", Op: guard})
+	}
+
+	guardsLen := len(context.ClobberGuards)
+
+	for i := guardsLen - 1; i >= 0; i -= 1 {
+		guard := context.ClobberGuards[i]
+		pops = append(pops, &AsmUnaryInstr{Mnemonic: "pop", Op: guard})
+	}
+
+	return pushes, pops
+}
+
 func flowWord(word *Word, env *Environment, context *RunContext) {
 	expectedInputs := word.InputRegisters()
 
@@ -319,6 +336,8 @@ func flowWord(word *Word, env *Environment, context *RunContext) {
 			Op2:      op2,
 		})
 	}
+
+	buildClobberGuards(word, context)
 
 	wordOutputs := word.OutputRegisters()
 	context.Inputs = append(context.Inputs, wordOutputs...)

@@ -10,8 +10,9 @@ import (
 )
 
 type RunContext struct {
-	Inputs  []string
-	Outputs []string
+	Inputs        []string
+	Outputs       []string
+	ClobberGuards []string
 }
 
 func (c *RunContext) AppendInput(i string) {
@@ -38,6 +39,14 @@ func (c *RunContext) Pop2Inputs() (string, string) {
 	c.Inputs = c.Inputs[:inputsLen-2]
 
 	return second, first
+}
+
+func (c *RunContext) ClearClobberGuards() {
+	c.ClobberGuards = nil
+}
+
+func (c *RunContext) AppendClobberGuard(regIdx int) {
+	c.ClobberGuards = append(c.ClobberGuards, reg64Names[regIdx])
 }
 
 type Environment struct {
@@ -195,7 +204,10 @@ func (e *Environment) ReadTil(s string) string {
 
 func instrsForWord(word *Word) []Instr {
 	if !word.IsInline() {
-		return []Instr{&CallWordInstr{Word: word}}
+		return []Instr{
+			&FlowWordInstr{Word: word},
+			&CallWordInstr{Word: word},
+		}
 	}
 
 	lastIdx := len(word.Code)
@@ -215,6 +227,8 @@ func (e *Environment) ParseNextWord() bool {
 	}
 
 	var instrs []Instr
+	var clobbers uint
+	shouldOptimize := false
 
 	if word := e.Dictionary.Find(name); word != nil {
 		if (!e.Compiling || word.IsImmediate()) && !word.IsInline() {
@@ -227,11 +241,13 @@ func (e *Environment) ParseNextWord() bool {
 			return true
 		}
 
+		clobbers = word.Clobbers
 		instrs = instrsForWord(word)
-	} else if _, found := x8664Mnemonics[name]; found {
+	} else if _, found := x8664Lowerers[name]; found {
 		instrs = []Instr{&X8664Instr{Mnemonic: name}}
-	} else if i, err := strconv.Atoi(name); err == nil {
-		instrs = []Instr{&LiteralIntInstr{I: i}}
+		shouldOptimize = true
+	} else if i, err := strconv.ParseInt(name, 0, 0); err == nil {
+		instrs = []Instr{&LiteralIntInstr{I: int(i)}}
 	}
 
 	if len(instrs) == 0 {
@@ -240,7 +256,16 @@ func (e *Environment) ParseNextWord() bool {
 
 	if !e.Compiling {
 		e.AppendInstrs(instrs)
+
+		if shouldOptimize {
+			e.OptimizeInstrs()
+		}
 	} else {
+		if !e.Dictionary.Latest.IsNoReturn() {
+			clobbers &= ^e.Dictionary.Latest.Registers
+			e.Dictionary.Latest.Clobbers |= clobbers
+		}
+
 		e.Dictionary.Latest.AppendInstrs(instrs)
 	}
 
@@ -252,7 +277,9 @@ func (c *Environment) AppendAsmInstr(i AsmInstr) {
 }
 
 func (c *Environment) AppendAsmInstrs(i []AsmInstr) {
-	c.AsmInstrs = append(c.AsmInstrs, i...)
+	if len(i) > 0 {
+		c.AsmInstrs = append(c.AsmInstrs, i...)
+	}
 }
 
 func (e *Environment) PopAsmInstr() AsmInstr {
@@ -271,12 +298,26 @@ func (e *Environment) AppendInstrs(i []Instr) {
 	e.CodeBuf = append(e.CodeBuf, i...)
 }
 
+func (e *Environment) OptimizeInstrs() {
+	e.CodeBuf = PerformPeepholeOptimizationsAtEnd(e.CodeBuf)
+}
+
 func (e *Environment) PopInstr() Instr {
 	last := len(e.CodeBuf) - 1
 	instr := e.CodeBuf[last]
 	e.CodeBuf = e.CodeBuf[:last]
 
 	return instr
+}
+
+func (e *Environment) Pop2Instrs() (Instr, Instr) {
+	codeBufLen := len(e.CodeBuf)
+	second := e.CodeBuf[codeBufLen-2]
+	first := e.CodeBuf[codeBufLen-1]
+
+	e.CodeBuf = e.CodeBuf[:codeBufLen-2]
+
+	return second, first
 }
 
 func (e *Environment) SuggestSection(section string) {

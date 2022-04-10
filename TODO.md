@@ -1,38 +1,23 @@
-## gfe
+## compiler
 
 1. Instr needs RegisterRefs?
-1. consider making flow instr not implicit via call instr
 1. more unit tests
-1. gfe.sh - run examples
-1. gfe.sh - stop the process if a step errors out
 1. CondCall is not flowing yet
 1. inline is not flowing yet
 1. import vs use - one brings in externs other all code from file
+   1. link vs include? - use to determine how to build via dsl?
 1. better newline support when generating asm
 1. better placement of comments in asm
 1. outputs don't flow
-1. collapse multiple extern/imports to one (const/resb/etc?) 
 1. when importing, can drop the global decls from the imported env?
-1. ability to compute echo's buf.clamp (was 1024 -> 2047 for and) at compile time
-1. push/pop
 1. continue to infer registers from word body
-1. ^ if fully specified, validate
-1. ^ infer during word fallthrough? whole program infer?
+   1. if fully specified, validate
+   1. infer during word fallthrough? whole program infer?
 1. validate needs to check for lingering refs/stack items
 1. check env.AppendInstr usage to see if compiling check can be moved there
-1. rosetta code examples
-1. ^ command line arguments
-1. ^ prog name
-1. push/pops based on called words indirect register usage (syscall steps on rcx)
-1. mov edx, rax
 1. treat words with only decb more like resb
-1. lea
-
-### random notes
-
-mov 0(%rsp), %rdi ; argc
-lea 8(%rsp), %rsi ; argv0
-lea 16(%rsp, %rdi, 8), %rdx ; argv1
+1. mov edx, rax bug
+1. peephole doesn't run when compiling a word
 
 ### optimizations
 
@@ -42,25 +27,30 @@ lea 16(%rsp, %rdi, 8), %rdx ; argv1
 #### peephole
 
 1. jmp vs call ret at tail of word
+1. jmp vs call noret word
 1. mov xxx, 0 -> xor xxx, xxx
+1. mov rxx, 1 -> xor exx, exx ; inc exx
 
-## blue
+## language
 
-1. structs
+1. structs - some basic support is in f6
 
 # Targets
 
-### f6
+### f7
 
-1. Some tooling
-1. ^ build
-1. ^ test
+1. Build process overhaul
+   1. tedious to add new files/builds
+   1. blue.sh - run examples
+   1. blue.sh - stop the process if a step errors out
 
-### f5 (current)
+### f6 (current)
 
-1. Some code to help the migration of blue to blue
-1. ^ main driver for blue
-1. ^^ print args to stdout
+1. README
+
+### f5
+
+language ergonomic improvements
 
 ### f4
 

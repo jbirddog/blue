@@ -6,7 +6,6 @@ import (
 	"os"
 )
 
-// TODO R8D..., R8...
 const (
 	eax = iota
 	ecx
@@ -16,6 +15,15 @@ const (
 	ebp
 	esi
 	edi
+
+	r8d
+	r9d
+	r10d
+	r11d
+	r12d
+	r13d
+	r14d
+	r15d
 )
 
 const (
@@ -27,7 +35,56 @@ const (
 	rbp
 	rsi
 	rdi
+
+	r8
+	r9
+	r10
+	r11
+	r12
+	r13
+	r14
+	r15
 )
+
+var reg32Names = []string{
+	"eax",
+	"ecx",
+	"edx",
+	"ebx",
+	"esp",
+	"ebp",
+	"esi",
+	"edi",
+
+	"r8d",
+	"r9d",
+	"r10d",
+	"r11d",
+	"r12d",
+	"r13d",
+	"r14d",
+	"r15d",
+}
+
+var reg64Names = []string{
+	"rax",
+	"rcx",
+	"rdx",
+	"rbx",
+	"rsp",
+	"rbp",
+	"rsi",
+	"rdi",
+
+	"r8",
+	"r9",
+	"r10",
+	"r11",
+	"r12",
+	"r13",
+	"r14",
+	"r15",
+}
 
 var registers = map[string]int{
 	"eax": eax,
@@ -39,6 +96,15 @@ var registers = map[string]int{
 	"esi": esi,
 	"edi": edi,
 
+	"r8d": r8d,
+	"r9d": r9d,
+	"r10d": r10d,
+	"r11d": r11d,
+	"r12d": r12d,
+	"r13d": r13d,
+	"r14d": r14d,
+	"r15d": r15d,
+
 	"rax": rax,
 	"rcx": rcx,
 	"rdx": rdx,
@@ -47,6 +113,15 @@ var registers = map[string]int{
 	"rbp": rbp,
 	"rsi": rsi,
 	"rdi": rdi,
+
+	"r8": r8,
+	"r9": r9,
+	"r10": r10,
+	"r11": r11,
+	"r12": r12,
+	"r13": r13,
+	"r14": r14,
+	"r15": r15,
 }
 
 type RegisterRef struct {
