@@ -155,7 +155,7 @@ global _start
 : _start ( -- noret ) s" Hello world!\n" 1 write bye ;
 ```
 
-`s"` reads until the next `"` and adds a byte array and length to the compile time data flow "stack". `1` is the global file descriptor for `stdout`. These three parameters are then flowed into `esi`, `edx` and `edi` as needed by our `write` word. We then call `write` and exit with `bye`.
+`s"` reads until the next `"` and adds a byte array and length to the compile time data flow stack. `1` is the global file descriptor for `stdout`. These three parameters are then flowed into `esi`, `edx` and `edi` as needed by our `write` word. We then call `write` and exit with `bye`.
 
 Compile and Run:
 
