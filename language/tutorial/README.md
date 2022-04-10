@@ -6,15 +6,15 @@ _Please note the language and compiler are in an early stage of development. Wor
 
 Blue is a compiled low level Forth-like language that is designed for building programs without a standard library. Currently the x86-64 instruction set is supported. Example programs utilize Linux system calls but nothing in the language requires or assumes an operating system. A familarity with the x86-64 instruction set is advised and some knowledge of Forth or a similar stack based language will help.
 
-## Language
-
 The Blue Language is very Forth-like in appearance, but instead of a traditional data/return stack, stack comments and manipulation words are used to describe the flow of data into registers. Stack manipulation words run at compile time and are not included in the resulting binary. When using the Blue Language you are in direct control of memory layout/allocation and register usage. As you develop a vocabulary to describe the program at hand, Blue quickly starts to look like a traditional Forth.
 
-### Code examples via a quick tutorial
+## A quick tutorial
 
-_Note: code can be found in `languages/tutorial`._
+To begin you will need the Blue compiler (unless you just want to read along). Please see the [installation instructions](../../INSTALL.md).
 
-#### Tutorial 1: `bye` executable for Linux
+_Note: to build the tutorials in the repo from `./build.sh` from this directory. Binaries will be in `.build/bin`_
+
+### Tutorial 1: `bye` executable for Linux
 
 For an introduction to Blue we will start by creating an executable to run on Linux which will simply exit. Since this program does not link against a standard library there is no main. A global `_start` word needs to be defined which will be the entry point to your program:
 
@@ -111,7 +111,7 @@ _start:
 
 That's it. The assembly is currently unoptimized but the basic idea is it is very close to a 1:1 mapping of the words and data flow described in the Blue program. Non `global` label names are mangled to support redefining words and words whose names are not valid nasm labels. 
 
-#### Tutorial 2: `Hello World!` executable for Linux
+### Tutorial 2: `Hello World!` executable for Linux
 
 Now it is time to unlock one of the greatest programming achievements - printing `Hello World!` to the screen. As you recall from tutorial 1 Blue is not linked against a standard library and has no traditional `main` function. For this program we will need to define some system calls to interact with the Linux kernel, namely `exit` and `write`. Let's start with a quick program that simply exits to get started:
 
@@ -188,7 +188,7 @@ global _start
 
 Here we define a constant for the stdout file descriptor and create a new word `print` that is a partial application of `write` - it is a call to write where the file descriptor is always `stdout`. We then defined `greet` that builds the string and prints it. `_start` simply calls the high level words. You might notice that `print` does not need to specify registers for its parameters. This is because they can be inferred since write already fully specified its registers. This is what was alluded to earlier - once you start building up a vocabulary your program starts to look more like a traditional Forth.
 
-#### Tutorial 3: `clear` executable for Linux and reuse some code
+### Tutorial 3: `clear` executable for Linux and reuse some code
 
 To write a `clear` clone we will need `exit` and `write` system calls so we can write a terminal escape sequence to clear the screen and return the cursor to the home position. Our `print` and `bye` higher level words will also be useful. To begin:
 
@@ -262,17 +262,6 @@ global _start
 : _start ( -- noret ) greet bye ;
 ```
 
-## Compiler
+## From here
 
-To build run `./build` in the repo root. The build script will compile, test and install the Blue compiler then build all language examples.
-
-The Blue compiler requires `go`, `nasm` and `ld`. Versions used for development are:
-
-```
-$ go version
-go version go1.18 linux/amd64
-$ nasm --version
-NASM version 2.15.05
-$ ld --version
-GNU ld (GNU Binutils for Ubuntu) 2.37
-```
+Feel free to play around with the language. Happy hacking.
