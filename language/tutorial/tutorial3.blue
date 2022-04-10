@@ -1,0 +1,7 @@
+import vocab
+
+global _start
+
+: clear-screen ( -- ) s" \033[2J\033[H" print ;
+
+: _start ( -- noret ) clear-screen bye ;
