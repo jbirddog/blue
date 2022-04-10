@@ -16,15 +16,4 @@ A brief [tutorial is available](language/tutorial/README.md) with examples of cr
 
 ## Compiler
 
-The Blue compiler requires `go`, `nasm` and `ld`. Versions used for development are:
-
-```
-$ go version
-go version go1.18 linux/amd64
-$ nasm --version
-NASM version 2.15.05
-$ ld --version
-GNU ld (GNU Binutils for Ubuntu) 2.37
-```
-
-To build run `./build` in the repo root. The build script will compile, test and install the Blue compiler then build all language examples.
+The Blue compiler requires `go`, `nasm` and `ld`. To install read the [installation instructions](INSTALL.md)
