@@ -10,6 +10,8 @@ The Blue Language is very Forth-like in appearance, but instead of a traditional
 
 ## A quick tutorial
 
+To begin you will need the Blue compiler (unless you just want to read along). Please see the [installation instructions](../../install.md).
+
 _Note: to build the tutorials in the repo from `./build.sh` from this directory. Binaries will be in `.build/bin`_
 
 ### Tutorial 1: `bye` executable for Linux
