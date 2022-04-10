@@ -12,7 +12,6 @@ global _start
 : print ( buf len -- ) stdout write ;
 
 : newline ( -- ) s" \n" print ;
-
 : println ( buf len -- ) print newline ; 
 
 : find0 ( start:rsi -- end:rsi ) lodsb 0 cmp latest xne ; 
