@@ -3,19 +3,9 @@
 mkdir -p .build/bin
 mkdir -p .build/obj
 
-blue sys.blue
-nasm -f elf64 -o .build/obj/sys.o sys.asm
-
 #
 # move these to examples/build.sh when import search paths
 #
-
-blue examples/exit33.blue
-nasm -f elf64 -o .build/obj/exit33.o examples/exit33.asm
-ld -o .build/bin/exit33 .build/obj/exit33.o
-
-blue examples/fib.blue
-nasm -f elf64 -o .build/obj/fib.o examples/fib.asm
 
 blue examples/fib_test.blue
 nasm -f elf64 -o .build/obj/fib_test.o examples/fib_test.asm

@@ -1,9 +1,9 @@
-import sys
+import examples/sys
 
 global _start
 
 : syscall3 ( edi edx esi num:eax -- result:eax ) syscall ;
-: unwrap ( result:eax -- value:eax ) dup 0 cmp ' exit.syserr xl ;
+: unwrap ( result:eax -- value:eax ) dup 0 cmp ' die xl ;
 
 : read ( fd len buf -- result ) 0 syscall3 ;
 : write ( fd len buf -- result ) 1 syscall3 ;
@@ -19,4 +19,4 @@ hide buf
 
 \ TODO compare read/write bytes for exit status
 \ TODO loop until read 0
-: _start ( -- noret ) stdin read stdout write exit.ok ; 
+: _start ( -- noret ) stdin read stdout write bye ; 

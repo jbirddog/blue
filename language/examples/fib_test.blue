@@ -1,5 +1,5 @@
-import sys
-import examples/fib
+import examples/rosettacode/fibonacci
+import examples/sys
 
 global _start
 
@@ -13,5 +13,5 @@ global _start
 	11 fib 89 test=
 	14 fib 377 test=
 	31 fib 1346269 test=
-	exit.ok
+	bye
 ;
