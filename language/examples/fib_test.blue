@@ -1,10 +1,9 @@
 import examples/rosettacode/fibonacci
-import examples/sys
+import examples/linux_x86-64
 
 global _start
 
-\ TODO failure code is test number that failed
-
+\ TODO exit with the test # that failed
 : test.failure ( -- ) 1 exit ;
 : test= ( actual:edi expected:eax -- ) swap cmp ' test.failure xne ;
 

@@ -38,7 +38,7 @@ __blue_1911791459_0:
 
 global _start
 
-;  TODO failure code is test number that failed
+;  TODO exit with the test # that failed
 ; : test.failure ( -- )
 __blue_1516647173_0:
 	mov edi, 1
