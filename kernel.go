@@ -44,7 +44,7 @@ func KernelExtern(env *Environment) {
 
 func KernelLatest(env *Environment) {
 	latest := env.Dictionary.Latest
-	latest.AppendInstr(&RefWordInstr{Word: latest})
+	env.AppendInstr(&RefWordInstr{Word: latest})
 }
 
 func KernelSemi(env *Environment) {
@@ -191,11 +191,11 @@ func KernelTick(env *Environment) {
 	}
 
 	instr := &RefWordInstr{Word: word}
-	// TODO won't work when not compiling
-	env.Dictionary.Latest.AppendInstr(instr)
+	env.AppendInstr(instr)
 }
 
 // TODO when migrating AppendInstr calls drop latest from the cond/loop names
+// TODO check for PopInstr usage on env, add compile check like AppendInstr
 func condCallLatest(env *Environment, jmp string) {
 	latest := env.Dictionary.Latest
 	refWord := latest.PopInstr().(*RefWordInstr)
@@ -258,7 +258,7 @@ func KernelLBracket(env *Environment) {
 		log.Fatal("[ expects a word before ]")
 	}
 
-	env.Dictionary.Latest.AppendInstr(&BracketInstr{
+	env.AppendInstr(&BracketInstr{
 		Value:        strings.Join(parts, " "),
 		Replacements: replacements,
 	})
@@ -277,7 +277,7 @@ func KernelSQuote(env *Environment) {
 		str = str[1:]
 	}
 
-	env.Dictionary.Latest.AppendInstr(&AsciiStrInstr{Str: str})
+	env.AppendInstr(&AsciiStrInstr{Str: str})
 }
 
 func buildRegisterRef(rawRef string) *RegisterRef {

@@ -41,6 +41,7 @@
    1. blue.sh - stop the process if a step errors out
 1. check env.AppendInstr usage to see if compiling check can be moved there
    1. better placement of comments in asm (will be fixed by above)
+   1. same for env/latest PopInstr (condCall/loop in kernel)
 1. peephole doesn't run when compiling a word
 1. peephole - mov xxx, 0 -> xor xxx, xxx
 1. Rosetta Code examples
