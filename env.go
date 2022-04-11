@@ -256,15 +256,13 @@ func (e *Environment) ParseNextWord() bool {
 
 	e.AppendInstrs(instrs)
 
-	if !e.Compiling {
-		if shouldOptimize {
-			e.OptimizeInstrs()
-		}
-	} else {
-		if !e.Dictionary.Latest.IsNoReturn() {
-			clobbers &= ^e.Dictionary.Latest.Registers
-			e.Dictionary.Latest.Clobbers |= clobbers
-		}
+	if shouldOptimize {
+		e.OptimizeInstrs()
+	}
+
+	if e.Compiling && !e.Dictionary.Latest.IsNoReturn() {
+		clobbers &= ^e.Dictionary.Latest.Registers
+		e.Dictionary.Latest.Clobbers |= clobbers
 	}
 
 	return true
@@ -313,7 +311,12 @@ func (e *Environment) AppendInstrs(i []Instr) {
 }
 
 func (e *Environment) OptimizeInstrs() {
-	e.CodeBuf = PerformPeepholeOptimizationsAtEnd(e.CodeBuf)
+	if e.Compiling {
+		latest := e.Dictionary.Latest
+		latest.Code = PerformPeepholeOptimizationsAtEnd(latest.Code)
+	} else {
+		e.CodeBuf = PerformPeepholeOptimizationsAtEnd(e.CodeBuf)
+	}
 }
 
 func (e *Environment) PopCodeBufInstr() Instr {
