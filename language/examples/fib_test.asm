@@ -2,7 +2,7 @@
 ; : fib ( nth:ecx -- result:edi )
 
 __blue_3169096246_0:
-	mov edi, 0
+	xor edi, edi
 	mov eax, 1
 
 ; : compute ( times:ecx accum:eax scratch:edi -- result:edi )
@@ -39,7 +39,7 @@ __blue_3454868101_0:
 ; : bye ( -- noret )
 
 __blue_1911791459_0:
-	mov edi, 0
+	xor edi, edi
 	call __blue_3454868101_0
 
 global _start

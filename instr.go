@@ -330,11 +330,13 @@ func flowWord(word *Word, env *Environment, context *RunContext) {
 			}
 		}
 
-		env.AppendAsmInstr(&AsmBinaryInstr{
+		flowInstrs := PeepholeAsmBinaryInstr(&AsmBinaryInstr{
 			Mnemonic: "mov",
 			Op1:      op1,
 			Op2:      op2,
 		})
+
+		env.AppendAsmInstrs(flowInstrs)
 	}
 
 	buildClobberGuards(word, context)

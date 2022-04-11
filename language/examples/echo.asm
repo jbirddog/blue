@@ -26,7 +26,7 @@ __blue_3454868101_0:
 ; : bye ( -- noret )
 
 __blue_1911791459_0:
-	mov edi, 0
+	xor edi, edi
 	call __blue_3454868101_0
 
 global _start
@@ -50,7 +50,7 @@ __blue_2157056155_0:
 ; : read ( fd len buf -- result )
 
 __blue_3470762949_0:
-	mov eax, 0
+	xor eax, eax
 	call __blue_1472650507_0
 	ret
 
@@ -92,7 +92,7 @@ __blue_3190202204_1:
 ; : _start ( -- noret )
 
 _start:
-	mov edi, 0
+	xor edi, edi
 	call __blue_3470762949_1
 	mov edi, 1
 	mov edx, eax

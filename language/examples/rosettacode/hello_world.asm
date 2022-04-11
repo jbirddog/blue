@@ -16,7 +16,7 @@ __blue_3454868101_0:
 ; : bye ( -- noret )
 
 __blue_1911791459_0:
-	mov edi, 0
+	xor edi, edi
 	call __blue_3454868101_0
 
 ; : write ( buf:esi len:edx fd:edi -- )

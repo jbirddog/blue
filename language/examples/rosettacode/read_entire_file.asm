@@ -16,7 +16,7 @@ __blue_3454868101_0:
 ; : bye ( -- noret )
 
 __blue_1911791459_0:
-	mov edi, 0
+	xor edi, edi
 	call __blue_3454868101_0
 
 ; : die ( err:eax -- noret )
@@ -105,7 +105,7 @@ section .text
 ; : open-file ( pathname:edi -- )
 
 __blue_3225053210_0:
-	mov esi, 0
+	xor esi, esi
 	call __blue_3546203337_0
 	mov [__blue_1763898183_0], eax
 	ret
@@ -123,8 +123,8 @@ __blue_1039529288_0:
 __blue_2864669986_0:
 	mov r10d, 2
 	mov edx, 1
-	mov r9d, 0
-	mov edi, 0
+	xor r9d, r9d
+	xor edi, edi
 	call __blue_776417966_0
 	ret
 
