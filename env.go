@@ -254,9 +254,9 @@ func (e *Environment) ParseNextWord() bool {
 		log.Fatal("Did not find ", name)
 	}
 
-	if !e.Compiling {
-		e.AppendInstrs(instrs)
+	e.AppendInstrs(instrs)
 
+	if !e.Compiling {
 		if shouldOptimize {
 			e.OptimizeInstrs()
 		}
@@ -265,8 +265,6 @@ func (e *Environment) ParseNextWord() bool {
 			clobbers &= ^e.Dictionary.Latest.Registers
 			e.Dictionary.Latest.Clobbers |= clobbers
 		}
-
-		e.Dictionary.Latest.AppendInstrs(instrs)
 	}
 
 	return true
