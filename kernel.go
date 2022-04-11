@@ -195,6 +195,7 @@ func KernelTick(env *Environment) {
 	env.Dictionary.Latest.AppendInstr(instr)
 }
 
+// TODO when migrating AppendInstr calls drop latest from the cond/loop names
 func condCallLatest(env *Environment, jmp string) {
 	latest := env.Dictionary.Latest
 	refWord := latest.PopInstr().(*RefWordInstr)

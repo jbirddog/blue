@@ -158,7 +158,7 @@ func (e *Environment) DeclWord(word *Word) {
 	e.ValidateRegisterRefs(word.Outputs)
 
 	e.AppendWord(word)
-	e.AppendInstrs([]Instr{
+	e.AppendCodeBufInstrs([]Instr{
 		&CommentInstr{Comment: word.DeclString()},
 		&DeclWordInstr{Word: word},
 	})
@@ -290,12 +290,28 @@ func (e *Environment) PopAsmInstr() AsmInstr {
 	return instr
 }
 
-func (e *Environment) AppendInstr(i Instr) {
+func (e *Environment) AppendCodeBufInstr(i Instr) {
 	e.CodeBuf = append(e.CodeBuf, i)
 }
 
-func (e *Environment) AppendInstrs(i []Instr) {
+func (e *Environment) AppendCodeBufInstrs(i []Instr) {
 	e.CodeBuf = append(e.CodeBuf, i...)
+}
+
+func (e *Environment) AppendInstr(i Instr) {
+	if e.Compiling {
+		e.Dictionary.Latest.AppendInstr(i)
+	} else {
+		e.CodeBuf = append(e.CodeBuf, i)
+	}
+}
+
+func (e *Environment) AppendInstrs(i []Instr) {
+	if e.Compiling {
+		e.Dictionary.Latest.AppendInstrs(i)
+	} else {
+		e.CodeBuf = append(e.CodeBuf, i...)
+	}
 }
 
 func (e *Environment) OptimizeInstrs() {
@@ -333,7 +349,7 @@ func (e *Environment) SuggestSection(section string) {
 		return
 	}
 
-	e.AppendInstr(&SectionInstr{Info: section})
+	e.AppendCodeBufInstr(&SectionInstr{Info: section})
 	e.Section = section
 }
 

@@ -46,6 +46,7 @@
 1. Rosetta Code examples
    1. Strip whitespace from a string/Top and tail
 1. Start putting examples on Rosetta Code
+1. Drop [] support for now, simplify @
 
 ### f6
 
