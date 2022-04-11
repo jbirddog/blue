@@ -158,7 +158,7 @@ func (e *Environment) DeclWord(word *Word) {
 	e.ValidateRegisterRefs(word.Outputs)
 
 	e.AppendWord(word)
-	e.AppendInstrs([]Instr{
+	e.AppendCodeBufInstrs([]Instr{
 		&CommentInstr{Comment: word.DeclString()},
 		&DeclWordInstr{Word: word},
 	})
@@ -254,9 +254,9 @@ func (e *Environment) ParseNextWord() bool {
 		log.Fatal("Did not find ", name)
 	}
 
-	if !e.Compiling {
-		e.AppendInstrs(instrs)
+	e.AppendInstrs(instrs)
 
+	if !e.Compiling {
 		if shouldOptimize {
 			e.OptimizeInstrs()
 		}
@@ -265,8 +265,6 @@ func (e *Environment) ParseNextWord() bool {
 			clobbers &= ^e.Dictionary.Latest.Registers
 			e.Dictionary.Latest.Clobbers |= clobbers
 		}
-
-		e.Dictionary.Latest.AppendInstrs(instrs)
 	}
 
 	return true
@@ -290,19 +288,35 @@ func (e *Environment) PopAsmInstr() AsmInstr {
 	return instr
 }
 
-func (e *Environment) AppendInstr(i Instr) {
+func (e *Environment) AppendCodeBufInstr(i Instr) {
 	e.CodeBuf = append(e.CodeBuf, i)
 }
 
-func (e *Environment) AppendInstrs(i []Instr) {
+func (e *Environment) AppendCodeBufInstrs(i []Instr) {
 	e.CodeBuf = append(e.CodeBuf, i...)
+}
+
+func (e *Environment) AppendInstr(i Instr) {
+	if e.Compiling {
+		e.Dictionary.Latest.AppendInstr(i)
+	} else {
+		e.CodeBuf = append(e.CodeBuf, i)
+	}
+}
+
+func (e *Environment) AppendInstrs(i []Instr) {
+	if e.Compiling {
+		e.Dictionary.Latest.AppendInstrs(i)
+	} else {
+		e.CodeBuf = append(e.CodeBuf, i...)
+	}
 }
 
 func (e *Environment) OptimizeInstrs() {
 	e.CodeBuf = PerformPeepholeOptimizationsAtEnd(e.CodeBuf)
 }
 
-func (e *Environment) PopInstr() Instr {
+func (e *Environment) PopCodeBufInstr() Instr {
 	last := len(e.CodeBuf) - 1
 	instr := e.CodeBuf[last]
 	e.CodeBuf = e.CodeBuf[:last]
@@ -310,14 +324,12 @@ func (e *Environment) PopInstr() Instr {
 	return instr
 }
 
-func (e *Environment) Pop2Instrs() (Instr, Instr) {
-	codeBufLen := len(e.CodeBuf)
-	second := e.CodeBuf[codeBufLen-2]
-	first := e.CodeBuf[codeBufLen-1]
+func (e *Environment) PopInstr() Instr {
+	if e.Compiling {
+		return e.Dictionary.Latest.PopInstr()
+	}
 
-	e.CodeBuf = e.CodeBuf[:codeBufLen-2]
-
-	return second, first
+	return e.PopCodeBufInstr()
 }
 
 func (e *Environment) SuggestSection(section string) {
@@ -333,7 +345,7 @@ func (e *Environment) SuggestSection(section string) {
 		return
 	}
 
-	e.AppendInstr(&SectionInstr{Info: section})
+	e.AppendCodeBufInstr(&SectionInstr{Info: section})
 	e.Section = section
 }
 

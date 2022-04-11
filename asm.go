@@ -83,7 +83,7 @@ type AsmCommentInstr struct {
 }
 
 func (i *AsmCommentInstr) String() string {
-	return fmt.Sprintf("\n; %s", i.Comment)
+	return fmt.Sprintf("\n; %s\n", i.Comment)
 }
 
 type AsmResInstr struct {

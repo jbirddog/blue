@@ -7,17 +7,14 @@
 1. import vs use - one brings in externs other all code from file
    1. link vs include? - use to determine how to build via dsl?
 1. better newline support when generating asm
-1. better placement of comments in asm
 1. outputs don't flow
 1. when importing, can drop the global decls from the imported env?
 1. continue to infer registers from word body
    1. if fully specified, validate
    1. infer during word fallthrough? whole program infer?
 1. validate needs to check for lingering refs/stack items
-1. check env.AppendInstr usage to see if compiling check can be moved there
 1. treat words with only decb more like resb
 1. mov edx, rax bug
-1. peephole doesn't run when compiling a word
 
 ### optimizations
 
@@ -28,7 +25,6 @@
 
 1. jmp vs call ret at tail of word
 1. jmp vs call noret word
-1. mov xxx, 0 -> xor xxx, xxx
 1. mov rxx, 1 -> xor exx, exx ; inc exx
 
 ## language
@@ -37,16 +33,22 @@
 
 # Targets
 
-### f7
+### f7 (current)
 
 1. Build process overhaul
    1. tedious to add new files/builds
    1. blue.sh - run examples
    1. blue.sh - stop the process if a step errors out
+1. peephole doesn't run when compiling a word
+1. peephole - mov xxx, 0 -> xor xxx, xxx
+1. Rosetta Code examples
+   1. Strip whitespace from a string/Top and tail
+1. Start putting examples on Rosetta Code
+1. Drop [] support for now, simplify kernel for @
 
-### f6 (current)
+### f6
 
-1. README
+language and compiler improvements, v0.0.1
 
 ### f5
 
