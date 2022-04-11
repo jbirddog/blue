@@ -114,12 +114,16 @@ func KernelImport(env *Environment) {
 }
 
 func res(env *Environment, size string) {
-	name := env.ReadNextWord()
-	if len(name) == 0 {
-		log.Fatal("res", size, "expects a name")
+	if env.Compiling {
+		log.Fatal("res", size, " does not expect to be declared in a word")
 	}
 
-	countInstr := env.PopInstr().(*LiteralIntInstr)
+	name := env.ReadNextWord()
+	if len(name) == 0 {
+		log.Fatal("res", size, " expects a name")
+	}
+
+	countInstr := env.PopCodeBufInstr().(*LiteralIntInstr)
 	count := uint(countInstr.I)
 
 	env.SuggestSection(".bss")
@@ -127,7 +131,7 @@ func res(env *Environment, size string) {
 	word := &Word{Name: name}
 	env.AppendWord(word)
 
-	env.AppendInstrs([]Instr{
+	env.AppendCodeBufInstrs([]Instr{
 		&CommentInstr{Comment: fmt.Sprintf("%d res%s %s", count, size, name)},
 		&ResInstr{Name: word.AsmLabel, Size: size, Count: count},
 	})
@@ -150,6 +154,9 @@ func KernelResq(env *Environment) {
 }
 
 func KernelDecb(env *Environment) {
+	if !env.Compiling {
+		log.Fatal("decb expects to be inside a word")
+	}
 	latest := env.Dictionary.Latest
 	valueInstr := latest.PopInstr().(*LiteralIntInstr)
 	value := valueInstr.I
@@ -158,6 +165,9 @@ func KernelDecb(env *Environment) {
 }
 
 func KernelDecbLParen(env *Environment) {
+	if !env.Compiling {
+		log.Fatal("decb( expects to be inside a word")
+	}
 	for {
 		name := env.ReadNextWord()
 		if name == ")" {
@@ -173,12 +183,15 @@ func KernelDecbLParen(env *Environment) {
 }
 
 func KernelConst(env *Environment) {
+	if env.Compiling {
+		log.Fatal("const does not expect to be declared in a word")
+	}
 	name := env.ReadNextWord()
 	if len(name) == 0 {
 		log.Fatal("const expects a name")
 	}
 
-	instr := env.PopInstr().(*LiteralIntInstr)
+	instr := env.PopCodeBufInstr().(*LiteralIntInstr)
 	word := NewInlineWord(name, instr)
 
 	env.AppendWord(word)
@@ -194,32 +207,28 @@ func KernelTick(env *Environment) {
 	env.AppendInstr(instr)
 }
 
-// TODO when migrating AppendInstr calls drop latest from the cond/loop names
-// TODO check for PopInstr usage on env, add compile check like AppendInstr
-func condCallLatest(env *Environment, jmp string) {
-	latest := env.Dictionary.Latest
-	refWord := latest.PopInstr().(*RefWordInstr)
+func condCall(env *Environment, jmp string) {
+	refWord := env.PopInstr().(*RefWordInstr)
 	condCall := &CondCallInstr{Jmp: jmp, Target: refWord}
-	latest.AppendInstr(condCall)
+	env.AppendInstr(condCall)
 }
 
 func KernelXl(env *Environment) {
-	condCallLatest(env, "jge")
+	condCall(env, "jge")
 }
 
 func KernelXne(env *Environment) {
-	condCallLatest(env, "je")
+	condCall(env, "je")
 }
 
-func condLoopLatest(env *Environment, jmp string) {
-	latest := env.Dictionary.Latest
-	refWord := latest.PopInstr().(*RefWordInstr)
+func condLoop(env *Environment, jmp string) {
+	refWord := env.PopInstr().(*RefWordInstr)
 	condLoop := &CondLoopInstr{Jmp: jmp, Target: refWord}
-	latest.AppendInstr(condLoop)
+	env.AppendInstr(condLoop)
 }
 
 func KernelLoople(env *Environment) {
-	condLoopLatest(env, "jg")
+	condLoop(env, "jg")
 }
 
 func KernelHide(env *Environment) {

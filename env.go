@@ -316,7 +316,7 @@ func (e *Environment) OptimizeInstrs() {
 	e.CodeBuf = PerformPeepholeOptimizationsAtEnd(e.CodeBuf)
 }
 
-func (e *Environment) PopInstr() Instr {
+func (e *Environment) PopCodeBufInstr() Instr {
 	last := len(e.CodeBuf) - 1
 	instr := e.CodeBuf[last]
 	e.CodeBuf = e.CodeBuf[:last]
@@ -324,14 +324,12 @@ func (e *Environment) PopInstr() Instr {
 	return instr
 }
 
-func (e *Environment) Pop2Instrs() (Instr, Instr) {
-	codeBufLen := len(e.CodeBuf)
-	second := e.CodeBuf[codeBufLen-2]
-	first := e.CodeBuf[codeBufLen-1]
+func (e *Environment) PopInstr() Instr {
+	if e.Compiling {
+		return e.Dictionary.Latest.PopInstr()
+	}
 
-	e.CodeBuf = e.CodeBuf[:codeBufLen-2]
-
-	return second, first
+	return e.PopCodeBufInstr()
 }
 
 func (e *Environment) SuggestSection(section string) {
