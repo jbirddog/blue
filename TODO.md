@@ -39,7 +39,6 @@
    1. tedious to add new files/builds
    1. blue.sh - run examples
    1. blue.sh - stop the process if a step errors out
-1. peephole doesn't run when compiling a word
 1. peephole - mov xxx, 0 -> xor xxx, xxx
 1. Rosetta Code examples
    1. Strip whitespace from a string/Top and tail

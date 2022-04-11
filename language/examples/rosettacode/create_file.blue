@@ -18,9 +18,10 @@ global _start
 00100 const create
 01000 const truncate
 
-create for-writing or truncate or const flags
+: create-file ( pathname -- ) 
+	create for-writing or truncate or
+	0640 open close ;
 
-: create-file ( pathname -- ) flags 0640 open close ;
 : make-directory ( pathname -- ) 0750 mkdir ;
 
 : create-output-file ( -- ) s" output.txt" drop create-file ;
