@@ -15,9 +15,9 @@ blue examples/echo.blue
 nasm -f elf64 -o .build/obj/echo.o examples/echo.asm
 ld -o .build/bin/echo .build/obj/echo.o
 
-#
-# rosetta code examples
-#
+cd tutorial
+./build.sh
+cd ../
 
 cd examples/rosettacode
 ./build.sh

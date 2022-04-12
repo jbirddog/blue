@@ -13,6 +13,12 @@ __blue_1147400058_0:
 	loop __blue_1147400058_0
 	ret
 
+; : example ( -- )
+
+__blue_2347908769_0:
+	mov ecx, 11
+	jmp __blue_3169096246_0
+
 global exit
 
 global bye
