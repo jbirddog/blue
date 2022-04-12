@@ -22,14 +22,16 @@ __blue_1911791459_0:
 ; : write ( buf:esi len:edx fd:edi -- )
 
 __blue_3190202204_0:
-	mov eax, 1
+	xor eax, eax
+	inc eax
 	call __blue_4057121178_0
 	ret
 
 ; : print ( buf len -- )
 
 __blue_372738696_0:
-	mov edi, 1
+	xor edi, edi
+	inc edi
 	call __blue_3190202204_0
 	ret
 
@@ -43,7 +45,8 @@ __blue_855163316_0:
 db 10
 db 0
 __blue_1223589535_0:
-	mov edx, 1
+	xor edx, edx
+	inc edx
 	mov esi, __blue_855163316_0
 	call __blue_372738696_0
 	ret

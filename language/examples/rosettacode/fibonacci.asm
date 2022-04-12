@@ -3,7 +3,8 @@
 
 __blue_3169096246_0:
 	xor edi, edi
-	mov eax, 1
+	xor eax, eax
+	inc eax
 
 ; : compute ( times:ecx accum:eax scratch:edi -- result:edi )
 

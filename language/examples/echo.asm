@@ -57,7 +57,8 @@ __blue_3470762949_0:
 ; : write ( fd len buf -- result )
 
 __blue_3190202204_0:
-	mov eax, 1
+	xor eax, eax
+	inc eax
 	call __blue_1472650507_0
 	ret
 
@@ -94,7 +95,8 @@ __blue_3190202204_1:
 _start:
 	xor edi, edi
 	call __blue_3470762949_1
-	mov edi, 1
+	xor edi, edi
+	inc edi
 	mov edx, eax
 	call __blue_3190202204_1
 	call __blue_1911791459_0

@@ -86,14 +86,36 @@ func PerformPeepholeOptimizationsAtEnd(instrs []Instr) []Instr {
 	return instrs
 }
 
-func PeepholeAsmBinaryInstr(instr *AsmBinaryInstr) []AsmInstr {
-	if instr.Mnemonic == "mov" && instr.Op2 == "0" {
-		if _, found := registers[instr.Op1]; found {
-			return []AsmInstr{&AsmBinaryInstr{
+func peepholeMovToReg(instr *AsmBinaryInstr) []AsmInstr {
+	if instr.Op2 == "0" {
+		return []AsmInstr{&AsmBinaryInstr{
+			Mnemonic: "xor",
+			Op1:      instr.Op1,
+			Op2:      instr.Op1,
+		}}
+	}
+
+	if instr.Op2 == "1" {
+		return []AsmInstr{
+			&AsmBinaryInstr{
 				Mnemonic: "xor",
 				Op1:      instr.Op1,
 				Op2:      instr.Op1,
-			}}
+			},
+			&AsmUnaryInstr{
+				Mnemonic: "inc",
+				Op:       instr.Op1,
+			},
+		}
+	}
+
+	return []AsmInstr{instr}
+}
+
+func PeepholeAsmBinaryInstr(instr *AsmBinaryInstr) []AsmInstr {
+	if instr.Mnemonic == "mov" {
+		if _, found := registers[instr.Op1]; found {
+			return peepholeMovToReg(instr)
 		}
 	}
 

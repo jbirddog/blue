@@ -3,7 +3,8 @@
 
 __blue_3169096246_0:
 	xor edi, edi
-	mov eax, 1
+	xor eax, eax
+	inc eax
 
 ; : compute ( times:ecx accum:eax scratch:edi -- result:edi )
 
@@ -49,7 +50,8 @@ global _start
 ; : test.failure ( -- )
 
 __blue_1516647173_0:
-	mov edi, 1
+	xor edi, edi
+	inc edi
 	call __blue_3454868101_0
 	ret
 
@@ -66,9 +68,11 @@ __blue_2157056155_0:
 ; : _start ( -- noret )
 
 _start:
-	mov ecx, 1
+	xor ecx, ecx
+	inc ecx
 	call __blue_3169096246_0
-	mov eax, 1
+	xor eax, eax
+	inc eax
 	call __blue_2636330760_0
 	mov ecx, 11
 	call __blue_3169096246_0

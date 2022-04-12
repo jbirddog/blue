@@ -122,7 +122,8 @@ __blue_1039529288_0:
 
 __blue_2864669986_0:
 	mov r10d, 2
-	mov edx, 1
+	xor edx, edx
+	inc edx
 	xor r9d, r9d
 	xor edi, edi
 	call __blue_776417966_0
