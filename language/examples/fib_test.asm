@@ -53,7 +53,6 @@ __blue_1516647173_0:
 	xor edi, edi
 	inc edi
 	jmp __blue_3454868101_0
-	ret
 
 ; : test= ( actual:edi expected:eax -- )
 

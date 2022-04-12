@@ -12,12 +12,28 @@ func (m *AnyLiteralIntMatcher) Matches(instr Instr) bool {
 	return matches
 }
 
+type CallWordMatcher struct{}
+
+func (m *CallWordMatcher) Matches(instr Instr) bool {
+	_, matches := instr.(*CallWordInstr)
+
+	return matches
+}
+
 type OrMatcher struct{}
 
 func (m *OrMatcher) Matches(instr Instr) bool {
 	x8664, matches := instr.(*X8664Instr)
 
 	return matches && x8664.Mnemonic == "or"
+}
+
+type RetMatcher struct{}
+
+func (m *RetMatcher) Matches(instr Instr) bool {
+	x8664, matches := instr.(*X8664Instr)
+
+	return matches && x8664.Mnemonic == "ret"
 }
 
 type InstrPattern []InstrMatcher
@@ -63,8 +79,24 @@ func (o *ConstantFoldOrOptimization) Optimize(current []Instr) []Instr {
 	return []Instr{&LiteralIntInstr{I: i1 | i2}}
 }
 
+type JmpInsteadOfCallRetOptimization struct{}
+
+func (o *JmpInsteadOfCallRetOptimization) Pattern() InstrPattern {
+	return InstrPattern{
+		&CallWordMatcher{},
+		&RetMatcher{},
+	}
+}
+
+func (o *JmpInsteadOfCallRetOptimization) Optimize(current []Instr) []Instr {
+	word := current[0].(*CallWordInstr).Word
+
+	return []Instr{&JmpWordInstr{Word: word}}
+}
+
 var optimizations = []PeepholeOptimization{
 	&ConstantFoldOrOptimization{},
+	&JmpInsteadOfCallRetOptimization{},
 }
 
 // TODO not very efficient or correct at this stage

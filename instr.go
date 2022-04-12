@@ -46,6 +46,14 @@ func (i *FlowWordInstr) Run(env *Environment, context *RunContext) {
 	flowWord(i.Word, env, context)
 }
 
+type JmpWordInstr struct {
+	Word *Word
+}
+
+func (i *JmpWordInstr) Run(env *Environment, context *RunContext) {
+	env.AppendAsmInstr(&AsmUnaryInstr{Mnemonic: "jmp", Op: i.Word.AsmLabel})
+}
+
 type CallWordInstr struct {
 	Word *Word
 }

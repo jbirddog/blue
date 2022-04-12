@@ -87,6 +87,23 @@ func attemptInference(word *Word) (bool, []string, []string) {
 			wordOutputs := instr.Word.OutputRegisters()
 			outputs = outputs[:outputsLen-outputsConsumed]
 			outputs = append(outputs, wordOutputs...)
+			// TODO refactor these two
+		case *JmpWordInstr:
+			if !instr.Word.HasCompleteRefs() {
+				return false, nil, nil
+			}
+
+			wordInputs := instr.Word.InputRegisters()
+			wordInputsLen := len(wordInputs)
+			outputsLen := len(outputs)
+			outputsConsumed := min(outputsLen, wordInputsLen)
+
+			wordInputs = wordInputs[:wordInputsLen-outputsConsumed]
+			inputs = append(inputs, wordInputs...)
+
+			wordOutputs := instr.Word.OutputRegisters()
+			outputs = outputs[:outputsLen-outputsConsumed]
+			outputs = append(outputs, wordOutputs...)
 		}
 
 		if pendingSwapIdx >= 0 && len(inputs) > pendingSwapIdx+1 {
