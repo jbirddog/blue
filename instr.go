@@ -52,6 +52,16 @@ type CallWordInstr struct {
 
 func (i *CallWordInstr) Run(env *Environment, context *RunContext) {
 	if env.Compiling {
+		if i.Word.IsNoReturn() {
+			env.AppendAsmInstr(&AsmUnaryInstr{
+				Mnemonic: "jmp", 
+				Op: i.Word.AsmLabel,
+			})
+
+			return
+		}
+
+		// TODO remove NoRetun check from env when or'ing clobbers
 		pushes, pops := clobberGuardInstrs(context)
 		env.AppendAsmInstrs(pushes)
 		env.AppendAsmInstr(&AsmCallInstr{Label: i.Word.AsmLabel})

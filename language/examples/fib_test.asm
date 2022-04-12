@@ -41,7 +41,7 @@ __blue_3454868101_0:
 
 __blue_1911791459_0:
 	xor edi, edi
-	call __blue_3454868101_0
+	jmp __blue_3454868101_0
 
 global _start
 
@@ -52,7 +52,7 @@ global _start
 __blue_1516647173_0:
 	xor edi, edi
 	inc edi
-	call __blue_3454868101_0
+	jmp __blue_3454868101_0
 	ret
 
 ; : test= ( actual:edi expected:eax -- )
@@ -86,4 +86,4 @@ _start:
 	call __blue_3169096246_0
 	mov eax, 1346269
 	call __blue_2636330760_0
-	call __blue_1911791459_0
+	jmp __blue_1911791459_0

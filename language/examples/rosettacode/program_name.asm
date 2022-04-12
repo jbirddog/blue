@@ -17,7 +17,7 @@ __blue_3454868101_0:
 
 __blue_1911791459_0:
 	xor edi, edi
-	call __blue_3454868101_0
+	jmp __blue_3454868101_0
 
 ; : write ( buf:esi len:edx fd:edi -- )
 
@@ -105,4 +105,4 @@ _start:
 	add rsp, 8
 	mov rdx, [rsp]
 	call __blue_2701174125_0
-	call __blue_1911791459_0
+	jmp __blue_1911791459_0

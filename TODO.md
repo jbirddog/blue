@@ -42,7 +42,6 @@
 1. Drop [] support for now, simplify kernel for @
 1. More peephole optimizations
    1. jmp vs call ret at tail of word
-   1. jmp vs call noret word
    1. mov rxx, 0 -> xor exx
    1. mov rxx, 1 -> xor exx, exx ; inc exx
    1. Update README/tutorial with new assembly

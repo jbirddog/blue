@@ -17,14 +17,14 @@ __blue_3454868101_0:
 
 __blue_1911791459_0:
 	xor edi, edi
-	call __blue_3454868101_0
+	jmp __blue_3454868101_0
 
 ; : die ( err:eax -- noret )
 
 __blue_3630339793_0:
 	neg eax
 	mov edi, eax
-	call __blue_3454868101_0
+	jmp __blue_3454868101_0
 
 ; : unwrap ( result:eax -- value:eax )
 
@@ -128,4 +128,4 @@ __blue_1223589535_1:
 _start:
 	call __blue_2468950182_0
 	call __blue_2374470879_0
-	call __blue_1911791459_0
+	jmp __blue_1911791459_0

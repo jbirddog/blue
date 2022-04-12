@@ -27,7 +27,7 @@ __blue_3454868101_0:
 
 __blue_1911791459_0:
 	xor edi, edi
-	call __blue_3454868101_0
+	jmp __blue_3454868101_0
 
 global _start
 
@@ -99,4 +99,4 @@ _start:
 	inc edi
 	mov edx, eax
 	call __blue_3190202204_1
-	call __blue_1911791459_0
+	jmp __blue_1911791459_0
