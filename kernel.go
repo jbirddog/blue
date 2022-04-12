@@ -52,9 +52,11 @@ func KernelSemi(env *Environment) {
 
 	if !latest.IsNoReturn() {
 		latest.AppendInstr(&X8664Instr{Mnemonic: "ret"})
-		env.OptimizeInstrs()
 	}
 
+	// TODO this should be a whole word optimization pass instead of 
+	// just optimizing the tail
+	env.OptimizeInstrs()
 	env.Compiling = false
 	env.DeclWord(latest)
 }

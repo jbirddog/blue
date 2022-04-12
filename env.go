@@ -257,6 +257,10 @@ func (e *Environment) ParseNextWord() bool {
 	e.AppendInstrs(instrs)
 
 	if shouldOptimize {
+		// TODO this should be done once when the word has finished compiling
+		// and cover more cases than just asm instructions (move leading string
+		// before word, etc). Need to consider how this interacts with computing
+		// the flow between words
 		e.OptimizeInstrs()
 	}
 
