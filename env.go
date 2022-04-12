@@ -260,7 +260,7 @@ func (e *Environment) ParseNextWord() bool {
 		e.OptimizeInstrs()
 	}
 
-	if e.Compiling && !e.Dictionary.Latest.IsNoReturn() {
+	if e.Compiling {
 		clobbers &= ^e.Dictionary.Latest.Registers
 		e.Dictionary.Latest.Clobbers |= clobbers
 	}
