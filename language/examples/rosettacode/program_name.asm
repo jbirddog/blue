@@ -16,22 +16,23 @@ __blue_3454868101_0:
 ; : bye ( -- noret )
 
 __blue_1911791459_0:
-	mov edi, 0
-	call __blue_3454868101_0
+	xor edi, edi
+	jmp __blue_3454868101_0
 
 ; : write ( buf:esi len:edx fd:edi -- )
 
 __blue_3190202204_0:
-	mov eax, 1
+	xor eax, eax
+	inc eax
 	call __blue_4057121178_0
 	ret
 
 ; : print ( buf len -- )
 
 __blue_372738696_0:
-	mov edi, 1
-	call __blue_3190202204_0
-	ret
+	xor edi, edi
+	inc edi
+	jmp __blue_3190202204_0
 
 ; : newline ( -- )
 
@@ -43,17 +44,16 @@ __blue_855163316_0:
 db 10
 db 0
 __blue_1223589535_0:
-	mov edx, 1
+	xor edx, edx
+	inc edx
 	mov esi, __blue_855163316_0
-	call __blue_372738696_0
-	ret
+	jmp __blue_372738696_0
 
 ; : println ( buf len -- )
 
 __blue_415234214_0:
 	call __blue_372738696_0
-	call __blue_4281549323_0
-	ret
+	jmp __blue_4281549323_0
 
 ; : find0 ( start:rsi -- end:rsi )
 
@@ -87,8 +87,7 @@ __blue_3207375596_0:
 
 __blue_2701174125_0:
 	call __blue_3207375596_0
-	call __blue_415234214_0
-	ret
+	jmp __blue_415234214_0
 
 ; : arg0 ( rsp -- rsp )
 
@@ -102,4 +101,4 @@ _start:
 	add rsp, 8
 	mov rdx, [rsp]
 	call __blue_2701174125_0
-	call __blue_1911791459_0
+	jmp __blue_1911791459_0

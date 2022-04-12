@@ -15,6 +15,10 @@
 1. validate needs to check for lingering refs/stack items
 1. treat words with only decb more like resb
 1. mov edx, rax bug
+1. More peephole optimizations
+   1. mov rxx, 0 -> xor exx
+   1. mov rxx, 1 -> xor exx, exx ; inc exx
+1. whole word optimizations
 
 ### optimizations
 
@@ -23,9 +27,6 @@
 
 #### peephole
 
-1. jmp vs call ret at tail of word
-1. jmp vs call noret word
-1. mov rxx, 1 -> xor exx, exx ; inc exx
 
 ## language
 
@@ -39,12 +40,12 @@
    1. tedious to add new files/builds
    1. blue.sh - run examples
    1. blue.sh - stop the process if a step errors out
-1. peephole doesn't run when compiling a word
-1. peephole - mov xxx, 0 -> xor xxx, xxx
 1. Rosetta Code examples
    1. Strip whitespace from a string/Top and tail
 1. Start putting examples on Rosetta Code
 1. Drop [] support for now, simplify kernel for @
+1. Update README/tutorial with new assembly
+1. Move register decls into x8664.go
 
 ### f6
 

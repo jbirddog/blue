@@ -26,16 +26,15 @@ __blue_3454868101_0:
 ; : bye ( -- noret )
 
 __blue_1911791459_0:
-	mov edi, 0
-	call __blue_3454868101_0
+	xor edi, edi
+	jmp __blue_3454868101_0
 
 global _start
 
 ; : syscall3 ( edi edx esi num:eax -- result:eax )
 
 __blue_1472650507_0:
-	call __blue_4057121178_0
-	ret
+	jmp __blue_4057121178_0
 
 ; : unwrap ( result:eax -- value:eax )
 
@@ -50,16 +49,15 @@ __blue_2157056155_0:
 ; : read ( fd len buf -- result )
 
 __blue_3470762949_0:
-	mov eax, 0
-	call __blue_1472650507_0
-	ret
+	xor eax, eax
+	jmp __blue_1472650507_0
 
 ; : write ( fd len buf -- result )
 
 __blue_3190202204_0:
-	mov eax, 1
-	call __blue_1472650507_0
-	ret
+	xor eax, eax
+	inc eax
+	jmp __blue_1472650507_0
 
 section .bss
 
@@ -74,16 +72,14 @@ __blue_3470762949_1:
 	mov esi, __blue_1926597602_0
 	mov edx, 1024
 	call __blue_3470762949_0
-	call __blue_4055961022_0
-	ret
+	jmp __blue_4055961022_0
 
 ; : write ( len fd -- wrote )
 
 __blue_3190202204_1:
 	mov esi, __blue_1926597602_0
 	call __blue_3190202204_0
-	call __blue_4055961022_0
-	ret
+	jmp __blue_4055961022_0
 
 ;  TODO compare read/write bytes for exit status
 
@@ -92,9 +88,10 @@ __blue_3190202204_1:
 ; : _start ( -- noret )
 
 _start:
-	mov edi, 0
+	xor edi, edi
 	call __blue_3470762949_1
-	mov edi, 1
+	xor edi, edi
+	inc edi
 	mov edx, eax
 	call __blue_3190202204_1
-	call __blue_1911791459_0
+	jmp __blue_1911791459_0

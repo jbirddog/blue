@@ -46,12 +46,29 @@ func (i *FlowWordInstr) Run(env *Environment, context *RunContext) {
 	flowWord(i.Word, env, context)
 }
 
+type JmpWordInstr struct {
+	Word *Word
+}
+
+func (i *JmpWordInstr) Run(env *Environment, context *RunContext) {
+	env.AppendAsmInstr(&AsmUnaryInstr{Mnemonic: "jmp", Op: i.Word.AsmLabel})
+}
+
 type CallWordInstr struct {
 	Word *Word
 }
 
 func (i *CallWordInstr) Run(env *Environment, context *RunContext) {
 	if env.Compiling {
+		if i.Word.IsNoReturn() {
+			env.AppendAsmInstr(&AsmUnaryInstr{
+				Mnemonic: "jmp",
+				Op:       i.Word.AsmLabel,
+			})
+
+			return
+		}
+
 		pushes, pops := clobberGuardInstrs(context)
 		env.AppendAsmInstrs(pushes)
 		env.AppendAsmInstr(&AsmCallInstr{Label: i.Word.AsmLabel})
@@ -330,11 +347,13 @@ func flowWord(word *Word, env *Environment, context *RunContext) {
 			}
 		}
 
-		env.AppendAsmInstr(&AsmBinaryInstr{
+		flowInstrs := PeepholeAsmBinaryInstr(&AsmBinaryInstr{
 			Mnemonic: "mov",
 			Op1:      op1,
 			Op2:      op2,
 		})
+
+		env.AppendAsmInstrs(flowInstrs)
 	}
 
 	buildClobberGuards(word, context)

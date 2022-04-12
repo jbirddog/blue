@@ -2,8 +2,9 @@
 ; : fib ( nth:ecx -- result:edi )
 
 __blue_3169096246_0:
-	mov edi, 0
-	mov eax, 1
+	xor edi, edi
+	xor eax, eax
+	inc eax
 
 ; : compute ( times:ecx accum:eax scratch:edi -- result:edi )
 
@@ -11,6 +12,12 @@ __blue_1147400058_0:
 	xadd eax, edi
 	loop __blue_1147400058_0
 	ret
+
+; : example ( -- )
+
+__blue_2347908769_0:
+	mov ecx, 11
+	jmp __blue_3169096246_0
 
 global exit
 
@@ -39,8 +46,8 @@ __blue_3454868101_0:
 ; : bye ( -- noret )
 
 __blue_1911791459_0:
-	mov edi, 0
-	call __blue_3454868101_0
+	xor edi, edi
+	jmp __blue_3454868101_0
 
 global _start
 
@@ -49,9 +56,9 @@ global _start
 ; : test.failure ( -- )
 
 __blue_1516647173_0:
-	mov edi, 1
-	call __blue_3454868101_0
-	ret
+	xor edi, edi
+	inc edi
+	jmp __blue_3454868101_0
 
 ; : test= ( actual:edi expected:eax -- )
 
@@ -66,9 +73,11 @@ __blue_2157056155_0:
 ; : _start ( -- noret )
 
 _start:
-	mov ecx, 1
+	xor ecx, ecx
+	inc ecx
 	call __blue_3169096246_0
-	mov eax, 1
+	xor eax, eax
+	inc eax
 	call __blue_2636330760_0
 	mov ecx, 11
 	call __blue_3169096246_0
@@ -82,4 +91,4 @@ _start:
 	call __blue_3169096246_0
 	mov eax, 1346269
 	call __blue_2636330760_0
-	call __blue_1911791459_0
+	jmp __blue_1911791459_0

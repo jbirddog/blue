@@ -52,6 +52,22 @@ func min(a, b int) int {
 	return b
 }
 
+func attemptInferenceToNextWord(word *Word, inputs []string, outputs []string) ([]string, []string) {
+	wordInputs := word.InputRegisters()
+	wordInputsLen := len(wordInputs)
+	outputsLen := len(outputs)
+	outputsConsumed := min(outputsLen, wordInputsLen)
+
+	wordInputs = wordInputs[:wordInputsLen-outputsConsumed]
+	inputs = append(inputs, wordInputs...)
+
+	wordOutputs := word.OutputRegisters()
+	outputs = outputs[:outputsLen-outputsConsumed]
+	outputs = append(outputs, wordOutputs...)
+
+	return inputs, outputs
+}
+
 func attemptInference(word *Word) (bool, []string, []string) {
 	var inputs []string
 	var outputs []string
@@ -76,17 +92,17 @@ func attemptInference(word *Word) (bool, []string, []string) {
 				return false, nil, nil
 			}
 
-			wordInputs := instr.Word.InputRegisters()
-			wordInputsLen := len(wordInputs)
-			outputsLen := len(outputs)
-			outputsConsumed := min(outputsLen, wordInputsLen)
+			inputs, outputs = attemptInferenceToNextWord(instr.Word,
+				inputs,
+				outputs)
+		case *JmpWordInstr:
+			if !instr.Word.HasCompleteRefs() {
+				return false, nil, nil
+			}
 
-			wordInputs = wordInputs[:wordInputsLen-outputsConsumed]
-			inputs = append(inputs, wordInputs...)
-
-			wordOutputs := instr.Word.OutputRegisters()
-			outputs = outputs[:outputsLen-outputsConsumed]
-			outputs = append(outputs, wordOutputs...)
+			inputs, outputs = attemptInferenceToNextWord(instr.Word,
+				inputs,
+				outputs)
 		}
 
 		if pendingSwapIdx >= 0 && len(inputs) > pendingSwapIdx+1 {

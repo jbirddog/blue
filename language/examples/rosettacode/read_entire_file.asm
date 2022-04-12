@@ -16,15 +16,15 @@ __blue_3454868101_0:
 ; : bye ( -- noret )
 
 __blue_1911791459_0:
-	mov edi, 0
-	call __blue_3454868101_0
+	xor edi, edi
+	jmp __blue_3454868101_0
 
 ; : die ( err:eax -- noret )
 
 __blue_3630339793_0:
 	neg eax
 	mov edi, eax
-	call __blue_3454868101_0
+	jmp __blue_3454868101_0
 
 ; : unwrap ( result:eax -- value:eax )
 
@@ -47,16 +47,14 @@ __blue_1614081290_0:
 __blue_3546203337_0:
 	mov eax, 2
 	call __blue_4057121178_0
-	call __blue_4055961022_0
-	ret
+	jmp __blue_4055961022_0
 
 ; : close ( fd:edi -- )
 
 __blue_667630371_0:
 	mov eax, 3
 	call __blue_4057121178_0
-	call __blue_1614081290_0
-	ret
+	jmp __blue_1614081290_0
 
 section .bss
 
@@ -76,24 +74,21 @@ section .text
 __blue_1508683483_0:
 	mov eax, 5
 	call __blue_4057121178_0
-	call __blue_1614081290_0
-	ret
+	jmp __blue_1614081290_0
 
 ; : mmap ( fd:r8d len:esi addr:edi off:r9d prot:edx flags:r10d -- buf:eax )
 
 __blue_776417966_0:
 	mov eax, 9
 	call __blue_4057121178_0
-	call __blue_4055961022_0
-	ret
+	jmp __blue_4055961022_0
 
 ; : munmap ( addr:edi len:esi -- )
 
 __blue_287864331_0:
 	mov eax, 11
 	call __blue_4057121178_0
-	call __blue_1614081290_0
-	ret
+	jmp __blue_1614081290_0
 
 section .bss
 
@@ -105,7 +100,7 @@ section .text
 ; : open-file ( pathname:edi -- )
 
 __blue_3225053210_0:
-	mov esi, 0
+	xor esi, esi
 	call __blue_3546203337_0
 	mov [__blue_1763898183_0], eax
 	ret
@@ -115,40 +110,36 @@ __blue_3225053210_0:
 __blue_1039529288_0:
 	mov esi, __blue_1200943365_0
 	mov edi, [__blue_1763898183_0]
-	call __blue_1508683483_0
-	ret
+	jmp __blue_1508683483_0
 
 ; : map-file ( fd len -- buf )
 
 __blue_2864669986_0:
 	mov r10d, 2
-	mov edx, 1
-	mov r9d, 0
-	mov edi, 0
-	call __blue_776417966_0
-	ret
+	xor edx, edx
+	inc edx
+	xor r9d, r9d
+	xor edi, edi
+	jmp __blue_776417966_0
 
 ; : map-file ( -- buf )
 
 __blue_2864669986_1:
 	mov esi, [__blue_1140937235_0]
 	mov r8d, [__blue_1763898183_0]
-	call __blue_2864669986_0
-	ret
+	jmp __blue_2864669986_0
 
 ; : unmap-file ( buf -- )
 
 __blue_255719461_0:
 	mov esi, [__blue_1140937235_0]
-	call __blue_287864331_0
-	ret
+	jmp __blue_287864331_0
 
 ; : close-file ( -- )
 
 __blue_2161677324_0:
 	mov edi, [__blue_1763898183_0]
-	call __blue_667630371_0
-	ret
+	jmp __blue_667630371_0
 
 ; : open-this-file ( -- )
 
@@ -181,8 +172,7 @@ db 101
 db 0
 __blue_1223589535_0:
 	mov edi, __blue_855163316_0
-	call __blue_3225053210_0
-	ret
+	jmp __blue_3225053210_0
 
 ; : _start ( -- noret )
 
@@ -195,4 +185,4 @@ _start:
 	mov edi, eax
 	call __blue_255719461_0
 	call __blue_2161677324_0
-	call __blue_1911791459_0
+	jmp __blue_1911791459_0

@@ -48,13 +48,16 @@ func KernelLatest(env *Environment) {
 }
 
 func KernelSemi(env *Environment) {
-	env.Compiling = false
 	latest := env.Dictionary.Latest
 
 	if !latest.IsNoReturn() {
 		latest.AppendInstr(&X8664Instr{Mnemonic: "ret"})
 	}
 
+	// TODO this should be a whole word optimization pass instead of 
+	// just optimizing the tail
+	env.OptimizeInstrs()
+	env.Compiling = false
 	env.DeclWord(latest)
 }
 
