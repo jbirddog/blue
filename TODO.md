@@ -46,6 +46,7 @@
    1. mov rxx, 0 -> xor exx
    1. mov rxx, 1 -> xor exx, exx ; inc exx
    1. Update README/tutorial with new assembly
+1. Move register decls into x8664.go
 
 ### f6
 
