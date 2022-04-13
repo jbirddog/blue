@@ -43,7 +43,6 @@
 1. Rosetta Code examples
    1. Strip whitespace from a string/Top and tail
 1. Start putting examples on Rosetta Code
-1. Drop [] support for now, simplify kernel for @
 1. Update README/tutorial with new assembly
 
 ### f6

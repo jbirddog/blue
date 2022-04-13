@@ -243,39 +243,6 @@ func KernelHide(env *Environment) {
 	word.Hidden()
 }
 
-func KernelLBracket(env *Environment) {
-	var parts []string
-	replacements := 0
-
-	for {
-		name := env.ReadNextWord()
-		if len(name) == 0 {
-			log.Fatal("[ expects a ]")
-		}
-
-		if name == "]" {
-			break
-		}
-
-		if name == "_" {
-			replacements += 1
-			parts = append(parts, "%s")
-			continue
-		}
-
-		parts = append(parts, name)
-	}
-
-	if len(parts) == 0 {
-		log.Fatal("[ expects a word before ]")
-	}
-
-	env.AppendInstr(&BracketInstr{
-		Value:        strings.Join(parts, " "),
-		Replacements: replacements,
-	})
-}
-
 func KernelSQuote(env *Environment) {
 	// TODO this won't handle nested quotes
 	str := env.ReadTil(`"`)
