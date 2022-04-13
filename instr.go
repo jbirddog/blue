@@ -218,24 +218,11 @@ func (i *CondLoopInstr) Run(env *Environment, context *RunContext) {
 	})
 }
 
-type BracketInstr struct {
-	Value        string
-	Replacements int
-}
+type BracketInstr struct {}
 
 func (i *BracketInstr) Run(env *Environment, context *RunContext) {
-	newInput := i.Value
-
-	if i.Replacements > 0 {
-		divide := len(context.Inputs) - i.Replacements
-		replacements := context.Inputs[divide:]
-		context.Inputs = context.Inputs[:divide]
-
-		// TODO believe this won't work with multiple replacements
-		newInput = fmt.Sprintf(newInput, replacements)
-	}
-
-	context.AppendInput(newInput)
+	ident := context.PopInput()
+	context.AppendInput(fmt.Sprintf("[%s]", ident))
 }
 
 type AsciiStrInstr struct {

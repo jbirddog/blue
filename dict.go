@@ -35,9 +35,7 @@ func DefaultDictionary() *Dictionary {
 		NewCallGoWord("loople", KernelLoople).Immediate(),
 		NewCallGoWord("const", KernelConst),
 		NewCallGoWord("hide", KernelHide),
-		NewCallGoWord("[", KernelLBracket).Immediate(),
-		NewInlineWord("[]", &BracketInstr{Value: "%s", Replacements: 1}),
-		NewInlineWord("@", &BracketInstr{Value: "%s", Replacements: 1}),
+		NewInlineWord("@", &BracketInstr{}),
 		NewInlineWord("!", &SetInstr{}),
 		NewCallGoWord(`s"`, KernelSQuote).Immediate(),
 	})
