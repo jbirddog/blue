@@ -7,8 +7,9 @@ global _start
 : die ( err:eax -- noret ) neg exit ;
 
 : unwrap ( result:eax -- value:eax ) dup 0 cmp ' die xl ;
-: ignore ( result:eax ignore:edi -- ) cmp ' die xne ;
 : ordie ( result -- ) unwrap drop ;
+
+: ignore ( result:eax ignore:edi -- ) swap dup rot cmp ' ordie xne ;
 
 1 const stdout
 
@@ -21,9 +22,9 @@ global _start
 : mkdir ( path:edi -- ) 0750 mkdir exists ignore ;
 
 : make-build-dirs ( -- )
-	s" .build" drop mkdir
-	s" .build/bin" drop mkdir
-	s" .build/obj" drop mkdir
+	c" .build" mkdir
+	c" .build/bin" mkdir
+	c" .build/obj" mkdir
 ;
 
 : usage ( -- ) s" 

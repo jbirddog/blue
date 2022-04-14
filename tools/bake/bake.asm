@@ -36,20 +36,20 @@ __blue_4055961022_0:
 __blue_2157056155_0:
 	ret
 
+; : ordie ( result -- )
+
+__blue_1614081290_0:
+	call __blue_4055961022_0
+	ret
+
 ; : ignore ( result:eax ignore:edi -- )
 
 __blue_2118064195_0:
 	cmp eax, edi
 	je __blue_2157056155_1
-	call __blue_3630339793_0
+	call __blue_1614081290_0
 
 __blue_2157056155_1:
-	ret
-
-; : ordie ( result -- )
-
-__blue_1614081290_0:
-	call __blue_4055961022_0
 	ret
 
 ; : write ( buf:esi len:edx fd:edi -- )
