@@ -218,15 +218,28 @@ func (i *CondLoopInstr) Run(env *Environment, context *RunContext) {
 	})
 }
 
-type BracketInstr struct {}
+type BracketInstr struct{}
 
 func (i *BracketInstr) Run(env *Environment, context *RunContext) {
 	ident := context.PopInput()
 	context.AppendInput(fmt.Sprintf("[%s]", ident))
 }
 
+type RotInstr struct{}
+
+func (i *RotInstr) Run(env *Environment, context *RunContext) {
+	input3 := context.PopInput()
+	input2 := context.PopInput()
+	input1 := context.PopInput()
+
+	context.AppendInput(input2)
+	context.AppendInput(input3)
+	context.AppendInput(input1)
+}
+
 type AsciiStrInstr struct {
-	Str string
+	Str     string
+	PushLen bool
 }
 
 func (i *AsciiStrInstr) Run(env *Environment, context *RunContext) {
@@ -249,7 +262,10 @@ func (i *AsciiStrInstr) Run(env *Environment, context *RunContext) {
 
 	env.AppendAsmInstrs(asmInstrs)
 	context.AppendInput(refLabel)
-	context.AppendInput(fmt.Sprint(len(bytes)))
+
+	if i.PushLen {
+		context.AppendInput(fmt.Sprint(len(bytes)))
+	}
 }
 
 func unescape(bytes []byte) []byte {

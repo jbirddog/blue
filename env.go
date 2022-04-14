@@ -231,6 +231,9 @@ func (e *Environment) ParseNextWord() bool {
 	shouldOptimize := false
 
 	if word := e.Dictionary.Find(name); word != nil {
+		// TODO this IsInline check isn't quite right
+		// eg: rot doesn't run when not compiling
+		// need to recall reason this was added and fix properly
 		if (!e.Compiling || word.IsImmediate()) && !word.IsInline() {
 			context := &RunContext{}
 
