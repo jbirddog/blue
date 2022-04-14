@@ -1,8 +1,10 @@
 #!/usr/bin/sh
 
-mkdir -p .build/bin
-mkdir -p .build/obj
+mkdir -p .bootstrap/bin
+mkdir -p .bootstrap/obj
 
 blue bake.blue
-nasm -f elf64 -o .build/obj/bake.o bake.asm
-ld -o .build/bin/bake .build/obj/bake.o
+nasm -f elf64 -o .bootstrap/obj/bake.o bake.asm
+ld -o .bootstrap/bin/bake .bootstrap/obj/bake.o
+
+.bootstrap/bin/bake bake.blue

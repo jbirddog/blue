@@ -4,5 +4,31 @@ global _start
 
 : exit ( status:edi -- noret ) 60 syscall ;
 : bye ( -- noret ) 0 exit ;
+: die ( err:eax -- noret ) neg exit ;
 
-: _start ( -- noret ) bye ;
+: unwrap ( result:eax -- value:eax ) dup 0 cmp ' die xl ;
+: ignore ( result:eax ignore:edi -- ) cmp ' die xne ;
+: ordie ( result -- ) unwrap drop ;
+
+1 const stdout
+
+: write ( buf:esi len:edx fd:edi -- ) 1 syscall ordie ;
+: type ( buf len -- ) stdout write ;
+
+-17 const exists
+
+: mkdir ( path:edi mode:esi -- result:eax ) 83 syscall ;
+: mkdir ( path:edi -- ) 0750 mkdir exists ignore ;
+
+: make-build-dirs ( -- )
+	s" .build" drop mkdir
+	s" .build/bin" drop mkdir
+	s" .build/obj" drop mkdir
+;
+
+: usage ( -- ) s" 
+	usage: bake [cmd] file
+" 
+	type ;
+
+: _start ( -- noret ) make-build-dirs bye ;
