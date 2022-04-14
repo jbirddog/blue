@@ -99,7 +99,33 @@ func TestCanFindResbRef(t *testing.T) {
 }
 
 func TestCanFindSQuote(t *testing.T) {
+	e := env(`s" bob"`)
+	asm := run(e)
+
+	if len(asm) == 0 {
+		t.Fatal("Expected asm instrs, got none")
+	}
+}
+
+func TestCanFindSQuoteWhenCompiling(t *testing.T) {
 	e := env(`: xyz ( -- ) s" testing" ;`)
+	asm := run(e)
+
+	if len(asm) == 0 {
+		t.Fatal("Expected asm instrs, got none")
+	}
+}
+
+func TestCanParseCQuote(t *testing.T) {
+	instrs := parse(`c" bob"`)
+
+	if len(instrs) == 0 {
+		t.Fatal("Expected instrs, got none")
+	}
+}
+
+func TestCanFindCQuoteWhenCompiling(t *testing.T) {
+	e := env(`: xyz ( -- ) c" testing" ;`)
 	asm := run(e)
 
 	if len(asm) == 0 {
@@ -119,6 +145,14 @@ func TestCanEvaluateRuntimeOr(t *testing.T) {
 
 	if litInstr.I != 3 {
 		t.Fatalf("Expected 1 2 or to be 3, got %d", litInstr.I)
+	}
+}
+
+func TestCanRot(t *testing.T) {
+	instrs := parse("1 2 3 rot")
+
+	if len(instrs) == 0 {
+		t.Fatal("Expected instrs, got none")
 	}
 }
 

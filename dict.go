@@ -37,7 +37,9 @@ func DefaultDictionary() *Dictionary {
 		NewCallGoWord("hide", KernelHide),
 		NewInlineWord("@", &BracketInstr{}),
 		NewInlineWord("!", &SetInstr{}),
+		NewInlineWord("rot", &RotInstr{}),
 		NewCallGoWord(`s"`, KernelSQuote).Immediate(),
+		NewCallGoWord(`c"`, KernelCQuote).Immediate(),
 	})
 
 	return d

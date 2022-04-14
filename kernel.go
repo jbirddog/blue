@@ -243,7 +243,7 @@ func KernelHide(env *Environment) {
 	word.Hidden()
 }
 
-func KernelSQuote(env *Environment) {
+func asciiStr(env *Environment, pushLen bool) {
 	// TODO this won't handle nested quotes
 	str := env.ReadTil(`"`)
 	strLen := len(str)
@@ -256,7 +256,15 @@ func KernelSQuote(env *Environment) {
 		str = str[1:]
 	}
 
-	env.AppendInstr(&AsciiStrInstr{Str: str})
+	env.AppendInstr(&AsciiStrInstr{Str: str, PushLen: pushLen})
+}
+
+func KernelCQuote(env *Environment) {
+	asciiStr(env, false)
+}
+
+func KernelSQuote(env *Environment) {
+	asciiStr(env, true)
 }
 
 func buildRegisterRef(rawRef string) *RegisterRef {
