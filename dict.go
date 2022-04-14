@@ -38,6 +38,7 @@ func DefaultDictionary() *Dictionary {
 		NewInlineWord("@", &BracketInstr{}),
 		NewInlineWord("!", &SetInstr{}),
 		NewCallGoWord(`s"`, KernelSQuote).Immediate(),
+		NewCallGoWord(`c"`, KernelCQuote).Immediate(),
 	})
 
 	return d

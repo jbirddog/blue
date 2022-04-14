@@ -227,6 +227,7 @@ func (i *BracketInstr) Run(env *Environment, context *RunContext) {
 
 type AsciiStrInstr struct {
 	Str string
+	PushLen bool
 }
 
 func (i *AsciiStrInstr) Run(env *Environment, context *RunContext) {
@@ -249,7 +250,10 @@ func (i *AsciiStrInstr) Run(env *Environment, context *RunContext) {
 
 	env.AppendAsmInstrs(asmInstrs)
 	context.AppendInput(refLabel)
+
+	if i.PushLen {
 	context.AppendInput(fmt.Sprint(len(bytes)))
+}
 }
 
 func unescape(bytes []byte) []byte {
