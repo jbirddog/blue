@@ -232,9 +232,9 @@ func (i *RotInstr) Run(env *Environment, context *RunContext) {
 	input2 := context.PopInput()
 	input1 := context.PopInput()
 
-	context.AppendInput(input1)
-	context.AppendInput(input3)
 	context.AppendInput(input2)
+	context.AppendInput(input3)
+	context.AppendInput(input1)
 }
 
 type AsciiStrInstr struct {
