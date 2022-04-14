@@ -42,7 +42,7 @@ __blue_1614081290_0:
 	call __blue_4055961022_0
 	ret
 
-; : ignore ( result:eax ignore:edi -- )
+; : ignore ( result:eax err:edi -- )
 
 __blue_2118064195_0:
 	cmp eax, edi
@@ -73,7 +73,7 @@ __blue_2883839448_0:
 	mov eax, 83
 	jmp __blue_4057121178_0
 
-; : mkdir ( path:edi -- )
+; : mkdir ( path -- )
 
 __blue_2883839448_1:
 	mov esi, 488

@@ -9,7 +9,7 @@ global _start
 : unwrap ( result:eax -- value:eax ) dup 0 cmp ' die xl ;
 : ordie ( result -- ) unwrap drop ;
 
-: ignore ( result:eax ignore:edi -- ) swap dup rot cmp ' ordie xne ;
+: ignore ( result:eax err:edi -- ) swap dup rot cmp ' ordie xne drop ;
 
 1 const stdout
 
@@ -19,7 +19,7 @@ global _start
 -17 const exists
 
 : mkdir ( path:edi mode:esi -- result:eax ) 83 syscall ;
-: mkdir ( path:edi -- ) 0750 mkdir exists ignore ;
+: mkdir ( path -- ) 0750 mkdir exists ignore ;
 
 : make-build-dirs ( -- )
 	c" .build" mkdir
