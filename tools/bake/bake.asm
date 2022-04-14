@@ -7,17 +7,30 @@ __blue_4057121178_0:
 	syscall
 	ret
 
+; : write ( buf:esi len:edx fd:edi -- result:eax )
+
+__blue_3190202204_0:
+	xor eax, eax
+	inc eax
+	jmp __blue_4057121178_0
+
+; : execve ( filename:edi argv:esi env:edx -- result:eax )
+
+__blue_172884385_0:
+	mov eax, 59
+	jmp __blue_4057121178_0
+
 ; : exit ( status:edi -- noret )
 
 __blue_3454868101_0:
 	mov eax, 60
 	call __blue_4057121178_0
 
-; : bye ( -- noret )
+; : mkdir ( path:edi mode:esi -- result:eax )
 
-__blue_1911791459_0:
-	xor edi, edi
-	jmp __blue_3454868101_0
+__blue_2883839448_0:
+	mov eax, 83
+	jmp __blue_4057121178_0
 
 ; : die ( err:eax -- noret )
 
@@ -52,18 +65,11 @@ __blue_2118064195_0:
 __blue_2157056155_1:
 	ret
 
-; : write ( buf:esi len:edx fd:edi -- result:eax )
+; : bye ( -- noret )
 
-__blue_3190202204_0:
-	xor eax, eax
-	inc eax
-	jmp __blue_4057121178_0
-
-; : mkdir ( path:edi mode:esi -- result:eax )
-
-__blue_2883839448_0:
-	mov eax, 83
-	jmp __blue_4057121178_0
+__blue_1911791459_0:
+	xor edi, edi
+	jmp __blue_3454868101_0
 
 ; : type ( buf len -- )
 
@@ -135,7 +141,7 @@ __blue_1223589535_2:
 	mov edi, __blue_855163316_2
 	jmp __blue_2883839448_1
 
-; : usage ( -- )
+; : usage ( -- noret )
 
 __blue_3461590696_0:
 	jmp __blue_1223589535_3
@@ -171,7 +177,8 @@ db 0
 __blue_1223589535_3:
 	mov edx, 25
 	mov esi, __blue_855163316_3
-	jmp __blue_1361572173_0
+	call __blue_1361572173_0
+	jmp __blue_1911791459_0
 
 ; : _start ( -- noret )
 
