@@ -11,14 +11,14 @@ global _start
 
 : ignore ( result:eax err:edi -- ) swap dup rot cmp ' ordie xne drop ;
 
+: write ( buf:esi len:edx fd:edi -- result:eax ) 1 syscall ;
+: mkdir ( path:edi mode:esi -- result:eax ) 83 syscall ;
+
 1 const stdout
-
-: write ( buf:esi len:edx fd:edi -- ) 1 syscall ordie ;
-: type ( buf len -- ) stdout write ;
-
 -17 const exists
 
-: mkdir ( path:edi mode:esi -- result:eax ) 83 syscall ;
+: type ( buf len -- ) stdout write ordie ;
+
 : mkdir ( path -- ) 0750 mkdir exists ignore ;
 
 : make-build-dirs ( -- )

@@ -52,26 +52,26 @@ __blue_2118064195_0:
 __blue_2157056155_1:
 	ret
 
-; : write ( buf:esi len:edx fd:edi -- )
+; : write ( buf:esi len:edx fd:edi -- result:eax )
 
 __blue_3190202204_0:
 	xor eax, eax
 	inc eax
-	call __blue_4057121178_0
-	jmp __blue_1614081290_0
-
-; : type ( buf len -- )
-
-__blue_1361572173_0:
-	xor edi, edi
-	inc edi
-	jmp __blue_3190202204_0
+	jmp __blue_4057121178_0
 
 ; : mkdir ( path:edi mode:esi -- result:eax )
 
 __blue_2883839448_0:
 	mov eax, 83
 	jmp __blue_4057121178_0
+
+; : type ( buf len -- )
+
+__blue_1361572173_0:
+	xor edi, edi
+	inc edi
+	call __blue_3190202204_0
+	jmp __blue_1614081290_0
 
 ; : mkdir ( path -- )
 
