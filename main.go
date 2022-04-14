@@ -13,7 +13,7 @@ type RegisterRef struct {
 
 func main() {
 	if len(os.Args) != 2 {
-		log.Fatal("Usage: gfe blueFile")
+		log.Fatal("Usage: blue [blueFile]")
 	}
 
 	blueFile := os.Args[1]
