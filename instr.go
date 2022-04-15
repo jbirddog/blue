@@ -149,12 +149,13 @@ func (i *ResInstr) Run(env *Environment, context *RunContext) {
 	env.AppendAsmInstr(&AsmResInstr{Name: i.Name, Size: i.Size, Count: i.Count})
 }
 
-type DecbInstr struct {
-	Value int // TODO why isn't this a byte?
+type DecInstr struct {
+	Size  string
+	Value int
 }
 
-func (i *DecbInstr) Run(env *Environment, context *RunContext) {
-	env.AppendAsmInstr(&AsmDecbInstr{Value: i.Value})
+func (i *DecInstr) Run(env *Environment, context *RunContext) {
+	env.AppendAsmInstr(&AsmDecInstr{Size: i.Size, Value: i.Value})
 }
 
 type DropInstr struct{}
@@ -259,10 +260,10 @@ func (i *AsciiStrInstr) Run(env *Environment, context *RunContext) {
 	}
 
 	for _, b := range bytes {
-		asmInstrs = append(asmInstrs, &AsmDecbInstr{Value: int(b)})
+		asmInstrs = append(asmInstrs, &AsmDecInstr{Size: "b", Value: int(b)})
 	}
 
-	asmInstrs = append(asmInstrs, &AsmDecbInstr{Value: 0})
+	asmInstrs = append(asmInstrs, &AsmDecInstr{Size: "b", Value: 0})
 	asmInstrs = append(asmInstrs, &AsmLabelInstr{Name: jmpLabel})
 
 	env.AppendAsmInstrs(asmInstrs)
