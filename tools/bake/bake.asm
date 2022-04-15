@@ -191,7 +191,11 @@ __blue_1223589535_3:
 	call __blue_1361572173_0
 	jmp __blue_1911791459_0
 
-; : check-argc ( rsp -- rsp )
+;  TODO move rsp into rax? early to avoid all the inlines
+
+;  inline not flowing is causing the extra dups in parse-args
+
+; : check-argc ( rsp -- )
 
 __blue_3569987719_0:
 	cmp qword [rsp], 3
@@ -199,6 +203,18 @@ __blue_3569987719_0:
 	call __blue_3461590696_0
 
 __blue_2157056155_2:
+	ret
+
+; : first-arg ( rsp -- rsp )
+
+__blue_952155568_0:
+	add rsp, 16
+	ret
+
+; : next-arg ( rsp -- rsp )
+
+__blue_2499737933_0:
+	add rsp, 8
 	ret
 
 ; : parse-args ( rsp -- )
@@ -209,6 +225,10 @@ __blue_4217555750_0:
 	call __blue_3461590696_0
 
 __blue_2157056155_3:
+	add rsp, 16
+	mov [__blue_4136785899_0], rsp
+	add rsp, 8
+	mov [__blue_680506038_0], rsp
 	ret
 
 ; : _start ( rsp -- noret )
@@ -219,5 +239,9 @@ _start:
 	call __blue_3461590696_0
 
 __blue_2157056155_4:
+	add rsp, 16
+	mov [__blue_4136785899_0], rsp
+	add rsp, 8
+	mov [__blue_680506038_0], rsp
 	call __blue_2670689297_0
 	jmp __blue_1911791459_0

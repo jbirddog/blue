@@ -33,7 +33,16 @@ global _start
 " 
 	type bye ;
 
-: check-argc ( rsp -- rsp ) @ 3 cmp ' usage xne ; inline
-: parse-args ( rsp -- ) check-argc ; inline
+\ TODO move rsp into rax? early to avoid all the inlines
+\ inline not flowing is causing the extra dups in parse-args
+
+: check-argc ( rsp -- ) @ 3 cmp ' usage xne ; inline
+: first-arg ( rsp -- rsp ) 16 add ; inline
+: next-arg ( rsp -- rsp ) 8 add ; inline
+: parse-args ( rsp -- ) 
+	dup check-argc 
+	dup first-arg cmd !
+	next-arg blue-file ! 
+; inline
 
 : _start ( rsp -- noret ) parse-args make-build-dirs bye ;
