@@ -98,6 +98,15 @@ func TestCanFindResbRef(t *testing.T) {
 	}
 }
 
+func TestCanDecARef(t *testing.T) {
+	e := env(": test ( -- ) latest decq ; : bob ( -- ) ' test decq ;")
+	asm := run(e)
+
+	if len(asm) == 0 {
+		t.Fatalf("Expected asm instrs")
+	}
+}
+
 func TestCanFindSQuote(t *testing.T) {
 	e := env(`s" bob"`)
 	asm := run(e)

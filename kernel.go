@@ -161,8 +161,15 @@ func dec(env *Environment, size string) {
 		log.Fatalf("dec%s expects to be inside a word", size)
 	}
 	latest := env.Dictionary.Latest
-	valueInstr := latest.PopInstr().(*LiteralIntInstr)
-	value := valueInstr.I
+	instr := latest.PopInstr()
+
+	var value string
+
+	if intInstr, ok := instr.(*LiteralIntInstr); ok {
+		value = fmt.Sprintf("%d", intInstr.I)
+	} else {
+		value = instr.(*RefWordInstr).Word.AsmLabel
+	}
 
 	latest.AppendInstr(&DecInstr{Size: size, Value: value})
 }
@@ -189,10 +196,10 @@ func decLParen(env *Environment, size string) {
 		if name == ")" {
 			break
 		}
-		if value, err := strconv.Atoi(name); err == nil {
+		if _, err := strconv.Atoi(name); err == nil {
 			env.Dictionary.Latest.AppendInstr(&DecInstr{
 				Size:  size,
-				Value: value,
+				Value: name,
 			})
 			continue
 		}
