@@ -98,11 +98,11 @@ func (i *AsmResInstr) String() string {
 
 type AsmDecInstr struct {
 	Size  string
-	Value int
+	Value string
 }
 
 func (i *AsmDecInstr) String() string {
-	return fmt.Sprintf("\nd%s %d", i.Size, i.Value)
+	return fmt.Sprintf("\nd%s %s", i.Size, i.Value)
 }
 
 type AsmWriter struct {
