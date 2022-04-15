@@ -58,15 +58,17 @@ global _start
 : build-cmd ( -- ) s" need to build..." type newline ;
 : run-cmd ( -- ) s" need to run..." type newline ;
 
-: cmd-table ( -- )
+\ TODO label/declare vs having to create a new word?
+: cmd-table ( -- noret )
 	build-cmd-key	' build-cmd decq
 	run-cmd-key	' run-cmd decq
+;
 
 : _start ( rsp -- noret ) 
 	parse-args
 	cmd @ type-cstr@ newline
 	blue-file @ type-cstr@ newline
 	make-build-dirs 
-	build-cmd
+	build-cmd \ TODO find cmd from table
 	bye 
 ;
