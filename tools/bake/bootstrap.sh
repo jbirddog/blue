@@ -8,4 +8,5 @@ blue bake.blue
 nasm -f elf64 -o .bootstrap/obj/bake.o bake.asm
 ld -o .bootstrap/bin/bake .bootstrap/obj/bake.o
 
-.bootstrap/bin/bake bake.blue
+.bootstrap/bin/bake build bake.blue 
+echo $?

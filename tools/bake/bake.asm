@@ -194,7 +194,7 @@ __blue_1223589535_3:
 ; : check-argc ( rsp -- rsp )
 
 __blue_3569987719_0:
-	cmp [rsp], 3
+	cmp qword [rsp], 3
 	je __blue_2157056155_2
 	call __blue_3461590696_0
 
@@ -204,7 +204,7 @@ __blue_2157056155_2:
 ; : parse-args ( rsp -- )
 
 __blue_4217555750_0:
-	cmp [rsp], 3
+	cmp qword [rsp], 3
 	je __blue_2157056155_3
 	call __blue_3461590696_0
 
@@ -214,7 +214,7 @@ __blue_2157056155_3:
 ; : _start ( rsp -- noret )
 
 _start:
-	cmp [rsp], 3
+	cmp qword [rsp], 3
 	je __blue_2157056155_4
 	call __blue_3461590696_0
 
