@@ -162,7 +162,7 @@ func dec(env *Environment, size string) {
 	}
 	latest := env.Dictionary.Latest
 	valueInstr := latest.PopInstr().(*LiteralIntInstr)
-	value := valueInstr.I
+	value := fmt.Sprintf("%d", valueInstr.I)
 
 	latest.AppendInstr(&DecInstr{Size: size, Value: value})
 }
@@ -189,10 +189,10 @@ func decLParen(env *Environment, size string) {
 		if name == ")" {
 			break
 		}
-		if value, err := strconv.Atoi(name); err == nil {
+		if _, err := strconv.Atoi(name); err == nil {
 			env.Dictionary.Latest.AppendInstr(&DecInstr{
 				Size:  size,
-				Value: value,
+				Value: name,
 			})
 			continue
 		}
