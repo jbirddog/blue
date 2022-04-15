@@ -156,33 +156,61 @@ func KernelResq(env *Environment) {
 	res(env, "q")
 }
 
-func KernelDecb(env *Environment) {
+func dec(env *Environment, size string) {
 	if !env.Compiling {
-		log.Fatal("decb expects to be inside a word")
+		log.Fatalf("dec%s expects to be inside a word", size)
 	}
 	latest := env.Dictionary.Latest
 	valueInstr := latest.PopInstr().(*LiteralIntInstr)
 	value := valueInstr.I
 
-	latest.AppendInstr(&DecbInstr{Value: value})
+	latest.AppendInstr(&DecInstr{Size: size, Value: value})
 }
 
-func KernelDecbLParen(env *Environment) {
+func KernelDecb(env *Environment) {
+	dec(env, "b")
+}
+
+func KernelDecd(env *Environment) {
+	dec(env, "d")
+}
+
+func KernelDecq(env *Environment) {
+	dec(env, "q")
+}
+
+func decLParen(env *Environment, size string) {
 	if !env.Compiling {
-		log.Fatal("decb( expects to be inside a word")
+		log.Fatalf("dec%s( expects to be inside a word", size)
 	}
+
 	for {
 		name := env.ReadNextWord()
 		if name == ")" {
 			break
 		}
 		if value, err := strconv.Atoi(name); err == nil {
-			env.Dictionary.Latest.AppendInstr(&DecbInstr{Value: value})
+			env.Dictionary.Latest.AppendInstr(&DecInstr{
+				Size:  size,
+				Value: value,
+			})
 			continue
 		}
 
-		log.Fatal("decb( expects a numeric value")
+		log.Fatalf("dec%s( expects a numeric value", size)
 	}
+}
+
+func KernelDecbLParen(env *Environment) {
+	decLParen(env, "b")
+}
+
+func KernelDecdLParen(env *Environment) {
+	decLParen(env, "d")
+}
+
+func KernelDecqLParen(env *Environment) {
+	decLParen(env, "q")
 }
 
 func KernelConst(env *Environment) {

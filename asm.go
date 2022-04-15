@@ -96,12 +96,13 @@ func (i *AsmResInstr) String() string {
 	return fmt.Sprintf("\n%s: res%s %d", i.Name, i.Size, i.Count)
 }
 
-type AsmDecbInstr struct {
+type AsmDecInstr struct {
+	Size  string
 	Value int
 }
 
-func (i *AsmDecbInstr) String() string {
-	return fmt.Sprintf("\ndb %d", i.Value)
+func (i *AsmDecInstr) String() string {
+	return fmt.Sprintf("\nd%s %d", i.Size, i.Value)
 }
 
 type AsmWriter struct {
