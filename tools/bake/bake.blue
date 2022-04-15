@@ -17,13 +17,20 @@ global _start
 
 : bye ( -- noret ) 0 exit ;
 : type ( buf len -- ) stdout write ordie ;
+: newline ( -- ) s" \n" type ;
+
+: find0 ( start:rsi -- end:rsi ) lodsb 0 cmp latest xne ; 
+: cstrlen ( str:rdi -- len:rsi ) dup find0 swap sub dec ;
+: cstr>str ( cstr:rdx -- str:rsi len:rdx ) dup cstrlen xchg ;
+: type-cstr ( buf -- ) cstr>str type ;
 
 : mkdir ( path -- ) 0750 mkdir exists ignore ;
 
 : make-build-dirs ( -- )
 	c" .build/" mkdir
 	c" .build/bin/" mkdir
-	c" .build/obj/" mkdir ;
+	c" .build/obj/" mkdir 
+;
 
 1 resq cmd
 1 resq blue-file
@@ -31,18 +38,31 @@ global _start
 : usage ( -- noret ) s" 
 	usage: bake cmd file
 " 
-	type bye ;
+	type bye 
+;
 
-\ TODO move rsp into rax? early to avoid all the inlines
-\ inline not flowing is causing the extra dups in parse-args
+: check-argc ( rax -- ) @ 3 cmp ' usage xne ;
+: first-arg ( rax -- rax ) 16 add ; 
+: next-arg ( rax -- rax ) 8 add ; 
+: parse-args ( rax -- ) 
+	dup dup check-argc
+	first-arg cmd !
+	next-arg blue-file ! 
+; 
 
 : check-argc ( rsp -- ) @ 3 cmp ' usage xne ; inline
-: first-arg ( rsp -- rsp ) 16 add ; inline
-: next-arg ( rsp -- rsp ) 8 add ; inline
+: first-arg ( rsp -- rsp ) 16 add ;  inline
+: next-arg ( rsp -- rsp ) 8 add ;  inline
 : parse-args ( rsp -- ) 
-	dup check-argc 
-	dup first-arg cmd !
+	dup dup check-argc
+	first-arg cmd !
 	next-arg blue-file ! 
-; inline
+;  inline
 
-: _start ( rsp -- noret ) parse-args make-build-dirs bye ;
+: _start ( rsp -- noret ) 
+	parse-args 
+	cmd @ type-cstr newline
+	blue-file @ type-cstr newline
+	make-build-dirs 
+	bye 
+;
