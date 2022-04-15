@@ -23,6 +23,7 @@ global _start
 : cstrlen ( str:rdi -- len:rsi ) dup find0 swap sub dec ;
 : cstr>str ( cstr:rdx -- str:rsi len:rdx ) dup cstrlen xchg ;
 : type-cstr ( buf -- ) cstr>str type ;
+: type-cstr@ ( addr -- ) @ type-cstr ;
 
 : mkdir ( path -- ) 0750 mkdir exists ignore ;
 
@@ -44,25 +45,16 @@ global _start
 : check-argc ( rax -- ) @ 3 cmp ' usage xne ;
 : first-arg ( rax -- rax ) 16 add ; 
 : next-arg ( rax -- rax ) 8 add ; 
-: parse-args ( rax -- ) 
-	dup dup check-argc
+: parse-args ( rax -- ) dup dup 
+	check-argc
 	first-arg cmd !
 	next-arg blue-file ! 
-; 
-
-: check-argc ( rsp -- ) @ 3 cmp ' usage xne ; inline
-: first-arg ( rsp -- rsp ) 16 add ;  inline
-: next-arg ( rsp -- rsp ) 8 add ;  inline
-: parse-args ( rsp -- ) 
-	dup dup check-argc
-	first-arg cmd !
-	next-arg blue-file ! 
-;  inline
+;
 
 : _start ( rsp -- noret ) 
-	parse-args 
-	cmd @ type-cstr newline
-	blue-file @ type-cstr newline
+	parse-args
+	cmd @ type-cstr@ newline
+	blue-file @ type-cstr@ newline
 	make-build-dirs 
 	bye 
 ;

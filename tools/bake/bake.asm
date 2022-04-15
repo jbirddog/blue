@@ -128,6 +128,12 @@ __blue_2703255396_0:
 	call __blue_3207375596_0
 	jmp __blue_1361572173_0
 
+; : type-cstr@ ( addr -- )
+
+__blue_3389152684_0:
+	mov rdx, qword [rdx]
+	jmp __blue_2703255396_0
+
 ; : mkdir ( path -- )
 
 __blue_2883839448_1:
@@ -272,59 +278,16 @@ __blue_4217555750_0:
 	mov [__blue_680506038_0], rax
 	ret
 
-; : check-argc ( rsp -- )
-
-__blue_3569987719_1:
-	cmp qword [rsp], 3
-	je __blue_2157056155_4
-	call __blue_3461590696_0
-
-__blue_2157056155_4:
-	ret
-
-; : first-arg ( rsp -- rsp )
-
-__blue_952155568_1:
-	add rsp, 16
-	ret
-
-; : next-arg ( rsp -- rsp )
-
-__blue_2499737933_1:
-	add rsp, 8
-	ret
-
-; : parse-args ( rsp -- )
-
-__blue_4217555750_1:
-	cmp qword [rsp], 3
-	je __blue_2157056155_5
-	call __blue_3461590696_0
-
-__blue_2157056155_5:
-	add rsp, 16
-	mov [__blue_4136785899_0], rsp
-	add rsp, 8
-	mov [__blue_680506038_0], rsp
-	ret
-
 ; : _start ( rsp -- noret )
 
 _start:
-	cmp qword [rsp], 3
-	je __blue_2157056155_6
-	call __blue_3461590696_0
-
-__blue_2157056155_6:
-	add rsp, 16
-	mov [__blue_4136785899_0], rsp
-	add rsp, 8
-	mov [__blue_680506038_0], rsp
+	mov rax, rsp
+	call __blue_4217555750_0
 	mov rdx, [__blue_4136785899_0]
-	call __blue_2703255396_0
+	call __blue_3389152684_0
 	call __blue_4281549323_0
 	mov rdx, [__blue_680506038_0]
-	call __blue_2703255396_0
+	call __blue_3389152684_0
 	call __blue_4281549323_0
 	call __blue_2670689297_0
 	jmp __blue_1911791459_0
