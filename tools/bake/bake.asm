@@ -364,7 +364,9 @@ __blue_1223589535_6:
 	call __blue_1361572173_0
 	jmp __blue_4281549323_0
 
-; : cmd-table ( -- )
+;  TODO label/declare vs having to create a new word?
+
+; : cmd-table ( -- noret )
 
 __blue_758800390_0:
 
@@ -375,8 +377,17 @@ db 98
 db 117
 db 105
 db 108
-db 100	jmp 
-
+db 100
+dq __blue_733264130_0
+db 0
+db 0
+db 0
+db 0
+db 0
+db 114
+db 117
+db 110
+dq __blue_1139689547_0
 ; : _start ( rsp -- noret )
 
 _start:
@@ -390,4 +401,6 @@ _start:
 	call __blue_4281549323_0
 	call __blue_2670689297_0
 	call __blue_733264130_0
+
+;  TODO find cmd from table
 	jmp __blue_1911791459_0
