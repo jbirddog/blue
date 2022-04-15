@@ -51,10 +51,22 @@ global _start
 	next-arg blue-file ! 
 ;
 
+\ TODO nicer way to illustrate this
+: build-cmd-key ( -- ) decb( 0 0 0 98 117 105 108 100 ) ; inline
+: run-cmd-key ( -- ) decb( 0 0 0 0 0 114 117 110 ) ; inline
+
+: build-cmd ( -- ) s" need to build..." type newline ;
+: run-cmd ( -- ) s" need to run..." type newline ;
+
+: cmd-table ( -- )
+	build-cmd-key	' build-cmd decq
+	run-cmd-key	' run-cmd decq
+
 : _start ( rsp -- noret ) 
 	parse-args
 	cmd @ type-cstr@ newline
 	blue-file @ type-cstr@ newline
 	make-build-dirs 
+	build-cmd
 	bye 
 ;

@@ -278,6 +278,105 @@ __blue_4217555750_0:
 	mov [__blue_680506038_0], rax
 	ret
 
+;  TODO nicer way to illustrate this
+
+; : build-cmd-key ( -- )
+
+__blue_187718900_0:
+
+db 0
+db 0
+db 0
+db 98
+db 117
+db 105
+db 108
+db 100	ret
+
+; : run-cmd-key ( -- )
+
+__blue_18326009_0:
+
+db 0
+db 0
+db 0
+db 0
+db 0
+db 114
+db 117
+db 110	ret
+
+; : build-cmd ( -- )
+
+__blue_733264130_0:
+	jmp __blue_1223589535_5
+
+__blue_855163316_5:
+
+db 110
+db 101
+db 101
+db 100
+db 32
+db 116
+db 111
+db 32
+db 98
+db 117
+db 105
+db 108
+db 100
+db 46
+db 46
+db 46
+db 0
+__blue_1223589535_5:
+	mov edx, 16
+	mov esi, __blue_855163316_5
+	call __blue_1361572173_0
+	jmp __blue_4281549323_0
+
+; : run-cmd ( -- )
+
+__blue_1139689547_0:
+	jmp __blue_1223589535_6
+
+__blue_855163316_6:
+
+db 110
+db 101
+db 101
+db 100
+db 32
+db 116
+db 111
+db 32
+db 114
+db 117
+db 110
+db 46
+db 46
+db 46
+db 0
+__blue_1223589535_6:
+	mov edx, 14
+	mov esi, __blue_855163316_6
+	call __blue_1361572173_0
+	jmp __blue_4281549323_0
+
+; : cmd-table ( -- )
+
+__blue_758800390_0:
+
+db 0
+db 0
+db 0
+db 98
+db 117
+db 105
+db 108
+db 100	jmp 
+
 ; : _start ( rsp -- noret )
 
 _start:
@@ -290,4 +389,5 @@ _start:
 	call __blue_3389152684_0
 	call __blue_4281549323_0
 	call __blue_2670689297_0
+	call __blue_733264130_0
 	jmp __blue_1911791459_0
