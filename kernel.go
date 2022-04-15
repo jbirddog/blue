@@ -161,8 +161,15 @@ func dec(env *Environment, size string) {
 		log.Fatalf("dec%s expects to be inside a word", size)
 	}
 	latest := env.Dictionary.Latest
-	valueInstr := latest.PopInstr().(*LiteralIntInstr)
-	value := fmt.Sprintf("%d", valueInstr.I)
+	instr := latest.PopInstr()
+
+	var value string
+
+	if intInstr, ok := instr.(*LiteralIntInstr); ok {
+		value = fmt.Sprintf("%d", intInstr.I)
+	} else {
+		value = instr.(*RefWordInstr).Word.AsmLabel
+	}
 
 	latest.AppendInstr(&DecInstr{Size: size, Value: value})
 }
