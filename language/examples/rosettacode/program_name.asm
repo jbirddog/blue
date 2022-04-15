@@ -99,6 +99,6 @@ __blue_1611286325_0:
 
 _start:
 	add rsp, 8
-	mov rdx, [rsp]
+	mov rdx, qword [rsp]
 	call __blue_2701174125_0
 	jmp __blue_1911791459_0
