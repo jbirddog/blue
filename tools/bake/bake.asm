@@ -100,6 +100,7 @@ db 117
 db 105
 db 108
 db 100
+db 47
 db 0
 __blue_1223589535_0:
 	mov edi, __blue_855163316_0
@@ -118,6 +119,7 @@ db 47
 db 98
 db 105
 db 110
+db 47
 db 0
 __blue_1223589535_1:
 	mov edi, __blue_855163316_1
@@ -136,10 +138,21 @@ db 47
 db 111
 db 98
 db 106
+db 47
 db 0
 __blue_1223589535_2:
 	mov edi, __blue_855163316_2
 	jmp __blue_2883839448_1
+
+section .bss
+
+; 1 resq cmd
+
+__blue_4136785899_0: resq 1
+; 1 resq blue-file
+
+__blue_680506038_0: resq 1
+section .text
 
 ; : usage ( -- noret )
 
@@ -162,11 +175,9 @@ db 97
 db 107
 db 101
 db 32
-db 91
 db 99
 db 109
 db 100
-db 93
 db 32
 db 102
 db 105
@@ -175,13 +186,38 @@ db 101
 db 10
 db 0
 __blue_1223589535_3:
-	mov edx, 25
+	mov edx, 23
 	mov esi, __blue_855163316_3
 	call __blue_1361572173_0
 	jmp __blue_1911791459_0
 
-; : _start ( -- noret )
+; : check-argc ( rsp -- rsp )
+
+__blue_3569987719_0:
+	cmp [rsp], 3
+	je __blue_2157056155_2
+	call __blue_3461590696_0
+
+__blue_2157056155_2:
+	ret
+
+; : parse-args ( rsp -- )
+
+__blue_4217555750_0:
+	cmp [rsp], 3
+	je __blue_2157056155_3
+	call __blue_3461590696_0
+
+__blue_2157056155_3:
+	ret
+
+; : _start ( rsp -- noret )
 
 _start:
+	cmp [rsp], 3
+	je __blue_2157056155_4
+	call __blue_3461590696_0
+
+__blue_2157056155_4:
 	call __blue_2670689297_0
 	jmp __blue_1911791459_0

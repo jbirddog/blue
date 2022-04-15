@@ -21,13 +21,19 @@ global _start
 : mkdir ( path -- ) 0750 mkdir exists ignore ;
 
 : make-build-dirs ( -- )
-	c" .build" mkdir
-	c" .build/bin" mkdir
-	c" .build/obj" mkdir ;
+	c" .build/" mkdir
+	c" .build/bin/" mkdir
+	c" .build/obj/" mkdir ;
+
+1 resq cmd
+1 resq blue-file
 
 : usage ( -- noret ) s" 
-	usage: bake [cmd] file
+	usage: bake cmd file
 " 
 	type bye ;
 
-: _start ( -- noret ) make-build-dirs bye ;
+: check-argc ( rsp -- rsp ) @ 3 cmp ' usage xne ; inline
+: parse-args ( rsp -- ) check-argc ; inline
+
+: _start ( rsp -- noret ) parse-args make-build-dirs bye ;
