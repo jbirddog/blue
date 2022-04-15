@@ -118,6 +118,44 @@ var registers = map[string]int{
 	"r15": r15,
 }
 
+var registerSize = map[string]string{
+	"eax": "dword",
+	"ecx": "dword",
+	"edx": "dword",
+	"ebx": "dword",
+	"esp": "dword",
+	"ebp": "dword",
+	"esi": "dword",
+	"edi": "dword",
+
+	"r8d":  "dword",
+	"r9d":  "dword",
+	"r10d": "dword",
+	"r11d": "dword",
+	"r12d": "dword",
+	"r13d": "dword",
+	"r14d": "dword",
+	"r15d": "dword",
+
+	"rax": "qword",
+	"rcx": "qword",
+	"rdx": "qword",
+	"rbx": "qword",
+	"rsp": "qword",
+	"rbp": "qword",
+	"rsi": "qword",
+	"rdi": "qword",
+
+	"r8":  "qword",
+	"r9":  "qword",
+	"r10": "qword",
+	"r11": "qword",
+	"r12": "qword",
+	"r13": "qword",
+	"r14": "qword",
+	"r15": "qword",
+}
+
 type x8664Lowerer = func(string, *Environment, *RunContext) AsmInstr
 
 func ops_0(mnemonic string, env *Environment, context *RunContext) AsmInstr {

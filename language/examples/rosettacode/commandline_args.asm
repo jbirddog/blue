@@ -115,13 +115,13 @@ __blue_2701174125_0:
 ; : _start ( rsp -- noret )
 
 _start:
-	mov rcx, [rsp]
+	mov rcx, qword [rsp]
 
 ; : print-args ( argc:rcx argv:rsp -- noret )
 
 __blue_2449731130_0:
 	add rsp, 8
-	mov rdx, [rsp]
+	mov rdx, qword [rsp]
 	push rcx
 	call __blue_2701174125_0
 	pop rcx

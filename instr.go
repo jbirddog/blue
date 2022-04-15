@@ -222,7 +222,12 @@ type BracketInstr struct{}
 
 func (i *BracketInstr) Run(env *Environment, context *RunContext) {
 	ident := context.PopInput()
-	context.AppendInput(fmt.Sprintf("[%s]", ident))
+
+	if size, found := registerSize[ident]; found {
+		context.AppendInput(fmt.Sprintf("%s [%s]", size, ident))
+	} else {
+		context.AppendInput(fmt.Sprintf("[%s]", ident))
+	}
 }
 
 type RotInstr struct{}
