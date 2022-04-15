@@ -2,6 +2,7 @@
 
 1. Instr needs RegisterRefs?
 1. more unit tests
+   1. needs to be easier to test Instr and AsmInstr
 1. CondCall is not flowing yet
 1. inline is not flowing yet
 1. import vs use - one brings in externs other all code from file
@@ -14,16 +15,17 @@
    1. infer during word fallthrough? whole program infer?
 1. validate needs to check for lingering refs/stack items
 1. treat words with only decb more like resb
+   1. global strings also fall into this bucket
 1. mov edx, rax bug
 1. More peephole optimizations
    1. mov rxx, 0 -> xor exx
    1. mov rxx, 1 -> xor exx, exx ; inc exx
-1. whole word optimizations
 
 ### optimizations
 
 1. inlining
 1. remove unused words before asm
+1. whole word optimizations
 
 #### peephole
 
