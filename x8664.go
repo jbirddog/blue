@@ -221,10 +221,10 @@ var x8664Lowerers = map[string]x8664Lowerer{
 	"or":      ops_2_1,
 	"repne":   consume_previous,
 	"ret":     ops_0,
-	"scasb":   ops_2_1, // TODO needs to enforce rdi/rax -> rdi (variant)
-	"scasw":   ops_2_1, // TODO needs to enforce rdi/rax -> rdi (variant)
-	"scasd":   ops_2_1, // TODO needs to enforce rdi/rax -> rdi (variant)
-	"scasq":   ops_2_1, // TODO needs to enforce rdi/rax -> rdi (variant)
+	"scasb":   ops_0, // TODO needs to enforce rdi/rax -> rdi (variant)
+	"scasw":   ops_0, // TODO needs to enforce rdi/rax -> rdi (variant)
+	"scasd":   ops_0, // TODO needs to enforce rdi/rax -> rdi (variant)
+	"scasq":   ops_0, // TODO needs to enforce rdi/rax -> rdi (variant)
 	"sal":     ops_2_1,
 	"sar":     ops_2_1,
 	"shl":     ops_2_1,
