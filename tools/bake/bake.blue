@@ -56,7 +56,11 @@ global _start
 : build-cmd-key ( -- ) decb( 0 0 0 98 117 105 108 100 ) ; inline
 : run-cmd-key ( -- ) decb( 0 0 0 0 0 114 117 110 ) ; inline
 
-: cmd-key ( buf:rax len:rcx -- key:rax ) 7 and -8 add neg 3 shl shr ;
+\ TODO remove after debugging
+: run-cmd-key ( -- ) decb( 2 0 0 0 0 0 0 0 ) ; inline
+: build-cmd-key ( -- ) decb( 0 0 0 0 0 0 0 98 ) ; inline
+
+: cmd-key ( buf:rax len:rcx -- key:rax ) exit ; \ 7 and -8 add neg 3 shl shr ;
 
 \ TODO these will eventually fork+execve
 : build-cmd ( -- noret ) s" need to build..." type newline bye ;
@@ -64,15 +68,14 @@ global _start
 
 \ TODO label/declare vs having to create a new word?
 : cmd-table ( -- noret )
-	\ run-cmd-key	' run-cmd decq
-	\ build-cmd-key	' build-cmd decq
-	0 decq		' build-cmd decq
-	1 decq		' run-cmd decq
+	build-cmd-key	' build-cmd decq
+	run-cmd-key	' run-cmd decq
 ;
 
 : execve-cmd ( cmd:rdi -- noret ) @ call ;
 
-: execve-keyed-cmd ( key:rax -- noret ) 1 2 ' cmd-table rot
+\ TODO instead of count 0 0 as last key/value, cmp 0 loopne
+: execve-keyed-cmd ( key:rax -- noret ) 2 ' cmd-table rot
 : find-cmd-with-key ( tries:ecx tbl:rdi key:rax -- noret ) 
 	scasq ' execve-cmd xz drop 8 add latest loop
 	usage

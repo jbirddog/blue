@@ -317,15 +317,41 @@ db 114
 db 117
 db 110	ret
 
+;  TODO remove after debugging
+
+; : run-cmd-key ( -- )
+
+__blue_18326009_1:
+
+db 2
+db 0
+db 0
+db 0
+db 0
+db 0
+db 0
+db 0	ret
+
+; : build-cmd-key ( -- )
+
+__blue_187718900_1:
+
+db 0
+db 0
+db 0
+db 0
+db 0
+db 0
+db 0
+db 98	ret
+
 ; : cmd-key ( buf:rax len:rcx -- key:rax )
 
 __blue_1785978521_0:
-	and rcx, 7
-	add rcx, -8
-	neg rcx
-	shl rcx, 3
-	shr rax, cl
-	ret
+	mov edi, rcx
+	jmp __blue_3454868101_0
+
+;  7 and -8 add neg 3 shl shr ;
 
 ;  TODO these will eventually fork+execve
 
@@ -395,24 +421,34 @@ __blue_1223589535_6:
 
 __blue_758800390_0:
 
-;  run-cmd-key	' run-cmd decq
-
-;  build-cmd-key	' build-cmd decq
-
-dq 0
+db 0
+db 0
+db 0
+db 0
+db 0
+db 0
+db 0
+db 98
 dq __blue_733264130_0
-dq 1
+db 2
+db 0
+db 0
+db 0
+db 0
+db 0
+db 0
+db 0
 dq __blue_1139689547_0
 ; : execve-cmd ( cmd:rdi -- noret )
 
 __blue_3804625748_0:
 	call qword [rdi]
 
+;  TODO instead of count 0 0 as last key/value, cmp 0 loopne
+
 ; : execve-keyed-cmd ( key:rax -- noret )
 
 __blue_261341123_0:
-	xor rax, rax
-	inc rax
 	mov rdi, __blue_758800390_0
 	mov ecx, 2
 
