@@ -201,9 +201,9 @@ __blue_1223589535_3:
 
 section .bss
 
-; 1 resq cmd
+; 1 resq cmd-name
 
-__blue_4136785899_0: resq 1
+__blue_1161787257_0: resq 1
 ; 1 resq blue-file
 
 __blue_680506038_0: resq 1
@@ -234,14 +234,23 @@ db 99
 db 109
 db 100
 db 32
+db 115
+db 111
+db 109
+db 101
 db 102
 db 105
 db 108
 db 101
+db 46
+db 98
+db 108
+db 117
+db 101
 db 10
 db 0
 __blue_1223589535_4:
-	mov edx, 23
+	mov edx, 32
 	mov esi, __blue_855163316_4
 	call __blue_1361572173_0
 	jmp __blue_1911791459_0
@@ -273,7 +282,7 @@ __blue_2499737933_0:
 __blue_4217555750_0:
 	call __blue_3569987719_0
 	call __blue_952155568_0
-	mov [__blue_4136785899_0], rax
+	mov [__blue_1161787257_0], rax
 	call __blue_2499737933_0
 	mov [__blue_680506038_0], rax
 	ret
@@ -305,6 +314,15 @@ db 0
 db 114
 db 117
 db 110	ret
+
+; : cmd-key ( buf:rax len:rcx -- key:rax )
+
+__blue_1785978521_0:
+	and rcx, 7
+	add rcx, -8
+	shl rcx, 3
+	shr rax, cl
+	ret
 
 ; : build-cmd ( -- )
 
@@ -393,7 +411,7 @@ dq __blue_1139689547_0
 _start:
 	mov rax, rsp
 	call __blue_4217555750_0
-	mov rdx, [__blue_4136785899_0]
+	mov rdx, [__blue_1161787257_0]
 	call __blue_3389152684_0
 	call __blue_4281549323_0
 	mov rdx, [__blue_680506038_0]

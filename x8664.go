@@ -1,5 +1,9 @@
 package main
 
+import (
+	"log"
+)
+
 const (
 	eax = iota
 	ecx
@@ -188,6 +192,21 @@ func ops_2_1(mnemonic string, env *Environment, context *RunContext) AsmInstr {
 	return &AsmBinaryInstr{Mnemonic: mnemonic, Op1: op1, Op2: op2}
 }
 
+func ops_shift(mnemonic string, env *Environment, context *RunContext) AsmInstr {
+	op1, op2 := context.Pop2Inputs()
+	context.AppendInput(op1)
+
+	if reg, found := registers[op2]; found {
+		if reg != ecx {
+			log.Fatal("Shift expects ECX register flavor")
+		}
+
+		op2 = "cl"
+	}
+
+	return &AsmBinaryInstr{Mnemonic: mnemonic, Op1: op1, Op2: op2}
+}
+
 func ops_2_x2(mnemonic string, env *Environment, context *RunContext) AsmInstr {
 	op1, op2 := context.Pop2Inputs()
 	context.AppendInput(op2)
@@ -210,7 +229,7 @@ func consume_previous(mnemonic string, env *Environment, context *RunContext) As
 
 var x8664Lowerers = map[string]x8664Lowerer{
 	"add":     ops_2_1,
-	"and":     ops_2, // TODO needs to push op1 back
+	"and":     ops_2_1,
 	"cmp":     ops_2,
 	"dec":     ops_1_1,
 	"inc":     ops_1_1,
@@ -225,10 +244,10 @@ var x8664Lowerers = map[string]x8664Lowerer{
 	"scasw":   ops_0, // TODO needs to enforce rdi/rax -> rdi (variant)
 	"scasd":   ops_0, // TODO needs to enforce rdi/rax -> rdi (variant)
 	"scasq":   ops_0, // TODO needs to enforce rdi/rax -> rdi (variant)
-	"sal":     ops_2_1,
-	"sar":     ops_2_1,
-	"shl":     ops_2_1,
-	"shr":     ops_2_1,
+	"sal":     ops_shift,
+	"sar":     ops_shift,
+	"shl":     ops_shift,
+	"shr":     ops_shift,
 	"sub":     ops_2_1,
 	"syscall": ops_0,
 	"xadd":    ops_2, // TODO needs to push op1 back

@@ -33,11 +33,11 @@ global _start
 	c" .build/obj/" mkdir 
 ;
 
-1 resq cmd
+1 resq cmd-name
 1 resq blue-file
 
 : usage ( -- noret ) s" 
-	usage: bake cmd file
+	usage: bake cmd somefile.blue
 " 
 	type bye 
 ;
@@ -47,13 +47,15 @@ global _start
 : next-arg ( rax -- rax ) 8 add ; 
 : parse-args ( rax -- ) dup dup 
 	check-argc
-	first-arg cmd !
+	first-arg cmd-name !
 	next-arg blue-file ! 
 ;
 
 \ TODO nicer way to illustrate this
 : build-cmd-key ( -- ) decb( 0 0 0 98 117 105 108 100 ) ; inline
 : run-cmd-key ( -- ) decb( 0 0 0 0 0 114 117 110 ) ; inline
+
+: cmd-key ( buf:rax len:rcx -- key:rax ) 7 and -8 add 3 shl shr ;
 
 : build-cmd ( -- ) s" need to build..." type newline ;
 : run-cmd ( -- ) s" need to run..." type newline ;
@@ -66,7 +68,7 @@ global _start
 
 : _start ( rsp -- noret ) 
 	parse-args
-	cmd @ type-cstr@ newline
+	cmd-name @ type-cstr@ newline
 	blue-file @ type-cstr@ newline
 	make-build-dirs 
 	build-cmd \ TODO find cmd from table
