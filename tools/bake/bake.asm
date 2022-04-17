@@ -348,7 +348,7 @@ db 98	ret
 ; : cmd-key ( buf:rax len:rcx -- key:rax )
 
 __blue_1785978521_0:
-	mov edi, rcx
+	mov edi, eax
 	jmp __blue_3454868101_0
 
 ;  7 and -8 add neg 3 shl shr ;

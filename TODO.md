@@ -16,7 +16,6 @@
 1. validate needs to check for lingering refs/stack items
 1. treat words with only decb more like resb
    1. global strings also fall into this bucket
-1. mov edx, rax bug
 1. More peephole optimizations
    1. mov rxx, 0 -> xor exx
    1. mov rxx, 1 -> xor exx, exx ; inc exx
