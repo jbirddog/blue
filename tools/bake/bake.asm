@@ -289,6 +289,8 @@ __blue_4217555750_0:
 
 ;  TODO nicer way to illustrate this
 
+;  TODO rename all the cmd related words
+
 ; : build-cmd-key ( -- )
 
 __blue_187718900_0:
@@ -324,7 +326,9 @@ __blue_1785978521_0:
 	shr rax, cl
 	ret
 
-; : build-cmd ( -- )
+;  TODO these will eventually fork+execve
+
+; : build-cmd ( -- noret )
 
 __blue_733264130_0:
 	jmp __blue_1223589535_5
@@ -352,9 +356,10 @@ __blue_1223589535_5:
 	mov edx, 16
 	mov esi, __blue_855163316_5
 	call __blue_1361572173_0
-	jmp __blue_4281549323_0
+	call __blue_4281549323_0
+	jmp __blue_1911791459_0
 
-; : run-cmd ( -- )
+; : run-cmd ( -- noret )
 
 __blue_1139689547_0:
 	jmp __blue_1223589535_6
@@ -380,7 +385,8 @@ __blue_1223589535_6:
 	mov edx, 14
 	mov esi, __blue_855163316_6
 	call __blue_1361572173_0
-	jmp __blue_4281549323_0
+	call __blue_4281549323_0
+	jmp __blue_1911791459_0
 
 ;  TODO label/declare vs having to create a new word?
 
@@ -406,19 +412,34 @@ db 114
 db 117
 db 110
 dq __blue_1139689547_0
+; : execve-keyed-cmd ( key:rax -- noret )
+
+__blue_261341123_0:
+	jmp __blue_3461590696_0
+
+; : execve-named-cmd ( name:rdx -- noret )
+
+__blue_3983487188_0:
+	mov rdx, qword [rdx]
+	call __blue_3207375596_0
+	mov rcx, rdx
+	mov rax, rsi
+	call __blue_1785978521_0
+	jmp __blue_261341123_0
+
 ; : _start ( rsp -- noret )
 
 _start:
 	mov rax, rsp
 	call __blue_4217555750_0
-	mov rdx, [__blue_1161787257_0]
-	call __blue_3389152684_0
-	call __blue_4281549323_0
-	mov rdx, [__blue_680506038_0]
-	call __blue_3389152684_0
-	call __blue_4281549323_0
-	call __blue_2670689297_0
-	call __blue_733264130_0
 
-;  TODO find cmd from table
-	jmp __blue_1911791459_0
+;  cmd-name @ type-cstr@ newline
+
+;  blue-file @ type-cstr@ newline
+	call __blue_2670689297_0
+
+;  build-cmd \ TODO find cmd from table
+
+;  bye 
+	mov rdx, [__blue_1161787257_0]
+	jmp __blue_3983487188_0
