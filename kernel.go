@@ -255,12 +255,20 @@ func KernelXe(env *Environment) {
 	condCall(env, "jne")
 }
 
+func KernelXne(env *Environment) {
+	condCall(env, "je")
+}
+
 func KernelXl(env *Environment) {
 	condCall(env, "jge")
 }
 
-func KernelXne(env *Environment) {
-	condCall(env, "je")
+func KernelXz(env *Environment) {
+	condCall(env, "jnz")
+}
+
+func KernelXnz(env *Environment) {
+	condCall(env, "jz")
 }
 
 func condLoop(env *Environment, jmp string) {

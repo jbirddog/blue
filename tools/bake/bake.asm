@@ -322,6 +322,7 @@ db 110	ret
 __blue_1785978521_0:
 	and rcx, 7
 	add rcx, -8
+	neg rcx
 	shl rcx, 3
 	shr rax, cl
 	ret
@@ -394,23 +395,13 @@ __blue_1223589535_6:
 
 __blue_758800390_0:
 
-db 0
-db 0
-db 0
-db 98
-db 117
-db 105
-db 108
-db 100
+;  run-cmd-key	' run-cmd decq
+
+;  build-cmd-key	' build-cmd decq
+
+dq 0
 dq __blue_733264130_0
-db 0
-db 0
-db 0
-db 0
-db 0
-db 114
-db 117
-db 110
+dq 1
 dq __blue_1139689547_0
 ; : execve-cmd ( cmd:rdi -- noret )
 
@@ -420,6 +411,8 @@ __blue_3804625748_0:
 ; : execve-keyed-cmd ( key:rax -- noret )
 
 __blue_261341123_0:
+	xor rax, rax
+	inc rax
 	mov rdi, __blue_758800390_0
 	mov ecx, 2
 
@@ -427,10 +420,11 @@ __blue_261341123_0:
 
 __blue_2401659856_0:
 	scasq
-	jne __blue_2157056155_4
+	jnz __blue_2157056155_4
 	call __blue_3804625748_0
 
 __blue_2157056155_4:
+	add rdi, 8
 	loop __blue_2401659856_0
 	jmp __blue_3461590696_0
 
