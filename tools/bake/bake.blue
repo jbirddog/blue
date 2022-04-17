@@ -57,10 +57,10 @@ global _start
 : run-cmd-key ( -- ) decb( 0 0 0 0 0 114 117 110 ) ; inline
 
 \ TODO remove after debugging
-: run-cmd-key ( -- ) decb( 2 0 0 0 0 0 0 0 ) ; inline
-: build-cmd-key ( -- ) decb( 0 0 0 0 0 0 0 98 ) ; inline
+\ : run-cmd-key ( -- ) decb( 0 0 0 0 0 114 117 110 ) ; inline
+\ : build-cmd-key ( -- ) decb( 0 0 0 0 0 0 0 98 ) ; inline
 
-: cmd-key ( buf:rax len:rcx -- key:rax ) exit ; \ 7 and -8 add neg 3 shl shr ;
+: cmd-key ( buf:rax len:rcx -- key:rax ) -8 add neg 3 shl shl ;
 
 \ TODO these will eventually fork+execve
 : build-cmd ( -- noret ) s" need to build..." type newline bye ;
@@ -81,7 +81,7 @@ global _start
 	usage
 ;
 
-: execve-named-cmd ( name:rdx -- noret ) @ cstr>str cmd-key execve-keyed-cmd ;
+: execve-named-cmd ( name:rdx -- noret ) @ cstr>str swap @ swap cmd-key execve-keyed-cmd ;
 
 : _start ( rsp -- noret ) 
 	parse-args

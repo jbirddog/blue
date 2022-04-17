@@ -319,39 +319,18 @@ db 110	ret
 
 ;  TODO remove after debugging
 
-; : run-cmd-key ( -- )
+;  : run-cmd-key ( -- ) decb( 0 0 0 0 0 114 117 110 ) ; inline
 
-__blue_18326009_1:
-
-db 2
-db 0
-db 0
-db 0
-db 0
-db 0
-db 0
-db 0	ret
-
-; : build-cmd-key ( -- )
-
-__blue_187718900_1:
-
-db 0
-db 0
-db 0
-db 0
-db 0
-db 0
-db 0
-db 98	ret
+;  : build-cmd-key ( -- ) decb( 0 0 0 0 0 0 0 98 ) ; inline
 
 ; : cmd-key ( buf:rax len:rcx -- key:rax )
 
 __blue_1785978521_0:
-	mov edi, eax
-	jmp __blue_3454868101_0
-
-;  7 and -8 add neg 3 shl shr ;
+	add rcx, -8
+	neg rcx
+	shl rcx, 3
+	shl rax, cl
+	ret
 
 ;  TODO these will eventually fork+execve
 
@@ -424,20 +403,20 @@ __blue_758800390_0:
 db 0
 db 0
 db 0
-db 0
-db 0
-db 0
-db 0
 db 98
+db 117
+db 105
+db 108
+db 100
 dq __blue_733264130_0
-db 2
 db 0
 db 0
 db 0
 db 0
 db 0
-db 0
-db 0
+db 114
+db 117
+db 110
 dq __blue_1139689547_0
 ; : execve-cmd ( cmd:rdi -- noret )
 
@@ -470,7 +449,7 @@ __blue_3983487188_0:
 	mov rdx, qword [rdx]
 	call __blue_3207375596_0
 	mov rcx, rdx
-	mov rax, rsi
+	mov rax, qword [rsi]
 	call __blue_1785978521_0
 	jmp __blue_261341123_0
 
