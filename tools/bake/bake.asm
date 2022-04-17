@@ -412,9 +412,26 @@ db 114
 db 117
 db 110
 dq __blue_1139689547_0
+; : execve-cmd ( cmd:rdi -- noret )
+
+__blue_3804625748_0:
+	call qword [rdi]
+
 ; : execve-keyed-cmd ( key:rax -- noret )
 
 __blue_261341123_0:
+	mov rdi, __blue_758800390_0
+	mov ecx, 2
+
+; : find-cmd-with-key ( tries:ecx tbl:rdi key:rax -- noret )
+
+__blue_2401659856_0:
+	scasq
+	jne __blue_2157056155_4
+	call __blue_3804625748_0
+
+__blue_2157056155_4:
+	loop __blue_2401659856_0
 	jmp __blue_3461590696_0
 
 ; : execve-named-cmd ( name:rdx -- noret )
@@ -437,9 +454,5 @@ _start:
 
 ;  blue-file @ type-cstr@ newline
 	call __blue_2670689297_0
-
-;  build-cmd \ TODO find cmd from table
-
-;  bye 
 	mov rdx, [__blue_1161787257_0]
 	jmp __blue_3983487188_0

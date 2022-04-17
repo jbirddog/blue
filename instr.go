@@ -54,6 +54,15 @@ func (i *JmpWordInstr) Run(env *Environment, context *RunContext) {
 	env.AppendAsmInstr(&AsmUnaryInstr{Mnemonic: "jmp", Op: i.Word.AsmLabel})
 }
 
+type CallInstr struct{}
+
+func (i *CallInstr) Run(env *Environment, context *RunContext) {
+	target := context.PopInput()
+
+	// TODO AsmCallInstr -> AsmUnaryInstr
+	env.AppendAsmInstr(&AsmCallInstr{Label: target})
+}
+
 type CallWordInstr struct {
 	Word *Word
 }

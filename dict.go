@@ -45,6 +45,7 @@ func DefaultDictionary() *Dictionary {
 		NewInlineWord("rot", &RotInstr{}),
 		NewCallGoWord(`s"`, KernelSQuote).Immediate(),
 		NewCallGoWord(`c"`, KernelCQuote).Immediate(),
+		NewInlineWord("call", &CallInstr{}),
 	})
 
 	return d

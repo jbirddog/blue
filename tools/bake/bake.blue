@@ -68,7 +68,7 @@ global _start
 	run-cmd-key	' run-cmd decq
 ;
 
-: execve-cmd ( cmd:rdi -- noret ) @ xe ;
+: execve-cmd ( cmd:rdi -- noret ) @ call ;
 
 : execve-keyed-cmd ( key:rax -- noret ) 2 ' cmd-table rot
 : find-cmd-with-key ( tries:ecx tbl:rdi key:rax -- noret ) 
@@ -83,7 +83,5 @@ global _start
 	\ cmd-name @ type-cstr@ newline
 	\ blue-file @ type-cstr@ newline
 	make-build-dirs 
-	\ build-cmd \ TODO find cmd from table
-	\ bye 
 	cmd-name @ execve-named-cmd
 ;
