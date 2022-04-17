@@ -251,6 +251,10 @@ func condCall(env *Environment, jmp string) {
 	env.AppendInstr(condCall)
 }
 
+func KernelXe(env *Environment) {
+	condCall(env, "jne")
+}
+
 func KernelXl(env *Environment) {
 	condCall(env, "jge")
 }

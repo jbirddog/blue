@@ -34,6 +34,7 @@ func DefaultDictionary() *Dictionary {
 		NewInlineWord("dup", &DupInstr{}),
 		NewInlineWord("swap", &SwapInstr{}),
 		NewCallGoWord("'", KernelTick).Immediate(),
+		NewCallGoWord("xe", KernelXe).Immediate(),
 		NewCallGoWord("xl", KernelXl).Immediate(),
 		NewCallGoWord("xne", KernelXne).Immediate(),
 		NewCallGoWord("loople", KernelLoople).Immediate(),
