@@ -51,36 +51,26 @@ global _start
 	next-arg blue-file ! 
 ;
 
-\ TODO rename all the cmd related words
+\ TODO these will fork+execve
+: build ( -- noret ) s" need to build..." type newline bye ;
+: run ( -- noret ) s" need to run..." type newline bye ;
 
-\ TODO nicer way to illustrate this
-: cmd-key(build) ( -- ) decb( 0 0 0 98 117 105 108 100 ) ; inline
-: cmd-key(run) ( -- ) decb( 0 0 0 0 0 114 117 110 ) ; inline
-
-: cmd-key ( buf:rax len:rcx -- key:rax ) 8 sub neg 3 shl shl ;
-
-\ TODO these will eventually fork+execve
-: build-file ( -- noret ) s" need to build..." type newline bye ;
-: run-file ( -- noret ) s" need to run..." type newline bye ;
-
-\ TODO label/declare vs having to create a new word?
 : cmd-table ( -- noret )
-	cmd-key(build)	' build-file decq
-	cmd-key(run)	' run-file decq
+	decb( 0 0 0 98 117 105 108 100 ) ' build decq
+	decb( 0 0 0 0 0 114 117 110 ) ' run decq
 ;
 
+: cmd-key ( qword:rax len:rcx -- key:rax ) 8 sub neg 3 shl shl ;
+: cstr>cmd-key ( cstr:rdx -- key:rax ) cstr>str swap @ swap cmd-key ;
 : call-cmd ( cmd:rdi -- noret ) @ call ;
 
-\ TODO instead of count 0 0 as last key/value, cmp 0 loopne
-\ TODO readability cleanup
-: call-keyed-cmd ( key:rax -- noret ) 2 ' cmd-table rot
-: find-cmd-with-key ( tries:ecx tbl:rdi key:rax -- noret ) 
-	scasq ' call-cmd xz drop 8 add latest loop
+: call-cmd-with-key ( key:rax -- noret ) 2 ' cmd-table rot
+: scan-cmd-table ( tries:ecx tbl:rdi key:rax -- noret ) 
+	scasq ' call-cmd xe drop 8 add latest loop
 	usage
 ;
 
-\ TODO make first half more readable
-: call-named-cmd ( name:rdx -- noret ) @ cstr>str swap @ swap cmd-key call-keyed-cmd ;
+: call-named-cmd ( name:rdx -- noret ) @ cstr>cmd-key call-cmd-with-key ;
 
 : _start ( rsp -- noret ) 
 	parse-args

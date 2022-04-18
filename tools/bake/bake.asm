@@ -287,50 +287,11 @@ __blue_4217555750_0:
 	mov [__blue_680506038_0], rax
 	ret
 
-;  TODO rename all the cmd related words
+;  TODO these will fork+execve
 
-;  TODO nicer way to illustrate this
+; : build ( -- noret )
 
-; : cmd-key(build) ( -- )
-
-__blue_896455872_0:
-
-db 0
-db 0
-db 0
-db 98
-db 117
-db 105
-db 108
-db 100	ret
-
-; : cmd-key(run) ( -- )
-
-__blue_1927041815_0:
-
-db 0
-db 0
-db 0
-db 0
-db 0
-db 114
-db 117
-db 110	ret
-
-; : cmd-key ( buf:rax len:rcx -- key:rax )
-
-__blue_1785978521_0:
-	sub rcx, 8
-	neg rcx
-	shl rcx, 3
-	shl rax, cl
-	ret
-
-;  TODO these will eventually fork+execve
-
-; : build-file ( -- noret )
-
-__blue_3359169164_0:
+__blue_3281777315_0:
 	jmp __blue_1223589535_5
 
 __blue_855163316_5:
@@ -359,9 +320,9 @@ __blue_1223589535_5:
 	call __blue_4281549323_0
 	jmp __blue_1911791459_0
 
-; : run-file ( -- noret )
+; : run ( -- noret )
 
-__blue_737335331_0:
+__blue_718098122_0:
 	jmp __blue_1223589535_6
 
 __blue_855163316_6:
@@ -388,7 +349,9 @@ __blue_1223589535_6:
 	call __blue_4281549323_0
 	jmp __blue_1911791459_0
 
-;  TODO label/declare vs having to create a new word?
+;  TODO label/declare vs having to create a new word for table?
+
+;  TODO nicer way to illustrate keys
 
 ; : cmd-table ( -- noret )
 
@@ -402,7 +365,7 @@ db 117
 db 105
 db 108
 db 100
-dq __blue_3359169164_0
+dq __blue_3281777315_0
 db 0
 db 0
 db 0
@@ -411,45 +374,53 @@ db 0
 db 114
 db 117
 db 110
-dq __blue_737335331_0
+dq __blue_718098122_0
+; : cmd-key ( qword:rax len:rcx -- key:rax )
+
+__blue_1785978521_0:
+	sub rcx, 8
+	neg rcx
+	shl rcx, 3
+	shl rax, cl
+	ret
+
+; : cstr>cmd-key ( cstr:rdx -- key:rax )
+
+__blue_4283867725_0:
+	call __blue_3207375596_0
+	mov rcx, rdx
+	mov rax, qword [rsi]
+	jmp __blue_1785978521_0
+
 ; : call-cmd ( cmd:rdi -- noret )
 
 __blue_1042682684_0:
 	call qword [rdi]
 
-;  TODO instead of count 0 0 as last key/value, cmp 0 loopne
+; : call-cmd-with-key ( key:rax -- noret )
 
-;  TODO readability cleanup
-
-; : call-keyed-cmd ( key:rax -- noret )
-
-__blue_1689358267_0:
+__blue_2379826553_0:
 	mov rdi, __blue_758800390_0
 	mov ecx, 2
 
-; : find-cmd-with-key ( tries:ecx tbl:rdi key:rax -- noret )
+; : scan-cmd-table ( tries:ecx tbl:rdi key:rax -- noret )
 
-__blue_2401659856_0:
+__blue_612288868_0:
 	scasq
-	jnz __blue_2157056155_4
+	jne __blue_2157056155_4
 	call __blue_1042682684_0
 
 __blue_2157056155_4:
 	add rdi, 8
-	loop __blue_2401659856_0
+	loop __blue_612288868_0
 	jmp __blue_3461590696_0
-
-;  TODO make first half more readable
 
 ; : call-named-cmd ( name:rdx -- noret )
 
 __blue_2780306156_0:
 	mov rdx, qword [rdx]
-	call __blue_3207375596_0
-	mov rcx, rdx
-	mov rax, qword [rsi]
-	call __blue_1785978521_0
-	jmp __blue_1689358267_0
+	call __blue_4283867725_0
+	jmp __blue_2379826553_0
 
 ; : _start ( rsp -- noret )
 
