@@ -292,19 +292,34 @@ section .bss
 ; 1 resq execve-file
 
 __blue_3267543346_0: resq 1
-; 1 resq execve-argv
+; 1 resq execve-arg0
 
-__blue_1213363986_0: resq 1
+__blue_38930656_0: resq 1
 ; 1 resq execve-arg1
 
 __blue_55708275_0: resq 1
 ; 1 resq execve-arg2
 
 __blue_72485894_0: resq 1
-; 1 resq execve-envp
+; 1 resq execve-arg3
 
-__blue_3160449449_0: resq 1
+__blue_89263513_0: resq 1
 section .text
+
+; : prep-execve ( file:rsi arg0:rax -- )
+
+__blue_640619689_0:
+	mov [__blue_38930656_0], rax
+	mov [__blue_3267543346_0], rsi
+	ret
+
+; : set-args ( arg1:rsi arg2:rax arg3:rcx -- )
+
+__blue_3319044491_0:
+	mov [__blue_89263513_0], rcx
+	mov [__blue_72485894_0], rax
+	mov [__blue_55708275_0], rsi
+	ret
 
 ; : build ( -- noret )
 
@@ -327,29 +342,73 @@ db 110
 db 118
 db 0
 __blue_1223589535_5:
-	mov [__blue_3267543346_0], __blue_855163316_5
 	jmp __blue_1223589535_6
 
 __blue_855163316_6:
+
+db 101
+db 110
+db 118
+db 0
+__blue_1223589535_6:
+	mov rax, __blue_855163316_6
+	mov rsi, __blue_855163316_5
+	call __blue_640619689_0
+	jmp __blue_1223589535_7
+
+__blue_855163316_7:
 
 db 98
 db 108
 db 117
 db 101
 db 0
-__blue_1223589535_6:
-	mov [__blue_1213363986_0], __blue_855163316_6
-	mov [__blue_55708275_0], __blue_680506038_0
-	mov [__blue_72485894_0], 0
-	mov [__blue_3160449449_0], 0
+__blue_1223589535_7:
+	jmp __blue_1223589535_8
+
+__blue_855163316_8:
+
+db 98
+db 97
+db 107
+db 101
+db 46
+db 98
+db 108
+db 117
+db 101
+db 0
+__blue_1223589535_8:
+	xor rcx, rcx
+	mov rax, __blue_855163316_8
+	mov rsi, __blue_855163316_7
+	call __blue_3319044491_0
+	xor edx, edx
+	mov esi, __blue_38930656_0
+	mov edi, [__blue_3267543346_0]
+	jmp __blue_172884385_0
+	jmp __blue_1223589535_9
+
+__blue_855163316_9:
+
+db 104
+db 101
+db 114
+db 101
+db 0
+__blue_1223589535_9:
+	mov edx, 4
+	mov esi, __blue_855163316_9
+	call __blue_1361572173_0
+	call __blue_4281549323_0
 	jmp __blue_1911791459_0
 
 ; : run ( -- noret )
 
 __blue_718098122_0:
-	jmp __blue_1223589535_7
+	jmp __blue_1223589535_10
 
-__blue_855163316_7:
+__blue_855163316_10:
 
 db 110
 db 101
@@ -366,9 +425,9 @@ db 46
 db 46
 db 46
 db 0
-__blue_1223589535_7:
+__blue_1223589535_10:
 	mov edx, 14
-	mov esi, __blue_855163316_7
+	mov esi, __blue_855163316_10
 	call __blue_1361572173_0
 	call __blue_4281549323_0
 	jmp __blue_1911791459_0

@@ -52,18 +52,20 @@ global _start
 ;
 
 1 resq execve-file
-1 resq execve-argv
+1 resq execve-arg0
 1 resq execve-arg1
 1 resq execve-arg2
-1 resq execve-envp
+1 resq execve-arg3
+
+: prep-execve ( file:rsi arg0:rax -- ) execve-arg0 ! execve-file ! ;
+: set-args ( arg1:rsi arg2:rax arg3:rcx -- ) execve-arg3 ! execve-arg2 ! execve-arg1 ! ;
 
 : build ( -- noret ) 
-	c" /usr/bin/env" execve-file ! 
-	c" blue" execve-argv !
-	blue-file execve-arg1 !
-	0 execve-arg2 !
-	0 execve-envp !
-	bye ;
+	c" /usr/bin/env" c" env" prep-execve
+	c" blue" c" bake.blue" 0 set-args
+	execve-file @ execve-arg0 0 execve 
+	s" here" type newline bye 
+;
 
 : run ( -- noret ) s" need to run..." type newline bye ;
 
