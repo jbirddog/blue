@@ -35,6 +35,12 @@ global _start
 
 1 resq cmd-name
 1 resq blue-file
+1 resq envp
+
+\ TODO these are needed because we can't currently `@ var !` and retain operation size
+: set-cmd-name ( rcx -- ) cmd-name ! ;
+: set-blue-file ( rcx -- ) blue-file ! ;
+: set-envp ( rcx -- ) envp ! ;
 
 : usage ( -- noret ) s" 
 	usage: bake cmd somefile.blue
@@ -45,10 +51,11 @@ global _start
 : check-argc ( rax -- ) @ 3 cmp ' usage xne ;
 : first-arg ( rax -- rax ) 16 add ; 
 : next-arg ( rax -- rax ) 8 add ; 
-: parse-args ( rax -- ) dup dup 
+: parse-args ( rax -- ) dup dup dup 
 	check-argc
-	first-arg cmd-name !
-	next-arg blue-file ! 
+	first-arg @ set-cmd-name
+	next-arg @ set-blue-file 
+	next-arg @ set-envp
 ;
 
 1 resq execve-file
@@ -63,7 +70,7 @@ global _start
 : build ( -- noret ) 
 	c" /usr/bin/env" c" env" prep-execve
 	c" blue" c" bake.blue" 0 set-args
-	execve-file @ execve-arg0 0 execve 
+	execve-file @ execve-arg0 envp @ execve 
 	s" here" type newline bye 
 ;
 
@@ -84,7 +91,7 @@ global _start
 	usage
 ;
 
-: call-named-cmd ( name:rdx -- noret ) @ cstr>cmd-key call-cmd-with-key ;
+: call-named-cmd ( name:rdx -- noret ) cstr>cmd-key call-cmd-with-key ;
 
 : _start ( rsp -- noret ) 
 	parse-args

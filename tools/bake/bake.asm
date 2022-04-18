@@ -207,7 +207,30 @@ __blue_1161787257_0: resq 1
 ; 1 resq blue-file
 
 __blue_680506038_0: resq 1
+; 1 resq envp
+
+__blue_2355496332_0: resq 1
+;  TODO these are needed because we can't currently `@ var !` and retain operation size
+
 section .text
+
+; : set-cmd-name ( rcx -- )
+
+__blue_355623518_0:
+	mov [__blue_1161787257_0], rcx
+	ret
+
+; : set-blue-file ( rcx -- )
+
+__blue_1258471747_0:
+	mov [__blue_680506038_0], rcx
+	ret
+
+; : set-envp ( rcx -- )
+
+__blue_3701733543_0:
+	mov [__blue_2355496332_0], rcx
+	ret
 
 ; : usage ( -- noret )
 
@@ -282,10 +305,14 @@ __blue_2499737933_0:
 __blue_4217555750_0:
 	call __blue_3569987719_0
 	call __blue_952155568_0
-	mov [__blue_1161787257_0], rax
+	mov rcx, qword [rax]
+	call __blue_355623518_0
 	call __blue_2499737933_0
-	mov [__blue_680506038_0], rax
-	ret
+	mov rcx, qword [rax]
+	call __blue_1258471747_0
+	call __blue_2499737933_0
+	mov rcx, qword [rax]
+	jmp __blue_3701733543_0
 
 section .bss
 
@@ -383,7 +410,7 @@ __blue_1223589535_8:
 	mov rax, __blue_855163316_8
 	mov rsi, __blue_855163316_7
 	call __blue_3319044491_0
-	xor edx, edx
+	mov edx, [__blue_2355496332_0]
 	mov esi, __blue_38930656_0
 	mov edi, [__blue_3267543346_0]
 	jmp __blue_172884385_0
@@ -497,7 +524,6 @@ __blue_2157056155_4:
 ; : call-named-cmd ( name:rdx -- noret )
 
 __blue_2780306156_0:
-	mov rdx, qword [rdx]
 	call __blue_4283867725_0
 	jmp __blue_2379826553_0
 
