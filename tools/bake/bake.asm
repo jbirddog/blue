@@ -14,11 +14,11 @@ __blue_3190202204_0:
 	inc eax
 	jmp __blue_4057121178_0
 
-; : execve ( filename:edi argv:esi env:edx -- result:eax )
+; : execve ( filename:edi argv:esi env:edx -- noret )
 
 __blue_172884385_0:
 	mov eax, 59
-	jmp __blue_4057121178_0
+	call __blue_4057121178_0
 
 ; : exit ( status:edi -- noret )
 
@@ -287,7 +287,24 @@ __blue_4217555750_0:
 	mov [__blue_680506038_0], rax
 	ret
 
-;  TODO these will fork+execve
+section .bss
+
+; 1 resq execve-file
+
+__blue_3267543346_0: resq 1
+; 1 resq execve-argv
+
+__blue_1213363986_0: resq 1
+; 1 resq execve-arg1
+
+__blue_55708275_0: resq 1
+; 1 resq execve-arg2
+
+__blue_72485894_0: resq 1
+; 1 resq execve-envp
+
+__blue_3160449449_0: resq 1
+section .text
 
 ; : build ( -- noret )
 
@@ -296,36 +313,43 @@ __blue_3281777315_0:
 
 __blue_855163316_5:
 
-db 110
-db 101
-db 101
-db 100
-db 32
-db 116
-db 111
-db 32
-db 98
+db 47
 db 117
+db 115
+db 114
+db 47
+db 98
 db 105
-db 108
-db 100
-db 46
-db 46
-db 46
+db 110
+db 47
+db 101
+db 110
+db 118
 db 0
 __blue_1223589535_5:
-	mov edx, 16
-	mov esi, __blue_855163316_5
-	call __blue_1361572173_0
-	call __blue_4281549323_0
+	mov [__blue_3267543346_0], __blue_855163316_5
+	jmp __blue_1223589535_6
+
+__blue_855163316_6:
+
+db 98
+db 108
+db 117
+db 101
+db 0
+__blue_1223589535_6:
+	mov [__blue_1213363986_0], __blue_855163316_6
+	mov [__blue_55708275_0], __blue_680506038_0
+	mov [__blue_72485894_0], 0
+	mov [__blue_3160449449_0], 0
 	jmp __blue_1911791459_0
 
 ; : run ( -- noret )
 
 __blue_718098122_0:
-	jmp __blue_1223589535_6
+	jmp __blue_1223589535_7
 
-__blue_855163316_6:
+__blue_855163316_7:
 
 db 110
 db 101
@@ -342,9 +366,9 @@ db 46
 db 46
 db 46
 db 0
-__blue_1223589535_6:
+__blue_1223589535_7:
 	mov edx, 14
-	mov esi, __blue_855163316_6
+	mov esi, __blue_855163316_7
 	call __blue_1361572173_0
 	call __blue_4281549323_0
 	jmp __blue_1911791459_0

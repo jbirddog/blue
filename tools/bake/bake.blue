@@ -3,7 +3,7 @@ global _start
 : syscall ( num:eax -- result:eax ) syscall ;
 
 : write ( buf:esi len:edx fd:edi -- result:eax ) 1 syscall ;
-: execve ( filename:edi argv:esi env:edx -- result:eax ) 59 syscall ;
+: execve ( filename:edi argv:esi env:edx -- noret ) 59 syscall ;
 : exit ( status:edi -- noret ) 60 syscall ;
 : mkdir ( path:edi mode:esi -- result:eax ) 83 syscall ;
 
@@ -51,8 +51,20 @@ global _start
 	next-arg blue-file ! 
 ;
 
-\ TODO these will fork+execve
-: build ( -- noret ) s" need to build..." type newline bye ;
+1 resq execve-file
+1 resq execve-argv
+1 resq execve-arg1
+1 resq execve-arg2
+1 resq execve-envp
+
+: build ( -- noret ) 
+	c" /usr/bin/env" execve-file ! 
+	c" blue" execve-argv !
+	blue-file execve-arg1 !
+	0 execve-arg2 !
+	0 execve-envp !
+	bye ;
+
 : run ( -- noret ) s" need to run..." type newline bye ;
 
 : cmd-table ( -- noret )
