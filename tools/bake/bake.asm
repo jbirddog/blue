@@ -287,13 +287,13 @@ __blue_4217555750_0:
 	mov [__blue_680506038_0], rax
 	ret
 
-;  TODO nicer way to illustrate this
-
 ;  TODO rename all the cmd related words
 
-; : build-cmd-key ( -- )
+;  TODO nicer way to illustrate this
 
-__blue_187718900_0:
+; : cmd-key(build) ( -- )
+
+__blue_896455872_0:
 
 db 0
 db 0
@@ -304,9 +304,9 @@ db 105
 db 108
 db 100	ret
 
-; : run-cmd-key ( -- )
+; : cmd-key(run) ( -- )
 
-__blue_18326009_0:
+__blue_1927041815_0:
 
 db 0
 db 0
@@ -317,16 +317,10 @@ db 114
 db 117
 db 110	ret
 
-;  TODO remove after debugging
-
-;  : run-cmd-key ( -- ) decb( 0 0 0 0 0 114 117 110 ) ; inline
-
-;  : build-cmd-key ( -- ) decb( 0 0 0 0 0 0 0 98 ) ; inline
-
 ; : cmd-key ( buf:rax len:rcx -- key:rax )
 
 __blue_1785978521_0:
-	add rcx, -8
+	sub rcx, 8
 	neg rcx
 	shl rcx, 3
 	shl rax, cl
@@ -334,9 +328,9 @@ __blue_1785978521_0:
 
 ;  TODO these will eventually fork+execve
 
-; : build-cmd ( -- noret )
+; : build-file ( -- noret )
 
-__blue_733264130_0:
+__blue_3359169164_0:
 	jmp __blue_1223589535_5
 
 __blue_855163316_5:
@@ -365,9 +359,9 @@ __blue_1223589535_5:
 	call __blue_4281549323_0
 	jmp __blue_1911791459_0
 
-; : run-cmd ( -- noret )
+; : run-file ( -- noret )
 
-__blue_1139689547_0:
+__blue_737335331_0:
 	jmp __blue_1223589535_6
 
 __blue_855163316_6:
@@ -408,7 +402,7 @@ db 117
 db 105
 db 108
 db 100
-dq __blue_733264130_0
+dq __blue_3359169164_0
 db 0
 db 0
 db 0
@@ -417,17 +411,19 @@ db 0
 db 114
 db 117
 db 110
-dq __blue_1139689547_0
-; : execve-cmd ( cmd:rdi -- noret )
+dq __blue_737335331_0
+; : call-cmd ( cmd:rdi -- noret )
 
-__blue_3804625748_0:
+__blue_1042682684_0:
 	call qword [rdi]
 
 ;  TODO instead of count 0 0 as last key/value, cmp 0 loopne
 
-; : execve-keyed-cmd ( key:rax -- noret )
+;  TODO readability cleanup
 
-__blue_261341123_0:
+; : call-keyed-cmd ( key:rax -- noret )
+
+__blue_1689358267_0:
 	mov rdi, __blue_758800390_0
 	mov ecx, 2
 
@@ -436,32 +432,30 @@ __blue_261341123_0:
 __blue_2401659856_0:
 	scasq
 	jnz __blue_2157056155_4
-	call __blue_3804625748_0
+	call __blue_1042682684_0
 
 __blue_2157056155_4:
 	add rdi, 8
 	loop __blue_2401659856_0
 	jmp __blue_3461590696_0
 
-; : execve-named-cmd ( name:rdx -- noret )
+;  TODO make first half more readable
 
-__blue_3983487188_0:
+; : call-named-cmd ( name:rdx -- noret )
+
+__blue_2780306156_0:
 	mov rdx, qword [rdx]
 	call __blue_3207375596_0
 	mov rcx, rdx
 	mov rax, qword [rsi]
 	call __blue_1785978521_0
-	jmp __blue_261341123_0
+	jmp __blue_1689358267_0
 
 ; : _start ( rsp -- noret )
 
 _start:
 	mov rax, rsp
 	call __blue_4217555750_0
-
-;  cmd-name @ type-cstr@ newline
-
-;  blue-file @ type-cstr@ newline
 	call __blue_2670689297_0
 	mov rdx, [__blue_1161787257_0]
-	jmp __blue_3983487188_0
+	jmp __blue_2780306156_0

@@ -51,42 +51,39 @@ global _start
 	next-arg blue-file ! 
 ;
 
-\ TODO nicer way to illustrate this
 \ TODO rename all the cmd related words
-: build-cmd-key ( -- ) decb( 0 0 0 98 117 105 108 100 ) ; inline
-: run-cmd-key ( -- ) decb( 0 0 0 0 0 114 117 110 ) ; inline
 
-\ TODO remove after debugging
-\ : run-cmd-key ( -- ) decb( 0 0 0 0 0 114 117 110 ) ; inline
-\ : build-cmd-key ( -- ) decb( 0 0 0 0 0 0 0 98 ) ; inline
+\ TODO nicer way to illustrate this
+: cmd-key(build) ( -- ) decb( 0 0 0 98 117 105 108 100 ) ; inline
+: cmd-key(run) ( -- ) decb( 0 0 0 0 0 114 117 110 ) ; inline
 
-: cmd-key ( buf:rax len:rcx -- key:rax ) -8 add neg 3 shl shl ;
+: cmd-key ( buf:rax len:rcx -- key:rax ) 8 sub neg 3 shl shl ;
 
 \ TODO these will eventually fork+execve
-: build-cmd ( -- noret ) s" need to build..." type newline bye ;
-: run-cmd ( -- noret ) s" need to run..." type newline bye ;
+: build-file ( -- noret ) s" need to build..." type newline bye ;
+: run-file ( -- noret ) s" need to run..." type newline bye ;
 
 \ TODO label/declare vs having to create a new word?
 : cmd-table ( -- noret )
-	build-cmd-key	' build-cmd decq
-	run-cmd-key	' run-cmd decq
+	cmd-key(build)	' build-file decq
+	cmd-key(run)	' run-file decq
 ;
 
-: execve-cmd ( cmd:rdi -- noret ) @ call ;
+: call-cmd ( cmd:rdi -- noret ) @ call ;
 
 \ TODO instead of count 0 0 as last key/value, cmp 0 loopne
-: execve-keyed-cmd ( key:rax -- noret ) 2 ' cmd-table rot
+\ TODO readability cleanup
+: call-keyed-cmd ( key:rax -- noret ) 2 ' cmd-table rot
 : find-cmd-with-key ( tries:ecx tbl:rdi key:rax -- noret ) 
-	scasq ' execve-cmd xz drop 8 add latest loop
+	scasq ' call-cmd xz drop 8 add latest loop
 	usage
 ;
 
-: execve-named-cmd ( name:rdx -- noret ) @ cstr>str swap @ swap cmd-key execve-keyed-cmd ;
+\ TODO make first half more readable
+: call-named-cmd ( name:rdx -- noret ) @ cstr>str swap @ swap cmd-key call-keyed-cmd ;
 
 : _start ( rsp -- noret ) 
 	parse-args
-	\ cmd-name @ type-cstr@ newline
-	\ blue-file @ type-cstr@ newline
 	make-build-dirs 
-	cmd-name @ execve-named-cmd
+	cmd-name @ call-named-cmd
 ;
