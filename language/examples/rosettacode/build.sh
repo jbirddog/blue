@@ -18,6 +18,10 @@ blue create_file.blue
 nasm -f elf64 -o .build/obj/create_file.o create_file.asm
 ld -o .build/bin/create_file .build/obj/create_file.o
 
+blue environment.blue
+nasm -f elf64 -o .build/obj/environment.o environment.asm
+ld -o .build/bin/environment .build/obj/environment.o
+
 blue fibonacci.blue
 nasm -f elf64 -o .build/obj/fibonacci.o fibonacci.asm
 

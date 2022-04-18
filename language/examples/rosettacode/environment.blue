@@ -1,0 +1,31 @@
+global _start
+
+: syscall ( num:eax -- result:eax | rcx ) syscall ;
+
+: exit ( status:edi -- noret ) 60 syscall ;
+: bye ( -- noret ) 0 exit ;
+: die ( err:eax -- noret ) neg exit ;
+
+: unwrap ( result:eax -- value:eax ) dup 0 cmp ' die xl ;
+: ordie ( result -- ) unwrap drop ;
+
+1 const stdout
+
+: write ( buf:esi len:edx fd:edi -- ) 1 syscall ordie ;
+: print ( buf len -- ) stdout write ;
+
+: newline ( -- ) s" \n" print ;
+: println ( buf len -- ) print newline ; 
+
+: find0 ( start:rsi -- end:rsi ) lodsb 0 cmp latest xne ; 
+: cstrlen ( str:rdi -- len:rsi ) dup find0 swap sub dec ;
+: cstr>str ( cstr:rdx -- str:rsi len:rdx ) dup cstrlen xchg ;
+
+: print-env-var ( var -- ) cstr>str println ;
+
+\ TODO print one env var by name eg s" HOME" getenv
+: _start ( rsp -- noret ) 32 add 0 swap 
+: print-env ( max:rcx env:rsp -- noret ) 
+	dup @ print-env-var 8 add @ 0 cmp latest loopne 
+	bye 
+;
