@@ -349,10 +349,6 @@ __blue_1223589535_6:
 	call __blue_4281549323_0
 	jmp __blue_1911791459_0
 
-;  TODO label/declare vs having to create a new word for table?
-
-;  TODO nicer way to illustrate keys
-
 ; : cmd-table ( -- noret )
 
 __blue_758800390_0:
