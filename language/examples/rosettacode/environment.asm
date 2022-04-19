@@ -50,9 +50,9 @@ __blue_3190202204_0:
 	call __blue_4057121178_0
 	jmp __blue_1614081290_0
 
-; : print ( buf len -- )
+; : type ( buf len -- )
 
-__blue_372738696_0:
+__blue_1361572173_0:
 	xor edi, edi
 	inc edi
 	jmp __blue_3190202204_0
@@ -70,13 +70,7 @@ __blue_1223589535_0:
 	xor edx, edx
 	inc edx
 	mov esi, __blue_855163316_0
-	jmp __blue_372738696_0
-
-; : println ( buf len -- )
-
-__blue_415234214_0:
-	call __blue_372738696_0
-	jmp __blue_4281549323_0
+	jmp __blue_1361572173_0
 
 ; : find0 ( start:rsi -- end:rsi )
 
@@ -106,11 +100,29 @@ __blue_3207375596_0:
 	xchg rdx, rsi
 	ret
 
-; : print-env-var ( var -- )
+; : print ( var -- )
 
-__blue_4099834566_0:
+__blue_372738696_0:
 	call __blue_3207375596_0
-	jmp __blue_415234214_0
+	call __blue_1361572173_0
+	jmp __blue_4281549323_0
+
+; : bob ( -- )
+
+__blue_2261164244_0:
+	jmp __blue_1223589535_1
+
+__blue_855163316_1:
+
+db 98
+db 111
+db 98
+db 0
+__blue_1223589535_1:
+	mov edx, 3
+	mov esi, __blue_855163316_1
+	call __blue_1361572173_0
+	jmp __blue_4281549323_0
 
 section .bss
 
@@ -126,24 +138,69 @@ __blue_2164669320_0:
 	mov [__blue_2355496332_0], rax
 	ret
 
-;  TODO print one env var by name eg s" HOME" getenv
+; : getenv ( name:rsi len:rcx -- value:rdi )
+
+__blue_1306389850_0:
+	mov rax, [__blue_2355496332_0]
+
+; : scan-envp ( max:rcx name:rsi next:rax -- value:rdi )
+
+__blue_491392598_0:
+	mov rdi, qword [rax]
+
+; : check-entry ( max:rcx name:rsi entry:rdi -- value:rdi )
+
+__blue_585535462_0:
+	repe cmpsb
+
+;  drop drop print bye
+	mov edi, ecx
+	jmp __blue_3454868101_0
+
+;  dec 61 cmp ' bob xe
+
+;  drop drop print bye
+	ret
 
 ; : _start ( rsp -- noret )
 
 _start:
 	mov rax, rsp
 	call __blue_2164669320_0
-	mov rsp, [__blue_2355496332_0]
-	xor rcx, rcx
+	jmp __blue_1223589535_2
 
-; : print-env ( max:rcx env:rsp -- noret )
+__blue_855163316_2:
 
-__blue_3450619010_0:
-	mov rdx, qword [rsp]
-	push rcx
-	call __blue_4099834566_0
-	pop rcx
-	add rsp, 8
-	cmp qword [rsp], 0
-	loopne __blue_3450619010_0
+db 83
+db 69
+db 83
+db 83
+db 73
+db 79
+db 78
+db 95
+db 77
+db 65
+db 78
+db 65
+db 71
+db 69
+db 82
+db 0
+__blue_1223589535_2:
+	mov rcx, 15
+	mov rsi, __blue_855163316_2
+	call __blue_1306389850_0
 	jmp __blue_1911791459_0
+
+;  envp @ print bye ;
+
+;  0 envp @ 
+
+;  : print-env ( max:rcx env:rsp -- noret ) 
+
+; 	dup @ print-env-var 8 add @ 0 cmp latest loopne 
+
+; 	bye 
+
+;  ;

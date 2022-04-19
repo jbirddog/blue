@@ -173,6 +173,14 @@ func ops_0_al(mnemonic string, env *Environment, context *RunContext) AsmInstr {
 	return &AsmNoOperandInstr{Mnemonic: mnemonic}
 }
 
+// TODO hack
+func ops_0_sil_dil(mnemonic string, env *Environment, context *RunContext) AsmInstr {
+	context.AppendInput("sil")
+	context.AppendInput("dil")
+
+	return &AsmNoOperandInstr{Mnemonic: mnemonic}
+}
+
 func ops_1_1(mnemonic string, env *Environment, context *RunContext) AsmInstr {
 	op := context.Peek()
 
@@ -231,10 +239,10 @@ var x8664Lowerers = map[string]x8664Lowerer{
 	"add":     ops_2_1,
 	"and":     ops_2_1,
 	"cmp":     ops_2,
-	"cmpsb":   ops_0, // TODO hack - needs to enforce rsi/rdi -> rsi/rdi (variant)
-	"cmpsw":   ops_0, // TODO hack - needs to enforce rsi/rdi -> rsi/rdi (variant)
-	"cmpsd":   ops_0, // TODO hack - needs to enforce rsi/rdi -> rsi/rdi (variant)
-	"cmpsq":   ops_0, // TODO hack - needs to enforce rsi/rdi -> rsi/rdi (variant)
+	"cmpsb":   ops_0_sil_dil, // TODO hack - needs to enforce rsi/rdi -> rsi/rdi (variant)
+	"cmpsw":   ops_0,         // TODO hack - needs to enforce rsi/rdi -> rsi/rdi (variant)
+	"cmpsd":   ops_0,         // TODO hack - needs to enforce rsi/rdi -> rsi/rdi (variant)
+	"cmpsq":   ops_0,         // TODO hack - needs to enforce rsi/rdi -> rsi/rdi (variant)
 	"dec":     ops_1_1,
 	"inc":     ops_1_1,
 	"lodsb":   ops_0_al, // TODO hack - needs to consume esi, assumes al
@@ -243,6 +251,7 @@ var x8664Lowerers = map[string]x8664Lowerer{
 	"loopne":  op_label, // TODO hack - needs to consume ecx
 	"neg":     ops_1_1,
 	"or":      ops_2_1,
+	"repe":    consume_previous,
 	"repne":   consume_previous,
 	"ret":     ops_0,
 	"scasb":   ops_0, // TODO needs to enforce rdi/rax -> rdi (variant)
