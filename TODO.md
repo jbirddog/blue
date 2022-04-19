@@ -43,6 +43,7 @@
    1. blue.sh - stop the process if a step errors out
 1. Rosetta Code examples
    1. Strip whitespace from a string/Top and tail
+   1. Environment variable
 1. Update README/tutorial with new assembly
 
 ### f6

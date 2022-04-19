@@ -231,10 +231,15 @@ var x8664Lowerers = map[string]x8664Lowerer{
 	"add":     ops_2_1,
 	"and":     ops_2_1,
 	"cmp":     ops_2,
+	"cmpsb":   ops_0, // TODO hack - needs to enforce rsi/rdi -> rsi/rdi (variant)
+	"cmpsw":   ops_0, // TODO hack - needs to enforce rsi/rdi -> rsi/rdi (variant)
+	"cmpsd":   ops_0, // TODO hack - needs to enforce rsi/rdi -> rsi/rdi (variant)
+	"cmpsq":   ops_0, // TODO hack - needs to enforce rsi/rdi -> rsi/rdi (variant)
 	"dec":     ops_1_1,
 	"inc":     ops_1_1,
 	"lodsb":   ops_0_al, // TODO hack - needs to consume esi, assumes al
 	"loop":    op_label, // TODO hack - needs to consume ecx
+	"loope":   op_label, // TODO hack - needs to consume ecx
 	"loopne":  op_label, // TODO hack - needs to consume ecx
 	"neg":     ops_1_1,
 	"or":      ops_2_1,

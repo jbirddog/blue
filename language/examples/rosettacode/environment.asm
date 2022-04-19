@@ -112,10 +112,28 @@ __blue_4099834566_0:
 	call __blue_3207375596_0
 	jmp __blue_415234214_0
 
+section .bss
+
+; 1 resq envp
+
+__blue_2355496332_0: resq 1
+section .text
+
+; : store-envp ( rax -- )
+
+__blue_2164669320_0:
+	add rax, 32
+	mov [__blue_2355496332_0], rax
+	ret
+
+;  TODO print one env var by name eg s" HOME" getenv
+
 ; : _start ( rsp -- noret )
 
 _start:
-	add rsp, 32
+	mov rax, rsp
+	call __blue_2164669320_0
+	mov rsp, [__blue_2355496332_0]
 	xor rcx, rcx
 
 ; : print-env ( max:rcx env:rsp -- noret )

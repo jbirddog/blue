@@ -23,8 +23,12 @@ global _start
 
 : print-env-var ( var -- ) cstr>str println ;
 
+1 resq envp
+
+: store-envp ( rax -- ) 32 add envp ! ;
+
 \ TODO print one env var by name eg s" HOME" getenv
-: _start ( rsp -- noret ) 32 add 0 swap 
+: _start ( rsp -- noret ) store-envp 0 envp @ 
 : print-env ( max:rcx env:rsp -- noret ) 
 	dup @ print-env-var 8 add @ 0 cmp latest loopne 
 	bye 
