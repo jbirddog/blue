@@ -138,6 +138,12 @@ __blue_2164669320_0:
 	mov [__blue_2355496332_0], rax
 	ret
 
+; : value-for-name? ( namelen:rcx name:rsi entry:rdi -- value:rdi unmatched:rcx )
+
+__blue_625331137_0:
+	repe cmpsb
+	ret
+
 ; : getenv ( name:rsi len:rcx -- value:rdi )
 
 __blue_1306389850_0:
@@ -151,16 +157,10 @@ __blue_491392598_0:
 ; : check-entry ( max:rcx name:rsi entry:rdi -- value:rdi )
 
 __blue_585535462_0:
-	repe cmpsb
-
-;  drop drop print bye
-	mov edi, ecx
-	jmp __blue_3454868101_0
-
-;  dec 61 cmp ' bob xe
-
-;  drop drop print bye
-	ret
+	call __blue_625331137_0
+	mov rdx, rdi
+	call __blue_372738696_0
+	jmp __blue_1911791459_0
 
 ; : _start ( rsp -- noret )
 
