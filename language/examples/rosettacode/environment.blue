@@ -24,20 +24,32 @@ global _start
 : bob ( -- ) s" bob" type newline ;
 
 1 resq envp
+1 resq envp-entry
 
 : store-envp ( rax -- ) 32 add envp ! ;
+: set-envp-entry ( rax -- ) envp-entry ! ;
+: reset-envp-entry ( -- ) envp @ set-envp-entry ;
+: advance ( rax -- rax ) 8 add ;
+: advance-envp-entry ( -- ) envp-entry @ advance drop ; 
 
-: drop-prefix ( namelen:rcx name:rsi entry:rdi -- value:rdi unmatched:rcx )
-	cmpsb rot dup repe rot drop ;
+: value-for-name? ( namelen:rcx name:rsi entry:rdi -- value:rdi unmatched:rcx )
+	\ TODO clean up the rot swaps
+	\ TODO this will match short, like HO will match ME=value
+	cmpsb rot dup repe swap inc swap rot drop ;
 
-: getenv ( name:rsi len:rcx -- value:rdi ) swap envp @ 
-: scan-envp ( max:rcx name:rsi next:rax -- value:rdi ) @ 
-: check-entry ( max:rcx name:rsi entry:rdi -- value:rdi ) 
-	drop-prefix 0 cmp ' bob xe exit
+\ : check-entry ( max:rcx name:rsi entry:rdi -- value:rdi ) 
+\	drop-prefix 0 cmp ' bob xe ;
+
+: getenv ( name:r8 len:r9 -- value:rdi ) reset-envp-entry 
+: check-entry ( name:r8 len:r9 -- value:rdi ) 
+	envp-entry @ value-for-name? 
+	0 cmp ' advance-envp-entry xne latest xne
 ;
 
+\ : scan-envp ( max:rcx name:rsi next:rax -- value:rdi ) dup @ check-entry ;
+
 : _start ( rsp -- noret ) store-envp 
-	s" SESSION_MANAGER" getenv bye ;
+	s" SESSION_MANAGER" getenv print bye ;
 	\ envp @ print bye ;
 
 \ 0 envp @ 
