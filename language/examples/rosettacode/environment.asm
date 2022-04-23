@@ -138,9 +138,9 @@ __blue_2164669320_0:
 	mov [__blue_2355496332_0], rax
 	ret
 
-; : value-for-name? ( namelen:rcx name:rsi entry:rdi -- value:rdi unmatched:rcx )
+; : drop-prefix ( namelen:rcx name:rsi entry:rdi -- value:rdi unmatched:rcx )
 
-__blue_625331137_0:
+__blue_2843895655_0:
 	repe cmpsb
 	ret
 
@@ -157,10 +157,13 @@ __blue_491392598_0:
 ; : check-entry ( max:rcx name:rsi entry:rdi -- value:rdi )
 
 __blue_585535462_0:
-	call __blue_625331137_0
-	mov rdx, rdi
-	call __blue_372738696_0
-	jmp __blue_1911791459_0
+	call __blue_2843895655_0
+	cmp rcx, 0
+	jne __blue_2157056155_2
+	call __blue_2261164244_0
+
+__blue_2157056155_2:
+	jmp __blue_3454868101_0
 
 ; : _start ( rsp -- noret )
 

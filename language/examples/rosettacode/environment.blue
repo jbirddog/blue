@@ -27,14 +27,13 @@ global _start
 
 : store-envp ( rax -- ) 32 add envp ! ;
 
-: value-for-name? ( namelen:rcx name:rsi entry:rdi -- value:rdi unmatched:rcx )
-	cmpsb rot dup repe
-	rot drop ;
+: drop-prefix ( namelen:rcx name:rsi entry:rdi -- value:rdi unmatched:rcx )
+	cmpsb rot dup repe rot drop ;
 
 : getenv ( name:rsi len:rcx -- value:rdi ) swap envp @ 
 : scan-envp ( max:rcx name:rsi next:rax -- value:rdi ) @ 
 : check-entry ( max:rcx name:rsi entry:rdi -- value:rdi ) 
-	value-for-name? drop print bye
+	drop-prefix 0 cmp ' bob xe exit
 ;
 
 : _start ( rsp -- noret ) store-envp 
