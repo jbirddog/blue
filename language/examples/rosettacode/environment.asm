@@ -164,7 +164,7 @@ __blue_667710333_0:
 __blue_4288035396_0:
 	mov rax, [__blue_2301798669_0]
 	call __blue_667710333_0
-	ret
+	jmp __blue_651937478_0
 
 ; : value-for-name? ( namelen:rcx name:rsi entry:rdx -- value:rdi unmatched:rcx )
 
@@ -175,7 +175,7 @@ __blue_625331137_0:
 
 __blue_1436770364_0:
 
-;  TODO clean up the rot swaps
+;  TODO clean up the swap rot drop 
 
 ;  TODO this will match short, like HO will match ME=value
 	repe cmpsb
@@ -185,7 +185,6 @@ __blue_1436770364_0:
 ; : getenv ( name:r8 len:r9 -- value:rdi )
 
 __blue_1306389850_0:
-	call __blue_3243367623_0
 
 ; : check-entry ( len:r9 name:r8 -- value:rdi )
 
@@ -201,8 +200,10 @@ __blue_585535462_0:
 	call __blue_4288035396_0
 
 __blue_2157056155_2:
+	je __blue_2157056155_3
+	call __blue_585535462_0
 
-;  latest xne
+__blue_2157056155_3:
 	ret
 
 ; : _start ( rsp -- noret )
@@ -210,30 +211,37 @@ __blue_2157056155_2:
 _start:
 	mov rax, rsp
 	call __blue_2164669320_0
+	call __blue_3243367623_0
 	jmp __blue_1223589535_2
 
 __blue_855163316_2:
 
-db 83
-db 69
-db 83
-db 83
-db 73
+db 72
 db 79
-db 78
-db 95
 db 77
-db 65
-db 78
-db 65
-db 71
 db 69
-db 82
 db 0
 __blue_1223589535_2:
-	mov r9, 15
+	mov r9, 4
 	mov r8, __blue_855163316_2
 	call __blue_1306389850_0
 	mov rdx, rdi
 	call __blue_372738696_0
+	jmp __blue_1223589535_3
+
+__blue_855163316_3:
+
+db 80
+db 65
+db 84
+db 72
+db 0
+__blue_1223589535_3:
+	mov r9, 4
+	mov r8, __blue_855163316_3
+	call __blue_1306389850_0
+	mov rdx, rdi
+	call __blue_372738696_0
+
+;  s" SESSION_MANAGER" getenv print 
 	jmp __blue_1911791459_0
