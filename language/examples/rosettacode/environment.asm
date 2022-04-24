@@ -173,8 +173,8 @@ __blue_625331137_0:
 ;  TODO clean up the rot swaps
 
 ;  TODO this will match short, like HO will match ME=value
-	repe cmpsb
-	inc dil
+
+;  cmpsb rot dup repe swap inc swap rot drop 
 	ret
 
 ;  : check-entry ( max:rcx name:rsi entry:rdi -- value:rdi ) 
@@ -186,22 +186,20 @@ __blue_625331137_0:
 __blue_1306389850_0:
 	call __blue_3243367623_0
 
-; : check-entry ( name:r8 len:r9 -- value:rdi )
+; : check-entry ( len:r9 name:r8 -- value:rdi )
 
 __blue_585535462_0:
 	mov rdi, [__blue_2301798669_0]
-	mov rsi, r9
-	mov rcx, r8
+	mov rsi, r8
+	mov rcx, r9
 	call __blue_625331137_0
 	cmp rcx, 0
 	je __blue_2157056155_2
 	call __blue_4288035396_0
 
 __blue_2157056155_2:
-	je __blue_2157056155_3
-	call __blue_585535462_0
 
-__blue_2157056155_3:
+;  latest xne
 	ret
 
 ;  : scan-envp ( max:rcx name:rsi next:rax -- value:rdi ) dup @ check-entry ;
@@ -235,11 +233,13 @@ __blue_1223589535_2:
 	mov r9, 15
 	mov r8, __blue_855163316_2
 	call __blue_1306389850_0
-	mov rdx, rdi
+	mov rdx, qword [rdi]
 	call __blue_372738696_0
 	jmp __blue_1911791459_0
 
 ;  envp @ print bye ;
+
+;  reset-envp-entry envp-entry @ print bye ;
 
 ;  0 envp @ 
 

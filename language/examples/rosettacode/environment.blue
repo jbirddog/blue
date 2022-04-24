@@ -35,22 +35,21 @@ global _start
 : value-for-name? ( namelen:rcx name:rsi entry:rdi -- value:rdi unmatched:rcx )
 	\ TODO clean up the rot swaps
 	\ TODO this will match short, like HO will match ME=value
-	cmpsb rot dup repe swap inc swap rot drop ;
+	\ cmpsb rot dup repe swap inc swap rot drop 
+;
 
-\ : check-entry ( max:rcx name:rsi entry:rdi -- value:rdi ) 
-\	drop-prefix 0 cmp ' bob xe ;
-
-: getenv ( name:r8 len:r9 -- value:rdi ) reset-envp-entry 
-: check-entry ( name:r8 len:r9 -- value:rdi ) 
+: getenv ( name:r8 len:r9 -- value:rdi ) reset-envp-entry swap
+: check-entry ( len:r9 name:r8 -- value:rdi ) 
 	envp-entry @ value-for-name? 
-	0 cmp ' advance-envp-entry xne latest xne
+	0 cmp ' advance-envp-entry xne \ latest xne
 ;
 
 \ : scan-envp ( max:rcx name:rsi next:rax -- value:rdi ) dup @ check-entry ;
 
 : _start ( rsp -- noret ) store-envp 
-	s" SESSION_MANAGER" getenv print bye ;
+	s" SESSION_MANAGER" getenv @ print bye ;
 	\ envp @ print bye ;
+	\ reset-envp-entry envp-entry @ print bye ;
 
 \ 0 envp @ 
 \ : print-env ( max:rcx env:rsp -- noret ) 
