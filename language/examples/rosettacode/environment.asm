@@ -166,20 +166,21 @@ __blue_4288035396_0:
 	call __blue_667710333_0
 	ret
 
-; : value-for-name? ( namelen:rcx name:rsi entry:rdi -- value:rdi unmatched:rcx )
+; : value-for-name? ( namelen:rcx name:rsi entry:rdx -- value:rdi unmatched:rcx )
 
 __blue_625331137_0:
+	mov rdi, qword [rdx]
+
+; : 'value-for-name? ( namelen:rcx name:rsi entry:rdi -- value:rdi unmatched:rcx )
+
+__blue_1436770364_0:
 
 ;  TODO clean up the rot swaps
 
 ;  TODO this will match short, like HO will match ME=value
-
-;  cmpsb rot dup repe swap inc swap rot drop 
+	repe cmpsb
+	inc dil
 	ret
-
-;  : check-entry ( max:rcx name:rsi entry:rdi -- value:rdi ) 
-
-; 	drop-prefix 0 cmp ' bob xe ;
 
 ; : getenv ( name:r8 len:r9 -- value:rdi )
 
@@ -189,10 +190,12 @@ __blue_1306389850_0:
 ; : check-entry ( len:r9 name:r8 -- value:rdi )
 
 __blue_585535462_0:
-	mov rdi, [__blue_2301798669_0]
+	mov rdx, [__blue_2301798669_0]
 	mov rsi, r8
 	mov rcx, r9
 	call __blue_625331137_0
+
+;  TODO need to loop if not matched
 	cmp rcx, 0
 	je __blue_2157056155_2
 	call __blue_4288035396_0
@@ -201,8 +204,6 @@ __blue_2157056155_2:
 
 ;  latest xne
 	ret
-
-;  : scan-envp ( max:rcx name:rsi next:rax -- value:rdi ) dup @ check-entry ;
 
 ; : _start ( rsp -- noret )
 
@@ -233,20 +234,6 @@ __blue_1223589535_2:
 	mov r9, 15
 	mov r8, __blue_855163316_2
 	call __blue_1306389850_0
-	mov rdx, qword [rdi]
+	mov rdx, rdi
 	call __blue_372738696_0
 	jmp __blue_1911791459_0
-
-;  envp @ print bye ;
-
-;  reset-envp-entry envp-entry @ print bye ;
-
-;  0 envp @ 
-
-;  : print-env ( max:rcx env:rsp -- noret ) 
-
-; 	dup @ print-env-var 8 add @ 0 cmp latest loopne 
-
-; 	bye 
-
-;  ;
