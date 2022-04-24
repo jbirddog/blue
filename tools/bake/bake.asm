@@ -294,10 +294,16 @@ __blue_952155568_0:
 	add rax, 16
 	ret
 
-; : next-arg ( rax -- rax )
+; : second-arg ( rax -- rax )
 
-__blue_2499737933_0:
-	add rax, 8
+__blue_3635418476_0:
+	add rax, 24
+	ret
+
+; : third-arg ( rax -- rax )
+
+__blue_338596667_0:
+	add rax, 32
 	ret
 
 ; : parse-args ( rax -- )
@@ -307,10 +313,12 @@ __blue_4217555750_0:
 	call __blue_952155568_0
 	mov rcx, qword [rax]
 	call __blue_355623518_0
-	call __blue_2499737933_0
+	call __blue_3635418476_0
 	mov rcx, qword [rax]
 	call __blue_1258471747_0
-	call __blue_2499737933_0
+
+;  TODO not right
+	call __blue_3635418476_0
 	mov rcx, qword [rax]
 	jmp __blue_3701733543_0
 
@@ -355,6 +363,20 @@ __blue_3281777315_0:
 
 __blue_855163316_5:
 
+db 104
+db 101
+db 114
+db 101
+db 0
+__blue_1223589535_5:
+	mov edx, 4
+	mov esi, __blue_855163316_5
+	call __blue_1361572173_0
+	call __blue_4281549323_0
+	jmp __blue_1223589535_6
+
+__blue_855163316_6:
+
 db 47
 db 117
 db 115
@@ -368,32 +390,32 @@ db 101
 db 110
 db 118
 db 0
-__blue_1223589535_5:
-	jmp __blue_1223589535_6
+__blue_1223589535_6:
+	jmp __blue_1223589535_7
 
-__blue_855163316_6:
+__blue_855163316_7:
 
 db 101
 db 110
 db 118
 db 0
-__blue_1223589535_6:
-	mov rax, __blue_855163316_6
-	mov rsi, __blue_855163316_5
+__blue_1223589535_7:
+	mov rax, __blue_855163316_7
+	mov rsi, __blue_855163316_6
 	call __blue_640619689_0
-	jmp __blue_1223589535_7
+	jmp __blue_1223589535_8
 
-__blue_855163316_7:
+__blue_855163316_8:
 
 db 98
 db 108
 db 117
 db 101
 db 0
-__blue_1223589535_7:
-	jmp __blue_1223589535_8
+__blue_1223589535_8:
+	jmp __blue_1223589535_9
 
-__blue_855163316_8:
+__blue_855163316_9:
 
 db 98
 db 97
@@ -405,30 +427,15 @@ db 108
 db 117
 db 101
 db 0
-__blue_1223589535_8:
+__blue_1223589535_9:
 	xor rcx, rcx
-	mov rax, __blue_855163316_8
-	mov rsi, __blue_855163316_7
+	mov rax, __blue_855163316_9
+	mov rsi, __blue_855163316_8
 	call __blue_3319044491_0
 	mov edx, [__blue_2355496332_0]
-	mov esi, __blue_38930656_0
+	mov esi, [__blue_38930656_0]
 	mov edi, [__blue_3267543346_0]
 	jmp __blue_172884385_0
-	jmp __blue_1223589535_9
-
-__blue_855163316_9:
-
-db 104
-db 101
-db 114
-db 101
-db 0
-__blue_1223589535_9:
-	mov edx, 4
-	mov esi, __blue_855163316_9
-	call __blue_1361572173_0
-	call __blue_4281549323_0
-	jmp __blue_1911791459_0
 
 ; : run ( -- noret )
 
@@ -535,3 +542,5 @@ _start:
 	call __blue_2670689297_0
 	mov rdx, [__blue_1161787257_0]
 	jmp __blue_2780306156_0
+
+;  blue-file @ type-cstr newline bye 
