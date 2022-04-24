@@ -26,27 +26,29 @@ global _start
 1 resq envp
 1 resq envp-entry
 
-: store-envp ( rax -- ) 32 add envp ! ;
+: store-envp ( rax -- ) 24 add envp ! ;
 : set-envp-entry ( rax -- ) envp-entry ! ;
 : reset-envp-entry ( -- ) envp @ set-envp-entry ;
 : advance ( rax -- rax ) 8 add ;
 : advance-envp-entry ( -- ) envp-entry @ advance set-envp-entry ; 
 
+\ TODO need @@ to avoid this double decl
 : value-for-name? ( namelen:rcx name:rsi entry:rdx -- value:rdi unmatched:rcx ) @
 : 'value-for-name? ( namelen:rcx name:rsi entry:rdi -- value:rdi unmatched:rcx )
-	\ TODO clean up the swap rot drop 
-	\ TODO this will match short, like HO will match ME=value
-	cmpsb rot dup repe swap inc swap rot drop 
+	\ TODO this will match short, like HO will match E=value for HOME=value
+	cmpsb rot dup repe swap inc swap 
 ;
 
-: getenv ( name:r8 len:r9 -- value:rdi ) swap
+: getenv ( name:r8 len:r9 -- value:rdi ) swap reset-envp-entry
 : check-entry ( len:r9 name:r8 -- value:rdi ) 
 	envp-entry @ value-for-name? 
 	0 cmp ' advance-envp-entry xne latest xne
 ;
 
-: _start ( rsp -- noret ) store-envp reset-envp-entry
+: _start ( rsp -- noret ) store-envp 
 	s" HOME" getenv print 
 	s" PATH" getenv print 
+	s" SESSION_MANAGER" getenv print 
+	s" SHELL" getenv print 
 	bye 
 ;

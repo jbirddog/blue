@@ -137,7 +137,7 @@ section .text
 ; : store-envp ( rax -- )
 
 __blue_2164669320_0:
-	add rax, 32
+	add rax, 24
 	mov [__blue_2355496332_0], rax
 	ret
 
@@ -166,6 +166,8 @@ __blue_4288035396_0:
 	call __blue_667710333_0
 	jmp __blue_651937478_0
 
+;  TODO need @@ to avoid this double decl
+
 ; : value-for-name? ( namelen:rcx name:rsi entry:rdx -- value:rdi unmatched:rcx )
 
 __blue_625331137_0:
@@ -175,9 +177,7 @@ __blue_625331137_0:
 
 __blue_1436770364_0:
 
-;  TODO clean up the swap rot drop 
-
-;  TODO this will match short, like HO will match ME=value
+;  TODO this will match short, like HO will match E=value for HOME=value
 	repe cmpsb
 	inc dil
 	ret
@@ -185,6 +185,7 @@ __blue_1436770364_0:
 ; : getenv ( name:r8 len:r9 -- value:rdi )
 
 __blue_1306389850_0:
+	call __blue_3243367623_0
 
 ; : check-entry ( len:r9 name:r8 -- value:rdi )
 
@@ -209,7 +210,6 @@ __blue_2157056155_3:
 _start:
 	mov rax, rsp
 	call __blue_2164669320_0
-	call __blue_3243367623_0
 	jmp __blue_1223589535_2
 
 __blue_855163316_2:
@@ -237,6 +237,48 @@ db 0
 __blue_1223589535_3:
 	mov r9, 4
 	mov r8, __blue_855163316_3
+	call __blue_1306389850_0
+	mov rdx, rdi
+	call __blue_372738696_0
+	jmp __blue_1223589535_4
+
+__blue_855163316_4:
+
+db 83
+db 69
+db 83
+db 83
+db 73
+db 79
+db 78
+db 95
+db 77
+db 65
+db 78
+db 65
+db 71
+db 69
+db 82
+db 0
+__blue_1223589535_4:
+	mov r9, 15
+	mov r8, __blue_855163316_4
+	call __blue_1306389850_0
+	mov rdx, rdi
+	call __blue_372738696_0
+	jmp __blue_1223589535_5
+
+__blue_855163316_5:
+
+db 83
+db 72
+db 69
+db 76
+db 76
+db 0
+__blue_1223589535_5:
+	mov r9, 5
+	mov r8, __blue_855163316_5
 	call __blue_1306389850_0
 	mov rdx, rdi
 	call __blue_372738696_0
