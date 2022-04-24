@@ -193,8 +193,6 @@ __blue_585535462_0:
 	mov rsi, r8
 	mov rcx, r9
 	call __blue_625331137_0
-
-;  TODO need to loop if not matched
 	cmp rcx, 0
 	je __blue_2157056155_2
 	call __blue_4288035396_0
@@ -242,6 +240,4 @@ __blue_1223589535_3:
 	call __blue_1306389850_0
 	mov rdx, rdi
 	call __blue_372738696_0
-
-;  s" SESSION_MANAGER" getenv print 
 	jmp __blue_1911791459_0

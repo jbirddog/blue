@@ -48,6 +48,5 @@ global _start
 : _start ( rsp -- noret ) store-envp reset-envp-entry
 	s" HOME" getenv print 
 	s" PATH" getenv print 
-	\ s" SESSION_MANAGER" getenv print 
 	bye 
 ;
