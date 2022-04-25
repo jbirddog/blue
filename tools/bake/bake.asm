@@ -322,9 +322,17 @@ __blue_4217555750_0:
 
 section .bss
 
+; 1 resq env-file
+
+__blue_2063802741_0: resq 1
+; 1 resq env-arg0
+
+__blue_188583195_0: resq 1
 ; 1 resq execve-file
 
 __blue_3267543346_0: resq 1
+;  4 resq execve-argv - TODO blocked by operation size issue
+
 ; 1 resq execve-arg0
 
 __blue_38930656_0: resq 1
@@ -339,24 +347,18 @@ __blue_72485894_0: resq 1
 __blue_89263513_0: resq 1
 section .text
 
-; : prep-execve ( file:rsi arg0:rax -- )
+; : prep-env ( file:rsi arg0:rax -- )
 
-__blue_640619689_0:
-	mov [__blue_38930656_0], rax
-	mov [__blue_3267543346_0], rsi
+__blue_4177786188_0:
+	mov [__blue_188583195_0], rax
+	mov [__blue_2063802741_0], rsi
 	ret
 
-; : set-args ( arg1:rsi arg2:rax arg3:rcx -- )
+; : execve-via-env ( -- noret )
 
-__blue_3319044491_0:
-	mov [__blue_89263513_0], rcx
-	mov [__blue_72485894_0], rax
-	mov [__blue_55708275_0], rsi
-	ret
+__blue_2254422318_0:
 
-; : build ( -- noret )
-
-__blue_3281777315_0:
+;  TODO want to set these directly but lose operation size
 	jmp __blue_1223589535_5
 
 __blue_855163316_5:
@@ -386,7 +388,40 @@ db 0
 __blue_1223589535_6:
 	mov rax, __blue_855163316_6
 	mov rsi, __blue_855163316_5
-	call __blue_640619689_0
+	call __blue_4177786188_0
+	mov rdx, [__blue_2355496332_0]
+	mov rsi, __blue_188583195_0
+	mov rdi, [__blue_2063802741_0]
+	jmp __blue_172884385_0
+
+;  TODO these are here to work around the operation size issue
+
+; : set-args ( arg1:rsi arg2:rax arg3:rcx -- )
+
+__blue_3319044491_0:
+	mov [__blue_89263513_0], rcx
+	mov [__blue_72485894_0], rax
+	mov [__blue_55708275_0], rsi
+	ret
+
+; : clear-args ( -- )
+
+__blue_480086900_0:
+	xor rcx, rcx
+	xor rax, rax
+	xor rsi, rsi
+	jmp __blue_3319044491_0
+
+; : prep-execve ( file:rsi arg0:rax -- )
+
+__blue_640619689_0:
+	mov [__blue_38930656_0], rax
+	mov [__blue_3267543346_0], rsi
+	jmp __blue_480086900_0
+
+; : build ( -- noret )
+
+__blue_3281777315_0:
 	jmp __blue_1223589535_7
 
 __blue_855163316_7:
@@ -412,14 +447,10 @@ db 117
 db 101
 db 0
 __blue_1223589535_8:
-	xor rcx, rcx
 	mov rax, __blue_855163316_8
 	mov rsi, __blue_855163316_7
-	call __blue_3319044491_0
-	mov rdx, [__blue_2355496332_0]
-	mov rsi, __blue_38930656_0
-	mov rdi, [__blue_3267543346_0]
-	jmp __blue_172884385_0
+	call __blue_640619689_0
+	jmp __blue_2254422318_0
 
 ; : run ( -- noret )
 
