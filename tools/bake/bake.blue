@@ -17,6 +17,7 @@ global _start
 : wait4 ( pid:edi status:rsi options:rdx usage:r10 -- result:eax ) 61 syscall ;  
 
 \ TODO want to return wait-status @ but outputs don't flow yet
+\ TODO actually need ports of WIFEXITED and WEXITSTATUS
 : waitpid ( pid:edi -- ) wait-status 0 0 wait4 ordie ;
 
 : write ( buf:esi len:edx fd:edi -- result:eax ) 1 syscall ;
