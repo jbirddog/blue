@@ -7,24 +7,11 @@ __blue_4057121178_0:
 	syscall
 	ret
 
-; : write ( buf:esi len:edx fd:edi -- result:eax )
-
-__blue_3190202204_0:
-	xor eax, eax
-	inc eax
-	jmp __blue_4057121178_0
-
 ; : exit ( status:edi -- noret )
 
 __blue_3454868101_0:
 	mov eax, 60
 	call __blue_4057121178_0
-
-; : mkdir ( path:edi mode:esi -- result:eax )
-
-__blue_2883839448_0:
-	mov eax, 83
-	jmp __blue_4057121178_0
 
 ; : die ( err:eax -- noret )
 
@@ -59,12 +46,45 @@ __blue_2118064195_0:
 __blue_2157056155_1:
 	ret
 
+; : fork ( -- result:eax )
+
+__blue_1046004769_0:
+	mov eax, 57
+	call __blue_4057121178_0
+	jmp __blue_4055961022_0
+
 ; : execve ( filename:rdi argv:rsi env:rdx -- noret )
 
 __blue_172884385_0:
 	mov eax, 59
 	call __blue_4057121178_0
 	call __blue_1614081290_0
+
+section .bss
+
+; 1 resd wait-status
+
+__blue_285992641_0: resd 1
+section .text
+
+; : wait4 ( pid:rdi status:rsi options:rdx usage:r10 -- value:eax )
+
+__blue_2279771388_0:
+	mov eax, 61
+	jmp __blue_4057121178_0
+
+; : write ( buf:esi len:edx fd:edi -- result:eax )
+
+__blue_3190202204_0:
+	xor eax, eax
+	inc eax
+	jmp __blue_4057121178_0
+
+; : mkdir ( path:edi mode:esi -- result:eax )
+
+__blue_2883839448_0:
+	mov eax, 83
+	jmp __blue_4057121178_0
 
 ; : bye ( -- noret )
 
