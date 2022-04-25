@@ -67,11 +67,22 @@ section .bss
 __blue_285992641_0: resd 1
 section .text
 
-; : wait4 ( pid:rdi status:rsi options:rdx usage:r10 -- value:eax )
+; : wait4 ( pid:edi status:rsi options:rdx usage:r10 -- result:eax )
 
 __blue_2279771388_0:
 	mov eax, 61
 	jmp __blue_4057121178_0
+
+;  TODO want to return wait-status @ but outputs don't flow yet
+
+; : waitpid ( pid:edi -- )
+
+__blue_3964545837_0:
+	xor r10, r10
+	xor rdx, rdx
+	mov rsi, __blue_285992641_0
+	call __blue_2279771388_0
+	jmp __blue_1614081290_0
 
 ; : write ( buf:esi len:edx fd:edi -- result:eax )
 
@@ -328,11 +339,25 @@ __blue_4217555750_0:
 	call __blue_952155568_0
 	mov rcx, qword [rax]
 	call __blue_355623518_0
-	call __blue_3635418476_0
-	mov rcx, qword [rax]
+	jmp __blue_1223589535_5
+
+__blue_855163316_5:
+
+db 98
+db 97
+db 107
+db 101
+db 46
+db 98
+db 108
+db 117
+db 101
+db 0
+__blue_1223589535_5:
+	mov rcx, __blue_855163316_5
 	call __blue_1258471747_0
 
-;  TODO not right
+;  TODO second-arg is not right
 	call __blue_3635418476_0
 	mov rcx, rax
 	call __blue_3701733543_0
@@ -365,6 +390,8 @@ __blue_72485894_0: resq 1
 ; 1 resq execve-arg3
 
 __blue_89263513_0: resq 1
+;  TODO this is here to work around the operation size issue
+
 section .text
 
 ; : prep-env ( file:rsi arg0:rax -- )
@@ -379,9 +406,9 @@ __blue_4177786188_0:
 __blue_2254422318_0:
 
 ;  TODO want to set these directly but lose operation size
-	jmp __blue_1223589535_5
+	jmp __blue_1223589535_6
 
-__blue_855163316_5:
+__blue_855163316_6:
 
 db 47
 db 117
@@ -396,18 +423,18 @@ db 101
 db 110
 db 118
 db 0
-__blue_1223589535_5:
-	jmp __blue_1223589535_6
+__blue_1223589535_6:
+	jmp __blue_1223589535_7
 
-__blue_855163316_6:
+__blue_855163316_7:
 
 db 101
 db 110
 db 118
 db 0
-__blue_1223589535_6:
-	mov rax, __blue_855163316_6
-	mov rsi, __blue_855163316_5
+__blue_1223589535_7:
+	mov rax, __blue_855163316_7
+	mov rsi, __blue_855163316_6
 	call __blue_4177786188_0
 	mov rdx, [__blue_2355496332_0]
 	mov rsi, __blue_188583195_0
@@ -439,38 +466,37 @@ __blue_640619689_0:
 	mov [__blue_3267543346_0], rsi
 	jmp __blue_480086900_0
 
-; : build ( -- noret )
+; : gen-asm ( -- )
 
-__blue_3281777315_0:
-	jmp __blue_1223589535_7
-
-__blue_855163316_7:
-
-db 98
-db 108
-db 117
-db 101
-db 0
-__blue_1223589535_7:
+__blue_58599487_0:
 	jmp __blue_1223589535_8
 
 __blue_855163316_8:
 
-db 98
-db 97
-db 107
-db 101
-db 46
 db 98
 db 108
 db 117
 db 101
 db 0
 __blue_1223589535_8:
-	mov rax, __blue_855163316_8
-	mov rsi, __blue_855163316_7
+	mov rax, [__blue_680506038_0]
+	mov rsi, __blue_855163316_8
 	call __blue_640619689_0
-	jmp __blue_2254422318_0
+	call __blue_1046004769_0
+	cmp eax, 0
+	jne __blue_2157056155_4
+	call __blue_2254422318_0
+
+__blue_2157056155_4:
+	mov edi, eax
+	jmp __blue_3964545837_0
+
+; : build ( -- noret )
+
+__blue_3281777315_0:
+	call __blue_58599487_0
+	mov edi, [__blue_285992641_0]
+	jmp __blue_3454868101_0
 
 ; : run ( -- noret )
 
@@ -555,10 +581,10 @@ __blue_2379826553_0:
 
 __blue_612288868_0:
 	scasq
-	jne __blue_2157056155_4
+	jne __blue_2157056155_5
 	call __blue_1042682684_0
 
-__blue_2157056155_4:
+__blue_2157056155_5:
 	add rdi, 8
 	loop __blue_612288868_0
 	jmp __blue_3461590696_0

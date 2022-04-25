@@ -14,7 +14,10 @@ global _start
 
 1 resd wait-status
 
-: wait4 ( pid:rdi status:rsi options:rdx usage:r10 -- value:eax ) 61 syscall ;  
+: wait4 ( pid:edi status:rsi options:rdx usage:r10 -- result:eax ) 61 syscall ;  
+
+\ TODO want to return wait-status @ but outputs don't flow yet
+: waitpid ( pid:edi -- ) wait-status 0 0 wait4 ordie ;
 
 : write ( buf:esi len:edx fd:edi -- result:eax ) 1 syscall ;
 : mkdir ( path:edi mode:esi -- result:eax ) 83 syscall ;
@@ -61,7 +64,7 @@ global _start
 : parse-args ( rax -- ) dup dup dup 
 	check-argc
 	first-arg @ set-cmd-name
-	second-arg @ set-blue-file \ TODO not right
+	c" bake.blue" set-blue-file \ TODO second-arg is not right
 	second-arg set-envp \ TODO better name, its not an argv
 ;
 
@@ -74,6 +77,7 @@ global _start
 1 resq execve-arg2
 1 resq execve-arg3
 
+\ TODO this is here to work around the operation size issue
 : prep-env ( file:rsi arg0:rax -- ) env-arg0 ! env-file ! ;
 
 : execve-via-env ( -- noret )
@@ -86,10 +90,13 @@ global _start
 : clear-args ( -- ) 0 0 0 set-args ;
 : prep-execve ( file:rsi arg0:rax -- ) execve-arg0 ! execve-file ! clear-args ;
 
-: build ( -- noret ) 
-	c" blue" c" bake.blue" prep-execve
-	execve-via-env
+: gen-asm ( -- ) 
+	c" blue" blue-file @ prep-execve 
+	fork dup 0 cmp ' execve-via-env xe
+	waitpid 
 ;
+
+: build ( -- noret ) gen-asm wait-status @ exit ;
 
 : run ( -- noret ) s" need to run..." type newline bye ;
 
