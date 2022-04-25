@@ -1,5 +1,6 @@
 #!/usr/bin/sh
 
+rm -rf .bootstrap
 rm -rf .build
 mkdir -p .bootstrap/bin
 mkdir -p .bootstrap/obj

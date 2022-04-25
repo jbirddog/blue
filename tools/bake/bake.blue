@@ -3,7 +3,6 @@ global _start
 : syscall ( num:eax -- result:eax ) syscall ;
 
 : write ( buf:esi len:edx fd:edi -- result:eax ) 1 syscall ;
-: execve ( filename:edi argv:esi env:edx -- noret ) 59 syscall ;
 : exit ( status:edi -- noret ) 60 syscall ;
 : mkdir ( path:edi mode:esi -- result:eax ) 83 syscall ;
 
@@ -11,6 +10,8 @@ global _start
 : unwrap ( result:eax -- value:eax ) dup 0 cmp ' die xl ;
 : ordie ( result -- ) unwrap drop ;
 : ignore ( result:eax err:edi -- ) swap dup rot cmp ' ordie xne drop ;
+
+: execve ( filename:rdi argv:rsi env:rdx -- noret ) 59 syscall ordie ;
 
 1 const stdout
 -17 const exists
@@ -55,7 +56,7 @@ global _start
 	check-argc
 	first-arg @ set-cmd-name
 	second-arg @ set-blue-file \ TODO not right
-	second-arg @ set-envp \ TODO better name, its not an argv
+	second-arg set-envp \ TODO better name, its not an argv
 ;
 
 1 resq execve-file
@@ -68,10 +69,9 @@ global _start
 : set-args ( arg1:rsi arg2:rax arg3:rcx -- ) execve-arg3 ! execve-arg2 ! execve-arg1 ! ;
 
 : build ( -- noret ) 
-	s" here" type newline
 	c" /usr/bin/env" c" env" prep-execve
 	c" blue" c" bake.blue" 0 set-args
-	execve-file @ execve-arg0 @ envp @ execve 
+	execve-file @ execve-arg0 envp @ execve
 ;
 
 : run ( -- noret ) s" need to run..." type newline bye ;

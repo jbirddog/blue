@@ -14,12 +14,6 @@ __blue_3190202204_0:
 	inc eax
 	jmp __blue_4057121178_0
 
-; : execve ( filename:edi argv:esi env:edx -- noret )
-
-__blue_172884385_0:
-	mov eax, 59
-	call __blue_4057121178_0
-
 ; : exit ( status:edi -- noret )
 
 __blue_3454868101_0:
@@ -64,6 +58,13 @@ __blue_2118064195_0:
 
 __blue_2157056155_1:
 	ret
+
+; : execve ( filename:rdi argv:rsi env:rdx -- noret )
+
+__blue_172884385_0:
+	mov eax, 59
+	call __blue_4057121178_0
+	call __blue_1614081290_0
 
 ; : bye ( -- noret )
 
@@ -300,12 +301,6 @@ __blue_3635418476_0:
 	add rax, 24
 	ret
 
-; : third-arg ( rax -- rax )
-
-__blue_338596667_0:
-	add rax, 32
-	ret
-
 ; : parse-args ( rax -- )
 
 __blue_4217555750_0:
@@ -319,8 +314,11 @@ __blue_4217555750_0:
 
 ;  TODO not right
 	call __blue_3635418476_0
-	mov rcx, qword [rax]
-	jmp __blue_3701733543_0
+	mov rcx, rax
+	call __blue_3701733543_0
+
+;  TODO better name, its not an argv
+	ret
 
 section .bss
 
@@ -363,20 +361,6 @@ __blue_3281777315_0:
 
 __blue_855163316_5:
 
-db 104
-db 101
-db 114
-db 101
-db 0
-__blue_1223589535_5:
-	mov edx, 4
-	mov esi, __blue_855163316_5
-	call __blue_1361572173_0
-	call __blue_4281549323_0
-	jmp __blue_1223589535_6
-
-__blue_855163316_6:
-
 db 47
 db 117
 db 115
@@ -390,32 +374,32 @@ db 101
 db 110
 db 118
 db 0
-__blue_1223589535_6:
-	jmp __blue_1223589535_7
+__blue_1223589535_5:
+	jmp __blue_1223589535_6
 
-__blue_855163316_7:
+__blue_855163316_6:
 
 db 101
 db 110
 db 118
 db 0
-__blue_1223589535_7:
-	mov rax, __blue_855163316_7
-	mov rsi, __blue_855163316_6
+__blue_1223589535_6:
+	mov rax, __blue_855163316_6
+	mov rsi, __blue_855163316_5
 	call __blue_640619689_0
-	jmp __blue_1223589535_8
+	jmp __blue_1223589535_7
 
-__blue_855163316_8:
+__blue_855163316_7:
 
 db 98
 db 108
 db 117
 db 101
 db 0
-__blue_1223589535_8:
-	jmp __blue_1223589535_9
+__blue_1223589535_7:
+	jmp __blue_1223589535_8
 
-__blue_855163316_9:
+__blue_855163316_8:
 
 db 98
 db 97
@@ -427,22 +411,22 @@ db 108
 db 117
 db 101
 db 0
-__blue_1223589535_9:
+__blue_1223589535_8:
 	xor rcx, rcx
-	mov rax, __blue_855163316_9
-	mov rsi, __blue_855163316_8
+	mov rax, __blue_855163316_8
+	mov rsi, __blue_855163316_7
 	call __blue_3319044491_0
-	mov edx, [__blue_2355496332_0]
-	mov esi, [__blue_38930656_0]
-	mov edi, [__blue_3267543346_0]
+	mov rdx, [__blue_2355496332_0]
+	mov rsi, __blue_38930656_0
+	mov rdi, [__blue_3267543346_0]
 	jmp __blue_172884385_0
 
 ; : run ( -- noret )
 
 __blue_718098122_0:
-	jmp __blue_1223589535_10
+	jmp __blue_1223589535_9
 
-__blue_855163316_10:
+__blue_855163316_9:
 
 db 110
 db 101
@@ -459,9 +443,9 @@ db 46
 db 46
 db 46
 db 0
-__blue_1223589535_10:
+__blue_1223589535_9:
 	mov edx, 14
-	mov esi, __blue_855163316_10
+	mov esi, __blue_855163316_9
 	call __blue_1361572173_0
 	call __blue_4281549323_0
 	jmp __blue_1911791459_0
