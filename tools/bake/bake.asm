@@ -433,21 +433,55 @@ __blue_1223589535_8:
 
 section .bss
 
-; 1 resq assmebly-file
+; 512 resb base-file
 
-__blue_3747911134_0: resq 1
-; 1 resq object-file
+__blue_3277841025_0: resb 512
+; 512 resb assmebly-file
 
-__blue_496119923_0: resq 1
-; 1 resq binary-file
+__blue_3747911134_0: resb 512
+; 512 resb object-file
 
-__blue_837047421_0: resq 1
+__blue_496119923_0: resb 512
+; 512 resb binary-file
+
+__blue_837047421_0: resb 512
 section .text
+
+; : copy-str ( src:esi len:ecx dest:edi -- )
+
+__blue_2360258130_0:
+	repnz movsb
+	ret
+
+;  TODO
+
+; : build-base-file-name ( -- )
+
+__blue_914170956_0:
+	ret
+
+; : build-assembly-file-name ( -- )
+
+__blue_976802625_0:
+	ret
+
+; : build-object-file-name ( -- )
+
+__blue_3419772654_0:
+	ret
+
+; : build-binary-file-name ( -- )
+
+__blue_1696784928_0:
+	ret
 
 ; : build-output-file-names ( -- )
 
 __blue_747073145_0:
-	ret
+	call __blue_914170956_0
+	call __blue_976802625_0
+	call __blue_3419772654_0
+	jmp __blue_1696784928_0
 
 section .bss
 
@@ -684,6 +718,12 @@ __blue_2780306156_0:
 	call __blue_4283867725_0
 	jmp __blue_2379826553_0
 
+; : call-specified-cmd ( -- noret )
+
+__blue_929563223_0:
+	mov rdx, [__blue_1161787257_0]
+	jmp __blue_2780306156_0
+
 ; : _start ( rsp -- noret )
 
 _start:
@@ -691,7 +731,4 @@ _start:
 	call __blue_4217555750_0
 	call __blue_2670689297_0
 	call __blue_747073145_0
-	mov rdx, [__blue_1161787257_0]
-	jmp __blue_2780306156_0
-
-;  blue-file @ type-cstr newline bye 
+	jmp __blue_929563223_0

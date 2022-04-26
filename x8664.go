@@ -247,14 +247,21 @@ var x8664Lowerers = map[string]x8664Lowerer{
 	"cmpsq":   ops_0,         // TODO hack - needs to enforce rsi/rdi -> rsi/rdi (variant)
 	"dec":     ops_1_1,
 	"inc":     ops_1_1,
-	"lodsb":   ops_0_al, // TODO hack - needs to consume esi, assumes al
-	"loop":    op_label, // TODO hack - needs to consume ecx
-	"loope":   op_label, // TODO hack - needs to consume ecx
-	"loopne":  op_label, // TODO hack - needs to consume ecx
+	"lodsb":   ops_0_al,      // TODO hack - needs to consume esi, assumes al
+	"loop":    op_label,      // TODO hack - needs to consume ecx
+	"loope":   op_label,      // TODO hack - needs to consume ecx
+	"loopne":  op_label,      // TODO hack - needs to consume ecx
+	"movsb":   ops_2_sil_dil, // TODO same hack as all around this
+	"movsw":   ops_2_sil_dil, // TODO next 3 need right registers, ideally with real fix
+	"movsd":   ops_2_sil_dil,
+	"movsq":   ops_2_sil_dil,
 	"neg":     ops_1_1,
 	"or":      ops_2_1,
+	"rep":     consume_previous, // TODO hack - needs to enforce rcx (variant)
 	"repe":    consume_previous, // TODO hack - needs to enforce rcx (variant)
+	"repz":    consume_previous, // TODO hack - needs to enforce rcx (variant)
 	"repne":   consume_previous, // TODO hack - needs to enforce rcx (variant)
+	"repnz":   consume_previous, // TODO hack - needs to enforce rcx (variant)
 	"ret":     ops_0,
 	"scasb":   ops_0, // TODO needs to enforce rdi/rax -> rdi (variant)
 	"scasw":   ops_0, // TODO needs to enforce rdi/rax -> rdi (variant)

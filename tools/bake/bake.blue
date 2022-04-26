@@ -73,11 +73,27 @@ global _start
 	second-arg envp! \ TODO better name, its not an argv
 ;
 
-1 resq assmebly-file
-1 resq object-file
-1 resq binary-file
+512 const max-file-name-len
 
-: build-output-file-names ( -- ) ;
+max-file-name-len resb base-file
+max-file-name-len resb assmebly-file
+max-file-name-len resb object-file
+max-file-name-len resb binary-file
+
+: copy-str ( src:esi len:ecx dest:edi -- ) rot swap movsb repnz ;
+
+\ TODO
+: build-base-file-name ( -- ) ;
+: build-assembly-file-name ( -- ) ; 
+: build-object-file-name ( -- ) ;
+: build-binary-file-name ( -- ) ;
+
+: build-output-file-names ( -- )
+	build-base-file-name 
+	build-assembly-file-name 
+	build-object-file-name
+	build-binary-file-name 
+;
 
 1 resq env-file
 1 resq env-arg0
