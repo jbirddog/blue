@@ -373,9 +373,11 @@ func flowWord(word *Word, env *Environment, context *RunContext) {
 				op1RegSize := registerSize[op1]
 				op2RegSize := registerSize[op2]
 
-				// TODO will need some more work to support 8/16
+				// TODO will need some more work to support all  all combos
 				if op1RegSize == "dword" && op2RegSize == "qword" {
 					op2 = reg32Names[op2RegIndex]
+				} else if op1RegSize == "qword" && op2RegSize == "dword" {
+					op1 = reg32Names[op1RegIndex]
 				}
 			}
 		}

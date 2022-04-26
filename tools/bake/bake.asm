@@ -445,9 +445,13 @@ __blue_496119923_0: resb 512
 ; 512 resb binary-file
 
 __blue_837047421_0: resb 512
+;  TODO rot swap -> -rot
+
+;  TODO swap drop -> nip
+
 section .text
 
-; : copy-str ( src:esi len:ecx dest:edi -- )
+; : copy-str ( src:esi len:ecx dest:edi -- tail:edi )
 
 __blue_2360258130_0:
 	repnz movsb
@@ -458,7 +462,11 @@ __blue_2360258130_0:
 ; : build-base-file-name ( -- )
 
 __blue_914170956_0:
-	ret
+	mov rdx, __blue_680506038_0
+	call __blue_3207375596_0
+	mov edi, __blue_3277841025_0
+	mov ecx, edx
+	jmp __blue_2360258130_0
 
 ; : build-assembly-file-name ( -- )
 
@@ -731,4 +739,9 @@ _start:
 	call __blue_4217555750_0
 	call __blue_2670689297_0
 	call __blue_747073145_0
+	mov rdx, [__blue_3277841025_0]
+	call __blue_2703255396_0
+	call __blue_4281549323_0
+
+;  TODO debugging
 	jmp __blue_929563223_0

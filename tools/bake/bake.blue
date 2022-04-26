@@ -80,10 +80,15 @@ max-file-name-len resb assmebly-file
 max-file-name-len resb object-file
 max-file-name-len resb binary-file
 
-: copy-str ( src:esi len:ecx dest:edi -- ) rot swap movsb repnz ;
+\ TODO rot swap -> -rot
+\ TODO swap drop -> nip
+: copy-str ( src:esi len:ecx dest:edi -- tail:edi ) rot swap movsb repnz swap drop ;
+
+\ TODO set DF=1 to cmpsb backward?
+: drop-suffix ( str:esi suffix:edi len:rcx -- str:esi ) drop drop ;
 
 \ TODO
-: build-base-file-name ( -- ) ;
+: build-base-file-name ( -- ) blue-file cstr>str base-file copy-str ;
 : build-assembly-file-name ( -- ) ; 
 : build-object-file-name ( -- ) ;
 : build-binary-file-name ( -- ) ;
@@ -156,5 +161,6 @@ max-file-name-len resb binary-file
 	parse-args
 	make-build-dirs 
 	build-output-file-names
+	base-file @ type-cstr newline \ TODO debugging
 	call-specified-cmd
 ;
