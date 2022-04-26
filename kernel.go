@@ -139,6 +139,8 @@ func res(env *Environment, size string) {
 		&ResInstr{Name: word.AsmLabel, Size: size, Count: count},
 	})
 
+	env.AppendRefSize(word.AsmLabel, size)
+
 	instr := &RefWordInstr{Word: word}
 	word.AppendInstr(instr)
 	word.Inline()

@@ -59,6 +59,7 @@ type Environment struct {
 	Labels               map[string]int
 	Section              string
 	UserSpecifiedSection bool
+	RefSizes             map[string]string
 }
 
 func DefaultEnvironment() *Environment {
@@ -66,6 +67,7 @@ func DefaultEnvironment() *Environment {
 		Dictionary: DefaultDictionary(),
 		Globals:    map[string]bool{},
 		Labels:     map[string]int{},
+		RefSizes:   map[string]string{},
 	}
 }
 
@@ -139,6 +141,19 @@ func (e *Environment) AppendWord(word *Word) {
 
 	word.AsmLabel = label
 	e.Dictionary.Append(word)
+}
+
+func (e *Environment) AppendRefSize(label string, size string) {
+	switch size {
+	case "b":
+		e.RefSizes[label] = "byte"
+	case "d":
+		e.RefSizes[label] = "dword"
+	case "q":
+		e.RefSizes[label] = "qword"
+	default:
+		log.Fatal("Unexpected size: ", size)
+	}
 }
 
 func (e *Environment) ValidateRegisterRefs(refs []*RegisterRef) {

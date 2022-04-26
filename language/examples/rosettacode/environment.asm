@@ -138,13 +138,13 @@ section .text
 
 __blue_2164669320_0:
 	add rax, 24
-	mov [__blue_2355496332_0], rax
+	mov qword [__blue_2355496332_0], rax
 	ret
 
 ; : set-envp-entry ( rax -- )
 
 __blue_651937478_0:
-	mov [__blue_2301798669_0], rax
+	mov qword [__blue_2301798669_0], rax
 	ret
 
 ; : reset-envp-entry ( -- )

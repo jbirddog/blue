@@ -193,7 +193,12 @@ type SetInstr struct{}
 
 func (i *SetInstr) Run(env *Environment, context *RunContext) {
 	op2, op1 := context.Pop2Inputs()
-	op1 = fmt.Sprintf("[%s]", op1)
+
+	if size, found := env.RefSizes[op1]; found {
+		op1 = fmt.Sprintf("%s [%s]", size, op1)
+	} else {
+		op1 = fmt.Sprintf("[%s]", op1)
+	}
 
 	env.AppendAsmInstr(&AsmBinaryInstr{Mnemonic: "mov", Op1: op1, Op2: op2})
 }

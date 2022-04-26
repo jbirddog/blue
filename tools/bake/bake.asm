@@ -75,6 +75,8 @@ __blue_2279771388_0:
 
 ;  TODO want to return wait-status @ but outputs don't flow yet
 
+;  TODO actually need ports of WIFEXITED and WEXITSTATUS
+
 ; : waitpid ( pid:edi -- )
 
 __blue_3964545837_0:
@@ -249,19 +251,19 @@ section .text
 ; : set-cmd-name ( rcx -- )
 
 __blue_355623518_0:
-	mov [__blue_1161787257_0], rcx
+	mov qword [__blue_1161787257_0], rcx
 	ret
 
 ; : set-blue-file ( rcx -- )
 
 __blue_1258471747_0:
-	mov [__blue_680506038_0], rcx
+	mov qword [__blue_680506038_0], rcx
 	ret
 
 ; : set-envp ( rcx -- )
 
 __blue_3701733543_0:
-	mov [__blue_2355496332_0], rcx
+	mov qword [__blue_2355496332_0], rcx
 	ret
 
 ; : usage ( -- noret )
@@ -390,25 +392,24 @@ __blue_72485894_0: resq 1
 ; 1 resq execve-arg3
 
 __blue_89263513_0: resq 1
-;  TODO this is here to work around the operation size issue
-
 section .text
-
-; : prep-env ( file:rsi arg0:rax -- )
-
-__blue_4177786188_0:
-	mov [__blue_188583195_0], rax
-	mov [__blue_2063802741_0], rsi
-	ret
 
 ; : execve-via-env ( -- noret )
 
 __blue_2254422318_0:
-
-;  TODO want to set these directly but lose operation size
 	jmp __blue_1223589535_6
 
 __blue_855163316_6:
+
+db 101
+db 110
+db 118
+db 0
+__blue_1223589535_6:
+	mov qword [__blue_188583195_0], __blue_855163316_6
+	jmp __blue_1223589535_7
+
+__blue_855163316_7:
 
 db 47
 db 117
@@ -423,22 +424,10 @@ db 101
 db 110
 db 118
 db 0
-__blue_1223589535_6:
-	jmp __blue_1223589535_7
-
-__blue_855163316_7:
-
-db 101
-db 110
-db 118
-db 0
 __blue_1223589535_7:
-	mov rax, __blue_855163316_7
-	mov rsi, __blue_855163316_6
-	call __blue_4177786188_0
 	mov rdx, [__blue_2355496332_0]
 	mov rsi, __blue_188583195_0
-	mov rdi, [__blue_2063802741_0]
+	mov rdi, __blue_855163316_7
 	jmp __blue_172884385_0
 
 ;  TODO these are here to work around the operation size issue
@@ -446,9 +435,9 @@ __blue_1223589535_7:
 ; : set-args ( arg1:rsi arg2:rax arg3:rcx -- )
 
 __blue_3319044491_0:
-	mov [__blue_89263513_0], rcx
-	mov [__blue_72485894_0], rax
-	mov [__blue_55708275_0], rsi
+	mov qword [__blue_89263513_0], rcx
+	mov qword [__blue_72485894_0], rax
+	mov qword [__blue_55708275_0], rsi
 	ret
 
 ; : clear-args ( -- )
@@ -462,8 +451,8 @@ __blue_480086900_0:
 ; : prep-execve ( file:rsi arg0:rax -- )
 
 __blue_640619689_0:
-	mov [__blue_38930656_0], rax
-	mov [__blue_3267543346_0], rsi
+	mov qword [__blue_38930656_0], rax
+	mov qword [__blue_3267543346_0], rsi
 	jmp __blue_480086900_0
 
 ; : gen-asm ( -- )

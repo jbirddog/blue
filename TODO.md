@@ -22,7 +22,7 @@
 1. clobber support for indirect register usage
 1. x8664 words can have default registers - ( a -- b ) 8 add ; a/b = eax
 1. x8664 words can have required registers 4 shl needs ecx
-1. can't c" bob" var ! - operation size not specified
+1. need to support var1 @ var2 !
 
 ### optimizations
 

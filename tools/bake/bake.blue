@@ -78,13 +78,9 @@ global _start
 1 resq execve-arg2
 1 resq execve-arg3
 
-\ TODO this is here to work around the operation size issue
-: prep-env ( file:rsi arg0:rax -- ) env-arg0 ! env-file ! ;
-
 : execve-via-env ( -- noret )
-	\ TODO want to set these directly but lose operation size
-	c" /usr/bin/env" c" env" prep-env 
-	env-file @ env-arg0 envp @ execve ;
+	c" env" env-arg0 !
+	c" /usr/bin/env" env-arg0 envp @ execve ;
 
 \ TODO these are here to work around the operation size issue
 : set-args ( arg1:rsi arg2:rax arg3:rcx -- ) execve-arg3 ! execve-arg2 ! execve-arg1 ! ;
