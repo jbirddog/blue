@@ -176,9 +176,9 @@ __blue_2883839448_1:
 	mov edi, -17
 	jmp __blue_2118064195_0
 
-; : make-build-dirs ( -- )
+; : build-dir ( -- )
 
-__blue_2670689297_0:
+__blue_1221549521_0:
 	jmp __blue_1223589535_1
 
 __blue_855163316_1:
@@ -192,8 +192,11 @@ db 100
 db 47
 db 0
 __blue_1223589535_1:
-	mov edi, __blue_855163316_1
-	call __blue_2883839448_1
+	ret
+
+; : bin-dir ( -- )
+
+__blue_1480828760_0:
 	jmp __blue_1223589535_2
 
 __blue_855163316_2:
@@ -211,8 +214,13 @@ db 110
 db 47
 db 0
 __blue_1223589535_2:
-	mov edi, __blue_855163316_2
-	call __blue_2883839448_1
+	ret
+
+;  TODO compile time concat
+
+; : obj-dir ( -- )
+
+__blue_264527620_0:
 	jmp __blue_1223589535_3
 
 __blue_855163316_3:
@@ -230,7 +238,63 @@ db 106
 db 47
 db 0
 __blue_1223589535_3:
-	mov edi, __blue_855163316_3
+	ret
+
+; : make-build-dirs ( -- )
+
+__blue_2670689297_0:
+	jmp __blue_1223589535_4
+
+__blue_855163316_4:
+
+db 46
+db 98
+db 117
+db 105
+db 108
+db 100
+db 47
+db 0
+__blue_1223589535_4:
+	mov edi, __blue_855163316_4
+	call __blue_2883839448_1
+	jmp __blue_1223589535_5
+
+__blue_855163316_5:
+
+db 46
+db 98
+db 117
+db 105
+db 108
+db 100
+db 47
+db 98
+db 105
+db 110
+db 47
+db 0
+__blue_1223589535_5:
+	mov edi, __blue_855163316_5
+	call __blue_2883839448_1
+	jmp __blue_1223589535_6
+
+__blue_855163316_6:
+
+db 46
+db 98
+db 117
+db 105
+db 108
+db 100
+db 47
+db 111
+db 98
+db 106
+db 47
+db 0
+__blue_1223589535_6:
+	mov edi, __blue_855163316_6
 	jmp __blue_2883839448_1
 
 section .bss
@@ -248,30 +312,30 @@ __blue_2355496332_0: resq 1
 
 section .text
 
-; : set-cmd-name ( rcx -- )
+; : cmd-name! ( rcx -- )
 
-__blue_355623518_0:
+__blue_1525211016_0:
 	mov qword [__blue_1161787257_0], rcx
 	ret
 
-; : set-blue-file ( rcx -- )
+; : blue-file! ( rcx -- )
 
-__blue_1258471747_0:
+__blue_1899373493_0:
 	mov qword [__blue_680506038_0], rcx
 	ret
 
-; : set-envp ( rcx -- )
+; : envp! ( rcx -- )
 
-__blue_3701733543_0:
+__blue_2979721047_0:
 	mov qword [__blue_2355496332_0], rcx
 	ret
 
 ; : usage ( -- noret )
 
 __blue_3461590696_0:
-	jmp __blue_1223589535_4
+	jmp __blue_1223589535_7
 
-__blue_855163316_4:
+__blue_855163316_7:
 
 db 10
 db 9
@@ -306,9 +370,9 @@ db 117
 db 101
 db 10
 db 0
-__blue_1223589535_4:
+__blue_1223589535_7:
 	mov edx, 32
-	mov esi, __blue_855163316_4
+	mov esi, __blue_855163316_7
 	call __blue_1361572173_0
 	jmp __blue_1911791459_0
 
@@ -340,10 +404,10 @@ __blue_4217555750_0:
 	call __blue_3569987719_0
 	call __blue_952155568_0
 	mov rcx, qword [rax]
-	call __blue_355623518_0
-	jmp __blue_1223589535_5
+	call __blue_1525211016_0
+	jmp __blue_1223589535_8
 
-__blue_855163316_5:
+__blue_855163316_8:
 
 db 98
 db 97
@@ -355,16 +419,34 @@ db 108
 db 117
 db 101
 db 0
-__blue_1223589535_5:
-	mov rcx, __blue_855163316_5
-	call __blue_1258471747_0
+__blue_1223589535_8:
+	mov rcx, __blue_855163316_8
+	call __blue_1899373493_0
 
 ;  TODO second-arg is not right
 	call __blue_3635418476_0
 	mov rcx, rax
-	call __blue_3701733543_0
+	call __blue_2979721047_0
 
 ;  TODO better name, its not an argv
+	ret
+
+section .bss
+
+; 1 resq assmebly-file
+
+__blue_3747911134_0: resq 1
+; 1 resq object-file
+
+__blue_496119923_0: resq 1
+; 1 resq binary-file
+
+__blue_837047421_0: resq 1
+section .text
+
+; : build-output-file-names ( -- )
+
+__blue_747073145_0:
 	ret
 
 section .bss
@@ -378,8 +460,6 @@ __blue_188583195_0: resq 1
 ; 1 resq execve-file
 
 __blue_3267543346_0: resq 1
-;  4 resq execve-argv - TODO blocked by operation size issue
-
 ; 1 resq execve-arg0
 
 __blue_38930656_0: resq 1
@@ -392,24 +472,29 @@ __blue_72485894_0: resq 1
 ; 1 resq execve-arg3
 
 __blue_89263513_0: resq 1
+; 4 resq execve-argv
+
+__blue_1213363986_0: resq 4
+;  TODO blocked by operation size issue
+
 section .text
 
 ; : execve-via-env ( -- noret )
 
 __blue_2254422318_0:
-	jmp __blue_1223589535_6
+	jmp __blue_1223589535_9
 
-__blue_855163316_6:
+__blue_855163316_9:
 
 db 101
 db 110
 db 118
 db 0
-__blue_1223589535_6:
-	mov qword [__blue_188583195_0], __blue_855163316_6
-	jmp __blue_1223589535_7
+__blue_1223589535_9:
+	mov qword [__blue_188583195_0], __blue_855163316_9
+	jmp __blue_1223589535_10
 
-__blue_855163316_7:
+__blue_855163316_10:
 
 db 47
 db 117
@@ -424,10 +509,10 @@ db 101
 db 110
 db 118
 db 0
-__blue_1223589535_7:
+__blue_1223589535_10:
 	mov rdx, [__blue_2355496332_0]
 	mov rsi, __blue_188583195_0
-	mov rdi, __blue_855163316_7
+	mov rdi, __blue_855163316_10
 	jmp __blue_172884385_0
 
 ;  TODO these are here to work around the operation size issue
@@ -455,21 +540,21 @@ __blue_640619689_0:
 	mov qword [__blue_3267543346_0], rsi
 	jmp __blue_480086900_0
 
-; : gen-asm ( -- )
+; : generate-assembly ( -- )
 
-__blue_58599487_0:
-	jmp __blue_1223589535_8
+__blue_2434586205_0:
+	jmp __blue_1223589535_11
 
-__blue_855163316_8:
+__blue_855163316_11:
 
 db 98
 db 108
 db 117
 db 101
 db 0
-__blue_1223589535_8:
+__blue_1223589535_11:
 	mov rax, [__blue_680506038_0]
-	mov rsi, __blue_855163316_8
+	mov rsi, __blue_855163316_11
 	call __blue_640619689_0
 	call __blue_1046004769_0
 	cmp eax, 0
@@ -480,19 +565,34 @@ __blue_2157056155_4:
 	mov edi, eax
 	jmp __blue_3964545837_0
 
+;  TODO
+
+; : compile-assembly ( -- )
+
+__blue_2532285537_0:
+	ret
+
+; : link-binary ( -- )
+
+__blue_838765769_0:
+	ret
+
+;  TODO check wait-status after each call
+
 ; : build ( -- noret )
 
 __blue_3281777315_0:
-	call __blue_58599487_0
-	mov edi, [__blue_285992641_0]
-	jmp __blue_3454868101_0
+	call __blue_2434586205_0
+	call __blue_2532285537_0
+	call __blue_838765769_0
+	jmp __blue_1911791459_0
 
 ; : run ( -- noret )
 
 __blue_718098122_0:
-	jmp __blue_1223589535_9
+	jmp __blue_1223589535_12
 
-__blue_855163316_9:
+__blue_855163316_12:
 
 db 110
 db 101
@@ -509,9 +609,9 @@ db 46
 db 46
 db 46
 db 0
-__blue_1223589535_9:
+__blue_1223589535_12:
 	mov edx, 14
-	mov esi, __blue_855163316_9
+	mov esi, __blue_855163316_12
 	call __blue_1361572173_0
 	call __blue_4281549323_0
 	jmp __blue_1911791459_0
@@ -590,6 +690,7 @@ _start:
 	mov rax, rsp
 	call __blue_4217555750_0
 	call __blue_2670689297_0
+	call __blue_747073145_0
 	mov rdx, [__blue_1161787257_0]
 	jmp __blue_2780306156_0
 

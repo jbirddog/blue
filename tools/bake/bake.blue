@@ -38,10 +38,14 @@ global _start
 
 : mkdir ( path -- ) 0750 mkdir exists ignore ;
 
+: build-dir ( -- ) c" .build/" ; inline
+: bin-dir ( -- ) c" .build/bin/" ; inline \ TODO compile time concat
+: obj-dir ( -- ) c" .build/obj/" ; inline
+
 : make-build-dirs ( -- )
-	c" .build/" mkdir
-	c" .build/bin/" mkdir
-	c" .build/obj/" mkdir 
+	build-dir mkdir
+	bin-dir mkdir
+	obj-dir mkdir 
 ;
 
 1 resq cmd-name
@@ -49,9 +53,9 @@ global _start
 1 resq envp
 
 \ TODO these are needed because we can't currently `@ var !` and retain operation size
-: set-cmd-name ( rcx -- ) cmd-name ! ;
-: set-blue-file ( rcx -- ) blue-file ! ;
-: set-envp ( rcx -- ) envp ! ;
+: cmd-name! ( rcx -- ) cmd-name ! ;
+: blue-file! ( rcx -- ) blue-file ! ;
+: envp! ( rcx -- ) envp ! ;
 
 : usage ( -- noret ) s" 
 	usage: bake cmd somefile.blue
@@ -64,19 +68,26 @@ global _start
 : second-arg ( rax -- rax ) 24 add ; 
 : parse-args ( rax -- ) dup dup dup 
 	check-argc
-	first-arg @ set-cmd-name
-	c" bake.blue" set-blue-file \ TODO second-arg is not right
-	second-arg set-envp \ TODO better name, its not an argv
+	first-arg @ cmd-name!
+	c" bake.blue" blue-file! \ TODO second-arg is not right
+	second-arg envp! \ TODO better name, its not an argv
 ;
+
+1 resq assmebly-file
+1 resq object-file
+1 resq binary-file
+
+: build-output-file-names ( -- ) ;
 
 1 resq env-file
 1 resq env-arg0
 1 resq execve-file
-\ 4 resq execve-argv - TODO blocked by operation size issue
 1 resq execve-arg0
 1 resq execve-arg1
 1 resq execve-arg2
 1 resq execve-arg3
+
+4 resq execve-argv \ TODO blocked by operation size issue
 
 : execve-via-env ( -- noret )
 	c" env" env-arg0 !
@@ -87,13 +98,23 @@ global _start
 : clear-args ( -- ) 0 0 0 set-args ;
 : prep-execve ( file:rsi arg0:rax -- ) execve-arg0 ! execve-file ! clear-args ;
 
-: gen-asm ( -- ) 
+: generate-assembly ( -- ) 
 	c" blue" blue-file @ prep-execve 
 	fork dup 0 cmp ' execve-via-env xe
 	waitpid 
 ;
 
-: build ( -- noret ) gen-asm wait-status @ exit ;
+\ TODO
+: compile-assembly ( -- ) ;
+: link-binary ( -- ) ;
+
+\ TODO check wait-status after each call
+: build ( -- noret ) 
+	generate-assembly
+	compile-assembly
+	link-binary 
+	bye 
+;
 
 : run ( -- noret ) s" need to run..." type newline bye ;
 
@@ -113,10 +134,11 @@ global _start
 ;
 
 : call-named-cmd ( name:rdx -- noret ) cstr>cmd-key call-cmd-with-key ;
+: call-specified-cmd ( -- noret ) cmd-name @ call-named-cmd ;
 
 : _start ( rsp -- noret ) 
 	parse-args
 	make-build-dirs 
-	cmd-name @ call-named-cmd
-	\ blue-file @ type-cstr newline bye 
+	build-output-file-names
+	call-specified-cmd
 ;

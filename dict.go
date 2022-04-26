@@ -11,7 +11,6 @@ func DefaultDictionary() *Dictionary {
 
 	d.appendWords([]*Word{
 		NewCallGoWord("import", KernelImport),
-		NewCallGoWord("import", KernelImport),
 		NewCallGoWord("extern", KernelExtern),
 		NewCallGoWord("section", KernelSection),
 		NewCallGoWord(":", KernelColon).Immediate(),
