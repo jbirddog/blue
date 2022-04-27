@@ -76,19 +76,19 @@ global _start
 512 const max-file-name-len
 
 max-file-name-len resb base-file
-max-file-name-len resb assmebly-file
+max-file-name-len resb assembly-file
 max-file-name-len resb object-file
 max-file-name-len resb binary-file
 
-\ TODO rot swap -> -rot
 \ TODO swap drop -> nip
-: copy-str ( src:esi len:ecx dest:edi -- tail:edi ) rot swap movsb repnz swap drop ;
+: copy-str ( src:rsi len:rcx dest:rdi -- tail:rdi ) rot swap movsb rep ;
 
-\ TODO set DF=1 to cmpsb backward?
-: drop-suffix ( str:esi suffix:edi len:rcx -- str:esi ) drop drop ;
+\ TODO should drop .blue vs taking 5 off the length...
+: build-base-file-name ( -- ) 
+	blue-file @ cstr>str 5 sub base-file copy-str
+	\ s" .blue" drop-suffix 
+;
 
-\ TODO
-: build-base-file-name ( -- ) blue-file cstr>str base-file copy-str ;
 : build-assembly-file-name ( -- ) ; 
 : build-object-file-name ( -- ) ;
 : build-binary-file-name ( -- ) ;
@@ -161,6 +161,6 @@ max-file-name-len resb binary-file
 	parse-args
 	make-build-dirs 
 	build-output-file-names
-	base-file @ type-cstr newline \ TODO debugging
+	base-file type-cstr newline \ TODO debugging
 	call-specified-cmd
 ;

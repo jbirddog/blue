@@ -436,37 +436,39 @@ section .bss
 ; 512 resb base-file
 
 __blue_3277841025_0: resb 512
-; 512 resb assmebly-file
+; 512 resb assembly-file
 
-__blue_3747911134_0: resb 512
+__blue_565080558_0: resb 512
 ; 512 resb object-file
 
 __blue_496119923_0: resb 512
 ; 512 resb binary-file
 
 __blue_837047421_0: resb 512
-;  TODO rot swap -> -rot
-
 ;  TODO swap drop -> nip
 
 section .text
 
-; : copy-str ( src:esi len:ecx dest:edi -- tail:edi )
+; : copy-str ( src:rsi len:rcx dest:rdi -- tail:rdi )
 
 __blue_2360258130_0:
-	repnz movsb
+	rep movsb
 	ret
 
-;  TODO
+;  TODO should drop .blue vs taking 5 off the length...
 
 ; : build-base-file-name ( -- )
 
 __blue_914170956_0:
-	mov rdx, __blue_680506038_0
+	mov rdx, [__blue_680506038_0]
 	call __blue_3207375596_0
-	mov edi, __blue_3277841025_0
-	mov ecx, edx
-	jmp __blue_2360258130_0
+	sub rdx, 5
+	mov rdi, __blue_3277841025_0
+	mov rcx, rdx
+	call __blue_2360258130_0
+
+;  s" .blue" drop-suffix 
+	ret
 
 ; : build-assembly-file-name ( -- )
 
@@ -739,7 +741,7 @@ _start:
 	call __blue_4217555750_0
 	call __blue_2670689297_0
 	call __blue_747073145_0
-	mov rdx, [__blue_3277841025_0]
+	mov rdx, __blue_3277841025_0
 	call __blue_2703255396_0
 	call __blue_4281549323_0
 

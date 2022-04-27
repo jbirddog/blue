@@ -240,6 +240,7 @@ func consume_previous(mnemonic string, env *Environment, context *RunContext) As
 var x8664Lowerers = map[string]x8664Lowerer{
 	"add":     ops_2_1,
 	"and":     ops_2_1,
+	"cld": ops_0,
 	"cmp":     ops_2,
 	"cmpsb":   ops_2_sil_dil, // TODO hack - needs to enforce rsi/rdi -> rsi/rdi (variant)
 	"cmpsw":   ops_0,         // TODO hack - needs to enforce rsi/rdi -> rsi/rdi (variant)
@@ -271,6 +272,7 @@ var x8664Lowerers = map[string]x8664Lowerer{
 	"sar":     ops_shift,
 	"shl":     ops_shift,
 	"shr":     ops_shift,
+	"std": ops_0,
 	"sub":     ops_2_1,
 	"syscall": ops_0,
 	"xadd":    ops_2, // TODO needs to push op1 back
