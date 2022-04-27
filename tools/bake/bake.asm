@@ -455,7 +455,15 @@ __blue_2360258130_0:
 	rep movsb
 	ret
 
-;  TODO should drop .blue vs taking 5 off the length...
+;  TODO swap rot -> -rot
+
+; : append-str ( tail:rdi src:rsi len:rcx -- tail:rdi )
+
+__blue_256417459_0:
+	rep movsb
+	ret
+
+;  TODO should drop .blue explicitly vs taking 5 off the length...
 
 ; : build-base-file-name ( -- )
 
@@ -465,15 +473,29 @@ __blue_914170956_0:
 	sub rdx, 5
 	mov rdi, __blue_3277841025_0
 	mov rcx, rdx
-	call __blue_2360258130_0
-
-;  s" .blue" drop-suffix 
-	ret
+	jmp __blue_2360258130_0
 
 ; : build-assembly-file-name ( -- )
 
 __blue_976802625_0:
-	ret
+	mov rdx, __blue_3277841025_0
+	call __blue_3207375596_0
+	mov rdi, __blue_565080558_0
+	mov rcx, rdx
+	call __blue_2360258130_0
+	jmp __blue_1223589535_9
+
+__blue_855163316_9:
+
+db 46
+db 97
+db 115
+db 109
+db 0
+__blue_1223589535_9:
+	mov rcx, 4
+	mov rsi, __blue_855163316_9
+	jmp __blue_256417459_0
 
 ; : build-object-file-name ( -- )
 
@@ -526,19 +548,19 @@ section .text
 ; : execve-via-env ( -- noret )
 
 __blue_2254422318_0:
-	jmp __blue_1223589535_9
+	jmp __blue_1223589535_10
 
-__blue_855163316_9:
+__blue_855163316_10:
 
 db 101
 db 110
 db 118
 db 0
-__blue_1223589535_9:
-	mov qword [__blue_188583195_0], __blue_855163316_9
-	jmp __blue_1223589535_10
+__blue_1223589535_10:
+	mov qword [__blue_188583195_0], __blue_855163316_10
+	jmp __blue_1223589535_11
 
-__blue_855163316_10:
+__blue_855163316_11:
 
 db 47
 db 117
@@ -553,10 +575,10 @@ db 101
 db 110
 db 118
 db 0
-__blue_1223589535_10:
+__blue_1223589535_11:
 	mov rdx, [__blue_2355496332_0]
 	mov rsi, __blue_188583195_0
-	mov rdi, __blue_855163316_10
+	mov rdi, __blue_855163316_11
 	jmp __blue_172884385_0
 
 ;  TODO these are here to work around the operation size issue
@@ -587,18 +609,18 @@ __blue_640619689_0:
 ; : generate-assembly ( -- )
 
 __blue_2434586205_0:
-	jmp __blue_1223589535_11
+	jmp __blue_1223589535_12
 
-__blue_855163316_11:
+__blue_855163316_12:
 
 db 98
 db 108
 db 117
 db 101
 db 0
-__blue_1223589535_11:
+__blue_1223589535_12:
 	mov rax, [__blue_680506038_0]
-	mov rsi, __blue_855163316_11
+	mov rsi, __blue_855163316_12
 	call __blue_640619689_0
 	call __blue_1046004769_0
 	cmp eax, 0
@@ -634,9 +656,9 @@ __blue_3281777315_0:
 ; : run ( -- noret )
 
 __blue_718098122_0:
-	jmp __blue_1223589535_12
+	jmp __blue_1223589535_13
 
-__blue_855163316_12:
+__blue_855163316_13:
 
 db 110
 db 101
@@ -653,9 +675,9 @@ db 46
 db 46
 db 46
 db 0
-__blue_1223589535_12:
+__blue_1223589535_13:
 	mov edx, 14
-	mov esi, __blue_855163316_12
+	mov esi, __blue_855163316_13
 	call __blue_1361572173_0
 	call __blue_4281549323_0
 	jmp __blue_1911791459_0
@@ -741,7 +763,7 @@ _start:
 	call __blue_4217555750_0
 	call __blue_2670689297_0
 	call __blue_747073145_0
-	mov rdx, __blue_3277841025_0
+	mov rdx, __blue_565080558_0
 	call __blue_2703255396_0
 	call __blue_4281549323_0
 
