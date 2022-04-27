@@ -449,7 +449,7 @@ __blue_837047421_0: resb 512
 
 section .text
 
-; : copy-str ( src:rsi len:rcx dest:rdi -- tail:rdi )
+; : copy-str ( src:esi len:ecx dest:edi -- tail:edi )
 
 __blue_2360258130_0:
 	rep movsb
@@ -457,7 +457,7 @@ __blue_2360258130_0:
 
 ;  TODO swap rot -> -rot
 
-; : append-str ( tail:rdi src:rsi len:rcx -- tail:rdi )
+; : append-str ( tail:edi src:esi len:ecx -- tail:edi )
 
 __blue_256417459_0:
 	rep movsb
@@ -471,8 +471,8 @@ __blue_914170956_0:
 	mov rdx, [__blue_680506038_0]
 	call __blue_3207375596_0
 	sub rdx, 5
-	mov rdi, __blue_3277841025_0
-	mov rcx, rdx
+	mov edi, __blue_3277841025_0
+	mov ecx, edx
 	jmp __blue_2360258130_0
 
 ; : build-assembly-file-name ( -- )
@@ -480,8 +480,8 @@ __blue_914170956_0:
 __blue_976802625_0:
 	mov rdx, __blue_3277841025_0
 	call __blue_3207375596_0
-	mov rdi, __blue_565080558_0
-	mov rcx, rdx
+	mov edi, __blue_565080558_0
+	mov ecx, edx
 	call __blue_2360258130_0
 	jmp __blue_1223589535_9
 
@@ -493,19 +493,79 @@ db 115
 db 109
 db 0
 __blue_1223589535_9:
-	mov rcx, 4
-	mov rsi, __blue_855163316_9
+	mov ecx, 4
+	mov esi, __blue_855163316_9
 	jmp __blue_256417459_0
 
 ; : build-object-file-name ( -- )
 
 __blue_3419772654_0:
-	ret
+	jmp __blue_1223589535_10
+
+__blue_855163316_10:
+
+db 46
+db 98
+db 117
+db 105
+db 108
+db 100
+db 47
+db 111
+db 98
+db 106
+db 47
+db 0
+__blue_1223589535_10:
+	mov edi, __blue_496119923_0
+	mov ecx, 11
+	mov esi, __blue_855163316_10
+	call __blue_2360258130_0
+	mov rdx, __blue_3277841025_0
+	call __blue_3207375596_0
+	mov ecx, edx
+	call __blue_256417459_0
+	jmp __blue_1223589535_11
+
+__blue_855163316_11:
+
+db 46
+db 111
+db 0
+__blue_1223589535_11:
+	mov ecx, 2
+	mov esi, __blue_855163316_11
+	jmp __blue_256417459_0
 
 ; : build-binary-file-name ( -- )
 
 __blue_1696784928_0:
-	ret
+	jmp __blue_1223589535_12
+
+__blue_855163316_12:
+
+db 46
+db 98
+db 117
+db 105
+db 108
+db 100
+db 47
+db 98
+db 105
+db 110
+db 47
+db 0
+__blue_1223589535_12:
+	mov rdx, __blue_855163316_12
+	call __blue_3207375596_0
+	mov edi, __blue_837047421_0
+	mov ecx, edx
+	call __blue_2360258130_0
+	mov rdx, __blue_3277841025_0
+	call __blue_3207375596_0
+	mov ecx, edx
+	jmp __blue_256417459_0
 
 ; : build-output-file-names ( -- )
 
@@ -548,19 +608,19 @@ section .text
 ; : execve-via-env ( -- noret )
 
 __blue_2254422318_0:
-	jmp __blue_1223589535_10
+	jmp __blue_1223589535_13
 
-__blue_855163316_10:
+__blue_855163316_13:
 
 db 101
 db 110
 db 118
 db 0
-__blue_1223589535_10:
-	mov qword [__blue_188583195_0], __blue_855163316_10
-	jmp __blue_1223589535_11
+__blue_1223589535_13:
+	mov qword [__blue_188583195_0], __blue_855163316_13
+	jmp __blue_1223589535_14
 
-__blue_855163316_11:
+__blue_855163316_14:
 
 db 47
 db 117
@@ -575,10 +635,10 @@ db 101
 db 110
 db 118
 db 0
-__blue_1223589535_11:
+__blue_1223589535_14:
 	mov rdx, [__blue_2355496332_0]
 	mov rsi, __blue_188583195_0
-	mov rdi, __blue_855163316_11
+	mov rdi, __blue_855163316_14
 	jmp __blue_172884385_0
 
 ;  TODO these are here to work around the operation size issue
@@ -609,18 +669,18 @@ __blue_640619689_0:
 ; : generate-assembly ( -- )
 
 __blue_2434586205_0:
-	jmp __blue_1223589535_12
+	jmp __blue_1223589535_15
 
-__blue_855163316_12:
+__blue_855163316_15:
 
 db 98
 db 108
 db 117
 db 101
 db 0
-__blue_1223589535_12:
+__blue_1223589535_15:
 	mov rax, [__blue_680506038_0]
-	mov rsi, __blue_855163316_12
+	mov rsi, __blue_855163316_15
 	call __blue_640619689_0
 	call __blue_1046004769_0
 	cmp eax, 0
@@ -656,9 +716,9 @@ __blue_3281777315_0:
 ; : run ( -- noret )
 
 __blue_718098122_0:
-	jmp __blue_1223589535_13
+	jmp __blue_1223589535_16
 
-__blue_855163316_13:
+__blue_855163316_16:
 
 db 110
 db 101
@@ -675,9 +735,9 @@ db 46
 db 46
 db 46
 db 0
-__blue_1223589535_13:
+__blue_1223589535_16:
 	mov edx, 14
-	mov esi, __blue_855163316_13
+	mov esi, __blue_855163316_16
 	call __blue_1361572173_0
 	call __blue_4281549323_0
 	jmp __blue_1911791459_0
@@ -764,6 +824,16 @@ _start:
 	call __blue_2670689297_0
 	call __blue_747073145_0
 	mov rdx, __blue_565080558_0
+	call __blue_2703255396_0
+	call __blue_4281549323_0
+
+;  TODO debugging
+	mov rdx, __blue_496119923_0
+	call __blue_2703255396_0
+	call __blue_4281549323_0
+
+;  TODO debugging
+	mov rdx, __blue_837047421_0
 	call __blue_2703255396_0
 	call __blue_4281549323_0
 

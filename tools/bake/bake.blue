@@ -81,10 +81,10 @@ max-file-name-len resb object-file
 max-file-name-len resb binary-file
 
 \ TODO swap drop -> nip
-: copy-str ( src:rsi len:rcx dest:rdi -- tail:rdi ) rot swap movsb swap drop rep ;
+: copy-str ( src:esi len:ecx dest:edi -- tail:edi ) rot swap movsb swap drop swap rep ;
 
 \ TODO swap rot -> -rot
-: append-str ( tail:rdi src:rsi len:rcx -- tail:rdi ) swap rot movsb swap drop rep ; 
+: append-str ( tail:edi src:esi len:ecx -- tail:edi ) swap rot movsb swap drop rep ; 
 
 \ TODO should drop .blue explicitly vs taking 5 off the length...
 : build-base-file-name ( -- ) 
@@ -96,8 +96,16 @@ max-file-name-len resb binary-file
 	s" .asm" append-str
 ;
  
-: build-object-file-name ( -- ) ;
-: build-binary-file-name ( -- ) ;
+: build-object-file-name ( -- ) 
+	s" .build/obj/" object-file copy-str 
+	base-file cstr>str append-str
+	s" .o" append-str
+;
+
+: build-binary-file-name ( -- ) 
+	bin-dir cstr>str binary-file copy-str
+	base-file cstr>str append-str
+;
 
 : build-output-file-names ( -- )
 	build-base-file-name 
@@ -168,5 +176,7 @@ max-file-name-len resb binary-file
 	make-build-dirs 
 	build-output-file-names
 	assembly-file type-cstr newline \ TODO debugging
+	object-file type-cstr newline \ TODO debugging
+	binary-file type-cstr newline \ TODO debugging
 	call-specified-cmd
 ;
