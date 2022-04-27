@@ -148,7 +148,9 @@ __blue_1939608060_0:
 	dec rsi
 	ret
 
-; : cstr>str ( cstr:rdx -- str:rsi len:rdx )
+;  TODO this is an example of needing indirect clobber detection
+
+; : cstr>str ( cstr:rdx -- str:rsi len:rdx | rdi )
 
 __blue_3207375596_0:
 	mov rdi, rdx
@@ -455,6 +457,16 @@ __blue_2360258130_0:
 	rep movsb
 	ret
 
+; : copy-cstr ( src:rsi dest:rdi -- tail:rdi )
+
+__blue_2435236535_0:
+	mov rdx, rsi
+	push rdi
+	call __blue_3207375596_0
+	pop rdi
+	mov rcx, rdx
+	jmp __blue_2360258130_0
+
 ;  TODO swap rot -> -rot
 
 ; : append-str ( tail:rdi src:rsi len:rcx -- tail:rdi )
@@ -463,11 +475,15 @@ __blue_256417459_0:
 	rep movsb
 	ret
 
-; : append-str ( tail:rdi src:rsi len:rcx -- tail:rdi )
+; : append-cstr ( tail:rdi src:rsi -- tail:rdi )
 
-__blue_256417459_1:
-	rep movsb
-	ret
+__blue_586198672_0:
+	mov rdx, rsi
+	push rdi
+	call __blue_3207375596_0
+	pop rdi
+	mov rcx, rdx
+	jmp __blue_256417459_0
 
 ;  TODO should drop .blue explicitly vs taking 5 off the length...
 
@@ -484,11 +500,9 @@ __blue_914170956_0:
 ; : build-assembly-file-name ( -- )
 
 __blue_976802625_0:
-	mov rdx, __blue_3277841025_0
-	call __blue_3207375596_0
 	mov rdi, __blue_565080558_0
-	mov rcx, rdx
-	call __blue_2360258130_0
+	mov rsi, __blue_3277841025_0
+	call __blue_2435236535_0
 	jmp __blue_1223589535_9
 
 __blue_855163316_9:
@@ -501,7 +515,7 @@ db 0
 __blue_1223589535_9:
 	mov rcx, 4
 	mov rsi, __blue_855163316_9
-	jmp __blue_256417459_1
+	jmp __blue_256417459_0
 
 ; : build-object-file-name ( -- )
 
@@ -523,14 +537,11 @@ db 106
 db 47
 db 0
 __blue_1223589535_10:
-	mov rdx, __blue_855163316_10
-	call __blue_3207375596_0
 	mov rdi, __blue_496119923_0
-	mov rcx, rdx
-	call __blue_2360258130_0
-	mov rcx, 4
+	mov rsi, __blue_855163316_10
+	call __blue_2435236535_0
 	mov rsi, __blue_3277841025_0
-	call __blue_256417459_1
+	call __blue_586198672_0
 	jmp __blue_1223589535_11
 
 __blue_855163316_11:
@@ -541,7 +552,7 @@ db 0
 __blue_1223589535_11:
 	mov rcx, 2
 	mov rsi, __blue_855163316_11
-	jmp __blue_256417459_1
+	jmp __blue_256417459_0
 
 ; : build-binary-file-name ( -- )
 
@@ -563,22 +574,17 @@ db 110
 db 47
 db 0
 __blue_1223589535_12:
-	mov rdx, __blue_855163316_12
-	call __blue_3207375596_0
 	mov rdi, __blue_837047421_0
-	mov rcx, rdx
-	call __blue_2360258130_0
-	mov rdx, __blue_3277841025_0
-	call __blue_3207375596_0
-	mov rcx, rdx
-	jmp __blue_256417459_1
+	mov rsi, __blue_855163316_12
+	call __blue_2435236535_0
+	mov rsi, __blue_3277841025_0
+	jmp __blue_586198672_0
 
 ; : build-output-file-names ( -- )
 
 __blue_747073145_0:
 	call __blue_914170956_0
-
-;  build-assembly-file-name 
+	call __blue_976802625_0
 	call __blue_3419772654_0
 	jmp __blue_1696784928_0
 
@@ -830,17 +836,16 @@ _start:
 	call __blue_4217555750_0
 	call __blue_2670689297_0
 	call __blue_747073145_0
+	mov rdx, __blue_565080558_0
+	call __blue_2703255396_0
+	call __blue_4281549323_0
 
-;  assembly-file type-cstr newline \ TODO debugging
+;  TODO debugging
 	mov rdx, __blue_496119923_0
 	call __blue_2703255396_0
 	call __blue_4281549323_0
 
 ;  TODO debugging
-	mov rdi, __blue_496119923_0
-	call __blue_1939608060_0
-	mov edi, esi
-	jmp __blue_3454868101_0
 	mov rdx, __blue_837047421_0
 	call __blue_2703255396_0
 	call __blue_4281549323_0

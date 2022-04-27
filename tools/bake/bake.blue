@@ -32,7 +32,10 @@ global _start
 
 : find0 ( start:rsi -- end:rsi ) lodsb 0 cmp latest xne ; 
 : cstrlen ( str:rdi -- len:rsi ) dup find0 swap sub dec ;
-: cstr>str ( cstr:rdx -- str:rsi len:rdx ) dup cstrlen xchg ;
+
+\ TODO this is an example of needing indirect clobber detection
+: cstr>str ( cstr:rdx -- str:rsi len:rdx | rdi ) dup cstrlen xchg ;
+
 : type-cstr ( buf -- ) cstr>str type ;
 : type-cstr@ ( addr -- ) @ type-cstr ;
 
@@ -81,12 +84,12 @@ max-file-name-len resb object-file
 max-file-name-len resb binary-file
 
 \ TODO swap drop -> nip
-: copy-str ( src:rsi len:rcx dest:rdi -- tail:rdi ) rot swap movsb swap drop swap rep 
-;
+: copy-str ( src:rsi len:rcx dest:rdi -- tail:rdi ) rot swap movsb swap drop swap rep ;
+: copy-cstr ( src:rsi dest:rdi -- tail:rdi ) swap cstr>str rot copy-str ;
 
 \ TODO swap rot -> -rot
 : append-str ( tail:rdi src:rsi len:rcx -- tail:rdi ) swap rot movsb swap drop rep ; 
-: append-str ( tail:rdi src:rsi len:rcx -- tail:rdi ) movsb rep ; 
+: append-cstr ( tail:rdi src:rsi -- tail:rdi ) cstr>str append-str ; 
 
 \ TODO should drop .blue explicitly vs taking 5 off the length...
 : build-base-file-name ( -- ) 
@@ -94,24 +97,24 @@ max-file-name-len resb binary-file
 ;
 
 : build-assembly-file-name ( -- ) 
-	base-file cstr>str assembly-file copy-str 
+	base-file assembly-file copy-cstr 
 	s" .asm" append-str
 ;
  
 : build-object-file-name ( -- ) 
-	obj-dir cstr>str object-file copy-str 
-	base-file 4 append-str
+	obj-dir object-file copy-cstr 
+	base-file append-cstr
 	s" .o" append-str
 ;
 
 : build-binary-file-name ( -- ) 
-	bin-dir cstr>str binary-file copy-str
-	base-file cstr>str append-str
+	bin-dir binary-file copy-cstr
+	base-file append-cstr
 ;
 
 : build-output-file-names ( -- )
 	build-base-file-name 
-	\ build-assembly-file-name 
+	build-assembly-file-name 
 	build-object-file-name
 	build-binary-file-name 
 ;
@@ -177,9 +180,5 @@ max-file-name-len resb binary-file
 	parse-args
 	make-build-dirs 
 	build-output-file-names
-	\ assembly-file type-cstr newline \ TODO debugging
-	object-file type-cstr newline \ TODO debugging
-	object-file cstrlen exit
-	binary-file type-cstr newline \ TODO debugging
 	call-specified-cmd
 ;
