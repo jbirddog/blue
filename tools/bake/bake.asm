@@ -763,12 +763,38 @@ __blue_2157056155_5:
 	mov edi, eax
 	jmp __blue_3964545837_0
 
-;  TODO
-
 ; : link-binary ( -- )
 
 __blue_838765769_0:
-	ret
+	jmp __blue_1223589535_20
+
+__blue_855163316_20:
+
+db 108
+db 100
+db 0
+__blue_1223589535_20:
+	mov rax, __blue_496119923_0
+	mov rsi, __blue_855163316_20
+	call __blue_640619689_0
+	jmp __blue_1223589535_21
+
+__blue_855163316_21:
+
+db 45
+db 111
+db 0
+__blue_1223589535_21:
+	mov qword [__blue_55708275_0], __blue_855163316_21
+	mov qword [__blue_72485894_0], __blue_837047421_0
+	call __blue_1046004769_0
+	cmp eax, 0
+	jne __blue_2157056155_6
+	call __blue_2254422318_0
+
+__blue_2157056155_6:
+	mov edi, eax
+	jmp __blue_3964545837_0
 
 ;  TODO check wait-status after each call
 
@@ -783,9 +809,9 @@ __blue_3281777315_0:
 ; : run ( -- noret )
 
 __blue_718098122_0:
-	jmp __blue_1223589535_20
+	jmp __blue_1223589535_22
 
-__blue_855163316_20:
+__blue_855163316_22:
 
 db 110
 db 101
@@ -802,9 +828,9 @@ db 46
 db 46
 db 46
 db 0
-__blue_1223589535_20:
+__blue_1223589535_22:
 	mov edx, 14
-	mov esi, __blue_855163316_20
+	mov esi, __blue_855163316_22
 	call __blue_1361572173_0
 	call __blue_4281549323_0
 	jmp __blue_1911791459_0
@@ -863,10 +889,10 @@ __blue_2379826553_0:
 
 __blue_612288868_0:
 	scasq
-	jne __blue_2157056155_6
+	jne __blue_2157056155_7
 	call __blue_1042682684_0
 
-__blue_2157056155_6:
+__blue_2157056155_7:
 	add rdi, 8
 	loop __blue_612288868_0
 	jmp __blue_3461590696_0

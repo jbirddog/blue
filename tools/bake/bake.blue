@@ -155,8 +155,13 @@ max-file-name-len resb binary-file
 	waitpid
 ;
 
-\ TODO
-: link-binary ( -- ) ;
+: link-binary ( -- ) 
+	c" ld" object-file prep-execve
+	c" -o" execve-arg1 !
+	binary-file execve-arg2 !
+	fork dup 0 cmp ' execve-via-env xe
+	waitpid
+;
 
 \ TODO check wait-status after each call
 : build ( -- noret ) 
