@@ -611,6 +611,9 @@ __blue_72485894_0: resq 1
 ; 1 resq execve-arg3
 
 __blue_89263513_0: resq 1
+; 1 resq execve-arg4
+
+__blue_106041132_0: resq 1
 ; 4 resq execve-argv
 
 __blue_1213363986_0: resq 4
@@ -704,12 +707,63 @@ __blue_2157056155_4:
 	mov edi, eax
 	jmp __blue_3964545837_0
 
-;  TODO
-
 ; : compile-assembly ( -- )
 
 __blue_2532285537_0:
-	ret
+	jmp __blue_1223589535_16
+
+__blue_855163316_16:
+
+db 110
+db 97
+db 115
+db 109
+db 0
+__blue_1223589535_16:
+	mov rax, __blue_565080558_0
+	mov rsi, __blue_855163316_16
+	call __blue_640619689_0
+	jmp __blue_1223589535_17
+
+__blue_855163316_17:
+
+db 45
+db 102
+db 0
+__blue_1223589535_17:
+	mov qword [__blue_55708275_0], __blue_855163316_17
+	jmp __blue_1223589535_18
+
+__blue_855163316_18:
+
+db 101
+db 108
+db 102
+db 54
+db 52
+db 0
+__blue_1223589535_18:
+	mov qword [__blue_72485894_0], __blue_855163316_18
+	jmp __blue_1223589535_19
+
+__blue_855163316_19:
+
+db 45
+db 111
+db 0
+__blue_1223589535_19:
+	mov qword [__blue_89263513_0], __blue_855163316_19
+	mov qword [__blue_106041132_0], __blue_496119923_0
+	call __blue_1046004769_0
+	cmp eax, 0
+	jne __blue_2157056155_5
+	call __blue_2254422318_0
+
+__blue_2157056155_5:
+	mov edi, eax
+	jmp __blue_3964545837_0
+
+;  TODO
 
 ; : link-binary ( -- )
 
@@ -729,9 +783,9 @@ __blue_3281777315_0:
 ; : run ( -- noret )
 
 __blue_718098122_0:
-	jmp __blue_1223589535_16
+	jmp __blue_1223589535_20
 
-__blue_855163316_16:
+__blue_855163316_20:
 
 db 110
 db 101
@@ -748,9 +802,9 @@ db 46
 db 46
 db 46
 db 0
-__blue_1223589535_16:
+__blue_1223589535_20:
 	mov edx, 14
-	mov esi, __blue_855163316_16
+	mov esi, __blue_855163316_20
 	call __blue_1361572173_0
 	call __blue_4281549323_0
 	jmp __blue_1911791459_0
@@ -809,10 +863,10 @@ __blue_2379826553_0:
 
 __blue_612288868_0:
 	scasq
-	jne __blue_2157056155_5
+	jne __blue_2157056155_6
 	call __blue_1042682684_0
 
-__blue_2157056155_5:
+__blue_2157056155_6:
 	add rdi, 8
 	loop __blue_612288868_0
 	jmp __blue_3461590696_0
@@ -836,19 +890,4 @@ _start:
 	call __blue_4217555750_0
 	call __blue_2670689297_0
 	call __blue_747073145_0
-	mov rdx, __blue_565080558_0
-	call __blue_2703255396_0
-	call __blue_4281549323_0
-
-;  TODO debugging
-	mov rdx, __blue_496119923_0
-	call __blue_2703255396_0
-	call __blue_4281549323_0
-
-;  TODO debugging
-	mov rdx, __blue_837047421_0
-	call __blue_2703255396_0
-	call __blue_4281549323_0
-
-;  TODO debugging
 	jmp __blue_929563223_0

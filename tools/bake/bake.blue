@@ -126,6 +126,7 @@ max-file-name-len resb binary-file
 1 resq execve-arg1
 1 resq execve-arg2
 1 resq execve-arg3
+1 resq execve-arg4
 
 4 resq execve-argv \ TODO blocked by operation size issue
 
@@ -144,8 +145,17 @@ max-file-name-len resb binary-file
 	waitpid 
 ;
 
+: compile-assembly ( -- ) 
+	c" nasm" assembly-file prep-execve
+	c" -f" execve-arg1 !
+	c" elf64" execve-arg2 !
+	c" -o" execve-arg3 !
+	object-file execve-arg4 !
+	fork dup 0 cmp ' execve-via-env xe
+	waitpid
+;
+
 \ TODO
-: compile-assembly ( -- ) ;
 : link-binary ( -- ) ;
 
 \ TODO check wait-status after each call
