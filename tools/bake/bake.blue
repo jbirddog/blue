@@ -1,12 +1,8 @@
 import linux/base
-import linux/x8664
+import linux/x8664/syscalls
+import linux/x8664/error_handling
 
 global _start
-
-: die ( err:eax -- noret ) neg exit ;
-: unwrap ( result:eax -- value:eax ) dup 0 cmp ' die xl ;
-: ordie ( result -- ) unwrap drop ;
-: ignore ( result:eax err:edi -- ) swap dup rot cmp ' ordie xne drop ;
 
 : fork ( -- result ) fork unwrap ;
 : execve ( filename argv env -- noret ) execve ordie ;

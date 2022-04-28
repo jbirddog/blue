@@ -48,8 +48,6 @@ __blue_2883839448_1:
 	mov eax, 83
 	jmp __blue_4057121178_0
 
-global _start
-
 ; : die ( err:eax -- noret )
 
 __blue_3630339793_0:
@@ -82,6 +80,8 @@ __blue_2118064195_0:
 
 __blue_2157056155_1:
 	ret
+
+global _start
 
 ; : fork ( -- result )
 

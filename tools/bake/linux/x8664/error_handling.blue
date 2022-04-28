@@ -1,0 +1,4 @@
+: die ( err:eax -- noret ) neg exit ;
+: unwrap ( result:eax -- value:eax ) dup 0 cmp ' die xl ;
+: ordie ( result -- ) unwrap drop ;
+: ignore ( result:eax err:edi -- ) swap dup rot cmp ' ordie xne drop ;
