@@ -58,7 +58,6 @@ global _start
 \ TODO these are needed because we can't currently `@ var !` and retain operation size
 : cmd-name! ( rcx -- ) cmd-name ! ;
 : blue-file! ( rcx -- ) blue-file ! ;
-: envp! ( rcx -- ) envp ! ;
 
 : usage ( -- noret ) s" 
 	usage: bake cmd somefile.blue
@@ -68,12 +67,12 @@ global _start
 
 : check-argc ( rax -- ) @ 3 cmp ' usage xne ;
 : first-arg ( rax -- rax ) 16 add ; 
-: second-arg ( rax -- rax ) 24 add ; 
+: environment ( rax -- rax ) 24 add ; 
 : parse-args ( rax -- ) dup dup dup 
 	check-argc
 	first-arg @ cmd-name!
 	c" bake.blue" blue-file! \ TODO second-arg is not right
-	second-arg envp! \ TODO better name, its not an argv
+	environment envp !
 ;
 
 512 const max-file-name-len
@@ -164,14 +163,21 @@ max-file-name-len resb binary-file
 ;
 
 \ TODO check wait-status after each call
-: build ( -- noret ) 
+: do-build ( -- ) 
 	generate-assembly
 	compile-assembly
 	link-binary 
-	bye 
 ;
 
-: run ( -- noret ) s" need to run..." type newline bye ;
+: build ( -- noret ) do-build bye ;
+
+\ TODO needs to forward args
+: run ( -- noret ) 
+	do-build
+	binary-file 0 prep-execve
+	execve-via-env
+	bye
+;
 
 : cmd-table ( -- noret )
 	decb( 0 0 0 98 117 105 108 100 ) ' build decq

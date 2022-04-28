@@ -326,12 +326,6 @@ __blue_1899373493_0:
 	mov qword [__blue_680506038_0], rcx
 	ret
 
-; : envp! ( rcx -- )
-
-__blue_2979721047_0:
-	mov qword [__blue_2355496332_0], rcx
-	ret
-
 ; : usage ( -- noret )
 
 __blue_3461590696_0:
@@ -394,9 +388,9 @@ __blue_952155568_0:
 	add rax, 16
 	ret
 
-; : second-arg ( rax -- rax )
+; : environment ( rax -- rax )
 
-__blue_3635418476_0:
+__blue_1072573434_0:
 	add rax, 24
 	ret
 
@@ -426,11 +420,8 @@ __blue_1223589535_8:
 	call __blue_1899373493_0
 
 ;  TODO second-arg is not right
-	call __blue_3635418476_0
-	mov rcx, rax
-	call __blue_2979721047_0
-
-;  TODO better name, its not an argv
+	call __blue_1072573434_0
+	mov qword [__blue_2355496332_0], rax
 	ret
 
 section .bss
@@ -798,41 +789,29 @@ __blue_2157056155_6:
 
 ;  TODO check wait-status after each call
 
+; : do-build ( -- )
+
+__blue_387804145_0:
+	call __blue_2434586205_0
+	call __blue_2532285537_0
+	jmp __blue_838765769_0
+
 ; : build ( -- noret )
 
 __blue_3281777315_0:
-	call __blue_2434586205_0
-	call __blue_2532285537_0
-	call __blue_838765769_0
+	call __blue_387804145_0
 	jmp __blue_1911791459_0
+
+;  TODO needs to forward args
 
 ; : run ( -- noret )
 
 __blue_718098122_0:
-	jmp __blue_1223589535_22
-
-__blue_855163316_22:
-
-db 110
-db 101
-db 101
-db 100
-db 32
-db 116
-db 111
-db 32
-db 114
-db 117
-db 110
-db 46
-db 46
-db 46
-db 0
-__blue_1223589535_22:
-	mov edx, 14
-	mov esi, __blue_855163316_22
-	call __blue_1361572173_0
-	call __blue_4281549323_0
+	call __blue_387804145_0
+	xor rax, rax
+	mov rsi, __blue_837047421_0
+	call __blue_640619689_0
+	jmp __blue_2254422318_0
 	jmp __blue_1911791459_0
 
 ; : cmd-table ( -- noret )
