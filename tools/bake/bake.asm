@@ -83,18 +83,16 @@ __blue_2118064195_0:
 __blue_2157056155_1:
 	ret
 
-; : fork ( -- result:eax )
+; : fork ( -- result )
 
 __blue_1046004769_2:
-	mov eax, 57
-	call __blue_4057121178_0
+	call __blue_1046004769_1
 	jmp __blue_4055961022_0
 
-; : execve ( filename:rdi argv:rsi env:rdx -- noret )
+; : execve ( filename argv env -- noret )
 
 __blue_172884385_2:
-	mov eax, 59
-	call __blue_4057121178_0
+	call __blue_172884385_1
 	call __blue_1614081290_0
 
 section .bss
@@ -102,25 +100,19 @@ section .bss
 ; 1 resd wait-status
 
 __blue_285992641_0: resd 1
-section .text
-
-; : wait4 ( pid:edi status:rsi options:rdx usage:r10 -- result:eax )
-
-__blue_2279771388_2:
-	mov eax, 61
-	jmp __blue_4057121178_0
-
 ;  TODO want to return wait-status @ but outputs don't flow yet
 
 ;  TODO actually need ports of WIFEXITED and WEXITSTATUS
 
-; : waitpid ( pid:edi -- )
+section .text
+
+; : waitpid ( pid -- )
 
 __blue_3964545837_0:
 	xor r10, r10
 	xor rdx, rdx
 	mov rsi, __blue_285992641_0
-	call __blue_2279771388_2
+	call __blue_2279771388_1
 	jmp __blue_1614081290_0
 
 ; : bye ( -- noret )

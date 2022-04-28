@@ -1,4 +1,4 @@
-import linux
+import linux/base
 import linux/x8664
 
 global _start
@@ -8,16 +8,14 @@ global _start
 : ordie ( result -- ) unwrap drop ;
 : ignore ( result:eax err:edi -- ) swap dup rot cmp ' ordie xne drop ;
 
-: fork ( -- result:eax ) 57 syscall unwrap ;
-: execve ( filename:rdi argv:rsi env:rdx -- noret ) 59 syscall ordie ;
+: fork ( -- result ) fork unwrap ;
+: execve ( filename argv env -- noret ) execve ordie ;
 
 1 resd wait-status
 
-: wait4 ( pid:edi status:rsi options:rdx usage:r10 -- result:eax ) 61 syscall ;  
-
 \ TODO want to return wait-status @ but outputs don't flow yet
 \ TODO actually need ports of WIFEXITED and WEXITSTATUS
-: waitpid ( pid:edi -- ) wait-status 0 0 wait4 ordie ;
+: waitpid ( pid -- ) wait-status 0 0 wait4 ordie ;
 
 : bye ( -- noret ) 0 exit ;
 : type ( buf len -- ) stdout write ordie ;
