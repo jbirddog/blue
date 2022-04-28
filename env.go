@@ -94,6 +94,22 @@ func ParseFileInNewEnvironment(filename string) *Environment {
 	return env
 }
 
+func (e *Environment) ParseFile(filename string) {
+	bytes, err := ioutil.ReadFile(filename)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	currentInputBuf := e.InputBuf
+	e.InputBuf = string(bytes)
+
+	for e.ParseNextWord() {
+	}
+
+	e.Validate()
+	e.InputBuf = currentInputBuf
+}
+
 func (e *Environment) Merge(e2 *Environment) {
 	e.CodeBuf = append(e.CodeBuf, e2.CodeBuf...)
 

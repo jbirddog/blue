@@ -111,9 +111,7 @@ func KernelImport(env *Environment) {
 	}
 
 	file = fmt.Sprintf("%s.blue", file)
-	importEnv := ParseFileInNewEnvironment(file)
-
-	env.Merge(importEnv)
+	env.ParseFile(file)
 }
 
 func res(env *Environment, size string) {

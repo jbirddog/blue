@@ -5,8 +5,6 @@
 
 ;  system call numbers
 
-global _start
-
 ; : syscall ( num:eax -- result:eax )
 
 __blue_4057121178_0:
@@ -18,6 +16,39 @@ __blue_4057121178_0:
 __blue_3454868101_1:
 	mov eax, 60
 	call __blue_4057121178_0
+
+; : fork ( -- result:eax )
+
+__blue_1046004769_1:
+	mov eax, 57
+	jmp __blue_4057121178_0
+
+; : execve ( filename:rdi argv:rsi env:rdx -- result:eax )
+
+__blue_172884385_1:
+	mov eax, 59
+	jmp __blue_4057121178_0
+
+; : wait4 ( pid:edi status:rsi options:rdx usage:r10 -- result:eax )
+
+__blue_2279771388_1:
+	mov eax, 61
+	jmp __blue_4057121178_0
+
+; : write ( buf:esi len:edx fd:edi -- result:eax )
+
+__blue_3190202204_1:
+	xor eax, eax
+	inc eax
+	jmp __blue_4057121178_0
+
+; : mkdir ( path:edi mode:esi -- result:eax )
+
+__blue_2883839448_1:
+	mov eax, 83
+	jmp __blue_4057121178_0
+
+global _start
 
 ; : die ( err:eax -- noret )
 
@@ -54,14 +85,14 @@ __blue_2157056155_1:
 
 ; : fork ( -- result:eax )
 
-__blue_1046004769_1:
+__blue_1046004769_2:
 	mov eax, 57
 	call __blue_4057121178_0
 	jmp __blue_4055961022_0
 
 ; : execve ( filename:rdi argv:rsi env:rdx -- noret )
 
-__blue_172884385_1:
+__blue_172884385_2:
 	mov eax, 59
 	call __blue_4057121178_0
 	call __blue_1614081290_0
@@ -75,7 +106,7 @@ section .text
 
 ; : wait4 ( pid:edi status:rsi options:rdx usage:r10 -- result:eax )
 
-__blue_2279771388_1:
+__blue_2279771388_2:
 	mov eax, 61
 	jmp __blue_4057121178_0
 
@@ -89,21 +120,8 @@ __blue_3964545837_0:
 	xor r10, r10
 	xor rdx, rdx
 	mov rsi, __blue_285992641_0
-	call __blue_2279771388_1
+	call __blue_2279771388_2
 	jmp __blue_1614081290_0
-
-; : write ( buf:esi len:edx fd:edi -- result:eax )
-
-__blue_3190202204_1:
-	xor eax, eax
-	inc eax
-	jmp __blue_4057121178_0
-
-; : mkdir ( path:edi mode:esi -- result:eax )
-
-__blue_2883839448_1:
-	mov eax, 83
-	jmp __blue_4057121178_0
 
 ; : bye ( -- noret )
 
@@ -652,7 +670,7 @@ __blue_1223589535_14:
 	mov rdx, [__blue_2355496332_0]
 	mov rsi, __blue_188583195_0
 	mov rdi, __blue_855163316_14
-	jmp __blue_172884385_1
+	jmp __blue_172884385_2
 
 ;  TODO these are here to work around the operation size issue
 
@@ -695,7 +713,7 @@ __blue_1223589535_15:
 	mov rax, [__blue_680506038_0]
 	mov rsi, __blue_855163316_15
 	call __blue_640619689_0
-	call __blue_1046004769_1
+	call __blue_1046004769_2
 	cmp eax, 0
 	jne __blue_2157056155_4
 	call __blue_2254422318_0
@@ -751,7 +769,7 @@ db 0
 __blue_1223589535_19:
 	mov qword [__blue_89263513_0], __blue_855163316_19
 	mov qword [__blue_106041132_0], __blue_496119923_0
-	call __blue_1046004769_1
+	call __blue_1046004769_2
 	cmp eax, 0
 	jne __blue_2157056155_5
 	call __blue_2254422318_0
@@ -784,7 +802,7 @@ db 0
 __blue_1223589535_21:
 	mov qword [__blue_55708275_0], __blue_855163316_21
 	mov qword [__blue_72485894_0], __blue_837047421_0
-	call __blue_1046004769_1
+	call __blue_1046004769_2
 	cmp eax, 0
 	jne __blue_2157056155_6
 	call __blue_2254422318_0
