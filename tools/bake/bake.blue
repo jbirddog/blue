@@ -1,8 +1,7 @@
+import linux
+import linux/x8664
+
 global _start
-
-: syscall ( num:eax -- result:eax ) syscall ;
-
-: exit ( status:edi -- noret ) 60 syscall ;
 
 : die ( err:eax -- noret ) neg exit ;
 : unwrap ( result:eax -- value:eax ) dup 0 cmp ' die xl ;
@@ -19,12 +18,6 @@ global _start
 \ TODO want to return wait-status @ but outputs don't flow yet
 \ TODO actually need ports of WIFEXITED and WEXITSTATUS
 : waitpid ( pid:edi -- ) wait-status 0 0 wait4 ordie ;
-
-: write ( buf:esi len:edx fd:edi -- result:eax ) 1 syscall ;
-: mkdir ( path:edi mode:esi -- result:eax ) 83 syscall ;
-
-1 const stdout
--17 const exists
 
 : bye ( -- noret ) 0 exit ;
 : type ( buf len -- ) stdout write ordie ;
