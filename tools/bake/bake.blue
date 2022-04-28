@@ -1,32 +1,11 @@
+import x8664/strings
 import linux/base
 import linux/x8664/syscalls
 import linux/x8664/error_handling
+import linux/x8664/convenience
+import convenience
 
 global _start
-
-: fork ( -- result ) fork unwrap ;
-: execve ( filename argv env -- noret ) execve ordie ;
-
-1 resd wait-status
-
-\ TODO want to return wait-status @ but outputs don't flow yet
-\ TODO actually need ports of WIFEXITED and WEXITSTATUS
-: waitpid ( pid -- ) wait-status 0 0 wait4 ordie ;
-
-: bye ( -- noret ) 0 exit ;
-: type ( buf len -- ) stdout write ordie ;
-: newline ( -- ) s" \n" type ;
-
-: find0 ( start:rsi -- end:rsi ) lodsb 0 cmp latest xne ; 
-: cstrlen ( str:rdi -- len:rsi ) dup find0 swap sub dec ;
-
-\ TODO this is an example of needing indirect clobber detection
-: cstr>str ( cstr:rdx -- str:rsi len:rdx | rdi ) dup cstrlen xchg ;
-
-: type-cstr ( buf -- ) cstr>str type ;
-: type-cstr@ ( addr -- ) @ type-cstr ;
-
-: mkdir ( path -- ) 0750 mkdir exists ignore ;
 
 : build-dir ( -- ) c" .build/" ; inline
 : bin-dir ( -- ) c" .build/bin/" ; inline \ TODO compile time concat
@@ -68,14 +47,6 @@ max-file-name-len resb base-file
 max-file-name-len resb assembly-file
 max-file-name-len resb object-file
 max-file-name-len resb binary-file
-
-\ TODO swap drop -> nip
-: copy-str ( src:rsi len:rcx dest:rdi -- tail:rdi ) rot swap movsb swap drop swap rep ;
-: copy-cstr ( src:rsi dest:rdi -- tail:rdi ) swap cstr>str rot copy-str ;
-
-\ TODO swap rot -> -rot
-: append-str ( tail:rdi src:rsi len:rcx -- tail:rdi ) swap rot movsb swap drop rep ; 
-: append-cstr ( tail:rdi src:rsi -- tail:rdi ) cstr>str append-str ; 
 
 \ TODO should drop .blue explicitly vs taking 5 off the length...
 : build-base-file-name ( -- ) 

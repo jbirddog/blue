@@ -1,4 +1,70 @@
 
+; : find0 ( start:rsi -- end:rsi )
+
+__blue_1805780446_0:
+	lodsb
+	cmp al, 0
+	je __blue_2157056155_0
+	call __blue_1805780446_0
+
+__blue_2157056155_0:
+	ret
+
+; : cstrlen ( str:rdi -- len:rsi )
+
+__blue_1939608060_0:
+	mov rsi, rdi
+	call __blue_1805780446_0
+	sub rsi, rdi
+	dec rsi
+	ret
+
+;  TODO this is an example of needing indirect clobber detection
+
+; : cstr>str ( cstr:rdx -- str:rsi len:rdx | rdi )
+
+__blue_3207375596_0:
+	mov rdi, rdx
+	call __blue_1939608060_0
+	xchg rdx, rsi
+	ret
+
+;  TODO swap drop -> nip
+
+; : copy-str ( src:rsi len:rcx dest:rdi -- tail:rdi )
+
+__blue_2360258130_0:
+	rep movsb
+	ret
+
+; : copy-cstr ( src:rsi dest:rdi -- tail:rdi )
+
+__blue_2435236535_0:
+	mov rdx, rsi
+	push rdi
+	call __blue_3207375596_0
+	pop rdi
+	mov rcx, rdx
+	jmp __blue_2360258130_0
+
+;  TODO swap rot -> -rot
+
+; : append-str ( tail:rdi src:rsi len:rcx -- tail:rdi )
+
+__blue_256417459_0:
+	rep movsb
+	ret
+
+; : append-cstr ( tail:rdi src:rsi -- tail:rdi )
+
+__blue_586198672_0:
+	mov rdx, rsi
+	push rdi
+	call __blue_3207375596_0
+	pop rdi
+	mov rcx, rdx
+	jmp __blue_256417459_0
+
 ;  global file descriptors
 
 ;  kernel error codes
@@ -59,10 +125,10 @@ __blue_3630339793_0:
 
 __blue_4055961022_0:
 	cmp eax, 0
-	jge __blue_2157056155_0
+	jge __blue_2157056155_1
 	call __blue_3630339793_0
 
-__blue_2157056155_0:
+__blue_2157056155_1:
 	ret
 
 ; : ordie ( result -- )
@@ -75,13 +141,11 @@ __blue_1614081290_0:
 
 __blue_2118064195_0:
 	cmp eax, edi
-	je __blue_2157056155_1
+	je __blue_2157056155_2
 	call __blue_1614081290_0
 
-__blue_2157056155_1:
+__blue_2157056155_2:
 	ret
-
-global _start
 
 ; : fork ( -- result )
 
@@ -115,11 +179,13 @@ __blue_3964545837_0:
 	call __blue_2279771388_1
 	jmp __blue_1614081290_0
 
-; : bye ( -- noret )
+; : mkdir ( path -- )
 
-__blue_1911791459_0:
-	xor edi, edi
-	jmp __blue_3454868101_1
+__blue_2883839448_2:
+	mov esi, 488
+	call __blue_2883839448_1
+	mov edi, -17
+	jmp __blue_2118064195_0
 
 ; : type ( buf len -- )
 
@@ -128,6 +194,12 @@ __blue_1361572173_0:
 	inc edi
 	call __blue_3190202204_1
 	jmp __blue_1614081290_0
+
+; : bye ( -- noret )
+
+__blue_1911791459_0:
+	xor edi, edi
+	jmp __blue_3454868101_1
 
 ; : newline ( -- )
 
@@ -144,55 +216,7 @@ __blue_1223589535_0:
 	mov esi, __blue_855163316_0
 	jmp __blue_1361572173_0
 
-; : find0 ( start:rsi -- end:rsi )
-
-__blue_1805780446_0:
-	lodsb
-	cmp al, 0
-	je __blue_2157056155_2
-	call __blue_1805780446_0
-
-__blue_2157056155_2:
-	ret
-
-; : cstrlen ( str:rdi -- len:rsi )
-
-__blue_1939608060_0:
-	mov rsi, rdi
-	call __blue_1805780446_0
-	sub rsi, rdi
-	dec rsi
-	ret
-
-;  TODO this is an example of needing indirect clobber detection
-
-; : cstr>str ( cstr:rdx -- str:rsi len:rdx | rdi )
-
-__blue_3207375596_0:
-	mov rdi, rdx
-	call __blue_1939608060_0
-	xchg rdx, rsi
-	ret
-
-; : type-cstr ( buf -- )
-
-__blue_2703255396_0:
-	call __blue_3207375596_0
-	jmp __blue_1361572173_0
-
-; : type-cstr@ ( addr -- )
-
-__blue_3389152684_0:
-	mov rdx, qword [rdx]
-	jmp __blue_2703255396_0
-
-; : mkdir ( path -- )
-
-__blue_2883839448_2:
-	mov esi, 488
-	call __blue_2883839448_1
-	mov edi, -17
-	jmp __blue_2118064195_0
+global _start
 
 ; : build-dir ( -- )
 
@@ -454,45 +478,9 @@ __blue_496119923_0: resb 512
 ; 512 resb binary-file
 
 __blue_837047421_0: resb 512
-;  TODO swap drop -> nip
+;  TODO should drop .blue explicitly vs taking 5 off the length...
 
 section .text
-
-; : copy-str ( src:rsi len:rcx dest:rdi -- tail:rdi )
-
-__blue_2360258130_0:
-	rep movsb
-	ret
-
-; : copy-cstr ( src:rsi dest:rdi -- tail:rdi )
-
-__blue_2435236535_0:
-	mov rdx, rsi
-	push rdi
-	call __blue_3207375596_0
-	pop rdi
-	mov rcx, rdx
-	jmp __blue_2360258130_0
-
-;  TODO swap rot -> -rot
-
-; : append-str ( tail:rdi src:rsi len:rcx -- tail:rdi )
-
-__blue_256417459_0:
-	rep movsb
-	ret
-
-; : append-cstr ( tail:rdi src:rsi -- tail:rdi )
-
-__blue_586198672_0:
-	mov rdx, rsi
-	push rdi
-	call __blue_3207375596_0
-	pop rdi
-	mov rcx, rdx
-	jmp __blue_256417459_0
-
-;  TODO should drop .blue explicitly vs taking 5 off the length...
 
 ; : build-base-file-name ( -- )
 

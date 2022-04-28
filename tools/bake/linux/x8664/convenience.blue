@@ -1,0 +1,12 @@
+: fork ( -- result ) fork unwrap ;
+: execve ( filename argv env -- noret ) execve ordie ;
+
+1 resd wait-status
+
+\ TODO want to return wait-status @ but outputs don't flow yet
+\ TODO actually need ports of WIFEXITED and WEXITSTATUS
+: waitpid ( pid -- ) wait-status 0 0 wait4 ordie ;
+
+: mkdir ( path -- ) 0750 mkdir exists ignore ;
+
+: type ( buf len -- ) stdout write ordie ;
