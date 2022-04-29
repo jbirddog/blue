@@ -1,38 +1,24 @@
 #!/usr/bin/sh
 
-mkdir -p .build/bin
-mkdir -p .build/obj
+BAKE=../../../tools/bake/.build/bin/bake
+
+command -v "${BAKE}" > /dev/null 2>&1 || {
+	cd ../../../tools/bake
+	./bootstrap.sh
+	cd -
+}
 
 rm -f output.txt
 rm -rf docs
 
-blue clear_the_screen.blue
-nasm -f elf64 -o .build/obj/clear_the_screen.o clear_the_screen.asm
-ld -o .build/bin/clear_the_screen .build/obj/clear_the_screen.o
+$BAKE build clear_the_screen.blue
+$BAKE build commandline_args.blue
+$BAKE build create_file.blue
+$BAKE build environment.blue
+$BAKE build hello_world.blue
+$BAKE build program_name.blue
+$BAKE build read_entire_file.blue
 
-blue commandline_args.blue
-nasm -f elf64 -o .build/obj/commandline_args.o commandline_args.asm
-ld -o .build/bin/commandline_args .build/obj/commandline_args.o
-
-blue create_file.blue
-nasm -f elf64 -o .build/obj/create_file.o create_file.asm
-ld -o .build/bin/create_file .build/obj/create_file.o
-
-blue environment.blue
-nasm -f elf64 -o .build/obj/environment.o environment.asm
-ld -o .build/bin/environment .build/obj/environment.o
-
+# TODO support this via bake
 blue fibonacci.blue
 nasm -f elf64 -o .build/obj/fibonacci.o fibonacci.asm
-
-blue hello_world.blue
-nasm -f elf64 -o .build/obj/hello_world.o hello_world.asm
-ld -o .build/bin/hello_world .build/obj/hello_world.o
-
-blue program_name.blue
-nasm -f elf64 -o .build/obj/program_name.o program_name.asm
-ld -o .build/bin/program_name .build/obj/program_name.o
-
-blue read_entire_file.blue
-nasm -f elf64 -o .build/obj/read_entire_file.o read_entire_file.asm
-ld -o .build/bin/read_entire_file .build/obj/read_entire_file.o
