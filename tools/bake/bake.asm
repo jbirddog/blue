@@ -358,6 +358,8 @@ __blue_1223589535_1:
 	call __blue_1361572173_0
 	jmp __blue_1911791459_0
 
+;  TODO move this, doesn't logically fit here
+
 ;  TODO compile time concat
 
 ; : build-dir ( -- )
@@ -479,6 +481,49 @@ __blue_1223589535_7:
 	mov edi, __blue_855163316_7
 	jmp __blue_2883839448_2
 
+;  TODO move to crt0.5 or similar
+
+section .bss
+
+; 1 resq argc
+
+__blue_2366279180_0: resq 1
+; 1 resq argv
+
+__blue_2584388227_0: resq 1
+; 1 resq envp
+
+__blue_2355496332_0: resq 1
+;  TODO needed because we can't currently `@ var !` and retain operation size
+
+section .text
+
+; : argc! ( rcx -- )
+
+__blue_882757847_0:
+	mov qword [__blue_2366279180_0], rcx
+	ret
+
+; : envp-start ( rax args:rcx -- start:rax )
+
+__blue_3309500289_0:
+	shl rcx, 3
+	add rcx, 8
+	add rax, rcx
+	ret
+
+; : crt0.5 ( rax -- | rax )
+
+__blue_2092787281_0:
+	mov rcx, qword [rax]
+	call __blue_882757847_0
+	add rax, 8
+	mov qword [__blue_2584388227_0], rax
+	mov rcx, [__blue_2366279180_0]
+	call __blue_3309500289_0
+	mov qword [__blue_2355496332_0], rax
+	ret
+
 section .bss
 
 ; 1 resq cmd-name
@@ -487,9 +532,6 @@ __blue_1161787257_0: resq 1
 ; 1 resq blue-file
 
 __blue_680506038_0: resq 1
-; 1 resq envp
-
-__blue_2355496332_0: resq 1
 ;  TODO these are needed because we can't currently `@ var !` and retain operation size
 
 section .text
@@ -510,7 +552,7 @@ __blue_1899373493_0:
 
 __blue_3569987719_0:
 	cmp qword [rax], 3
-	je __blue_2157056155_3
+	jge __blue_2157056155_3
 	call __blue_3461590696_0
 
 __blue_2157056155_3:
@@ -531,6 +573,11 @@ __blue_1072573434_0:
 ; : parse-args ( rax -- )
 
 __blue_4217555750_0:
+	push rax
+	call __blue_2092787281_0
+	pop rax
+
+;  TODO move out of here
 	call __blue_3569987719_0
 	call __blue_952155568_0
 	mov rcx, qword [rax]
@@ -554,8 +601,6 @@ __blue_1223589535_8:
 	call __blue_1899373493_0
 
 ;  TODO second-arg is not right
-	call __blue_1072573434_0
-	mov qword [__blue_2355496332_0], rax
 	ret
 
 section .bss
