@@ -413,7 +413,43 @@ __blue_1223589535_1:
 	call __blue_1361572173_0
 	jmp __blue_1911791459_0
 
-;  TODO move this, doesn't logically fit here
+section .bss
+
+; 1 resq cmd-name
+
+__blue_1161787257_0: resq 1
+; 1 resq blue-file
+
+__blue_680506038_0: resq 1
+;  TODO support operation size for cmp so caller doesn't have to pass in argc
+
+section .text
+
+; : check-argc ( rcx -- )
+
+__blue_3569987719_0:
+	cmp rcx, 3
+	jge __blue_2157056155_3
+	call __blue_3461590696_0
+
+__blue_2157056155_3:
+	ret
+
+; : parse-args ( -- )
+
+__blue_4217555750_0:
+	mov rcx, [__blue_2366279180_0]
+	call __blue_3569987719_0
+	xor rcx, rcx
+	inc rcx
+	mov rax, [__blue_2584388227_0]
+	call __blue_3382297396_0
+	mov qword [__blue_1161787257_0], rax
+	mov rcx, 2
+	mov rax, [__blue_2584388227_0]
+	call __blue_3382297396_0
+	mov qword [__blue_680506038_0], rax
+	ret
 
 ;  TODO compile time concat
 
@@ -535,44 +571,6 @@ db 0
 __blue_1223589535_7:
 	mov edi, __blue_855163316_7
 	jmp __blue_2883839448_2
-
-section .bss
-
-; 1 resq cmd-name
-
-__blue_1161787257_0: resq 1
-; 1 resq blue-file
-
-__blue_680506038_0: resq 1
-;  TODO support operation size for cmp so caller doesn't have to pass in argc
-
-section .text
-
-; : check-argc ( rcx -- )
-
-__blue_3569987719_0:
-	cmp rcx, 3
-	jge __blue_2157056155_3
-	call __blue_3461590696_0
-
-__blue_2157056155_3:
-	ret
-
-; : parse-args ( -- )
-
-__blue_4217555750_0:
-	mov rcx, [__blue_2366279180_0]
-	call __blue_3569987719_0
-	xor rcx, rcx
-	inc rcx
-	mov rax, [__blue_2584388227_0]
-	call __blue_3382297396_0
-	mov qword [__blue_1161787257_0], rax
-	mov rcx, 2
-	mov rax, [__blue_2584388227_0]
-	call __blue_3382297396_0
-	mov qword [__blue_680506038_0], rax
-	ret
 
 section .bss
 

@@ -9,18 +9,6 @@ cmd:
 	type bye
 ;
 
-\ TODO move this, doesn't logically fit here
-\ TODO compile time concat
-: build-dir ( -- ) c" .build/" ; inline
-: bin-dir ( -- ) c" .build/bin/" ; inline 
-: obj-dir ( -- ) c" .build/obj/" ; inline
-
-: make-build-dirs ( -- )
-	build-dir mkdir
-	bin-dir mkdir
-	obj-dir mkdir 
-;
-
 1 resq cmd-name
 1 resq blue-file
 
