@@ -677,8 +677,6 @@ __blue_747073145_0:
 	call __blue_3419772654_0
 	jmp __blue_1696784928_0
 
-global _start
-
 section .bss
 
 ; 1 resq env-file
@@ -687,33 +685,35 @@ __blue_2063802741_0: resq 1
 ; 1 resq env-arg0
 
 __blue_188583195_0: resq 1
-; 1 resq execve-file
+; 1 resq exec-file
 
-__blue_3267543346_0: resq 1
+__blue_667945565_0: resq 1
 ;  TODO blocked by operation size issue
 
-;  4 resq execve-argv 
+;  4 resq exec-argv 
 
-; 1 resq execve-arg0
+; 1 resq exec-arg0
 
-__blue_38930656_0: resq 1
-; 1 resq execve-arg1
+__blue_871594851_0: resq 1
+; 1 resq exec-arg1
 
-__blue_55708275_0: resq 1
-; 1 resq execve-arg2
+__blue_854817232_0: resq 1
+; 1 resq exec-arg2
 
-__blue_72485894_0: resq 1
-; 1 resq execve-arg3
+__blue_905150089_0: resq 1
+; 1 resq exec-arg3
 
-__blue_89263513_0: resq 1
-; 1 resq execve-arg4
+__blue_888372470_0: resq 1
+; 1 resq exec-arg4
 
-__blue_106041132_0: resq 1
+__blue_938705327_0: resq 1
+;  TODO uses /usr/bin/env as a crutch right now
+
 section .text
 
-; : execve-via-env ( -- noret )
+; : execvpe ( -- noret )
 
-__blue_2254422318_0:
+__blue_279745373_0:
 	jmp __blue_1223589535_13
 
 __blue_855163316_13:
@@ -752,9 +752,9 @@ __blue_1223589535_14:
 ; : set-args ( arg1:rsi arg2:rax arg3:rcx -- )
 
 __blue_3319044491_0:
-	mov qword [__blue_89263513_0], rcx
-	mov qword [__blue_72485894_0], rax
-	mov qword [__blue_55708275_0], rsi
+	mov qword [__blue_888372470_0], rcx
+	mov qword [__blue_905150089_0], rax
+	mov qword [__blue_854817232_0], rsi
 	ret
 
 ; : clear-args ( -- )
@@ -768,9 +768,23 @@ __blue_480086900_0:
 ; : prep-execve ( file:rsi arg0:rax -- )
 
 __blue_640619689_0:
-	mov qword [__blue_38930656_0], rax
-	mov qword [__blue_3267543346_0], rsi
+	mov qword [__blue_871594851_0], rax
+	mov qword [__blue_667945565_0], rsi
 	jmp __blue_480086900_0
+
+; : spawn ( -- )
+
+__blue_975326616_0:
+	call __blue_1046004769_2
+	cmp eax, 0
+	jne __blue_2157056155_4
+	call __blue_279745373_0
+
+__blue_2157056155_4:
+	mov edi, eax
+	jmp __blue_3964545837_0
+
+global _start
 
 ; : generate-assembly ( -- )
 
@@ -788,14 +802,7 @@ __blue_1223589535_15:
 	mov rax, [__blue_680506038_0]
 	mov rsi, __blue_855163316_15
 	call __blue_640619689_0
-	call __blue_1046004769_2
-	cmp eax, 0
-	jne __blue_2157056155_4
-	call __blue_2254422318_0
-
-__blue_2157056155_4:
-	mov edi, eax
-	jmp __blue_3964545837_0
+	jmp __blue_975326616_0
 
 ; : compile-assembly ( -- )
 
@@ -821,7 +828,7 @@ db 45
 db 102
 db 0
 __blue_1223589535_17:
-	mov qword [__blue_55708275_0], __blue_855163316_17
+	mov qword [__blue_854817232_0], __blue_855163316_17
 	jmp __blue_1223589535_18
 
 __blue_855163316_18:
@@ -833,7 +840,7 @@ db 54
 db 52
 db 0
 __blue_1223589535_18:
-	mov qword [__blue_72485894_0], __blue_855163316_18
+	mov qword [__blue_905150089_0], __blue_855163316_18
 	jmp __blue_1223589535_19
 
 __blue_855163316_19:
@@ -842,16 +849,9 @@ db 45
 db 111
 db 0
 __blue_1223589535_19:
-	mov qword [__blue_89263513_0], __blue_855163316_19
-	mov qword [__blue_106041132_0], __blue_496119923_0
-	call __blue_1046004769_2
-	cmp eax, 0
-	jne __blue_2157056155_5
-	call __blue_2254422318_0
-
-__blue_2157056155_5:
-	mov edi, eax
-	jmp __blue_3964545837_0
+	mov qword [__blue_888372470_0], __blue_855163316_19
+	mov qword [__blue_938705327_0], __blue_496119923_0
+	jmp __blue_975326616_0
 
 ; : link-binary ( -- )
 
@@ -875,43 +875,29 @@ db 45
 db 111
 db 0
 __blue_1223589535_21:
-	mov qword [__blue_55708275_0], __blue_855163316_21
-	mov qword [__blue_72485894_0], __blue_837047421_0
-	call __blue_1046004769_2
-	cmp eax, 0
-	jne __blue_2157056155_6
-	call __blue_2254422318_0
-
-__blue_2157056155_6:
-	mov edi, eax
-	jmp __blue_3964545837_0
+	mov qword [__blue_854817232_0], __blue_855163316_21
+	mov qword [__blue_905150089_0], __blue_837047421_0
+	jmp __blue_975326616_0
 
 ;  TODO check wait-status after each call
 
-; : do-build ( -- )
+; : build ( -- )
 
-__blue_387804145_0:
+__blue_3281777315_0:
 	call __blue_2434586205_0
 	call __blue_2532285537_0
 	jmp __blue_838765769_0
-
-; : build ( -- noret )
-
-__blue_3281777315_0:
-	call __blue_387804145_0
-	jmp __blue_1911791459_0
 
 ;  TODO needs to forward args
 
 ; : run ( -- noret )
 
 __blue_718098122_0:
-	call __blue_387804145_0
+	call __blue_3281777315_0
 	xor rax, rax
 	mov rsi, __blue_837047421_0
 	call __blue_640619689_0
-	jmp __blue_2254422318_0
-	jmp __blue_1911791459_0
+	jmp __blue_279745373_0
 
 ; : cmd-table ( -- noret )
 
@@ -956,6 +942,7 @@ __blue_4283867725_0:
 
 __blue_1042682684_0:
 	call qword [rdi]
+	jmp __blue_1911791459_0
 
 ; : call-cmd-with-key ( key:rax -- noret )
 
@@ -967,10 +954,10 @@ __blue_2379826553_0:
 
 __blue_612288868_0:
 	scasq
-	jne __blue_2157056155_7
+	jne __blue_2157056155_5
 	call __blue_1042682684_0
 
-__blue_2157056155_7:
+__blue_2157056155_5:
 	add rdi, 8
 	loop __blue_612288868_0
 	jmp __blue_3461590696_0
