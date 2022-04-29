@@ -8,5 +8,3 @@
 
 : write ( buf:esi len:edx fd:edi -- result:eax ) write syscall ;
 : mkdir ( path:edi mode:esi -- result:eax ) mkdir syscall ;
-
-hide syscall
