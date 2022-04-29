@@ -1,0 +1,76 @@
+: usage ( -- noret ) s" 
+usage: bake cmd somefile.blue
+
+cmd:
+	build 	- compile the specified blue file
+	run 	- compile and run the specified blue file
+
+" 
+	type bye
+;
+
+\ TODO compile time concat
+: build-dir ( -- ) c" .build/" ; inline
+: bin-dir ( -- ) c" .build/bin/" ; inline 
+: obj-dir ( -- ) c" .build/obj/" ; inline
+
+: make-build-dirs ( -- )
+	build-dir mkdir
+	bin-dir mkdir
+	obj-dir mkdir 
+;
+
+1 resq cmd-name
+1 resq blue-file
+1 resq envp
+
+\ TODO these are needed because we can't currently `@ var !` and retain operation size
+: cmd-name! ( rcx -- ) cmd-name ! ;
+: blue-file! ( rcx -- ) blue-file ! ;
+
+: check-argc ( rax -- ) @ 3 cmp ' usage xne ;
+: first-arg ( rax -- rax ) 16 add ; 
+: environment ( rax -- rax ) 24 add ; 
+: parse-args ( rax -- ) dup dup dup 
+	check-argc
+	first-arg @ cmd-name!
+	c" bake.blue" blue-file! \ TODO second-arg is not right
+	environment envp !
+;
+
+512 const max-len
+
+max-len resb base-file
+max-len resb assembly-file
+max-len resb object-file
+max-len resb binary-file
+
+hide max-len
+
+\ TODO should drop .blue explicitly vs taking 5 off the length...
+: build-base-file-name ( -- ) 
+	blue-file @ cstr>str 5 sub base-file copy-str
+;
+
+: build-assembly-file-name ( -- ) 
+	base-file assembly-file copy-cstr 
+	s" .asm" append-str
+;
+ 
+: build-object-file-name ( -- ) 
+	obj-dir object-file copy-cstr 
+	base-file append-cstr
+	s" .o" append-str
+;
+
+: build-binary-file-name ( -- ) 
+	bin-dir binary-file copy-cstr
+	base-file append-cstr
+;
+
+: build-output-file-names ( -- )
+	build-base-file-name 
+	build-assembly-file-name 
+	build-object-file-name
+	build-binary-file-name 
+;

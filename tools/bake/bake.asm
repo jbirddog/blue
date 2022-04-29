@@ -216,165 +216,14 @@ __blue_1223589535_0:
 	mov esi, __blue_855163316_0
 	jmp __blue_1361572173_0
 
-global _start
+; : usage ( -- noret )
 
-;  TODO compile time concat
-
-; : build-dir ( -- )
-
-__blue_1221549521_0:
+__blue_3461590696_0:
 	jmp __blue_1223589535_1
 
 __blue_855163316_1:
 
-db 46
-db 98
-db 117
-db 105
-db 108
-db 100
-db 47
-db 0
-__blue_1223589535_1:
-	ret
-
-; : bin-dir ( -- )
-
-__blue_1480828760_0:
-	jmp __blue_1223589535_2
-
-__blue_855163316_2:
-
-db 46
-db 98
-db 117
-db 105
-db 108
-db 100
-db 47
-db 98
-db 105
-db 110
-db 47
-db 0
-__blue_1223589535_2:
-	ret
-
-; : obj-dir ( -- )
-
-__blue_264527620_0:
-	jmp __blue_1223589535_3
-
-__blue_855163316_3:
-
-db 46
-db 98
-db 117
-db 105
-db 108
-db 100
-db 47
-db 111
-db 98
-db 106
-db 47
-db 0
-__blue_1223589535_3:
-	ret
-
-; : make-build-dirs ( -- )
-
-__blue_2670689297_0:
-	jmp __blue_1223589535_4
-
-__blue_855163316_4:
-
-db 46
-db 98
-db 117
-db 105
-db 108
-db 100
-db 47
-db 0
-__blue_1223589535_4:
-	mov edi, __blue_855163316_4
-	call __blue_2883839448_2
-	jmp __blue_1223589535_5
-
-__blue_855163316_5:
-
-db 46
-db 98
-db 117
-db 105
-db 108
-db 100
-db 47
-db 98
-db 105
-db 110
-db 47
-db 0
-__blue_1223589535_5:
-	mov edi, __blue_855163316_5
-	call __blue_2883839448_2
-	jmp __blue_1223589535_6
-
-__blue_855163316_6:
-
-db 46
-db 98
-db 117
-db 105
-db 108
-db 100
-db 47
-db 111
-db 98
-db 106
-db 47
-db 0
-__blue_1223589535_6:
-	mov edi, __blue_855163316_6
-	jmp __blue_2883839448_2
-
-section .bss
-
-; 1 resq cmd-name
-
-__blue_1161787257_0: resq 1
-; 1 resq blue-file
-
-__blue_680506038_0: resq 1
-; 1 resq envp
-
-__blue_2355496332_0: resq 1
-;  TODO these are needed because we can't currently `@ var !` and retain operation size
-
-section .text
-
-; : cmd-name! ( rcx -- )
-
-__blue_1525211016_0:
-	mov qword [__blue_1161787257_0], rcx
-	ret
-
-; : blue-file! ( rcx -- )
-
-__blue_1899373493_0:
-	mov qword [__blue_680506038_0], rcx
-	ret
-
-; : usage ( -- noret )
-
-__blue_3461590696_0:
-	jmp __blue_1223589535_7
-
-__blue_855163316_7:
-
 db 10
-db 9
 db 117
 db 115
 db 97
@@ -405,12 +254,257 @@ db 108
 db 117
 db 101
 db 10
+db 10
+db 99
+db 109
+db 100
+db 58
+db 10
+db 9
+db 98
+db 117
+db 105
+db 108
+db 100
+db 32
+db 9
+db 45
+db 32
+db 99
+db 111
+db 109
+db 112
+db 105
+db 108
+db 101
+db 32
+db 116
+db 104
+db 101
+db 32
+db 115
+db 112
+db 101
+db 99
+db 105
+db 102
+db 105
+db 101
+db 100
+db 32
+db 98
+db 108
+db 117
+db 101
+db 32
+db 102
+db 105
+db 108
+db 101
+db 10
+db 9
+db 114
+db 117
+db 110
+db 32
+db 9
+db 45
+db 32
+db 99
+db 111
+db 109
+db 112
+db 105
+db 108
+db 101
+db 32
+db 97
+db 110
+db 100
+db 32
+db 114
+db 117
+db 110
+db 32
+db 116
+db 104
+db 101
+db 32
+db 115
+db 112
+db 101
+db 99
+db 105
+db 102
+db 105
+db 101
+db 100
+db 32
+db 98
+db 108
+db 117
+db 101
+db 32
+db 102
+db 105
+db 108
+db 101
+db 10
+db 10
 db 0
-__blue_1223589535_7:
-	mov edx, 32
-	mov esi, __blue_855163316_7
+__blue_1223589535_1:
+	mov edx, 128
+	mov esi, __blue_855163316_1
 	call __blue_1361572173_0
 	jmp __blue_1911791459_0
+
+;  TODO compile time concat
+
+; : build-dir ( -- )
+
+__blue_1221549521_0:
+	jmp __blue_1223589535_2
+
+__blue_855163316_2:
+
+db 46
+db 98
+db 117
+db 105
+db 108
+db 100
+db 47
+db 0
+__blue_1223589535_2:
+	ret
+
+; : bin-dir ( -- )
+
+__blue_1480828760_0:
+	jmp __blue_1223589535_3
+
+__blue_855163316_3:
+
+db 46
+db 98
+db 117
+db 105
+db 108
+db 100
+db 47
+db 98
+db 105
+db 110
+db 47
+db 0
+__blue_1223589535_3:
+	ret
+
+; : obj-dir ( -- )
+
+__blue_264527620_0:
+	jmp __blue_1223589535_4
+
+__blue_855163316_4:
+
+db 46
+db 98
+db 117
+db 105
+db 108
+db 100
+db 47
+db 111
+db 98
+db 106
+db 47
+db 0
+__blue_1223589535_4:
+	ret
+
+; : make-build-dirs ( -- )
+
+__blue_2670689297_0:
+	jmp __blue_1223589535_5
+
+__blue_855163316_5:
+
+db 46
+db 98
+db 117
+db 105
+db 108
+db 100
+db 47
+db 0
+__blue_1223589535_5:
+	mov edi, __blue_855163316_5
+	call __blue_2883839448_2
+	jmp __blue_1223589535_6
+
+__blue_855163316_6:
+
+db 46
+db 98
+db 117
+db 105
+db 108
+db 100
+db 47
+db 98
+db 105
+db 110
+db 47
+db 0
+__blue_1223589535_6:
+	mov edi, __blue_855163316_6
+	call __blue_2883839448_2
+	jmp __blue_1223589535_7
+
+__blue_855163316_7:
+
+db 46
+db 98
+db 117
+db 105
+db 108
+db 100
+db 47
+db 111
+db 98
+db 106
+db 47
+db 0
+__blue_1223589535_7:
+	mov edi, __blue_855163316_7
+	jmp __blue_2883839448_2
+
+section .bss
+
+; 1 resq cmd-name
+
+__blue_1161787257_0: resq 1
+; 1 resq blue-file
+
+__blue_680506038_0: resq 1
+; 1 resq envp
+
+__blue_2355496332_0: resq 1
+;  TODO these are needed because we can't currently `@ var !` and retain operation size
+
+section .text
+
+; : cmd-name! ( rcx -- )
+
+__blue_1525211016_0:
+	mov qword [__blue_1161787257_0], rcx
+	ret
+
+; : blue-file! ( rcx -- )
+
+__blue_1899373493_0:
+	mov qword [__blue_680506038_0], rcx
+	ret
 
 ; : check-argc ( rax -- )
 
@@ -583,6 +677,8 @@ __blue_747073145_0:
 	call __blue_3419772654_0
 	jmp __blue_1696784928_0
 
+global _start
+
 section .bss
 
 ; 1 resq env-file
@@ -594,6 +690,10 @@ __blue_188583195_0: resq 1
 ; 1 resq execve-file
 
 __blue_3267543346_0: resq 1
+;  TODO blocked by operation size issue
+
+;  4 resq execve-argv 
+
 ; 1 resq execve-arg0
 
 __blue_38930656_0: resq 1
@@ -609,10 +709,6 @@ __blue_89263513_0: resq 1
 ; 1 resq execve-arg4
 
 __blue_106041132_0: resq 1
-;  TODO blocked by operation size issue
-
-;  4 resq execve-argv 
-
 section .text
 
 ; : execve-via-env ( -- noret )

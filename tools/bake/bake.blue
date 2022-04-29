@@ -4,90 +4,22 @@ import linux/x8664/error_handling
 import linux/x8664/convenience
 import x8664/strings
 import convenience
+import args
 
 global _start
-
-\ TODO compile time concat
-: build-dir ( -- ) c" .build/" ; inline
-: bin-dir ( -- ) c" .build/bin/" ; inline 
-: obj-dir ( -- ) c" .build/obj/" ; inline
-
-: make-build-dirs ( -- )
-	build-dir mkdir
-	bin-dir mkdir
-	obj-dir mkdir 
-;
-
-1 resq cmd-name
-1 resq blue-file
-1 resq envp
-
-\ TODO these are needed because we can't currently `@ var !` and retain operation size
-: cmd-name! ( rcx -- ) cmd-name ! ;
-: blue-file! ( rcx -- ) blue-file ! ;
-
-: usage ( -- noret ) s" 
-	usage: bake cmd somefile.blue
-" 
-	type bye 
-;
-
-: check-argc ( rax -- ) @ 3 cmp ' usage xne ;
-: first-arg ( rax -- rax ) 16 add ; 
-: environment ( rax -- rax ) 24 add ; 
-: parse-args ( rax -- ) dup dup dup 
-	check-argc
-	first-arg @ cmd-name!
-	c" bake.blue" blue-file! \ TODO second-arg is not right
-	environment envp !
-;
-
-512 const max-file-name-len
-
-max-file-name-len resb base-file
-max-file-name-len resb assembly-file
-max-file-name-len resb object-file
-max-file-name-len resb binary-file
-
-\ TODO should drop .blue explicitly vs taking 5 off the length...
-: build-base-file-name ( -- ) 
-	blue-file @ cstr>str 5 sub base-file copy-str
-;
-
-: build-assembly-file-name ( -- ) 
-	base-file assembly-file copy-cstr 
-	s" .asm" append-str
-;
- 
-: build-object-file-name ( -- ) 
-	obj-dir object-file copy-cstr 
-	base-file append-cstr
-	s" .o" append-str
-;
-
-: build-binary-file-name ( -- ) 
-	bin-dir binary-file copy-cstr
-	base-file append-cstr
-;
-
-: build-output-file-names ( -- )
-	build-base-file-name 
-	build-assembly-file-name 
-	build-object-file-name
-	build-binary-file-name 
-;
 
 1 resq env-file
 1 resq env-arg0
 1 resq execve-file
+
+\ TODO blocked by operation size issue
+\ 4 resq execve-argv 
+
 1 resq execve-arg0
 1 resq execve-arg1
 1 resq execve-arg2
 1 resq execve-arg3
 1 resq execve-arg4
-
-\ TODO blocked by operation size issue
-\ 4 resq execve-argv 
 
 : execve-via-env ( -- noret )
 	c" env" env-arg0 !
