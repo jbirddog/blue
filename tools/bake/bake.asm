@@ -481,7 +481,7 @@ __blue_1223589535_7:
 	mov edi, __blue_855163316_7
 	jmp __blue_2883839448_2
 
-;  TODO move to crt0.5 or similar
+;  TODO move to brt0.5 or similar
 
 section .bss
 
@@ -512,9 +512,25 @@ __blue_3309500289_0:
 	add rax, rcx
 	ret
 
-; : crt0.5 ( rax -- | rax )
+;  TODO 'arg@ is work around since outputs don't flow
 
-__blue_2092787281_0:
+; : nth-arg ( argv:rsi nth:rdi -- rdx )
+
+__blue_3382297396_0:
+	shl rdi, 3
+	add rsi, rdi
+	mov rdx, qword [rsi]
+
+; : 'arg@ ( arg:rdx -- rdx )
+
+__blue_3248877538_0:
+	ret
+
+;  TODO rax clobber is temporary
+
+; : brt0.5 ( rax -- | rax )
+
+__blue_2520067616_0:
 	mov rcx, qword [rax]
 	call __blue_882757847_0
 	add rax, 8
@@ -548,59 +564,35 @@ __blue_1899373493_0:
 	mov qword [__blue_680506038_0], rcx
 	ret
 
-; : check-argc ( rax -- )
+;  TODO support operation size for cmp so caller doesn't have to pass in argc
+
+; : check-argc ( rcx -- )
 
 __blue_3569987719_0:
-	cmp qword [rax], 3
+	cmp rcx, 3
 	jge __blue_2157056155_3
 	call __blue_3461590696_0
 
 __blue_2157056155_3:
 	ret
 
-; : first-arg ( rax -- rax )
-
-__blue_952155568_0:
-	add rax, 16
-	ret
-
-; : environment ( rax -- rax )
-
-__blue_1072573434_0:
-	add rax, 24
-	ret
-
 ; : parse-args ( rax -- )
 
 __blue_4217555750_0:
-	push rax
-	call __blue_2092787281_0
-	pop rax
+	call __blue_2520067616_0
 
 ;  TODO move out of here
+	mov rcx, [__blue_2366279180_0]
 	call __blue_3569987719_0
-	call __blue_952155568_0
-	mov rcx, qword [rax]
-	call __blue_1525211016_0
-	jmp __blue_1223589535_8
-
-__blue_855163316_8:
-
-db 98
-db 97
-db 107
-db 101
-db 46
-db 98
-db 108
-db 117
-db 101
-db 0
-__blue_1223589535_8:
-	mov rcx, __blue_855163316_8
-	call __blue_1899373493_0
-
-;  TODO second-arg is not right
+	xor rdi, rdi
+	inc rdi
+	mov rsi, [__blue_2584388227_0]
+	call __blue_3382297396_0
+	mov qword [__blue_1161787257_0], rdx
+	mov rdi, 2
+	mov rsi, [__blue_2584388227_0]
+	call __blue_3382297396_0
+	mov qword [__blue_680506038_0], rdx
 	ret
 
 section .bss
@@ -637,26 +629,26 @@ __blue_976802625_0:
 	mov rdi, __blue_565080558_0
 	mov rsi, __blue_3277841025_0
 	call __blue_2435236535_0
-	jmp __blue_1223589535_9
+	jmp __blue_1223589535_8
 
-__blue_855163316_9:
+__blue_855163316_8:
 
 db 46
 db 97
 db 115
 db 109
 db 0
-__blue_1223589535_9:
+__blue_1223589535_8:
 	mov rcx, 4
-	mov rsi, __blue_855163316_9
+	mov rsi, __blue_855163316_8
 	jmp __blue_256417459_0
 
 ; : build-object-file-name ( -- )
 
 __blue_3419772654_0:
-	jmp __blue_1223589535_10
+	jmp __blue_1223589535_9
 
-__blue_855163316_10:
+__blue_855163316_9:
 
 db 46
 db 98
@@ -670,30 +662,30 @@ db 98
 db 106
 db 47
 db 0
-__blue_1223589535_10:
+__blue_1223589535_9:
 	mov rdi, __blue_496119923_0
-	mov rsi, __blue_855163316_10
+	mov rsi, __blue_855163316_9
 	call __blue_2435236535_0
 	mov rsi, __blue_3277841025_0
 	call __blue_586198672_0
-	jmp __blue_1223589535_11
+	jmp __blue_1223589535_10
 
-__blue_855163316_11:
+__blue_855163316_10:
 
 db 46
 db 111
 db 0
-__blue_1223589535_11:
+__blue_1223589535_10:
 	mov rcx, 2
-	mov rsi, __blue_855163316_11
+	mov rsi, __blue_855163316_10
 	jmp __blue_256417459_0
 
 ; : build-binary-file-name ( -- )
 
 __blue_1696784928_0:
-	jmp __blue_1223589535_12
+	jmp __blue_1223589535_11
 
-__blue_855163316_12:
+__blue_855163316_11:
 
 db 46
 db 98
@@ -707,9 +699,9 @@ db 105
 db 110
 db 47
 db 0
-__blue_1223589535_12:
+__blue_1223589535_11:
 	mov rdi, __blue_837047421_0
-	mov rsi, __blue_855163316_12
+	mov rsi, __blue_855163316_11
 	call __blue_2435236535_0
 	mov rsi, __blue_3277841025_0
 	jmp __blue_586198672_0
@@ -759,19 +751,19 @@ section .text
 ; : execvpe ( -- noret )
 
 __blue_279745373_0:
-	jmp __blue_1223589535_13
+	jmp __blue_1223589535_12
 
-__blue_855163316_13:
+__blue_855163316_12:
 
 db 101
 db 110
 db 118
 db 0
-__blue_1223589535_13:
-	mov qword [__blue_188583195_0], __blue_855163316_13
-	jmp __blue_1223589535_14
+__blue_1223589535_12:
+	mov qword [__blue_188583195_0], __blue_855163316_12
+	jmp __blue_1223589535_13
 
-__blue_855163316_14:
+__blue_855163316_13:
 
 db 47
 db 117
@@ -786,10 +778,10 @@ db 101
 db 110
 db 118
 db 0
-__blue_1223589535_14:
+__blue_1223589535_13:
 	mov rdx, [__blue_2355496332_0]
 	mov rsi, __blue_188583195_0
-	mov rdi, __blue_855163316_14
+	mov rdi, __blue_855163316_13
 	jmp __blue_172884385_2
 
 ;  TODO these are here to work around the operation size issue
@@ -832,49 +824,49 @@ __blue_2157056155_4:
 ; : generate-assembly ( -- )
 
 __blue_2434586205_0:
-	jmp __blue_1223589535_15
+	jmp __blue_1223589535_14
 
-__blue_855163316_15:
+__blue_855163316_14:
 
 db 98
 db 108
 db 117
 db 101
 db 0
-__blue_1223589535_15:
+__blue_1223589535_14:
 	mov rax, [__blue_680506038_0]
-	mov rsi, __blue_855163316_15
+	mov rsi, __blue_855163316_14
 	call __blue_640619689_0
 	jmp __blue_975326616_0
 
 ; : compile-assembly ( -- )
 
 __blue_2532285537_0:
-	jmp __blue_1223589535_16
+	jmp __blue_1223589535_15
 
-__blue_855163316_16:
+__blue_855163316_15:
 
 db 110
 db 97
 db 115
 db 109
 db 0
-__blue_1223589535_16:
+__blue_1223589535_15:
 	mov rax, __blue_565080558_0
-	mov rsi, __blue_855163316_16
+	mov rsi, __blue_855163316_15
 	call __blue_640619689_0
-	jmp __blue_1223589535_17
+	jmp __blue_1223589535_16
 
-__blue_855163316_17:
+__blue_855163316_16:
 
 db 45
 db 102
 db 0
-__blue_1223589535_17:
-	mov qword [__blue_854817232_0], __blue_855163316_17
-	jmp __blue_1223589535_18
+__blue_1223589535_16:
+	mov qword [__blue_854817232_0], __blue_855163316_16
+	jmp __blue_1223589535_17
 
-__blue_855163316_18:
+__blue_855163316_17:
 
 db 101
 db 108
@@ -882,43 +874,43 @@ db 102
 db 54
 db 52
 db 0
-__blue_1223589535_18:
-	mov qword [__blue_905150089_0], __blue_855163316_18
-	jmp __blue_1223589535_19
+__blue_1223589535_17:
+	mov qword [__blue_905150089_0], __blue_855163316_17
+	jmp __blue_1223589535_18
 
-__blue_855163316_19:
+__blue_855163316_18:
 
 db 45
 db 111
 db 0
-__blue_1223589535_19:
-	mov qword [__blue_888372470_0], __blue_855163316_19
+__blue_1223589535_18:
+	mov qword [__blue_888372470_0], __blue_855163316_18
 	mov qword [__blue_938705327_0], __blue_496119923_0
 	jmp __blue_975326616_0
 
 ; : link-binary ( -- )
 
 __blue_838765769_0:
-	jmp __blue_1223589535_20
+	jmp __blue_1223589535_19
 
-__blue_855163316_20:
+__blue_855163316_19:
 
 db 108
 db 100
 db 0
-__blue_1223589535_20:
+__blue_1223589535_19:
 	mov rax, __blue_496119923_0
-	mov rsi, __blue_855163316_20
+	mov rsi, __blue_855163316_19
 	call __blue_640619689_0
-	jmp __blue_1223589535_21
+	jmp __blue_1223589535_20
 
-__blue_855163316_21:
+__blue_855163316_20:
 
 db 45
 db 111
 db 0
-__blue_1223589535_21:
-	mov qword [__blue_854817232_0], __blue_855163316_21
+__blue_1223589535_20:
+	mov qword [__blue_854817232_0], __blue_855163316_20
 	mov qword [__blue_905150089_0], __blue_837047421_0
 	jmp __blue_975326616_0
 

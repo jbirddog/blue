@@ -21,7 +21,7 @@ cmd:
 	obj-dir mkdir 
 ;
 
-\ TODO move to crt0.5 or similar
+\ TODO move to brt0.5 or similar
 1 resq argc
 1 resq argv
 1 resq envp
@@ -31,7 +31,12 @@ cmd:
 
 : envp-start ( rax args:rcx -- start:rax ) 3 shl 8 add add ;
 
-: crt0.5 ( rax -- | rax ) dup dup dup
+\ TODO 'arg@ is work around since outputs don't flow
+: nth-arg ( argv:rsi nth:rdi -- rdx ) 3 shl add @
+: 'arg@ ( arg:rdx -- rdx ) ;
+
+\ TODO rax clobber is temporary
+: brt0.5 ( rax -- | rax ) dup dup dup
 	@ argc!
 	8 add argv !
 	argc @ envp-start envp !
@@ -44,14 +49,12 @@ cmd:
 : cmd-name! ( rcx -- ) cmd-name ! ;
 : blue-file! ( rcx -- ) blue-file ! ;
 
-: check-argc ( rax -- ) @ 3 cmp ' usage xl ;
-: first-arg ( rax -- rax ) 16 add ; 
-: environment ( rax -- rax ) 24 add ; 
-: parse-args ( rax -- ) 
-	dup crt0.5 \ TODO move out of here
+\ TODO support operation size for cmp so caller doesn't have to pass in argc
+: check-argc ( rcx -- ) 3 cmp ' usage xl ;
 
-	dup dup dup 
-	check-argc
-	first-arg @ cmd-name!
-	c" bake.blue" blue-file! \ TODO second-arg is not right
+: parse-args ( rax -- ) 
+	brt0.5 \ TODO move out of here
+	argc @ check-argc
+	argv @ 1 nth-arg cmd-name !
+	argv @ 2 nth-arg blue-file !
 ;
