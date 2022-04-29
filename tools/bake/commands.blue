@@ -26,9 +26,13 @@
 	link-binary 
 ;
 
+: exec-arg0! ( rax -- ) exec-arg0 ! ;
+
 \ TODO needs to forward args
 : run ( -- noret ) 
 	build
-	binary-file 0 prep-execve
+	\ binary-file exec-file !
+	\ cmd-args exec-arg0 ! 
+	binary-file cmd-args @ prep-execve
 	execvpe
 ;

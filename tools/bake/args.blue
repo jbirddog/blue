@@ -1,22 +1,33 @@
 : usage ( -- noret ) s" 
-usage: bake cmd somefile.blue
+usage: bake cmd somefile.blue [args]
 
 cmd:
 	build 	- compile the specified blue file
 	run 	- compile and run the specified blue file
 
+[args]:
+	optional args can be passed to commands:
+
+	build	- n/a
+	run	- args to forward to the blue program to run
 " 
 	type bye
 ;
 
-1 resq cmd-name
 1 resq blue-file
+1 resq cmd-name
+1 resq cmd-args
+
+: cmd-args! ( rax -- ) cmd-args ! ;
+: set-cmd-args ( -- ) argv @ 3 nth-arg cmd-args! ;
 
 \ TODO support operation size for cmp so caller doesn't have to pass in argc
-: check-argc ( rcx -- ) 3 cmp ' usage xl ;
+: set-cmd-args ( argc:rax -- ) 3 cmp ' set-cmd-args xg ; 
+: check-argc ( argc:rax -- ) 3 cmp ' usage xl ;
 
 : parse-args ( -- ) 
 	argc @ check-argc
 	argv @ 1 nth-arg cmd-name !
 	argv @ 2 nth-arg blue-file !
+	argc @ set-cmd-args
 ;

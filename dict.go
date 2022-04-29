@@ -38,6 +38,7 @@ func DefaultDictionary() *Dictionary {
 		NewCallGoWord("xl", KernelXl).Immediate(),
 		NewCallGoWord("xz", KernelXz).Immediate(),
 		NewCallGoWord("xnz", KernelXnz).Immediate(),
+		NewCallGoWord("xg", KernelXg).Immediate(),
 		NewCallGoWord("loople", KernelLoople).Immediate(),
 		NewCallGoWord("const", KernelConst),
 		NewCallGoWord("hide", KernelHide),

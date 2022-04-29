@@ -271,6 +271,10 @@ func KernelXnz(env *Environment) {
 	condCall(env, "jz")
 }
 
+func KernelXg(env *Environment) {
+	condCall(env, "jle")
+}
+
 func condLoop(env *Environment, jmp string) {
 	refWord := env.PopInstr().(*RefWordInstr)
 	condLoop := &CondLoopInstr{Jmp: jmp, Target: refWord}

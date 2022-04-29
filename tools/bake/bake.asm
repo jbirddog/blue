@@ -308,6 +308,13 @@ db 98
 db 108
 db 117
 db 101
+db 32
+db 91
+db 97
+db 114
+db 103
+db 115
+db 93
 db 10
 db 10
 db 99
@@ -406,39 +413,180 @@ db 108
 db 101
 db 10
 db 10
+db 91
+db 97
+db 114
+db 103
+db 115
+db 93
+db 58
+db 10
+db 9
+db 111
+db 112
+db 116
+db 105
+db 111
+db 110
+db 97
+db 108
+db 32
+db 97
+db 114
+db 103
+db 115
+db 32
+db 99
+db 97
+db 110
+db 32
+db 98
+db 101
+db 32
+db 112
+db 97
+db 115
+db 115
+db 101
+db 100
+db 32
+db 116
+db 111
+db 32
+db 99
+db 111
+db 109
+db 109
+db 97
+db 110
+db 100
+db 115
+db 58
+db 10
+db 10
+db 9
+db 98
+db 117
+db 105
+db 108
+db 100
+db 9
+db 45
+db 32
+db 110
+db 47
+db 97
+db 10
+db 9
+db 114
+db 117
+db 110
+db 9
+db 45
+db 32
+db 97
+db 114
+db 103
+db 115
+db 32
+db 116
+db 111
+db 32
+db 102
+db 111
+db 114
+db 119
+db 97
+db 114
+db 100
+db 32
+db 116
+db 111
+db 32
+db 116
+db 104
+db 101
+db 32
+db 98
+db 108
+db 117
+db 101
+db 32
+db 112
+db 114
+db 111
+db 103
+db 114
+db 97
+db 109
+db 32
+db 116
+db 111
+db 32
+db 114
+db 117
+db 110
+db 10
 db 0
 __blue_1223589535_1:
-	mov edx, 128
+	mov edx, 249
 	mov esi, __blue_855163316_1
 	call __blue_1361572173_0
 	jmp __blue_1911791459_0
 
 section .bss
 
-; 1 resq cmd-name
-
-__blue_1161787257_0: resq 1
 ; 1 resq blue-file
 
 __blue_680506038_0: resq 1
-;  TODO support operation size for cmp so caller doesn't have to pass in argc
+; 1 resq cmd-name
 
+__blue_1161787257_0: resq 1
+; 1 resq cmd-args
+
+__blue_964343155_0: resq 1
 section .text
 
-; : check-argc ( rcx -- )
+; : cmd-args! ( rax -- )
 
-__blue_3569987719_0:
-	cmp rcx, 3
-	jge __blue_2157056155_3
-	call __blue_3461590696_0
+__blue_3458953238_0:
+	mov qword [__blue_964343155_0], rax
+	ret
+
+; : set-cmd-args ( -- )
+
+__blue_4050364212_0:
+	mov rcx, 3
+	mov rax, [__blue_2584388227_0]
+	call __blue_3382297396_0
+	jmp __blue_3458953238_0
+
+;  TODO support operation size for cmp so caller doesn't have to pass in argc
+
+; : set-cmd-args ( argc:rax -- )
+
+__blue_4050364212_1:
+	cmp rax, 3
+	jle __blue_2157056155_3
+	call __blue_4050364212_0
 
 __blue_2157056155_3:
+	ret
+
+; : check-argc ( argc:rax -- )
+
+__blue_3569987719_0:
+	cmp rax, 3
+	jge __blue_2157056155_4
+	call __blue_3461590696_0
+
+__blue_2157056155_4:
 	ret
 
 ; : parse-args ( -- )
 
 __blue_4217555750_0:
-	mov rcx, [__blue_2366279180_0]
+	mov rax, [__blue_2366279180_0]
 	call __blue_3569987719_0
 	xor rcx, rcx
 	inc rcx
@@ -449,7 +597,8 @@ __blue_4217555750_0:
 	mov rax, [__blue_2584388227_0]
 	call __blue_3382297396_0
 	mov qword [__blue_680506038_0], rax
-	ret
+	mov rax, [__blue_2366279180_0]
+	jmp __blue_4050364212_1
 
 ;  TODO compile time concat
 
@@ -791,10 +940,10 @@ __blue_640619689_0:
 __blue_975326616_0:
 	call __blue_1046004769_2
 	cmp eax, 0
-	jne __blue_2157056155_4
+	jne __blue_2157056155_5
 	call __blue_279745373_0
 
-__blue_2157056155_4:
+__blue_2157056155_5:
 	mov edi, eax
 	jmp __blue_3964545837_0
 
@@ -900,13 +1049,23 @@ __blue_3281777315_0:
 	call __blue_2532285537_0
 	jmp __blue_838765769_0
 
+; : exec-arg0! ( rax -- )
+
+__blue_172689638_0:
+	mov qword [__blue_871594851_0], rax
+	ret
+
 ;  TODO needs to forward args
 
 ; : run ( -- noret )
 
 __blue_718098122_0:
 	call __blue_3281777315_0
-	xor rax, rax
+
+;  binary-file exec-file !
+
+;  cmd-args exec-arg0 ! 
+	mov rax, [__blue_964343155_0]
 	mov rsi, __blue_837047421_0
 	call __blue_640619689_0
 	jmp __blue_279745373_0
@@ -966,10 +1125,10 @@ __blue_2379826553_0:
 
 __blue_612288868_0:
 	scasq
-	jne __blue_2157056155_5
+	jne __blue_2157056155_6
 	call __blue_1042682684_0
 
-__blue_2157056155_5:
+__blue_2157056155_6:
 	add rdi, 8
 	loop __blue_612288868_0
 	jmp __blue_3461590696_0
