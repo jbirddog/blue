@@ -1,70 +1,4 @@
 
-; : find0 ( start:rsi -- end:rsi )
-
-__blue_1805780446_0:
-	lodsb
-	cmp al, 0
-	je __blue_2157056155_0
-	call __blue_1805780446_0
-
-__blue_2157056155_0:
-	ret
-
-; : cstrlen ( str:rdi -- len:rsi )
-
-__blue_1939608060_0:
-	mov rsi, rdi
-	call __blue_1805780446_0
-	sub rsi, rdi
-	dec rsi
-	ret
-
-;  TODO this is an example of needing indirect clobber detection
-
-; : cstr>str ( cstr:rdx -- str:rsi len:rdx | rdi )
-
-__blue_3207375596_0:
-	mov rdi, rdx
-	call __blue_1939608060_0
-	xchg rdx, rsi
-	ret
-
-;  TODO swap drop -> nip
-
-; : copy-str ( src:rsi len:rcx dest:rdi -- tail:rdi )
-
-__blue_2360258130_0:
-	rep movsb
-	ret
-
-; : copy-cstr ( src:rsi dest:rdi -- tail:rdi )
-
-__blue_2435236535_0:
-	mov rdx, rsi
-	push rdi
-	call __blue_3207375596_0
-	pop rdi
-	mov rcx, rdx
-	jmp __blue_2360258130_0
-
-;  TODO swap rot -> -rot
-
-; : append-str ( tail:rdi src:rsi len:rcx -- tail:rdi )
-
-__blue_256417459_0:
-	rep movsb
-	ret
-
-; : append-cstr ( tail:rdi src:rsi -- tail:rdi )
-
-__blue_586198672_0:
-	mov rdx, rsi
-	push rdi
-	call __blue_3207375596_0
-	pop rdi
-	mov rcx, rdx
-	jmp __blue_256417459_0
-
 ;  global file descriptors
 
 ;  kernel error codes
@@ -125,10 +59,10 @@ __blue_3630339793_0:
 
 __blue_4055961022_0:
 	cmp eax, 0
-	jge __blue_2157056155_1
+	jge __blue_2157056155_0
 	call __blue_3630339793_0
 
-__blue_2157056155_1:
+__blue_2157056155_0:
 	ret
 
 ; : ordie ( result -- )
@@ -141,10 +75,10 @@ __blue_1614081290_0:
 
 __blue_2118064195_0:
 	cmp eax, edi
-	je __blue_2157056155_2
+	je __blue_2157056155_1
 	call __blue_1614081290_0
 
-__blue_2157056155_2:
+__blue_2157056155_1:
 	ret
 
 ; : fork ( -- result )
@@ -195,6 +129,72 @@ __blue_1361572173_0:
 	call __blue_3190202204_1
 	jmp __blue_1614081290_0
 
+; : find0 ( start:rsi -- end:rsi )
+
+__blue_1805780446_0:
+	lodsb
+	cmp al, 0
+	je __blue_2157056155_2
+	call __blue_1805780446_0
+
+__blue_2157056155_2:
+	ret
+
+; : cstrlen ( str:rdi -- len:rsi )
+
+__blue_1939608060_0:
+	mov rsi, rdi
+	call __blue_1805780446_0
+	sub rsi, rdi
+	dec rsi
+	ret
+
+;  TODO this is an example of needing indirect clobber detection
+
+; : cstr>str ( cstr:rdx -- str:rsi len:rdx | rdi )
+
+__blue_3207375596_0:
+	mov rdi, rdx
+	call __blue_1939608060_0
+	xchg rdx, rsi
+	ret
+
+;  TODO swap drop -> nip
+
+; : copy-str ( src:rsi len:rcx dest:rdi -- tail:rdi )
+
+__blue_2360258130_0:
+	rep movsb
+	ret
+
+; : copy-cstr ( src:rsi dest:rdi -- tail:rdi )
+
+__blue_2435236535_0:
+	mov rdx, rsi
+	push rdi
+	call __blue_3207375596_0
+	pop rdi
+	mov rcx, rdx
+	jmp __blue_2360258130_0
+
+;  TODO swap rot -> -rot
+
+; : append-str ( tail:rdi src:rsi len:rcx -- tail:rdi )
+
+__blue_256417459_0:
+	rep movsb
+	ret
+
+; : append-cstr ( tail:rdi src:rsi -- tail:rdi )
+
+__blue_586198672_0:
+	mov rdx, rsi
+	push rdi
+	call __blue_3207375596_0
+	pop rdi
+	mov rcx, rdx
+	jmp __blue_256417459_0
+
 ; : bye ( -- noret )
 
 __blue_1911791459_0:
@@ -217,6 +217,8 @@ __blue_1223589535_0:
 	jmp __blue_1361572173_0
 
 global _start
+
+;  TODO compile time concat
 
 ; : build-dir ( -- )
 
@@ -257,8 +259,6 @@ db 47
 db 0
 __blue_1223589535_2:
 	ret
-
-;  TODO compile time concat
 
 ; : obj-dir ( -- )
 
@@ -609,10 +609,9 @@ __blue_89263513_0: resq 1
 ; 1 resq execve-arg4
 
 __blue_106041132_0: resq 1
-; 4 resq execve-argv
-
-__blue_1213363986_0: resq 4
 ;  TODO blocked by operation size issue
+
+;  4 resq execve-argv 
 
 section .text
 

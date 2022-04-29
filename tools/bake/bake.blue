@@ -1,14 +1,15 @@
-import x8664/strings
 import linux/base
 import linux/x8664/syscalls
 import linux/x8664/error_handling
 import linux/x8664/convenience
+import x8664/strings
 import convenience
 
 global _start
 
+\ TODO compile time concat
 : build-dir ( -- ) c" .build/" ; inline
-: bin-dir ( -- ) c" .build/bin/" ; inline \ TODO compile time concat
+: bin-dir ( -- ) c" .build/bin/" ; inline 
 : obj-dir ( -- ) c" .build/obj/" ; inline
 
 : make-build-dirs ( -- )
@@ -85,7 +86,8 @@ max-file-name-len resb binary-file
 1 resq execve-arg3
 1 resq execve-arg4
 
-4 resq execve-argv \ TODO blocked by operation size issue
+\ TODO blocked by operation size issue
+\ 4 resq execve-argv 
 
 : execve-via-env ( -- noret )
 	c" env" env-arg0 !
