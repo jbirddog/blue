@@ -1,0 +1,17 @@
+: cmd-table ( -- noret )
+	decb( 0 0 0 98 117 105 108 100 ) ' build decq
+	decb( 0 0 0 0 0 114 117 110 ) ' run decq
+;
+
+: cmd-key ( qword:rax len:rcx -- key:rax ) 8 sub neg 3 shl shl ;
+: cstr>cmd-key ( cstr:rdx -- key:rax ) cstr>str swap @ swap cmd-key ;
+: call-cmd ( cmd:rdi -- noret ) @ call bye ;
+
+: call-cmd-with-key ( key:rax -- noret ) 2 ' cmd-table rot
+: scan-cmd-table ( tries:ecx tbl:rdi key:rax -- noret ) 
+	scasq ' call-cmd xe drop 8 add latest loop
+	usage
+;
+
+: call-named-cmd ( name:rdx -- noret ) cstr>cmd-key call-cmd-with-key ;
+: call-specified-cmd ( -- noret ) cmd-name @ call-named-cmd ;

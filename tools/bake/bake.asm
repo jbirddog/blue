@@ -784,8 +784,6 @@ __blue_2157056155_4:
 	mov edi, eax
 	jmp __blue_3964545837_0
 
-global _start
-
 ; : generate-assembly ( -- )
 
 __blue_2434586205_0:
@@ -973,6 +971,8 @@ __blue_2780306156_0:
 __blue_929563223_0:
 	mov rdx, [__blue_1161787257_0]
 	jmp __blue_2780306156_0
+
+global _start
 
 ; : _start ( rsp -- noret )
 
