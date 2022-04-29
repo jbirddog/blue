@@ -129,6 +129,61 @@ __blue_1361572173_0:
 	call __blue_3190202204_1
 	jmp __blue_1614081290_0
 
+section .bss
+
+; 1 resq argc
+
+__blue_2366279180_0: resq 1
+; 1 resq argv
+
+__blue_2584388227_0: resq 1
+; 1 resq envp
+
+__blue_2355496332_0: resq 1
+;  TODO needed because we can't currently `@ var !` and retain operation size
+
+section .text
+
+; : argc! ( rcx -- )
+
+__blue_882757847_0:
+	mov qword [__blue_2366279180_0], rcx
+	ret
+
+; : envp-start ( base:rax argc:rcx -- start:rax )
+
+__blue_3309500289_0:
+	shl rcx, 3
+	add rcx, 8
+	add rax, rcx
+	ret
+
+;  TODO 'arg@ is work around since outputs don't flow
+
+; : nth-arg ( argv:rax nth:rcx -- arg:rax )
+
+__blue_3382297396_0:
+	shl rcx, 3
+	add rax, rcx
+	mov rax, qword [rax]
+
+; : 'arg@ ( arg:rax -- arg:rax )
+
+__blue_3248877538_0:
+	ret
+
+; : brt0 ( rax -- )
+
+__blue_2486814297_0:
+	mov rcx, qword [rax]
+	call __blue_882757847_0
+	add rax, 8
+	mov qword [__blue_2584388227_0], rax
+	mov rcx, [__blue_2366279180_0]
+	call __blue_3309500289_0
+	mov qword [__blue_2355496332_0], rax
+	ret
+
 ; : find0 ( start:rsi -- end:rsi )
 
 __blue_1805780446_0:
@@ -481,65 +536,6 @@ __blue_1223589535_7:
 	mov edi, __blue_855163316_7
 	jmp __blue_2883839448_2
 
-;  TODO move to brt0.5 or similar
-
-section .bss
-
-; 1 resq argc
-
-__blue_2366279180_0: resq 1
-; 1 resq argv
-
-__blue_2584388227_0: resq 1
-; 1 resq envp
-
-__blue_2355496332_0: resq 1
-;  TODO needed because we can't currently `@ var !` and retain operation size
-
-section .text
-
-; : argc! ( rcx -- )
-
-__blue_882757847_0:
-	mov qword [__blue_2366279180_0], rcx
-	ret
-
-; : envp-start ( rax args:rcx -- start:rax )
-
-__blue_3309500289_0:
-	shl rcx, 3
-	add rcx, 8
-	add rax, rcx
-	ret
-
-;  TODO 'arg@ is work around since outputs don't flow
-
-; : nth-arg ( argv:rsi nth:rdi -- rdx )
-
-__blue_3382297396_0:
-	shl rdi, 3
-	add rsi, rdi
-	mov rdx, qword [rsi]
-
-; : 'arg@ ( arg:rdx -- rdx )
-
-__blue_3248877538_0:
-	ret
-
-;  TODO rax clobber is temporary
-
-; : brt0.5 ( rax -- | rax )
-
-__blue_2520067616_0:
-	mov rcx, qword [rax]
-	call __blue_882757847_0
-	add rax, 8
-	mov qword [__blue_2584388227_0], rax
-	mov rcx, [__blue_2366279180_0]
-	call __blue_3309500289_0
-	mov qword [__blue_2355496332_0], rax
-	ret
-
 section .bss
 
 ; 1 resq cmd-name
@@ -548,23 +544,9 @@ __blue_1161787257_0: resq 1
 ; 1 resq blue-file
 
 __blue_680506038_0: resq 1
-;  TODO these are needed because we can't currently `@ var !` and retain operation size
+;  TODO support operation size for cmp so caller doesn't have to pass in argc
 
 section .text
-
-; : cmd-name! ( rcx -- )
-
-__blue_1525211016_0:
-	mov qword [__blue_1161787257_0], rcx
-	ret
-
-; : blue-file! ( rcx -- )
-
-__blue_1899373493_0:
-	mov qword [__blue_680506038_0], rcx
-	ret
-
-;  TODO support operation size for cmp so caller doesn't have to pass in argc
 
 ; : check-argc ( rcx -- )
 
@@ -576,23 +558,20 @@ __blue_3569987719_0:
 __blue_2157056155_3:
 	ret
 
-; : parse-args ( rax -- )
+; : parse-args ( -- )
 
 __blue_4217555750_0:
-	call __blue_2520067616_0
-
-;  TODO move out of here
 	mov rcx, [__blue_2366279180_0]
 	call __blue_3569987719_0
-	xor rdi, rdi
-	inc rdi
-	mov rsi, [__blue_2584388227_0]
+	xor rcx, rcx
+	inc rcx
+	mov rax, [__blue_2584388227_0]
 	call __blue_3382297396_0
-	mov qword [__blue_1161787257_0], rdx
-	mov rdi, 2
-	mov rsi, [__blue_2584388227_0]
+	mov qword [__blue_1161787257_0], rax
+	mov rcx, 2
+	mov rax, [__blue_2584388227_0]
 	call __blue_3382297396_0
-	mov qword [__blue_680506038_0], rdx
+	mov qword [__blue_680506038_0], rax
 	ret
 
 section .bss
@@ -1015,6 +994,7 @@ global _start
 
 _start:
 	mov rax, rsp
+	call __blue_2486814297_0
 	call __blue_4217555750_0
 	call __blue_2670689297_0
 	call __blue_747073145_0

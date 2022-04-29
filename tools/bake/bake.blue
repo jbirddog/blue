@@ -2,6 +2,7 @@ import linux/base
 import linux/x8664/syscalls
 import linux/x8664/error_handling
 import linux/x8664/convenience
+import linux/x8664/brt0
 import x8664/strings
 import convenience
 import args
@@ -13,6 +14,7 @@ import command_table
 global _start
 
 : _start ( rsp -- noret ) 
+	brt0
 	parse-args
 	make-build-dirs 
 	build-output-file-names
