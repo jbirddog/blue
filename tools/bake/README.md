@@ -1,6 +1,6 @@
 # Bake
 
-`bake` is a simplistic and opinionated build tool for Blue programs. Running `bake` with no parameters or invalid parameters will print its `usage`:
+`bake` is a simplistic and opinionated build tool for Blue programs developed on Linux/x86-64. Running `bake` with no parameters or invalid parameters will print its `usage`:
 
 ```
 $ bake
@@ -48,10 +48,18 @@ Hello world!
 
 `bake` will first compile the Blue file then execute it. Extra command line arguments are passed on to the executable (note: currently only one argument is supported, see TODO.md)
 
+## Building
+
+To build `bake`, either run `./bootstrap.sh` in this directory, or `./build.sh` from the root of this repo. `bake` has the same dependencies as the Blue compiler itself. For more information see [INSTALL.md](../../INSTALL.md).
+
+Once built using one of the methods above, `bake` will reside in `.build/bin` in this directory. Either add this location to your path or copy `bake` to a location already in your path.
+
 ## Questions
 
 Q: Couldn't this just be a shell script/Makefile?
+
 A: Naturally, yes. This was more of an exercise while developing the Blue language and compiler, during which several issues were resolved - most of which only happened after moving beyond Hello World type programs.
 
 Q: Is this used?
+
 A: Yes, to build all language examples, the tutorial and `bake` itself.
