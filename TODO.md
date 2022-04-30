@@ -23,6 +23,9 @@
 1. x8664 words can have default registers - ( a -- b ) 8 add ; a/b = eax
 1. x8664 words can have required registers 4 shl needs ecx
 1. need to support var1 @ var2 !
+1. Rosetta Code examples
+   1. Strip whitespace from a string/Top and tail
+   1. Environment variable
 
 ### optimizations
 
@@ -41,14 +44,7 @@
 
 ### f7 (current)
 
-1. Build process overhaul
-   1. tedious to add new files/builds
-   1. blue.sh - run examples
-   1. blue.sh - stop the process if a step errors out
-1. Rosetta Code examples
-   1. Strip whitespace from a string/Top and tail
-   1. Environment variable
-1. Update README/tutorial with new assembly
+bake, language and compiler improvements, v0.0.2
 
 ### f6
 
