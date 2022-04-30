@@ -1,6 +1,6 @@
 # Bake
 
-`bake` is a simplistic and opinionated build tool for Blue programs developed on Linux/x86-64. Running `bake` with no parameters or invalid parameters will print its `usage`:
+`bake` is a simplistic and opinionated tool for building and running Blue programs on Linux/x86-64. Running `bake` with no parameters or invalid parameters will print its `usage`:
 
 ```
 $ bake
