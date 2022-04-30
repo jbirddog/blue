@@ -11,7 +11,6 @@ func DefaultDictionary() *Dictionary {
 
 	d.appendWords([]*Word{
 		NewCallGoWord("import", KernelImport),
-		NewCallGoWord("import", KernelImport),
 		NewCallGoWord("extern", KernelExtern),
 		NewCallGoWord("section", KernelSection),
 		NewCallGoWord(":", KernelColon).Immediate(),
@@ -34,8 +33,12 @@ func DefaultDictionary() *Dictionary {
 		NewInlineWord("dup", &DupInstr{}),
 		NewInlineWord("swap", &SwapInstr{}),
 		NewCallGoWord("'", KernelTick).Immediate(),
-		NewCallGoWord("xl", KernelXl).Immediate(),
+		NewCallGoWord("xe", KernelXe).Immediate(),
 		NewCallGoWord("xne", KernelXne).Immediate(),
+		NewCallGoWord("xl", KernelXl).Immediate(),
+		NewCallGoWord("xz", KernelXz).Immediate(),
+		NewCallGoWord("xnz", KernelXnz).Immediate(),
+		NewCallGoWord("xg", KernelXg).Immediate(),
 		NewCallGoWord("loople", KernelLoople).Immediate(),
 		NewCallGoWord("const", KernelConst),
 		NewCallGoWord("hide", KernelHide),
@@ -44,6 +47,7 @@ func DefaultDictionary() *Dictionary {
 		NewInlineWord("rot", &RotInstr{}),
 		NewCallGoWord(`s"`, KernelSQuote).Immediate(),
 		NewCallGoWord(`c"`, KernelCQuote).Immediate(),
+		NewInlineWord("call", &CallInstr{}),
 	})
 
 	return d

@@ -1,0 +1,24 @@
+1 resq env-file
+1 resq env-arg0
+1 resq exec-file
+
+\ TODO blocked by operation size issue
+\ 4 resq exec-argv 
+
+1 resq exec-arg0
+1 resq exec-arg1
+1 resq exec-arg2
+1 resq exec-arg3
+1 resq exec-arg4
+
+\ TODO uses /usr/bin/env as a crutch right now
+: execvpe ( -- noret )
+	c" env" env-arg0 !
+	c" /usr/bin/env" env-arg0 envp @ execve ;
+
+\ TODO these are here to work around the operation size issue
+: set-args ( arg1:rsi arg2:rax arg3:rcx -- ) exec-arg3 ! exec-arg2 ! exec-arg1 ! ;
+: clear-args ( -- ) 0 0 0 set-args ;
+: prep-execve ( file:rsi arg0:rax -- ) exec-arg0 ! exec-file ! clear-args ;
+
+: spawn ( -- ) fork dup 0 cmp ' execvpe xe waitpid ;

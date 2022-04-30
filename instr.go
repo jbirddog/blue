@@ -54,6 +54,15 @@ func (i *JmpWordInstr) Run(env *Environment, context *RunContext) {
 	env.AppendAsmInstr(&AsmUnaryInstr{Mnemonic: "jmp", Op: i.Word.AsmLabel})
 }
 
+type CallInstr struct{}
+
+func (i *CallInstr) Run(env *Environment, context *RunContext) {
+	target := context.PopInput()
+
+	// TODO AsmCallInstr -> AsmUnaryInstr
+	env.AppendAsmInstr(&AsmCallInstr{Label: target})
+}
+
 type CallWordInstr struct {
 	Word *Word
 }
@@ -184,7 +193,12 @@ type SetInstr struct{}
 
 func (i *SetInstr) Run(env *Environment, context *RunContext) {
 	op2, op1 := context.Pop2Inputs()
-	op1 = fmt.Sprintf("[%s]", op1)
+
+	if size, found := env.RefSizes[op1]; found {
+		op1 = fmt.Sprintf("%s [%s]", size, op1)
+	} else {
+		op1 = fmt.Sprintf("[%s]", op1)
+	}
 
 	env.AppendAsmInstr(&AsmBinaryInstr{Mnemonic: "mov", Op1: op1, Op2: op2})
 }
@@ -355,6 +369,15 @@ func flowWord(word *Word, env *Environment, context *RunContext) {
 			if op1RegIndex, found := registers[op1]; found {
 				if op1RegIndex == op2RegIndex {
 					continue
+				}
+				op1RegSize := registerSize[op1]
+				op2RegSize := registerSize[op2]
+
+				// TODO will need some more work to support all  all combos
+				if op1RegSize == "dword" && op2RegSize == "qword" {
+					op2 = reg32Names[op2RegIndex]
+				} else if op1RegSize == "qword" && op2RegSize == "dword" {
+					op1 = reg32Names[op1RegIndex]
 				}
 			}
 		}

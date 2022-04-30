@@ -8,6 +8,9 @@ command -v "${BAKE}" > /dev/null 2>&1 || {
 	cd -
 }
 
-$BAKE build tutorial1.blue
-$BAKE build tutorial2.blue
-$BAKE build tutorial3.blue
+$BAKE build echo.blue
+$BAKE build fib_test.blue
+
+cd rosettacode
+./build.sh
+cd ..

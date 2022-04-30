@@ -1,0 +1,18 @@
+1 resq argc
+1 resq argv
+1 resq envp
+
+\ TODO needed because we can't currently `@ var !` and retain operation size
+: argc! ( rcx -- ) argc ! ;
+
+: envp-start ( base:rax argc:rcx -- start:rax ) 3 shl 8 add add ;
+
+\ TODO 'arg@ is work around since outputs don't flow
+: nth-arg ( argv:rax nth:rcx -- arg:rax ) 3 shl add @
+: 'arg@ ( arg:rax -- arg:rax ) ;
+
+: brt0 ( rax -- ) 
+	dup @ argc!
+	dup 8 add argv !
+	argc @ envp-start envp !
+;

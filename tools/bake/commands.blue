@@ -1,0 +1,38 @@
+: generate-assembly ( -- ) 
+	c" blue" blue-file @ prep-execve 
+	spawn 
+;
+
+: compile-assembly ( -- ) 
+	c" nasm" assembly-file prep-execve
+	c" -f" exec-arg1 !
+	c" elf64" exec-arg2 !
+	c" -o" exec-arg3 !
+	object-file exec-arg4 !
+	spawn
+;
+
+: link-binary ( -- ) 
+	c" ld" object-file prep-execve
+	c" -o" exec-arg1 !
+	binary-file exec-arg2 !
+	spawn
+;
+
+\ TODO check wait-status after each call
+: build ( -- ) 
+	generate-assembly
+	compile-assembly
+	link-binary 
+;
+
+: exec-arg0! ( rax -- ) exec-arg0 ! ;
+
+\ TODO needs to forward args
+: run ( -- noret ) 
+	build
+	\ binary-file exec-file !
+	\ cmd-args exec-arg0 ! 
+	binary-file cmd-args @ prep-execve
+	execvpe
+;

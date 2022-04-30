@@ -1,0 +1,54 @@
+global _start
+
+: syscall ( num:eax -- result:eax | rcx ) syscall ;
+
+: exit ( status:edi -- noret ) 60 syscall ;
+: bye ( -- noret ) 0 exit ;
+: die ( err:eax -- noret ) neg exit ;
+
+: unwrap ( result:eax -- value:eax ) dup 0 cmp ' die xl ;
+: ordie ( result -- ) unwrap drop ;
+
+1 const stdout
+
+: write ( buf:esi len:edx fd:edi -- ) 1 syscall ordie ;
+: type ( buf len -- ) stdout write ;
+
+: newline ( -- ) s" \n" type ;
+
+: find0 ( start:rsi -- end:rsi ) lodsb 0 cmp latest xne ; 
+: cstrlen ( str:rdi -- len:rsi ) dup find0 swap sub dec ;
+: cstr>str ( cstr:rdx -- str:rsi len:rdx ) dup cstrlen xchg ;
+
+: print ( var -- ) cstr>str type newline ;
+: bob ( -- ) s" bob" type newline ;
+
+1 resq envp
+1 resq envp-entry
+
+: store-envp ( rax -- ) 24 add envp ! ;
+: set-envp-entry ( rax -- ) envp-entry ! ;
+: reset-envp-entry ( -- ) envp @ set-envp-entry ;
+: advance ( rax -- rax ) 8 add ;
+: advance-envp-entry ( -- ) envp-entry @ advance set-envp-entry ; 
+
+\ TODO need @@ to avoid this double decl
+: value-for-name? ( namelen:rcx name:rsi entry:rdx -- value:rdi unmatched:rcx ) @
+: 'value-for-name? ( namelen:rcx name:rsi entry:rdi -- value:rdi unmatched:rcx )
+	\ TODO this will match short, like HO will match E=value for HOME=value
+	cmpsb rot dup repe swap inc swap 
+;
+
+: getenv ( name:r8 len:r9 -- value:rdi ) swap reset-envp-entry
+: check-entry ( len:r9 name:r8 -- value:rdi ) 
+	envp-entry @ value-for-name? 
+	0 cmp ' advance-envp-entry xne latest xne
+;
+
+: _start ( rsp -- noret ) store-envp 
+	s" HOME" getenv print 
+	s" PATH" getenv print 
+	s" SESSION_MANAGER" getenv print 
+	s" SHELL" getenv print 
+	bye 
+;

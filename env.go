@@ -59,6 +59,7 @@ type Environment struct {
 	Labels               map[string]int
 	Section              string
 	UserSpecifiedSection bool
+	RefSizes             map[string]string
 }
 
 func DefaultEnvironment() *Environment {
@@ -66,6 +67,7 @@ func DefaultEnvironment() *Environment {
 		Dictionary: DefaultDictionary(),
 		Globals:    map[string]bool{},
 		Labels:     map[string]int{},
+		RefSizes:   map[string]string{},
 	}
 }
 
@@ -90,6 +92,22 @@ func ParseFileInNewEnvironment(filename string) *Environment {
 	env.Validate()
 
 	return env
+}
+
+func (e *Environment) ParseFile(filename string) {
+	bytes, err := ioutil.ReadFile(filename)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	currentInputBuf := e.InputBuf
+	e.InputBuf = string(bytes)
+
+	for e.ParseNextWord() {
+	}
+
+	e.Validate()
+	e.InputBuf = currentInputBuf
 }
 
 func (e *Environment) Merge(e2 *Environment) {
@@ -139,6 +157,19 @@ func (e *Environment) AppendWord(word *Word) {
 
 	word.AsmLabel = label
 	e.Dictionary.Append(word)
+}
+
+func (e *Environment) AppendRefSize(label string, size string) {
+	switch size {
+	case "b":
+		e.RefSizes[label] = "byte"
+	case "d":
+		e.RefSizes[label] = "dword"
+	case "q":
+		e.RefSizes[label] = "qword"
+	default:
+		log.Fatal("Unexpected size: ", size)
+	}
 }
 
 func (e *Environment) ValidateRegisterRefs(refs []*RegisterRef) {

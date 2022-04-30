@@ -1,5 +1,5 @@
-import examples/rosettacode/fibonacci
-import examples/linux_x86-64
+import rosettacode/fibonacci
+import linux_x86-64
 
 global _start
 

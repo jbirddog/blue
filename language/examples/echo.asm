@@ -13,21 +13,21 @@ __blue_4057121178_0:
 
 ; : die ( err:eax -- noret )
 
-__blue_3630339793_0:
+die:
 	neg eax
 	mov edi, eax
 
 ; : exit ( status:edi -- noret )
 
-__blue_3454868101_0:
+exit:
 	mov eax, 60
 	call __blue_4057121178_0
 
 ; : bye ( -- noret )
 
-__blue_1911791459_0:
+bye:
 	xor edi, edi
-	jmp __blue_3454868101_0
+	jmp exit
 
 global _start
 
@@ -41,7 +41,7 @@ __blue_1472650507_0:
 __blue_4055961022_0:
 	cmp eax, 0
 	jge __blue_2157056155_0
-	call __blue_3630339793_0
+	call die
 
 __blue_2157056155_0:
 	ret
@@ -94,4 +94,4 @@ _start:
 	inc edi
 	mov edx, eax
 	call __blue_3190202204_1
-	jmp __blue_1911791459_0
+	jmp bye

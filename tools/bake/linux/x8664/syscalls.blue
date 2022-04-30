@@ -1,0 +1,10 @@
+: syscall ( num:eax -- result:eax ) syscall ;
+
+: exit ( status:edi -- noret ) exit syscall ;
+
+: fork ( -- result:eax ) fork syscall ;
+: execve ( filename:rdi argv:rsi env:rdx -- result:eax ) execve syscall ;
+: wait4 ( pid:edi status:rsi options:rdx usage:r10 -- result:eax ) wait4 syscall ;  
+
+: write ( buf:esi len:edx fd:edi -- result:eax ) write syscall ;
+: mkdir ( path:edi mode:esi -- result:eax ) mkdir syscall ;

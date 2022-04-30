@@ -111,9 +111,7 @@ func KernelImport(env *Environment) {
 	}
 
 	file = fmt.Sprintf("%s.blue", file)
-	importEnv := ParseFileInNewEnvironment(file)
-
-	env.Merge(importEnv)
+	env.ParseFile(file)
 }
 
 func res(env *Environment, size string) {
@@ -138,6 +136,8 @@ func res(env *Environment, size string) {
 		&CommentInstr{Comment: fmt.Sprintf("%d res%s %s", count, size, name)},
 		&ResInstr{Name: word.AsmLabel, Size: size, Count: count},
 	})
+
+	env.AppendRefSize(word.AsmLabel, size)
 
 	instr := &RefWordInstr{Word: word}
 	word.AppendInstr(instr)
@@ -251,12 +251,28 @@ func condCall(env *Environment, jmp string) {
 	env.AppendInstr(condCall)
 }
 
-func KernelXl(env *Environment) {
-	condCall(env, "jge")
+func KernelXe(env *Environment) {
+	condCall(env, "jne")
 }
 
 func KernelXne(env *Environment) {
 	condCall(env, "je")
+}
+
+func KernelXl(env *Environment) {
+	condCall(env, "jge")
+}
+
+func KernelXz(env *Environment) {
+	condCall(env, "jnz")
+}
+
+func KernelXnz(env *Environment) {
+	condCall(env, "jz")
+}
+
+func KernelXg(env *Environment) {
+	condCall(env, "jle")
 }
 
 func condLoop(env *Environment, jmp string) {

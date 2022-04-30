@@ -102,7 +102,7 @@ section .text
 __blue_3225053210_0:
 	xor esi, esi
 	call __blue_3546203337_0
-	mov [__blue_1763898183_0], eax
+	mov dword [__blue_1763898183_0], eax
 	ret
 
 ; : read-file-size ( -- )

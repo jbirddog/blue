@@ -8,6 +8,7 @@
 */bin
 */obj
 *.build
+*.bootstrap
 blue
 !language/blue
 language/examples/rosettacode/output.txt

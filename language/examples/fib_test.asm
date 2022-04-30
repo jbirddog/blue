@@ -33,21 +33,21 @@ __blue_4057121178_0:
 
 ; : die ( err:eax -- noret )
 
-__blue_3630339793_0:
+die:
 	neg eax
 	mov edi, eax
 
 ; : exit ( status:edi -- noret )
 
-__blue_3454868101_0:
+exit:
 	mov eax, 60
 	call __blue_4057121178_0
 
 ; : bye ( -- noret )
 
-__blue_1911791459_0:
+bye:
 	xor edi, edi
-	jmp __blue_3454868101_0
+	jmp exit
 
 global _start
 
@@ -58,7 +58,7 @@ global _start
 __blue_1516647173_0:
 	xor edi, edi
 	inc edi
-	jmp __blue_3454868101_0
+	jmp exit
 
 ; : test= ( actual:edi expected:eax -- )
 
@@ -91,4 +91,4 @@ _start:
 	call __blue_3169096246_0
 	mov eax, 1346269
 	call __blue_2636330760_0
-	jmp __blue_1911791459_0
+	jmp bye
