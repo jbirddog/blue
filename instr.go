@@ -360,6 +360,32 @@ func clobberGuardInstrs(context *RunContext) ([]AsmInstr, []AsmInstr) {
 	return pushes, pops
 }
 
+func normalizeRefs(a string, b string) (bool, string, string) {
+	if a == b {
+		return true, a, b
+	}
+
+	if aIndex, found := registers[a]; found {
+		if bIndex, found := registers[b]; found {
+			if aIndex == bIndex {
+				return true, a, b
+			}
+
+			aSize := registerSize[a]
+			bSize := registerSize[b]
+
+			// TODO will need some more work to support all  all combos
+			if aSize == "dword" && bSize == "qword" {
+				return false, a, reg32Names[bIndex]
+			} else if aSize == "qword" && bSize == "dword" {
+				return false, reg32Names[aIndex], b
+			}
+		}
+	}
+
+	return false, a, b
+}
+
 func flowWordInputs(word *Word, env *Environment, context *RunContext) {
 	expectedInputs := word.InputRegisters()
 
@@ -369,28 +395,10 @@ func flowWordInputs(word *Word, env *Environment, context *RunContext) {
 	context.Inputs = context.Inputs[:have-need]
 
 	for i := need - 1; i >= 0; i-- {
-		op1 := expectedInputs[i]
-		op2 := neededInputs[i]
+		same, op1, op2 := normalizeRefs(expectedInputs[i], neededInputs[i])
 
-		if op1 == op2 {
+		if same {
 			continue
-		}
-
-		if op2RegIndex, found := registers[op2]; found {
-			if op1RegIndex, found := registers[op1]; found {
-				if op1RegIndex == op2RegIndex {
-					continue
-				}
-				op1RegSize := registerSize[op1]
-				op2RegSize := registerSize[op2]
-
-				// TODO will need some more work to support all  all combos
-				if op1RegSize == "dword" && op2RegSize == "qword" {
-					op2 = reg32Names[op2RegIndex]
-				} else if op1RegSize == "qword" && op2RegSize == "dword" {
-					op1 = reg32Names[op1RegIndex]
-				}
-			}
 		}
 
 		flowInstrs := PeepholeAsmBinaryInstr(&AsmBinaryInstr{
@@ -430,7 +438,9 @@ func flowWordOutputs(word *Word, env *Environment, context *RunContext) {
 		op1 := expectedOutputs[i]
 		op2 := neededInputs[i]
 
-		if op1 == op2 {
+		same, op1, op2 := normalizeRefs(expectedOutputs[i], neededInputs[i])
+
+		if same {
 			continue
 		}
 
