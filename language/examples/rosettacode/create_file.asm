@@ -47,21 +47,24 @@ __blue_1614081290_0:
 __blue_3546203337_0:
 	mov eax, 2
 	call __blue_4057121178_0
-	jmp __blue_4055961022_0
+	call __blue_4055961022_0
+	ret
 
 ; : close ( fd:edi -- )
 
 __blue_667630371_0:
 	mov eax, 3
 	call __blue_4057121178_0
-	jmp __blue_1614081290_0
+	call __blue_1614081290_0
+	ret
 
 ; : mkdir ( pathname:edi mode:esi -- )
 
 __blue_2883839448_0:
 	mov eax, 83
 	call __blue_4057121178_0
-	jmp __blue_1614081290_0
+	call __blue_1614081290_0
+	ret
 
 ; : create-file ( pathname -- )
 
@@ -70,13 +73,15 @@ __blue_3101971046_0:
 	mov esi, 577
 	call __blue_3546203337_0
 	mov edi, eax
-	jmp __blue_667630371_0
+	call __blue_667630371_0
+	ret
 
 ; : make-directory ( pathname -- )
 
 __blue_2358895277_0:
 	mov esi, 488
-	jmp __blue_2883839448_0
+	call __blue_2883839448_0
+	ret
 
 ; : create-output-file ( -- )
 
@@ -98,7 +103,8 @@ db 116
 db 0
 __blue_1223589535_0:
 	mov edi, __blue_855163316_0
-	jmp __blue_3101971046_0
+	call __blue_3101971046_0
+	ret
 
 ; : make-docs-directory ( -- )
 
@@ -114,7 +120,8 @@ db 115
 db 0
 __blue_1223589535_1:
 	mov edi, __blue_855163316_1
-	jmp __blue_2358895277_0
+	call __blue_2358895277_0
+	ret
 
 ; : _start ( -- noret )
 

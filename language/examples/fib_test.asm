@@ -17,7 +17,8 @@ __blue_1147400058_0:
 
 __blue_2347908769_0:
 	mov ecx, 11
-	jmp __blue_3169096246_0
+	call __blue_3169096246_0
+	ret
 
 global exit
 
@@ -59,6 +60,7 @@ __blue_1516647173_0:
 	xor edi, edi
 	inc edi
 	jmp exit
+	ret
 
 ; : test= ( actual:edi expected:eax -- )
 

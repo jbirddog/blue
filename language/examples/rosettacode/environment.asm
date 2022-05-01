@@ -48,14 +48,16 @@ __blue_3190202204_0:
 	xor eax, eax
 	inc eax
 	call __blue_4057121178_0
-	jmp __blue_1614081290_0
+	call __blue_1614081290_0
+	ret
 
 ; : type ( buf len -- )
 
 __blue_1361572173_0:
 	xor edi, edi
 	inc edi
-	jmp __blue_3190202204_0
+	call __blue_3190202204_0
+	ret
 
 ; : newline ( -- )
 
@@ -70,7 +72,8 @@ __blue_1223589535_0:
 	xor edx, edx
 	inc edx
 	mov esi, __blue_855163316_0
-	jmp __blue_1361572173_0
+	call __blue_1361572173_0
+	ret
 
 ; : find0 ( start:rsi -- end:rsi )
 
@@ -105,7 +108,8 @@ __blue_3207375596_0:
 __blue_372738696_0:
 	call __blue_3207375596_0
 	call __blue_1361572173_0
-	jmp __blue_4281549323_0
+	call __blue_4281549323_0
+	ret
 
 ; : bob ( -- )
 
@@ -122,7 +126,8 @@ __blue_1223589535_1:
 	mov edx, 3
 	mov esi, __blue_855163316_1
 	call __blue_1361572173_0
-	jmp __blue_4281549323_0
+	call __blue_4281549323_0
+	ret
 
 section .bss
 
@@ -151,7 +156,8 @@ __blue_651937478_0:
 
 __blue_3243367623_0:
 	mov rax, [__blue_2355496332_0]
-	jmp __blue_651937478_0
+	call __blue_651937478_0
+	ret
 
 ; : advance ( rax -- rax )
 
@@ -164,7 +170,8 @@ __blue_667710333_0:
 __blue_4288035396_0:
 	mov rax, [__blue_2301798669_0]
 	call __blue_667710333_0
-	jmp __blue_651937478_0
+	call __blue_651937478_0
+	ret
 
 ;  TODO need @@ to avoid this double decl
 

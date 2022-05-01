@@ -32,7 +32,8 @@ __blue_3190202204_0:
 __blue_372738696_0:
 	xor edi, edi
 	inc edi
-	jmp __blue_3190202204_0
+	call __blue_3190202204_0
+	ret
 
 ; : clear-screen ( -- )
 
@@ -52,7 +53,8 @@ db 0
 __blue_1223589535_0:
 	mov edx, 7
 	mov esi, __blue_855163316_0
-	jmp __blue_372738696_0
+	call __blue_372738696_0
+	ret
 
 ; : _start ( -- noret )
 
