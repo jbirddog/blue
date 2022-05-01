@@ -50,13 +50,14 @@ func KernelLatest(env *Environment) {
 func KernelSemi(env *Environment) {
 	latest := env.Dictionary.Latest
 
-	latest.AppendInstr(&FlowWordInstr{
-		Word:      latest,
-		Direction: FlowDirection_Output,
-	})
-
 	if !latest.IsNoReturn() {
-		latest.AppendInstr(&X8664Instr{Mnemonic: "ret"})
+		latest.AppendInstrs([]Instr{
+			&FlowWordInstr{
+				Word:      latest,
+				Direction: FlowDirection_Output,
+			},
+			&X8664Instr{Mnemonic: "ret"},
+		})
 	}
 
 	env.Compiling = false

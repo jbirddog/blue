@@ -415,52 +415,54 @@ func flowWordOutputs(word *Word, env *Environment, context *RunContext) {
 	have := len(context.Inputs)
 
 	if have > need {
-		log.Printf("At the end of Word %s (%s) there are %d items on the 'stack' but %d are output. This will be fatal soon.", word.Name, word.AsmLabel, have, need)
+		log.Printf("WARNING: At the end of Word %s (%s) there are %d items on the 'stack' but %d are output. This will be fatal soon.", word.Name, word.AsmLabel, have, need)
 		have = need
-	} else if need < have {
+	} /*else if need < have {
 		log.Printf("At the end of Word %s (%s) there are %d items on the 'stack' but %d are output. This will be fatal soon.", word.Name, word.AsmLabel, have, need)
 		need = have
-	}
+	}*/
 
-	neededOutputs := context.Outputs[have-need:]
-	context.Inputs = context.Inputs[:have-need]
+	/*
+		neededOutputs := context.Outputs[have-need:]
+		context.Inputs = context.Inputs[:have-need]
 
-	for i := need - 1; i >= 0; i-- {
-		op1 := expectedOutputs[i]
-		op2 := neededOutputs[i]
+		for i := need - 1; i >= 0; i-- {
+			op1 := expectedOutputs[i]
+			op2 := neededOutputs[i]
 
-		if op1 == op2 {
-			continue
-		}
+			if op1 == op2 {
+				continue
+			}
 
-		if op2RegIndex, found := registers[op2]; found {
-			if op1RegIndex, found := registers[op1]; found {
-				if op1RegIndex == op2RegIndex {
-					continue
-				}
-				op1RegSize := registerSize[op1]
-				op2RegSize := registerSize[op2]
+			if op2RegIndex, found := registers[op2]; found {
+				if op1RegIndex, found := registers[op1]; found {
+					if op1RegIndex == op2RegIndex {
+						continue
+					}
+					op1RegSize := registerSize[op1]
+					op2RegSize := registerSize[op2]
 
-				// TODO will need some more work to support all  all combos
-				if op1RegSize == "dword" && op2RegSize == "qword" {
-					op2 = reg32Names[op2RegIndex]
-				} else if op1RegSize == "qword" && op2RegSize == "dword" {
-					op1 = reg32Names[op1RegIndex]
+					// TODO will need some more work to support all  all combos
+					if op1RegSize == "dword" && op2RegSize == "qword" {
+						op2 = reg32Names[op2RegIndex]
+					} else if op1RegSize == "qword" && op2RegSize == "dword" {
+						op1 = reg32Names[op1RegIndex]
+					}
 				}
 			}
+
+			flowInstrs := PeepholeAsmBinaryInstr(&AsmBinaryInstr{
+				Mnemonic: "mov",
+				Op1:      op1,
+				Op2:      op2,
+			})
+
+			env.AppendAsmInstrs(flowInstrs)
 		}
 
-		flowInstrs := PeepholeAsmBinaryInstr(&AsmBinaryInstr{
-			Mnemonic: "mov",
-			Op1:      op1,
-			Op2:      op2,
-		})
+		buildClobberGuards(word, context)
 
-		env.AppendAsmInstrs(flowInstrs)
-	}
-
-	buildClobberGuards(word, context)
-
-	// wordOutputs := word.OutputRegisters()
-	// context.Inputs = append(context.Inputs, wordOutputs...)
+		// wordOutputs := word.OutputRegisters()
+		// context.Inputs = append(context.Inputs, wordOutputs...)
+	*/
 }

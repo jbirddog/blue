@@ -4,7 +4,7 @@ go test
 go install .
 
 cd tools/bake
-#./bootstrap.sh
+./bootstrap.sh
 cd ../../
 
 cd language
