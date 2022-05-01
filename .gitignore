@@ -9,6 +9,7 @@
 */obj
 *.build
 *.bootstrap
+*.swp
 blue
 !language/blue
 language/examples/rosettacode/output.txt

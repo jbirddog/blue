@@ -414,13 +414,27 @@ func flowWordOutputs(word *Word, env *Environment, context *RunContext) {
 	need := len(expectedOutputs)
 	have := len(context.Inputs)
 
-	/*if have > need {
-		log.Printf("WARNING: At the end of Word %s (%s) there are %d items on the 'stack' but %d are output. This will be fatal soon.", word.Name, word.AsmLabel, have, need)
-		have = need
-	} else*/
-
 	if have < need {
-		log.Printf("At the end of Word %s (%s) %d items are marked as output but only %d exist on the 'stack'.", word.Name, word.AsmLabel, need, have)
+		log.Fatalf("At the end of Word %s (%s) %d items are marked as output but only %d exist on the 'stack'.", word.Name, word.AsmLabel, need, have)
+	}
+
+	// TODO warn on lingering stack items, might be here or handled as a separate check
+	// have = need
+
+	neededInputs := context.Inputs[have-need:]
+
+	// TODO need to port the next line and deal with fallout
+	// context.Inputs = context.Inputs[have-need:]
+
+	for i := need - 1; i >= 0; i-- {
+		op1 := expectedOutputs[i]
+		op2 := neededInputs[i]
+
+		if op1 == op2 {
+			continue
+		}
+
+		log.Printf("Word %s (%s) needs mov %s, %s\n", word.Name, word.AsmLabel, op1, op2)
 	}
 
 	/*
