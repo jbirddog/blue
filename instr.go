@@ -38,12 +38,22 @@ func (i *LiteralIntInstr) Run(env *Environment, context *RunContext) {
 	context.AppendInput(strconv.Itoa(i.I))
 }
 
+const (
+	FlowDirection_Input = iota
+	FlowDirection_Output
+)
+
 type FlowWordInstr struct {
-	Word *Word
+	Word      *Word
+	Direction int
 }
 
 func (i *FlowWordInstr) Run(env *Environment, context *RunContext) {
-	flowWord(i.Word, env, context)
+	if i.Direction == FlowDirection_Input {
+		flowWordInputs(i.Word, env, context)
+	} else {
+		flowWordOutputs(i.Word, env, context)
+	}
 }
 
 type JmpWordInstr struct {
@@ -349,7 +359,7 @@ func clobberGuardInstrs(context *RunContext) ([]AsmInstr, []AsmInstr) {
 	return pushes, pops
 }
 
-func flowWord(word *Word, env *Environment, context *RunContext) {
+func flowWordInputs(word *Word, env *Environment, context *RunContext) {
 	expectedInputs := word.InputRegisters()
 
 	need := len(expectedInputs)
@@ -395,4 +405,7 @@ func flowWord(word *Word, env *Environment, context *RunContext) {
 
 	wordOutputs := word.OutputRegisters()
 	context.Inputs = append(context.Inputs, wordOutputs...)
+}
+
+func flowWordOutputs(word *Word, env *Environment, context *RunContext) {
 }
