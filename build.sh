@@ -8,5 +8,5 @@ cd tools/bake
 cd ../../
 
 cd language
-#./build.sh
+./build.sh
 cd ../

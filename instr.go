@@ -414,13 +414,14 @@ func flowWordOutputs(word *Word, env *Environment, context *RunContext) {
 	need := len(expectedOutputs)
 	have := len(context.Inputs)
 
-	if have > need {
+	/*if have > need {
 		log.Printf("WARNING: At the end of Word %s (%s) there are %d items on the 'stack' but %d are output. This will be fatal soon.", word.Name, word.AsmLabel, have, need)
 		have = need
-	} /*else if need < have {
-		log.Printf("At the end of Word %s (%s) there are %d items on the 'stack' but %d are output. This will be fatal soon.", word.Name, word.AsmLabel, have, need)
-		need = have
-	}*/
+	} else*/
+
+	if have < need {
+		log.Printf("At the end of Word %s (%s) %d items are marked as output but only %d exist on the 'stack'.", word.Name, word.AsmLabel, need, have)
+	}
 
 	/*
 		neededOutputs := context.Outputs[have-need:]
