@@ -13,7 +13,6 @@ const (
 	rbp
 	rsi
 	rdi
-
 	r8
 	r9
 	r10
@@ -33,7 +32,6 @@ const (
 	ebp
 	esi
 	edi
-
 	r8d
 	r9d
 	r10d
@@ -44,25 +42,43 @@ const (
 	r15d
 )
 
-var reg32Names = []string{
-	"eax",
-	"ecx",
-	"edx",
-	"ebx",
-	"esp",
-	"ebp",
-	"esi",
-	"edi",
+const (
+	ax = iota
+	cx
+	dx
+	bx
+	sp
+	bp
+	si
+	di
+	r8w
+	r9w
+	r10w
+	r11w
+	r12w
+	r13w
+	r14w
+	r15w
+)
 
-	"r8d",
-	"r9d",
-	"r10d",
-	"r11d",
-	"r12d",
-	"r13d",
-	"r14d",
-	"r15d",
-}
+const (
+	al = iota
+	cl
+	dl
+	bl
+	spl
+	bpl
+	sil
+	dil
+	r8l
+	r9l
+	r10l
+	r11l
+	r12l
+	r13l
+	r14l
+	r15l
+)
 
 var reg64Names = []string{
 	"rax",
@@ -73,7 +89,6 @@ var reg64Names = []string{
 	"rbp",
 	"rsi",
 	"rdi",
-
 	"r8",
 	"r9",
 	"r10",
@@ -82,6 +97,63 @@ var reg64Names = []string{
 	"r13",
 	"r14",
 	"r15",
+}
+
+var reg32Names = []string{
+	"eax",
+	"ecx",
+	"edx",
+	"ebx",
+	"esp",
+	"ebp",
+	"esi",
+	"edi",
+	"r8d",
+	"r9d",
+	"r10d",
+	"r11d",
+	"r12d",
+	"r13d",
+	"r14d",
+	"r15d",
+}
+
+var reg16Names = []string{
+	"ax",
+	"cx",
+	"dx",
+	"bx",
+	"sp",
+	"bp",
+	"si",
+	"di",
+	"r8w",
+	"r9w",
+	"r10w",
+	"r11w",
+	"r12w",
+	"r13w",
+	"r14w",
+	"r15w",
+}
+
+var reg8Names = []string{
+	"al",
+	"cl",
+	"dl",
+	"bl",
+	"spl",
+	"bpl",
+	"sil",
+	"dil",
+	"r8l",
+	"r9l",
+	"r10l",
+	"r11l",
+	"r12l",
+	"r13l",
+	"r14l",
+	"r15l",
 }
 
 var registers = map[string]int{
@@ -93,7 +165,6 @@ var registers = map[string]int{
 	"rbp": rbp,
 	"rsi": rsi,
 	"rdi": rdi,
-
 	"r8":  r8,
 	"r9":  r9,
 	"r10": r10,
@@ -111,7 +182,6 @@ var registers = map[string]int{
 	"ebp": ebp,
 	"esi": esi,
 	"edi": edi,
-
 	"r8d":  r8d,
 	"r9d":  r9d,
 	"r10d": r10d,
@@ -120,6 +190,40 @@ var registers = map[string]int{
 	"r13d": r13d,
 	"r14d": r14d,
 	"r15d": r15d,
+
+	"ax": ax,
+	"cx": cx,
+	"dx": dx,
+	"bx": bx,
+	"sp": sp,
+	"bp": bp,
+	"si": si,
+	"di": di,
+	"r8w": r8w,
+	"r9w": r9w,
+	"r10w": r10w,
+	"r11w": r11w,
+	"r12w": r12w,
+	"r13w": r13w,
+	"r14w": r14w,
+	"r15w": r15w,
+
+	"al": al,
+	"cl": cl,
+	"dl": dl,
+	"bl": bl,
+	"spl": spl,
+	"bpl": bpl,
+	"sil": sil,
+	"dil": dil,
+	"r8l": r8l,
+	"r9l": r9l,
+	"r10l": r10l,
+	"r11l": r11l,
+	"r12l": r12l,
+	"r13l": r13l,
+	"r14l": r14l,
+	"r15l": r15l,
 }
 
 var registerSize = map[string]string{
@@ -131,7 +235,6 @@ var registerSize = map[string]string{
 	"rbp": "qword",
 	"rsi": "qword",
 	"rdi": "qword",
-
 	"r8":  "qword",
 	"r9":  "qword",
 	"r10": "qword",
@@ -149,7 +252,6 @@ var registerSize = map[string]string{
 	"ebp": "dword",
 	"esi": "dword",
 	"edi": "dword",
-
 	"r8d":  "dword",
 	"r9d":  "dword",
 	"r10d": "dword",
@@ -158,6 +260,40 @@ var registerSize = map[string]string{
 	"r13d": "dword",
 	"r14d": "dword",
 	"r15d": "dword",
+
+	"ax": "word",
+	"cx": "word",
+	"dx": "word",
+	"bx": "word",
+	"sp": "word",
+	"bp": "word",
+	"si": "word",
+	"di": "word",
+	"r8w": "word",
+	"r9w": "word",
+	"r10w": "word",
+	"r11w": "word",
+	"r12w": "word",
+	"r13w": "word",
+	"r14w": "word",
+	"r15w": "word",
+
+	"al": "byte",
+	"cl": "byte",
+	"dl": "byte",
+	"bl": "byte",
+	"spl": "byte",
+	"bpl": "byte",
+	"sil": "byte",
+	"dil": "byte",
+	"r8l": "byte",
+	"r9l": "byte",
+	"r10l": "byte",
+	"r11l": "byte",
+	"r12l": "byte",
+	"r13l": "byte",
+	"r14l": "byte",
+	"r15l": "byte",
 }
 
 type x8664Lowerer = func(string, *Environment, *RunContext) AsmInstr
