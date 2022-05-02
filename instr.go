@@ -427,17 +427,12 @@ func flowWordOutputs(word *Word, env *Environment, context *RunContext) {
 	}
 
 	// TODO warn on lingering stack items, might be here or handled as a separate check
-	// have = need
-
 	neededInputs := context.Inputs[have-need:]
 
-	// TODO need to port the next line and deal with fallout
-	// context.Inputs = context.Inputs[have-need:]
+	// TODO need this but causes slice exception
+	// context.Inputs = context.Inputs[:have-need]
 
 	for i := need - 1; i >= 0; i-- {
-		op1 := expectedOutputs[i]
-		op2 := neededInputs[i]
-
 		same, op1, op2 := normalizeRefs(expectedOutputs[i], neededInputs[i])
 
 		if same {
@@ -448,34 +443,6 @@ func flowWordOutputs(word *Word, env *Environment, context *RunContext) {
 	}
 
 	/*
-		neededOutputs := context.Outputs[have-need:]
-		context.Inputs = context.Inputs[:have-need]
-
-		for i := need - 1; i >= 0; i-- {
-			op1 := expectedOutputs[i]
-			op2 := neededOutputs[i]
-
-			if op1 == op2 {
-				continue
-			}
-
-			if op2RegIndex, found := registers[op2]; found {
-				if op1RegIndex, found := registers[op1]; found {
-					if op1RegIndex == op2RegIndex {
-						continue
-					}
-					op1RegSize := registerSize[op1]
-					op2RegSize := registerSize[op2]
-
-					// TODO will need some more work to support all  all combos
-					if op1RegSize == "dword" && op2RegSize == "qword" {
-						op2 = reg32Names[op2RegIndex]
-					} else if op1RegSize == "qword" && op2RegSize == "dword" {
-						op1 = reg32Names[op1RegIndex]
-					}
-				}
-			}
-
 			flowInstrs := PeepholeAsmBinaryInstr(&AsmBinaryInstr{
 				Mnemonic: "mov",
 				Op1:      op1,
