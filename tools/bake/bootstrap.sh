@@ -6,7 +6,7 @@ mkdir -p .bootstrap/bin
 mkdir -p .bootstrap/obj
 
 blue bake.blue
-nasm -f elf64 -o .bootstrap/obj/bake.o bake.asm
-ld -o .bootstrap/bin/bake .bootstrap/obj/bake.o
+nasm bake.asm -f elf64 -o .bootstrap/obj/bake.o
+ld .bootstrap/obj/bake.o -o .bootstrap/bin/bake
 
 .bootstrap/bin/bake build bake.blue

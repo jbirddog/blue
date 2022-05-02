@@ -87,7 +87,7 @@ func TestCanDeclResb(t *testing.T) {
 }
 
 func TestCanFindResbRef(t *testing.T) {
-	e := env("1024 resb buf : xyz ( -- ) buf loop ;")
+	e := env("1024 resb buf : xyz ( ecx -- ) buf loop ;")
 	asm := run(e)
 
 	loopInstr := asm[6].(*AsmUnaryInstr)

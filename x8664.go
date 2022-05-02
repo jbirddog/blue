@@ -224,8 +224,14 @@ func ops_2_x2(mnemonic string, env *Environment, context *RunContext) AsmInstr {
 	return &AsmBinaryInstr{Mnemonic: mnemonic, Op1: op1, Op2: op2}
 }
 
-func op_label(mnemonic string, env *Environment, context *RunContext) AsmInstr {
+func ops_loopx(mnemonic string, env *Environment, context *RunContext) AsmInstr {
 	op := context.PopInput()
+
+	ref := context.PopInput()
+	// TODO improve this check as the hacks mentioned below are addressed
+	if ref != "ecx" && ref != "rcx" {
+		log.Fatalf("%s expects rcx variant, got %s\n", mnemonic, ref)
+	}
 
 	return &AsmUnaryInstr{Mnemonic: mnemonic, Op: op}
 }
@@ -234,7 +240,7 @@ func ops_repx(mnemonic string, env *Environment, context *RunContext) AsmInstr {
 	ref := context.PopInput()
 	// TODO improve this check as the hacks mentioned below are addressed
 	if ref != "ecx" && ref != "rcx" {
-		log.Fatalf("Expected rcx variant, got %s\n", ref)
+		log.Fatalf("%s expects rcx variant, got %s\n", mnemonic, ref)
 	}
 
 	previous := env.PopAsmInstr().(*AsmNoOperandInstr)
@@ -254,9 +260,9 @@ var x8664Lowerers = map[string]x8664Lowerer{
 	"dec":     ops_1_1,
 	"inc":     ops_1_1,
 	"lodsb":   ops_0_al,      // TODO hack - needs to consume esi, assumes al
-	"loop":    op_label,      // TODO hack - needs to consume ecx
-	"loope":   op_label,      // TODO hack - needs to consume ecx
-	"loopne":  op_label,      // TODO hack - needs to consume ecx
+	"loop":    ops_loopx,      // TODO hack - needs to consume ecx
+	"loope":   ops_loopx,      // TODO hack - needs to consume ecx
+	"loopne":  ops_loopx,      // TODO hack - needs to consume ecx
 	"movsb":   ops_2_sil_dil, // TODO same hack as all around this
 	"movsw":   ops_2_sil_dil, // TODO next 3 need right registers, ideally with real fix
 	"movsd":   ops_2_sil_dil,
