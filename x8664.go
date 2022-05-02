@@ -280,6 +280,6 @@ var x8664Lowerers = map[string]x8664Lowerer{
 	"std":     ops_0,
 	"sub":     ops_2_1,
 	"syscall": ops_0,
-	"xadd":    ops_2, // TODO needs to push op1 back
+	"xadd":    ops_2_1,
 	"xchg":    ops_2_x2,
 }

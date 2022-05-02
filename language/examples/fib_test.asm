@@ -6,7 +6,7 @@ __blue_3169096246_0:
 	xor eax, eax
 	inc eax
 
-; : compute ( times:ecx accum:eax scratch:edi -- result:edi )
+; : compute ( times:ecx accum:eax scratch:edi -- result:eax )
 
 __blue_1147400058_0:
 	xadd eax, edi
@@ -62,10 +62,10 @@ __blue_1516647173_0:
 	jmp exit
 	ret
 
-; : test= ( actual:edi expected:eax -- )
+; : test= ( actual:r8d expected:r9d -- )
 
 __blue_2636330760_0:
-	cmp eax, edi
+	cmp r9d, r8d
 	je __blue_2157056155_0
 	call __blue_1516647173_0
 
@@ -78,19 +78,23 @@ _start:
 	xor ecx, ecx
 	inc ecx
 	call __blue_3169096246_0
-	xor eax, eax
-	inc eax
+	xor r9d, r9d
+	inc r9d
+	mov r8d, edi
 	call __blue_2636330760_0
 	mov ecx, 11
 	call __blue_3169096246_0
-	mov eax, 89
+	mov r9d, 89
+	mov r8d, edi
 	call __blue_2636330760_0
 	mov ecx, 14
 	call __blue_3169096246_0
-	mov eax, 377
+	mov r9d, 377
+	mov r8d, edi
 	call __blue_2636330760_0
 	mov ecx, 31
 	call __blue_3169096246_0
-	mov eax, 1346269
+	mov r9d, 1346269
+	mov r8d, edi
 	call __blue_2636330760_0
 	jmp bye
