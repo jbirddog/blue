@@ -5,26 +5,6 @@ import (
 )
 
 const (
-	eax = iota
-	ecx
-	edx
-	ebx
-	esp
-	ebp
-	esi
-	edi
-
-	r8d
-	r9d
-	r10d
-	r11d
-	r12d
-	r13d
-	r14d
-	r15d
-)
-
-const (
 	rax = iota
 	rcx
 	rdx
@@ -42,6 +22,26 @@ const (
 	r13
 	r14
 	r15
+)
+
+const (
+	eax = iota
+	ecx
+	edx
+	ebx
+	esp
+	ebp
+	esi
+	edi
+
+	r8d
+	r9d
+	r10d
+	r11d
+	r12d
+	r13d
+	r14d
+	r15d
 )
 
 var reg32Names = []string{
@@ -85,24 +85,6 @@ var reg64Names = []string{
 }
 
 var registers = map[string]int{
-	"eax": eax,
-	"ecx": ecx,
-	"edx": edx,
-	"ebx": ebx,
-	"esp": esp,
-	"ebp": ebp,
-	"esi": esi,
-	"edi": edi,
-
-	"r8d":  r8d,
-	"r9d":  r9d,
-	"r10d": r10d,
-	"r11d": r11d,
-	"r12d": r12d,
-	"r13d": r13d,
-	"r14d": r14d,
-	"r15d": r15d,
-
 	"rax": rax,
 	"rcx": rcx,
 	"rdx": rdx,
@@ -120,27 +102,27 @@ var registers = map[string]int{
 	"r13": r13,
 	"r14": r14,
 	"r15": r15,
+
+	"eax": eax,
+	"ecx": ecx,
+	"edx": edx,
+	"ebx": ebx,
+	"esp": esp,
+	"ebp": ebp,
+	"esi": esi,
+	"edi": edi,
+
+	"r8d":  r8d,
+	"r9d":  r9d,
+	"r10d": r10d,
+	"r11d": r11d,
+	"r12d": r12d,
+	"r13d": r13d,
+	"r14d": r14d,
+	"r15d": r15d,
 }
 
 var registerSize = map[string]string{
-	"eax": "dword",
-	"ecx": "dword",
-	"edx": "dword",
-	"ebx": "dword",
-	"esp": "dword",
-	"ebp": "dword",
-	"esi": "dword",
-	"edi": "dword",
-
-	"r8d":  "dword",
-	"r9d":  "dword",
-	"r10d": "dword",
-	"r11d": "dword",
-	"r12d": "dword",
-	"r13d": "dword",
-	"r14d": "dword",
-	"r15d": "dword",
-
 	"rax": "qword",
 	"rcx": "qword",
 	"rdx": "qword",
@@ -158,6 +140,24 @@ var registerSize = map[string]string{
 	"r13": "qword",
 	"r14": "qword",
 	"r15": "qword",
+
+	"eax": "dword",
+	"ecx": "dword",
+	"edx": "dword",
+	"ebx": "dword",
+	"esp": "dword",
+	"ebp": "dword",
+	"esi": "dword",
+	"edi": "dword",
+
+	"r8d":  "dword",
+	"r9d":  "dword",
+	"r10d": "dword",
+	"r11d": "dword",
+	"r12d": "dword",
+	"r13d": "dword",
+	"r14d": "dword",
+	"r15d": "dword",
 }
 
 type x8664Lowerer = func(string, *Environment, *RunContext) AsmInstr
@@ -172,7 +172,6 @@ func ops_0_2_1(mnemonic string, env *Environment, context *RunContext) AsmInstr 
 
 	return &AsmNoOperandInstr{Mnemonic: mnemonic}
 }
-
 
 // TODO hack
 func ops_0_al(mnemonic string, env *Environment, context *RunContext) AsmInstr {
@@ -268,9 +267,9 @@ var x8664Lowerers = map[string]x8664Lowerer{
 	"dec":     ops_1_1,
 	"inc":     ops_1_1,
 	"lodsb":   ops_0_al,      // TODO hack - needs to consume esi, assumes al
-	"loop":    ops_loopx,      // TODO hack - needs to consume ecx
-	"loope":   ops_loopx,      // TODO hack - needs to consume ecx
-	"loopne":  ops_loopx,      // TODO hack - needs to consume ecx
+	"loop":    ops_loopx,     // TODO hack - needs to consume ecx
+	"loope":   ops_loopx,     // TODO hack - needs to consume ecx
+	"loopne":  ops_loopx,     // TODO hack - needs to consume ecx
 	"movsb":   ops_2_sil_dil, // TODO same hack as all around this
 	"movsw":   ops_2_sil_dil, // TODO next 3 need right registers, ideally with real fix
 	"movsd":   ops_2_sil_dil,

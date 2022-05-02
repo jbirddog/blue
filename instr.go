@@ -360,32 +360,6 @@ func clobberGuardInstrs(context *RunContext) ([]AsmInstr, []AsmInstr) {
 	return pushes, pops
 }
 
-func normalizeRefs(a string, b string) (bool, string, string) {
-	if a == b {
-		return true, a, b
-	}
-
-	if aIndex, found := registers[a]; found {
-		if bIndex, found := registers[b]; found {
-			if aIndex == bIndex {
-				return true, a, b
-			}
-
-			aSize := registerSize[a]
-			bSize := registerSize[b]
-
-			// TODO will need some more work to support all  all combos
-			if aSize == "dword" && bSize == "qword" {
-				return false, a, reg32Names[bIndex]
-			} else if aSize == "qword" && bSize == "dword" {
-				return false, reg32Names[aIndex], b
-			}
-		}
-	}
-
-	return false, a, b
-}
-
 func flowWordInputs(word *Word, env *Environment, context *RunContext) {
 	expectedInputs := word.InputRegisters()
 
@@ -395,7 +369,7 @@ func flowWordInputs(word *Word, env *Environment, context *RunContext) {
 	context.Inputs = context.Inputs[:have-need]
 
 	for i := need - 1; i >= 0; i-- {
-		same, op1, op2 := normalizeRefs(expectedInputs[i], neededInputs[i])
+		same, op1, op2 := NormalizeRefs(expectedInputs[i], neededInputs[i])
 
 		if same {
 			continue
@@ -433,7 +407,7 @@ func flowWordOutputs(word *Word, env *Environment, context *RunContext) {
 	// context.Inputs = context.Inputs[:have-need]
 
 	for i := need - 1; i >= 0; i-- {
-		same, op1, op2 := normalizeRefs(expectedOutputs[i], neededInputs[i])
+		same, op1, op2 := NormalizeRefs(expectedOutputs[i], neededInputs[i])
 
 		if same {
 			continue
