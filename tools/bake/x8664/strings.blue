@@ -9,5 +9,5 @@
 : copy-cstr ( src:rsi dest:rdi -- tail:rdi ) swap cstr>str rot copy-str ;
 
 \ TODO swap rot -> -rot
-: append-str ( tail:rdi src:rsi len:rcx -- tail:rdi ) swap rot movsb swap drop rep ; 
+: append-str ( tail:rdi src:rsi len:rcx -- tail:rdi ) swap rot movsb swap drop swap rep ; 
 : append-cstr ( tail:rdi src:rsi -- tail:rdi ) cstr>str append-str ; 

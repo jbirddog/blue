@@ -230,8 +230,13 @@ func op_label(mnemonic string, env *Environment, context *RunContext) AsmInstr {
 	return &AsmUnaryInstr{Mnemonic: mnemonic, Op: op}
 }
 
-func consume_previous(mnemonic string, env *Environment, context *RunContext) AsmInstr {
-	context.PopInput()
+func ops_repx(mnemonic string, env *Environment, context *RunContext) AsmInstr {
+	ref := context.PopInput()
+	// TODO improve this check as the hacks mentioned below are addressed
+	if ref != "ecx" && ref != "rcx" {
+		log.Fatalf("Expected rcx variant, got %s\n", ref)
+	}
+
 	previous := env.PopAsmInstr().(*AsmNoOperandInstr)
 
 	return &AsmUnaryInstr{Mnemonic: mnemonic, Op: previous.Mnemonic}
@@ -258,11 +263,11 @@ var x8664Lowerers = map[string]x8664Lowerer{
 	"movsq":   ops_2_sil_dil,
 	"neg":     ops_1_1,
 	"or":      ops_2_1,
-	"rep":     consume_previous, // TODO hack - needs to enforce rcx (variant)
-	"repe":    consume_previous, // TODO hack - needs to enforce rcx (variant)
-	"repz":    consume_previous, // TODO hack - needs to enforce rcx (variant)
-	"repne":   consume_previous, // TODO hack - needs to enforce rcx (variant)
-	"repnz":   consume_previous, // TODO hack - needs to enforce rcx (variant)
+	"rep":     ops_repx,
+	"repe":    ops_repx,
+	"repz":    ops_repx,
+	"repne":   ops_repx,
+	"repnz":   ops_repx,
 	"ret":     ops_0,
 	"scasb":   ops_0, // TODO needs to enforce rdi/rax -> rdi (variant)
 	"scasw":   ops_0, // TODO needs to enforce rdi/rax -> rdi (variant)
