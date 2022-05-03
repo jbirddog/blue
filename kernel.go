@@ -321,7 +321,7 @@ func KernelSQuote(env *Environment) {
 	asciiStr(env, true)
 }
 
-func buildRegisterRef(rawRef string) *RegisterRef {
+func buildStackRef(rawRef string) *StackRef {
 	parts := strings.SplitN(rawRef, ":", 2)
 	partsLen := len(parts)
 
@@ -329,13 +329,13 @@ func buildRegisterRef(rawRef string) *RegisterRef {
 		part := parts[0]
 
 		if _, found := registers[part]; found {
-			return &RegisterRef{Name: part, Reg: part}
+			return &StackRef{Name: part, Ref: part}
 		}
 
-		return &RegisterRef{Name: part, Reg: ""}
+		return &StackRef{Name: part, Ref: ""}
 	}
 
-	return &RegisterRef{Name: parts[0], Reg: parts[1]}
+	return &StackRef{Name: parts[0], Ref: parts[1]}
 }
 
 func parseRefs(word *Word, env *Environment) []string {
@@ -383,8 +383,8 @@ func parseRefs(word *Word, env *Environment) []string {
 			break
 		}
 
-		ref := buildRegisterRef(nextWord)
-		regIndex, found := registers[ref.Reg]
+		ref := buildStackRef(nextWord)
+		regIndex, found := registers[ref.Ref]
 
 		if found && parsing != clobbers {
 			word.Registers |= 1 << regIndex

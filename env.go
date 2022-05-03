@@ -172,21 +172,21 @@ func (e *Environment) AppendRefSize(label string, size string) {
 	}
 }
 
-func (e *Environment) ValidateRegisterRefs(refs []*RegisterRef) {
+func (e *Environment) ValidateStackRefs(refs []*StackRef) {
 	for _, r := range refs {
-		if _, found := registers[r.Reg]; !found {
-			log.Fatalf("Unable to map '%s' to register '%s': ", r.Name, r.Reg)
+		if _, found := registers[r.Ref]; !found {
+			log.Fatalf("Unable to map '%s' to register '%s': ", r.Name, r.Ref)
 		}
 	}
 }
 
 func (e *Environment) DeclWord(word *Word) {
 	if !word.HasCompleteRefs() {
-		InferRegisterRefs(word)
+		InferStackRefs(word)
 	}
 
-	e.ValidateRegisterRefs(word.Inputs)
-	e.ValidateRegisterRefs(word.Outputs)
+	e.ValidateStackRefs(word.Inputs)
+	e.ValidateStackRefs(word.Outputs)
 
 	e.AppendWord(word)
 	e.AppendCodeBufInstrs([]Instr{

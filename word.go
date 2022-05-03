@@ -17,8 +17,8 @@ const (
 type Word struct {
 	Name      string
 	Flags     uint
-	Inputs    []*RegisterRef
-	Outputs   []*RegisterRef
+	Inputs    []*StackRef
+	Outputs   []*StackRef
 	Code      []Instr
 	AsmLabel  string
 	RawRefs   []string
@@ -47,18 +47,18 @@ func (w *Word) PopInstr() Instr {
 	return instr
 }
 
-func (w *Word) AppendInput(r *RegisterRef) {
+func (w *Word) AppendInput(r *StackRef) {
 	w.Inputs = append(w.Inputs, r)
 }
 
-func (w *Word) AppendOutput(r *RegisterRef) {
+func (w *Word) AppendOutput(r *StackRef) {
 	w.Outputs = append(w.Outputs, r)
 }
 
 // TODO move when registers/refs get their own file
-func refsAreComplete(refs []*RegisterRef) bool {
+func refsAreComplete(refs []*StackRef) bool {
 	for _, r := range refs {
-		if len(r.Reg) == 0 {
+		if len(r.Ref) == 0 {
 			return false
 		}
 	}
@@ -144,7 +144,7 @@ func (w *Word) InputRegisters() []string {
 	var registers []string
 
 	for _, i := range w.Inputs {
-		registers = append(registers, i.Reg)
+		registers = append(registers, i.Ref)
 	}
 
 	return registers
@@ -154,7 +154,7 @@ func (w *Word) OutputRegisters() []string {
 	var registers []string
 
 	for _, o := range w.Outputs {
-		registers = append(registers, o.Reg)
+		registers = append(registers, o.Ref)
 	}
 
 	return registers
