@@ -242,10 +242,8 @@ func instrsForWord(word *Word) []Instr {
 	}
 
 	lastIdx := len(word.Code)
-	if instr, x8664 := word.Code[lastIdx-1].(*X8664Instr); x8664 {
-		if instr.Mnemonic == "ret" {
-			lastIdx -= 1
-		}
+	if _, isRet := word.Code[lastIdx-1].(*RetInstr); isRet {
+		lastIdx -= 1
 	}
 
 	return word.Code[:lastIdx]

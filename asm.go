@@ -51,6 +51,13 @@ func (i *AsmCallInstr) String() string {
 	return fmt.Sprintf("\tcall %s\n", i.Label)
 }
 
+type AsmRetInstr struct {
+}
+
+func (i *AsmRetInstr) String() string {
+	return fmt.Sprintf("\tret\n")
+}
+
 type AsmNoOperandInstr struct {
 	Mnemonic string
 }
