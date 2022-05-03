@@ -10,7 +10,7 @@ import (
 // the effect for a word. this implementation will be quick and dirty to
 // see how it works in the language before the more correct implementation
 
-func InferRegisterRefs(word *Word) {
+func InferStackRefs(word *Word) {
 	if word.HasCompleteRefs() {
 		return
 	}
@@ -32,14 +32,14 @@ func InferRegisterRefs(word *Word) {
 	}
 
 	for i, r := range word.Inputs {
-		if r.Reg == "" {
-			r.Reg = inputs[i]
+		if r.Ref == "" {
+			r.Ref = inputs[i]
 		}
 	}
 
 	for i, r := range word.Outputs {
-		if r.Reg == "" {
-			r.Reg = outputs[i]
+		if r.Ref == "" {
+			r.Ref = outputs[i]
 		}
 	}
 }

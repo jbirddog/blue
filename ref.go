@@ -1,10 +1,16 @@
 package main
 
-type RegisterRef struct {
+const (
+	StackRefType_Register = iota
+)
+
+type StackRef struct {
 	Name string
-	Reg  string
+	Type int
+	Ref  string
 }
 
+// TODO need to refactor so that by the time this is called a and b are StackRefs
 func NormalizeRefs(a string, b string) (bool, string, string) {
 	if a == b {
 		return true, a, b
