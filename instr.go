@@ -52,7 +52,7 @@ type FlowWordInstr struct {
 func (i *FlowWordInstr) Run(env *Environment, context *RunContext) {
 	if i.Direction == FlowDirection_Input {
 		flowWordInputs(i.Word, env, context)
-	} else {
+	} else if !i.Word.IsInline() {
 		flowWordOutputs(i.Word, env, context)
 	}
 }
