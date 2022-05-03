@@ -7,7 +7,6 @@
 
 : envp-start ( base:rax argc:rcx -- start:rax ) 3 shl 8 add add ;
 
-\ TODO 'arg@ is work around since outputs don't flow
 : nth-arg ( argv:rax nth:rcx -- arg:rax ) 3 shl add @ ;
 
 : brt0 ( rax -- ) 

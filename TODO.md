@@ -8,12 +8,12 @@
 1. import vs use - one brings in externs other all code from file
    1. link vs include? - use to determine how to build via dsl?
 1. better newline support when generating asm
-1. outputs don't flow
 1. when importing, can drop the global decls from the imported env?
 1. continue to infer registers from word body
    1. if fully specified, validate
    1. infer during word fallthrough? whole program infer?
 1. validate needs to check for lingering refs/stack items
+   1. some fatal logs exist
 1. treat words with only decb more like resb
    1. global strings also fall into this bucket
 1. More peephole optimizations
@@ -22,7 +22,7 @@
 1. clobber support for indirect register usage
 1. x8664 words can have default registers - ( a -- b ) 8 add ; a/b = eax
 1. x8664 words can have required registers 4 shl needs ecx
-1. need to support var1 @ var2 !
+1. need to support var1 @ var2 ! - @! with clobber support
 1. Rosetta Code examples
    1. Strip whitespace from a string/Top and tail
    1. Environment variable
@@ -35,6 +35,7 @@
 
 #### peephole
 
+1. bring back call/ret -> jmp
 
 ## language
 

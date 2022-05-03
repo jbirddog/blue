@@ -104,7 +104,7 @@ section .bss
 ; 1 resd wait-status
 
 __blue_285992641_0: resd 1
-;  TODO want to return wait-status @ but outputs don't flow yet
+;  TODO want to return wait-status @ 
 
 ;  TODO actually need ports of WIFEXITED and WEXITSTATUS
 
@@ -166,8 +166,6 @@ __blue_3309500289_0:
 	add rcx, 8
 	add rax, rcx
 	ret
-
-;  TODO 'arg@ is work around since outputs don't flow
 
 ; : nth-arg ( argv:rax nth:rcx -- arg:rax )
 
