@@ -175,10 +175,6 @@ __blue_3382297396_0:
 	shl rcx, 3
 	add rax, rcx
 	mov rax, qword [rax]
-
-; : 'arg@ ( arg:rax -- arg:rax )
-
-__blue_3248877538_0:
 	ret
 
 ; : brt0 ( rax -- )

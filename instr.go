@@ -402,9 +402,7 @@ func flowWordOutputs(word *Word, env *Environment, context *RunContext) {
 
 	// TODO warn on lingering stack items, might be here or handled as a separate check
 	neededInputs := context.Inputs[have-need:]
-
-	// TODO need this but causes slice exception
-	// context.Inputs = context.Inputs[:have-need]
+	context.Inputs = context.Inputs[:have-need]
 
 	for i := need - 1; i >= 0; i-- {
 		same, op1, op2 := NormalizeRefs(expectedOutputs[i], neededInputs[i])
@@ -413,22 +411,17 @@ func flowWordOutputs(word *Word, env *Environment, context *RunContext) {
 			continue
 		}
 
-		log.Printf("Word %s (%s) needs mov %s, %s\n", word.Name, word.AsmLabel, op1, op2)
+		flowInstrs := PeepholeAsmBinaryInstr(&AsmBinaryInstr{
+			Mnemonic: "mov",
+			Op1:      op1,
+			Op2:      op2,
+		})
+
+		env.AppendAsmInstrs(flowInstrs)
 	}
 
-	/*
-			flowInstrs := PeepholeAsmBinaryInstr(&AsmBinaryInstr{
-				Mnemonic: "mov",
-				Op1:      op1,
-				Op2:      op2,
-			})
+	// buildClobberGuards(word, context)
 
-			env.AppendAsmInstrs(flowInstrs)
-		}
-
-		buildClobberGuards(word, context)
-
-		// wordOutputs := word.OutputRegisters()
-		// context.Inputs = append(context.Inputs, wordOutputs...)
-	*/
+	wordOutputs := word.OutputRegisters()
+	context.Inputs = append(context.Inputs, wordOutputs...)
 }
