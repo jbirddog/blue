@@ -70,8 +70,13 @@ type CallInstr struct{}
 func (i *CallInstr) Run(env *Environment, context *RunContext) {
 	target := context.PopInput()
 
-	// TODO AsmCallInstr -> AsmUnaryInstr
 	env.AppendAsmInstr(&AsmCallInstr{Label: target})
+}
+
+type RetInstr struct{}
+
+func (i *RetInstr) Run(env *Environment, context *RunContext) {
+	env.AppendAsmInstr(&AsmRetInstr{})
 }
 
 type CallWordInstr struct {

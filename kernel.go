@@ -56,7 +56,7 @@ func KernelSemi(env *Environment) {
 				Word:      latest,
 				Direction: FlowDirection_Output,
 			},
-			&X8664Instr{Mnemonic: "ret"},
+			&RetInstr{},
 		})
 	}
 
