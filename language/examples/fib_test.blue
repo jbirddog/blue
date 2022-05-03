@@ -5,7 +5,7 @@ global _start
 
 \ TODO exit with the test # that failed
 : test.failure ( -- ) 1 exit ;
-: test= ( actual:edi expected:eax -- ) swap cmp ' test.failure xne ;
+: test= ( actual:r8d expected:r9d -- ) swap cmp ' test.failure xne ;
 
 : _start ( -- noret )
 	1 fib 1 test=

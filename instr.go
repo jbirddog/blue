@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"strconv"
 )
 
@@ -38,12 +39,22 @@ func (i *LiteralIntInstr) Run(env *Environment, context *RunContext) {
 	context.AppendInput(strconv.Itoa(i.I))
 }
 
+const (
+	FlowDirection_Input = iota
+	FlowDirection_Output
+)
+
 type FlowWordInstr struct {
-	Word *Word
+	Word      *Word
+	Direction int
 }
 
 func (i *FlowWordInstr) Run(env *Environment, context *RunContext) {
-	flowWord(i.Word, env, context)
+	if i.Direction == FlowDirection_Input {
+		flowWordInputs(i.Word, env, context)
+	} else if !i.Word.IsInline() {
+		flowWordOutputs(i.Word, env, context)
+	}
 }
 
 type JmpWordInstr struct {
@@ -349,7 +360,7 @@ func clobberGuardInstrs(context *RunContext) ([]AsmInstr, []AsmInstr) {
 	return pushes, pops
 }
 
-func flowWord(word *Word, env *Environment, context *RunContext) {
+func flowWordInputs(word *Word, env *Environment, context *RunContext) {
 	expectedInputs := word.InputRegisters()
 
 	need := len(expectedInputs)
@@ -358,28 +369,10 @@ func flowWord(word *Word, env *Environment, context *RunContext) {
 	context.Inputs = context.Inputs[:have-need]
 
 	for i := need - 1; i >= 0; i-- {
-		op1 := expectedInputs[i]
-		op2 := neededInputs[i]
+		same, op1, op2 := NormalizeRefs(expectedInputs[i], neededInputs[i])
 
-		if op1 == op2 {
+		if same {
 			continue
-		}
-
-		if op2RegIndex, found := registers[op2]; found {
-			if op1RegIndex, found := registers[op1]; found {
-				if op1RegIndex == op2RegIndex {
-					continue
-				}
-				op1RegSize := registerSize[op1]
-				op2RegSize := registerSize[op2]
-
-				// TODO will need some more work to support all  all combos
-				if op1RegSize == "dword" && op2RegSize == "qword" {
-					op2 = reg32Names[op2RegIndex]
-				} else if op1RegSize == "qword" && op2RegSize == "dword" {
-					op1 = reg32Names[op1RegIndex]
-				}
-			}
 		}
 
 		flowInstrs := PeepholeAsmBinaryInstr(&AsmBinaryInstr{
@@ -392,6 +385,42 @@ func flowWord(word *Word, env *Environment, context *RunContext) {
 	}
 
 	buildClobberGuards(word, context)
+
+	wordOutputs := word.OutputRegisters()
+	context.Inputs = append(context.Inputs, wordOutputs...)
+}
+
+func flowWordOutputs(word *Word, env *Environment, context *RunContext) {
+	expectedOutputs := word.OutputRegisters()
+
+	need := len(expectedOutputs)
+	have := len(context.Inputs)
+
+	if have < need {
+		log.Fatalf("At the end of Word %s (%s) %d items are marked as output but only %d exist on the 'stack'.", word.Name, word.AsmLabel, need, have)
+	}
+
+	// TODO warn on lingering stack items, might be here or handled as a separate check
+	neededInputs := context.Inputs[have-need:]
+	context.Inputs = context.Inputs[:have-need]
+
+	for i := need - 1; i >= 0; i-- {
+		same, op1, op2 := NormalizeRefs(expectedOutputs[i], neededInputs[i])
+
+		if same {
+			continue
+		}
+
+		flowInstrs := PeepholeAsmBinaryInstr(&AsmBinaryInstr{
+			Mnemonic: "mov",
+			Op1:      op1,
+			Op2:      op2,
+		})
+
+		env.AppendAsmInstrs(flowInstrs)
+	}
+
+	// buildClobberGuards(word, context)
 
 	wordOutputs := word.OutputRegisters()
 	context.Inputs = append(context.Inputs, wordOutputs...)

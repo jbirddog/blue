@@ -6,7 +6,7 @@ __blue_3169096246_0:
 	xor eax, eax
 	inc eax
 
-; : compute ( times:ecx accum:eax scratch:edi -- result:edi )
+; : compute ( times:ecx accum:eax scratch:edi -- result:eax )
 
 __blue_1147400058_0:
 	xadd eax, edi
@@ -17,4 +17,5 @@ __blue_1147400058_0:
 
 __blue_2347908769_0:
 	mov ecx, 11
-	jmp __blue_3169096246_0
+	call __blue_3169096246_0
+	ret

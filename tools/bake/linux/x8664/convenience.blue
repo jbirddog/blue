@@ -3,7 +3,7 @@
 
 1 resd wait-status
 
-\ TODO want to return wait-status @ but outputs don't flow yet
+\ TODO want to return wait-status @ 
 \ TODO actually need ports of WIFEXITED and WEXITSTATUS
 : waitpid ( pid -- ) wait-status 0 0 wait4 ordie ;
 

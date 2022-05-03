@@ -9,7 +9,7 @@
 
 : call-cmd-with-key ( key:rax -- noret ) 2 ' cmd-table rot
 : scan-cmd-table ( tries:ecx tbl:rdi key:rax -- noret ) 
-	scasq ' call-cmd xe drop 8 add latest loop
+	scasq ' call-cmd xe 8 add drop latest loop
 	usage
 ;
 

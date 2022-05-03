@@ -6,11 +6,6 @@ import (
 	"os"
 )
 
-type RegisterRef struct {
-	Name string
-	Reg  string
-}
-
 func main() {
 	if len(os.Args) != 2 {
 		log.Fatal("Usage: blue [blueFile]")

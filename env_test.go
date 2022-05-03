@@ -87,7 +87,7 @@ func TestCanDeclResb(t *testing.T) {
 }
 
 func TestCanFindResbRef(t *testing.T) {
-	e := env("1024 resb buf : xyz ( -- ) buf loop ;")
+	e := env("1024 resb buf : xyz ( ecx -- ) buf loop ;")
 	asm := run(e)
 
 	loopInstr := asm[6].(*AsmUnaryInstr)
@@ -117,7 +117,7 @@ func TestCanFindSQuote(t *testing.T) {
 }
 
 func TestCanFindSQuoteWhenCompiling(t *testing.T) {
-	e := env(`: xyz ( -- ) s" testing" ;`)
+	e := env(`: xyz ( -- ) s" testing" drop drop ;`)
 	asm := run(e)
 
 	if len(asm) == 0 {
@@ -134,7 +134,7 @@ func TestCanParseCQuote(t *testing.T) {
 }
 
 func TestCanFindCQuoteWhenCompiling(t *testing.T) {
-	e := env(`: xyz ( -- ) c" testing" ;`)
+	e := env(`: xyz ( -- ) c" testing" drop ;`)
 	asm := run(e)
 
 	if len(asm) == 0 {

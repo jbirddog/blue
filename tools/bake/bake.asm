@@ -21,32 +21,37 @@ __blue_3454868101_1:
 
 __blue_1046004769_1:
 	mov eax, 57
-	jmp __blue_4057121178_0
+	call __blue_4057121178_0
+	ret
 
 ; : execve ( filename:rdi argv:rsi env:rdx -- result:eax )
 
 __blue_172884385_1:
 	mov eax, 59
-	jmp __blue_4057121178_0
+	call __blue_4057121178_0
+	ret
 
 ; : wait4 ( pid:edi status:rsi options:rdx usage:r10 -- result:eax )
 
 __blue_2279771388_1:
 	mov eax, 61
-	jmp __blue_4057121178_0
+	call __blue_4057121178_0
+	ret
 
 ; : write ( buf:esi len:edx fd:edi -- result:eax )
 
 __blue_3190202204_1:
 	xor eax, eax
 	inc eax
-	jmp __blue_4057121178_0
+	call __blue_4057121178_0
+	ret
 
 ; : mkdir ( path:edi mode:esi -- result:eax )
 
 __blue_2883839448_1:
 	mov eax, 83
-	jmp __blue_4057121178_0
+	call __blue_4057121178_0
+	ret
 
 ; : die ( err:eax -- noret )
 
@@ -85,7 +90,8 @@ __blue_2157056155_1:
 
 __blue_1046004769_2:
 	call __blue_1046004769_1
-	jmp __blue_4055961022_0
+	call __blue_4055961022_0
+	ret
 
 ; : execve ( filename argv env -- noret )
 
@@ -98,7 +104,7 @@ section .bss
 ; 1 resd wait-status
 
 __blue_285992641_0: resd 1
-;  TODO want to return wait-status @ but outputs don't flow yet
+;  TODO want to return wait-status @ 
 
 ;  TODO actually need ports of WIFEXITED and WEXITSTATUS
 
@@ -111,7 +117,8 @@ __blue_3964545837_0:
 	xor rdx, rdx
 	mov rsi, __blue_285992641_0
 	call __blue_2279771388_1
-	jmp __blue_1614081290_0
+	call __blue_1614081290_0
+	ret
 
 ; : mkdir ( path -- )
 
@@ -119,7 +126,8 @@ __blue_2883839448_2:
 	mov esi, 488
 	call __blue_2883839448_1
 	mov edi, -17
-	jmp __blue_2118064195_0
+	call __blue_2118064195_0
+	ret
 
 ; : type ( buf len -- )
 
@@ -127,7 +135,8 @@ __blue_1361572173_0:
 	xor edi, edi
 	inc edi
 	call __blue_3190202204_1
-	jmp __blue_1614081290_0
+	call __blue_1614081290_0
+	ret
 
 section .bss
 
@@ -158,18 +167,12 @@ __blue_3309500289_0:
 	add rax, rcx
 	ret
 
-;  TODO 'arg@ is work around since outputs don't flow
-
 ; : nth-arg ( argv:rax nth:rcx -- arg:rax )
 
 __blue_3382297396_0:
 	shl rcx, 3
 	add rax, rcx
 	mov rax, qword [rax]
-
-; : 'arg@ ( arg:rax -- arg:rax )
-
-__blue_3248877538_0:
 	ret
 
 ; : brt0 ( rax -- )
@@ -230,7 +233,8 @@ __blue_2435236535_0:
 	call __blue_3207375596_0
 	pop rdi
 	mov rcx, rdx
-	jmp __blue_2360258130_0
+	call __blue_2360258130_0
+	ret
 
 ;  TODO swap rot -> -rot
 
@@ -248,7 +252,8 @@ __blue_586198672_0:
 	call __blue_3207375596_0
 	pop rdi
 	mov rcx, rdx
-	jmp __blue_256417459_0
+	call __blue_256417459_0
+	ret
 
 ; : bye ( -- noret )
 
@@ -269,7 +274,8 @@ __blue_1223589535_0:
 	xor edx, edx
 	inc edx
 	mov esi, __blue_855163316_0
-	jmp __blue_1361572173_0
+	call __blue_1361572173_0
+	ret
 
 ; : usage ( -- noret )
 
@@ -559,7 +565,8 @@ __blue_4050364212_0:
 	mov rcx, 3
 	mov rax, [__blue_2584388227_0]
 	call __blue_3382297396_0
-	jmp __blue_3458953238_0
+	call __blue_3458953238_0
+	ret
 
 ;  TODO support operation size for cmp so caller doesn't have to pass in argc
 
@@ -598,7 +605,8 @@ __blue_4217555750_0:
 	call __blue_3382297396_0
 	mov qword [__blue_680506038_0], rax
 	mov rax, [__blue_2366279180_0]
-	jmp __blue_4050364212_1
+	call __blue_4050364212_1
+	ret
 
 ;  TODO compile time concat
 
@@ -719,7 +727,8 @@ db 47
 db 0
 __blue_1223589535_7:
 	mov edi, __blue_855163316_7
-	jmp __blue_2883839448_2
+	call __blue_2883839448_2
+	ret
 
 section .bss
 
@@ -747,7 +756,8 @@ __blue_914170956_0:
 	sub rdx, 5
 	mov rdi, __blue_3277841025_0
 	mov rcx, rdx
-	jmp __blue_2360258130_0
+	call __blue_2360258130_0
+	ret
 
 ; : build-assembly-file-name ( -- )
 
@@ -767,7 +777,8 @@ db 0
 __blue_1223589535_8:
 	mov rcx, 4
 	mov rsi, __blue_855163316_8
-	jmp __blue_256417459_0
+	call __blue_256417459_0
+	ret
 
 ; : build-object-file-name ( -- )
 
@@ -804,7 +815,8 @@ db 0
 __blue_1223589535_10:
 	mov rcx, 2
 	mov rsi, __blue_855163316_10
-	jmp __blue_256417459_0
+	call __blue_256417459_0
+	ret
 
 ; : build-binary-file-name ( -- )
 
@@ -830,7 +842,8 @@ __blue_1223589535_11:
 	mov rsi, __blue_855163316_11
 	call __blue_2435236535_0
 	mov rsi, __blue_3277841025_0
-	jmp __blue_586198672_0
+	call __blue_586198672_0
+	ret
 
 ; : build-output-file-names ( -- )
 
@@ -838,7 +851,8 @@ __blue_747073145_0:
 	call __blue_914170956_0
 	call __blue_976802625_0
 	call __blue_3419772654_0
-	jmp __blue_1696784928_0
+	call __blue_1696784928_0
+	ret
 
 section .bss
 
@@ -926,14 +940,16 @@ __blue_480086900_0:
 	xor rcx, rcx
 	xor rax, rax
 	xor rsi, rsi
-	jmp __blue_3319044491_0
+	call __blue_3319044491_0
+	ret
 
 ; : prep-execve ( file:rsi arg0:rax -- )
 
 __blue_640619689_0:
 	mov qword [__blue_871594851_0], rax
 	mov qword [__blue_667945565_0], rsi
-	jmp __blue_480086900_0
+	call __blue_480086900_0
+	ret
 
 ; : spawn ( -- )
 
@@ -945,7 +961,8 @@ __blue_975326616_0:
 
 __blue_2157056155_5:
 	mov edi, eax
-	jmp __blue_3964545837_0
+	call __blue_3964545837_0
+	ret
 
 ; : generate-assembly ( -- )
 
@@ -963,7 +980,8 @@ __blue_1223589535_14:
 	mov rax, [__blue_680506038_0]
 	mov rsi, __blue_855163316_14
 	call __blue_640619689_0
-	jmp __blue_975326616_0
+	call __blue_975326616_0
+	ret
 
 ; : compile-assembly ( -- )
 
@@ -1012,7 +1030,8 @@ db 0
 __blue_1223589535_18:
 	mov qword [__blue_888372470_0], __blue_855163316_18
 	mov qword [__blue_938705327_0], __blue_496119923_0
-	jmp __blue_975326616_0
+	call __blue_975326616_0
+	ret
 
 ; : link-binary ( -- )
 
@@ -1038,7 +1057,8 @@ db 0
 __blue_1223589535_20:
 	mov qword [__blue_854817232_0], __blue_855163316_20
 	mov qword [__blue_905150089_0], __blue_837047421_0
-	jmp __blue_975326616_0
+	call __blue_975326616_0
+	ret
 
 ;  TODO check wait-status after each call
 
@@ -1047,7 +1067,8 @@ __blue_1223589535_20:
 __blue_3281777315_0:
 	call __blue_2434586205_0
 	call __blue_2532285537_0
-	jmp __blue_838765769_0
+	call __blue_838765769_0
+	ret
 
 ; : exec-arg0! ( rax -- )
 
@@ -1107,7 +1128,8 @@ __blue_4283867725_0:
 	call __blue_3207375596_0
 	mov rcx, rdx
 	mov rax, qword [rsi]
-	jmp __blue_1785978521_0
+	call __blue_1785978521_0
+	ret
 
 ; : call-cmd ( cmd:rdi -- noret )
 
