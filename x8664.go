@@ -311,7 +311,7 @@ func ops_0_2_1(mnemonic string, env *Environment, context *RunContext) AsmInstr 
 
 // TODO hack
 func ops_0_al(mnemonic string, env *Environment, context *RunContext) AsmInstr {
-	context.AppendInput("al")
+	context.AppendInput(&StackRef{Ref: "al"})
 
 	return &AsmNoOperandInstr{Mnemonic: mnemonic}
 }
@@ -319,37 +319,42 @@ func ops_0_al(mnemonic string, env *Environment, context *RunContext) AsmInstr {
 // TODO hack
 func ops_2_sil_dil(mnemonic string, env *Environment, context *RunContext) AsmInstr {
 	context.Pop2Inputs()
-	context.AppendInput("sil")
-	context.AppendInput("dil")
+	context.AppendInput(&StackRef{Ref: "sil"})
+	context.AppendInput(&StackRef{Ref: "dil"})
 
 	return &AsmNoOperandInstr{Mnemonic: mnemonic}
 }
 
 func ops_1_1(mnemonic string, env *Environment, context *RunContext) AsmInstr {
-	op := context.Peek()
+	op := context.Peek().Ref
 
 	return &AsmUnaryInstr{Mnemonic: mnemonic, Op: op}
 }
 
 func ops_2(mnemonic string, env *Environment, context *RunContext) AsmInstr {
-	op1, op2 := context.Pop2Inputs()
+	ref1, ref2 := context.Pop2Inputs()
+	op1, op2 := ref1.Ref, ref2.Ref
 
 	return &AsmBinaryInstr{Mnemonic: mnemonic, Op1: op1, Op2: op2}
 }
 
 func ops_2_1(mnemonic string, env *Environment, context *RunContext) AsmInstr {
-	op1, op2 := context.Pop2Inputs()
-	context.AppendInput(op1)
+	ref1, ref2 := context.Pop2Inputs()
+	op1, op2 := ref1.Ref, ref2.Ref
+
+	context.AppendInput(ref1)
 
 	return &AsmBinaryInstr{Mnemonic: mnemonic, Op1: op1, Op2: op2}
 }
 
 func ops_shift(mnemonic string, env *Environment, context *RunContext) AsmInstr {
-	op1, op2 := context.Pop2Inputs()
-	context.AppendInput(op1)
+	ref1, ref2 := context.Pop2Inputs()
+	op1, op2 := ref1.Ref, ref2.Ref
 
-	if reg, found := registers[op2]; found {
-		if reg != ecx {
+	context.AppendInput(ref1)
+
+	if ref2.Type == StackRefType_Register {
+		if registers[op2] != ecx {
 			log.Fatal("Shift expects ECX register flavor")
 		}
 
@@ -360,30 +365,33 @@ func ops_shift(mnemonic string, env *Environment, context *RunContext) AsmInstr 
 }
 
 func ops_2_x2(mnemonic string, env *Environment, context *RunContext) AsmInstr {
-	op1, op2 := context.Pop2Inputs()
-	context.AppendInput(op2)
-	context.AppendInput(op1)
+	ref1, ref2 := context.Pop2Inputs()
+	op1, op2 := ref1.Ref, ref2.Ref
+
+	context.AppendInput(ref2)
+	context.AppendInput(ref1)
 
 	return &AsmBinaryInstr{Mnemonic: mnemonic, Op1: op1, Op2: op2}
 }
 
 func ops_loopx(mnemonic string, env *Environment, context *RunContext) AsmInstr {
-	op := context.PopInput()
+	ref2, ref1 := context.Pop2Inputs()
+	op2, op1 := ref1.Ref, ref2.Ref
 
-	ref := context.PopInput()
 	// TODO improve this check as the hacks mentioned below are addressed
-	if ref != "ecx" && ref != "rcx" {
-		log.Fatalf("%s expects rcx variant, got %s\n", mnemonic, ref)
+	// TODO can also enforce label on the stack now
+	if op1 != "ecx" && op1 != "rcx" {
+		log.Fatalf("%s expects rcx variant, got %s\n", mnemonic, op1)
 	}
 
-	return &AsmUnaryInstr{Mnemonic: mnemonic, Op: op}
+	return &AsmUnaryInstr{Mnemonic: mnemonic, Op: op2}
 }
 
 func ops_repx(mnemonic string, env *Environment, context *RunContext) AsmInstr {
 	ref := context.PopInput()
 	// TODO improve this check as the hacks mentioned below are addressed
-	if ref != "ecx" && ref != "rcx" {
-		log.Fatalf("%s expects rcx variant, got %s\n", mnemonic, ref)
+	if ref.Ref != "ecx" && ref.Ref != "rcx" {
+		log.Fatalf("%s expects rcx variant, got %s\n", mnemonic, ref.Ref)
 	}
 
 	previous := env.PopAsmInstr().(*AsmNoOperandInstr)
