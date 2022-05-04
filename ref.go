@@ -2,6 +2,8 @@ package main
 
 const (
 	StackRefType_Register = iota
+	StackRefType_LiteralInt
+	StackRefType_Label
 )
 
 type StackRef struct {

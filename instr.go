@@ -35,8 +35,10 @@ type LiteralIntInstr struct {
 }
 
 func (i *LiteralIntInstr) Run(env *Environment, context *RunContext) {
-	// TODO this is a hack during prototyping
-	context.AppendInput(strconv.Itoa(i.I))
+	context.AppendInput(&StackRef{
+		Type: StackRefType_LiteralInt,
+		Ref:  strconv.Itoa(i.I),
+	})
 }
 
 const (
@@ -68,7 +70,7 @@ func (i *JmpWordInstr) Run(env *Environment, context *RunContext) {
 type CallInstr struct{}
 
 func (i *CallInstr) Run(env *Environment, context *RunContext) {
-	target := context.PopInput()
+	target := context.PopInput().Ref
 
 	env.AppendAsmInstr(&AsmCallInstr{Label: target})
 }
@@ -111,7 +113,10 @@ type RefWordInstr struct {
 }
 
 func (i *RefWordInstr) Run(env *Environment, context *RunContext) {
-	context.AppendInput(i.Word.AsmLabel)
+	context.AppendInput(&StackRef{
+		Type: StackRefType_Label,
+		Ref:  i.Word.AsmLabel,
+	})
 }
 
 type ExternWordInstr struct {
