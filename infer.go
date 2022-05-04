@@ -33,13 +33,13 @@ func InferStackRefs(word *Word) {
 
 	for i, r := range word.Inputs {
 		if r.Ref == "" {
-			r.Ref = inputs[i]
+			r.Ref = inputs[i].Ref
 		}
 	}
 
 	for i, r := range word.Outputs {
 		if r.Ref == "" {
-			r.Ref = outputs[i]
+			r.Ref = outputs[i].Ref
 		}
 	}
 }
@@ -52,7 +52,7 @@ func min(a, b int) int {
 	return b
 }
 
-func attemptInferenceToNextWord(word *Word, inputs []string, outputs []string) ([]string, []string) {
+func attemptInferenceToNextWord(word *Word, inputs []*StackRef, outputs []*StackRef) ([]*StackRef, []*StackRef) {
 	wordInputs := word.InputRegisters()
 	wordInputsLen := len(wordInputs)
 	outputsLen := len(outputs)
@@ -68,9 +68,9 @@ func attemptInferenceToNextWord(word *Word, inputs []string, outputs []string) (
 	return inputs, outputs
 }
 
-func attemptInference(word *Word) (bool, []string, []string) {
-	var inputs []string
-	var outputs []string
+func attemptInference(word *Word) (bool, []*StackRef, []*StackRef) {
+	var inputs []*StackRef
+	var outputs []*StackRef
 	pendingSwapIdx := -1
 
 	for i, code := range word.Code {
@@ -84,9 +84,15 @@ func attemptInference(word *Word) (bool, []string, []string) {
 
 			pendingSwapIdx = i
 		case *LiteralIntInstr:
-			outputs = append(outputs, "I")
+			outputs = append(outputs, &StackRef{
+				Type: StackRefType_LiteralInt,
+				Ref:  "I",
+			})
 		case *RefWordInstr:
-			outputs = append(outputs, "RW")
+			outputs = append(outputs, &StackRef{
+				Type: StackRefType_Label,
+				Ref:  "RW",
+			})
 		case *CallWordInstr:
 			if !instr.Word.HasCompleteRefs() {
 				return false, nil, nil

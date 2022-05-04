@@ -395,7 +395,7 @@ func flowWordInputs(word *Word, env *Environment, context *RunContext) {
 	context.Inputs = context.Inputs[:have-need]
 
 	for i := need - 1; i >= 0; i-- {
-		same, op1, op2 := NormalizeRefs(expectedInputs[i], neededInputs[i])
+		same, ref1, ref2 := NormalizeRefs(expectedInputs[i], neededInputs[i])
 
 		if same {
 			continue
@@ -403,8 +403,8 @@ func flowWordInputs(word *Word, env *Environment, context *RunContext) {
 
 		flowInstrs := PeepholeAsmBinaryInstr(&AsmBinaryInstr{
 			Mnemonic: "mov",
-			Op1:      op1,
-			Op2:      op2,
+			Op1:      ref1.Ref,
+			Op2:      ref2.Ref,
 		})
 
 		env.AppendAsmInstrs(flowInstrs)
@@ -431,7 +431,7 @@ func flowWordOutputs(word *Word, env *Environment, context *RunContext) {
 	context.Inputs = context.Inputs[:have-need]
 
 	for i := need - 1; i >= 0; i-- {
-		same, op1, op2 := NormalizeRefs(expectedOutputs[i], neededInputs[i])
+		same, ref1, ref2 := NormalizeRefs(expectedOutputs[i], neededInputs[i])
 
 		if same {
 			continue
@@ -439,8 +439,8 @@ func flowWordOutputs(word *Word, env *Environment, context *RunContext) {
 
 		flowInstrs := PeepholeAsmBinaryInstr(&AsmBinaryInstr{
 			Mnemonic: "mov",
-			Op1:      op1,
-			Op2:      op2,
+			Op1:      ref1.Ref,
+			Op2:      ref2.Ref,
 		})
 
 		env.AppendAsmInstrs(flowInstrs)

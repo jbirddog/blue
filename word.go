@@ -145,7 +145,7 @@ func (w *Word) InputRegisters() []*StackRef {
 
 	for _, i := range w.Inputs {
 		if i.Type == StackRefType_Register {
-			registers = append(registers, i.Ref)
+			registers = append(registers, i)
 		}
 	}
 
@@ -157,7 +157,7 @@ func (w *Word) OutputRegisters() []*StackRef {
 
 	for _, o := range w.Outputs {
 		if o.Type == StackRefType_Register {
-			registers = append(registers, o.Ref)
+			registers = append(registers, o)
 		}
 	}
 
