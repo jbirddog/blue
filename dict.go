@@ -42,7 +42,7 @@ func DefaultDictionary() *Dictionary {
 		NewCallGoWord("loople", KernelLoople).Immediate(),
 		NewCallGoWord("const", KernelConst),
 		NewCallGoWord("hide", KernelHide),
-		NewInlineWord("@", &BracketInstr{}),
+		NewInlineWord("@", &DerefInstr{}),
 		NewInlineWord("!", &SetInstr{}),
 		NewInlineWord("rot", &RotInstr{}),
 		NewCallGoWord(`s"`, KernelSQuote).Immediate(),
