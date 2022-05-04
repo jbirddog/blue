@@ -140,21 +140,25 @@ func (w *Word) IsInline() bool {
 	return w.hasFlag(wordFlag_Inline)
 }
 
-func (w *Word) InputRegisters() []string {
-	var registers []string
+func (w *Word) InputRegisters() []*StackRef {
+	var registers []*StackRef
 
 	for _, i := range w.Inputs {
-		registers = append(registers, i.Ref)
+		if i.Type == StackRefType_Register {
+			registers = append(registers, i)
+		}
 	}
 
 	return registers
 }
 
-func (w *Word) OutputRegisters() []string {
-	var registers []string
+func (w *Word) OutputRegisters() []*StackRef {
+	var registers []*StackRef
 
 	for _, o := range w.Outputs {
-		registers = append(registers, o.Ref)
+		if o.Type == StackRefType_Register {
+			registers = append(registers, o)
+		}
 	}
 
 	return registers

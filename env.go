@@ -10,20 +10,20 @@ import (
 )
 
 type RunContext struct {
-	Inputs        []string
-	Outputs       []string
+	Inputs        []*StackRef
+	Outputs       []*StackRef
 	ClobberGuards []string
 }
 
-func (c *RunContext) AppendInput(i string) {
+func (c *RunContext) AppendInput(i *StackRef) {
 	c.Inputs = append(c.Inputs, i)
 }
 
-func (c *RunContext) Peek() string {
+func (c *RunContext) Peek() *StackRef {
 	return c.Inputs[len(c.Inputs)-1]
 }
 
-func (c *RunContext) PopInput() string {
+func (c *RunContext) PopInput() *StackRef {
 	lastIdx := len(c.Inputs) - 1
 	input := c.Inputs[lastIdx]
 	c.Inputs = c.Inputs[:lastIdx]
@@ -31,7 +31,7 @@ func (c *RunContext) PopInput() string {
 	return input
 }
 
-func (c *RunContext) Pop2Inputs() (string, string) {
+func (c *RunContext) Pop2Inputs() (*StackRef, *StackRef) {
 	inputsLen := len(c.Inputs)
 	second := c.Inputs[inputsLen-2]
 	first := c.Inputs[inputsLen-1]

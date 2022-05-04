@@ -35,8 +35,10 @@ type LiteralIntInstr struct {
 }
 
 func (i *LiteralIntInstr) Run(env *Environment, context *RunContext) {
-	// TODO this is a hack during prototyping
-	context.AppendInput(strconv.Itoa(i.I))
+	context.AppendInput(&StackRef{
+		Type: StackRefType_LiteralInt,
+		Ref:  strconv.Itoa(i.I),
+	})
 }
 
 const (
@@ -68,7 +70,7 @@ func (i *JmpWordInstr) Run(env *Environment, context *RunContext) {
 type CallInstr struct{}
 
 func (i *CallInstr) Run(env *Environment, context *RunContext) {
-	target := context.PopInput()
+	target := context.PopInput().Ref
 
 	env.AppendAsmInstr(&AsmCallInstr{Label: target})
 }
@@ -111,7 +113,10 @@ type RefWordInstr struct {
 }
 
 func (i *RefWordInstr) Run(env *Environment, context *RunContext) {
-	context.AppendInput(i.Word.AsmLabel)
+	context.AppendInput(&StackRef{
+		Type: StackRefType_Label,
+		Ref:  i.Word.AsmLabel,
+	})
 }
 
 type ExternWordInstr struct {
@@ -208,7 +213,8 @@ func (i *SwapInstr) Run(env *Environment, context *RunContext) {
 type SetInstr struct{}
 
 func (i *SetInstr) Run(env *Environment, context *RunContext) {
-	op2, op1 := context.Pop2Inputs()
+	ref2, ref1 := context.Pop2Inputs()
+	op2, op1 := ref2.Ref, ref1.Ref
 
 	if size, found := env.RefSizes[op1]; found {
 		op1 = fmt.Sprintf("%s [%s]", size, op1)
@@ -252,13 +258,19 @@ func (i *CondLoopInstr) Run(env *Environment, context *RunContext) {
 type BracketInstr struct{}
 
 func (i *BracketInstr) Run(env *Environment, context *RunContext) {
-	ident := context.PopInput()
+	ident := context.PopInput().Ref
+	var ref string
 
 	if size, found := registerSize[ident]; found {
-		context.AppendInput(fmt.Sprintf("%s [%s]", size, ident))
+		ref = fmt.Sprintf("%s [%s]", size, ident)
 	} else {
-		context.AppendInput(fmt.Sprintf("[%s]", ident))
+		ref = fmt.Sprintf("[%s]", ident)
 	}
+
+	context.AppendInput(&StackRef{
+		Type: StackRefType_Deref,
+		Ref:  ref,
+	})
 }
 
 type RotInstr struct{}
@@ -300,10 +312,16 @@ func (i *AsciiStrInstr) Run(env *Environment, context *RunContext) {
 	asmInstrs = append(asmInstrs, &AsmLabelInstr{Name: jmpLabel})
 
 	env.AppendAsmInstrs(asmInstrs)
-	context.AppendInput(refLabel)
+	context.AppendInput(&StackRef{
+		Type: StackRefType_Label,
+		Ref:  refLabel,
+	})
 
 	if i.PushLen {
-		context.AppendInput(fmt.Sprint(len(bytes)))
+		context.AppendInput(&StackRef{
+			Type: StackRefType_LiteralInt,
+			Ref:  fmt.Sprint(len(bytes)),
+		})
 	}
 }
 
@@ -337,13 +355,16 @@ func buildClobberGuards(word *Word, context *RunContext) {
 	context.ClearClobberGuards()
 
 	for _, input := range context.Inputs {
-		if regIdx, found := registers[input]; found {
-			if word.Clobbers&(1<<regIdx) == 0 {
-				continue
-			}
-
-			context.AppendClobberGuard(regIdx)
+		if input.Type != StackRefType_Register {
+			continue
 		}
+
+		regIdx := registers[input.Ref]
+		if word.Clobbers&(1<<regIdx) == 0 {
+			continue
+		}
+
+		context.AppendClobberGuard(regIdx)
 	}
 }
 
@@ -374,7 +395,7 @@ func flowWordInputs(word *Word, env *Environment, context *RunContext) {
 	context.Inputs = context.Inputs[:have-need]
 
 	for i := need - 1; i >= 0; i-- {
-		same, op1, op2 := NormalizeRefs(expectedInputs[i], neededInputs[i])
+		same, ref1, ref2 := NormalizeRefs(expectedInputs[i], neededInputs[i])
 
 		if same {
 			continue
@@ -382,8 +403,8 @@ func flowWordInputs(word *Word, env *Environment, context *RunContext) {
 
 		flowInstrs := PeepholeAsmBinaryInstr(&AsmBinaryInstr{
 			Mnemonic: "mov",
-			Op1:      op1,
-			Op2:      op2,
+			Op1:      ref1.Ref,
+			Op2:      ref2.Ref,
 		})
 
 		env.AppendAsmInstrs(flowInstrs)
@@ -410,7 +431,7 @@ func flowWordOutputs(word *Word, env *Environment, context *RunContext) {
 	context.Inputs = context.Inputs[:have-need]
 
 	for i := need - 1; i >= 0; i-- {
-		same, op1, op2 := NormalizeRefs(expectedOutputs[i], neededInputs[i])
+		same, ref1, ref2 := NormalizeRefs(expectedOutputs[i], neededInputs[i])
 
 		if same {
 			continue
@@ -418,8 +439,8 @@ func flowWordOutputs(word *Word, env *Environment, context *RunContext) {
 
 		flowInstrs := PeepholeAsmBinaryInstr(&AsmBinaryInstr{
 			Mnemonic: "mov",
-			Op1:      op1,
-			Op2:      op2,
+			Op1:      ref1.Ref,
+			Op2:      ref2.Ref,
 		})
 
 		env.AppendAsmInstrs(flowInstrs)
