@@ -255,9 +255,9 @@ func (i *CondLoopInstr) Run(env *Environment, context *RunContext) {
 	})
 }
 
-type BracketInstr struct{}
+type DerefInstr struct{}
 
-func (i *BracketInstr) Run(env *Environment, context *RunContext) {
+func (i DerefInstr) Run(env *Environment, context *RunContext) {
 	ident := context.PopInput().Ref
 	var ref string
 
