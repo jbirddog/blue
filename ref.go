@@ -28,13 +28,14 @@ func NormalizeRefs(a *StackRef, b *StackRef) (bool, *StackRef, *StackRef) {
 		aSize := registerSize[a.Ref]
 		bSize := registerSize[b.Ref]
 
-		// TODO will need some more work to support all combos
-		// add lookup in x8664.go map[size][index] to get names
-		if aSize == "dword" && bSize == "qword" {
-			b.Ref = reg32Names[bIndex]
+		aBytes := registerSizeInBytes[aSize]
+		bBytes := registerSizeInBytes[bSize]
+
+		if aBytes < bBytes {
+			b.Ref = registerNamesBySize[aSize][bIndex]
 			return false, a, b
-		} else if aSize == "qword" && bSize == "dword" {
-			a.Ref = reg32Names[aIndex]
+		} else if aBytes > bBytes {
+			a.Ref = registerNamesBySize[bSize][aIndex]
 			return false, a, b
 		}
 	}

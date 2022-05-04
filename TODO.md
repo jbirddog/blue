@@ -1,6 +1,5 @@
 ## compiler
 
-1. Instr needs RegisterRefs?
 1. more unit tests
    1. needs to be easier to test Instr and AsmInstr
 1. CondCall is not flowing yet
@@ -19,10 +18,8 @@
 1. More peephole optimizations
    1. mov rxx, 0 -> xor exx
    1. mov rxx, 1 -> xor exx, exx ; inc exx
-1. clobber support for indirect register usage
 1. x8664 words can have default registers - ( a -- b ) 8 add ; a/b = eax
 1. x8664 words can have required registers 4 shl needs ecx
-1. need to support var1 @ var2 ! - @! with clobber support
 1. Rosetta Code examples
    1. Strip whitespace from a string/Top and tail
    1. Environment variable
@@ -43,7 +40,14 @@
 
 # Targets
 
-### f7 (current)
+### f8
+
+1. allow addresses in stack refs
+1. need to support var1 @ var2 ! - @! with clobber support
+1. clobber support for indirect register usage
+   1. consider fallthrough words
+
+### f7
 
 bake, language and compiler improvements, v0.0.2
 
