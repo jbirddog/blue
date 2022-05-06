@@ -1,8 +1,7 @@
 : find0 ( start:rsi -- end:rsi ) lodsb 0 cmp latest xne ; 
 : cstrlen ( str:rdi -- len:rsi ) dup find0 swap sub dec ;
 
-\ TODO this is an example of needing indirect clobber detection
-: cstr>str ( cstr:rdx -- str:rsi len:rdx | rdi ) dup cstrlen xchg ;
+: cstr>str ( cstr:rdx -- str:rsi len:rdx ) dup cstrlen xchg ;
 
 \ TODO swap drop -> nip
 : copy-str ( src:rsi len:rcx dest:rdi -- tail:rdi ) rot swap movsb swap drop swap rep ;

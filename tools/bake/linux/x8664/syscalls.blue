@@ -1,4 +1,4 @@
-: syscall ( num:eax -- result:eax ) syscall ;
+: syscall ( num:eax -- result:eax | rcx ) syscall ;
 
 : exit ( status:edi -- noret ) exit syscall ;
 

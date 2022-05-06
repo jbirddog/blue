@@ -235,14 +235,14 @@ var registerNamesBySize = map[string][]string{
 	size64: reg64Names,
 	size32: reg32Names,
 	size16: reg16Names,
-	size8: reg8Names,
+	size8:  reg8Names,
 }
 
 var registerSizeInBytes = map[string]uint{
 	size64: 8,
 	size32: 4,
 	size16: 2,
-	size8: 1,
+	size8:  1,
 }
 
 var registerSize = map[string]string{

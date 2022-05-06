@@ -5,7 +5,7 @@
 
 ;  system call numbers
 
-; : syscall ( num:eax -- result:eax )
+; : syscall ( num:eax -- result:eax | rcx )
 
 __blue_4057121178_0:
 	syscall
@@ -207,9 +207,7 @@ __blue_1939608060_0:
 	dec rsi
 	ret
 
-;  TODO this is an example of needing indirect clobber detection
-
-; : cstr>str ( cstr:rdx -- str:rsi len:rdx | rdi )
+; : cstr>str ( cstr:rdx -- str:rsi len:rdx )
 
 __blue_3207375596_0:
 	mov rdi, rdx

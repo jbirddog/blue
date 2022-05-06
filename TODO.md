@@ -11,6 +11,7 @@
 1. continue to infer registers from word body
    1. if fully specified, validate
    1. infer during word fallthrough? whole program infer?
+   1. needs x8664 "words" to have register definitions
 1. validate needs to check for lingering refs/stack items
    1. some fatal logs exist
 1. treat words with only decb more like resb
@@ -42,10 +43,8 @@
 
 ### f8
 
-1. allow addresses in stack refs
 1. need to support var1 @ var2 ! - @! with clobber support
-1. clobber support for indirect register usage
-   1. consider fallthrough words
+   1. movs?
 
 ### f7
 
