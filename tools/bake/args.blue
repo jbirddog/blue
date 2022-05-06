@@ -18,8 +18,7 @@ cmd:
 1 resq cmd-name
 1 resq cmd-args
 
-: cmd-args! ( rax -- ) cmd-args ! ;
-: set-cmd-args ( -- ) argv @ 3 nth-arg cmd-args! ;
+: set-cmd-args ( -- ) argv @ 3 nth-arg cmd-args ! ;
 
 \ TODO support operation size for cmp so caller doesn't have to pass in argc
 : set-cmd-args ( argc:rax -- ) 3 cmp ' set-cmd-args xg ; 
