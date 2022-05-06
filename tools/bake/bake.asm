@@ -5,7 +5,7 @@
 
 ;  system call numbers
 
-; : syscall ( num:eax -- result:eax )
+; : syscall ( num:eax -- result:eax | rcx )
 
 __blue_4057121178_0:
 	syscall
