@@ -257,6 +257,7 @@ func (e *Environment) ParseNextWord() bool {
 
 	var instrs []Instr
 	var clobbers uint
+	var indirectRegisters uint
 	shouldOptimize := false
 
 	if word := e.Dictionary.Find(name); word != nil {
@@ -274,6 +275,7 @@ func (e *Environment) ParseNextWord() bool {
 		}
 
 		clobbers = word.Clobbers
+		indirectRegisters = word.Registers
 		instrs = instrsForWord(word)
 	} else if _, found := x8664Lowerers[name]; found {
 		instrs = []Instr{&X8664Instr{Mnemonic: name}}
@@ -297,8 +299,9 @@ func (e *Environment) ParseNextWord() bool {
 	}
 
 	if e.Compiling {
-		clobbers &= ^e.Dictionary.Latest.Registers
-		e.Dictionary.Latest.Clobbers |= clobbers
+		e.Dictionary.Latest.Clobbers |= UpdatedClobbers(clobbers,
+			e.Dictionary.Latest.Registers,
+			indirectRegisters)
 	}
 
 	return true

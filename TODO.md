@@ -45,8 +45,6 @@
 
 1. need to support var1 @ var2 ! - @! with clobber support
    1. movs?
-1. clobber support for indirect register usage
-   1. consider fallthrough words
 
 ### f7
 
