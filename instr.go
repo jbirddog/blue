@@ -446,8 +446,6 @@ func flowWordOutputs(word *Word, env *Environment, context *RunContext) {
 		env.AppendAsmInstrs(flowInstrs)
 	}
 
-	// buildClobberGuards(word, context)
-
 	wordOutputs := word.OutputRegisters()
 	context.Inputs = append(context.Inputs, wordOutputs...)
 }
