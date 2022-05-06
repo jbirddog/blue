@@ -41,10 +41,7 @@
 
 # Targets
 
-### f8
-
-1. need to support var1 @ var2 ! - @! with clobber support
-   1. movs?
+### f8 (Current)
 
 ### f7
 

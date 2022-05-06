@@ -1,4 +1,10 @@
 
+; : @! ( src:rsi dest:rdi -- )
+
+__blue_2950180442_0:
+	movsq
+	ret
+
 ;  global file descriptors
 
 ;  kernel error codes
@@ -149,15 +155,7 @@ __blue_2584388227_0: resq 1
 ; 1 resq envp
 
 __blue_2355496332_0: resq 1
-;  TODO needed because we can't currently `@ var !` and retain operation size
-
 section .text
-
-; : argc! ( rcx -- )
-
-__blue_882757847_0:
-	mov qword [__blue_2366279180_0], rcx
-	ret
 
 ; : envp-start ( base:rax argc:rcx -- start:rax )
 
@@ -178,8 +176,9 @@ __blue_3382297396_0:
 ; : brt0 ( rax -- )
 
 __blue_2486814297_0:
-	mov rcx, qword [rax]
-	call __blue_882757847_0
+	mov rdi, __blue_2366279180_0
+	mov rsi, rax
+	call __blue_2950180442_0
 	add rax, 8
 	mov qword [__blue_2584388227_0], rax
 	mov rcx, [__blue_2366279180_0]
@@ -551,19 +550,13 @@ __blue_1161787257_0: resq 1
 __blue_964343155_0: resq 1
 section .text
 
-; : cmd-args! ( rax -- )
-
-__blue_3458953238_0:
-	mov qword [__blue_964343155_0], rax
-	ret
-
 ; : set-cmd-args ( -- )
 
 __blue_4050364212_0:
 	mov rcx, 3
 	mov rax, [__blue_2584388227_0]
 	call __blue_3382297396_0
-	call __blue_3458953238_0
+	mov qword [__blue_964343155_0], rax
 	ret
 
 ;  TODO support operation size for cmp so caller doesn't have to pass in argc
