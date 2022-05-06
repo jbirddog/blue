@@ -263,7 +263,13 @@ func (e *Environment) ParseNextWord() bool {
 	if word := e.Dictionary.Find(name); word != nil {
 		// TODO this IsInline check isn't quite right
 		// eg: rot doesn't run when not compiling
-		// need to recall reason this was added and fix properly
+		// ---
+		// inline is here working around the fact that we start a new
+		// run context to execute words. A word like rot expects 3
+		// inputs at runtime, but in the case of not compiling the
+		// previous inputs are LiteralIntInstr on the code buf.
+		// since these types of words do not currently declare their
+		// inputs/outputs we can't convert codebuf->stackrefs
 		if (!e.Compiling || word.IsImmediate()) && !word.IsInline() {
 			context := &RunContext{}
 
@@ -295,6 +301,10 @@ func (e *Environment) ParseNextWord() bool {
 		// and cover more cases than just asm instructions (move leading string
 		// before word, etc). Need to consider how this interacts with computing
 		// the flow between words
+		// ---
+		// this is also working around the same issue described above. We can't
+		// properly interpret things like 1 2 or, so instead rely on the
+		// optimizer after each instruction which isn't good
 		e.OptimizeInstrs()
 	}
 
