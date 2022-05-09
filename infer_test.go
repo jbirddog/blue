@@ -66,7 +66,7 @@ func TestInference2(t *testing.T) {
 		expectedInputs  []string
 		expectedOutputs []string
 	}{
-		{": bob ( eax -- edi ) ;", []string{"eax"}, []string{"edi"}},
+		//{": bob ( eax -- edi ) ;", []string{"eax"}, []string{"edi"}},
 		{`
 		: bob ( eax -- ) ;
 		: sue ( joe -- ) bob ;

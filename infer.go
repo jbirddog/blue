@@ -110,7 +110,20 @@ func attemptInference2(env *Environment, word *Word) (bool, []*StackRef, []*Stac
 	env = env.Sandbox()
 
 	for _, instr := range word.Code {
+		if x, ok := instr.(*FlowWordInstr); ok {
+			log.Printf("f%d: %s %d", x.Direction, x.Word.Name, len(x.Word.Inputs))
+		}
 		instr.Run(env, context)
+	}
+
+	log.Printf(": %s - ", word.Name)
+
+	for _, i := range word.InputRegisters() {
+		log.Printf("i: %s:%s", i.Name, i.Ref)
+	}
+
+	for _, instr := range env.AsmInstrs {
+		log.Printf("a: %v", instr)
 	}
 
 	return false, nil, nil

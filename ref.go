@@ -20,8 +20,13 @@ func NormalizeRefs(a *StackRef, b *StackRef) (bool, *StackRef, *StackRef) {
 	}
 
 	if a.Type == StackRefType_Register && a.Type == b.Type {
-		aIndex := registers[a.Ref]
-		bIndex := registers[b.Ref]
+		aIndex, aFound := registers[a.Ref]
+		bIndex, bFound := registers[b.Ref]
+
+		if !aFound || !bFound {
+			return false, a, b
+		}
+
 		if aIndex == bIndex {
 			return true, a, b
 		}

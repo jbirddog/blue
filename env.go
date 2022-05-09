@@ -323,13 +323,13 @@ func (e *Environment) ParseNextWord() bool {
 	return true
 }
 
-func (c *Environment) AppendAsmInstr(i AsmInstr) {
-	c.AsmInstrs = append(c.AsmInstrs, i)
+func (e *Environment) AppendAsmInstr(i AsmInstr) {
+	e.AsmInstrs = append(e.AsmInstrs, i)
 }
 
-func (c *Environment) AppendAsmInstrs(i []AsmInstr) {
+func (e *Environment) AppendAsmInstrs(i []AsmInstr) {
 	if len(i) > 0 {
-		c.AsmInstrs = append(c.AsmInstrs, i...)
+		e.AsmInstrs = append(e.AsmInstrs, i...)
 	}
 }
 
