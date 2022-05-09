@@ -103,30 +103,45 @@ func attemptInferenceToNextWord(word *Word, inputs []*StackRef, outputs []*Stack
 }
 
 func attemptInference2(env *Environment, word *Word) (bool, []*StackRef, []*StackRef) {
-	context := &RunContext{
-		Inputs:  word.InputRegisters(),
-		Outputs: word.OutputRegisters(),
-	}
+	inputs := word.InputRegisters()
+	outputs := word.OutputRegisters()
+	context := &RunContext{Inputs: inputs, Outputs: outputs}
 	env = env.Sandbox()
 
 	for _, instr := range word.Code {
-		if x, ok := instr.(*FlowWordInstr); ok {
-			log.Printf("f%d: %s %d", x.Direction, x.Word.Name, len(x.Word.Inputs))
-		}
 		instr.Run(env, context)
 	}
 
-	log.Printf(": %s - ", word.Name)
-
-	for _, i := range word.InputRegisters() {
-		log.Printf("i: %s:%s", i.Name, i.Ref)
-	}
+	var movInstrs []*AsmBinaryInstr
 
 	for _, instr := range env.AsmInstrs {
-		log.Printf("a: %v", instr)
+		if mov, ok := instr.(*AsmBinaryInstr); ok {
+			movInstrs = append(movInstrs, mov)
+		}
 	}
 
-	return false, nil, nil
+	movsLen := len(movInstrs)
+	inputsLen := len(inputs)
+	outputsLen := len(outputs)
+
+	if movsLen < inputsLen+outputsLen {
+		return false, nil, nil
+	}
+
+	var inferedInputs []*StackRef
+	var inferedOutputs []*StackRef
+
+	for _, inputMov := range movInstrs[:inputsLen] {
+		inferedInputs = append(inferedInputs, &StackRef{Ref: inputMov.Op1})
+	}
+
+	/*
+	for i, outputMov := range movInstrs[outputsLen:] {
+		log.Printf("'%s' infered as '%s'", outputs[i].Name, outputMov.Op1)
+	}
+	*/
+
+	return true, inferedInputs, inferedOutputs
 }
 
 func attemptInference(word *Word) (bool, []*StackRef, []*StackRef) {
