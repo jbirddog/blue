@@ -234,19 +234,26 @@ func (e *Environment) ReadTil(s string) string {
 }
 
 func instrsForWord(word *Word) []Instr {
+	instrs := []Instr{&FlowWordInstr{Word: word}}
+
 	if !word.IsInline() {
-		return []Instr{
-			&FlowWordInstr{Word: word},
-			&CallWordInstr{Word: word},
+		instrs = append(instrs, &CallWordInstr{Word: word})
+	} else {
+
+		lastIdx := len(word.Code)
+		if _, isRet := word.Code[lastIdx-1].(*RetInstr); isRet {
+			lastIdx -= 1
 		}
+
+		// TODO debug the inference issue when the inlined word
+		// is flowed
+		// ---
+		// one issue is the swap in echo.blue's second write
+		instrs = append(instrs, word.Code[:lastIdx]...)
+		//instrs = word.Code[:lastIdx]
 	}
 
-	lastIdx := len(word.Code)
-	if _, isRet := word.Code[lastIdx-1].(*RetInstr); isRet {
-		lastIdx -= 1
-	}
-
-	return word.Code[:lastIdx]
+	return instrs
 }
 
 func (e *Environment) ParseNextWord() bool {
