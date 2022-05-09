@@ -48,10 +48,12 @@ func (w *Word) PopInstr() Instr {
 }
 
 func (w *Word) AppendInput(r *StackRef) {
+	r.Position = len(w.Inputs)
 	w.Inputs = append(w.Inputs, r)
 }
 
 func (w *Word) AppendOutput(r *StackRef) {
+	r.Position = len(w.Outputs)
 	w.Outputs = append(w.Outputs, r)
 }
 

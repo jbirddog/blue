@@ -8,9 +8,10 @@ const (
 )
 
 type StackRef struct {
-	Name string
-	Type int
-	Ref  string
+	Name     string
+	Type     int
+	Ref      string
+	Position int
 }
 
 func NormalizeRefs(a *StackRef, b *StackRef) (bool, *StackRef, *StackRef) {

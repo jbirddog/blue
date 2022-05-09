@@ -5,11 +5,7 @@ import (
 )
 
 func TestDoesNothingIfRefsAreComplete(t *testing.T) {
-	w := &Word{
-		Name:    "bob",
-		Inputs:  []*StackRef{&StackRef{Name: "eax", Ref: "eax"}},
-		Outputs: []*StackRef{&StackRef{Name: "edi", Ref: "edi"}},
-	}
+	w := parseForLatest(": bob ( eax -- edi ) ;")
 
 	InferStackRefs(w)
 
@@ -23,66 +19,44 @@ func TestDoesNothingIfRefsAreComplete(t *testing.T) {
 }
 
 func TestInfersBasicInputRefs(t *testing.T) {
-	// : bob ( eax -- ) ;
-	w1 := &Word{
-		Name:   "bob",
-		Inputs: []*StackRef{&StackRef{Name: "eax", Ref: "eax"}},
-	}
+	w := parseForLatest(`
+		: bob ( eax -- ) ;
+		: sue ( joe -- ) bob ;
+	`)
 
-	// : sue ( joe -- ) bob ;
-	w2 := &Word{
-		Name:   "sue",
-		Inputs: []*StackRef{&StackRef{Name: "joe", Ref: ""}},
-		Code:   []Instr{&CallWordInstr{Word: w1}},
-	}
+	InferStackRefs(w)
 
-	InferStackRefs(w2)
-
-	if w2.Inputs[0].Ref != "eax" {
+	if w.Inputs[0].Ref != "eax" {
 		t.Fatalf("Failed to infer eax")
 	}
 }
 
 func TestEchoReadExample(t *testing.T) {
-	// : syscall3 ( edi edx esi num:eax -- result:eax ) syscall ;
-	w1 := &Word{
-		Name: "syscall3",
-		Inputs: []*StackRef{
-			&StackRef{Name: "edi", Ref: "edi"},
-			&StackRef{Name: "edx", Ref: "edx"},
-			&StackRef{Name: "esi", Ref: "esi"},
-			&StackRef{Name: "num", Ref: "eax"},
-		},
-		Outputs: []*StackRef{&StackRef{Name: "result", Ref: "eax"}},
+	w := parseForLatest(`
+		: syscall3 ( edi edx esi num:eax -- result:eax ) syscall ;
+		: read ( fd len buf -- result ) 0 syscall3 ;
+	`)
+
+	InferStackRefs(w)
+
+	if len(w.Inputs) != 3 {
+		t.Fatalf("Expected 3 inputs got %d", len(w.Inputs))
+	}
+	if w.Inputs[0].Ref != "edi" {
+		t.Fatalf("Expected edi got '%s'", w.Inputs[0].Ref)
+	}
+	if w.Inputs[1].Ref != "edx" {
+		t.Fatalf("Expected edx got '%s'", w.Inputs[1].Ref)
+	}
+	if w.Inputs[2].Ref != "esi" {
+		t.Fatalf("Expected esi got '%s'", w.Inputs[2].Ref)
 	}
 
-	// : read ( fd len buf -- result ) 0 syscall3 ;
-	w2 := &Word{
-		Name: "read",
-		Inputs: []*StackRef{
-			&StackRef{Name: "fd", Ref: ""},
-			&StackRef{Name: "len", Ref: ""},
-			&StackRef{Name: "buf", Ref: ""},
-		},
-		Outputs: []*StackRef{&StackRef{Name: "result", Ref: ""}},
-		Code: []Instr{
-			&LiteralIntInstr{I: 0},
-			&CallWordInstr{Word: w1},
-		},
+	if len(w.Outputs) != 1 {
+		t.Fatalf("Expected 1 outputs got %d", len(w.Outputs))
 	}
-
-	InferStackRefs(w2)
-
-	for i, r := range w2.Inputs {
-		if r.Ref != w1.Inputs[i].Ref {
-			t.Fatalf("Expected '%s', got '%s'", w1.Inputs[i].Ref, r.Ref)
-		}
-	}
-
-	for i, r := range w2.Outputs {
-		if r.Ref != w1.Outputs[i].Ref {
-			t.Fatalf("Expected '%s', got '%s'", w1.Outputs[i].Ref, r.Ref)
-		}
+	if w.Outputs[0].Ref != "eax" {
+		t.Fatalf("Expected eax got '%s'", w.Outputs[0].Ref)
 	}
 }
 
@@ -183,4 +157,13 @@ func TestWriteDropsResult(t *testing.T) {
 	if len(w2.Outputs) != 0 {
 		t.Fatal("Unexpected output len")
 	}
+}
+
+// TODO move these test helpers somewhere
+func parseForLatest(buf string) *Word {
+	e := env(buf)
+	for e.ParseNextWord() {
+	}
+
+	return e.Dictionary.Latest
 }
