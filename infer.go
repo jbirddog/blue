@@ -117,6 +117,7 @@ func attemptInference2(env *Environment, word *Word) (bool, []*StackRef, []*Stac
 	for _, instr := range env.AsmInstrs {
 		if mov, ok := instr.(*AsmBinaryInstr); ok {
 			movInstrs = append(movInstrs, mov)
+			log.Printf("%s - f: %s, %s", word.Name, mov.Op1, mov.Op2)
 		}
 	}
 
@@ -133,13 +134,13 @@ func attemptInference2(env *Environment, word *Word) (bool, []*StackRef, []*Stac
 
 	for _, inputMov := range movInstrs[:inputsLen] {
 		inferedInputs = append(inferedInputs, &StackRef{Ref: inputMov.Op1})
+		log.Printf("%s - i: %s, %s", word.Name, inputMov.Op1, inputMov.Op2)
 	}
 
-	/*
-	for i, outputMov := range movInstrs[outputsLen:] {
-		log.Printf("'%s' infered as '%s'", outputs[i].Name, outputMov.Op1)
+	for _, outputMov := range movInstrs[movsLen-outputsLen:] {
+		inferedOutputs = append(inferedOutputs, &StackRef{Ref: outputMov.Op2})
+		log.Printf("%s - o: %s, %s", word.Name, outputMov.Op1, outputMov.Op2)
 	}
-	*/
 
 	return true, inferedInputs, inferedOutputs
 }

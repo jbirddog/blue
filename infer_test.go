@@ -66,16 +66,16 @@ func TestInference2(t *testing.T) {
 		expectedInputs  []string
 		expectedOutputs []string
 	}{
-		//{": bob ( eax -- edi ) ;", []string{"eax"}, []string{"edi"}},
+		{": bob ( eax -- edi ) ;", []string{"eax"}, []string{"edi"}},
 		{`
 		: bob ( eax -- ) ;
 		: sue ( joe -- ) bob ;
 		`, []string{"eax"}, nil},
-		/*
-			{`
+		{`
 			: syscall3 ( edi edx esi num:eax -- result:eax ) syscall ;
 			: read ( fd len buf -- result ) 0 syscall3 ;
 			`, []string{"edi", "edx", "esi"}, []string{"eax"}},
+		/*
 			{`
 			1 resb buf
 			: syscall3 ( edi edx esi num:eax -- result:eax ) syscall ;
