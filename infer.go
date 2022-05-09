@@ -10,12 +10,46 @@ import (
 // the effect for a word. this implementation will be quick and dirty to
 // see how it works in the language before the more correct implementation
 
-func InferStackRefs(word *Word) {
+func InferStackRefs(env *Environment, word *Word) {
 	if word.HasCompleteRefs() {
 		return
 	}
 
 	inferred, inputs, outputs := attemptInference(word)
+
+	if !inferred {
+		return
+	}
+
+	if len(inputs) != len(word.Inputs) {
+		log.Printf("Inferred different input len (%d) than declared (%d)", len(inputs), len(word.Inputs))
+		return
+	}
+
+	if len(outputs) != len(word.Outputs) {
+		log.Print("Inferred different output len than declared")
+		return
+	}
+
+	for i, r := range word.Inputs {
+		if r.Ref == "" {
+			r.Ref = inputs[i].Ref
+		}
+	}
+
+	for i, r := range word.Outputs {
+		if r.Ref == "" {
+			r.Ref = outputs[i].Ref
+		}
+	}
+}
+
+func InferStackRefs2(env *Environment, word *Word) {
+	if word.HasCompleteRefs() {
+		return
+	}
+
+	inferred, inputs, outputs := attemptInference2(env, word)
 
 	if !inferred {
 		return
@@ -66,6 +100,20 @@ func attemptInferenceToNextWord(word *Word, inputs []*StackRef, outputs []*Stack
 	outputs = append(outputs, wordOutputs...)
 
 	return inputs, outputs
+}
+
+func attemptInference2(env *Environment, word *Word) (bool, []*StackRef, []*StackRef) {
+	context := &RunContext{
+		Inputs:  word.InputRegisters(),
+		Outputs: word.OutputRegisters(),
+	}
+	env = env.Sandbox()
+
+	for _, instr := range word.Code {
+		instr.Run(env, context)
+	}
+
+	return false, nil, nil
 }
 
 func attemptInference(word *Word) (bool, []*StackRef, []*StackRef) {
