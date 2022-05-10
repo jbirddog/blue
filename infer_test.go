@@ -72,19 +72,19 @@ func TestInference2(t *testing.T) {
 		: sue ( joe -- ) bob ;
 		`, []string{"eax"}, nil},
 		{`
-			: syscall3 ( edi edx esi num:eax -- result:eax ) syscall ;
-			: read ( fd len buf -- result ) 0 syscall3 ;
-			`, []string{"edi", "edx", "esi"}, []string{"eax"}},
+		: syscall3 ( edi edx esi num:eax -- result:eax ) syscall ;
+		: read ( fd len buf -- result ) 0 syscall3 ;
+		`, []string{"edi", "edx", "esi"}, []string{"eax"}},
 		{`
-				1 resb buf
-				: syscall3 ( edi edx esi num:eax -- result:eax ) syscall ;
-				: write ( len fd -- result ) swap buf 0 syscall3 ;
-				`, []string{"edx", "edi"}, []string{"eax"}},
+		1 resb buf
+		: syscall3 ( edi edx esi num:eax -- result:eax ) syscall ;
+		: write ( len fd -- result ) swap buf 0 syscall3 ;
+		`, []string{"edx", "edi"}, []string{"eax"}},
 		{`
-				1 resb buf
-				: syscall3 ( edi edx esi num:eax -- result:eax ) syscall ;
-				: write ( fd len -- ) swap buf 0 syscall3 drop ;
-				`, []string{"edx", "edi"}, []string{}},
+		1 resb buf
+		: syscall3 ( edi edx esi num:eax -- result:eax ) syscall ;
+		: write ( fd len -- ) swap buf 0 syscall3 drop ;
+		`, []string{"edx", "edi"}, []string{}},
 	}
 
 	for cnum, c := range cases {
@@ -101,7 +101,7 @@ func TestInference2(t *testing.T) {
 
 		for i, input := range w.Inputs {
 			if input.Ref != c.expectedInputs[i] {
-				t.Fatalf("%db) Expected '%s' got '%s'", cnum, c.expectedInputs[i], input.Ref)
+				t.Fatalf("%db) Expected '%s' got '%s' @ %d", cnum, c.expectedInputs[i], input.Ref, i)
 			}
 		}
 
