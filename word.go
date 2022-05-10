@@ -55,19 +55,8 @@ func (w *Word) AppendOutput(r *StackRef) {
 	w.Outputs = append(w.Outputs, r)
 }
 
-// TODO move when registers/refs get their own file
-func refsAreComplete(refs []*StackRef) bool {
-	for _, r := range refs {
-		if len(r.Ref) == 0 {
-			return false
-		}
-	}
-
-	return true
-}
-
 func (w *Word) HasCompleteRefs() bool {
-	return refsAreComplete(w.Inputs) && refsAreComplete(w.Outputs)
+	return RefsAreComplete(w.Inputs) && RefsAreComplete(w.Outputs)
 }
 
 func (w *Word) DeclString() string {

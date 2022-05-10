@@ -49,27 +49,20 @@ func InferStackRefs2(env *Environment, word *Word) {
 		return
 	}
 
-	inputs, outputs := attemptInference2(env, word)
+	infered, inputs, outputs := attemptInference2(env, word)
 
-	if len(inputs) != len(word.Inputs) {
-		log.Printf("Inferred different input len (%d) than declared (%d)", len(inputs), len(word.Inputs))
+	if !infered {
 		return
 	}
 
-	if len(outputs) != len(word.Outputs) {
-		log.Print("Inferred different output len than declared")
-		return
-	}
+	applyInference(word.Inputs, inputs)
+	applyInference(word.Outputs, outputs)
+}
 
-	for i, r := range word.Inputs {
-		if r.Ref == "" {
-			r.Ref = inputs[i].Ref
-		}
-	}
-
-	for i, r := range word.Outputs {
-		if r.Ref == "" {
-			r.Ref = outputs[i].Ref
+func applyInference(dest []*StackRef, src []*StackRef) {
+	for i, d := range dest {
+		if d.Ref == "" {
+			d.Ref = src[i].Ref
 		}
 	}
 }
@@ -108,7 +101,19 @@ func indexStackRefs(refs []*StackRef) map[string]int {
 	return indexes
 }
 
-func attemptInference2(env *Environment, word *Word) ([]*StackRef, []*StackRef) {
+func findMovInstrs(asmInstrs []AsmInstr) []*AsmBinaryInstr {
+	var movs []*AsmBinaryInstr
+
+	for _, instr := range asmInstrs {
+		if mov, ok := instr.(*AsmBinaryInstr); ok && mov.Mnemonic == "mov" {
+			movs = append(movs, mov)
+		}
+	}
+
+	return movs
+}
+
+func attemptInference2(env *Environment, word *Word) (bool, []*StackRef, []*StackRef) {
 	inputs := word.InputRegisters()
 	inputIndexes := indexStackRefs(inputs)
 	outputs := word.OutputRegisters()
@@ -123,17 +128,28 @@ func attemptInference2(env *Environment, word *Word) ([]*StackRef, []*StackRef) 
 		instr.Run(env, context)
 	}
 
-	for _, instr := range env.AsmInstrs {
-		if mov, ok := instr.(*AsmBinaryInstr); ok && mov.Mnemonic == "mov" {
-			if index, found := inputIndexes[mov.Op2]; found {
-				inputs[index].Ref = mov.Op1
-			} else if index, found := outputIndexes[mov.Op1]; found {
-				outputs[index].Ref = mov.Op2
-			}
+	movInstrs := findMovInstrs(env.AsmInstrs)
+
+	if len(movInstrs) < len(inputs)+len(outputs) {
+		return false, nil, nil
+	}
+
+	for _, mov := range movInstrs {
+		if index, found := inputIndexes[mov.Op2]; found {
+			inputs[index].Ref = mov.Op1
+			continue
+		}
+
+		if index, found := outputIndexes[mov.Op1]; found {
+			outputs[index].Ref = mov.Op2
 		}
 	}
 
-	return inputs, outputs
+	if !RefsAreComplete(inputs) || !RefsAreComplete(outputs) {
+		return false, nil, nil
+	}
+
+	return true, inputs, outputs
 }
 
 func attemptInference(word *Word) (bool, []*StackRef, []*StackRef) {

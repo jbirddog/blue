@@ -21,6 +21,17 @@ func (s *StackRef) FlowTarget() string {
 	return s.Name
 }
 
+// TODO move when registers/refs get their own file
+func RefsAreComplete(refs []*StackRef) bool {
+	for _, r := range refs {
+		if len(r.Ref) == 0 {
+			return false
+		}
+	}
+
+	return true
+}
+
 func NormalizeRefs(a *StackRef, b *StackRef) (bool, *StackRef, *StackRef) {
 	if a.Type == b.Type && a.Ref == b.Ref {
 		return true, a, b
