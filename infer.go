@@ -102,9 +102,19 @@ func attemptInferenceToNextWord(word *Word, inputs []*StackRef, outputs []*Stack
 	return inputs, outputs
 }
 
+func indexStackRefs(refs []*StackRef) ([]*StackRef, map[string]int) {
+	indexes := map[string]int{}
+
+	for i, r := range refs {
+		indexes[r.Name] = i
+	}
+
+	return refs, indexes
+}
+
 func attemptInference2(env *Environment, word *Word) (bool, []*StackRef, []*StackRef) {
-	inputs := word.InputRegisters()
-	outputs := word.OutputRegisters()
+	inputs, inputIndexes := indexStackRefs(word.InputRegisters())
+	outputs, outputIndexes := indexStackRefs(word.OutputRegisters())
 	context := &RunContext{Inputs: inputs, Outputs: outputs}
 	env = env.Sandbox()
 
@@ -112,39 +122,20 @@ func attemptInference2(env *Environment, word *Word) (bool, []*StackRef, []*Stac
 		instr.Run(env, context)
 	}
 
-	var movInstrs []*AsmBinaryInstr
-
 	for _, instr := range env.AsmInstrs {
-		if mov, ok := instr.(*AsmBinaryInstr); ok {
-			if mov.Op1 != "" && mov.Op2 != "" {
-				continue
+		if mov, ok := instr.(*AsmBinaryInstr); ok && mov.Mnemonic == "mov" {
+			if index, found := inputIndexes[mov.Op2]; found {
+				log.Printf("inputs[%d]: infered %s as %s", index, mov.Op2, mov.Op1)
+				inputs[index].Ref = mov.Op1
+			} else if index, found := outputIndexes[mov.Op1]; found {
+				log.Printf("outputs[%d]: infered %s as %s", index, mov.Op1, mov.Op2)
+				outputs[index].Ref = mov.Op2
 			}
-
-			movInstrs = append(movInstrs, mov)
 		}
 	}
 
-	movsLen := len(movInstrs)
-	inputsLen := len(inputs)
-	outputsLen := len(outputs)
-
-	if movsLen < inputsLen+outputsLen {
-		return false, nil, nil
-	}
-
-	var inferedInputs []*StackRef
-	var inferedOutputs []*StackRef
-
-	for i := inputsLen - 1; i >= 0; i -= 1 {
-		inferedInputs = append(inferedInputs, &StackRef{Ref: movInstrs[i].Op1})
-	}
-
-	// TODO test multiple outputs
-	for _, outputMov := range movInstrs[movsLen-outputsLen:] {
-		inferedOutputs = append(inferedOutputs, &StackRef{Ref: outputMov.Op2})
-	}
-
-	return true, inferedInputs, inferedOutputs
+	// TODO when v2 is ready remove the bool and simplify the caller
+	return true, inputs, outputs
 }
 
 func attemptInference(word *Word) (bool, []*StackRef, []*StackRef) {

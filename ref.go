@@ -8,10 +8,17 @@ const (
 )
 
 type StackRef struct {
-	Name     string
-	Type     int
-	Ref      string
-	Position int
+	Name string
+	Type int
+	Ref  string
+}
+
+func (s *StackRef) FlowTarget() string {
+	if s.Ref != "" {
+		return s.Ref
+	}
+
+	return s.Name
 }
 
 func NormalizeRefs(a *StackRef, b *StackRef) (bool, *StackRef, *StackRef) {
