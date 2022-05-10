@@ -85,6 +85,17 @@ func TestInference2(t *testing.T) {
 		: syscall3 ( edi edx esi num:eax -- result:eax ) syscall ;
 		: write ( fd len -- ) swap buf 0 syscall3 drop ;
 		`, []string{"edx", "edi"}, []string{}},
+		// crash during integration from examples/echo.blue
+		{`
+		: syscall ( num:eax -- result:eax ) syscall ;
+
+		: read ( fd:edi len:edx buf:esi -- result:eax ) 0 syscall ;
+
+		1024 const buf.cap
+		buf.cap resb buf
+
+		: read ( fd -- read ) buf.cap buf read ;
+		`, []string{"edi"}, []string{"eax"}},
 	}
 
 	for cnum, c := range cases {

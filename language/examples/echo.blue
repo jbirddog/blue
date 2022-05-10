@@ -2,11 +2,10 @@ import linux_x86-64
 
 global _start
 
-: syscall3 ( edi edx esi num:eax -- result:eax ) syscall ;
 : unwrap ( result:eax -- value:eax ) dup 0 cmp ' die xl ;
 
-: read ( fd len buf -- result ) 0 syscall3 ;
-: write ( fd len buf -- result ) 1 syscall3 ;
+: read ( fd:edi len:edx buf:esi -- result:eax ) 0 syscall ;
+: write ( fd:edi len:edx buf:esi -- result:eax ) 1 syscall ;
 
 1024 const buf.cap
 
