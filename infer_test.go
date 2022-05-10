@@ -75,18 +75,16 @@ func TestInference2(t *testing.T) {
 			: syscall3 ( edi edx esi num:eax -- result:eax ) syscall ;
 			: read ( fd len buf -- result ) 0 syscall3 ;
 			`, []string{"edi", "edx", "esi"}, []string{"eax"}},
-		/*
-			{`
+		{`
 				1 resb buf
 				: syscall3 ( edi edx esi num:eax -- result:eax ) syscall ;
 				: write ( len fd -- result ) swap buf 0 syscall3 ;
 				`, []string{"edx", "edi"}, []string{"eax"}},
-				{`
+		{`
 				1 resb buf
 				: syscall3 ( edi edx esi num:eax -- result:eax ) syscall ;
 				: write ( fd len -- ) swap buf 0 syscall3 drop ;
 				`, []string{"edx", "edi"}, []string{}},
-		*/
 	}
 
 	for cnum, c := range cases {
@@ -98,22 +96,22 @@ func TestInference2(t *testing.T) {
 		w := e.Dictionary.Latest
 
 		if len(w.Inputs) != len(c.expectedInputs) {
-			t.Fatalf("%d) Expected %d inputs got %d", cnum, len(w.Inputs), len(c.expectedInputs))
+			t.Fatalf("%da) Expected %d inputs got %d", cnum, len(w.Inputs), len(c.expectedInputs))
 		}
 
 		for i, input := range w.Inputs {
 			if input.Ref != c.expectedInputs[i] {
-				t.Fatalf("%d) Expected '%s' got '%s'", cnum, c.expectedInputs[i], input.Ref)
+				t.Fatalf("%db) Expected '%s' got '%s'", cnum, c.expectedInputs[i], input.Ref)
 			}
 		}
 
 		if len(w.Outputs) != len(c.expectedOutputs) {
-			t.Fatalf("%d) Expected %d outputs got %d", cnum, len(w.Outputs), len(c.expectedOutputs))
+			t.Fatalf("%dc) Expected %d outputs got %d", cnum, len(w.Outputs), len(c.expectedOutputs))
 		}
 
 		for i, output := range w.Outputs {
 			if output.Ref != c.expectedOutputs[i] {
-				t.Fatalf("%d) Expected '%s' got '%s'", cnum, c.expectedOutputs[i], output.Ref)
+				t.Fatalf("%dd) Expected '%s' got '%s'", cnum, c.expectedOutputs[i], output.Ref)
 			}
 		}
 	}
