@@ -60,7 +60,6 @@ type Environment struct {
 	Section              string
 	UserSpecifiedSection bool
 	RefSizes             map[string]string
-	InferV2              bool // TODO delete once migrated
 }
 
 func DefaultEnvironment() *Environment {
@@ -73,13 +72,11 @@ func DefaultEnvironment() *Environment {
 }
 
 func (e *Environment) Sandbox() *Environment {
-	// TODO copy containers
 	return &Environment{
 		Dictionary: e.Dictionary,
 		Globals:    e.Globals,
 		Labels:     e.Labels,
 		RefSizes:   e.RefSizes,
-		InferV2:    e.InferV2,
 	}
 }
 
@@ -194,11 +191,7 @@ func (e *Environment) ValidateStackRefs(refs []*StackRef) {
 
 func (e *Environment) DeclWord(word *Word) {
 	if !word.HasCompleteRefs() {
-		if true || e.InferV2 {
 			InferStackRefs2(e, word)
-		} else {
-			InferStackRefs(e, word)
-		}
 	}
 
 	e.ValidateStackRefs(word.Inputs)

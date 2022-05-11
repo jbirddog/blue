@@ -7,12 +7,6 @@ import (
 	"strings"
 )
 
-// TODO remove once switched over
-func KernelInferV2(env *Environment) {
-	log.Print("Switching to inference v2")
-	env.InferV2 = true
-}
-
 func KernelColon(env *Environment) {
 	flowPreviousWord := env.Compiling
 	env.Compiling = true
