@@ -243,7 +243,11 @@ func (e *Environment) ReadTil(s string) string {
 }
 
 func instrsForWord(word *Word) []Instr {
-	instrs := []Instr{&FlowWordInstr{Word: word}}
+	var instrs []Instr
+
+	if word.HasStackRefs() {
+		instrs = append(instrs, &FlowWordInstr{Word: word})
+	}
 
 	if !word.IsInline() {
 		instrs = append(instrs, &CallWordInstr{Word: word})
@@ -255,7 +259,6 @@ func instrsForWord(word *Word) []Instr {
 		}
 
 		instrs = append(instrs, word.Code[:lastIdx]...)
-		//instrs = word.Code[:lastIdx]
 	}
 
 	return instrs
