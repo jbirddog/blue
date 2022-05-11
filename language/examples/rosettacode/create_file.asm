@@ -69,8 +69,10 @@ __blue_2883839448_0:
 ; : create-file ( pathname -- )
 
 __blue_3101971046_0:
+	or 64, 1
+	or 64, 512
 	mov edx, 416
-	mov esi, 577
+	mov esi, 64
 	call __blue_3546203337_0
 	mov edi, eax
 	call __blue_667630371_0

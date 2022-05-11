@@ -254,10 +254,6 @@ func instrsForWord(word *Word) []Instr {
 			lastIdx -= 1
 		}
 
-		// TODO debug the inference issue when the inlined word
-		// is flowed
-		// ---
-		// one issue is the swap in echo.blue's second write
 		instrs = append(instrs, word.Code[:lastIdx]...)
 		//instrs = word.Code[:lastIdx]
 	}
