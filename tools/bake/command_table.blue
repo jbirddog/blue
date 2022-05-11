@@ -13,5 +13,5 @@
 	usage
 ;
 
-: call-named-cmd ( name:rdx -- noret ) cstr>cmd-key call-cmd-with-key ;
+: call-named-cmd ( name -- noret ) cstr>cmd-key call-cmd-with-key ;
 : call-specified-cmd ( -- noret ) cmd-name @ call-named-cmd ;

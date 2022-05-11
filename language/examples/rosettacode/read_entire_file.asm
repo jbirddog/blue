@@ -102,7 +102,7 @@ section .bss
 __blue_1763898183_0: resd 1
 section .text
 
-; : open-file ( pathname:edi -- )
+; : open-file ( pathname -- )
 
 __blue_3225053210_0:
 	xor esi, esi
