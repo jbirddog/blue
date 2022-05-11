@@ -101,6 +101,27 @@ func indexStackRefs(refs []*StackRef) map[string]int {
 	return indexes
 }
 
+func prepCodeForInference(instrs []Instr) (bool, []Instr) {
+	var prepped []Instr
+
+	for _, i := range instrs {
+		switch instr := i.(type) {
+		case *CallWordInstr:
+			if !instr.Word.HasCompleteRefs() {
+				return false, nil
+			}
+		case *JmpWordInstr:
+			if !instr.Word.HasCompleteRefs() {
+				return false, nil
+			}
+		default:
+			prepped = append(prepped, instr)
+		}
+	}
+
+	return true, prepped
+}
+
 func findMovInstrs(asmInstrs []AsmInstr) []*AsmBinaryInstr {
 	var movs []*AsmBinaryInstr
 
@@ -123,8 +144,13 @@ func attemptInference2(env *Environment, word *Word) (bool, []*StackRef, []*Stac
 		Outputs: word.OutputRegisters(),
 	}
 	env = env.Sandbox()
+	inferable, code := prepCodeForInference(word.Code)
 
-	for _, instr := range word.Code {
+	if !inferable {
+		return false, nil, nil
+	}
+
+	for _, instr := range code {
 		instr.Run(env, context)
 	}
 

@@ -81,6 +81,11 @@ func TestInference2(t *testing.T) {
 		: joe ( bob -- ) sue ;
 		`, []string{"eax"}, nil},
 		{`
+		: bob ( eax -- ecx ) ;
+		: sue ( joe -- sam ) bob ;
+		: joe ( bob -- sam ) sue ;
+		`, []string{"eax"}, []string{"ecx"}},
+		{`
 		: syscall3 ( edi edx esi num:eax -- result:eax ) syscall ;
 		: read ( fd len buf -- result ) 0 syscall3 ;
 		`, []string{"edi", "edx", "esi"}, []string{"eax"}},
@@ -105,15 +110,13 @@ func TestInference2(t *testing.T) {
 
 		: read ( fd -- read ) buf.cap buf read ;
 		`, []string{"edi"}, []string{"eax"}},
-		/*
-			{`
-			: println ( r10 r11 -- ) drop drop ;
-			: cstrlen ( str:rdi -- len:rsi ) ;
-			: cstr>str ( cstr:rdx -- str:rsi len:rdx ) dup cstrlen xchg ;
+		{`
+		: println ( r10 r11 -- ) drop drop ;
+		: cstrlen ( str:rdi -- len:rsi ) ;
+		: cstr>str ( cstr:rdx -- str:rsi len:rdx ) dup cstrlen xchg ;
 
-			: print-arg ( arg -- ) cstr>str println ;
-			`, []string{}, []string{}},
-		*/
+		: print-arg ( arg -- ) cstr>str println ;
+		`, []string{"rdx"}, []string{}},
 	}
 
 	for cnum, c := range cases {
