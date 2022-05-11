@@ -1146,7 +1146,7 @@ __blue_2157056155_6:
 	loop __blue_612288868_0
 	jmp __blue_3461590696_0
 
-; : call-named-cmd ( name:rdx -- noret )
+; : call-named-cmd ( name -- noret )
 
 __blue_2780306156_0:
 	call __blue_4283867725_0
