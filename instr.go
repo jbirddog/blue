@@ -408,14 +408,6 @@ func flowWordInputs(word *Word, env *Environment, context *RunContext) {
 		})
 
 		env.AppendAsmInstrs(flowInstrs)
-
-		/*
-			env.AppendAsmInstr(&AsmBinaryInstr{
-				Mnemonic: "mov",
-				Op1: ref1.Ref,
-				Op2: ref2.Ref,
-			})
-		*/
 	}
 
 	buildClobberGuards(word, context)
@@ -452,14 +444,6 @@ func flowWordOutputs(word *Word, env *Environment, context *RunContext) {
 		})
 
 		env.AppendAsmInstrs(flowInstrs)
-
-		/*
-			env.AppendAsmInstr(&AsmBinaryInstr{
-				Mnemonic: "mov",
-				Op1: ref1.Ref,
-				Op2: ref2.Ref,
-			})
-		*/
 	}
 
 	wordOutputs := word.OutputRegisters()

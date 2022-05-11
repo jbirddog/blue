@@ -191,7 +191,7 @@ func (e *Environment) ValidateStackRefs(refs []*StackRef) {
 
 func (e *Environment) DeclWord(word *Word) {
 	if !word.HasCompleteRefs() {
-			InferStackRefs2(e, word)
+		InferStackRefs(e, word)
 	}
 
 	e.ValidateStackRefs(word.Inputs)
