@@ -3,17 +3,13 @@
 1. more unit tests
    1. needs to be easier to test Instr and AsmInstr
 1. CondCall is not flowing yet
-1. inline is not flowing yet
 1. import vs use - one brings in externs other all code from file
    1. link vs include? - use to determine how to build via dsl?
 1. better newline support when generating asm
 1. when importing, can drop the global decls from the imported env?
 1. continue to infer registers from word body
-   1. if fully specified, check if inferable
-   1. infer during word fallthrough? whole program infer?
-   1. needs x8664 "words" to have register definitions
-1. validate needs to check for lingering refs/stack items
-   1. some fatal logs exist
+   1. infer during word fallthrough?
+   1. need x8664 "words" to have register definitions
 1. treat words with only decb more like resb
    1. global strings also fall into this bucket
 1. More peephole optimizations

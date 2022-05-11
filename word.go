@@ -55,6 +55,10 @@ func (w *Word) AppendOutput(r *StackRef) {
 	w.Outputs = append(w.Outputs, r)
 }
 
+func (w *Word) HasStackRefs() bool {
+	return len(w.Inputs) > 0 || len(w.Outputs) > 0
+}
+
 func (w *Word) HasCompleteRefs() bool {
 	return RefsAreComplete(w.Inputs) && RefsAreComplete(w.Outputs)
 }
