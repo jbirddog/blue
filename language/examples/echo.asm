@@ -31,6 +31,12 @@ bye:
 
 global _start
 
+; : syscall3 ( edi edx esi num:eax -- result:eax )
+
+__blue_1472650507_0:
+	call __blue_4057121178_0
+	ret
+
 ; : unwrap ( result:eax -- value:eax )
 
 __blue_4055961022_0:
@@ -41,19 +47,19 @@ __blue_4055961022_0:
 __blue_2157056155_0:
 	ret
 
-; : read ( fd:edi len:edx buf:esi -- result:eax )
+; : read ( fd len buf -- result )
 
 __blue_3470762949_0:
 	xor eax, eax
-	call __blue_4057121178_0
+	call __blue_1472650507_0
 	ret
 
-; : write ( fd:edi len:edx buf:esi -- result:eax )
+; : write ( fd len buf -- result )
 
 __blue_3190202204_0:
 	xor eax, eax
 	inc eax
-	call __blue_4057121178_0
+	call __blue_1472650507_0
 	ret
 
 section .bss
