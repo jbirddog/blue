@@ -403,8 +403,8 @@ func flowWordInputs(word *Word, env *Environment, context *RunContext) {
 
 		flowInstrs := PeepholeAsmBinaryInstr(&AsmBinaryInstr{
 			Mnemonic: "mov",
-			Op1:      ref1.Ref,
-			Op2:      ref2.Ref,
+			Op1:      ref1.FlowTarget(),
+			Op2:      ref2.FlowTarget(),
 		})
 
 		env.AppendAsmInstrs(flowInstrs)
@@ -439,8 +439,8 @@ func flowWordOutputs(word *Word, env *Environment, context *RunContext) {
 
 		flowInstrs := PeepholeAsmBinaryInstr(&AsmBinaryInstr{
 			Mnemonic: "mov",
-			Op1:      ref1.Ref,
-			Op2:      ref2.Ref,
+			Op1:      ref1.FlowTarget(),
+			Op2:      ref2.FlowTarget(),
 		})
 
 		env.AppendAsmInstrs(flowInstrs)
