@@ -252,7 +252,7 @@ func instrsForWord(word *Word) []Instr {
 	if !word.IsInline() {
 		instrs = append(instrs, &CallWordInstr{Word: word})
 	} else {
-
+		// TODO inline handling should be moved when whole word optimizations land
 		lastIdx := len(word.Code)
 		if _, isRet := word.Code[lastIdx-1].(*RetInstr); isRet {
 			lastIdx -= 1

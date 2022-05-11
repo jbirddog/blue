@@ -8,7 +8,7 @@ import (
 )
 
 func KernelColon(env *Environment) {
-	flowPreviousWord := env.Compiling
+	fallthroughFromPreviousWord := env.Compiling
 	env.Compiling = true
 
 	name := env.ReadNextWord()
@@ -19,9 +19,13 @@ func KernelColon(env *Environment) {
 	word := &Word{Name: name}
 	word.RawRefs = parseRefs(word, env)
 
-	if flowPreviousWord {
+	if fallthroughFromPreviousWord {
 		previous := env.Dictionary.Latest
-		previous.AppendInstr(&FlowWordInstr{Word: word})
+
+		if previous.HasStackRefs() {
+			previous.AppendInstr(&FlowWordInstr{Word: word})
+		}
+
 		env.DeclWord(previous)
 	}
 
@@ -51,13 +55,17 @@ func KernelSemi(env *Environment) {
 	latest := env.Dictionary.Latest
 
 	if !latest.IsNoReturn() {
-		latest.AppendInstrs([]Instr{
-			&FlowWordInstr{
-				Word:      latest,
-				Direction: FlowDirection_Output,
-			},
+		if latest.HasStackRefs() {
+			latest.AppendInstr(
+				&FlowWordInstr{
+					Word:      latest,
+					Direction: FlowDirection_Output,
+				})
+		}
+
+		latest.AppendInstr(
 			&RetInstr{},
-		})
+		)
 	}
 
 	env.Compiling = false
