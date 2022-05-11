@@ -122,8 +122,7 @@ func (e *Environment) ParseFile(filename string) {
 func (e *Environment) Merge(e2 *Environment) {
 	e.CodeBuf = append(e.CodeBuf, e2.CodeBuf...)
 
-	for _, val := range e2.Dictionary.Words {
-		word := val.(*Word)
+	for _, word := range e2.Dictionary.Words {
 		e.AppendWord(word)
 	}
 
@@ -134,8 +133,7 @@ func (e *Environment) Merge(e2 *Environment) {
 }
 
 func (e *Environment) AsmLabelForWordNamed(name string) string {
-	val := e.Dictionary.Words[name]
-	word := val.(*Word)
+	word := e.Dictionary.Words[name]
 
 	return word.AsmLabel
 }

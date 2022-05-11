@@ -2,12 +2,12 @@ package main
 
 type Dictionary struct {
 	Name   string
-	Words  map[string]interface{}
+	Words  map[string]*Word
 	Latest *Word
 }
 
 func DefaultDictionary() *Dictionary {
-	d := &Dictionary{Name: "default", Words: map[string]interface{}{}}
+	d := &Dictionary{Name: "default", Words: map[string]*Word{}}
 
 	d.appendWords([]*Word{
 		NewCallGoWord("import", KernelImport),
@@ -65,12 +65,10 @@ func (d *Dictionary) appendWords(words []*Word) {
 }
 
 func (d *Dictionary) Find(wordName string) *Word {
-	val := d.Words[wordName]
-	if val == nil {
+	word := d.Words[wordName]
+	if word == nil {
 		return nil
 	}
-
-	word := val.(*Word)
 
 	if word.IsHidden() {
 		return nil
