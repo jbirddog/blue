@@ -72,6 +72,15 @@ func TestInference2(t *testing.T) {
 		: sue ( joe -- ) bob ;
 		`, []string{"eax"}, nil},
 		{`
+		: bob ( eax -- edi ) ;
+		: sue ( joe -- sam ) bob ;
+		`, []string{"eax"}, []string{"edi"}},
+		{`
+		: bob ( eax -- ) ;
+		: sue ( joe -- ) bob ;
+		: joe ( bob -- ) sue ;
+		`, []string{"eax"}, nil},
+		{`
 		: syscall3 ( edi edx esi num:eax -- result:eax ) syscall ;
 		: read ( fd len buf -- result ) 0 syscall3 ;
 		`, []string{"edi", "edx", "esi"}, []string{"eax"}},
@@ -85,7 +94,7 @@ func TestInference2(t *testing.T) {
 		: syscall3 ( edi edx esi num:eax -- result:eax ) syscall ;
 		: write ( fd len -- ) swap buf 0 syscall3 drop ;
 		`, []string{"edx", "edi"}, []string{}},
-		// crash during integration from examples/echo.blue
+		// adapted crashes during integration
 		{`
 		: syscall ( num:eax -- result:eax ) syscall ;
 
@@ -96,6 +105,15 @@ func TestInference2(t *testing.T) {
 
 		: read ( fd -- read ) buf.cap buf read ;
 		`, []string{"edi"}, []string{"eax"}},
+		/*
+			{`
+			: println ( r10 r11 -- ) drop drop ;
+			: cstrlen ( str:rdi -- len:rsi ) ;
+			: cstr>str ( cstr:rdx -- str:rsi len:rdx ) dup cstrlen xchg ;
+
+			: print-arg ( arg -- ) cstr>str println ;
+			`, []string{}, []string{}},
+		*/
 	}
 
 	for cnum, c := range cases {
@@ -107,7 +125,7 @@ func TestInference2(t *testing.T) {
 		w := e.Dictionary.Latest
 
 		if len(w.Inputs) != len(c.expectedInputs) {
-			t.Fatalf("%da) Expected %d inputs got %d", cnum, len(w.Inputs), len(c.expectedInputs))
+			t.Fatalf("%da) Expected %d inputs got %d", cnum, len(c.expectedInputs), len(w.Inputs))
 		}
 
 		for i, input := range w.Inputs {
@@ -117,7 +135,7 @@ func TestInference2(t *testing.T) {
 		}
 
 		if len(w.Outputs) != len(c.expectedOutputs) {
-			t.Fatalf("%dc) Expected %d outputs got %d", cnum, len(w.Outputs), len(c.expectedOutputs))
+			t.Fatalf("%dc) Expected %d outputs got %d", cnum, len(c.expectedOutputs), len(w.Outputs))
 		}
 
 		for i, output := range w.Outputs {
