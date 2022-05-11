@@ -71,6 +71,15 @@ func DefaultEnvironment() *Environment {
 	}
 }
 
+func (e *Environment) Sandbox() *Environment {
+	return &Environment{
+		Dictionary: e.Dictionary,
+		Globals:    e.Globals,
+		Labels:     e.Labels,
+		RefSizes:   e.RefSizes,
+	}
+}
+
 func NewEnvironmentForFile(filename string) *Environment {
 	bytes, err := ioutil.ReadFile(filename)
 	if err != nil {
@@ -182,7 +191,7 @@ func (e *Environment) ValidateStackRefs(refs []*StackRef) {
 
 func (e *Environment) DeclWord(word *Word) {
 	if !word.HasCompleteRefs() {
-		InferStackRefs(word)
+		InferStackRefs(e, word)
 	}
 
 	e.ValidateStackRefs(word.Inputs)
@@ -324,13 +333,13 @@ func (e *Environment) ParseNextWord() bool {
 	return true
 }
 
-func (c *Environment) AppendAsmInstr(i AsmInstr) {
-	c.AsmInstrs = append(c.AsmInstrs, i)
+func (e *Environment) AppendAsmInstr(i AsmInstr) {
+	e.AsmInstrs = append(e.AsmInstrs, i)
 }
 
-func (c *Environment) AppendAsmInstrs(i []AsmInstr) {
+func (e *Environment) AppendAsmInstrs(i []AsmInstr) {
 	if len(i) > 0 {
-		c.AsmInstrs = append(c.AsmInstrs, i...)
+		e.AsmInstrs = append(e.AsmInstrs, i...)
 	}
 }
 

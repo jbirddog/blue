@@ -9,7 +9,7 @@
 1. better newline support when generating asm
 1. when importing, can drop the global decls from the imported env?
 1. continue to infer registers from word body
-   1. if fully specified, validate
+   1. if fully specified, check if inferable
    1. infer during word fallthrough? whole program infer?
    1. needs x8664 "words" to have register definitions
 1. validate needs to check for lingering refs/stack items
