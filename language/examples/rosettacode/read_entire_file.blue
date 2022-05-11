@@ -27,7 +27,7 @@ global _start
 1 resd fd
 0 const read-only
 
-: open-file ( pathname:edi -- ) read-only open fd ! ;
+: open-file ( pathname -- ) read-only open fd ! ;
 : read-file-size ( -- ) fd @ stat_buf fstat ;
 : map-file ( fd len -- buf ) 0 0 prot_read map_private mmap ;
 : map-file ( -- buf ) fd @ file-size @ map-file ;
