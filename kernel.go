@@ -186,6 +186,65 @@ func KernelResq(env *Environment) {
 	res(env, "q")
 }
 
+func lit(env *Environment, size string) {
+	instr := env.PopInstr()
+
+	var value string
+
+	if intInstr, ok := instr.(*LiteralIntInstr); ok {
+		value = fmt.Sprintf("%d", intInstr.I)
+	} else {
+		value = instr.(*RefWordInstr).Word.AsmLabel
+	}
+
+	env.SuggestSection(".text")
+	env.AppendInstr(&DecInstr{Size: size, Value: value})
+}
+
+func KernelLitb(env *Environment) {
+	lit(env, "b")
+}
+
+func KernelLitd(env *Environment) {
+	lit(env, "d")
+}
+
+func KernelLitq(env *Environment) {
+	lit(env, "q")
+}
+
+func litLParen(env *Environment, size string) {
+	env.SuggestSection(".text")
+
+	for {
+		name := env.ReadNextWord()
+		if name == ")" {
+			break
+		}
+		if _, err := strconv.Atoi(name); err == nil {
+			env.AppendInstr(&DecInstr{
+				Size:  size,
+				Value: name,
+			})
+			continue
+		}
+
+		log.Fatalf("lit%s( expects a numeric value", size)
+	}
+}
+
+func KernelLitbLParen(env *Environment) {
+	litLParen(env, "b")
+}
+
+func KernelLitdLParen(env *Environment) {
+	litLParen(env, "d")
+}
+
+func KernelLitqLParen(env *Environment) {
+	litLParen(env, "q")
+}
+
 func dec(env *Environment, size string) {
 	instr := env.PopInstr()
 
