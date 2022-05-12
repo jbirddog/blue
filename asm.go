@@ -106,7 +106,7 @@ func (i *AsmResInstr) String() string {
 type AsmDecInstr struct {
 	Name  string
 	Size  string
-	Value string
+	Value []string
 }
 
 func (i *AsmDecInstr) String() string {
@@ -114,7 +114,9 @@ func (i *AsmDecInstr) String() string {
 		return fmt.Sprintf("\n%s: d%s %s", i.Name, i.Size, i.Value)
 	}
 
-	return fmt.Sprintf("\nd%s %s", i.Size, i.Value)
+	value := strings.Join(i.Value, ",")
+
+	return fmt.Sprintf("\nd%s %s", i.Size, value)
 }
 
 type AsmWriter struct {

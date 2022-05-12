@@ -190,7 +190,7 @@ func (i *ResInstr) Run(env *Environment, context *RunContext) {
 type DecInstr struct {
 	Name  string
 	Size  string
-	Value string
+	Value []string
 }
 
 func (i *DecInstr) Run(env *Environment, context *RunContext) {
@@ -313,14 +313,15 @@ func (i *AsciiStrInstr) Run(env *Environment, context *RunContext) {
 	bytes := []byte(i.Str)
 	bytes = unescape(bytes)
 
+	var decValues []string
+
 	for _, b := range bytes {
-		asmInstrs = append(asmInstrs, &AsmDecInstr{
-			Size:  "b",
-			Value: fmt.Sprintf("%d", b),
-		})
+		decValues = append(decValues, fmt.Sprintf("%d", b))
 	}
 
-	asmInstrs = append(asmInstrs, &AsmDecInstr{Size: "b", Value: "0"})
+	decValues = append(decValues, "0")
+
+	asmInstrs = append(asmInstrs, &AsmDecInstr{Size: "b", Value: decValues})
 
 	if env.Compiling {
 		asmInstrs = append(asmInstrs, &AsmLabelInstr{Name: jmpLabel})

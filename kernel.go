@@ -198,7 +198,7 @@ func lit(env *Environment, size string) {
 	}
 
 	env.SuggestSection(".text")
-	env.AppendInstr(&DecInstr{Size: size, Value: value})
+	env.AppendInstr(&DecInstr{Size: size, Value: []string{value}})
 }
 
 func KernelLitb(env *Environment) {
@@ -214,7 +214,7 @@ func KernelLitq(env *Environment) {
 }
 
 func litLParen(env *Environment, size string) {
-	env.SuggestSection(".text")
+	var decValues []string
 
 	for {
 		name := env.ReadNextWord()
@@ -222,15 +222,15 @@ func litLParen(env *Environment, size string) {
 			break
 		}
 		if _, err := strconv.Atoi(name); err == nil {
-			env.AppendInstr(&DecInstr{
-				Size:  size,
-				Value: name,
-			})
+			decValues = append(decValues, name)
 			continue
 		}
 
 		log.Fatalf("lit%s( expects a numeric value", size)
 	}
+
+	env.SuggestSection(".text")
+	env.AppendInstr(&DecInstr{Size: size, Value: decValues})
 }
 
 func KernelLitbLParen(env *Environment) {
@@ -284,26 +284,9 @@ func KernelDecq(env *Environment) {
 	dec(env, "q")
 }
 
-// TODO take a name like dec, set name only on the first instr
-// or make DecInstr take a slice of strings
+// TODO take a name like dec
 func decLParen(env *Environment, size string) {
-	env.SuggestSection(".text")
-
-	for {
-		name := env.ReadNextWord()
-		if name == ")" {
-			break
-		}
-		if _, err := strconv.Atoi(name); err == nil {
-			env.AppendInstr(&DecInstr{
-				Size:  size,
-				Value: name,
-			})
-			continue
-		}
-
-		log.Fatalf("dec%s( expects a numeric value", size)
-	}
+	litLParen(env, size)
 }
 
 func KernelDecbLParen(env *Environment) {
