@@ -10,7 +10,6 @@
 1. continue to infer registers from word body
    1. infer during word fallthrough?
    1. need x8664 "words" to have register definitions
-1. treat words with only decb more like resb
 1. More peephole optimizations
    1. mov rxx, 0 -> xor exx
    1. mov rxx, 1 -> xor exx, exx ; inc exx
