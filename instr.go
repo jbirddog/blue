@@ -188,11 +188,16 @@ func (i *ResInstr) Run(env *Environment, context *RunContext) {
 }
 
 type DecInstr struct {
+	Name  string
 	Size  string
 	Value string
 }
 
 func (i *DecInstr) Run(env *Environment, context *RunContext) {
+	if len(i.Name) > 0 {
+		env.AppendAsmInstr(&AsmLabelInstr{Name: i.Name})
+	}
+
 	env.AppendAsmInstr(&AsmDecInstr{Size: i.Size, Value: i.Value})
 }
 

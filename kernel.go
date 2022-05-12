@@ -246,18 +246,45 @@ func KernelLitqLParen(env *Environment) {
 }
 
 func dec(env *Environment, size string) {
-	instr := env.PopInstr()
+	lit(env, size)
 
-	var value string
-
-	if intInstr, ok := instr.(*LiteralIntInstr); ok {
-		value = fmt.Sprintf("%d", intInstr.I)
-	} else {
-		value = instr.(*RefWordInstr).Word.AsmLabel
+	name := env.ReadNextWord()
+	if len(name) == 0 {
+		log.Fatalf("dec%s expects a name", size)
 	}
 
-	env.SuggestSection(".text")
-	env.AppendInstr(&DecInstr{Size: size, Value: value})
+	// TODO refactor this pattern, in res* and coloncolon
+	word := &Word{Name: name}
+	env.AppendWord(word)
+
+	decInstr := env.PopInstr().(*DecInstr)
+	decInstr.Name = word.AsmLabel
+
+	// TODO why not just AppendInstrs?
+	env.AppendCodeBufInstrs([]Instr{
+		&CommentInstr{Comment: fmt.Sprintf("%s dec%s %s", decInstr.Value, size, name)},
+		decInstr,
+	})
+
+	env.AppendRefSize(word.AsmLabel, size)
+
+	word.AppendInstr(&RefWordInstr{Word: word})
+	word.Inline()
+
+	/*
+		instr := env.PopInstr()
+
+		var value string
+
+		if intInstr, ok := instr.(*LiteralIntInstr); ok {
+			value = fmt.Sprintf("%d", intInstr.I)
+		} else {
+			value = instr.(*RefWordInstr).Word.AsmLabel
+		}
+
+		env.SuggestSection(".text")
+		env.AppendInstr(&DecInstr{Size: size, Value: value})
+	*/
 }
 
 func KernelDecb(env *Environment) {
