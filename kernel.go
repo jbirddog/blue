@@ -260,8 +260,7 @@ func dec(env *Environment, size string) {
 	decInstr := env.PopInstr().(*DecInstr)
 	decInstr.Name = word.AsmLabel
 
-	// TODO why not just AppendInstrs?
-	env.AppendCodeBufInstrs([]Instr{
+	env.AppendInstrs([]Instr{
 		&CommentInstr{Comment: fmt.Sprintf("%s dec%s %s", decInstr.Value, size, name)},
 		decInstr,
 	})
@@ -287,6 +286,28 @@ func KernelDecq(env *Environment) {
 // TODO take a name like dec
 func decLParen(env *Environment, size string) {
 	litLParen(env, size)
+
+	name := env.ReadNextWord()
+	if len(name) == 0 {
+		log.Fatalf("dec%s( expects a name", size)
+	}
+
+	// TODO refactor this pattern, in res*, decLparen and coloncolon, etc
+	word := &Word{Name: name}
+	env.AppendWord(word)
+
+	decInstr := env.PopInstr().(*DecInstr)
+	decInstr.Name = word.AsmLabel
+
+	env.AppendInstrs([]Instr{
+		&CommentInstr{Comment: fmt.Sprintf("dec%s( .. ) %s", size, name)},
+		decInstr,
+	})
+
+	env.AppendRefSize(word.AsmLabel, size)
+
+	word.AppendInstr(&RefWordInstr{Word: word})
+	word.Inline()
 }
 
 func KernelDecbLParen(env *Environment) {

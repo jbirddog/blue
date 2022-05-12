@@ -110,11 +110,11 @@ type AsmDecInstr struct {
 }
 
 func (i *AsmDecInstr) String() string {
-	if len(i.Name) > 0 {
-		return fmt.Sprintf("\n%s: d%s %s", i.Name, i.Size, i.Value)
-	}
-
 	value := strings.Join(i.Value, ",")
+
+	if len(i.Name) > 0 {
+		return fmt.Sprintf("\n%s: d%s %s", i.Name, i.Size, value)
+	}
 
 	return fmt.Sprintf("\nd%s %s", i.Size, value)
 }
