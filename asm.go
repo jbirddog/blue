@@ -104,11 +104,16 @@ func (i *AsmResInstr) String() string {
 }
 
 type AsmDecInstr struct {
+	Name  string
 	Size  string
 	Value string
 }
 
 func (i *AsmDecInstr) String() string {
+	if len(i.Name) > 0 {
+		return fmt.Sprintf("\n%s: d%s %s", i.Name, i.Size, i.Value)
+	}
+
 	return fmt.Sprintf("\nd%s %s", i.Size, i.Value)
 }
 

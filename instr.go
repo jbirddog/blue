@@ -194,11 +194,7 @@ type DecInstr struct {
 }
 
 func (i *DecInstr) Run(env *Environment, context *RunContext) {
-	if len(i.Name) > 0 {
-		env.AppendAsmInstr(&AsmLabelInstr{Name: i.Name})
-	}
-
-	env.AppendAsmInstr(&AsmDecInstr{Size: i.Size, Value: i.Value})
+	env.AppendAsmInstr(&AsmDecInstr{Name: i.Name, Size: i.Size, Value: i.Value})
 }
 
 type DropInstr struct{}

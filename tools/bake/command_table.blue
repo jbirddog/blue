@@ -1,6 +1,6 @@
 :: cmd-table
-	litb( 0 0 0 98 117 105 108 100 ) ' build litq
-	litb( 0 0 0 0 0 114 117 110 ) ' run litq
+	decb( 0 0 0 98 117 105 108 100 ) ' build litq
+	decb( 0 0 0 0 0 114 117 110 ) ' run litq
 
 : cmd-key ( qword:rax len:rcx -- key:rax ) 8 sub neg 3 shl shl ;
 : cstr>cmd-key ( cstr:rdx -- key:rax ) cstr>str swap @ swap cmd-key ;
