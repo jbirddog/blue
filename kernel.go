@@ -178,6 +178,7 @@ func dec(env *Environment, size string) {
 		value = instr.(*RefWordInstr).Word.AsmLabel
 	}
 
+	env.SuggestSection(".text")
 	env.AppendInstr(&DecInstr{Size: size, Value: value})
 }
 
@@ -194,9 +195,7 @@ func KernelDecq(env *Environment) {
 }
 
 func decLParen(env *Environment, size string) {
-	if !env.Compiling {
-		log.Fatalf("dec%s( expects to be inside a word", size)
-	}
+	env.SuggestSection(".text")
 
 	for {
 		name := env.ReadNextWord()
@@ -204,7 +203,7 @@ func decLParen(env *Environment, size string) {
 			break
 		}
 		if _, err := strconv.Atoi(name); err == nil {
-			env.Dictionary.Latest.AppendInstr(&DecInstr{
+			env.AppendInstr(&DecInstr{
 				Size:  size,
 				Value: name,
 			})
