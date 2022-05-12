@@ -1082,7 +1082,7 @@ __blue_718098122_0:
 	call __blue_640619689_0
 	jmp __blue_279745373_0
 
-; : cmd-table ( -- noret )
+; :: cmd-table
 
 __blue_758800390_0:
 

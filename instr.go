@@ -135,6 +135,14 @@ func (i *GlobalWordInstr) Run(env *Environment, context *RunContext) {
 	env.AppendAsmInstr(&AsmGlobalInstr{Label: i.Name})
 }
 
+type LabelInstr struct {
+	Name string
+}
+
+func (i *LabelInstr) Run(env *Environment, context *RunContext) {
+	env.AppendAsmInstr(&AsmLabelInstr{Name: i.Name})
+}
+
 type DeclWordInstr struct {
 	Word *Word
 }

@@ -48,6 +48,7 @@ func DefaultDictionary() *Dictionary {
 		NewCallGoWord(`s"`, KernelSQuote).Immediate(),
 		NewCallGoWord(`c"`, KernelCQuote).Immediate(),
 		NewInlineWord("call", &CallInstr{}),
+		NewCallGoWord("::", KernelColonColon).Immediate(),
 	})
 
 	return d

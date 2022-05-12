@@ -125,6 +125,25 @@ func KernelImport(env *Environment) {
 	env.ParseFile(file)
 }
 
+func KernelColonColon(env *Environment) {
+	name := env.ReadNextWord()
+	if len(name) == 0 {
+		log.Fatal(":: expects a name")
+	}
+
+	word := &Word{Name: name}
+	env.AppendWord(word)
+
+	env.AppendCodeBufInstrs([]Instr{
+		&CommentInstr{Comment: fmt.Sprintf(":: %s", word.Name)},
+		&LabelInstr{Name: word.AsmLabel},
+	})
+
+	instr := &RefWordInstr{Word: word}
+	word.AppendInstr(instr)
+	word.Inline()
+}
+
 func res(env *Environment, size string) {
 	if env.Compiling {
 		log.Fatal("res", size, " does not expect to be declared in a word")
