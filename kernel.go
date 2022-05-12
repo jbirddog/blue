@@ -253,7 +253,7 @@ func dec(env *Environment, size string) {
 		log.Fatalf("dec%s expects a name", size)
 	}
 
-	// TODO refactor this pattern, in res* and coloncolon
+	// TODO refactor this pattern, in res*, decLparen and coloncolon, etc
 	word := &Word{Name: name}
 	env.AppendWord(word)
 
@@ -270,21 +270,6 @@ func dec(env *Environment, size string) {
 
 	word.AppendInstr(&RefWordInstr{Word: word})
 	word.Inline()
-
-	/*
-		instr := env.PopInstr()
-
-		var value string
-
-		if intInstr, ok := instr.(*LiteralIntInstr); ok {
-			value = fmt.Sprintf("%d", intInstr.I)
-		} else {
-			value = instr.(*RefWordInstr).Word.AsmLabel
-		}
-
-		env.SuggestSection(".text")
-		env.AppendInstr(&DecInstr{Size: size, Value: value})
-	*/
 }
 
 func KernelDecb(env *Environment) {
@@ -299,6 +284,8 @@ func KernelDecq(env *Environment) {
 	dec(env, "q")
 }
 
+// TODO take a name like dec, set name only on the first instr
+// or make DecInstr take a slice of strings
 func decLParen(env *Environment, size string) {
 	env.SuggestSection(".text")
 
