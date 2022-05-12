@@ -168,11 +168,7 @@ func KernelResq(env *Environment) {
 }
 
 func dec(env *Environment, size string) {
-	if !env.Compiling {
-		log.Fatalf("dec%s expects to be inside a word", size)
-	}
-	latest := env.Dictionary.Latest
-	instr := latest.PopInstr()
+	instr := env.PopInstr()
 
 	var value string
 
@@ -182,7 +178,7 @@ func dec(env *Environment, size string) {
 		value = instr.(*RefWordInstr).Word.AsmLabel
 	}
 
-	latest.AppendInstr(&DecInstr{Size: size, Value: value})
+	env.AppendInstr(&DecInstr{Size: size, Value: value})
 }
 
 func KernelDecb(env *Environment) {
