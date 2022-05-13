@@ -178,6 +178,10 @@ func KernelResb(env *Environment) {
 	res(env, "b")
 }
 
+func KernelResw(env *Environment) {
+	res(env, "w")
+}
+
 func KernelResd(env *Environment) {
 	res(env, "d")
 }
@@ -203,6 +207,10 @@ func lit(env *Environment, size string) {
 
 func KernelLitb(env *Environment) {
 	lit(env, "b")
+}
+
+func KernelLitw(env *Environment) {
+	lit(env, "w")
 }
 
 func KernelLitd(env *Environment) {
@@ -235,6 +243,10 @@ func litLParen(env *Environment, size string) {
 
 func KernelLitbLParen(env *Environment) {
 	litLParen(env, "b")
+}
+
+func KernelLitwLParen(env *Environment) {
+	litLParen(env, "w")
 }
 
 func KernelLitdLParen(env *Environment) {
@@ -275,6 +287,10 @@ func KernelDecb(env *Environment) {
 	dec(env, "b")
 }
 
+func KernelDecw(env *Environment) {
+	dec(env, "w")
+}
+
 func KernelDecd(env *Environment) {
 	dec(env, "d")
 }
@@ -312,6 +328,10 @@ func decLParen(env *Environment, size string) {
 
 func KernelDecbLParen(env *Environment) {
 	decLParen(env, "b")
+}
+
+func KernelDecwLParen(env *Environment) {
+	decLParen(env, "w")
 }
 
 func KernelDecdLParen(env *Environment) {
