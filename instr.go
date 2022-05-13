@@ -135,6 +135,14 @@ func (i *GlobalWordInstr) Run(env *Environment, context *RunContext) {
 	env.AppendAsmInstr(&AsmGlobalInstr{Label: i.Name})
 }
 
+type LabelInstr struct {
+	Name string
+}
+
+func (i *LabelInstr) Run(env *Environment, context *RunContext) {
+	env.AppendAsmInstr(&AsmLabelInstr{Name: i.Name})
+}
+
 type DeclWordInstr struct {
 	Word *Word
 }
@@ -180,12 +188,13 @@ func (i *ResInstr) Run(env *Environment, context *RunContext) {
 }
 
 type DecInstr struct {
+	Name  string
 	Size  string
-	Value string
+	Value []string
 }
 
 func (i *DecInstr) Run(env *Environment, context *RunContext) {
-	env.AppendAsmInstr(&AsmDecInstr{Size: i.Size, Value: i.Value})
+	env.AppendAsmInstr(&AsmDecInstr{Name: i.Name, Size: i.Size, Value: i.Value})
 }
 
 type DropInstr struct{}
@@ -291,38 +300,46 @@ type AsciiStrInstr struct {
 }
 
 func (i *AsciiStrInstr) Run(env *Environment, context *RunContext) {
+	var jmpLabel, refLabel string
+	var asmInstrs []AsmInstr
+
+	if env.Compiling {
+		jmpLabel = env.AsmLabelForName("</str>")
+		refLabel = env.AsmLabelForName("<str>")
+		asmInstrs = append(asmInstrs, &AsmUnaryInstr{Mnemonic: "jmp", Op: jmpLabel})
+		asmInstrs = append(asmInstrs, &AsmLabelInstr{Name: refLabel})
+	}
+
 	bytes := []byte(i.Str)
 	bytes = unescape(bytes)
-	refLabel := env.AsmLabelForName("<str>")
-	jmpLabel := env.AsmLabelForName("</str>")
 
-	asmInstrs := []AsmInstr{
-		&AsmUnaryInstr{Mnemonic: "jmp", Op: jmpLabel},
-		&AsmLabelInstr{Name: refLabel},
-	}
+	var decValues []string
 
 	for _, b := range bytes {
-		asmInstrs = append(asmInstrs, &AsmDecInstr{
-			Size:  "b",
-			Value: fmt.Sprintf("%d", b),
-		})
+		decValues = append(decValues, fmt.Sprintf("%d", b))
 	}
 
-	asmInstrs = append(asmInstrs, &AsmDecInstr{Size: "b", Value: "0"})
-	asmInstrs = append(asmInstrs, &AsmLabelInstr{Name: jmpLabel})
+	decValues = append(decValues, "0")
+
+	asmInstrs = append(asmInstrs, &AsmDecInstr{Size: "b", Value: decValues})
+
+	if env.Compiling {
+		asmInstrs = append(asmInstrs, &AsmLabelInstr{Name: jmpLabel})
+
+		context.AppendInput(&StackRef{
+			Type: StackRefType_Label,
+			Ref:  refLabel,
+		})
+
+		if i.PushLen {
+			context.AppendInput(&StackRef{
+				Type: StackRefType_LiteralInt,
+				Ref:  fmt.Sprint(len(bytes)),
+			})
+		}
+	}
 
 	env.AppendAsmInstrs(asmInstrs)
-	context.AppendInput(&StackRef{
-		Type: StackRefType_Label,
-		Ref:  refLabel,
-	})
-
-	if i.PushLen {
-		context.AppendInput(&StackRef{
-			Type: StackRefType_LiteralInt,
-			Ref:  fmt.Sprint(len(bytes)),
-		})
-	}
 }
 
 func unescape(bytes []byte) []byte {

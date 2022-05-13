@@ -99,7 +99,7 @@ func TestCanFindResbRef(t *testing.T) {
 }
 
 func TestCanDecARef(t *testing.T) {
-	e := env(": test ( -- ) latest decq ; : bob ( -- ) ' test decq ;")
+	e := env(": test ( -- ) latest litq ; : bob ( -- ) ' test litq ;")
 	asm := run(e)
 
 	if len(asm) == 0 {

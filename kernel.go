@@ -125,6 +125,25 @@ func KernelImport(env *Environment) {
 	env.ParseFile(file)
 }
 
+func KernelColonColon(env *Environment) {
+	name := env.ReadNextWord()
+	if len(name) == 0 {
+		log.Fatal(":: expects a name")
+	}
+
+	word := &Word{Name: name}
+	env.AppendWord(word)
+
+	env.AppendCodeBufInstrs([]Instr{
+		&CommentInstr{Comment: fmt.Sprintf(":: %s", word.Name)},
+		&LabelInstr{Name: word.AsmLabel},
+	})
+
+	instr := &RefWordInstr{Word: word}
+	word.AppendInstr(instr)
+	word.Inline()
+}
+
 func res(env *Environment, size string) {
 	if env.Compiling {
 		log.Fatal("res", size, " does not expect to be declared in a word")
@@ -167,12 +186,8 @@ func KernelResq(env *Environment) {
 	res(env, "q")
 }
 
-func dec(env *Environment, size string) {
-	if !env.Compiling {
-		log.Fatalf("dec%s expects to be inside a word", size)
-	}
-	latest := env.Dictionary.Latest
-	instr := latest.PopInstr()
+func lit(env *Environment, size string) {
+	instr := env.PopInstr()
 
 	var value string
 
@@ -182,7 +197,78 @@ func dec(env *Environment, size string) {
 		value = instr.(*RefWordInstr).Word.AsmLabel
 	}
 
-	latest.AppendInstr(&DecInstr{Size: size, Value: value})
+	env.SuggestSection(".text")
+	env.AppendInstr(&DecInstr{Size: size, Value: []string{value}})
+}
+
+func KernelLitb(env *Environment) {
+	lit(env, "b")
+}
+
+func KernelLitd(env *Environment) {
+	lit(env, "d")
+}
+
+func KernelLitq(env *Environment) {
+	lit(env, "q")
+}
+
+func litLParen(env *Environment, size string) {
+	var decValues []string
+
+	for {
+		name := env.ReadNextWord()
+		if name == ")" {
+			break
+		}
+		if _, err := strconv.Atoi(name); err == nil {
+			decValues = append(decValues, name)
+			continue
+		}
+
+		log.Fatalf("lit%s( expects a numeric value", size)
+	}
+
+	env.SuggestSection(".text")
+	env.AppendInstr(&DecInstr{Size: size, Value: decValues})
+}
+
+func KernelLitbLParen(env *Environment) {
+	litLParen(env, "b")
+}
+
+func KernelLitdLParen(env *Environment) {
+	litLParen(env, "d")
+}
+
+func KernelLitqLParen(env *Environment) {
+	litLParen(env, "q")
+}
+
+func dec(env *Environment, size string) {
+	lit(env, size)
+
+	name := env.ReadNextWord()
+	if len(name) == 0 {
+		log.Fatalf("dec%s expects a name", size)
+	}
+
+	// TODO refactor this pattern, in res*, decLparen and coloncolon, etc
+	word := &Word{Name: name}
+	env.AppendWord(word)
+
+	decInstr := env.PopInstr().(*DecInstr)
+	decInstr.Name = word.AsmLabel
+
+	env.AppendInstrs([]Instr{
+		&CommentInstr{Comment: fmt.Sprintf("%s dec%s %s", decInstr.Value, size, name)},
+		decInstr,
+	})
+
+	env.AppendRefSize(word.AsmLabel, size)
+
+	word.AppendInstr(&RefWordInstr{Word: word})
+	word.Inline()
 }
 
 func KernelDecb(env *Environment) {
@@ -197,26 +283,31 @@ func KernelDecq(env *Environment) {
 	dec(env, "q")
 }
 
+// TODO take a name like dec
 func decLParen(env *Environment, size string) {
-	if !env.Compiling {
-		log.Fatalf("dec%s( expects to be inside a word", size)
+	litLParen(env, size)
+
+	name := env.ReadNextWord()
+	if len(name) == 0 {
+		log.Fatalf("dec%s( expects a name", size)
 	}
 
-	for {
-		name := env.ReadNextWord()
-		if name == ")" {
-			break
-		}
-		if _, err := strconv.Atoi(name); err == nil {
-			env.Dictionary.Latest.AppendInstr(&DecInstr{
-				Size:  size,
-				Value: name,
-			})
-			continue
-		}
+	// TODO refactor this pattern, in res*, decLparen and coloncolon, etc
+	word := &Word{Name: name}
+	env.AppendWord(word)
 
-		log.Fatalf("dec%s( expects a numeric value", size)
-	}
+	decInstr := env.PopInstr().(*DecInstr)
+	decInstr.Name = word.AsmLabel
+
+	env.AppendInstrs([]Instr{
+		&CommentInstr{Comment: fmt.Sprintf("dec%s( .. ) %s", size, name)},
+		decInstr,
+	})
+
+	env.AppendRefSize(word.AsmLabel, size)
+
+	word.AppendInstr(&RefWordInstr{Word: word})
+	word.Inline()
 }
 
 func KernelDecbLParen(env *Environment) {

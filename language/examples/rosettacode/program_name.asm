@@ -42,8 +42,7 @@ __blue_4281549323_0:
 
 __blue_855163316_0:
 
-db 10
-db 0
+db 10,0
 __blue_1223589535_0:
 	xor edx, edx
 	inc edx

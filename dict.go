@@ -29,6 +29,12 @@ func DefaultDictionary() *Dictionary {
 		NewCallGoWord("decb(", KernelDecbLParen).Immediate(),
 		NewCallGoWord("decd(", KernelDecdLParen).Immediate(),
 		NewCallGoWord("decq(", KernelDecqLParen).Immediate(),
+		NewCallGoWord("litb", KernelLitb).Immediate(),
+		NewCallGoWord("litd", KernelLitd).Immediate(),
+		NewCallGoWord("litq", KernelLitq).Immediate(),
+		NewCallGoWord("litb(", KernelLitbLParen).Immediate(),
+		NewCallGoWord("litd(", KernelLitdLParen).Immediate(),
+		NewCallGoWord("litq(", KernelLitqLParen).Immediate(),
 		NewInlineWord("drop", &DropInstr{}),
 		NewInlineWord("dup", &DupInstr{}),
 		NewInlineWord("swap", &SwapInstr{}),
@@ -48,6 +54,7 @@ func DefaultDictionary() *Dictionary {
 		NewCallGoWord(`s"`, KernelSQuote).Immediate(),
 		NewCallGoWord(`c"`, KernelCQuote).Immediate(),
 		NewInlineWord("call", &CallInstr{}),
+		NewCallGoWord("::", KernelColonColon).Immediate(),
 	})
 
 	return d
