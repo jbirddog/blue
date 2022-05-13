@@ -9,8 +9,9 @@ Blue is a compiled low level Forth-like language that is designed for building p
 If you are unfamilar with any of the above, some useful links:
 
 1. [Starting Forth](https://www.forth.com/starting-forth/1-forth-stacks-dictionary)
-2. [x86 Instruction Reference](https://www.felixcloutier.com/x86/index.html)
-3. [x86-64 Linux System Call Table](https://filippo.io/linux-syscall-table/)
+1. [x86 Instruction Reference](https://www.felixcloutier.com/x86/index.html)
+1. [x86-64 Linux System Call Table](https://filippo.io/linux-syscall-table/)
+   1. [Chromium Docs x86-64 Linux System Call Table](https://chromium.googlesource.com/chromiumos/docs/+/HEAD/constants/syscalls.md#x86_64-64_bit)
 
 ## Language
 

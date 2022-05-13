@@ -3,11 +3,3 @@
 
 \ kernel error codes
 -17 const exists
-
-\ system call numbers
-1 const write
-57 const fork
-59 const execve
-60 const exit
-61 const wait4
-83 const mkdir
