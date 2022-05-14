@@ -429,6 +429,9 @@ func asciiStr(env *Environment, pushLen bool) {
 		str = str[1:]
 	}
 
+	if !env.Compiling {
+		env.SuggestSection(".text")
+	}
 	env.AppendInstr(&AsciiStrInstr{Str: str, PushLen: pushLen})
 }
 
