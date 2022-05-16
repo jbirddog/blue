@@ -443,6 +443,11 @@ func KernelSQuote(env *Environment) {
 	asciiStr(env, true)
 }
 
+func KernelRoll(env *Environment) {
+	count := env.PopInstr().(*LiteralIntInstr).I
+	env.AppendInstr(&RollInstr{Count: count})
+}
+
 func buildStackRef(rawRef string) *StackRef {
 	parts := strings.SplitN(rawRef, ":", 2)
 	partsLen := len(parts)

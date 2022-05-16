@@ -294,6 +294,20 @@ func (i *RotInstr) Run(env *Environment, context *RunContext) {
 	context.AppendInput(input1)
 }
 
+type RollInstr struct {
+	Count int
+}
+
+func (i *RollInstr) Run(env *Environment, context *RunContext) {
+	have := len(context.Inputs)
+	unders := context.Inputs[have-i.Count:]
+	context.Inputs = context.Inputs[:have-i.Count]
+	over := context.PopInput()
+
+	context.AppendInputs(unders)
+	context.AppendInput(over)
+}
+
 type AsciiStrInstr struct {
 	Str     string
 	PushLen bool
