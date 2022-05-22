@@ -9,8 +9,6 @@ __blue_2950180442_0:
 
 ;  kernel error codes
 
-;  system call numbers
-
 ; : syscall ( num:eax -- result:eax | rcx )
 
 __blue_4057121178_0:
@@ -19,34 +17,34 @@ __blue_4057121178_0:
 
 ; : exit ( status:edi -- noret )
 
-__blue_3454868101_1:
+__blue_3454868101_0:
 	mov eax, 60
 	call __blue_4057121178_0
 
 ; : fork ( -- result:eax )
 
-__blue_1046004769_1:
+__blue_1046004769_0:
 	mov eax, 57
 	call __blue_4057121178_0
 	ret
 
 ; : execve ( filename:rdi argv:rsi env:rdx -- result:eax )
 
-__blue_172884385_1:
+__blue_172884385_0:
 	mov eax, 59
 	call __blue_4057121178_0
 	ret
 
 ; : wait4 ( pid:edi status:rsi options:rdx usage:r10 -- result:eax )
 
-__blue_2279771388_1:
+__blue_2279771388_0:
 	mov eax, 61
 	call __blue_4057121178_0
 	ret
 
 ; : write ( buf:esi len:edx fd:edi -- result:eax )
 
-__blue_3190202204_1:
+__blue_3190202204_0:
 	xor eax, eax
 	inc eax
 	call __blue_4057121178_0
@@ -54,7 +52,7 @@ __blue_3190202204_1:
 
 ; : mkdir ( path:edi mode:esi -- result:eax )
 
-__blue_2883839448_1:
+__blue_2883839448_0:
 	mov eax, 83
 	call __blue_4057121178_0
 	ret
@@ -64,7 +62,7 @@ __blue_2883839448_1:
 __blue_3630339793_0:
 	neg eax
 	mov edi, eax
-	jmp __blue_3454868101_1
+	jmp __blue_3454868101_0
 
 ; : unwrap ( result:eax -- value:eax )
 
@@ -94,15 +92,15 @@ __blue_2157056155_1:
 
 ; : fork ( -- result )
 
-__blue_1046004769_2:
-	call __blue_1046004769_1
+__blue_1046004769_1:
+	call __blue_1046004769_0
 	call __blue_4055961022_0
 	ret
 
 ; : execve ( filename argv env -- noret )
 
-__blue_172884385_2:
-	call __blue_172884385_1
+__blue_172884385_1:
+	call __blue_172884385_0
 	call __blue_1614081290_0
 
 section .bss
@@ -122,15 +120,15 @@ __blue_3964545837_0:
 	xor r10, r10
 	xor rdx, rdx
 	mov rsi, __blue_285992641_0
-	call __blue_2279771388_1
+	call __blue_2279771388_0
 	call __blue_1614081290_0
 	ret
 
 ; : mkdir ( path -- )
 
-__blue_2883839448_2:
+__blue_2883839448_1:
 	mov esi, 488
-	call __blue_2883839448_1
+	call __blue_2883839448_0
 	mov edi, -17
 	call __blue_2118064195_0
 	ret
@@ -140,7 +138,7 @@ __blue_2883839448_2:
 __blue_1361572173_0:
 	xor edi, edi
 	inc edi
-	call __blue_3190202204_1
+	call __blue_3190202204_0
 	call __blue_1614081290_0
 	ret
 
@@ -256,7 +254,7 @@ __blue_586198672_0:
 
 __blue_1911791459_0:
 	xor edi, edi
-	jmp __blue_3454868101_1
+	jmp __blue_3454868101_0
 
 ; : newline ( -- )
 
@@ -394,7 +392,7 @@ __blue_855163316_5:
 db 46,98,117,105,108,100,47,0
 __blue_1223589535_5:
 	mov edi, __blue_855163316_5
-	call __blue_2883839448_2
+	call __blue_2883839448_1
 	jmp __blue_1223589535_6
 
 __blue_855163316_6:
@@ -402,7 +400,7 @@ __blue_855163316_6:
 db 46,98,117,105,108,100,47,98,105,110,47,0
 __blue_1223589535_6:
 	mov edi, __blue_855163316_6
-	call __blue_2883839448_2
+	call __blue_2883839448_1
 	jmp __blue_1223589535_7
 
 __blue_855163316_7:
@@ -410,7 +408,7 @@ __blue_855163316_7:
 db 46,98,117,105,108,100,47,111,98,106,47,0
 __blue_1223589535_7:
 	mov edi, __blue_855163316_7
-	call __blue_2883839448_2
+	call __blue_2883839448_1
 	ret
 
 section .bss
@@ -562,7 +560,7 @@ __blue_1223589535_13:
 	mov rdx, [__blue_2355496332_0]
 	mov rsi, __blue_188583195_0
 	mov rdi, __blue_855163316_13
-	jmp __blue_172884385_2
+	jmp __blue_172884385_1
 
 ;  TODO these are here to work around the operation size issue
 
@@ -594,7 +592,7 @@ __blue_640619689_0:
 ; : spawn ( -- )
 
 __blue_975326616_0:
-	call __blue_1046004769_2
+	call __blue_1046004769_1
 	cmp eax, 0
 	jne __blue_2157056155_5
 	call __blue_279745373_0

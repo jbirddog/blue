@@ -429,6 +429,9 @@ func asciiStr(env *Environment, pushLen bool) {
 		str = str[1:]
 	}
 
+	if !env.Compiling {
+		env.SuggestSection(".text")
+	}
 	env.AppendInstr(&AsciiStrInstr{Str: str, PushLen: pushLen})
 }
 
@@ -438,6 +441,11 @@ func KernelCQuote(env *Environment) {
 
 func KernelSQuote(env *Environment) {
 	asciiStr(env, true)
+}
+
+func KernelRoll(env *Environment) {
+	count := env.PopInstr().(*LiteralIntInstr).I
+	env.AppendInstr(&RollInstr{Count: count})
 }
 
 func buildStackRef(rawRef string) *StackRef {

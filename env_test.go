@@ -165,6 +165,14 @@ func TestCanRot(t *testing.T) {
 	}
 }
 
+func TestCanRoll(t *testing.T) {
+	instrs := parse("10 20 30 40 3 roll")
+
+	if len(instrs) == 0 {
+		t.Fatalf("Expected instrs, got none")
+	}
+}
+
 func env(buf string) *Environment {
 	env := DefaultEnvironment()
 	env.InputBuf = buf

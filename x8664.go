@@ -357,6 +357,15 @@ func ops_2(mnemonic string, env *Environment, context *RunContext) AsmInstr {
 	return &AsmBinaryInstr{Mnemonic: mnemonic, Op1: op1, Op2: op2}
 }
 
+func ops_1_2_1(mnemonic string, env *Environment, context *RunContext) AsmInstr {
+	ref1, ref2 := context.Pop2Inputs()
+	op := ref2.Ref
+
+	context.AppendInput(ref1)
+
+	return &AsmUnaryInstr{Mnemonic: mnemonic, Op: op}
+}
+
 func ops_2_1(mnemonic string, env *Environment, context *RunContext) AsmInstr {
 	ref1, ref2 := context.Pop2Inputs()
 	op1, op2 := ref1.Ref, ref2.Ref
@@ -430,6 +439,9 @@ var x8664Lowerers = map[string]x8664Lowerer{
 	"dec":     ops_1_1,
 	"inc":     ops_1_1,
 	"lodsb":   ops_0_al,      // TODO hack - needs to consume esi, assumes al
+	"lodsw":   ops_0_al,      // TODO hack - needs to consume esi, assumes al
+	"lodsd":   ops_0_al,      // TODO hack - needs to consume esi, assumes al
+	"lodsq":   ops_0_al,      // TODO hack - needs to consume esi, assumes al
 	"loop":    ops_loopx,     // TODO hack - needs to consume ecx
 	"loope":   ops_loopx,     // TODO hack - needs to consume ecx
 	"loopne":  ops_loopx,     // TODO hack - needs to consume ecx
@@ -438,6 +450,7 @@ var x8664Lowerers = map[string]x8664Lowerer{
 	"movsd":   ops_2_sil_dil,
 	"movsq":   ops_2_sil_dil,
 	"neg":     ops_1_1,
+	"mul":      ops_1_2_1,
 	"or":      ops_2_1,
 	"rep":     ops_repx,
 	"repe":    ops_repx,

@@ -19,6 +19,10 @@ func (c *RunContext) AppendInput(i *StackRef) {
 	c.Inputs = append(c.Inputs, i)
 }
 
+func (c *RunContext) AppendInputs(i []*StackRef) {
+	c.Inputs = append(c.Inputs, i...)
+}
+
 func (c *RunContext) Peek() *StackRef {
 	return c.Inputs[len(c.Inputs)-1]
 }
