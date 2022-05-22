@@ -358,10 +358,10 @@ func ops_2(mnemonic string, env *Environment, context *RunContext) AsmInstr {
 }
 
 func ops_1_2_1(mnemonic string, env *Environment, context *RunContext) AsmInstr {
-	ref, _ := context.Pop2Inputs()
-	op := ref.Ref
+	ref1, ref2 := context.Pop2Inputs()
+	op := ref2.Ref
 
-	context.AppendInput(ref)
+	context.AppendInput(ref1)
 
 	return &AsmUnaryInstr{Mnemonic: mnemonic, Op: op}
 }
