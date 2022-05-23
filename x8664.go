@@ -450,7 +450,7 @@ var x8664Lowerers = map[string]x8664Lowerer{
 	"movsd":   ops_2_sil_dil,
 	"movsq":   ops_2_sil_dil,
 	"neg":     ops_1_1,
-	"mul":      ops_1_2_1,
+	"mul":     ops_1_2_1,
 	"or":      ops_2_1,
 	"rep":     ops_repx,
 	"repe":    ops_repx,

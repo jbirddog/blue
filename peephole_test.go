@@ -24,6 +24,26 @@ func TestCanConstantFoldOr(t *testing.T) {
 	}
 }
 
+func TestCanConstantFoldShl(t *testing.T) {
+	instrs := []Instr{
+		&LiteralIntInstr{I: 4},
+		&LiteralIntInstr{I: 1},
+		&X8664Instr{Mnemonic: "shl"},
+	}
+
+	optimized := PerformPeepholeOptimizationsAtEnd(instrs)
+
+	if len(optimized) != 1 {
+		t.Fatalf("Expected 1 optimized instr, got %d", len(optimized))
+	}
+
+	value := optimized[0].(*LiteralIntInstr).I
+
+	if value != 8 {
+		t.Fatalf("Expected optimized value of 8, got %d", value)
+	}
+}
+
 func TestCanOptimizeMovReg0ToXorRegReg(t *testing.T) {
 	instr := &AsmBinaryInstr{Mnemonic: "mov", Op1: "eax", Op2: "0"}
 
