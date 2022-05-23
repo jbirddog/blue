@@ -28,6 +28,14 @@ func (m *OrMatcher) Matches(instr Instr) bool {
 	return matches && x8664.Mnemonic == "or"
 }
 
+type ShlMatcher struct{}
+
+func (m *ShlMatcher) Matches(instr Instr) bool {
+	x8664, matches := instr.(*X8664Instr)
+
+	return matches && x8664.Mnemonic == "shl"
+}
+
 type RetMatcher struct{}
 
 func (m *RetMatcher) Matches(instr Instr) bool {
@@ -79,6 +87,23 @@ func (o *ConstantFoldOrOptimization) Optimize(current []Instr) []Instr {
 	return []Instr{&LiteralIntInstr{I: i1 | i2}}
 }
 
+type ConstantFoldShlOptimization struct{}
+
+func (o *ConstantFoldShlOptimization) Pattern() InstrPattern {
+	return InstrPattern{
+		&AnyLiteralIntMatcher{},
+		&AnyLiteralIntMatcher{},
+		&ShlMatcher{},
+	}
+}
+
+func (o *ConstantFoldShlOptimization) Optimize(current []Instr) []Instr {
+	i1 := current[0].(*LiteralIntInstr).I
+	i2 := current[1].(*LiteralIntInstr).I
+
+	return []Instr{&LiteralIntInstr{I: i1 << i2}}
+}
+
 type JmpInsteadOfCallRetOptimization struct{}
 
 func (o *JmpInsteadOfCallRetOptimization) Pattern() InstrPattern {
@@ -96,6 +121,7 @@ func (o *JmpInsteadOfCallRetOptimization) Optimize(current []Instr) []Instr {
 
 var optimizations = []PeepholeOptimization{
 	&ConstantFoldOrOptimization{},
+	&ConstantFoldShlOptimization{},
 	&JmpInsteadOfCallRetOptimization{},
 }
 
