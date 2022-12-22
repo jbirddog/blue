@@ -12,16 +12,6 @@ config:
 .max_user_words = 1024
 .word_code_size = 32
 
-; needed in asm - generic words to support
-;
-; * read until c from input buffer
-; * create dictionary entry
-; * update dictionary entry
-; * find dictionary entry
-; * call dictionary entry
-; * write bytes to code buffer
-; * drop/dup/swap
-
 segment readable writeable executable
 
 ;
@@ -31,6 +21,7 @@ segment readable writeable executable
 code_buffer:
 .cap = config.word_code_size * config.max_user_words
 rb .cap
+.next rq 1
 .end:
 
 segment readable writeable
@@ -60,7 +51,7 @@ rb .cap
 ; ...
 
 dictionary: 
-.entry_size = 32
+.entry_size = config.cell_size * 4
 .latest rq 1
 .next rq 1
 .start:
@@ -70,7 +61,30 @@ dictionary:
 
 segment readable executable
 
+; needed in asm - words to support
+;
+; * read until c from input buffer
+; * create dictionary entry
+; * update dictionary entry
+; * find dictionary entry
+; * call dictionary entry
+; * push/pop/drop/dup/swap data stack
+; * write bytes to code buffer
+
+compile_byte:
+	; works but would like some movsb or something
+	mov rdi, [code_buffer.next]
+	mov byte [edi], sil
+	inc rdi
+	mov [code_buffer.next], rdi
+	ret
+	
+
 entry $
+.init_data_structures:
+	lea rsi, [code_buffer]
+	mov [code_buffer.next], rsi
+
 	mov edx, msg_size
 	
 	lea rsi, [msg]
@@ -78,26 +92,17 @@ entry $
 	mov eax, 1
 	syscall
 
-	lea rdi, [code_buffer]
-	mov byte [edi], 0xff
-	inc rdi
-	mov byte [edi], 0xc7
-	inc rdi
-	mov byte [edi], 0xff
-	inc rdi
-	mov byte [edi], 0xc7
-	inc rdi
-	mov byte [edi], 0xff
-	inc rdi
-	mov byte [edi], 0xc7
-	inc rdi
-	mov byte [edi], 0xc3
-	inc rdi
+	; POC - inc edi; ret
+	mov sil, 0xff
+	call compile_byte
+	mov sil, 0xc7
+	call compile_byte
+	mov sil, 0xc3
+	call compile_byte
 
 	xor edi, edi
-	;mov edi, [code_buffer.in]
 	lea rcx, [code_buffer]
-	;add rcx, 2
+	add rcx, 2 ; jump over inc edi
 	call rcx
 	mov eax, 60
 	syscall
