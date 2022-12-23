@@ -8,15 +8,15 @@ config:
 
 .cell_size = 8
 .input_buffer_size = 4096
-.max_data_stack_items = 32
+.max_stack_items = 32
 .max_user_words = 1024
 .word_code_size = 32
-
-segment readable writeable executable
 
 ;
 ; code buffer
 ;
+
+segment readable writeable executable
 
 code_buffer:
 .cap = config.word_code_size * config.max_user_words
@@ -24,14 +24,33 @@ rb .cap
 .next rq 1
 .end:
 
+segment readable executable
+
+.init:
+	mov rsi, code_buffer
+	mov [code_buffer.next], rsi
+	ret
+
+.stosb:
+.c_comma:
+	mov rdi, [code_buffer.next]
+	stosb
+	mov [code_buffer.next], rdi
+	ret
+
+;
+; compile time stacks
+;
+
 segment readable writeable
 
-;
-; compile time data stack
-;
-
 data_stack:
-.cap = config.cell_size * config.max_data_stack_items
+.cap = config.cell_size * config.max_stack_items
+rb .cap
+.end:
+
+return_stack:
+.cap = config.cell_size * config.max_stack_items
 rb .cap
 .end:
 
@@ -70,20 +89,11 @@ segment readable executable
 ; * call dictionary entry
 ; * push/pop/drop/dup/swap data stack
 ; * write bytes to code buffer
-
-compile_byte:
-	; works but would like some movsb or something
-	mov rdi, [code_buffer.next]
-	mov byte [edi], sil
-	inc rdi
-	mov [code_buffer.next], rdi
-	ret
 	
 
 entry $
 .init_data_structures:
-	lea rsi, [code_buffer]
-	mov [code_buffer.next], rsi
+	call code_buffer.init
 
 	mov edx, msg_size
 	
@@ -92,17 +102,20 @@ entry $
 	mov eax, 1
 	syscall
 
-	; POC - inc edi; ret
-	mov sil, 0xff
-	call compile_byte
-	mov sil, 0xc7
-	call compile_byte
-	mov sil, 0xc3
-	call compile_byte
+	; POC
+
+	; inc edi
+	mov al, 0xff
+	call code_buffer.c_comma
+	mov al, 0xc7
+	call code_buffer.c_comma
+	; ret
+	mov al, 0xc3
+	call code_buffer.c_comma
 
 	xor edi, edi
-	lea rcx, [code_buffer]
-	add rcx, 2 ; jump over inc edi
+	mov rcx, code_buffer
+	; add rcx, 2 ; jump over inc edi
 	call rcx
 	mov eax, 60
 	syscall
