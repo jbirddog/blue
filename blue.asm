@@ -19,19 +19,20 @@ config:
 segment readable writeable executable
 
 code_buffer:
-.cap = config.word_code_size * config.max_user_words
-rb .cap
 .next rq 1
+.core:
+.cap = config.word_code_size * config.max_user_words
+.user rb .cap
 .end:
 
 segment readable executable
 
 .init:
-	mov rsi, code_buffer
+	mov rsi, code_buffer.user
 	mov [code_buffer.next], rsi
 	ret
 
-.stosb:
+; assumes al is set
 .c_comma:
 	mov rdi, [code_buffer.next]
 	stosb
@@ -43,6 +44,10 @@ segment readable executable
 ;
 
 segment readable writeable
+
+; need:
+;
+; * push/pop/drop/dup/swap stacks
 
 data_stack:
 .cap = config.cell_size * config.max_stack_items
@@ -80,6 +85,11 @@ dictionary:
 
 segment readable executable
 
+.init:
+	ret
+
+segment readable executable
+
 ; needed in asm - words to support
 ;
 ; * read until c from input buffer
@@ -87,13 +97,11 @@ segment readable executable
 ; * update dictionary entry
 ; * find dictionary entry
 ; * call dictionary entry
-; * push/pop/drop/dup/swap data stack
-; * write bytes to code buffer
-	
 
 entry $
-.init_data_structures:
+	; init data structures:
 	call code_buffer.init
+	call dictionary.init
 
 	mov edx, msg_size
 	
@@ -114,7 +122,7 @@ entry $
 	call code_buffer.c_comma
 
 	xor edi, edi
-	mov rcx, code_buffer
+	mov rcx, code_buffer.user
 	; add rcx, 2 ; jump over inc edi
 	call rcx
 	mov eax, 60
