@@ -6,6 +6,7 @@ format ELF64 executable 3 ; fasm q: why 3? can omit or change
 
 config:
 
+; cell_size isn't really configurable...
 .cell_size = 8
 .input_buffer_size = 4096
 .max_stack_items = 32
@@ -19,8 +20,30 @@ config:
 segment readable writeable executable
 
 code_buffer:
+;
+; when compiling the final output, not sure if it would be 
+; better to have another .c_comma for the final buffer, 
+; somehow reuse this buffer or have three new statics to 
+; track the current buffer target, its start and cap.
+;
 .next rq 1
+
 .core:
+;
+; these are the core commands that are compiled in by default
+;
+
+.c_comma:
+	; assumes al is set
+	; should check if there is a byte to write to
+	mov rdi, [code_buffer.next]
+	stosb
+	mov [code_buffer.next], rdi
+	ret
+
+;
+; space reserved for user defined code
+;
 .cap = config.word_code_size * config.max_user_words
 .user rb .cap
 .end:
@@ -30,13 +53,6 @@ segment readable executable
 .init:
 	mov rsi, code_buffer.user
 	mov [code_buffer.next], rsi
-	ret
-
-; assumes al is set
-.c_comma:
-	mov rdi, [code_buffer.next]
-	stosb
-	mov [code_buffer.next], rdi
 	ret
 
 ;
@@ -74,18 +90,36 @@ rb .cap
 ; 8  - reserved
 ; ...
 
-dictionary: 
+dictionary:
 .entry_size = config.cell_size * 4
 .latest rq 1
 .next rq 1
 .start:
 .core:
-.user rb config.max_user_words * .entry_size
+;
+; these are the core commands that are compiled in by default
+; - once we get bootstrapped refine these
+;
+.c_comma:
+dq 0
+db 'c', ',', 0, 0, 0, 0, 0, 0
+dq code_buffer.c_comma
+dq 0
+
+;
+; space reserved for user defined code
+;
+.cap = config.max_user_words * .entry_size
+.user rb .cap
 .end:
 
 segment readable executable
 
 .init:
+	mov rsi, dictionary.user
+	mov [dictionary.next], rsi
+	sub rsi, .entry_size
+	mov [dictionary.latest], rsi
 	ret
 
 segment readable executable
@@ -103,23 +137,27 @@ entry $
 	call code_buffer.init
 	call dictionary.init
 
+	; run tests then re-init data structures?
+
 	mov edx, msg_size
-	
+
 	lea rsi, [msg]
 	mov edi, 1
 	mov eax, 1
 	syscall
 
 	; POC
+	mov rcx, dictionary.c_comma
+	add rcx, 16
 
 	; inc edi
 	mov al, 0xff
-	call code_buffer.c_comma
+	call qword [rcx]
 	mov al, 0xc7
-	call code_buffer.c_comma
+	call qword [rcx]
 	; ret
 	mov al, 0xc3
-	call code_buffer.c_comma
+	call qword [rcx]
 
 	xor edi, edi
 	mov rcx, code_buffer.user
@@ -129,7 +167,7 @@ entry $
 	syscall
 
 
-segment readable 
+segment readable
 
 msg db 'blue compiler (fasm edition)',0xA
 msg_size = $-msg
