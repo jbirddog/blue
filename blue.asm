@@ -35,10 +35,18 @@ code_buffer:
 
 .c_comma:
 	; assumes al is set
-	; should check if there is a byte to write to
+	; should check if there is space in the buffer
 	mov rdi, [code_buffer.next]
 	stosb
 	mov [code_buffer.next], rdi
+	ret
+
+.push_ds:
+	; assumes rax is set
+	; should check if there is space on the stack
+	mov rdi, [data_stack.next]
+	stosq
+	mov [data_stack.next], rdi
 	ret
 
 ;
@@ -47,13 +55,6 @@ code_buffer:
 .cap = config.word_code_size * config.max_user_words
 .user rb .cap
 .end:
-
-segment readable executable
-
-.init:
-	mov rsi, code_buffer.user
-	mov [code_buffer.next], rsi
-	ret
 
 ;
 ; compile time stacks
@@ -66,10 +67,13 @@ segment readable writeable
 ; * push/pop/drop/dup/swap stacks
 
 data_stack:
+.next rq 1
+.start:
 .cap = config.cell_size * config.max_stack_items
 rb .cap
 .end:
 
+; see how data_stack plays out, not sure if we re-implement or macro?
 return_stack:
 .cap = config.cell_size * config.max_stack_items
 rb .cap
@@ -93,7 +97,7 @@ rb .cap
 dictionary:
 .entry_size = config.cell_size * 4
 .latest rq 1
-.next rq 1
+.here rq 1
 .start:
 .core:
 ;
@@ -115,14 +119,22 @@ dq 0
 
 segment readable executable
 
-.init:
+dictionary.init:
 	mov rsi, dictionary.user
-	mov [dictionary.next], rsi
-	sub rsi, .entry_size
+	mov [dictionary.here], rsi
+	sub rsi, dictionary.entry_size
 	mov [dictionary.latest], rsi
 	ret
 
-segment readable executable
+code_buffer.init:
+	mov rsi, code_buffer.user
+	mov [code_buffer.next], rsi
+	ret
+
+data_stack.init:
+	mov rsi, data_stack.start
+	mov [data_stack.next], rsi
+	ret
 
 ; needed in asm - words to support
 ;
@@ -136,6 +148,7 @@ entry $
 	; init data structures:
 	call code_buffer.init
 	call dictionary.init
+	call data_stack.init
 
 	; run tests then re-init data structures?
 
@@ -147,17 +160,14 @@ entry $
 	syscall
 
 	; POC
-	mov rcx, dictionary.c_comma
-	add rcx, 16
-
 	; inc edi
 	mov al, 0xff
-	call qword [rcx]
+	call code_buffer.c_comma
 	mov al, 0xc7
-	call qword [rcx]
+	call code_buffer.c_comma
 	; ret
 	mov al, 0xc3
-	call qword [rcx]
+	call code_buffer.c_comma
 
 	xor edi, edi
 	mov rcx, code_buffer.user
