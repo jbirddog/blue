@@ -1,4 +1,6 @@
-format ELF64 executable 3 ; fasm q: why 3? can omit or change
+format ELF64 executable 3 ; fasm q: why is 3 needed? can omit or change
+
+cell_size = 8
 
 ;
 ; configuration
@@ -6,8 +8,6 @@ format ELF64 executable 3 ; fasm q: why 3? can omit or change
 
 config:
 
-; cell_size isn't really configurable...
-.cell_size = 8
 .input_buffer_size = 4096
 .max_stack_items = 32
 .max_user_words = 1024
@@ -31,6 +31,9 @@ code_buffer:
 .core:
 ;
 ; these are the core commands that are compiled in by default
+;
+; - rax/etc reg strategy
+; - use of data stack/clobbers
 ;
 
 .c_comma:
@@ -69,13 +72,13 @@ segment readable writeable
 data_stack:
 .next rq 1
 .start:
-.cap = config.cell_size * config.max_stack_items
+.cap = cell_size * config.max_stack_items
 rb .cap
 .end:
 
 ; see how data_stack plays out, not sure if we re-implement or macro?
 return_stack:
-.cap = config.cell_size * config.max_stack_items
+.cap = cell_size * config.max_stack_items
 rb .cap
 .end:
 
@@ -95,7 +98,7 @@ rb .cap
 ; ...
 
 dictionary:
-.entry_size = config.cell_size * 4
+.entry_size = cell_size * 4
 .latest rq 1
 .here rq 1
 .start:
@@ -106,7 +109,7 @@ dictionary:
 ;
 .c_comma:
 dq 0
-db 'c', ',', 0, 0, 0, 0, 0, 0
+db 2, 'c', ',', 0, 0, 0, 0, 0
 dq code_buffer.c_comma
 dq 0
 
@@ -144,20 +147,15 @@ data_stack.init:
 ; * find dictionary entry
 ; * call dictionary entry
 
-entry $
-	; init data structures:
+init:
+.data_structures:
 	call code_buffer.init
 	call dictionary.init
 	call data_stack.init
+	ret
 
-	; run tests then re-init data structures?
-
-	mov edx, msg_size
-
-	lea rsi, [msg]
-	mov edi, 1
-	mov eax, 1
-	syscall
+entry $
+	call init
 
 	; POC
 	; inc edi
@@ -179,5 +177,15 @@ entry $
 
 segment readable
 
-msg db 'blue compiler (fasm edition)',0xA
-msg_size = $-msg
+; in asm:
+;
+; comp! - set compiling flag
+; interp! - clear compiling flag
+;
+;	skip/skipws/sws - skip ws
+; parse/word/next - next word from input
+; create - create dictionary entry
+;
+
+bootstrap:
+db "create : ", 0xA
