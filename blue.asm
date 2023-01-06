@@ -36,20 +36,32 @@ code_buffer:
 ; - use of data stack/clobbers
 ;
 
-.c_comma:
-	; assumes al is set
-	; should check if there is space in the buffer
-	mov rdi, [code_buffer.next]
-	stosb
-	mov [code_buffer.next], rdi
-	ret
-
 .push_ds:
 	; assumes rax is set
 	; should check if there is space on the stack
 	mov rdi, [data_stack.next]
 	stosq
 	mov [data_stack.next], rdi
+	ret
+
+.pop_ds:
+	; should check if there is space on the stack
+	; shirley there is a more effecient way to do this
+	mov rsi, [data_stack.next]
+	std
+	lodsq
+	mov [data_stack.next], rsi
+	lodsq
+	cld
+	ret
+
+.c_comma:
+	; assumes value has been pushed to the data stack
+	; should check if there is space in the buffer
+	call .pop_ds
+	mov rdi, [code_buffer.next]
+	stosb
+	mov [code_buffer.next], rdi
 	ret
 
 ;
@@ -99,7 +111,6 @@ rb .cap
 
 dictionary:
 .entry_size = cell_size * 4
-.latest rq 1
 .here rq 1
 .start:
 .core:
@@ -125,8 +136,6 @@ segment readable executable
 dictionary.init:
 	mov rsi, dictionary.user
 	mov [dictionary.here], rsi
-	sub rsi, dictionary.entry_size
-	mov [dictionary.latest], rsi
 	ret
 
 code_buffer.init:
@@ -157,14 +166,21 @@ init:
 entry $
 	call init
 
+	xor eax, eax
 	; POC
 	; inc edi
 	mov al, 0xff
+	call code_buffer.push_ds
+	xor eax, eax
 	call code_buffer.c_comma
 	mov al, 0xc7
+	call code_buffer.push_ds
+	xor eax, eax
 	call code_buffer.c_comma
 	; ret
 	mov al, 0xc3
+	call code_buffer.push_ds
+	xor eax, eax
 	call code_buffer.c_comma
 
 	xor edi, edi
