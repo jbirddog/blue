@@ -166,21 +166,17 @@ init:
 entry $
 	call init
 
-	xor eax, eax
 	; POC
 	; inc edi
 	mov al, 0xff
 	call code_buffer.push_ds
-	xor eax, eax
 	call code_buffer.c_comma
 	mov al, 0xc7
 	call code_buffer.push_ds
-	xor eax, eax
 	call code_buffer.c_comma
 	; ret
 	mov al, 0xc3
 	call code_buffer.push_ds
-	xor eax, eax
 	call code_buffer.c_comma
 
 	xor edi, edi
@@ -193,15 +189,5 @@ entry $
 
 segment readable
 
-; in asm:
-;
-; comp! - set compiling flag
-; interp! - clear compiling flag
-;
-;	skip/skipws/sws - skip ws
-; parse/word/next - next word from input
-; create - create dictionary entry
-;
-
 bootstrap:
-db "create : ", 0xA
+db "0xff c, 0xc7 c, 0xc3 c,", 0xA
