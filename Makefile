@@ -1,14 +1,16 @@
+BLUE := blue
+
 all: build link run
 	@true
 
 build:
-	nasm -felf64 driver.asm -l driver.lst
+	nasm -felf64 $(BLUE).asm -l $(BLUE).lst
 
 link:
-	ld driver.o
+	ld -o $(BLUE) $(BLUE).o
 
 run:
-	./a.out
+	./$(BLUE)
 
 .PHONY:
 	build link run

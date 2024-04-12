@@ -1,6 +1,6 @@
 
 ;;;
-;;; 
+;;; compiler for the Blue Language
 ;;; 
 
 	section compiler write exec
