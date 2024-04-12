@@ -3,7 +3,7 @@
 ;;; 
 ;;; 
 
-	section codebuf write exec
+	section compiler write exec
 	
 ;;;
 ;;; 
@@ -12,10 +12,11 @@
 __codebuf:
 	.here dq 0
 	.start:
+	
 	.exit:
 	;; : exit (( status edi  -- )) 60 syscall ; noret
 	mov eax, 60
-	db 0x0f, 0x05			; syscall
+	syscall
 
 	.user:
 	times 4096 db 0
@@ -41,10 +42,13 @@ __dict:
 _start:
 	mov rax, __codebuf.user	
 	mov [__codebuf.here], rax
+
+	mov rax, __dict.user	
+	mov [__dict.here], rax
 	
-	;; 3 4 add exit 
-	mov eax, 3
-	add eax, 4
+	;; 6 add1 exit 
+	mov eax, 6
+	add eax, 1
 	
 	mov edi, eax
 	jmp __codebuf.exit
