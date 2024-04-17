@@ -9,18 +9,6 @@
 ;;; 
 ;;;
 
-__stack:
-	.here dq 0
-	.start times 32 dq 0
-	.end:
-
-	.push:
-	;; assumes value in rax
-	mov rsi, [.here]
-	stosq
-	mov [.here], rsi
-	ret
-
 __codebuf:
 	.here dq 0
 	
@@ -28,17 +16,41 @@ __codebuf:
 	.entry_jmp db 0xE9
 	.entry dq 0
 
+	.b_comma:
+	;;
+	;; : b, (( b al -- )) ... ; inline
+	;; 
+	mov rdi, [.here]
+	stosb
+	mov [.here], rdi
+	ret
+
+	.d_comma:
+	;;
+	;; : d, (( d eax -- )) ... ; inline
+	;; 
+	mov rdi, [.here]
+	stosd
+	mov [.here], rdi
+	ret
+
 	.syscall_1:
+	;;
 	;; : syscall/1 (( num eax -- result eax )) ... ; inline
+	;; 
 	syscall
-	
+
 	.exit:
+	;;
 	;; : exit (( status edi  -- )) 60 syscall drop ; noret
+	;; 
 	mov eax, 60
 	jmp .syscall_1
 
 	.add1:
+	;; 
 	;; : add1 (( n eax -- n+1 eax )) ... ; inline
+	;; 
 	inc eax
 	ret
 
@@ -49,29 +61,11 @@ __codebuf:
 ;;; 
 ;;; 
 
-__dict:
-	.here dq 0
-	.start:
-	.exit:
-
-	.__user:
-	times 4096 db 0
-
-;;;
-;;; 
-;;; 
-
 	global _start
 
-_start:
-	mov rsi, __stack.start
-	mov [__stack.here], rsi
-	
+_start:	
 	mov rsi, __codebuf.__user	
 	mov [__codebuf.here], rsi
-
-	mov rsi, __dict.__user	
-	mov [__dict.here], rsi
 
 	;; 
 	;; demo of this version of the blue compiler
@@ -112,15 +106,33 @@ _start:
 	call __codebuf.add1
 
 	;; stack now indicates there is an immediate value in `eax`. when moving into
-	;; into `edi` for `exit` the value of `eax` needs to be compiled. for now just
+	;; into `edi` for `exit` the value in `eax` needs to be compiled. for now just
 	;; move the full register but later respect the size from the register name.
 
 	;; 
-	;; TODO: compile into __codebuf:
+	;; compile into __codebuf:
 	;; 
 	;; BF07000000 - mov rdi, 7
-	;; E9A6DFFFFF - jmp __codebuf.exit
+	;;
+
+	push rax 		; don't clobber the `7` in rax
+	
+	push 0xBF
+	pop rax
+	call __codebuf.b_comma
+
+	pop rax
+	call __codebuf.d_comma
+
 	;; 
+	;; E9A6DFFFFF - jmp __codebuf.exit
+	;;
+
+	push 0xE9
+	pop rax
+	call __codebuf.b_comma
+
+	;; TODO: calculate offset, sign extend?
 
 	;; 
 	;; set the `entry` to `_start`'s code. for this demo this just happens to be
