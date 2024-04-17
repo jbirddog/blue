@@ -139,10 +139,23 @@ _start:
 	;; the start of the user section of the code buffer, but really `entry` would
 	;; find the previously defined word and use its code.
 	;;
+	
+	mov rsi, __codebuf.__user
+	sub rsi, __codebuf.start
+	mov [__codebuf.entry], rsi
 
 	;;
 	;; write the code buffer to out.bin and exit
-	;; 
+	;;
+
+	mov rdi, outfile
+	xor esi, esi
+	mov eax, 2
+	syscall
 
 	xor edi, edi
 	jmp __codebuf.exit
+
+outfile:
+	db "out.bin", 0
+	.len equ $ - outfile
