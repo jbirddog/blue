@@ -167,7 +167,7 @@ _start:
 	pop rdi
 	mov rsi, __codebuf.start
 	mov rdx, [__codebuf.here]
-	sub rdx, [__codebuf.start]
+	sub rdx, __codebuf.start
 	mov eax, 1
 	syscall
 	
