@@ -3,4 +3,5 @@
 *.o
 a.out
 blue
+demo
 out.bin
