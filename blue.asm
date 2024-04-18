@@ -132,7 +132,12 @@ _start:
 	pop rax
 	call __codebuf.b_comma
 
-	;; TODO: calculate offset, sign extend?
+	mov rsi, __codebuf.exit
+	sub rsi, __codebuf.here
+	push rsi
+	
+	pop rax
+	call __codebuf.d_comma
 
 	;; 
 	;; set the `entry` to `_start`'s code. for this demo this just happens to be
@@ -148,9 +153,19 @@ _start:
 	;; write the code buffer to out.bin and exit
 	;;
 
+	;; open
 	mov rdi, outfile
-	xor esi, esi
+	mov esi, 0o1 | 0o100 | 0o1000
+	mov edx, 0o640
 	mov eax, 2
+	syscall
+
+	;; write
+	
+
+	;; close
+	mov edi, eax
+	mov eax, 3
 	syscall
 
 	xor edi, edi
@@ -159,3 +174,4 @@ _start:
 outfile:
 	db "out.bin", 0
 	.len equ $ - outfile
+	
