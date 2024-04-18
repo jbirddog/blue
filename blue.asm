@@ -160,11 +160,20 @@ _start:
 	mov eax, 2
 	syscall
 
+	push rax
+	push rax
+
 	;; write
+	pop rdi
+	mov rsi, __codebuf.start
+	mov rdx, [__codebuf.here]
+	sub rdx, [__codebuf.start]
+	mov eax, 1
+	syscall
 	
 
 	;; close
-	mov edi, eax
+	pop rdi
 	mov eax, 3
 	syscall
 
