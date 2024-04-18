@@ -13,10 +13,13 @@ link:
 run:
 	./$(BLUE)
 
+dis-demo:
+	ndisasm -b64 demo
+
 dis-out:
 	ndisasm -b64 out.bin
 
-dis: dis-out
+dis: dis-out dis-demo
 	@true
 
 build-demo:

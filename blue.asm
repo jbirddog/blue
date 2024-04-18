@@ -13,7 +13,7 @@ __codebuf:
 	.here dq 0
 	
 	.start:
-	.entry_jmp db 0xE9
+	.entry_jmp db 0xEB
 	.entry dq 0
 
 	.b_comma:
@@ -147,6 +147,7 @@ _start:
 	
 	mov rsi, __codebuf.__user
 	sub rsi, __codebuf.start
+	sub rsi, 2
 	mov [__codebuf.entry], rsi
 
 	;;
