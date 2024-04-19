@@ -81,9 +81,9 @@ _start:
 	;;
 	;; the final binary output would roughly be the equivalent of:
 	;;
+	;; .... code from the compiler
 	;; mov rdi, 7
-	;; mov eax, 60
-	;; syscall
+	;; jmp [location of __codebuf.exit]
 	;;
 	;; the output should be a binary file containing the machine code for the
 	;; above unoptimized assembly. This should be able to be included in a
