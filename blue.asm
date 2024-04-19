@@ -13,7 +13,7 @@ __codebuf:
 	.here dq 0
 	
 	.start:
-	.entry_jmp db 0xEB
+	.entry_jmp db 0xEB 	; TODO: after demo works check E9
 	.entry dq 0
 
 	.b_comma:
@@ -124,25 +124,51 @@ _start:
 	pop rax
 	call __codebuf.d_comma
 
-	;; 
-	;; E9A6DFFFFF - jmp __codebuf.exit
-	;;
-
-	push 0xE9
+	;; ----------------------------------
+	push 0xB8
 	pop rax
 	call __codebuf.b_comma
 
-	mov rsi, __codebuf.exit
-	sub rsi, __codebuf.here
-	push rsi
-	
+	push 60
 	pop rax
 	call __codebuf.d_comma
 
+	push 0x0F
+	pop rax
+	call __codebuf.b_comma
+	
+	push 0x05
+	pop rax
+	call __codebuf.b_comma
+	;; ----------------------------------
+
+	
+	
+	;; ;; 
+	;; ;; E9A6DFFFFF - jmp __codebuf.exit
+	;; ;;
+
+	;; push 0xE9
+	;; pop rax
+	;; call __codebuf.b_comma
+
+	;; ;; TODO: offset to exit
+
+	;; mov rsi, __codebuf.exit
+	;; sub rsi, __codebuf.here
+	;; sub rsi, 2
+	;; push rsi
+	
+	;; pop rax
+	;; call __codebuf.d_comma
+
+
+	
 	;; 
 	;; set the `entry` to `_start`'s code. for this demo this just happens to be
 	;; the start of the user section of the code buffer, but really `entry` would
-	;; find the previously defined word and use its code.
+	;; find the previously defined word and use its code. like finding a word in
+	;; the dictionary, this does not impact the correctness of the demo.
 	;;
 	
 	mov rsi, __codebuf.__user
