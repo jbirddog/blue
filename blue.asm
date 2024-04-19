@@ -5,6 +5,8 @@
 
 	section compiler write exec
 
+	global _start
+
 ;;;
 ;;; 
 ;;;
@@ -60,8 +62,6 @@ __codebuf:
 ;;;
 ;;; 
 ;;; 
-
-	global _start
 
 _start:	
 	mov rsi, __codebuf.__user	
@@ -123,26 +123,6 @@ _start:
 
 	pop rax
 	call __codebuf.d_comma
-
-	;; ----------------------------------
-	push 0xB8
-	pop rax
-	call __codebuf.b_comma
-
-	push 60
-	pop rax
-	call __codebuf.d_comma
-
-	push 0x0F
-	pop rax
-	call __codebuf.b_comma
-	
-	push 0x05
-	pop rax
-	call __codebuf.b_comma
-	;; ----------------------------------
-
-	
 	
 	;; 
 	;; E9A6DFFFFF - jmp __codebuf.exit
@@ -152,11 +132,9 @@ _start:
 	pop rax
 	call __codebuf.b_comma
 
-	;; TODO: offset to exit
-
 	mov rsi, __codebuf.exit
-	sub rsi, __codebuf.here
-	sub rsi, 2
+	sub rsi, [__codebuf.here]
+	sub rsi, 4
 	push rsi
 	
 	pop rax
