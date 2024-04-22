@@ -15,7 +15,7 @@ __codebuf:
 	.here dq 0
 	
 	.start:
-	.entry_jmp db 0xE9
+	db 0xE9
 	.entry dq 0
 
 	.b_comma:
@@ -41,13 +41,14 @@ __codebuf:
 	;; : syscall/1 (( num eax -- result eax )) ... ; inline
 	;; 
 	syscall
+	ret
 
 	.exit:
 	;;
-	;; : exit (( status edi  -- )) 60 syscall drop ; noret
+	;; : exit (( status edi  -- )) 60 syscall/1 drop ; noret
 	;; 
 	mov eax, 60
-	jmp .syscall_1
+	syscall
 
 	.add1:
 	;; 
@@ -81,13 +82,14 @@ _start:
 	;;
 	;; the final binary output would roughly be the equivalent of:
 	;;
-	;; .... code from the compiler
+	;; jmp [location of user code]
+	;; .... __codebuf
 	;; mov rdi, 7
 	;; jmp [location of __codebuf.exit]
 	;;
 	;; the output should be a binary file containing the machine code for the
 	;; above unoptimized assembly. This should be able to be included in a
-	;; asm driver file that can jump to the correct location to execute the
+	;; asm driver file that jumps to the correct location to execute the
 	;; program.
 	;;
 	;; logic such as parsing the application code and finding entries in the
@@ -125,7 +127,7 @@ _start:
 	call __codebuf.d_comma
 	
 	;; 
-	;; E9A6DFFFFF - jmp __codebuf.exit
+	;; E9XXXXXXXX - jmp __codebuf.exit
 	;;
 
 	push 0xE9
