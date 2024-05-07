@@ -107,6 +107,23 @@ _start:
 	pop rax
 	call __codebuf.add1
 
+	;;
+	;; demo 2 - the above code simulated the fact that a `6` was parsed, not found
+	;; in the dictionary and pushed as a literal value at compile time. The value
+	;; from the stack is then moved into rax due to `add1`'s stack effect. The
+	;; location of `add1`'s code is then found via the dictionary and called.
+	;;
+	;; for demo 2 we are going to pretend `6` was already parsed, not found as a
+	;; word and is about to be pushed. when the word is pushed we need to add an
+	;; entry to the compile time stack that says: "interpret & literal". this will
+	;; be required for the second part of the demo, handling a simple move of a
+	;; literal from the stack to `rax`. this requires knowledge of `add1`'s stack
+	;; effect. once that is done we can change the call of `__codebuf.add1` to
+	;; be a relative location, as if it was found in the dictionary.
+	;;
+	;; demo 3 could be handling of the output stack effect?
+	;; 
+
 	;; stack now indicates there is an immediate value in `eax`. when moving into
 	;; into `edi` for `exit` the value in `eax` needs to be compiled. for now just
 	;; move the full register but later respect the size from the register name.
