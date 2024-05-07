@@ -121,6 +121,14 @@ _start:
 	;; effect. once that is done we can change the call of `__codebuf.add1` to
 	;; be a relative location, as if it was found in the dictionary.
 	;;
+	;; needed:
+	;; 
+	;; [ ] compile time stack definition
+	;; [ ] knowledge of interpret vs compile mode
+	;; [ ] compile time dictionary definition (headers, codebuf location, etc)
+	;; [ ] hardcoded dictionary entry for `add1`
+	;; [ ] rax, etc constants and operations to use them (push rax)
+	;;
 	;; demo 3 could be handling of the output stack effect?
 	;; 
 
