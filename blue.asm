@@ -23,10 +23,10 @@ registers:
 	.rax equ 0
 
 size:
-	.b equ 0
-	.w equ 1
-	.d equ 2
-	.q equ 3
+	.b equ 1
+	.w equ 2
+	.d equ 4
+	.q equ 8
 	
 ;;;
 ;;; compiler state
@@ -159,8 +159,8 @@ _start:
 	;; [ ] compile time stack definition (mode, location, size)
 	;; [ ] compile time dictionary definition (headers, codebuf location, etc)
 	;; [ ] hardcoded dictionary entry for `add1`
-	;; [ ] rax, etc constants to be used when building machine code
 	;; [ ] operations to use rax, etc constants (pop rax)
+	;; [ ] call to __codebuf.add1 via offset
 	;;
 	;;
 	;; questions:
