@@ -138,12 +138,23 @@ _start:
 	;;
 	;; needed:
 	;; 
-	;; [X] knowledge of interpret vs compile mode
 	;; [ ] rax, etc constants to be used when building machine code
+	;; [ ] mode constants (interpret, compile)
+	;; [ ] size constants (b, w, d, q)
+	;; [ ] location constants (stack, register, memory)
+	;; [X] knowledge of interpret vs compile mode
+	;; [X] start in interpret mode
 	;; [ ] compile time stack definition (mode, location, size)
 	;; [ ] compile time dictionary definition (headers, codebuf location, etc)
 	;; [ ] hardcoded dictionary entry for `add1`
-	;; [ ] operations to use rax, etc constants (push rax)
+	;; [ ] operations to use rax, etc constants (pop rax)
+	;;
+	;;
+	;; questions:
+	;; 
+	;; * for interpret vs compile, the bodies of words seem straightforward
+	;;   but for top level code, should we build up a fake word and call it?
+	;;   or add it somewhere the just call it?
 	;;
 	;; demo 3 could be handling of the output stack effect?
 	;; 
