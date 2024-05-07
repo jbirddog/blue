@@ -8,7 +8,22 @@
 	global _start
 
 ;;;
+;;; constants
 ;;; 
+
+mode:
+	.interpret equ 0
+	.compile equ 1
+
+;;;
+;;; compiler state
+;;; 
+
+__blue:
+	.mode db mode.interpret
+
+;;;
+;;; code buffer 
 ;;;
 
 __codebuf:
@@ -61,7 +76,7 @@ __codebuf:
 	times 4096 db 0
 
 ;;;
-;;; 
+;;; compiler entry point
 ;;; 
 
 _start:	
@@ -123,11 +138,12 @@ _start:
 	;;
 	;; needed:
 	;; 
-	;; [ ] compile time stack definition
-	;; [ ] knowledge of interpret vs compile mode
+	;; [X] knowledge of interpret vs compile mode
+	;; [ ] rax, etc constants to be used when building machine code
+	;; [ ] compile time stack definition (mode, location, size)
 	;; [ ] compile time dictionary definition (headers, codebuf location, etc)
 	;; [ ] hardcoded dictionary entry for `add1`
-	;; [ ] rax, etc constants and operations to use them (push rax)
+	;; [ ] operations to use rax, etc constants (push rax)
 	;;
 	;; demo 3 could be handling of the output stack effect?
 	;; 
