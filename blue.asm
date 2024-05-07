@@ -11,10 +11,23 @@
 ;;; constants
 ;;; 
 
+location:
+	.stack equ 0
+	.register equ 1
+
 mode:
 	.interpret equ 0
 	.compile equ 1
 
+registers:
+	.rax equ 0
+
+size:
+	.b equ 0
+	.w equ 1
+	.d equ 2
+	.q equ 3
+	
 ;;;
 ;;; compiler state
 ;;; 
@@ -138,15 +151,15 @@ _start:
 	;;
 	;; needed:
 	;; 
-	;; [ ] rax, etc constants to be used when building machine code
-	;; [ ] mode constants (interpret, compile)
-	;; [ ] size constants (b, w, d, q)
-	;; [ ] location constants (stack, register, memory)
+	;; [X] mode constants (interpret, compile)
+	;; [X] size constants (b, w, d, q)
+	;; [X] location constants (stack, register, memory)
 	;; [X] knowledge of interpret vs compile mode
 	;; [X] start in interpret mode
 	;; [ ] compile time stack definition (mode, location, size)
 	;; [ ] compile time dictionary definition (headers, codebuf location, etc)
 	;; [ ] hardcoded dictionary entry for `add1`
+	;; [ ] rax, etc constants to be used when building machine code
 	;; [ ] operations to use rax, etc constants (pop rax)
 	;;
 	;;
