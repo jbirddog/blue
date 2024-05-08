@@ -29,6 +29,25 @@ size:
 	.q equ 8
 
 ;;;
+;;; stack effect list
+;;;
+
+__effects:
+	.here dq 0
+
+	.b_comma_in:
+	.b_comma_out:
+	
+	.d_comma_in:
+	.d_comma_out:
+	
+	.add1_in:
+	.add1_out:
+	
+	.__user:
+	times 512 dq 0
+
+;;;
 ;;; dictionary
 ;;;
 
@@ -123,6 +142,9 @@ blue:
 
 	mov rsi, __dict.__user
 	mov [__dict.here], rsi
+
+	mov rsi, __effects.__user
+	mov [__effects.__user], rsi
 	
 	ret
 
@@ -133,6 +155,7 @@ blue:
 
 _start:
 	call blue.init
+	
 	;; 
 	;; demo of this version of the blue compiler
 	;; 
@@ -205,6 +228,7 @@ _start:
 	;; [X] init dictionary like codebuf
 	;; [ ] compile time stack definition (mode, location, size)
 	;; [ ] compile time dictionary definition (headers, codebuf location, etc)
+	;; [X] compile time stack effect list
 	;; [ ] code to enter interpret mode
 	;; [ ] code to enter compile mode
 	;; [ ] tmp call to enter interpret mode
