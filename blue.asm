@@ -27,14 +27,36 @@ size:
 	.w equ 2
 	.d equ 4
 	.q equ 8
-	
+
 ;;;
-;;; compiler state
-;;; 
+;;; dictionary
+;;;
 
-__blue:
-	.mode db mode.interpret
+__dict:
+	.here dq 0
+	.start:
 
+	.b_comma:
+	dq 0
+	db 'b', ',', 0, 0, 0, 0, 0, 0
+	dq __codebuf.b_comma
+	dq 0
+
+	.d_comma:
+	dq 0
+	db 'd', ',', 0, 0, 0, 0, 0, 0
+	dq __codebuf.d_comma
+	dq 0
+	
+	.add1:
+	dq 0
+	dq 'a', 'd', 'd', '1', 0, 0, 0, 0
+	dq __codebuf.add1
+	dq 0
+
+	.__user:
+	times 4096 db 0
+	
 ;;;
 ;;; code buffer 
 ;;;
@@ -89,13 +111,28 @@ __codebuf:
 	times 4096 db 0
 
 ;;;
+;;; compiler
+;;; 
+
+blue:
+	.mode db mode.interpret
+
+	.init:
+	mov rsi, __codebuf.__user
+	mov [__codebuf.here], rsi
+
+	mov rsi, __dict.__user
+	mov [__dict.here], rsi
+	
+	ret
+
+
+;;;
 ;;; compiler entry point
 ;;; 
 
-_start:	
-	mov rsi, __codebuf.__user	
-	mov [__codebuf.here], rsi
-
+_start:
+	call blue.init
 	;; 
 	;; demo of this version of the blue compiler
 	;; 
@@ -149,6 +186,15 @@ _start:
 	;; effect. once that is done we can change the call of `__codebuf.add1` to
 	;; be a relative location, as if it was found in the dictionary.
 	;;
+	;; to allow interpreted code and immediate words to all operate the same, when
+	;; a word is finished compiling via `;`, the codebuf location for `here` of the
+	;; dictionary will be set to codebuf's `here`. This will serve as a scratchpad
+	;; for interpreted code that will be overwritten once a new word is compiled.
+	;; interpreted code will be compiled into this space just like the body of any
+	;; word. the start of compilation for a word `:` will first compile in a `ret`
+	;; and call the codebuf location of `here`. once that returns `here` pointers
+	;; need to be reset and the word can be compiled.
+	;;
 	;; needed:
 	;; 
 	;; [X] mode constants (interpret, compile)
@@ -156,19 +202,23 @@ _start:
 	;; [X] location constants (stack, register, memory)
 	;; [X] knowledge of interpret vs compile mode
 	;; [X] start in interpret mode
+	;; [X] init dictionary like codebuf
 	;; [ ] compile time stack definition (mode, location, size)
 	;; [ ] compile time dictionary definition (headers, codebuf location, etc)
-	;; [ ] hardcoded dictionary entry for `add1`
+	;; [ ] code to enter interpret mode
+	;; [ ] code to enter compile mode
+	;; [ ] tmp call to enter interpret mode
+	;; [X] hardcoded dictionary entry for `b,`, `c,`, `add1`
 	;; [ ] operations to use rax, etc constants (pop rax)
 	;; [ ] call to __codebuf.add1 via offset
 	;;
 	;;
 	;; questions:
-	;; 
-	;; * for interpret vs compile, the bodies of words seem straightforward
-	;;   but for top level code, should we build up a fake word and call it?
-	;;   or add it somewhere the just call it?
 	;;
+	;;   - how are stack effects stored? in the dictionary directly? pointer
+	;;     to another structure? directly means variable length dictionary
+	;;     headers and a previous pointer...
+	;; 
 	;; demo 3 could be handling of the output stack effect?
 	;; 
 
