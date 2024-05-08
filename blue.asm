@@ -11,41 +11,9 @@
 ;;; constants
 ;;; 
 
-location:
-	.stack equ 0
-	.register equ 1
-
 mode:
 	.interpret equ 0
 	.compile equ 1
-
-registers:
-	.rax equ 0
-
-size:
-	.b equ 1
-	.w equ 2
-	.d equ 4
-	.q equ 8
-
-;;;
-;;; stack effect list
-;;;
-
-__effects:
-	.here dq 0
-
-	.b_comma_in:
-	.b_comma_out:
-	
-	.d_comma_in:
-	.d_comma_out:
-	
-	.add1_in:
-	.add1_out:
-	
-	.__user:
-	times 512 dq 0
 
 ;;;
 ;;; dictionary
@@ -142,9 +110,6 @@ blue:
 
 	mov rsi, __dict.__user
 	mov [__dict.here], rsi
-
-	mov rsi, __effects.__user
-	mov [__effects.__user], rsi
 	
 	ret
 
@@ -203,11 +168,12 @@ _start:
 	;;
 	;; for demo 2 we are going to pretend `6` was already parsed, not found as a
 	;; word and is about to be pushed. when the word is pushed we need to add an
-	;; entry to the compile time stack that says: "interpret & literal". this will
-	;; be required for the second part of the demo, handling a simple move of a
-	;; literal from the stack to `rax`. this requires knowledge of `add1`'s stack
-	;; effect. once that is done we can change the call of `__codebuf.add1` to
-	;; be a relative location, as if it was found in the dictionary.
+	;; entry to the compile time stack that says: "interpret & literal". we will then
+	;; simulate the handling of `add1`'s stack effect by moving this value into `rax`.
+	;; this will be done by compiling the approriate machine code instead of assembly.
+	;; the location of `add1`'s code will then be found via a simulated dictionary
+	;; lookup, its relative location computed and the appropriate call will be
+	;; compiled instead of writing the assembly.
 	;;
 	;; to allow interpreted code and immediate words to all operate the same, when
 	;; a word is finished compiling via `;`, the codebuf location for `here` of the
@@ -221,29 +187,17 @@ _start:
 	;; needed:
 	;; 
 	;; [X] mode constants (interpret, compile)
-	;; [X] size constants (b, w, d, q)
-	;; [X] location constants (stack, register, memory)
 	;; [X] knowledge of interpret vs compile mode
 	;; [X] start in interpret mode
 	;; [X] init dictionary like codebuf
-	;; [ ] compile time stack definition (mode, location, size)
 	;; [ ] compile time dictionary definition (headers, codebuf location, etc)
-	;; [X] compile time stack effect list
 	;; [ ] code to enter interpret mode
 	;; [ ] code to enter compile mode
 	;; [ ] tmp call to enter interpret mode
 	;; [X] hardcoded dictionary entry for `b,`, `c,`, `add1`
-	;; [ ] operations to use rax, etc constants (pop rax)
 	;; [ ] call to __codebuf.add1 via offset
 	;;
-	;;
-	;; questions:
-	;;
-	;;   - how are stack effects stored? in the dictionary directly? pointer
-	;;     to another structure? directly means variable length dictionary
-	;;     headers and a previous pointer...
-	;; 
-	;; demo 3 could be handling of the output stack effect?
+	;; demo 3 could be handling of the stack effect?
 	;; 
 
 	;; stack now indicates there is an immediate value in `eax`. when moving into
