@@ -167,13 +167,18 @@ _start:
 	;; location of `add1`'s code is then found via the dictionary and called.
 	;;
 	;; for demo 2 we are going to pretend `6` was already parsed, not found as a
-	;; word and is about to be pushed. when the word is pushed we need to add an
-	;; entry to the compile time stack that says: "interpret & literal". we will then
-	;; simulate the handling of `add1`'s stack effect by moving this value into `rax`.
+	;; word and is about to be pushed.
+	;; 
 	;; this will be done by compiling the approriate machine code instead of assembly.
 	;; the location of `add1`'s code will then be found via a simulated dictionary
 	;; lookup, its relative location computed and the appropriate call will be
 	;; compiled instead of writing the assembly.
+	;;
+	;; the interesting aspect of this demo is that the compile time code to call
+	;; `add1` is no longer going to be run at compile time. in the first demo we
+	;; simulated this by compiling the code into the compiler. this takes it one
+	;; step further and will generate the machine code in the codebuf that is then
+	;; executed at compile time.
 	;;
 	;; to allow interpreted code and immediate words to all operate the same, when
 	;; a word is finished compiling via `;`, the codebuf location for `here` of the
@@ -183,6 +188,7 @@ _start:
 	;; word. the start of compilation for a word `:` will first compile in a `ret`
 	;; and call the codebuf location of `here`. once that returns `here` pointers
 	;; need to be reset and the word can be compiled.
+	;; 
 	;;
 	;; needed:
 	;; 
@@ -190,14 +196,14 @@ _start:
 	;; [X] knowledge of interpret vs compile mode
 	;; [X] start in interpret mode
 	;; [X] init dictionary like codebuf
-	;; [ ] compile time dictionary definition (headers, codebuf location, etc)
+	;; [X] compile time dictionary definition (headers, codebuf location, etc)
 	;; [ ] code to enter interpret mode
 	;; [ ] code to enter compile mode
 	;; [ ] tmp call to enter interpret mode
 	;; [X] hardcoded dictionary entry for `b,`, `c,`, `add1`
 	;; [ ] call to __codebuf.add1 via offset
 	;;
-	;; demo 3 could be handling of the stack effect?
+	;; demo 3 could be handling of the stack and stack effect?
 	;; 
 
 	;; stack now indicates there is an immediate value in `eax`. when moving into
