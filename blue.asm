@@ -155,7 +155,7 @@ _start:
 	;; demo  1 - https://github.com/jbirddog/blue/commit/d90cce865ff5513b62d47ccfbebb2fc3158fa579
 	;;         - simulate calling previously compiled code at compile time
 	;;
-	;; demo  2 -
+	;; demo  2 - https://github.com/jbirddog/blue/commit/2e2037b65faa130c55a36937dad7d060c8a3ca37
 	;;         - actually compile compile time code into the codebuf and execute it
 	;;
 	;; demo  3 -
