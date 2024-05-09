@@ -104,7 +104,7 @@ codebuf:
 ;;; 
 
 interpret:
-	mov rsi, codebuf.here
+	mov rsi, [codebuf.here]
 	mov [dict.here + dict.codebuf_offset], rsi
 
 	mov byte [mode], mode.interpret
@@ -115,20 +115,15 @@ interpretive_dance:
 	pop rax
 	call codebuf.b_comma
 
-	call codebuf.__user	; needs to be dict.here + dict.codebuff_offset
+	call [dict.here + dict.codebuf_offset]
 
 	ret
 	
 compile:
 	call interpretive_dance
 	
-	;; set codebuf.here to dict.here's codebuf field
-	;; mov rsi, dict.here + dict.codebuf_offset 
-	;; mov [codebuf.here], rsi
-
-	mov rsi, codebuf.__user	; needs to be dict.here + dict.codebuff_offset
+	mov rsi, [dict.here + dict.codebuf_offset]
 	mov [codebuf.here], rsi
-
 	
 	mov byte [mode], mode.compile
 	ret
