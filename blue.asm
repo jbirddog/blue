@@ -25,6 +25,8 @@ dict:
 	.here dq 0
 	.start:
 
+	.__core:
+
 	.b_comma:
 	dq 0
 	db 'b', ',', 0, 0, 0, 0, 0, 0
@@ -37,13 +39,14 @@ dict:
 	dq codebuf.d_comma
 	dq 0
 	
+	.__user:
+	
 	.add1:
 	dq 0
 	db 'a', 'd', 'd', '1', 0, 0, 0, 0
 	dq codebuf.add1
 	dq 0
 
-	.__user:
 	times 4096 db 0
 	
 ;;;
@@ -118,7 +121,7 @@ interpretive_dance:
 	call [dict.here + dict.codebuf_offset]
 
 	ret
-	
+
 compile:
 	call interpretive_dance
 	
@@ -128,7 +131,6 @@ compile:
 	mov byte [mode], mode.compile
 	ret
 
-	
 init:
 	mov rsi, codebuf.__user
 	mov [codebuf.here], rsi
@@ -230,11 +232,11 @@ _start:
 	;; [X] start in interpret mode
 	;; [X] init dictionary like codebuf
 	;; [X] compile time dictionary definition (headers, codebuf location, etc)
-	;; [ ] code to enter interpret mode
-	;; [ ] code to enter compile mode
-	;; [ ] tmp call to enter interpret mode
+	;; [X] code to enter interpret mode
+	;; [X] code to enter compile mode
+	;; [X] tmp call to enter compile mode
 	;; [X] hardcoded dictionary entry for `b,`, `c,`, `add1`
-	;; [ ] call to codebuf.add1 via offset
+	;; [X] call to codebuf.add1 via offset
 	;;
 	;; demo 3 could be handling of the stack and stack effect?
 	;; 
@@ -257,7 +259,15 @@ _start:
 	pop rax
 	call codebuf.b_comma
 
-	;; call codebuf.add1
+	push 0xE8		; call
+	pop rax
+	call codebuf.b_comma
+
+	mov rax, [dict.add1 + dict.codebuf_offset]
+	sub rax, [codebuf.here]
+	sub rax, 4
+
+	call codebuf.d_comma
 	
 	call compile
 	
