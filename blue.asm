@@ -7,13 +7,13 @@
 
 	global _start
 
-;;;
-;;; constants
-;;; 
 
 mode:
 	.interpret equ 0
 	.compile equ 1
+
+	db .interpret
+
 
 ;;;
 ;;; dictionary
@@ -98,19 +98,32 @@ __codebuf:
 	times 4096 db 0
 
 ;;;
-;;; compiler
+;;; helpers
 ;;; 
 
-blue:
-	.mode db mode.interpret
+interpret:
+	;; set dict.here's codebuf field to codebuf.here
 
-	.init:
+	mov byte [mode], mode.interpret
+	ret
+	
+compile:
+	;; compile ret
+	;; call dict.here
+	;; set codebuf.here to dict.here's codebuf field
+
+	mov byte [mode], mode.compile
+	ret
+
+	
+init:
 	mov rsi, __codebuf.__user
 	mov [__codebuf.here], rsi
 
 	mov rsi, __dict.__user
 	mov [__dict.here], rsi
-	
+
+	call interpret
 	ret
 
 
@@ -119,7 +132,23 @@ blue:
 ;;; 
 
 _start:
-	call blue.init
+	call init
+
+	;;
+	;; demo history
+	;;
+	;; demo  1 - https://github.com/jbirddog/blue/commit/d90cce865ff5513b62d47ccfbebb2fc3158fa579
+	;;         - simulate calling previously compiled code at compile time
+	;;
+	;; demo  2 -
+	;;         - actually compile compile time code into the codebuf and execute it
+	;;
+	;; demo  3 -
+	;;         - compile time stack and stack effects
+	;;
+	;; demo  4 -
+	;;         - clobber support
+	;; 
 	
 	;; 
 	;; demo of this version of the blue compiler
@@ -150,15 +179,6 @@ _start:
 	;; interesting part. the interesting part is providing full access to
 	;; all previously defined code at compile time. 
 	;;
-
-	;;
-	;; compile the user program
-	;; 
-	
-	;; `6 add1` executed at compile time 
-	push 6
-	pop rax
-	call __codebuf.add1
 
 	;;
 	;; demo 2 - the above code simulated the fact that a `6` was parsed, not found
@@ -205,6 +225,16 @@ _start:
 	;;
 	;; demo 3 could be handling of the stack and stack effect?
 	;; 
+
+	;;
+	;; compile the user program
+	;; 
+	
+	;; `6 add1` executed at compile time
+	
+	push 6 			; 0x6A06
+	pop rax			; 0x58
+	call __codebuf.add1
 
 	;; stack now indicates there is an immediate value in `eax`. when moving into
 	;; into `edi` for `exit` the value in `eax` needs to be compiled. for now just
