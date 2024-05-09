@@ -19,26 +19,28 @@ mode:
 ;;; dictionary
 ;;;
 
-__dict:
+dict:
+	.codebuf_offset equ 16
+	
 	.here dq 0
 	.start:
 
 	.b_comma:
 	dq 0
 	db 'b', ',', 0, 0, 0, 0, 0, 0
-	dq __codebuf.b_comma
+	dq codebuf.b_comma
 	dq 0
 
 	.d_comma:
 	dq 0
 	db 'd', ',', 0, 0, 0, 0, 0, 0
-	dq __codebuf.d_comma
+	dq codebuf.d_comma
 	dq 0
 	
 	.add1:
 	dq 0
-	dq 'a', 'd', 'd', '1', 0, 0, 0, 0
-	dq __codebuf.add1
+	db 'a', 'd', 'd', '1', 0, 0, 0, 0
+	dq codebuf.add1
 	dq 0
 
 	.__user:
@@ -48,7 +50,7 @@ __dict:
 ;;; code buffer 
 ;;;
 
-__codebuf:
+codebuf:
 	.here dq 0
 	
 	.start:
@@ -102,26 +104,34 @@ __codebuf:
 ;;; 
 
 interpret:
-	;; set dict.here's codebuf field to codebuf.here
+	mov rsi, codebuf.here
+	mov [dict.here + dict.codebuf_offset], rsi
 
 	mov byte [mode], mode.interpret
 	ret
-	
-compile:
+
+interpretive_dance:
 	;; compile ret
 	;; call dict.here
+	ret
+	
+compile:
+	call interpretive_dance
+	
 	;; set codebuf.here to dict.here's codebuf field
-
+	mov rsi, [dict.here + dict.codebuf_offset] 
+	mov [codebuf.here], rsi
+	
 	mov byte [mode], mode.compile
 	ret
 
 	
 init:
-	mov rsi, __codebuf.__user
-	mov [__codebuf.here], rsi
+	mov rsi, codebuf.__user
+	mov [codebuf.here], rsi
 
-	mov rsi, __dict.__user
-	mov [__dict.here], rsi
+	mov rsi, dict.__user
+	mov [dict.here], rsi
 
 	call interpret
 	ret
@@ -165,9 +175,9 @@ _start:
 	;; the final binary output would roughly be the equivalent of:
 	;;
 	;; jmp [location of user code]
-	;; .... __codebuf
+	;; .... codebuf
 	;; mov rdi, 7
-	;; jmp [location of __codebuf.exit]
+	;; jmp [location of codebuf.exit]
 	;;
 	;; the output should be a binary file containing the machine code for the
 	;; above unoptimized assembly. This should be able to be included in a
@@ -221,7 +231,7 @@ _start:
 	;; [ ] code to enter compile mode
 	;; [ ] tmp call to enter interpret mode
 	;; [X] hardcoded dictionary entry for `b,`, `c,`, `add1`
-	;; [ ] call to __codebuf.add1 via offset
+	;; [ ] call to codebuf.add1 via offset
 	;;
 	;; demo 3 could be handling of the stack and stack effect?
 	;; 
@@ -234,14 +244,14 @@ _start:
 	
 	push 6 			; 0x6A06
 	pop rax			; 0x58
-	call __codebuf.add1
+	call codebuf.add1
 
 	;; stack now indicates there is an immediate value in `eax`. when moving into
 	;; into `edi` for `exit` the value in `eax` needs to be compiled. for now just
 	;; move the full register but later respect the size from the register name.
 
 	;; 
-	;; compile into __codebuf:
+	;; compile into codebuf:
 	;; 
 	;; BF07000000 - mov rdi, 7
 	;;
@@ -250,26 +260,26 @@ _start:
 	
 	push 0xBF
 	pop rax
-	call __codebuf.b_comma
+	call codebuf.b_comma
 
 	pop rax
-	call __codebuf.d_comma
+	call codebuf.d_comma
 	
 	;; 
-	;; E9XXXXXXXX - jmp __codebuf.exit
+	;; E9XXXXXXXX - jmp codebuf.exit
 	;;
 
 	push 0xE9
 	pop rax
-	call __codebuf.b_comma
+	call codebuf.b_comma
 
-	mov rsi, __codebuf.exit
-	sub rsi, [__codebuf.here]
+	mov rsi, codebuf.exit
+	sub rsi, [codebuf.here]
 	sub rsi, 4
 	push rsi
 	
 	pop rax
-	call __codebuf.d_comma
+	call codebuf.d_comma
 
 	;; 
 	;; set the `entry` to `_start`'s code. for this demo this just happens to be
@@ -278,10 +288,10 @@ _start:
 	;; the dictionary, this does not impact the correctness of the demo.
 	;;
 	
-	mov rsi, __codebuf.__user
-	sub rsi, __codebuf.start
+	mov rsi, codebuf.__user
+	sub rsi, codebuf.start
 	sub rsi, 5
-	mov [__codebuf.entry], rsi
+	mov [codebuf.entry], rsi
 
 	;;
 	;; write the code buffer to out.bin and exit
@@ -299,9 +309,9 @@ _start:
 
 	;; write
 	pop rdi
-	mov rsi, __codebuf.start
-	mov rdx, [__codebuf.here]
-	sub rdx, __codebuf.start
+	mov rsi, codebuf.start
+	mov rdx, [codebuf.here]
+	sub rdx, codebuf.start
 	mov eax, 1
 	syscall
 	
@@ -312,7 +322,7 @@ _start:
 	syscall
 
 	xor edi, edi
-	jmp __codebuf.exit
+	jmp codebuf.exit
 
 outfile:
 	db "out.bin", 0
