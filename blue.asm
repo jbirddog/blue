@@ -111,16 +111,24 @@ interpret:
 	ret
 
 interpretive_dance:
-	;; compile ret
-	;; call dict.here
+	push 0xC3		; ret
+	pop rax
+	call codebuf.b_comma
+
+	call codebuf.__user	; needs to be dict.here + dict.codebuff_offset
+
 	ret
 	
 compile:
 	call interpretive_dance
 	
 	;; set codebuf.here to dict.here's codebuf field
-	mov rsi, [dict.here + dict.codebuf_offset] 
+	;; mov rsi, dict.here + dict.codebuf_offset 
+	;; mov [codebuf.here], rsi
+
+	mov rsi, codebuf.__user	; needs to be dict.here + dict.codebuff_offset
 	mov [codebuf.here], rsi
+
 	
 	mov byte [mode], mode.compile
 	ret
@@ -242,10 +250,22 @@ _start:
 	
 	;; `6 add1` executed at compile time
 	
-	push 6 			; 0x6A06
-	pop rax			; 0x58
-	call codebuf.add1
+	push 0x6A		; push
+	pop rax
+	call codebuf.b_comma
 
+	push 0x06		; 6
+	pop rax
+	call codebuf.b_comma
+
+	push 0x58		; pop rax
+	pop rax
+	call codebuf.b_comma
+
+	;; call codebuf.add1
+	
+	call compile
+	
 	;; stack now indicates there is an immediate value in `eax`. when moving into
 	;; into `edi` for `exit` the value in `eax` needs to be compiled. for now just
 	;; move the full register but later respect the size from the register name.
