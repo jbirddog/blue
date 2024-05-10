@@ -55,6 +55,8 @@ dict:
 
 codebuf:
 	.here dq 0
+
+	.__core:
 	
 	.start:
 	db 0xE9
@@ -62,7 +64,7 @@ codebuf:
 
 	.b_comma:
 	;;
-	;; : b, (( b al -- )) ... ; inline
+	;; : b, (( b al -- )) ... ; immed
 	;; 
 	mov rdi, [.here]
 	stosb
@@ -148,25 +150,7 @@ init:
 
 _start:
 	call init
-
-	;;
-	;; demo history
-	;;
-	;; demo  1 - https://github.com/jbirddog/blue/commit/d90cce865ff5513b62d47ccfbebb2fc3158fa579
-	;;         - simulate calling previously compiled code at compile time
-	;;
-	;; demo  2 - https://github.com/jbirddog/blue/commit/2e2037b65faa130c55a36937dad7d060c8a3ca37
-	;;         - actually compile compile time code into the codebuf and execute it
-	;;
-	;; demo  3 -
-	;;         - compile time stack and stack effects
-	;;
-	;; demo  4 -
-	;;         - clobber support
-	;; 
 	
-	;; 
-	;; demo of this version of the blue compiler
 	;; 
 	;; want to simulate the program:
 	;;
@@ -179,7 +163,7 @@ _start:
 	;;
 	;; the final binary output would roughly be the equivalent of:
 	;;
-	;; jmp [location of user code]
+	;; jmp [location of `entry`]
 	;; .... codebuf
 	;; mov rdi, 7
 	;; jmp [location of codebuf.exit]
@@ -194,56 +178,6 @@ _start:
 	;; interesting part. the interesting part is providing full access to
 	;; all previously defined code at compile time. 
 	;;
-
-	;;
-	;; demo 2 - the above code simulated the fact that a `6` was parsed, not found
-	;; in the dictionary and pushed as a literal value at compile time. The value
-	;; from the stack is then moved into rax due to `add1`'s stack effect. The
-	;; location of `add1`'s code is then found via the dictionary and called.
-	;;
-	;; for demo 2 we are going to pretend `6` was already parsed, not found as a
-	;; word and is about to be pushed.
-	;; 
-	;; this will be done by compiling the approriate machine code instead of assembly.
-	;; the location of `add1`'s code will then be found via a simulated dictionary
-	;; lookup, its relative location computed and the appropriate call will be
-	;; compiled instead of writing the assembly.
-	;;
-	;; the interesting aspect of this demo is that the compile time code to call
-	;; `add1` is no longer going to be run at compile time. in the first demo we
-	;; simulated this by compiling the code into the compiler. this takes it one
-	;; step further and will generate the machine code in the codebuf that is then
-	;; executed at compile time.
-	;;
-	;; to allow interpreted code and immediate words to all operate the same, when
-	;; a word is finished compiling via `;`, the codebuf location for `here` of the
-	;; dictionary will be set to codebuf's `here`. This will serve as a scratchpad
-	;; for interpreted code that will be overwritten once a new word is compiled.
-	;; interpreted code will be compiled into this space just like the body of any
-	;; word. the start of compilation for a word `:` will first compile in a `ret`
-	;; and call the codebuf location of `here`. once that returns `here` pointers
-	;; need to be reset and the word can be compiled.
-	;; 
-	;;
-	;; needed:
-	;; 
-	;; [X] mode constants (interpret, compile)
-	;; [X] knowledge of interpret vs compile mode
-	;; [X] start in interpret mode
-	;; [X] init dictionary like codebuf
-	;; [X] compile time dictionary definition (headers, codebuf location, etc)
-	;; [X] code to enter interpret mode
-	;; [X] code to enter compile mode
-	;; [X] tmp call to enter compile mode
-	;; [X] hardcoded dictionary entry for `b,`, `c,`, `add1`
-	;; [X] call to codebuf.add1 via offset
-	;;
-	;; demo 3 could be handling of the stack and stack effect?
-	;; 
-
-	;;
-	;; compile the user program
-	;; 
 	
 	;; `6 add1` executed at compile time
 	
