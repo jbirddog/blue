@@ -9,13 +9,11 @@ DEV_CONTAINER ?= $(BLUE)-dev
 DEV_DOCKER_FILE ?= dev.Dockerfile
 DEV_IMAGE ?= blue-dev
 
-COMPOSE_FILES ?= -f dev.compose.yml
-DOCKER_COMPOSE ?= RUN_AS=$(ME) docker compose $(COMPOSE_FILES)
 IN_DEV_CONTAINER ?= docker exec $(DEV_CONTAINER)
 
 LD ?= ld.gold
 
-all: dev-env build link run
+all: dev-env dev-start compile
 	@true
 
 dev-env: dev-stop
