@@ -60,7 +60,7 @@ start: run build-demo link-demo run-demo
 
 .PHONY:
 	dev-env dev-start dev-stop \
-	comile build link run \
+	compile build link run \
 	build-demo link-demo run-demo \
 	dis dis-out \
 	start
