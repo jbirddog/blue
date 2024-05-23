@@ -6,10 +6,12 @@ BLUE := blue
 DEMO := demo
 
 DEV_CONTAINER ?= $(BLUE)-dev
+DEV_DOCKER_FILE ?= dev.Dockerfile
+DEV_IMAGE ?= blue-dev
 
 COMPOSE_FILES ?= -f dev.compose.yml
 DOCKER_COMPOSE ?= RUN_AS=$(ME) docker compose $(COMPOSE_FILES)
-IN_DEV_CONTAINER ?= $(DOCKER_COMPOSE) exec $(DEV_CONTAINER)
+IN_DEV_CONTAINER ?= docker exec $(DEV_CONTAINER)
 
 LD ?= ld.gold
 
@@ -17,13 +19,13 @@ all: dev-env build link run
 	@true
 
 dev-env: dev-stop
-	$(DOCKER_COMPOSE) build
+	docker build -t $(DEV_IMAGE) -f $(DEV_DOCKER_FILE) .
 
 dev-start: dev-stop
-	$(DOCKER_COMPOSE) up -d
+	docker run -d -t -u $(ME) -v ./:/app --name $(DEV_CONTAINER) $(DEV_IMAGE)
 
 dev-stop:
-	$(DOCKER_COMPOSE) down
+	docker rm -f $(DEV_CONTAINER) || true
 
 build:
 	$(IN_DEV_CONTAINER) nasm -felf64 $(BLUE).asm -l $(BLUE).lst
