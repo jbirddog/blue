@@ -29,33 +29,32 @@ compile: build link
 	@true
 
 run:
-	./$(BLUE)
+	$(IN_DEV_CONTAINER) ./$(BLUE)
 
 dis-demo:
-	ndisasm -b64 demo
+	$(IN_DEV_CONTAINER) ndisasm -b64 demo
 
 dis-out:
-	ndisasm -b64 out.bin
+	$(IN_DEV_CONTAINER) ndisasm -b64 out.bin
 
 dis: dis-out dis-demo
 	@true
 
 build-demo:
-	nasm -felf64 $(DEMO).asm
+	$(IN_DEV_CONTAINER) nasm -felf64 $(DEMO).asm
 
 link-demo:
-	ld -o $(DEMO) $(DEMO).o
+	$(IN_DEV_CONTAINER) ld -o $(DEMO) $(DEMO).o
 
 run-demo:
-	./$(DEMO)
+	$(IN_DEV_CONTAINER) ./$(DEMO)
 
 start: run build-demo link-demo run-demo
 	@true
 
 .PHONY:
 	dev-env \
-	compile \
-	build link run \
+	comile build link run \
 	build-demo link-demo run-demo \
 	dis dis-out \
 	start
