@@ -1,41 +1,66 @@
+MY_USER := $(shell id -u)
+MY_GROUP := $(shell id -g)
+ME := $(MY_USER):$(MY_GROUP)
+
 BLUE := blue
 DEMO := demo
 
-all: build link run
+DEV_CONTAINER ?= $(BLUE)-dev
+DEV_DOCKER_FILE ?= dev.Dockerfile
+DEV_IMAGE ?= blue-dev
+
+IN_DEV_CONTAINER ?= docker exec $(DEV_CONTAINER)
+
+LD ?= ld.gold
+
+all: dev-env dev-start compile
 	@true
 
+dev-env: dev-stop
+	docker build -t $(DEV_IMAGE) -f $(DEV_DOCKER_FILE) .
+
+dev-start: dev-stop
+	docker run -d -t -u $(ME) -v ./:/app --name $(DEV_CONTAINER) $(DEV_IMAGE)
+
+dev-stop:
+	docker rm -f $(DEV_CONTAINER) || true
+
 build:
-	nasm -felf64 $(BLUE).asm -l $(BLUE).lst
+	$(IN_DEV_CONTAINER) nasm -felf64 $(BLUE).asm -l $(BLUE).lst
 
 link:
-	ld -o $(BLUE) $(BLUE).o
+	$(IN_DEV_CONTAINER) $(LD) -o $(BLUE) $(BLUE).o
+
+compile: build link
+	@true
 
 run:
-	./$(BLUE)
+	$(IN_DEV_CONTAINER) ./$(BLUE)
 
 dis-demo:
-	ndisasm -b64 demo
+	$(IN_DEV_CONTAINER) ndisasm -b64 demo
 
 dis-out:
-	ndisasm -b64 out.bin
+	$(IN_DEV_CONTAINER) ndisasm -b64 out.bin
 
 dis: dis-out dis-demo
 	@true
 
 build-demo:
-	nasm -felf64 $(DEMO).asm
+	$(IN_DEV_CONTAINER) nasm -felf64 $(DEMO).asm
 
 link-demo:
-	ld -o $(DEMO) $(DEMO).o
+	$(IN_DEV_CONTAINER) ld -o $(DEMO) $(DEMO).o
 
 run-demo:
-	./$(DEMO)
+	$(IN_DEV_CONTAINER) ./$(DEMO)
 
 start: run build-demo link-demo run-demo
 	@true
 
 .PHONY:
-	build link run \
+	dev-env dev-start dev-stop \
+	compile build link run \
 	build-demo link-demo run-demo \
 	dis dis-out \
 	start
