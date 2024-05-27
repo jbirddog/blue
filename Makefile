@@ -26,7 +26,7 @@ dev-stop:
 	docker rm -f $(DEV_CONTAINER) || true
 
 build:
-	$(IN_DEV_CONTAINER) nasm -felf64 $(BLUE).asm -l $(BLUE).lst
+	$(IN_DEV_CONTAINER) fasm $(BLUE).asm $(BLUE)
 
 link:
 	$(IN_DEV_CONTAINER) $(LD) -o $(BLUE) $(BLUE).o
@@ -41,7 +41,7 @@ dis-demo:
 	$(IN_DEV_CONTAINER) ndisasm -b64 demo
 
 dis-out:
-	$(IN_DEV_CONTAINER) ndisasm -b64 out.bin
+	$(IN_DEV_CONTAINER) ndisasm -b64 blue
 
 dis: dis-out dis-demo
 	@true
