@@ -10,6 +10,7 @@ DEV_DOCKER_FILE ?= dev.Dockerfile
 DEV_IMAGE ?= blue-dev
 
 IN_DEV_CONTAINER ?= docker exec $(DEV_CONTAINER)
+DISASM ?= $(IN_DEV_CONTAINER) objdump -b binary -D -M intel -m i386:x86-64
 
 LD ?= ld.gold
 
@@ -32,10 +33,10 @@ run:
 	$(IN_DEV_CONTAINER) ./$(BLUE)
 
 dis-demo:
-	$(IN_DEV_CONTAINER) ndisasm -b64 demo
+	$(DISASM) demo
 
 dis-out:
-	$(IN_DEV_CONTAINER) ndisasm -b64 blue
+	$(DISASM) blue
 
 dis: dis-out dis-demo
 	@true
