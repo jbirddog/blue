@@ -25,14 +25,8 @@ dev-start: dev-stop
 dev-stop:
 	docker rm -f $(DEV_CONTAINER) || true
 
-build:
+compile:
 	$(IN_DEV_CONTAINER) fasm $(BLUE).asm $(BLUE)
-
-link:
-	$(IN_DEV_CONTAINER) $(LD) -o $(BLUE) $(BLUE).o
-
-compile: build link
-	@true
 
 run:
 	$(IN_DEV_CONTAINER) ./$(BLUE)
@@ -60,7 +54,7 @@ start: run build-demo link-demo run-demo
 
 .PHONY:
 	dev-env dev-start dev-stop \
-	compile build link run \
+	compile run \
 	build-demo link-demo run-demo \
 	dis dis-out \
 	start
