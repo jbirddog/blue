@@ -1,7 +1,9 @@
-format elf64 executable
+format elf64 executable 3
+	
+segment readable executable
 
 bob:
-	mov edi, 3
+	mov edi, 33
 	ret
 	
 entry $
