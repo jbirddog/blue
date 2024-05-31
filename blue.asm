@@ -1,5 +1,5 @@
 format elf64 executable 3
-
+	
 segment readable writeable
 
 _data_stack:
@@ -9,6 +9,12 @@ _data_stack:
 	
 segment readable executable
 
+syscall_err:
+	neg eax
+	mov edi, eax
+	mov eax, 60
+	syscall
+	
 mmap:
 	.prot_read = 1
 	.prot_write = 2
@@ -30,17 +36,16 @@ mmap:
 	syscall
 
 	cmp rax, 0
-	jl .error
+	jl syscall_err
 	ret
-
-	.error:
-	mov edi, 17
-	mov eax, 60
-	syscall
 
 	.unmap:
 	mov eax, 11
 	syscall
+	
+	cmp rax, 0
+	jne syscall_err
+
 	ret
 
 macro mmap_buffer len, prot {
@@ -51,9 +56,7 @@ macro mmap_buffer len, prot {
 
 data_stack:
 	.init:
-	mov esi, _data_stack.length
-	mov edx, mmap.prot_rw
-	call mmap.buffer
+	mmap_buffer _data_stack.length, mmap.prot_rw
 	
 	mov [_data_stack.base], rax
 	mov [_data_stack.here], rax
@@ -72,20 +75,8 @@ data_stack:
 	ret
 	
 entry $
-	;; call data_stack.init
+	call data_stack.init
 	;; call data_stack.deinit
-	
-	;; mov rsi, 4096
-	;; mov rdx, 3
-
-	mmap_buffer _data_stack.length, mmap.prot_rw
-	
-	;; mov rdi, 0
-	;; mov r10, 34
-	;; mov r8, -1
-	;; mov r9, 0
-	;; mov rax, 9
-	;; syscall
 	
 	mov rdi, rax
 	mov rsi, 4096
