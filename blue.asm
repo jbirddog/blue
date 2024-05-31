@@ -75,7 +75,7 @@ data_stack:
 entry $
 	;; call data_stack.init
 	;; call data_stack.deinit
-
+	
 	mov rdi, 0
 	mov rsi, 4096
 	mov rdx, 3
@@ -86,13 +86,26 @@ entry $
 	syscall
 
 	cmp rax, 0
+	jl bad
 	
 	mov rdi, rax
 	mov rsi, 4096
 	mov eax, 11
 	syscall
-	
+
+	cmp rax, 0
+	jl bad
+
 	xor edi, edi
-	mov rdi, rax
+	mov eax, 60
+	syscall
+
+bad:	
+	mov edi, 1
+	mov eax, 60
+	syscall
+
+bad2:	
+	mov edi, 2
 	mov eax, 60
 	syscall
