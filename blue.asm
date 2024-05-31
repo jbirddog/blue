@@ -6,11 +6,6 @@ _data_stack:
 	.length = 4096
 	.base dq 1
 	.here dq 1
-
-segment readable
-
-error:
-	.failed_to_mmap db 'failed to mmap', 10
 	
 segment readable executable
 
@@ -27,8 +22,6 @@ mmap:
 	.map_failed = -1
 	
 	.buffer:
-	;; : mmap ( fd:r8d len:esi addr:edi off:r9d prot:edx flags:r10d -- buf:eax ) 9 syscall unwrap ;
-	;; : munmap ( addr:edi len:esi -- ) 11 syscall ordie
 	xor edi, edi
 	mov r8d, -1
 	xor r9d, r9d
@@ -36,8 +29,8 @@ mmap:
 	mov eax, 9
 	syscall
 
-	cmp eax, 0
-	jle .error
+	cmp rax, 0
+	jl .error
 	ret
 
 	.error:
@@ -49,6 +42,12 @@ mmap:
 	mov eax, 11
 	syscall
 	ret
+
+macro mmap_buffer len, prot {
+	mov esi, len
+	mov edx, prot
+	call mmap.buffer
+}
 
 data_stack:
 	.init:
@@ -76,17 +75,17 @@ entry $
 	;; call data_stack.init
 	;; call data_stack.deinit
 	
-	mov rdi, 0
-	mov rsi, 4096
-	mov rdx, 3
-	mov r10, 34
-	mov r8, -1
-	mov r9, 0
-	mov rax, 9
-	syscall
+	;; mov rsi, 4096
+	;; mov rdx, 3
 
-	cmp rax, 0
-	jl bad
+	mmap_buffer _data_stack.length, mmap.prot_rw
+	
+	;; mov rdi, 0
+	;; mov r10, 34
+	;; mov r8, -1
+	;; mov r9, 0
+	;; mov rax, 9
+	;; syscall
 	
 	mov rdi, rax
 	mov rsi, 4096
