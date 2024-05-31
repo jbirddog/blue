@@ -69,33 +69,24 @@ data_stack:
 	ret
 	
 	.push:
-	mov rsi, [_data_stack.here]
+	mov rdi, [_data_stack.here]
 	stosq
-	mov [_data_stack.here], rsi
+	mov [_data_stack.here], rdi
 	ret
 	
 entry $
 	call data_stack.init
-	;; call data_stack.deinit
+
+	mov eax, 6
+	call data_stack.push
+	mov eax, 7
+	call data_stack.push
 	
-	mov rdi, rax
-	mov rsi, 4096
-	mov eax, 11
-	syscall
-
-	cmp rax, 0
-	jl bad
-
 	xor edi, edi
+	mov rdi, [_data_stack.base]
 	mov eax, 60
 	syscall
 
-bad:	
-	mov edi, 1
-	mov eax, 60
-	syscall
-
-bad2:	
-	mov edi, 2
-	mov eax, 60
-	syscall
+	;; move back up, using exit codes to debug...
+	call data_stack.deinit
+	
