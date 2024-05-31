@@ -73,6 +73,15 @@ data_stack:
 	stosq
 	mov [_data_stack.here], rdi
 	ret
+
+	.pop:
+	mov rsi, [_data_stack.here]
+	std
+	lodsq
+	mov [_data_stack.here], rsi
+	lodsq
+	cld
+	ret
 	
 entry $
 	call data_stack.init
@@ -81,9 +90,12 @@ entry $
 	call data_stack.push
 	mov eax, 7
 	call data_stack.push
+
+	call data_stack.pop
+	call data_stack.pop
 	
 	xor edi, edi
-	mov rdi, [_data_stack.base]
+	mov edi, eax
 	mov eax, 60
 	syscall
 
