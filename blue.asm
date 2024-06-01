@@ -1,4 +1,6 @@
 format elf64 executable 3
+
+include "const.inc"
 	
 segment readable writeable
 
@@ -15,23 +17,12 @@ syscall_err:
 	mov eax, 60
 	syscall
 	
-mmap:
-	.prot_read = 1
-	.prot_write = 2
-	.prot_exec = 4
-
-	.prot_rw = .prot_read or .prot_write
-	.prot_rwx = .prot_rw or .prot_exec
-
-	.map_anonymous = 32
-	.map_private = 2
-	.map_failed = -1
-	
+mmap:	
 	.buffer:
 	xor edi, edi
 	mov r8d, -1
 	xor r9d, r9d
-	mov r10d, .map_anonymous or .map_private
+	mov r10d, MAP_ANONYMOUS or MAP_PRIVATE
 	mov eax, 9
 	syscall
 
@@ -56,7 +47,7 @@ macro mmap_buffer len, prot {
 
 data_stack:
 	.init:
-	mmap_buffer _data_stack.length, mmap.prot_rw
+	mmap_buffer _data_stack.length, PROT_RW
 	
 	mov [_data_stack.base], rax
 	mov [_data_stack.here], rax
