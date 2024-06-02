@@ -3,4 +3,5 @@
 *.o
 blue
 demo
+*.lst
 out.bin
