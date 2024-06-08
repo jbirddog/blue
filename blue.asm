@@ -140,20 +140,11 @@ entry $
 	call code_buffer.init
 	call data_stack.init
 	call dictionary.init
-
-	mov eax, 6
-	call data_stack.push
-	call data_stack.pop
-
-	mov eax, 7
-	call data_stack.push
-	call data_stack.pop
-
+	
 	call code_buffer.deinit
 	call data_stack.deinit
 	call dictionary.deinit
 	
 	xor edi, edi
-	mov edi, eax
 	mov eax, 60
 	syscall
