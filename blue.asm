@@ -36,7 +36,6 @@ mmap:
 	
 	cmp rax, 0
 	jne syscall_err
-
 	ret
 
 macro mmap_buffer len, prot {
@@ -67,22 +66,29 @@ data_stack:
 
 	.pop:
 	mov rsi, [_data_stack.here]
+	cmp rsi, [_data_stack.base]
+	jle .underflow
 	std
 	lodsq
 	mov [_data_stack.here], rsi
 	lodsq
 	cld
 	ret
+
+	.underflow:
+	mov edi, 3
+	mov eax, 60
+	syscall
 	
 entry $
 	call data_stack.init
 
 	mov eax, 6
 	call data_stack.push
+	call data_stack.pop
+
 	mov eax, 7
 	call data_stack.push
-
-	call data_stack.pop
 	call data_stack.pop
 	
 	xor edi, edi
