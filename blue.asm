@@ -13,10 +13,12 @@ include "dictionary.inc"
 
 include "code_buffer_test.inc"
 include "data_stack_test.inc"
+include "dictionary_test.inc"
 
 entry $
 	call code_buffer_test
 	call data_stack_test
+	call dictionary_test
 
 	call code_buffer.init
 	call data_stack.init
