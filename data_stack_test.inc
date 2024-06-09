@@ -1,5 +1,7 @@
 
 data_stack_test:
+	call data_stack.init
+	
 	; make sure stack is clean
 	call data_stack.depth
 	test eax, eax
@@ -58,6 +60,8 @@ data_stack_test:
 	call data_stack.depth
 	test eax, eax
 	jnz .fail
+
+	call data_stack.deinit
 	
 	ret
 

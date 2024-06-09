@@ -14,11 +14,11 @@ include "dictionary.inc"
 include "data_stack_test.inc"
 
 entry $
+	call data_stack_test
+
 	call code_buffer.init
 	call data_stack.init
 	call dictionary.init
-
-	call data_stack_test
 	
 	call code_buffer.deinit
 	call data_stack.deinit
