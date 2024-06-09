@@ -35,3 +35,9 @@ data_stack:
 	mov eax, 60
 	syscall
 
+	.depth:
+	mov rax, [_data_stack.here]
+	sub rax, [_data_stack.base]
+	shr rax, 3
+	ret
+
