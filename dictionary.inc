@@ -21,7 +21,7 @@ _core_words:
 	dq 0
 	dq _core_code.b_comma
 	dq 0
-	dq 0 ; TODO: stack effects
+	dq 0 ; TODO: stack effects (( b al -- | rdi ))
 	
 	.latest:
 	.d_comma:
@@ -29,7 +29,7 @@ _core_words:
 	dq .b_comma
 	dq _core_code.d_comma
 	dq 0
-	dq 0 ; TODO: stack effects
+	dq 0 ; TODO: stack effects (( d ax -- | rdi ))
 
 dictionary:
 	.init:

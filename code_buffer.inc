@@ -4,12 +4,12 @@ _core_code:
 	mov rdi, [_code_buffer.here]
 	stosb
 	mov [_code_buffer.here], rdi
+	ret
 	
 	.d_comma:
 	mov rdi, [_code_buffer.here]
 	stosd
 	mov [_code_buffer.here], rdi
-	ret
 	ret
 
 code_buffer:
