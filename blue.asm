@@ -53,4 +53,5 @@ bootstrap:
 	db '6 add1\n'
 	db ': _start exit ; entry\n'
 	db 0
+
 bootstrap.length = $ - bootstrap
