@@ -53,9 +53,12 @@ run-demo:
 start: run #build-demo link-demo run-demo
 	@true
 
+watch:
+	watch -d make compile start
+
 .PHONY:
 	dev-env dev-start dev-stop \
 	compile run \
 	build-demo link-demo run-demo \
 	dis dis-out \
-	start
+	start watch

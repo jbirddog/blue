@@ -32,6 +32,8 @@ _core_words:
 	dq 0 ; TODO: stack effects (( d ax -- | rdi ))
 
 dictionary:
+	.entry_code_offset = 16
+
 	.init:
 	mmap_buffer _dictionary.length, PROT_RW
 

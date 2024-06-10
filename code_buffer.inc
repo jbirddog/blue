@@ -12,6 +12,11 @@ _core_code:
 	mov [_code_buffer.here], rdi
 	ret
 
+	.exit11:
+	mov eax, 60
+	mov edi, 11
+	syscall
+	
 code_buffer:
 	.init:
 	mmap_buffer _code_buffer.length, PROT_RWX

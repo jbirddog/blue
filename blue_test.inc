@@ -1,0 +1,3 @@
+
+blue_test:
+	ret
