@@ -93,11 +93,11 @@ output:
 
 	assert $ - .string = 0x0e
 
-	.shstrtab:
+	.shstrab:
 	db	".shstrab\0.text"
 	db	0x00
 
-	assert $ - .shstrtab = 0x10
+	assert $ - .shstrab = 0x10
 
 	.section_0:
 	dq 	0x00, 0x00, 0x00, 0x00	; 64 bytes of 0s 
@@ -119,7 +119,7 @@ output:
 	assert $ - .section_1 = 0x40
 
 	.section_2:
-	dd 0x00				; offset to name in strtab
+	dd 0x00				; offset to name in shstrab
 	dd 0x03				; type: string table
 	dq 0x00				; flags - none
 	dq 0x00				; addr in virtual memory of section - not used
