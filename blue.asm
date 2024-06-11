@@ -1,57 +1,62 @@
 format elf64 executable 3
 
-MODE_COMPILE = 0
-MODE_INTERPRET = 1
+segment readable writeable executable
 
-segment readable writeable
-
-include "defs.inc"
-
-segment readable executable
-
-include "linux.inc"
-include "code_buffer.inc"
-include "data_stack.inc"
-include "dictionary.inc"
-
-include "code_buffer_test.inc"
-include "data_stack_test.inc"
-include "dictionary_test.inc"
-
-blue:
-	.init:
-	mov [_blue.mode], MODE_INTERPRET
-	ret
-
-	.deinit:
-	ret
-
-entry $
-	call code_buffer_test
-	call data_stack_test
-	call dictionary_test
-
-	call code_buffer.init
-	call data_stack.init
-	call dictionary.init
-
-	call blue.init
-	
-	call code_buffer.deinit
-	call data_stack.deinit
-	call dictionary.deinit
-
-	call blue.deinit
-	
-	xor edi, edi
-	mov eax, 60
+entry $	
+	xor 	edi, edi
+	mov 	eax, 60
 	syscall
 
-segment readable
+;
+; https://kevinboone.me/elfdemo.html
+;
+output:
+	;
+	; elf header 64 bytes
+	;
+	.elf_header:
+	db	0x7f, 0x45, 0x4c, 0x46	; magic number
+	db	0x02			; 64 bit
+	db	0x01			; little endian
+	db	0x01			; elf version
+	db	0x00			; target abi
+	db	0x00			; target abi version
+	dd	0x00			; 7 bytes undefined
+	db	0x00, 0x00, 0x00
+	db	0x02, 0x00		; executable binary
+	db	0x3e, 0x00		; amd64 architecture
+	db	0x01, 0x00, 0x00, 0x00	; elf version
+	db	0x78, 0x00, 0x40, 0x00	; start address
+	dd	0x00
+	db	0x40, 0x00, 0x00, 0x00	; offset to program header
+	dd	0x00
+	db	0xc0, 0x00, 0x00, 0x00	; offset to section header
+	db	0x00, 0x00, 0x00, 0x00
+	dd	0x00			; architecture flags
+	db	0x40, 0x00		; size of header
+	db	0x38, 0x00		; size of program header
+	db	0x01, 0x00		; number of program headers
+	db	0x40, 0x00		; size of section header
+	db	0x03, 0x00		; number of section headers
+	db	0x02, 0x00		; index if strtab section header
 
-bootstrap:
-	db '6 add1\n'
-	db ': _start exit ; entry\n'
-	db 0
+	assert $ - .elf_header = 64
 
-bootstrap.length = $ - bootstrap
+	.program_header:
+	db	0x01, 0x00, 0x00, 0x00	; entry type: loadable segment
+	db	0x05, 0x00, 0x00, 0x00	; segment flags: RX
+	dq	0x0			; offset within file
+	db	0x00, 0x00, 0x40, 0x00	; load position in virtual memory
+	dd	0x00
+	db	0x00, 0x00, 0x40, 0x00	; load position in physical memory
+	dd	0x00
+	db	0xb0, 0x00, 0x00, 0x00	; size of the loaded section (file)
+	dd	0x00
+	db	0xb0, 0x00, 0x00, 0x00	; size of the loaded section (memory)
+	dd	0x00
+	db	0x00, 0x00, 0x20, 0x00	; alignment boundary for sections
+	dd	0x00
+
+	assert $ - .program_header = 56
+	
+output.length = $ - output
