@@ -2,11 +2,35 @@ format elf64 executable 3
 
 segment readable writeable executable
 
-entry $	
+entry $
+	mov	rdi, output_file
+	mov	esi, 0x01 or 0x40 or 0x200
+	mov	edx, 0x1a0
+	mov	eax, 2
+	syscall
+
+	push rax
+	push rax
+
+	mov	rdi, rax
+	mov	rsi, output
+	mov	rdx, output.length
+	mov	eax, 1
+	syscall
+
+	pop	rdi
+	mov	esi, 0x1ed
+	mov	eax, 91
+	syscall
+
+	pop	rdi
+	mov	eax, 3
+	syscall
+
 	xor 	edi, edi
 	mov 	eax, 60
 	syscall
-
+	
 ;
 ; https://kevinboone.me/elfdemo.html
 ;
@@ -115,5 +139,27 @@ output:
 	dq 0x00				; sh_entsize - not used
 
 	assert $ - .section_1 = 64
+
+	.section_2:
+	db 0x00, 0x00, 0x00, 0x00	; offset to name in strtab
+	db 0x03, 0x00, 0x00, 0x00	; type: string table
+	db 0x00, 0x00, 0x00, 0x00	; flags - none
+	dd 0x00
+	db 0x00, 0x00, 0x40, 0x00	; addr in virtual memory of section - not used
+	dd 0x00
+	db 0xB0, 0x00, 0x00, 0x00	; offset in the file of this section
+	dd 0x00
+	db 0x10, 0x00, 0x00, 0x00	; size of this section in the file
+	dd 0x00
+	dq 0x00				; sh_link - not used
+	db 0x01, 0x00, 0x00, 0x00	; alignment code (default??)
+	dd 0x00
+	dq 0x00				; sh_entsize - not used
+
+	assert $ - .section_2 = 64
 	
-output.length = $ - output
+	.length = $ - output
+
+output_file:
+	db 'a.out', 0
+	.length = $ - output_file
