@@ -45,7 +45,7 @@ output:
 	dw	0x02			; executable binary
 	dw	0x3e			; amd64 architecture
 	dd	0x01			; elf version
-	db	0x78, 0x00, 0x40, 0x00	; start address
+	dd	0x400078		; start address
 	dd	0x00
 	dq	0x40			; offset to program header
 	dq	0xc0			; offset to section header
@@ -63,15 +63,15 @@ output:
 	dd	0x01			; entry type: loadable segment
 	dd	0x05			; segment flags: RX
 	dq	0x00			; offset within file
-	db	0x00, 0x00, 0x40, 0x00	; load position in virtual memory
+	dd	0x400000		; load position in virtual memory
 	dd	0x00
-	db	0x00, 0x00, 0x40, 0x00	; load position in physical memory
+	dd	0x400000		; load position in physical memory
 	dd	0x00
 	dd	0xb0			; size of the loaded section (file)
 	dd	0x00
 	dd	0xb0			; size of the loaded section (memory)
 	dd	0x00
-	db	0x00, 0x00, 0x20, 0x00	; alignment boundary for sections
+	dd	0x200000		; alignment boundary for sections
 	dd	0x00
 
 	assert $ - .program_header = 0x38
@@ -99,11 +99,11 @@ output:
 
 	assert $ - .string = 0x0e
 
-	.strtab:
+	.shstrtab:
 	db	".shstrab\0.text"
 	db	0x00
 
-	assert $ - .strtab = 0x10
+	assert $ - .shstrtab = 0x10
 
 	.section_0:
 	dq 	0x00, 0x00, 0x00, 0x00	; 64 bytes of 0s 
@@ -116,7 +116,7 @@ output:
 	dd 0x01				; type: program data
 	dd 0x06				; flags - executable | in memory
 	dd 0x00
-	db 0x78, 0x00, 0x40, 0x00	; addr in virtual memory of section
+	dd 0x400078			; addr in virtual memory of section
 	dd 0x00
 	dd 0x78				; offset in the file of this section
 	dd 0x00
