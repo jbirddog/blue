@@ -1,6 +1,6 @@
 format elf64 executable 3
 
-segment readable writeable executable
+segment readable executable ; writeable
 
 entry $
 	mov	rdi, output_file
@@ -45,8 +45,7 @@ output:
 	dw	0x02			; executable binary
 	dw	0x3e			; amd64 architecture
 	dd	0x01			; elf version
-	dd	0x400078		; start address
-	dd	0x00
+	dq	0x400078		; start address
 	dq	0x40			; offset to program header
 	dq	0xc0			; offset to section header
 	dd	0x00			; architecture flags
@@ -63,16 +62,11 @@ output:
 	dd	0x01			; entry type: loadable segment
 	dd	0x05			; segment flags: RX
 	dq	0x00			; offset within file
-	dd	0x400000		; load position in virtual memory
-	dd	0x00
-	dd	0x400000		; load position in physical memory
-	dd	0x00
-	dd	0xb0			; size of the loaded section (file)
-	dd	0x00
-	dd	0xb0			; size of the loaded section (memory)
-	dd	0x00
-	dd	0x200000		; alignment boundary for sections
-	dd	0x00
+	dq	0x400000		; load position in virtual memory
+	dq	0x400000		; load position in physical memory
+	dq	0xb0			; size of the loaded section (file)
+	dq	0xb0			; size of the loaded section (memory)
+	dq	0x200000		; alignment boundary for sections
 
 	assert $ - .program_header = 0x38
 
@@ -114,17 +108,12 @@ output:
 	.section_1:
 	dd 0x0a				; offset to name in strtab
 	dd 0x01				; type: program data
-	dd 0x06				; flags - executable | in memory
-	dd 0x00
-	dd 0x400078			; addr in virtual memory of section
-	dd 0x00
-	dd 0x78				; offset in the file of this section
-	dd 0x00
-	dd 0x38				; size of this section in the file
-	dd 0x00
+	dq 0x06				; flags - executable | in memory
+	dq 0x400078			; addr in virtual memory of section
+	dq 0x78				; offset in the file of this section
+	dq 0x38				; size of this section in the file
 	dq 0x00				; sh_link - not used
-	dd 0x01				; alignment code (default??)
-	dd 0x00
+	dq 0x01				; alignment code (default??)
 	dq 0x00				; sh_entsize - not used
 
 	assert $ - .section_1 = 0x40
@@ -132,17 +121,12 @@ output:
 	.section_2:
 	dd 0x00				; offset to name in strtab
 	dd 0x03				; type: string table
-	dd 0x00				; flags - none
-	dd 0x00
-	dd 0x00				; addr in virtual memory of section - not used
-	dd 0x00
-	dd 0xb0				; offset in the file of this section
-	dd 0x00
-	dd 0x10				; size of this section in the file
-	dd 0x00
+	dq 0x00				; flags - none
+	dq 0x00				; addr in virtual memory of section - not used
+	dq 0xb0				; offset in the file of this section
+	dq 0x10				; size of this section in the file
 	dq 0x00				; sh_link - not used
-	dd 0x01				; alignment code (default??)
-	dd 0x00
+	dq 0x01				; alignment code (default??)
 	dq 0x00				; sh_entsize - not used
 
 	assert $ - .section_2 = 0x40
