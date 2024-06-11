@@ -35,53 +35,46 @@ entry $
 ; https://kevinboone.me/elfdemo.html
 ;
 output:
-	;
-	; elf header 64 bytes
-	;
 	.elf_header:
 	db	0x7f, 0x45, 0x4c, 0x46	; magic number
 	db	0x02			; 64 bit
 	db	0x01			; little endian
 	db	0x01			; elf version
 	db	0x00			; target abi
-	db	0x00			; target abi version
-	dd	0x00			; 7 bytes undefined
-	db	0x00, 0x00, 0x00
-	db	0x02, 0x00		; executable binary
-	db	0x3e, 0x00		; amd64 architecture
-	db	0x01, 0x00, 0x00, 0x00	; elf version
+	dq	0x00			; target abi version + 7 bytes undefined
+	dw	0x02			; executable binary
+	dw	0x3e			; amd64 architecture
+	dd	0x01			; elf version
 	db	0x78, 0x00, 0x40, 0x00	; start address
 	dd	0x00
-	db	0x40, 0x00, 0x00, 0x00	; offset to program header
-	dd	0x00
-	db	0xc0, 0x00, 0x00, 0x00	; offset to section header
-	db	0x00, 0x00, 0x00, 0x00
+	dq	0x40			; offset to program header
+	dq	0xc0			; offset to section header
 	dd	0x00			; architecture flags
-	db	0x40, 0x00		; size of header
-	db	0x38, 0x00		; size of program header
-	db	0x01, 0x00		; number of program headers
-	db	0x40, 0x00		; size of section header
-	db	0x03, 0x00		; number of section headers
-	db	0x02, 0x00		; index if strtab section header
+	dw	0x40			; size of header
+	dw	0x38			; size of program header
+	dw	0x01			; number of program headers
+	dw	0x40			; size of section header
+	dw	0x03			; number of section headers
+	dw	0x02			; index if strtab section header
 
-	assert $ - .elf_header = 64
+	assert $ - .elf_header = 0x40
 
 	.program_header:
-	db	0x01, 0x00, 0x00, 0x00	; entry type: loadable segment
-	db	0x05, 0x00, 0x00, 0x00	; segment flags: RX
-	dq	0x0			; offset within file
+	dd	0x01			; entry type: loadable segment
+	dd	0x05			; segment flags: RX
+	dq	0x00			; offset within file
 	db	0x00, 0x00, 0x40, 0x00	; load position in virtual memory
 	dd	0x00
 	db	0x00, 0x00, 0x40, 0x00	; load position in physical memory
 	dd	0x00
-	db	0xb0, 0x00, 0x00, 0x00	; size of the loaded section (file)
+	dd	0xb0			; size of the loaded section (file)
 	dd	0x00
-	db	0xb0, 0x00, 0x00, 0x00	; size of the loaded section (memory)
+	dd	0xb0			; size of the loaded section (memory)
 	dd	0x00
 	db	0x00, 0x00, 0x20, 0x00	; alignment boundary for sections
 	dd	0x00
 
-	assert $ - .program_header = 56
+	assert $ - .program_header = 0x38
 
 	.program_code:
 	db	0x48, 0xc7, 0xc0, 0x01	; mov rax, 1 - sys_write
@@ -98,68 +91,64 @@ output:
 	db	0x48, 0x31, 0xff	; xor rdi, rdi
 	db	0x0f, 0x05		; syscall
 
-	assert $ - .program_code = 42
+	assert $ - .program_code = 0x2a
 
 	.string:
-	db	0x48, 0x65, 0x6c, 0x6c	; string "Hello, world\n\0"
-	db	0x6f, 0x2c, 0x20, 0x77
-	db	0x6f, 0x72, 0x6c, 0x64
+	db	"Hello, world"
 	db	0x0a, 0x00
 
-	assert $ - .string = 14
+	assert $ - .string = 0x0e
 
 	.strtab:
-	db	0x2e, 0x73, 0x68, 0x73	; ".shstrab\0.text\0"
-	db	0x74, 0x72, 0x74, 0x61
-	db	0x62, 0x00, 0x2e, 0x74
-	db	0x65, 0x78, 0x74, 0x00
+	db	".shstrab\0.text"
+	db	0x00
 
-	assert $ - .strtab = 16
+	assert $ - .strtab = 0x10
 
 	.section_0:
-	dq 0, 0, 0, 0			; 64 bytes of 0s 
-	dq 0, 0, 0, 0
+	dq 	0x00, 0x00, 0x00, 0x00	; 64 bytes of 0s 
+	dq 	0x00, 0x00, 0x00, 0x00
 
-	assert $ - .section_0 = 64
+	assert $ - .section_0 = 0x40
 
 	.section_1:
-	db 0x0a, 0x00, 0x00, 0x00	; offset to name in strtab
-	db 0x01, 0x00, 0x00, 0x00	; type: program data
-	db 0x06, 0x00, 0x00, 0x00	; flags - executable | in memory
+	dd 0x0a				; offset to name in strtab
+	dd 0x01				; type: program data
+	dd 0x06				; flags - executable | in memory
 	dd 0x00
 	db 0x78, 0x00, 0x40, 0x00	; addr in virtual memory of section
 	dd 0x00
-	db 0x78, 0x00, 0x00, 0x00	; offset in the file of this section
+	dd 0x78				; offset in the file of this section
 	dd 0x00
-	db 0x38, 0x00, 0x00, 0x00	; size of this section in the file
+	dd 0x38				; size of this section in the file
 	dd 0x00
 	dq 0x00				; sh_link - not used
-	db 0x01, 0x00, 0x00, 0x00	; alignment code (default??)
+	dd 0x01				; alignment code (default??)
 	dd 0x00
 	dq 0x00				; sh_entsize - not used
 
-	assert $ - .section_1 = 64
+	assert $ - .section_1 = 0x40
 
 	.section_2:
-	db 0x00, 0x00, 0x00, 0x00	; offset to name in strtab
-	db 0x03, 0x00, 0x00, 0x00	; type: string table
-	db 0x00, 0x00, 0x00, 0x00	; flags - none
+	dd 0x00				; offset to name in strtab
+	dd 0x03				; type: string table
+	dd 0x00				; flags - none
 	dd 0x00
-	db 0x00, 0x00, 0x40, 0x00	; addr in virtual memory of section - not used
+	dd 0x00				; addr in virtual memory of section - not used
 	dd 0x00
-	db 0xB0, 0x00, 0x00, 0x00	; offset in the file of this section
+	dd 0xb0				; offset in the file of this section
 	dd 0x00
-	db 0x10, 0x00, 0x00, 0x00	; size of this section in the file
+	dd 0x10				; size of this section in the file
 	dd 0x00
 	dq 0x00				; sh_link - not used
-	db 0x01, 0x00, 0x00, 0x00	; alignment code (default??)
+	dd 0x01				; alignment code (default??)
 	dd 0x00
 	dq 0x00				; sh_entsize - not used
 
-	assert $ - .section_2 = 64
+	assert $ - .section_2 = 0x40
 	
 	.length = $ - output
 
 output_file:
-	db 'a.out', 0
+	db "a.out", 0x00
 	.length = $ - output_file
