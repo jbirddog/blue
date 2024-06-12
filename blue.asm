@@ -1,46 +1,14 @@
 format elf64 executable 3
 
-segment readable executable ; writeable
-
-entry $
-	mov	rdi, output_file
-	mov	esi, 0x01 or 0x40 or 0x200
-	mov	edx, 0x1a0
-	mov	eax, 2
-	syscall
-
-	push rax
-	push rax
-
-	mov	rdi, rax
-	mov	rsi, output
-	mov	rdx, output.length
-	mov	eax, 1
-	syscall
-
-	pop	rdi
-	mov	esi, 0x1ed
-	mov	eax, 91
-	syscall
-
-	pop	rdi
-	mov	eax, 3
-	syscall
-
-	xor 	edi, edi
-	mov 	eax, 60
-	syscall
+segment readable executable
 	
 ;
 ; https://kevinboone.me/elfdemo.html
 ;
 output:
 	.elf_header:
-	db	0x7f, 0x45, 0x4c, 0x46	; magic number
-	db	0x02			; 64 bit
-	db	0x01			; little endian
-	db	0x01			; elf version
-	db	0x00			; target abi
+	dd	0x464c457f		; magic number
+	dd	0x02010100		; 64 bit, little endian, elf version, target abi
 	dq	0x00			; target abi version + 7 bytes undefined
 	dw	0x02			; executable binary
 	dw	0x3e			; amd64 architecture
@@ -106,33 +74,67 @@ output:
 	assert $ - .section_0 = 0x40
 
 	.section_1:
-	dd 0x0a				; offset to name in strtab
-	dd 0x01				; type: program data
-	dq 0x06				; flags - executable | in memory
-	dq 0x400078			; addr in virtual memory of section
-	dq 0x78				; offset in the file of this section
-	dq 0x38				; size of this section in the file
-	dq 0x00				; sh_link - not used
-	dq 0x01				; alignment code (default??)
-	dq 0x00				; sh_entsize - not used
+	dd	0x0a			; offset to name in shstrab
+	dd 	0x01			; type: program data
+	dq 	0x06			; flags - executable | in memory
+	dq 	0x400078		; addr in virtual memory of section
+	dq 	0x78			; offset in the file of this section
+	dq 	0x38			; size of this section in the file
+	dq 	0x00			; sh_link - not used
+	dq 	0x01			; alignment code (default??)
+	dq 	0x00			; sh_entsize - not used
 
 	assert $ - .section_1 = 0x40
 
 	.section_2:
-	dd 0x00				; offset to name in shstrab
-	dd 0x03				; type: string table
-	dq 0x00				; flags - none
-	dq 0x00				; addr in virtual memory of section - not used
-	dq 0xb0				; offset in the file of this section
-	dq 0x10				; size of this section in the file
-	dq 0x00				; sh_link - not used
-	dq 0x01				; alignment code (default??)
-	dq 0x00				; sh_entsize - not used
+	dd 	0x00			; offset to name in shstrab
+	dd 	0x03			; type: string table
+	dq 	0x00			; flags - none
+	dq 	0x00			; addr in virtual memory of section - not used
+	dq 	0xb0			; offset in the file of this section
+	dq 	0x10			; size of this section in the file
+	dq 	0x00			; sh_link - not used
+	dq 	0x01			; alignment code (default??)
+	dq 	0x00			; sh_entsize - not used
 
 	assert $ - .section_2 = 0x40
 	
 	.length = $ - output
 
 output_file:
-	db "a.out", 0x00
+	db	"a.out"
+	db	0x00
 	.length = $ - output_file
+
+;
+; compiler entry point
+;
+
+entry $
+	mov	rdi, output_file
+	mov	esi, 0x01 or 0x40 or 0x200
+	mov	edx, 0x1a0
+	mov	eax, 2
+	syscall
+
+	push rax
+	push rax
+
+	mov	rdi, rax
+	mov	rsi, output
+	mov	rdx, output.length
+	mov	eax, 1
+	syscall
+
+	pop	rdi
+	mov	esi, 0x1ed
+	mov	eax, 91
+	syscall
+
+	pop	rdi
+	mov	eax, 3
+	syscall
+
+	xor 	edi, edi
+	mov 	eax, 60
+	syscall
