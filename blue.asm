@@ -1,10 +1,11 @@
 format elf64 executable 3
 
-segment readable executable
+segment readable writeable
 	
 ;
 ; https://kevinboone.me/elfdemo.html
 ;
+
 output:
 	.elf_header:
 	dd	0x464c457f		; magic number
@@ -23,7 +24,7 @@ output:
 	dw	0x40			; size of section header
 	dw	0x03			; number of section headers
 	dw	0x02			; index if strtab section header
-
+	
 	assert $ - .elf_header = 0x40
 
 	.program_header:
@@ -109,6 +110,8 @@ output_file:
 ;
 ; compiler entry point
 ;
+
+segment readable executable
 
 entry $
 	mov	rdi, output_file
