@@ -121,7 +121,7 @@ segment readable executable
 entry $
 	mov	rdi, output_file
 	mov	esi, 0x01 or 0x40 or 0x200
-	mov	edx, 0x1a0
+	mov	edx, 0x1ed
 	mov	eax, 2
 	syscall
 
@@ -132,11 +132,6 @@ entry $
 	mov	rsi, output
 	mov	rdx, output.length
 	mov	eax, 1
-	syscall
-
-	pop	rdi
-	mov	esi, 0x1ed
-	mov	eax, 91
 	syscall
 
 	pop	rdi
