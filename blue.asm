@@ -8,8 +8,11 @@ segment readable writeable
 
 output:
 	.elf_header:
-	dd	0x464c457f		; magic number
-	dd	0x02010100		; 64 bit, little endian, elf version, target abi
+	db	0x7f, 0x45, 0x4c, 0x46	; magic number
+	db	0x02			; 64 bit
+	db	0x01			; little endian
+	db	0x01			; elf version
+	db	0x00			; target abi	
 	dq	0x00			; target abi version + 7 bytes undefined
 	dw	0x02			; executable binary
 	dw	0x3e			; amd64 architecture
