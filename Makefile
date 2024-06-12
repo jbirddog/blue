@@ -10,8 +10,9 @@ DEV_DOCKER_FILE ?= dev.Dockerfile
 DEV_IMAGE ?= blue-dev
 
 IN_DEV_CONTAINER ?= docker exec $(DEV_CONTAINER)
+DISASM ?= $(IN_DEV_CONTAINER) objdump -d -M intel
 
-LD ?= ld.gold
+FASM ?= fasm
 
 all: dev-env dev-start compile
 	@true
@@ -25,42 +26,19 @@ dev-start: dev-stop
 dev-stop:
 	docker rm -f $(DEV_CONTAINER) || true
 
-build:
-	$(IN_DEV_CONTAINER) nasm -felf64 $(BLUE).asm -l $(BLUE).lst
+compile:
+	$(IN_DEV_CONTAINER) $(FASM) $(BLUE).asm $(BLUE)
 
-link:
-	$(IN_DEV_CONTAINER) $(LD) -o $(BLUE) $(BLUE).o
-
-compile: build link
-	@true
-
-run:
+start:
 	$(IN_DEV_CONTAINER) ./$(BLUE)
 
-dis-demo:
-	$(IN_DEV_CONTAINER) ndisasm -b64 demo
+dis:
+	$(DISASM) a.out
 
-dis-out:
-	$(IN_DEV_CONTAINER) ndisasm -b64 out.bin
-
-dis: dis-out dis-demo
-	@true
-
-build-demo:
-	$(IN_DEV_CONTAINER) nasm -felf64 $(DEMO).asm
-
-link-demo:
-	$(IN_DEV_CONTAINER) ld -o $(DEMO) $(DEMO).o
-
-run-demo:
-	$(IN_DEV_CONTAINER) ./$(DEMO)
-
-start: run build-demo link-demo run-demo
-	@true
+watch:
+	watch -d make compile start
 
 .PHONY:
 	dev-env dev-start dev-stop \
-	compile build link run \
-	build-demo link-demo run-demo \
-	dis dis-out \
-	start
+	compile start dis \
+	watch

@@ -1,289 +1,148 @@
+format elf64 executable 3
 
-;;;
-;;; compiler for the Blue Language
-;;;
-
-	section compiler write exec
-
-	global _start
-
-
-mode:
-	.interpret equ 0
-	.compile equ 1
-
-	db .interpret
-
-
-;;;
-;;; dictionary
-;;;
-
-dict:
-	.codebuf_offset equ 16
+segment readable writeable
 	
-	.here dq 0
-	.start:
+;
+; https://kevinboone.me/elfdemo.html
+;
 
-	.__core:
-
-	.b_comma:
-	dq 0
-	db 'b', ',', 0, 0, 0, 0, 0, 0
-	dq codebuf.b_comma
-	dq 0
-
-	.d_comma:
-	dq 0
-	db 'd', ',', 0, 0, 0, 0, 0, 0
-	dq codebuf.d_comma
-	dq 0
+output:
+	.elf_header:
+	db	0x7f, 0x45, 0x4c, 0x46	; magic number
+	db	0x02			; 64 bit
+	db	0x01			; little endian
+	db	0x01			; elf version
+	db	0x00			; target abi	
+	dq	0x00			; target abi version + 7 bytes undefined
+	dw	0x02			; executable binary
+	dw	0x3e			; amd64 architecture
+	dd	0x01			; elf version
+	dq	0x400078		; start address
+	dq	0x40			; offset to program header
+	dq	0xc0			; offset to section header
+	dd	0x00			; architecture flags
+	dw	0x40			; size of header
+	dw	0x38			; size of program header
+	dw	0x01			; number of program headers
+	dw	0x40			; size of section header
+	dw	0x03			; number of section headers
+	dw	0x02			; index if strtab section header
 	
-	.__user:
+	assert $ - .elf_header = 0x40
+
+	.program_header:
+	dd	0x01			; entry type: loadable segment
+	dd	0x05			; segment flags: RX
+	dq	0x00			; offset within file
+	dq	0x400000		; load position in virtual memory
+	dq	0x400000		; load position in physical memory
+	dq	0xb0			; size of the loaded section (file)
+	dq	0xb0			; size of the loaded section (memory)
+	dq	0x200000		; alignment boundary for sections
+
+	assert $ - .program_header = 0x38
+
+	.program_code:
+	db	0x48, 0xc7, 0xc0	; mov rax, 1 - sys_write
+	dd	0x01
+	db	0x48, 0xc7, 0xc7	; mov rdi, 1 - stdout fd
+	dd	0x01
+	db	0x48, 0xc7, 0xc6	; mov rsi, 0x4000a2 - location of string
+	dd	0x4000a2
+	db	0x48, 0xc7, 0xc2	; mov rdx, 13 - size of string
+	dd	0x0d
+	db	0x0f, 0x05		; syscall
+	db	0x48, 0xc7, 0xc0	; mov rax, 60 - sys_exit
+	dd	0x3c
+	db	0x48, 0x31, 0xff	; xor rdi, rdi
+	db	0x0f, 0x05		; syscall
+
+	assert $ - .program_code = 0x2a
+
+	.string:
+	db	"Hello, world"
+	db	0x0a, 0x00
+
+	assert $ - .string = 0x0e
+
+	.shstrtab:
+	db	".shstrtab"
+	db	0x00
+	db	".text"
+	db	0x00
+
+	assert $ - .shstrtab = 0x10
+
+	.section_0:
+	dq 	0x00, 0x00, 0x00, 0x00	; 64 bytes of 0s 
+	dq 	0x00, 0x00, 0x00, 0x00
+
+	assert $ - .section_0 = 0x40
+
+	.section_1:
+	dd	0x0a			; offset to name in shstrtab
+	dd 	0x01			; type: program data
+	dq 	0x06			; flags - executable | in memory
+	dq 	0x400078		; addr in virtual memory of section
+	dq 	0x78			; offset in the file of this section
+	dq 	0x38			; size of this section in the file
+	dq 	0x00			; sh_link - not used
+	dq 	0x01			; alignment code (default??)
+	dq 	0x00			; sh_entsize - not used
+
+	assert $ - .section_1 = 0x40
+
+	.section_2:
+	dd 	0x00			; offset to name in shstrtab
+	dd 	0x03			; type: string table
+	dq 	0x00			; flags - none
+	dq 	0x00			; addr in virtual memory of section - not used
+	dq 	0xb0			; offset in the file of this section
+	dq 	0x10			; size of this section in the file
+	dq 	0x00			; sh_link - not used
+	dq 	0x01			; alignment code (default??)
+	dq 	0x00			; sh_entsize - not used
+
+	assert $ - .section_2 = 0x40
 	
-	.add1:
-	dq 0
-	db 'a', 'd', 'd', '1', 0, 0, 0, 0
-	dq codebuf.add1
-	dq 0
+	.length = $ - output
 
-	times 4096 db 0
-	
-;;;
-;;; code buffer 
-;;;
+output_file:
+	db	"a.out"
+	db	0x00
+	.length = $ - output_file
 
-codebuf:
-	.here dq 0
+;
+; compiler entry point
+;
 
-	.__core:
-	
-	.start:
-	db 0xE9
-	.entry dq 0
+segment readable executable
 
-	.b_comma:
-	;;
-	;; : b, (( b al -- )) ... ; immed
-	;; 
-	mov rdi, [.here]
-	stosb
-	mov [.here], rdi
-	ret
-
-	.d_comma:
-	;;
-	;; : d, (( d eax -- )) ... ; inline
-	;; 
-	mov rdi, [.here]
-	stosd
-	mov [.here], rdi
-	ret
-
-	.syscall_1:
-	;;
-	;; : syscall/1 (( num eax -- result eax )) ... ; inline
-	;; 
-	syscall
-	ret
-
-	.exit:
-	;;
-	;; : exit (( status edi  -- )) 60 syscall/1 drop ; noret
-	;; 
-	mov eax, 60
-	syscall
-
-	.add1:
-	;; 
-	;; : add1 (( n eax -- n+1 eax )) ... ; inline
-	;; 
-	inc eax
-	ret
-
-	.__user:
-	times 4096 db 0
-
-;;;
-;;; helpers
-;;; 
-
-interpret:
-	mov rsi, [codebuf.here]
-	mov [dict.here + dict.codebuf_offset], rsi
-
-	mov byte [mode], mode.interpret
-	ret
-
-interpretive_dance:
-	push 0xC3		; ret
-	pop rax
-	call codebuf.b_comma
-
-	call [dict.here + dict.codebuf_offset]
-
-	ret
-
-compile:
-	call interpretive_dance
-	
-	mov rsi, [dict.here + dict.codebuf_offset]
-	mov [codebuf.here], rsi
-	
-	mov byte [mode], mode.compile
-	ret
-
-init:
-	mov rsi, codebuf.__user
-	mov [codebuf.here], rsi
-
-	mov rsi, dict.__user
-	mov [dict.here], rsi
-
-	call interpret
-	ret
-
-
-;;;
-;;; compiler entry point
-;;; 
-
-_start:
-	call init
-	
-	;; 
-	;; want to simulate the program:
-	;;
-	;; 6 add1
-	;; : _start exit ; entry
-	;;
-	;; demo assumes `add1` and `exit` are already defined
-	;; `6 add1` is run at compile time and results in `7` being on the stack
-	;;
-	;;
-	;; the final binary output would roughly be the equivalent of:
-	;;
-	;; jmp [location of `entry`]
-	;; .... codebuf
-	;; mov rdi, 7
-	;; jmp [location of codebuf.exit]
-	;;
-	;; the output should be a binary file containing the machine code for the
-	;; above unoptimized assembly. This should be able to be included in a
-	;; asm driver file that jumps to the correct location to execute the
-	;; program.
-	;;
-	;; logic such as parsing the application code and finding entries in the
-	;; dictionary will be omitted for the first demo since this is not the
-	;; interesting part. the interesting part is providing full access to
-	;; all previously defined code at compile time. 
-	;;
-	
-	;; `6 add1` executed at compile time
-	
-	push 0x6A		; push
-	pop rax
-	call codebuf.b_comma
-
-	push 0x06		; 6
-	pop rax
-	call codebuf.b_comma
-
-	push 0x58		; pop rax
-	pop rax
-	call codebuf.b_comma
-
-	push 0xE8		; call
-	pop rax
-	call codebuf.b_comma
-
-	mov rax, [dict.add1 + dict.codebuf_offset]
-	sub rax, [codebuf.here]
-	sub rax, 4
-
-	call codebuf.d_comma
-	
-	call compile
-	
-	;; stack now indicates there is an immediate value in `eax`. when moving into
-	;; into `edi` for `exit` the value in `eax` needs to be compiled. for now just
-	;; move the full register but later respect the size from the register name.
-
-	;; 
-	;; compile into codebuf:
-	;; 
-	;; BF07000000 - mov rdi, 7
-	;;
-
-	push rax 		; don't clobber the `7` in rax
-	
-	push 0xBF
-	pop rax
-	call codebuf.b_comma
-
-	pop rax
-	call codebuf.d_comma
-	
-	;; 
-	;; E9XXXXXXXX - jmp codebuf.exit
-	;;
-
-	push 0xE9
-	pop rax
-	call codebuf.b_comma
-
-	mov rsi, codebuf.exit
-	sub rsi, [codebuf.here]
-	sub rsi, 4
-	push rsi
-	
-	pop rax
-	call codebuf.d_comma
-
-	;; 
-	;; set the `entry` to `_start`'s code. for this demo this just happens to be
-	;; the start of the user section of the code buffer, but really `entry` would
-	;; find the previously defined word and use its code. like finding a word in
-	;; the dictionary, this does not impact the correctness of the demo.
-	;;
-	
-	mov rsi, codebuf.__user
-	sub rsi, codebuf.start
-	sub rsi, 5
-	mov [codebuf.entry], rsi
-
-	;;
-	;; write the code buffer to out.bin and exit
-	;;
-
-	;; open
-	mov rdi, outfile
-	mov esi, 0o1 | 0o100 | 0o1000
-	mov edx, 0o640
-	mov eax, 2
+entry $
+	mov	rdi, output_file
+	mov	esi, 0x01 or 0x40 or 0x200
+	mov	edx, 0x1a0
+	mov	eax, 2
 	syscall
 
 	push rax
 	push rax
 
-	;; write
-	pop rdi
-	mov rsi, codebuf.start
-	mov rdx, [codebuf.here]
-	sub rdx, codebuf.start
-	mov eax, 1
-	syscall
-	
-
-	;; close
-	pop rdi
-	mov eax, 3
+	mov	rdi, rax
+	mov	rsi, output
+	mov	rdx, output.length
+	mov	eax, 1
 	syscall
 
-	xor edi, edi
-	jmp codebuf.exit
+	pop	rdi
+	mov	esi, 0x1ed
+	mov	eax, 91
+	syscall
 
-outfile:
-	db "out.bin", 0
-	.len equ $ - outfile
-	
+	pop	rdi
+	mov	eax, 3
+	syscall
+
+	xor 	edi, edi
+	mov 	eax, 60
+	syscall
