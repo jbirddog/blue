@@ -40,17 +40,17 @@ output:
 	assert $ - .program_header = 0x38
 
 	.program_code:
-	db	0x48, 0xc7, 0xc0, 0x01	; mov rax, 1 - sys_write
-	db	0x00, 0x00, 0x00
-	db	0x48, 0xc7, 0xc7, 0x01	; mov rdi, 1 - stdout fd
-	db	0x00, 0x00, 0x00
-	db	0x48, 0xc7, 0xc6, 0xa2	; mov rsi, 0x4000a2 - location of string
-	db	0x00, 0x40, 0x00
-	db	0x48, 0xc7, 0xc2, 0x0d	; mov rdx, 13 - size of string
-	db	0x00, 0x00, 0x00
+	db	0x48, 0xc7, 0xc0	; mov rax, 1 - sys_write
+	dd	0x01
+	db	0x48, 0xc7, 0xc7	; mov rdi, 1 - stdout fd
+	dd	0x01
+	db	0x48, 0xc7, 0xc6	; mov rsi, 0x4000a2 - location of string
+	dd	0x4000a2
+	db	0x48, 0xc7, 0xc2	; mov rdx, 13 - size of string
+	dd	0x0d
 	db	0x0f, 0x05		; syscall
-	db	0x48, 0xc7, 0xc0, 0x3c	; mov rax, 60 - sys_exit
-	db	0x00, 0x00, 0x00
+	db	0x48, 0xc7, 0xc0	; mov rax, 60 - sys_exit
+	dd	0x3c
 	db	0x48, 0x31, 0xff	; xor rdi, rdi
 	db	0x0f, 0x05		; syscall
 
@@ -62,11 +62,13 @@ output:
 
 	assert $ - .string = 0x0e
 
-	.shstrab:
-	db	".shstrab\0.text"
+	.shstrtab:
+	db	".shstrtab"
+	db	0x00
+	db	".text"
 	db	0x00
 
-	assert $ - .shstrab = 0x10
+	assert $ - .shstrtab = 0x10
 
 	.section_0:
 	dq 	0x00, 0x00, 0x00, 0x00	; 64 bytes of 0s 
@@ -75,7 +77,7 @@ output:
 	assert $ - .section_0 = 0x40
 
 	.section_1:
-	dd	0x0a			; offset to name in shstrab
+	dd	0x0a			; offset to name in shstrtab
 	dd 	0x01			; type: program data
 	dq 	0x06			; flags - executable | in memory
 	dq 	0x400078		; addr in virtual memory of section
@@ -88,7 +90,7 @@ output:
 	assert $ - .section_1 = 0x40
 
 	.section_2:
-	dd 	0x00			; offset to name in shstrab
+	dd 	0x00			; offset to name in shstrtab
 	dd 	0x03			; type: string table
 	dq 	0x00			; flags - none
 	dq 	0x00			; addr in virtual memory of section - not used
