@@ -17,6 +17,9 @@ FASM ?= fasm
 all: dev-env dev-start compile
 	@true
 
+ci: dev-env dev-start compile tests dev-stop
+	@true
+
 dev-env: dev-stop
 	docker build -t $(DEV_IMAGE) -f $(DEV_DOCKER_FILE) .
 
@@ -41,6 +44,7 @@ watch:
 .PHONY:
 	dev-env dev-start dev-stop \
 	compile run dis \
-	watch
+	watch \
+	ci
 
 include test.mk

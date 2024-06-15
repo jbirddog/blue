@@ -29,7 +29,7 @@ program_code:
 segment readable executable
 
 output_file:
-	db	"a.out"
+	db	"elf_test_hello_world.out"
 	db	0x00
 
 entry $	
