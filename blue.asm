@@ -7,7 +7,7 @@ segment readable writeable
 ;
 
 output:
-	.elf_header:
+elf_header:
 	db	0x7f, 0x45, 0x4c, 0x46	; magic number
 	db	0x02			; 64 bit
 	db	0x01			; little endian
@@ -27,22 +27,25 @@ output:
 	dw	0x40			; size of section header
 	dw	0x03			; number of section headers
 	dw	0x02			; index if strtab section header
-	
-	assert $ - .elf_header = 0x40
 
-	.program_header:
+	.length = $ - elf_header
+	assert .length = 0x40
+
+program_header:
 	dd	0x01			; entry type: loadable segment
 	dd	0x05			; segment flags: RX
 	dq	0x00			; offset within file
 	dq	0x400000		; load position in virtual memory
 	dq	0x400000		; load position in physical memory
-	dq	0xb0			; size of the loaded section (file)
-	dq	0xb0			; size of the loaded section (memory)
+	.sizes:
+	dq	0x00			; size of the loaded section (file)
+	dq	0x00			; size of the loaded section (memory)
 	dq	0x200000		; alignment boundary for sections
 
-	assert $ - .program_header = 0x38
+	.length = $ - program_header
+	assert .length = 0x38
 
-	.program_code:
+program_code:
 	db	0x48, 0xc7, 0xc0	; mov rax, 1 - sys_write
 	dd	0x01
 	db	0x48, 0xc7, 0xc7	; mov rdi, 1 - stdout fd
@@ -57,60 +60,64 @@ output:
 	db	0x48, 0x31, 0xff	; xor rdi, rdi
 	db	0x0f, 0x05		; syscall
 
-	assert $ - .program_code = 0x2a
-
-	.string:
 	db	"Hello, world"
 	db	0x0a, 0x00
 
-	assert $ - .string = 0x0e
+	.length = $ - program_code
+	assert .length = 0x38
+	assert $ - output = 0xb0
 
-	.shstrtab:
+shstrtab:
 	db	".shstrtab"
 	db	0x00
 	db	".text"
 	db	0x00
 
-	assert $ - .shstrtab = 0x10
+	.length = $ - shstrtab
+	assert .length = 0x10
 
-	.section_0:
+section_0:
 	dq 	0x00, 0x00, 0x00, 0x00	; 64 bytes of 0s 
 	dq 	0x00, 0x00, 0x00, 0x00
 
-	assert $ - .section_0 = 0x40
+	.length = $ - section_0
+	assert .length = 0x40
 
-	.section_1:
+program_code_section_header:
 	dd	0x0a			; offset to name in shstrtab
 	dd 	0x01			; type: program data
 	dq 	0x06			; flags - executable | in memory
 	dq 	0x400078		; addr in virtual memory of section
 	dq 	0x78			; offset in the file of this section
+	.size:
 	dq 	0x38			; size of this section in the file
 	dq 	0x00			; sh_link - not used
 	dq 	0x01			; alignment code (default??)
 	dq 	0x00			; sh_entsize - not used
 
-	assert $ - .section_1 = 0x40
+	.length = $ - program_code_section_header
+	assert .length = 0x40
 
-	.section_2:
+shstrtab_section_header:
 	dd 	0x00			; offset to name in shstrtab
 	dd 	0x03			; type: string table
 	dq 	0x00			; flags - none
 	dq 	0x00			; addr in virtual memory of section - not used
 	dq 	0xb0			; offset in the file of this section
+	.size:
 	dq 	0x10			; size of this section in the file
 	dq 	0x00			; sh_link - not used
 	dq 	0x01			; alignment code (default??)
 	dq 	0x00			; sh_entsize - not used
 
-	assert $ - .section_2 = 0x40
+	.length = $ - shstrtab_section_header
+	assert .length = 0x40
 	
-	.length = $ - output
+output_length = $ - output
 
 output_file:
 	db	"a.out"
 	db	0x00
-	.length = $ - output_file
 
 ;
 ; compiler entry point
@@ -118,11 +125,21 @@ output_file:
 
 segment readable executable
 
+SYS_WRITE = 1
+SYS_OPEN = 2
+SYS_CLOSE = 3
+SYS_EXIT = 60
+
 entry $
+	mov	eax, elf_header.length + program_header.length + program_code.length
+	mov 	rdi, program_header.sizes
+	stosq
+	stosq
+
 	mov	rdi, output_file
 	mov	esi, 0x01 or 0x40 or 0x200
 	mov	edx, 0x1ed
-	mov	eax, 2
+	mov	eax, SYS_OPEN
 	syscall
 
 	push rax
@@ -130,14 +147,14 @@ entry $
 
 	mov	rdi, rax
 	mov	rsi, output
-	mov	rdx, output.length
-	mov	eax, 1
+	mov	rdx, output_length
+	mov	eax, SYS_WRITE
 	syscall
 
 	pop	rdi
-	mov	eax, 3
+	mov	eax, SYS_CLOSE
 	syscall
 
 	xor 	edi, edi
-	mov 	eax, 60
+	mov 	eax, SYS_EXIT
 	syscall
