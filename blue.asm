@@ -51,6 +51,7 @@ program_header:
 	assert .length = 0x38
 
 program_code:
+	.entry_offset = $ - program_code
 	db	0x48, 0xc7, 0xc0	; mov rax, 1 - sys_write
 	dd	0x01
 	db	0x48, 0xc7, 0xc7	; mov rdi, 1 - stdout fd
@@ -60,7 +61,6 @@ program_code:
 	db	0x48, 0xc7, 0xc2	; mov rdx, 13 - size of string
 	dd	0x0d
 	db	0x0f, 0x05		; syscall
-	.here:
 	db	0x48, 0xc7, 0xc0	; mov rax, 60 - sys_exit
 	dd	0x3c
 	db	0x48, 0x31, 0xff	; xor rdi, rdi
@@ -133,10 +133,11 @@ segment readable executable
 ;
 elf_binary_calculate_fields:
 	add	eax, elf_binary.program_code_offset
+	push	rax
 	add	eax, elf_binary.base_address
 	mov	qword [elf_header.start_address], rax
 
-	mov	eax, elf_binary.program_code_offset
+	pop	rax
 	mov	qword [program_code_section_header.offset], rax
 
 	mov	edi, eax
@@ -177,7 +178,7 @@ SYS_CLOSE = 3
 SYS_EXIT = 60
 
 entry $
-	mov eax, 0
+	mov eax, program_code.entry_offset
 	mov ecx, program_code.length
 	call elf_binary_calculate_fields
 	
