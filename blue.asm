@@ -88,9 +88,10 @@ program_code_section_header:
 	dd 	0x01			; type: program data
 	dq 	0x06			; flags - executable | in memory
 	dq 	0x400078		; addr in virtual memory of section
+	.offset:
 	dq 	0x78			; offset in the file of this section
 	.size:
-	dq 	0x38			; size of this section in the file
+	dq 	0x00			; size of this section in the file
 	dq 	0x00			; sh_link - not used
 	dq 	0x01			; alignment code (default??)
 	dq 	0x00			; sh_entsize - not used
@@ -103,9 +104,10 @@ shstrtab_section_header:
 	dd 	0x03			; type: string table
 	dq 	0x00			; flags - none
 	dq 	0x00			; addr in virtual memory of section - not used
-	dq 	0xb0			; offset in the file of this section
+	.offset:
+	dq 	0x00			; offset in the file of this section
 	.size:
-	dq 	0x10			; size of this section in the file
+	dq 	0x00			; size of this section in the file
 	dq 	0x00			; sh_link - not used
 	dq 	0x01			; alignment code (default??)
 	dq 	0x00			; sh_entsize - not used
@@ -131,11 +133,28 @@ SYS_CLOSE = 3
 SYS_EXIT = 60
 
 entry $
-	mov	eax, elf_header.length + program_header.length + program_code.length
+	;
+	; calculate variable fields for the elf format
+	;
+	mov	eax, elf_header.length + program_header.length
+	mov	qword [program_code_section_header.offset], rax
+	
+	add	eax, program_code.length
 	mov 	rdi, program_header.sizes
 	stosq
 	stosq
 
+	mov	rdi, shstrtab_section_header.offset
+	stosq
+
+	mov	eax, shstrtab.length
+	stosq
+
+	mov	qword [program_code_section_header.size], program_code.length
+
+	;
+	; write the output to ./a.out
+	;
 	mov	rdi, output_file
 	mov	esi, 0x01 or 0x40 or 0x200
 	mov	edx, 0x1ed
@@ -155,6 +174,9 @@ entry $
 	mov	eax, SYS_CLOSE
 	syscall
 
+	;
+	; exit cleanly
+	;
 	xor 	edi, edi
 	mov 	eax, SYS_EXIT
 	syscall
