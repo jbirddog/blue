@@ -140,3 +140,37 @@ elf_binary_calculate_fields:
 	mov	qword [elf_header.section_header_offset], rcx
 
 	ret
+;
+; expects
+; 	- program code entry offset in eax
+;	- program code length in ecx
+;	- file descriptor in edi
+;
+elf_binary_write:
+	push	rdi
+	call	elf_binary_calculate_fields
+	pop	rdi
+
+	mov	rsi, elf_binary_headers
+	mov	rdx, elf_binary_headers_length
+	mov	eax, SYS_WRITE
+	syscall
+
+	mov	rsi, program_code
+	mov	rdx, program_code.length
+	mov	eax, SYS_WRITE
+	syscall
+
+	mov	rsi, shstrtab
+	mov	rdx, shstrtab.length
+	mov	eax, SYS_WRITE
+	syscall
+
+	mov	rsi, elf_binary_section_headers
+	mov	rdx, elf_binary_section_headers_length
+	mov	eax, SYS_WRITE
+	syscall
+
+	ret
+
+	

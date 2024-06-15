@@ -1,10 +1,7 @@
 format elf64 executable 3
 
+include "linux.inc"
 include "elf.inc"
-
-;
-; compiler entry point
-;
 
 segment readable writeable
 
@@ -38,16 +35,7 @@ output_file:
 	db	"a.out"
 	db	0x00
 
-SYS_WRITE = 1
-SYS_OPEN = 2
-SYS_CLOSE = 3
-SYS_EXIT = 60
-
-entry $
-	mov eax, program_code.entry_offset
-	mov ecx, program_code.length
-	call elf_binary_calculate_fields
-	
+entry $	
 	;
 	; write the output to ./a.out
 	;
@@ -58,27 +46,10 @@ entry $
 	syscall
 
 	mov	rdi, rax
-
-	mov	rsi, elf_binary_headers
-	mov	rdx, elf_binary_headers_length
-	mov	eax, SYS_WRITE
-	syscall
-
-	mov	rsi, program_code
-	mov	rdx, program_code.length
-	mov	eax, SYS_WRITE
-	syscall
-
-	mov	rsi, shstrtab
-	mov	rdx, shstrtab.length
-	mov	eax, SYS_WRITE
-	syscall
-
-	mov	rsi, elf_binary_section_headers
-	mov	rdx, elf_binary_section_headers_length
-	mov	eax, SYS_WRITE
-	syscall
-
+	mov	eax, program_code.entry_offset
+	mov	ecx, program_code.length
+	call	elf_binary_write
+	
 	mov	eax, SYS_CLOSE
 	syscall
 
