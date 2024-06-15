@@ -6,6 +6,32 @@ include "elf.inc"
 ; compiler entry point
 ;
 
+segment readable writeable
+
+;
+; TODO: move to anonymous mmap buffer, compile bytes at runtime
+;
+program_code:
+	.entry_offset = $ - program_code
+	db	0x48, 0xc7, 0xc0	; mov rax, 1 - sys_write
+	dd	0x01
+	db	0x48, 0xc7, 0xc7	; mov rdi, 1 - stdout fd
+	dd	0x01
+	db	0x48, 0xc7, 0xc6	; mov rsi, 0x4000a2 - location of string
+	dd	0x4000a2
+	db	0x48, 0xc7, 0xc2	; mov rdx, 13 - size of string
+	dd	0x0d
+	db	0x0f, 0x05		; syscall
+	db	0x48, 0xc7, 0xc0	; mov rax, 60 - sys_exit
+	dd	0x3c
+	db	0x48, 0x31, 0xff	; xor rdi, rdi
+	db	0x0f, 0x05		; syscall
+
+	db	"Hello, world"
+	db	0x0a, 0x00
+
+	.length = $ - program_code
+
 segment readable executable
 
 output_file:
@@ -31,16 +57,28 @@ entry $
 	mov	eax, SYS_OPEN
 	syscall
 
-	push rax
-	push rax
-
 	mov	rdi, rax
-	mov	rsi, elf_binary
-	mov	rdx, elf_binary_length
+
+	mov	rsi, elf_binary_headers
+	mov	rdx, elf_binary_headers_length
 	mov	eax, SYS_WRITE
 	syscall
 
-	pop	rdi
+	mov	rsi, program_code
+	mov	rdx, program_code.length
+	mov	eax, SYS_WRITE
+	syscall
+
+	mov	rsi, shstrtab
+	mov	rdx, shstrtab.length
+	mov	eax, SYS_WRITE
+	syscall
+
+	mov	rsi, elf_binary_section_headers
+	mov	rdx, elf_binary_section_headers_length
+	mov	eax, SYS_WRITE
+	syscall
+
 	mov	eax, SYS_CLOSE
 	syscall
 

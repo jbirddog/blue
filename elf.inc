@@ -7,8 +7,8 @@ segment readable writeable
 
 elf_binary:
 	.base_address = 0x400000
-	.program_code_offset = elf_header.length + program_header.length
 
+elf_binary_headers:
 elf_header:
 	db	0x7f, 0x45, 0x4c, 0x46	; magic number
 	db	0x02			; 64 bit
@@ -49,29 +49,6 @@ program_header:
 	.length = $ - program_header
 	assert .length = 0x38
 
-program_code:
-	.entry_offset = $ - program_code
-	db	0x48, 0xc7, 0xc0	; mov rax, 1 - sys_write
-	dd	0x01
-	db	0x48, 0xc7, 0xc7	; mov rdi, 1 - stdout fd
-	dd	0x01
-	db	0x48, 0xc7, 0xc6	; mov rsi, 0x4000a2 - location of string
-	dd	0x4000a2
-	db	0x48, 0xc7, 0xc2	; mov rdx, 13 - size of string
-	dd	0x0d
-	db	0x0f, 0x05		; syscall
-	db	0x48, 0xc7, 0xc0	; mov rax, 60 - sys_exit
-	dd	0x3c
-	db	0x48, 0x31, 0xff	; xor rdi, rdi
-	db	0x0f, 0x05		; syscall
-
-	db	"Hello, world"
-	db	0x0a, 0x00
-
-	.length = $ - program_code
-	assert .length = 0x38
-	assert $ - elf_header = 0xb0
-
 shstrtab:
 	db	".shstrtab"
 	db	0x00
@@ -81,11 +58,12 @@ shstrtab:
 	.length = $ - shstrtab
 	assert .length = 0x10
 
-section_0:
+elf_binary_section_headers:
+section_header_0:
 	dq 	0x00, 0x00, 0x00, 0x00	; 64 bytes of 0s 
 	dq 	0x00, 0x00, 0x00, 0x00
 
-	.length = $ - section_0
+	.length = $ - section_header_0
 	assert .length = 0x40
 
 program_code_section_header:
@@ -122,6 +100,8 @@ shstrtab_section_header:
 	assert .length = 0x40
 	
 elf_binary_length = $ - elf_binary
+elf_binary_headers_length = elf_header.length + program_header.length
+elf_binary_section_headers_length = elf_binary_length - elf_binary_section_headers
 
 segment readable executable
 
@@ -131,7 +111,7 @@ segment readable executable
 ;	- program code length in ecx
 ;
 elf_binary_calculate_fields:
-	add	eax, elf_binary.program_code_offset
+	add	eax, elf_binary_headers_length
 	push	rax
 	add	eax, elf_binary.base_address
 	mov	qword [elf_header.start_address], rax
