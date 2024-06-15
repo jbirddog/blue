@@ -6,7 +6,7 @@ segment readable writeable
 ; adapted from https://kevinboone.me/elfdemo.html
 ;
 
-output:
+elf_binary:
 elf_header:
 	db	0x7f, 0x45, 0x4c, 0x46	; magic number
 	db	0x02			; 64 bit
@@ -66,7 +66,7 @@ program_code:
 
 	.length = $ - program_code
 	assert .length = 0x38
-	assert $ - output = 0xb0
+	assert $ - elf_header = 0xb0
 
 shstrtab:
 	db	".shstrtab"
@@ -116,32 +116,19 @@ shstrtab_section_header:
 	.length = $ - shstrtab_section_header
 	assert .length = 0x40
 	
-output_length = $ - output
-
-output_file:
-	db	"a.out"
-	db	0x00
-
-;
-; compiler entry point
-;
+elf_binary_length = $ - elf_binary
 
 segment readable executable
 
-SYS_WRITE = 1
-SYS_OPEN = 2
-SYS_CLOSE = 3
-SYS_EXIT = 60
-
-entry $
-	;
-	; calculate variable fields for the elf format
-	;
+;
+; expects length of program code in ecx
+;
+elf_binary_calculate_fields:
 	mov	eax, elf_header.length + program_header.length
 	mov	qword [program_code_section_header.offset], rax
-	mov	qword [program_code_section_header.size], program_code.length
+	mov	qword [program_code_section_header.size], rcx
 	
-	add	eax, program_code.length
+	add	eax, ecx
 	mov 	rdi, program_header.sizes
 	stosq
 	stosq
@@ -152,9 +139,30 @@ entry $
 	mov	eax, shstrtab.length
 	stosq
 
-	add	eax, elf_header.length + program_header.length + program_code.length
-	mov	qword [elf_header.section_header_offset], rax
+	add	ecx, elf_header.length + program_header.length
+	mov	qword [elf_header.section_header_offset], rcx
 
+	ret
+
+;
+; compiler entry point
+;
+
+segment readable executable
+
+output_file:
+	db	"a.out"
+	db	0x00
+
+SYS_WRITE = 1
+SYS_OPEN = 2
+SYS_CLOSE = 3
+SYS_EXIT = 60
+
+entry $
+	mov ecx, program_code.length
+	call elf_binary_calculate_fields
+	
 	;
 	; write the output to ./a.out
 	;
@@ -168,8 +176,8 @@ entry $
 	push rax
 
 	mov	rdi, rax
-	mov	rsi, output
-	mov	rdx, output_length
+	mov	rsi, elf_binary
+	mov	rdx, elf_binary_length
 	mov	eax, SYS_WRITE
 	syscall
 
