@@ -89,7 +89,7 @@ program_code_section_header:
 	dq 	0x06			; flags - executable | in memory
 	dq 	0x400078		; addr in virtual memory of section
 	.offset:
-	dq 	0x78			; offset in the file of this section
+	dq 	0x00			; offset in the file of this section
 	.size:
 	dq 	0x00			; size of this section in the file
 	dq 	0x00			; sh_link - not used
