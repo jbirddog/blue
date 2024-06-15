@@ -3,7 +3,7 @@ format elf64 executable 3
 segment readable writeable
 	
 ;
-; https://kevinboone.me/elfdemo.html
+; adapted from https://kevinboone.me/elfdemo.html
 ;
 
 output:
@@ -19,14 +19,15 @@ elf_header:
 	dd	0x01			; elf version
 	dq	0x400078		; start address
 	dq	0x40			; offset to program header
-	dq	0xc0			; offset to section header
+	.section_header_offset:
+	dq	0x00			; offset to section header
 	dd	0x00			; architecture flags
 	dw	0x40			; size of header
 	dw	0x38			; size of program header
 	dw	0x01			; number of program headers
 	dw	0x40			; size of section header
 	dw	0x03			; number of section headers
-	dw	0x02			; index if strtab section header
+	dw	0x02			; index of strtab section header
 
 	.length = $ - elf_header
 	assert .length = 0x40
@@ -150,6 +151,9 @@ entry $
 
 	mov	eax, shstrtab.length
 	stosq
+
+	add	eax, elf_header.length + program_header.length + program_code.length
+	mov	qword [elf_header.section_header_offset], rax
 
 	;
 	; write the output to ./a.out
