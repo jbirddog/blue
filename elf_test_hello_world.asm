@@ -32,6 +32,10 @@ output_file:
 	db	"elf_test_hello_world.out"
 	db	0x00
 
+execve_args:
+	dq	output_file
+	dq	0x0
+
 entry $	
 	mov	rdi, output_file
 	mov	esi, 0x01 or 0x40 or 0x200
@@ -47,10 +51,8 @@ entry $
 	mov	eax, SYS_CLOSE
 	syscall
 
-	;
-	; TODO execve to ./a.out
-	;
-	
-	xor 	edi, edi
-	mov 	eax, SYS_EXIT
-	syscall
+    	mov 	rdi, output_file
+    	mov 	rsi, execve_args
+    	xor 	rdx, rdx
+	mov	eax, SYS_EXECVE
+    	syscall

@@ -15,4 +15,7 @@ jobs:
     - uses: actions/checkout@v3
 
     - name: Default target
-      run: make ci
+      run: make
+
+    - name: Run tests
+      run: make tests
