@@ -138,6 +138,7 @@ entry $
 	;
 	mov	eax, elf_header.length + program_header.length
 	mov	qword [program_code_section_header.offset], rax
+	mov	qword [program_code_section_header.size], program_code.length
 	
 	add	eax, program_code.length
 	mov 	rdi, program_header.sizes
@@ -149,8 +150,6 @@ entry $
 
 	mov	eax, shstrtab.length
 	stosq
-
-	mov	qword [program_code_section_header.size], program_code.length
 
 	;
 	; write the output to ./a.out
