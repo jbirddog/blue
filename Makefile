@@ -3,7 +3,7 @@ MY_GROUP := $(shell id -g)
 ME := $(MY_USER):$(MY_GROUP)
 
 BLUE := blue
-DEMO := demo
+WHAT ?= $(BLUE)
 
 DEV_CONTAINER ?= $(BLUE)-dev
 DEV_DOCKER_FILE ?= dev.Dockerfile
@@ -27,18 +27,20 @@ dev-stop:
 	docker rm -f $(DEV_CONTAINER) || true
 
 compile:
-	$(IN_DEV_CONTAINER) $(FASM) $(BLUE).asm $(BLUE)
+	$(IN_DEV_CONTAINER) $(FASM) $(WHAT).asm $(WHAT) && chmod +x $(WHAT)
 
-start:
-	$(IN_DEV_CONTAINER) ./$(BLUE)
+run:
+	$(IN_DEV_CONTAINER) ./$(WHAT)
 
 dis:
 	$(DISASM) a.out
 
 watch:
-	watch -d make compile start
+	watch -d make compile run
 
 .PHONY:
 	dev-env dev-start dev-stop \
-	compile start dis \
+	compile run dis \
 	watch
+
+include test.mk
