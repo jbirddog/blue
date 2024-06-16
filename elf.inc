@@ -118,6 +118,11 @@ elf_binary_calculate_fields:
 
 	pop	rax
 	mov	qword [program_code_section_header.offset], rax
+	;
+	; above needs to be:
+	;
+	assert elf_binary_headers_length + 0x2a + 0x0e + 0x10 = 0xc0
+
 
 	mov	edi, eax
 	add	edi, elf_binary.base_address

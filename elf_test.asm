@@ -33,9 +33,19 @@ entry $
 	mov	ecx, program_code.length
 	call	elf_binary_calculate_fields
 
+	mov	edi, 1
+	cmp	qword [elf_header.start_address], 0x400078
+	jne	exit
+
+	mov	edi, 2
+	cmp	qword [elf_header.section_header_offset], 0xc0
+	jne	exit
+
 	;
 	; exit cleanly
 	;
 	xor 	edi, edi
+
+exit:
 	mov 	eax, SYS_EXIT
 	syscall
