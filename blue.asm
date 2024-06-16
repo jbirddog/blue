@@ -46,6 +46,7 @@ entry $
 	syscall
 
 	mov	rdi, rax
+	mov	rsi, program_code
 	mov	eax, program_code.entry_offset
 	mov	ecx, program_code.length
 	call	elf_binary_write

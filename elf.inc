@@ -145,11 +145,13 @@ elf_binary_calculate_fields:
 	ret
 ;
 ; expects
+;	- program code start in rsi
 ; 	- program code entry offset in eax
 ;	- program code length in ecx
 ;	- file descriptor in edi
 ;
 elf_binary_write:
+	push	rsi
 	push	rdi
 	call	elf_binary_calculate_fields
 	pop	rdi
@@ -159,8 +161,8 @@ elf_binary_write:
 	mov	eax, SYS_WRITE
 	syscall
 
-	mov	rsi, program_code
-	mov	rdx, program_code.length
+	pop	rsi
+	mov	edx, ecx
 	mov	eax, SYS_WRITE
 	syscall
 
