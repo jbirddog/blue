@@ -5,9 +5,6 @@ include "elf.inc"
 
 segment readable writeable
 
-;
-; TODO: move to anonymous mmap buffer, compile bytes at runtime
-;
 program_code:
 	.entry_offset = $ - program_code
 	db	0x48, 0xc7, 0xc0	; mov rax, 1 - sys_write
@@ -31,31 +28,52 @@ program_code:
 
 segment readable executable
 
-output_file:
-	db	"a.out"
-	db	0x00
-
 entry $	
-	;
-	; write the output to ./a.out
-	;
-	mov	rdi, output_file
-	mov	esi, 0x01 or 0x40 or 0x200
-	mov	edx, 0x1ed
-	mov	eax, SYS_OPEN
-	syscall
-
-	mov	rdi, rax
 	mov	eax, program_code.entry_offset
 	mov	ecx, program_code.length
-	call	elf_binary_write
-	
-	mov	eax, SYS_CLOSE
-	syscall
+	call	elf_binary_calculate_fields
+
+	mov	edi, 1
+	cmp	qword [elf_header.start_address], 0x400078
+	jne	exit
+
+	mov	edi, 2
+	cmp	qword [elf_header.section_header_offset], 0xc0
+	jne	exit
+
+	mov	edi, 3
+	cmp	qword [program_header.size_in_file], 0xb0
+	jne	exit
+
+	mov	edi, 4
+	cmp	qword [program_header.size_in_memory], 0xb0
+	jne	exit
+
+	mov	edi, 5
+	cmp	qword [program_code_section_header.address], 0x400078
+	jne	exit
+
+	mov	edi, 6
+	cmp	qword [program_code_section_header.offset], 0x78
+	jne	exit
+
+	mov	edi, 7
+	cmp	qword [program_code_section_header.size], 0x38
+	jne	exit
+
+	mov	edi, 8
+	cmp	qword [shstrtab_section_header.offset], 0xb0
+	jne	exit
+
+	mov	edi, 9
+	cmp	qword [shstrtab_section_header.size], 0x10
+	jne	exit
 
 	;
 	; exit cleanly
 	;
 	xor 	edi, edi
+
+exit:
 	mov 	eax, SYS_EXIT
 	syscall

@@ -5,9 +5,6 @@ include "elf.inc"
 
 segment readable writeable
 
-;
-; TODO: move to anonymous mmap buffer, compile bytes at runtime
-;
 program_code:
 	.entry_offset = $ - program_code
 	db	0x48, 0xc7, 0xc0	; mov rax, 1 - sys_write
@@ -32,13 +29,14 @@ program_code:
 segment readable executable
 
 output_file:
-	db	"a.out"
+	db	"elf_test_hello_world.out"
 	db	0x00
 
+execve_args:
+	dq	output_file
+	dq	0x0
+
 entry $	
-	;
-	; write the output to ./a.out
-	;
 	mov	rdi, output_file
 	mov	esi, 0x01 or 0x40 or 0x200
 	mov	edx, 0x1ed
@@ -53,9 +51,8 @@ entry $
 	mov	eax, SYS_CLOSE
 	syscall
 
-	;
-	; exit cleanly
-	;
-	xor 	edi, edi
-	mov 	eax, SYS_EXIT
-	syscall
+    	mov 	rdi, output_file
+    	mov 	rsi, execve_args
+    	xor 	rdx, rdx
+	mov	eax, SYS_EXECVE
+    	syscall

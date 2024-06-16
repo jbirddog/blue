@@ -42,7 +42,9 @@ program_header:
 	dq	elf_binary.base_address	; load position in virtual memory
 	dq	elf_binary.base_address	; load position in physical memory
 	.sizes:
+	.size_in_file:
 	dq	-0x01			; size of the loaded section (file)
+	.size_in_memory:
 	dq	-0x01			; size of the loaded section (memory)
 	dq	0x200000		; alignment boundary for sections
 
@@ -102,6 +104,7 @@ shstrtab_section_header:
 elf_binary_length = $ - elf_binary
 elf_binary_headers_length = elf_header.length + program_header.length
 elf_binary_section_headers_length = elf_binary_length - elf_binary_section_headers
+elf_binary_section_headers_offset = elf_binary_section_headers - elf_binary 
 
 segment readable executable
 
@@ -136,7 +139,41 @@ elf_binary_calculate_fields:
 	mov	eax, shstrtab.length
 	stosq
 
-	add	ecx, elf_header.length + program_header.length
+	add	ecx, elf_binary_section_headers_offset
 	mov	qword [elf_header.section_header_offset], rcx
 
 	ret
+;
+; expects
+; 	- program code entry offset in eax
+;	- program code length in ecx
+;	- file descriptor in edi
+;
+elf_binary_write:
+	push	rdi
+	call	elf_binary_calculate_fields
+	pop	rdi
+
+	mov	rsi, elf_binary_headers
+	mov	rdx, elf_binary_headers_length
+	mov	eax, SYS_WRITE
+	syscall
+
+	mov	rsi, program_code
+	mov	rdx, program_code.length
+	mov	eax, SYS_WRITE
+	syscall
+
+	mov	rsi, shstrtab
+	mov	rdx, shstrtab.length
+	mov	eax, SYS_WRITE
+	syscall
+
+	mov	rsi, elf_binary_section_headers
+	mov	rdx, elf_binary_section_headers_length
+	mov	eax, SYS_WRITE
+	syscall
+
+	ret
+
+	

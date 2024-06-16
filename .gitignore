@@ -1,2 +1,5 @@
 blue
-a.out
+*.out
+
+elf_test
+elf_test_hello_world
