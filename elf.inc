@@ -102,6 +102,7 @@ shstrtab_section_header:
 elf_binary_length = $ - elf_binary
 elf_binary_headers_length = elf_header.length + program_header.length
 elf_binary_section_headers_length = elf_binary_length - elf_binary_section_headers
+elf_binary_section_headers_offset = elf_binary_section_headers - elf_binary 
 
 segment readable executable
 
@@ -118,11 +119,6 @@ elf_binary_calculate_fields:
 
 	pop	rax
 	mov	qword [program_code_section_header.offset], rax
-	;
-	; above needs to be:
-	;
-	assert elf_binary_headers_length + 0x2a + 0x0e + 0x10 = 0xc0
-
 
 	mov	edi, eax
 	add	edi, elf_binary.base_address
@@ -141,7 +137,7 @@ elf_binary_calculate_fields:
 	mov	eax, shstrtab.length
 	stosq
 
-	add	ecx, elf_header.length + program_header.length
+	add	ecx, elf_binary_section_headers_offset
 	mov	qword [elf_header.section_header_offset], rcx
 
 	ret
