@@ -41,6 +41,34 @@ entry $
 	cmp	qword [elf_header.section_header_offset], 0xc0
 	jne	exit
 
+	mov	edi, 3
+	cmp	qword [program_header.size_in_file], 0xb0
+	jne	exit
+
+	mov	edi, 4
+	cmp	qword [program_header.size_in_memory], 0xb0
+	jne	exit
+
+	mov	edi, 5
+	cmp	qword [program_code_section_header.address], 0x400078
+	jne	exit
+
+	mov	edi, 6
+	cmp	qword [program_code_section_header.offset], 0x78
+	jne	exit
+
+	mov	edi, 7
+	cmp	qword [program_code_section_header.size], 0x38
+	jne	exit
+
+	mov	edi, 8
+	cmp	qword [shstrtab_section_header.offset], 0xb0
+	jne	exit
+
+	mov	edi, 9
+	cmp	qword [shstrtab_section_header.size], 0x10
+	jne	exit
+
 	;
 	; exit cleanly
 	;

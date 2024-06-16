@@ -42,7 +42,9 @@ program_header:
 	dq	elf_binary.base_address	; load position in virtual memory
 	dq	elf_binary.base_address	; load position in physical memory
 	.sizes:
+	.size_in_file:
 	dq	-0x01			; size of the loaded section (file)
+	.size_in_memory:
 	dq	-0x01			; size of the loaded section (memory)
 	dq	0x200000		; alignment boundary for sections
 
