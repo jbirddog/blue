@@ -61,6 +61,9 @@ entry $
 	mov	eax, SYS_FSTAT
 	syscall
 
+	; ls -lh has 192 on main
+	assert  expected_output_size = 384
+	
 	cmp	qword [fstat_buffer.file_size], expected_output_size
 	jne	failure
 	
@@ -74,6 +77,6 @@ entry $
     	syscall
 
 failure:
-	mov	rdi, [fstat_buffer.file_size] ;expected_output_size
+	mov	rdi, 1
 	mov	eax, SYS_EXIT
 	syscall
