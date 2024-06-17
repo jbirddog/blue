@@ -36,6 +36,8 @@ segment readable executable
 
 expected_output_size = elf_binary_length + program_code.length
 
+assert  expected_output_size = 384
+
 output_file:
 	db	"elf_test_hello_world.out"
 	db	0x00
@@ -60,9 +62,6 @@ entry $
 	mov	rsi, fstat_buffer
 	mov	eax, SYS_FSTAT
 	syscall
-
-	; ls -lh has 192 on main
-	assert  expected_output_size = 384
 	
 	cmp	qword [fstat_buffer.file_size], expected_output_size
 	jne	failure
