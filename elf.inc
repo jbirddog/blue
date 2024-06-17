@@ -101,7 +101,7 @@ shstrtab_section_header:
 	.length = $ - shstrtab_section_header
 	assert .length = 0x40
 	
-elf_binary_length = $ - elf_binary
+elf_binary_wrapper_length = $ - elf_binary
 elf_binary_headers_length = elf_header.length + program_header.length
 elf_binary_section_headers_length = $ - elf_binary_section_headers
 elf_binary_section_headers_offset = elf_binary_section_headers - elf_binary 

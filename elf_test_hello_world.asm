@@ -34,9 +34,9 @@ program_code:
 
 segment readable executable
 
-expected_output_size = elf_binary_length + program_code.length
+expected_output_size = elf_binary_wrapper_length + program_code.length
 
-assert  expected_output_size = 384
+assert expected_output_size = 384
 
 output_file:
 	db	"elf_test_hello_world.out"
