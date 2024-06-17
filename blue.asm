@@ -1,41 +1,52 @@
 format elf64 executable 3
 
-include "linux.inc"
 include "elf.inc"
 
 segment readable writeable
 
-;
-; TODO: move to anonymous mmap buffer, compile bytes at runtime
-;
-program_code:
-	.entry_offset = $ - program_code
-	db	0x48, 0xc7, 0xc0	; mov rax, 1 - sys_write
-	dd	0x01
-	db	0x48, 0xc7, 0xc7	; mov rdi, 1 - stdout fd
-	dd	0x01
-	db	0x48, 0xc7, 0xc6	; mov rsi, 0x4000a2 - location of string
-	dd	0x4000a2
-	db	0x48, 0xc7, 0xc2	; mov rdx, 13 - size of string
-	dd	0x0d
-	db	0x0f, 0x05		; syscall
-	db	0x48, 0xc7, 0xc0	; mov rax, 60 - sys_exit
-	dd	0x3c
-	db	0x48, 0x31, 0xff	; xor rdi, rdi
-	db	0x0f, 0x05		; syscall
-
-	db	"Hello, world"
-	db	0x0a, 0x00
-
-	.length = $ - program_code
+_code_buffer:
+	.length = 4096
+	.base dq 1
+	.here dq 1
+	.entry dd 1
 
 segment readable executable
+
+include "linux.inc"
+include "code_buffer.inc"
 
 output_file:
 	db	"a.out"
 	db	0x00
 
-entry $	
+_simulate_compilation:
+	xor	eax, eax
+
+	; xor edi, edi
+	mov	al, 0x31
+	call	_core_code.b_comma
+	mov	al, 0xff
+	call	_core_code.b_comma	
+
+	; mov eax, 60
+	mov	al, 0xb8
+	call	_core_code.b_comma
+	mov	eax, 0x3c
+	call	_core_code.d_comma
+
+	; syscall
+	mov	al, 0x0f
+	call	_core_code.b_comma
+	mov	al, 0x05
+	call	_core_code.b_comma
+	
+	ret
+
+entry $
+	call code_buffer_init
+
+	call _simulate_compilation
+
 	;
 	; write the output to ./a.out
 	;
@@ -46,13 +57,16 @@ entry $
 	syscall
 
 	mov	rdi, rax
-	mov	rsi, program_code
-	mov	eax, program_code.entry_offset
-	mov	ecx, program_code.length
+	mov	rsi, [_code_buffer.base]
+	mov	eax, [_code_buffer.entry]
+	mov	rcx, [_code_buffer.here]
+	sub	rcx, [_code_buffer.base]
 	call	elf_binary_write
 	
 	mov	eax, SYS_CLOSE
 	syscall
+
+	call code_buffer_deinit
 
 	;
 	; exit cleanly
