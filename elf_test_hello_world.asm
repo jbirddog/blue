@@ -5,6 +5,12 @@ include "elf.inc"
 
 segment readable writeable
 
+fstat_buffer:
+	rb	48
+	.file_size:
+	rq	1
+	rb	88
+
 program_code:
 	.entry_offset = $ - program_code
 	db	0x48, 0xc7, 0xc0	; mov rax, 1 - sys_write
@@ -28,6 +34,10 @@ program_code:
 
 segment readable executable
 
+expected_output_size = elf_binary_wrapper_length + program_code.length
+
+assert expected_output_size = 384
+
 output_file:
 	db	"elf_test_hello_world.out"
 	db	0x00
@@ -44,9 +54,17 @@ entry $
 	syscall
 
 	mov	rdi, rax
+	mov	rsi, program_code
 	mov	eax, program_code.entry_offset
 	mov	ecx, program_code.length
 	call	elf_binary_write
+
+	mov	rsi, fstat_buffer
+	mov	eax, SYS_FSTAT
+	syscall
+	
+	cmp	qword [fstat_buffer.file_size], expected_output_size
+	jne	failure
 	
 	mov	eax, SYS_CLOSE
 	syscall
@@ -56,3 +74,8 @@ entry $
     	xor 	rdx, rdx
 	mov	eax, SYS_EXECVE
     	syscall
+
+failure:
+	mov	rdi, 1
+	mov	eax, SYS_EXIT
+	syscall

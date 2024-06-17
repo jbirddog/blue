@@ -101,9 +101,9 @@ shstrtab_section_header:
 	.length = $ - shstrtab_section_header
 	assert .length = 0x40
 	
-elf_binary_length = $ - elf_binary
+elf_binary_wrapper_length = $ - elf_binary
 elf_binary_headers_length = elf_header.length + program_header.length
-elf_binary_section_headers_length = elf_binary_length - elf_binary_section_headers
+elf_binary_section_headers_length = $ - elf_binary_section_headers
 elf_binary_section_headers_offset = elf_binary_section_headers - elf_binary 
 
 segment readable executable
@@ -145,11 +145,14 @@ elf_binary_calculate_fields:
 	ret
 ;
 ; expects
+;	- program code start in rsi
 ; 	- program code entry offset in eax
 ;	- program code length in ecx
 ;	- file descriptor in edi
 ;
 elf_binary_write:
+	push	rsi
+	push	rcx
 	push	rdi
 	call	elf_binary_calculate_fields
 	pop	rdi
@@ -159,8 +162,9 @@ elf_binary_write:
 	mov	eax, SYS_WRITE
 	syscall
 
-	mov	rsi, program_code
-	mov	rdx, program_code.length
+	pop	rcx
+	pop	rsi
+	mov	edx, ecx
 	mov	eax, SYS_WRITE
 	syscall
 
@@ -175,5 +179,3 @@ elf_binary_write:
 	syscall
 
 	ret
-
-	
