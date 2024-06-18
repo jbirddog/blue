@@ -38,9 +38,6 @@ dis:
 watch:
 	watch -d make compile run
 
-watch-tests:
-	watch -d make tests
-
 .PHONY:
 	dev-env dev-start dev-stop \
 	compile run dis \

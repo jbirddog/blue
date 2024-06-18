@@ -1,5 +1,6 @@
 
 TESTS := \
+	code_buffer_test \
 	elf_test \
 	elf_test_hello_world
 
@@ -9,4 +10,7 @@ $(TESTS):
 tests: $(TESTS)
 	@/bin/true
 
-.PHONY: tests $(TESTS)
+tests-watch:
+	watch -d make tests
+
+.PHONY: tests tests-watch $(TESTS)
