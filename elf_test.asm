@@ -1,9 +1,12 @@
 format elf64 executable 3
 
-include "elf.inc"
+segment readable writeable
+
+include "elf_template.inc"
 
 segment readable executable
 
+include "elf.inc"
 include "linux.inc"
 
 program_code:
