@@ -1,5 +1,6 @@
 blue
 *.out
 
+code_buffer_test
 elf_test
 elf_test_hello_world
