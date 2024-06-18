@@ -56,7 +56,7 @@ entry $
 	mov	rsi, [_code_buffer.base]
 	mov	eax, [_code_buffer.entry]
 	mov	rcx, [_code_buffer.here]
-	sub	rcx, [_code_buffer.base]
+	sub	rcx, rsi
 	call	elf_binary_write
 	
 	mov	eax, SYS_CLOSE
