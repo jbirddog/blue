@@ -1,9 +1,10 @@
 format elf64 executable 3
 
-include "linux.inc"
 include "elf.inc"
 
-segment readable writeable
+segment readable executable
+
+include "linux.inc"
 
 program_code:
 	.entry_offset = $ - program_code
@@ -25,8 +26,6 @@ program_code:
 	db	0x0a, 0x00
 
 	.length = $ - program_code
-
-segment readable executable
 
 entry $	
 	mov	eax, program_code.entry_offset
