@@ -1,15 +1,16 @@
 format elf64 executable 3
 
-include "linux.inc"
-include "elf.inc"
-
 segment readable writeable
+
+include "elf_template.inc"
 
 fstat_buffer:
 	rb	48
 	.file_size:
 	rq	1
 	rb	88
+
+segment readable executable
 
 program_code:
 	.entry_offset = $ - program_code
@@ -32,7 +33,8 @@ program_code:
 
 	.length = $ - program_code
 
-segment readable executable
+include "elf.inc"
+include "linux.inc"
 
 expected_output_size = elf_binary_wrapper_length + program_code.length
 
