@@ -5,10 +5,13 @@ TESTS := \
 	elf_test_hello_world
 
 $(TESTS):
-	echo "Testing $@... " && make WHAT=$@ compile run && echo ""
+	echo "Testing $@... " && \
+	make WHAT=$@ compile run && \
+	rm -f $@ && \
+	echo ""
 
 tests: $(TESTS)
-	@/bin/true
+	rm -f elf_test_hello_world.out
 
 tests-watch:
 	watch -d make tests

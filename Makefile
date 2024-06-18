@@ -35,12 +35,15 @@ run:
 dis:
 	$(DISASM) a.out
 
+clean:
+	rm -f $(BLUE) a.out
+
 watch:
 	watch -d make compile run
-
+	
 .PHONY:
 	dev-env dev-start dev-stop \
-	compile run dis \
-	watch watch-tests
+	compile run dis clean \
+	watch
 
 include test.mk
