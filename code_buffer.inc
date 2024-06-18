@@ -17,9 +17,13 @@ code_buffer_init:
 	mov	edx, PROT_RWX
 	call	mmap_buffer
 	
-	mov [_code_buffer.base], rax
-	mov [_code_buffer.here], rax
-	mov [_code_buffer.entry], 0
+	mov 	rdi, _code_buffer.base
+	stosq
+	stosq
+
+	xor	eax, eax
+	stosd
+	
 	ret
 
 code_buffer_deinit:
