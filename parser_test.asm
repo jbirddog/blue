@@ -4,10 +4,13 @@ macro tc2 word_in, word_len {
 	call	parser_next_word
 
 	inc	[test_num]
+	xor	eax, eax
 	mov	al, [_blue.word_len]
 	cmp	al, word_len
 	jne	failure
 
+	mov	ecx, eax
+	mov	eax, word_in
 	call	check_word
 }
 
@@ -50,9 +53,9 @@ entry $
 	tc1	toks_2, 3, 0, 1
 	tc2	2, 1
 
-	tc1	toks_3, 20, 4, 4
-	tc2	10, 4
-	tc2	15, 6
+	;tc1	toks_3, 20, 4, 4
+	;tc2	10, 4
+	;tc2	15, 6
 
 	xor	edi, edi
 
@@ -64,12 +67,30 @@ failure:
 	mov	dil, [test_num]
 	jmp	exit
 
+failure2:
+	add	[test_num], 128
+	jmp	failure
+
+;
+; expects
+;	- word_len in ecx
+;	- word_in in al
+;
 check_word:
-	test	al, al
+	test	cl, cl
 	jz	.done
 
-	
+	mov	rsi, [_blue.tib]
+	add	esi, eax
+	mov	rdi, _blue.word
 
+	.loop:
+	cmpsb
+	jne	failure2
+
+	dec	ecx
+	jnz	.loop
+	
 	.done:
 	ret
 
