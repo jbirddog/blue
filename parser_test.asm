@@ -37,6 +37,8 @@ entry $
 	tc1	six, 1, 0, 1
 	tc1	space_a, 2, 0, 1
 	tc1	a_space, 2, 0, 1
+	tc1	abc, 3, 0, 3
+	tc1	ws_abc_ws, 7, 0, 3
 
 bye:
 	xor	edi, edi
@@ -62,3 +64,5 @@ ws_4		db 32, 9, 10, 32
 six		db '6'
 space_a		db ' a'
 a_space		db 'a '
+abc		db 'abc'
+ws_abc_ws	db 10, 32, 'abc', 9, 10
