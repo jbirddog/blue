@@ -33,7 +33,7 @@ entry $
 	tc1	just_newline, just_newline.length, 0, 0
 	tc1	some_ws, some_ws.length, 0, 0
 
-	;tc1	just_a_number, just_a_number.length, 0, 1
+	tc1	just_a_number, just_a_number.length, 0, 1
 
 	xor	edi, edi
 
@@ -42,7 +42,9 @@ exit:
 	syscall
 
 failure:
+	mov	dil, [_blue.word_len]
 	mov	dil, [test_num]
+	mov	edi, [_blue.tib_in]
 	jmp	exit
 
 segment readable

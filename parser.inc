@@ -14,6 +14,9 @@ parser_next_word:
 	sub	ecx, eax
 	jng	.done
 
+	and	ecx, 0xFF
+	push	rcx
+
 	mov	rsi, _blue.tib
 	add	esi, eax
 	mov	rdi, _blue.word
@@ -21,7 +24,7 @@ parser_next_word:
 	call	_skip_ws
 
 	test	ecx, ecx
-	jz	.loop_done
+	jz	.set_tib_in
 
 	.loop:
 	lodsb
@@ -33,8 +36,13 @@ parser_next_word:
 	jnz	.loop
 	
 	.loop_done:
-	; need to set word_len
-	; need to set tib_in
+	sub	rdi, _blue.word
+	mov	[_blue.word_len], dil
+
+	.set_tib_in:
+	pop	rax
+	sub	eax, ecx
+	add	[_blue.tib_in], eax
 	
 	.done:
 	ret
@@ -49,5 +57,4 @@ _skip_ws:
 
 	.done:
 	dec	rsi
-	inc	ecx
 	ret
