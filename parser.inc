@@ -52,7 +52,7 @@ _skip_ws:
 	cmp	byte [esi], 32
 	jg	.done
 
-	inc	rdi
+	inc	rsi
 	dec	ecx
 	jnz	_skip_ws
 

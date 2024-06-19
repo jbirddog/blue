@@ -35,6 +35,8 @@ entry $
 	tc1	ws_4, 4, 0, 0
 
 	tc1	six, 1, 0, 1
+	tc1	space_a, 2, 0, 1
+	tc1	a_space, 2, 0, 1
 
 bye:
 	xor	edi, edi
