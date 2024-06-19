@@ -33,6 +33,8 @@ parser_next_word:
 	jnz	.loop
 	
 	.loop_done:
+	; need to set word_len
+	; need to set tib_in
 	
 	.done:
 	ret
