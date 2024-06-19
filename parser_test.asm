@@ -1,20 +1,22 @@
 format elf64 executable 3
 
-macro tc2 word_len {
+macro tc2 word_in, word_len {
 	call	parser_next_word
 
 	inc	[test_num]
 	mov	al, [_blue.word_len]
 	cmp	al, word_len
 	jne	failure
+
+	call	check_word
 }
 
-macro tc1 tib, tib_len, tib_in, word_len {
+macro tc1 tib, tib_len, word_in, word_len {
 	mov	[_blue.tib], tib
 	mov	[_blue.tib_len], tib_len
-	mov	[_blue.tib_in], tib_in
+	mov	[_blue.tib_in], 0
 
-	tc2	word_len
+	tc2	word_in, word_len
 }
 
 segment readable writeable
@@ -40,19 +42,18 @@ entry $
 	tc1	ws_4, 4, 0, 0
 
 	tc1	six, 1, 0, 1
-	tc1	space_a, 2, 0, 1
+	tc1	space_a, 2, 1, 1
 	tc1	a_space, 2, 0, 1
 	tc1	abc, 3, 0, 3
-	tc1	ws_abc_ws, 7, 0, 3
+	tc1	ws_abc_ws, 7, 2, 3
 
 	tc1	toks_2, 3, 0, 1
-	tc2	1
+	tc2	2, 1
 
-	tc1	toks_3, 20, 0, 4
-	tc2	4
-	tc2	6
+	tc1	toks_3, 20, 4, 4
+	tc2	10, 4
+	tc2	15, 6
 
-bye:
 	xor	edi, edi
 
 exit:
@@ -61,9 +62,16 @@ exit:
 
 failure:
 	mov	dil, [test_num]
-	;mov	edi, [_blue.tib_in]
-	;mov	dil, [_blue.word_len]
 	jmp	exit
+
+check_word:
+	test	al, al
+	jz	.done
+
+	
+
+	.done:
+	ret
 
 segment readable
 
