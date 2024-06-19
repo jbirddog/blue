@@ -25,15 +25,16 @@ include "parser.inc"
 
 entry $
 	mov	[test_num], 0
-	
-	tc1	nothing, nothing.length, 0, 0
-	
-	tc1	just_space, just_space.length, 0, 0
-	tc1	just_tab, just_tab.length, 0, 0
-	tc1	just_newline, just_newline.length, 0, 0
-	tc1	some_ws, some_ws.length, 0, 0
 
-	tc1	just_a_number, just_a_number.length, 0, 1
+	tc1	nothing, 0, 0, 0
+	
+	tc1	space, 1, 0, 0
+	tc1	tab, 1, 0, 0
+	tc1	newline, 1, 0, 0
+	tc1	spaces, 2, 0, 0
+	tc1	ws_4, 4, 0, 0
+
+	;tc1	six, 1, 0, 1
 
 	xor	edi, edi
 
@@ -42,32 +43,15 @@ exit:
 	syscall
 
 failure:
-	mov	dil, [_blue.word_len]
 	mov	dil, [test_num]
-	mov	edi, [_blue.tib_in]
 	jmp	exit
 
 segment readable
 
-nothing:
-	.length = $ - nothing
-
-just_space:
-	db 32
-	.length = $ - just_space
-
-just_tab:
-	db 9
-	.length = $ - just_tab
-
-just_newline:
-	db 10
-	.length = $ - just_newline
-
-some_ws:
-	db 32, 9, 10, 32
-	.length = $ - some_ws
-
-just_a_number:
-	db '6'
-	.length = $ - just_a_number
+nothing		db 0
+space		db 32
+tab		db 9
+newline		db 10
+spaces		db 32, 32
+ws_4		db 32, 9, 10, 32
+six		db '6'

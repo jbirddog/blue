@@ -18,6 +18,10 @@ PROT_RWX	= PROT_RW or PROT_EXEC
 MAP_ANONYMOUS	= 32
 MAP_PRIVATE	= 2
 
+STDIN_FILENO	= 0
+STDOUT_FILENO	= 1
+STDERR_FILENO	= 2
+
 ;
 ; expects
 ;	- buffer length in esi

@@ -27,11 +27,12 @@ parser_next_word:
 	jz	.set_tib_in
 
 	.loop:
-	lodsb
-	cmp	al, 32
+	cmp	dil, 32
 	jle	.loop_done
-
+	
+	lodsb
 	stosb
+
 	dec	ecx
 	jnz	.loop
 	
@@ -48,13 +49,12 @@ parser_next_word:
 	ret
 	
 _skip_ws:
-	lodsb
-	cmp	al, 32
+	cmp	dil, 32
 	jg	.done
 
+	inc	rdi
 	dec	ecx
 	jnz	_skip_ws
 
 	.done:
-	dec	rsi
 	ret
