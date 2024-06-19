@@ -17,7 +17,7 @@ parser_next_word:
 	and	ecx, 0xFF
 	push	rcx
 
-	mov	rsi, _blue.tib
+	mov	rsi, [_blue.tib]
 	add	esi, eax
 	mov	rdi, _blue.word
 
@@ -51,10 +51,6 @@ parser_next_word:
 _skip_ws:
 	cmp	byte [esi], 32
 	jg	.done
-
-	mov	dil, 11
-	mov	eax, 60
-	syscall
 
 	inc	rdi
 	dec	ecx

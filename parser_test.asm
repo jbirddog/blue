@@ -36,6 +36,7 @@ entry $
 
 	tc1	six, 1, 0, 1
 
+bye:
 	xor	edi, edi
 
 exit:
@@ -45,7 +46,7 @@ exit:
 failure:
 	mov	dil, [test_num]
 	;mov	edi, [_blue.tib_in]
-	mov	dil, [_blue.word_len]
+	;mov	dil, [_blue.word_len]
 	jmp	exit
 
 segment readable
