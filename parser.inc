@@ -27,7 +27,7 @@ parser_next_word:
 	jz	.set_tib_in
 
 	.loop:
-	cmp	dil, 32
+	cmp	byte [esi], 32
 	jle	.loop_done
 	
 	lodsb
@@ -49,8 +49,12 @@ parser_next_word:
 	ret
 	
 _skip_ws:
-	cmp	dil, 32
+	cmp	byte [esi], 32
 	jg	.done
+
+	mov	dil, 11
+	mov	eax, 60
+	syscall
 
 	inc	rdi
 	dec	ecx

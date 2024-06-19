@@ -34,7 +34,7 @@ entry $
 	tc1	spaces, 2, 0, 0
 	tc1	ws_4, 4, 0, 0
 
-	;tc1	six, 1, 0, 1
+	tc1	six, 1, 0, 1
 
 	xor	edi, edi
 
@@ -44,6 +44,8 @@ exit:
 
 failure:
 	mov	dil, [test_num]
+	;mov	edi, [_blue.tib_in]
+	mov	dil, [_blue.word_len]
 	jmp	exit
 
 segment readable
@@ -55,3 +57,5 @@ newline		db 10
 spaces		db 32, 32
 ws_4		db 32, 9, 10, 32
 six		db '6'
+space_a		db ' a'
+a_space		db 'a '
