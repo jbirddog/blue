@@ -1,0 +1,3 @@
+*.inc linguist-language=Assembly
+
+bak/** linguist-vendored
