@@ -12,3 +12,10 @@ _code_buffer:
 	.base dq 1
 	.here dq 1
 	.entry dd 1
+
+_dictionary:
+	.entry_code_offset = 16
+	.length = 4096
+	.base dq 1
+	.here dq 1
+	.latest dq 1

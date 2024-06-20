@@ -2,6 +2,7 @@
 TESTS := \
 	code_buffer_test \
 	parser_test \
+	dictionary_test \
 	elf_test \
 	elf_test_hello_world
 
