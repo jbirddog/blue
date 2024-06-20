@@ -53,9 +53,9 @@ entry $
 	tc1	toks_2, 3, 0, 1
 	tc2	2, 1
 
-	;tc1	toks_3, 20, 4, 4
-	;tc2	10, 4
-	;tc2	15, 6
+	tc1	toks_3, 20, 3, 4
+	tc2	9, 4
+	tc2	14, 6
 
 	xor	edi, edi
 
@@ -68,8 +68,9 @@ failure:
 	jmp	exit
 
 failure2:
-	add	[test_num], 128
-	jmp	failure
+	mov	dil, [test_num]
+	add	dil, 100
+	jmp	exit
 
 ;
 ; expects

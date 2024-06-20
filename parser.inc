@@ -30,9 +30,8 @@ parser_next_word:
 	cmp	byte [esi], 32
 	jle	.loop_done
 	
-	lodsb
-	stosb
-
+	movsb
+	
 	dec	ecx
 	jnz	.loop
 	
