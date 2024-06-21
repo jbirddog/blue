@@ -16,6 +16,7 @@ _code_buffer:
 _dictionary:
 	.entry_code_offset = 16
 	.length = 4096
+	.key dq 1
 	.base dq 1
 	.here dq 1
 	.latest dq 1

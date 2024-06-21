@@ -12,12 +12,12 @@
 ; ?? - stack effects
 ;
 
-DE_VIS		= 1
-DE_IMMED	= 2
+DE_VISIBLE	= 1
+DE_IMMEDIATE	= 2
 
 _core_words:
 	.b_comma:
-	db	DE_VIS or DE_IMMED, 2, 'b,', 0, 0, 0, 0
+	db	DE_VISIBLE or DE_IMMEDIATE, 2, 'b,', 0, 0, 0, 0
 	dq	0
 	dq	_core_code.b_comma
 	dq	0
@@ -25,7 +25,7 @@ _core_words:
 	
 	.latest:
 	.d_comma:
-	db	DE_VIS or DE_IMMED, 2, 'd,', 0, 0, 0, 0
+	db	DE_VISIBLE or DE_IMMEDIATE, 2, 'd,', 0, 0, 0, 0
 	dq	.b_comma
 	dq	_core_code.d_comma
 	dq	0
@@ -49,5 +49,34 @@ dictionary_deinit:
 	mov	rdi, [_dictionary.base]
 	mov	eax, SYS_MUNMAP
 	syscall
+	
+	ret
+
+;
+; expects
+;	- properly configured blue structure with non zero word len
+;
+dictionary_key_for_word:
+	mov	rsi, _blue.word
+	mov	rdi, _dictionary.key
+	xor	ecx, ecx
+	mov	[rdi], rcx
+	mov	cl, [_blue.word_len]
+
+	mov	dil, DE_VISIBLE
+	inc	edi
+	
+	mov	dil, cl
+	inc	edi
+
+	cmp	cl, 6
+	jl	.loop
+
+	mov	cl, 5
+
+	.loop:
+	movsb
+	dec	cl
+	jnz	.loop
 	
 	ret
