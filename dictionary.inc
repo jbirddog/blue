@@ -80,8 +80,7 @@ dictionary_find:
 	cmp	al, byte [edi]
 	jne	.next
 
-	dec	edi
-	add	edi, _dictionary.word_offset
+	add	edi, _dictionary.word_offset - 1
 	
 	.check_word:
 	lodsb
@@ -99,9 +98,9 @@ dictionary_find:
 	pop	rdi
 	add	edi, _dictionary.prev_word_offset
 	mov	rdi, [rdi]
+
 	test	rdi, rdi
 	jnz	.find
-
 
 	xor	edi, edi
 	
