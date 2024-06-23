@@ -1,6 +1,6 @@
 format elf64 executable 3
 
-macro tc1 tib, tib_len {
+macro tc1 tib, tib_len, expected {
 	mov	[_blue.tib], tib
 	mov	[_blue.tib_len], tib_len
 	mov	[_blue.tib_in], 0
@@ -9,6 +9,8 @@ macro tc1 tib, tib_len {
 	call	dictionary_find
 
 	inc	[test_num]
+	cmp	rdi, expected
+	jne	failure
 }
 
 segment readable writeable
@@ -41,7 +43,9 @@ entry $
 	cmp	rax, _core_words.latest
 	jne	failure
 
-	tc1	d_comma, 2
+	tc1	unknown, 4, 0
+	tc1	d_comma, 2, _core_words.d_comma
+	tc1	b_comma, 2, _core_words.b_comma
 	
 	call	dictionary_deinit
 
@@ -57,5 +61,6 @@ failure:
 
 segment readable
 
+unknown		db '!@#$'
 b_comma		db 'b,'
 d_comma		db 'd,'

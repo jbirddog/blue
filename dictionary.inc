@@ -64,8 +64,9 @@ dictionary_deinit:
 ;
 dictionary_find:
 	mov	rdi, [_dictionary.latest]
+	xor	eax, eax
 
-	.loop:
+	.find:
 	push	rdi
 
 	test	byte [edi], DE_HIDDEN
@@ -73,18 +74,36 @@ dictionary_find:
 
 	inc	edi
 	mov	rsi, _blue.word_len
-	mov	ecx, esi
-
-	cmpsb
+	mov	ecx, [esi]
+	
+	lodsb
+	cmp	al, byte [edi]
 	jne	.next
 
+	dec	edi
+	add	edi, _dictionary.word_offset
+	
+	.check_word:
+	lodsb
+	cmp	al, byte [edi]
+	jne	.next
+
+	inc	edi
+	dec	ecx
+	js	.check_word
+
+	pop	rdi
+	jmp	.done
+	
 	.next:
 	pop	rdi
 	add	edi, _dictionary.prev_word_offset
 	mov	rdi, [rdi]
 	test	rdi, rdi
-	jz	.done
-	jmp	.loop
+	jnz	.find
 
+
+	xor	edi, edi
+	
 	.done:
 	ret
