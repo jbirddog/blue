@@ -68,10 +68,23 @@ dictionary_find:
 	.loop:
 	push	rdi
 
-	test	dil, DE_HIDDEN
+	test	byte [edi], DE_HIDDEN
 	jnz	.next
 
+	inc	edi
+	mov	rsi, _blue.word_len
+	mov	ecx, esi
+
+	cmpsb
+	jne	.next
+
 	.next:
+	pop	rdi
+	add	edi, _dictionary.prev_word_offset
+	mov	rdi, [rdi]
+	test	rdi, rdi
+	jz	.done
+	jmp	.loop
 
 	.done:
 	ret

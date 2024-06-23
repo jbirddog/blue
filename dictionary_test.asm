@@ -6,6 +6,7 @@ macro tc1 tib, tib_len {
 	mov	[_blue.tib_in], 0
 
 	call	parser_next_word
+	call	dictionary_find
 
 	inc	[test_num]
 }
