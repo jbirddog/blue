@@ -6,11 +6,9 @@ to_number:
 	xor	eax, eax
 	xor	ecx, ecx
 	xor	edi, edi
-	xor	edx, edx
 	
 	mov	cl, [_blue.word_len]
 	mov	rsi, _blue.word
-	mov	dl, [_blue.base]
 
 	.loop:
 	lodsb
@@ -24,7 +22,8 @@ to_number:
 	sub	al, 48
 
 	xchg	eax, edi
-	mul	edx
+	mul	[_blue.base]
+
 	add	eax, edi
 	xchg	eax, edi
 
