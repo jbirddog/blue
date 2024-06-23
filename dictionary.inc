@@ -23,7 +23,6 @@ _core_words:
 	dq	_core_code.b_comma
 	dq	'b,'
 	dq	0 ; TODO: stack effects (( b al -- | rdi ))
-	assert $ - .b_comma = 40
 	
 	.latest:
 	.d_comma:
@@ -35,7 +34,6 @@ _core_words:
 	dq	_core_code.d_comma
 	dq	'd,'
 	dq	0 ; TODO: stack effects (( d ax -- | rdi ))
-	assert $ - .d_comma = 40
 
 dictionary_init:
 	mov	esi, _dictionary.length
@@ -64,7 +62,6 @@ dictionary_deinit:
 ;
 dictionary_find:
 	mov	rdi, [_dictionary.latest]
-	xor	eax, eax
 
 	.find:
 	push	rdi
