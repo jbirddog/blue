@@ -4,7 +4,6 @@
 ;
 to_number:
 	xor	eax, eax
-	xor	ecx, ecx
 	xor	edi, edi
 	
 	mov	cl, [_blue.word_len]
@@ -34,6 +33,5 @@ to_number:
 	ret
 
 	.failure:
-	xor	edi, edi
 	mov	eax, FAILURE
 	ret
