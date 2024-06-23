@@ -88,7 +88,7 @@ dictionary_find:
 	dec	ecx
 	js	.check_word
 
-	pop	rdi
+	pop	rax
 	jmp	.done
 	
 	.next:
@@ -99,7 +99,7 @@ dictionary_find:
 	test	rdi, rdi
 	jnz	.find
 
-	xor	edi, edi
+	xor	eax, eax
 	
 	.done:
 	ret

@@ -9,7 +9,7 @@ macro tc1 tib, tib_len, expected {
 	call	dictionary_find
 
 	inc	[test_num]
-	cmp	rdi, expected
+	cmp	rax, expected
 	jne	failure
 }
 
