@@ -30,8 +30,6 @@ entry $
 	mov	[test_num], 0
 
 	call dictionary_init
-
-	; test dictionary init's properly
 	
 	inc	[test_num]
 	mov	rax, [_dictionary.base]
