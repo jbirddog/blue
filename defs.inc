@@ -14,7 +14,9 @@ _code_buffer:
 	.entry dd 1
 
 _dictionary:
+	.prev_word_offset = 8
 	.entry_code_offset = 16
+	.word_offset = 24
 	.length = 4096
 	.base dq 1
 	.here dq 1

@@ -6,7 +6,7 @@
 ;	- 6 bytes reserved
 ; 08	- prev addr
 ; 08	- code addr
-; ??	- remaining word chars
+; ??	- word chars (padded to dq)
 ; ??	- stack effects
 ;
 
@@ -15,19 +15,27 @@ DE_IMMEDIATE	= 2
 
 _core_words:
 	.b_comma:
-	db	DE_IMMEDIATE, 2, 'b,', 0, 0, 0, 0
+	db	DE_IMMEDIATE
+	db	2
+	dw	0
+	dd	0
 	dq	0
 	dq	_core_code.b_comma
-	dq	0
+	dq	'b,'
 	dq	0 ; TODO: stack effects (( b al -- | rdi ))
+	assert $ - .b_comma = 40
 	
 	.latest:
 	.d_comma:
-	db	DE_IMMEDIATE, 2, 'd,', 0, 0, 0, 0
+	db	DE_IMMEDIATE
+	db	2
+	dw	0
+	dd	0
 	dq	.b_comma
 	dq	_core_code.d_comma
-	dq	0
+	dq	'd,'
 	dq	0 ; TODO: stack effects (( d ax -- | rdi ))
+	assert $ - .d_comma = 40
 
 dictionary_init:
 	mov	esi, _dictionary.length
@@ -55,4 +63,15 @@ dictionary_deinit:
 ;	- properly configured blue structure with non zero word len
 ;
 dictionary_find:
+	mov	rdi, [_dictionary.latest]
+
+	.loop:
+	push	rdi
+
+	test	dil, DE_HIDDEN
+	jnz	.next
+
+	.next:
+
+	.done:
 	ret
