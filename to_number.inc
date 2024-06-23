@@ -12,19 +12,17 @@ to_number:
 	.loop:
 	lodsb
 
-	cmp	al, 48
-	jl	.failure
-
 	cmp	al, 57
 	jg	.failure
 
 	sub	al, 48
+	js	.failure
 
 	xchg	eax, edi
 	mul	[_blue.base]
 
 	add	eax, edi
-	xchg	eax, edi
+	mov	edi, eax
 
 	dec	cl
 	jnz	.loop
