@@ -16,8 +16,6 @@ output_file:
 	db	0x00
 
 _simulate_compilation:
-	xor	eax, eax
-
 	; xor edi, edi
 	mov	al, 0x31
 	call	_core_code.b_comma
@@ -39,6 +37,8 @@ _simulate_compilation:
 	ret
 
 entry $
+	mov [_blue.base], 10
+
 	call code_buffer_init
 
 	call _simulate_compilation

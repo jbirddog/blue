@@ -1,4 +1,7 @@
 
+FAILURE		= 0
+SUCCESS		= 1
+
 _blue:
 	.tib dq 1
 	.tib_len dd 1
@@ -6,6 +9,7 @@ _blue:
 	.word_len db 1
 	.word rb 255
 	.mode db 1
+	.base db 1
 	
 _code_buffer:
 	.length = 4096
