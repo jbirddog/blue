@@ -2,6 +2,9 @@
 FAILURE		= 0
 SUCCESS		= 1
 
+INTERPRET	= 0
+COMPILE		= 1
+
 _blue:
 	.tib dq 1
 	.tib_len dd 1
