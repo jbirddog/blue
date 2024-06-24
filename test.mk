@@ -17,7 +17,4 @@ $(TESTS):
 tests: $(TESTS)
 	rm -f elf_test_hello_world.out
 
-tests-watch:
-	watch -d make tests
-
-.PHONY: tests tests-watch $(TESTS)
+.PHONY: tests $(TESTS)
