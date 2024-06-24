@@ -7,6 +7,8 @@ macro tc1 tib, tib_len, expected, expected_len {
 	mov	ecx, tib_len
 	xor	eax, eax
 
+	call	kernel_loop
+
 	inc	[test_num]
 	mov	rsi, expected
 	mov	ecx, expected_len

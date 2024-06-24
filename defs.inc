@@ -5,6 +5,8 @@ SUCCESS		= 1
 INTERPRET	= 0
 COMPILE		= 1
 
+ERR_NOT_A_WORD	= 165
+
 _blue:
 	.tib dq 1
 	.tib_len dd 1
