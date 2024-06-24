@@ -1,9 +1,10 @@
 
 TESTS := \
 	code_buffer_test \
+	data_stack_test \
+	to_number_test \
 	parser_test \
 	dictionary_test \
-	to_number_test \
 	elf_test \
 	elf_test_hello_world
 
@@ -16,7 +17,4 @@ $(TESTS):
 tests: $(TESTS)
 	rm -f elf_test_hello_world.out
 
-tests-watch:
-	watch -d make tests
-
-.PHONY: tests tests-watch $(TESTS)
+.PHONY: tests $(TESTS)

@@ -37,13 +37,9 @@ dis:
 
 clean:
 	rm -f $(BLUE) a.out
-
-watch:
-	watch -d make compile run
 	
 .PHONY:
 	dev-env dev-start dev-stop \
-	compile run dis clean \
-	watch
+	compile run dis clean
 
 include test.mk
