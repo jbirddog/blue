@@ -15,7 +15,7 @@ kernel_init:
 ;	- tib length in ecx
 ;	- tib in in eax
 ;
-kernel_main_loop:
+kernel_loop:
 	mov	[_blue.tib], rsi
 	mov	[_blue.tib_len], ecx
 	mov	[_blue.tib_in], eax

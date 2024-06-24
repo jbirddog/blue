@@ -1,16 +1,18 @@
 format elf64 executable 3
 
 macro tc1 tib, tib_len, expected, expected_len {
+	call	kernel_init
+
 	mov	rsi, tib
 	mov	ecx, tib_len
 	xor	eax, eax
 
-	call	kernel_init
-	call	kernel_deinit
+	inc	[test_num]
+	mov	rsi, expected
+	mov	ecx, expected_len
+	call	check_code_buffer
 	
-	;inc	[test_num]
-	;cmp	rax, expected
-	;jne	failure
+	call	kernel_deinit
 }
 
 segment readable writeable
@@ -56,6 +58,23 @@ exit:
 failure:
 	mov	dil, [test_num]
 	jmp	exit
+
+check_code_buffer:
+	mov	rdi, [_code_buffer.here]
+	sub	rdi, [_code_buffer.base]
+	cmp	edi, ecx
+	jne	failure
+
+	mov	rdi, [_code_buffer.base]
+
+	.loop:
+	cmpsb
+	jne	failure
+
+	dec	ecx
+	jnz	.loop
+	
+	ret
 
 segment readable
 
