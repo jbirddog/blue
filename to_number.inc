@@ -20,9 +20,7 @@ to_number:
 
 	xchg	eax, edi
 	mul	[_blue.base]
-
-	add	eax, edi
-	mov	edi, eax
+	xadd	edi, eax
 
 	dec	cl
 	jnz	.loop
