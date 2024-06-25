@@ -22,6 +22,7 @@ code_buffer_init:
 	stosq
 
 	xor	eax, eax
+	stosq
 	stosd
 	
 	ret
