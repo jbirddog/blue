@@ -2,6 +2,11 @@
 FAILURE		= 0
 SUCCESS		= 1
 
+INTERPRET	= 0
+COMPILE		= 1
+
+ERR_NOT_A_WORD	= 165
+
 _blue:
 	.tib dq 1
 	.tib_len dd 1
@@ -24,7 +29,7 @@ _data_stack:
 
 _dictionary:
 	.prev_word_offset = 8
-	.entry_code_offset = 16
+	.code_offset = 16
 	.word_offset = 24
 	.length = 4096
 	.base dq 1

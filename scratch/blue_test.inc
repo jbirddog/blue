@@ -1,3 +1,0 @@
-
-blue_test:
-	ret
