@@ -64,10 +64,6 @@ entry $
 	cmp	[_blue.base], 10
 	jne	failure
 	
-	inc	[test_num]
-	cmp	[_blue.mode], INTERPRET
-	jne	failure
-	
 	call	kernel_deinit
 
 	tc1	clean_exit.blue, clean_exit.blue_length, \

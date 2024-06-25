@@ -5,8 +5,6 @@ kernel_init:
 	call	dictionary_init
 
 	mov	[_blue.base], 10
-
-	call	_interpret
 	
 	ret
 
@@ -20,6 +18,8 @@ kernel_loop:
 	mov	[_blue.tib], rsi
 	mov	[_blue.tib_len], ecx
 	mov	[_blue.tib_in], eax
+
+	call	_interpret
 
 	.loop:
 	call	parser_next_word
@@ -43,7 +43,7 @@ kernel_loop:
 	jmp	.loop
 
 	.done:
-	call	_compile ;_interpretive_dance
+	call	_compile
 	mov	eax, SUCCESS
 	ret
 
