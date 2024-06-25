@@ -22,39 +22,54 @@ kernel_loop:
 
 	.loop:
 	call	parser_next_word
-
 	cmp	[_blue.word_len], 0
 	je	.done
 
 	call	dictionary_find
-	
 	test	eax, eax
-	jz	.number_or_die
+	jz	.number_or_bail
 
-	; TODO: its a word, call/compile it...
-
+	call	_handle_word
 	jmp	.loop
 	
-	.number_or_die:
+	.number_or_bail:
 	call	to_number
-
 	cmp	eax, SUCCESS
 	jne	.not_a_word
 
 	mov	eax, edi
 	call	data_stack_push
-
 	jmp	.loop
+
+	.done:
+	ret
 
 	.not_a_word:
 	mov	edi, ERR_NOT_A_WORD
-	ret
-
-	.done:
 	ret
 
 kernel_deinit:
 	call	dictionary_deinit
 	call	data_stack_deinit
 	call	code_buffer_deinit
+	ret
+
+;
+; expects
+;	- word in rax
+;
+_handle_word:
+	test	al, DE_IMMEDIATE
+	jnz	.interpret
+
+	test	[_blue.mode], INTERPRET
+	jnz	.interpret
+
+	.interpret:
+	mov edi, 11
+	mov eax, 60
+	syscall
+	ret
+
+	.compile:
 	ret
