@@ -66,9 +66,13 @@ _handle_word:
 	jnz	.interpret
 
 	.interpret:
-	mov edi, 11
-	mov eax, 60
-	syscall
+	push	rax	
+	call	data_stack_pop
+	pop	rsi
+
+	add	rsi, _dictionary.code_offset
+	mov	rsi, [rsi]
+	call	rsi
 	ret
 
 	.compile:
