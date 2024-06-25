@@ -5,7 +5,8 @@ kernel_init:
 	call	dictionary_init
 
 	mov	[_blue.base], 10
-	mov	[_blue.mode], INTERPRET
+
+	call	_interpret
 	
 	ret
 
@@ -42,6 +43,7 @@ kernel_loop:
 	jmp	.loop
 
 	.done:
+	call	_interpretive_dance
 	mov	eax, SUCCESS
 	ret
 
@@ -54,19 +56,42 @@ kernel_deinit:
 	call	data_stack_deinit
 	call	code_buffer_deinit
 	ret
+;
+; expects
+;	- word in rax
+;
+_interpret:
+	mov	rdi, [_code_buffer.here]
+	mov	[_code_buffer.mark], rdi
+	
+	mov	[_blue.mode], INTERPRET
+	ret
+
+_interpretive_dance:
+	mov	eax, 0xc3
+	call	_core_code.b_comma
+	call	[_code_buffer.mark]
+	
+	ret
+;
+; expects
+;	- word in rax
+;
+_compile:
+	call	_interpretive_dance
+	mov	rdi, [_code_buffer.mark]
+	mov	[_code_buffer.here], rdi
+	xor	rdi, rdi
+	mov	[_code_buffer.mark], rdi
+	
+	mov	[_blue.mode], COMPILE
+	ret
 
 ;
 ; expects
 ;	- word in rax
 ;
 _handle_word:
-	test	al, DE_IMMEDIATE
-	jnz	.interpret
-
-	test	[_blue.mode], INTERPRET
-	jnz	.interpret
-
-	.interpret:
 	push	rax	
 	call	data_stack_pop
 	pop	rsi
@@ -76,5 +101,16 @@ _handle_word:
 	call	rsi
 	ret
 
-	.compile:
+____bak:
+	test	al, DE_IMMEDIATE
+	jnz	.interpret
+
+	test	[_blue.mode], INTERPRET
+	jnz	.interpret
+
+	call	_compile
+	ret
+
+	.interpret:
+	call	_interpret
 	ret
