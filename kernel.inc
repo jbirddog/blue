@@ -43,7 +43,7 @@ kernel_loop:
 	jmp	.loop
 
 	.done:
-	call	_interpretive_dance
+	call	_compile ;_interpretive_dance
 	mov	eax, SUCCESS
 	ret
 
@@ -56,10 +56,7 @@ kernel_deinit:
 	call	data_stack_deinit
 	call	code_buffer_deinit
 	ret
-;
-; expects
-;	- word in rax
-;
+
 _interpret:
 	mov	rdi, [_code_buffer.here]
 	mov	[_code_buffer.mark], rdi
@@ -73,10 +70,7 @@ _interpretive_dance:
 	call	[_code_buffer.mark]
 	
 	ret
-;
-; expects
-;	- word in rax
-;
+
 _compile:
 	call	_interpretive_dance
 	mov	rdi, [_code_buffer.mark]
@@ -91,14 +85,60 @@ _compile:
 ; expects
 ;	- word in rax
 ;
+_flow_in:
+	mov	al, 0xb8
+	call	_core_code.b_comma
+
+	call	data_stack_pop
+	call	_core_code.d_comma
+
+	ret
+
+;
+; expects
+;	- word in rax
+;
+_flow_out:
+	ret
+
+;
+; expects
+;	- word in rax
+;
 _handle_word:
-	push	rax	
+	push	rax
+	push	rax
+
+	call	_flow_in
+
+	mov	al, 0xe8
+	call	_core_code.b_comma
+
+	pop	rax
+	add	rax, _dictionary.code_offset
+	mov	rax, [rsi]
+	call	_core_code.d_comma
+
+	;sub	rax, [_code_buffer.here]
+	;sub	rax, 4
+	;call	_core_code.d_comma
+
+	pop	rax
+	call	_flow_out
+	
+	ret
+
+_________bak:
+
+	push	rax
 	call	data_stack_pop
 	pop	rsi
 
 	add	rsi, _dictionary.code_offset
 	mov	rsi, [rsi]
 	call	rsi
+	
+	call	_flow_out
 	ret
 
 ____bak:

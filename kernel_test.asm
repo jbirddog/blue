@@ -88,6 +88,9 @@ failure:
 check_code_buffer:
 	mov	rdi, [_code_buffer.here]
 	sub	rdi, [_code_buffer.base]
+	mov eax, 60
+	syscall
+
 	cmp	edi, ecx
 	jne	failure
 
