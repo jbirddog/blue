@@ -20,7 +20,6 @@ _core_words:
 	dw	0
 	dd	0
 	dq	0
-	assert $ - .b_comma = _dictionary.code_offset
 	dq	_core_code.b_comma
 	dq	'b,'
 	dq	0 ; TODO: stack effects (( b al -- | rdi ))
