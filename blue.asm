@@ -10,39 +10,21 @@ segment readable executable
 include "elf.inc"
 include "linux.inc"
 include "code_buffer.inc"
-
-output_file:
-	db	"a.out"
-	db	0x00
-
-_simulate_compilation:
-	; xor edi, edi
-	mov	al, 0x31
-	call	_core_code.b_comma
-	mov	al, 0xff
-	call	_core_code.b_comma	
-
-	; mov eax, 60
-	mov	al, 0xb8
-	call	_core_code.b_comma
-	mov	eax, 0x3c
-	call	_core_code.d_comma
-
-	; syscall
-	mov	al, 0x0f
-	call	_core_code.b_comma
-	mov	al, 0x05
-	call	_core_code.b_comma
-	
-	ret
+include "data_stack.inc"
+include "dictionary.inc"
+include "parser.inc"
+include "to_number.inc"
+include "kernel.inc"
 
 entry $
-	mov [_blue.base], 10
+	call	kernel_init
+	
+	mov	rsi, blue_bye
+	mov	ecx, blue_bye.length
+	xor	eax, eax
 
-	call code_buffer_init
-
-	call _simulate_compilation
-
+	call	kernel_loop
+	
 	;
 	; write the output to ./a.out
 	;
@@ -62,7 +44,7 @@ entry $
 	mov	eax, SYS_CLOSE
 	syscall
 
-	call code_buffer_deinit
+	call kernel_deinit
 
 	;
 	; exit cleanly
@@ -70,3 +52,15 @@ entry $
 	xor 	edi, edi
 	mov 	eax, SYS_EXIT
 	syscall
+
+segment readable
+
+blue_bye:
+	db	'49 b, 255 b, '		; xor edi, edi
+	db	'184 b, 60 d, '		; mov eax, 60
+	db	'15 b, 5 b,'		; syscall
+	.length = $ - blue_bye
+
+output_file:
+	db	"a.out"
+	db	0x00
