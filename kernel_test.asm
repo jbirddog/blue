@@ -10,9 +10,31 @@ macro tc1 tib, tib_len, expected, expected_len {
 	call	kernel_loop
 
 	inc	[test_num]
+	cmp	eax, SUCCESS
+	jne	failure
+	
 	mov	rsi, expected
 	mov	ecx, expected_len
 	call	check_code_buffer
+	
+	call	kernel_deinit
+}
+
+macro tc2 tib, tib_len {
+	call	kernel_init
+
+	mov	rsi, tib
+	mov	ecx, tib_len
+	xor	eax, eax
+
+	call	kernel_loop
+
+	inc	[test_num]
+	cmp	eax, FAILURE
+	jne	failure
+
+	cmp	edi, ERR_NOT_A_WORD
+	jne	failure
 	
 	call	kernel_deinit
 }
@@ -51,6 +73,8 @@ entry $
 	tc1	clean_exit.blue, clean_exit.blue_length, \
 		clean_exit.expected, clean_exit.expected_length 
 
+	tc2	bogus.blue, bogus.blue_length
+		
 	xor	edi, edi
 	
 exit:
@@ -79,6 +103,11 @@ check_code_buffer:
 	ret
 
 segment readable
+
+bogus:
+	.blue:
+	db	'^%^*^%'
+	.blue_length = $ - .blue
 
 clean_exit:
 	.blue:

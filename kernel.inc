@@ -42,6 +42,7 @@ kernel_loop:
 	jmp	.loop
 
 	.done:
+	mov	eax, SUCCESS
 	ret
 
 	.not_a_word:

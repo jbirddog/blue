@@ -24,6 +24,9 @@ entry $
 	xor	eax, eax
 
 	call	kernel_loop
+
+	cmp	eax, SUCCESS
+	jne	.exit
 	
 	;
 	; write the output to ./a.out
@@ -44,12 +47,10 @@ entry $
 	mov	eax, SYS_CLOSE
 	syscall
 
-	call kernel_deinit
-
-	;
-	; exit cleanly
-	;
+	call	kernel_deinit
 	xor 	edi, edi
+
+	.exit:
 	mov 	eax, SYS_EXIT
 	syscall
 
