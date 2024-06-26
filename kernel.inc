@@ -65,9 +65,9 @@ _interpret:
 	ret
 
 _interpretive_dance:
-	mov	eax, 0xc3
+	mov	al, 0xc3
 	call	_core_code.b_comma
-	call	[_code_buffer.mark]
+	;call	[_code_buffer.mark]
 	
 	ret
 
@@ -115,20 +115,20 @@ _handle_word:
 	call	_core_code.b_comma
 
 	pop	rax
-	add	rax, _dictionary.code_offset
-	mov	rax, [rsi]
-	call	_core_code.d_comma
 
-	;sub	rax, [_code_buffer.here]
-	;sub	rax, 4
-	;call	_core_code.d_comma
+	add	rax, _dictionary.code_offset
+	mov	rax, [rax]
+	sub	rax, [_code_buffer.here]
+	sub	rax, 4
+
+	call	_core_code.d_comma
 
 	pop	rax
 	call	_flow_out
 	
 	ret
 
-_________bak:
+_XX_bak:
 
 	push	rax
 	call	data_stack_pop

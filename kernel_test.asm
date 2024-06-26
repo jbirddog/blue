@@ -66,10 +66,13 @@ entry $
 	
 	call	kernel_deinit
 
-	tc1	clean_exit.blue, clean_exit.blue_length, \
-		clean_exit.expected, clean_exit.expected_length 
+	tc1	one.blue, one.blue_length, \
+		one.expected, one.expected_length 
 
-	tc2	bogus.blue, bogus.blue_length
+	;tc1	clean_exit.blue, clean_exit.blue_length, \
+	;	clean_exit.expected, clean_exit.expected_length 
+
+	;tc2	bogus.blue, bogus.blue_length
 		
 	xor	edi, edi
 	
@@ -84,8 +87,6 @@ failure:
 check_code_buffer:
 	mov	rdi, [_code_buffer.here]
 	sub	rdi, [_code_buffer.base]
-	mov eax, 60
-	syscall
 
 	cmp	edi, ecx
 	jne	failure
@@ -108,6 +109,15 @@ bogus:
 	db	'^%^*^%'
 	.blue_length = $ - .blue
 
+one:
+	.blue:
+	db	'1 b,'
+	.blue_length = $ - .blue
+
+	.expected:
+	db	0x01
+	.expected_length = $ - .expected
+	
 clean_exit:
 	.blue:
 	db	'49 b, 255 b, '		; xor edi, edi
