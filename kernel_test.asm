@@ -63,16 +63,20 @@ entry $
 	inc	[test_num]
 	cmp	[_blue.base], 10
 	jne	failure
+
+	inc	[test_num]
+	cmp	[_blue.mode], INTERPRET
+	jne	failure
 	
 	call	kernel_deinit
 
 	tc1	one.blue, one.blue_length, \
 		one.expected, one.expected_length 
 
-	;tc1	clean_exit.blue, clean_exit.blue_length, \
-	;	clean_exit.expected, clean_exit.expected_length 
+	tc1	clean_exit.blue, clean_exit.blue_length, \
+		clean_exit.expected, clean_exit.expected_length 
 
-	;tc2	bogus.blue, bogus.blue_length
+	tc2	bogus.blue, bogus.blue_length
 		
 	xor	edi, edi
 	

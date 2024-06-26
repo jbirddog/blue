@@ -114,6 +114,8 @@ _flow_out:
 ;	- word in rax
 ;
 _handle_word:
+	push	rax
+	push	rax
 	call	_flow_in
 
 	mov	al, 0x48			; mov rdi, _word's code_
@@ -122,8 +124,10 @@ _handle_word:
 	call	_core_code.b_comma
 	mov	al, 0xc7
 	call	_core_code.b_comma
-	
-	mov	rax, _core_code.b_comma
+
+	pop	rax
+	add	rax, _dictionary.code_offset
+	mov	rax, [rax]
 	call	_core_code.d_comma
 
 	mov	al, 0xff			; call rdi
@@ -131,4 +135,7 @@ _handle_word:
 	mov	al, 0xd7
 	call	_core_code.b_comma
 
+	pop	rax
+	call	_flow_out
+	
 	ret
