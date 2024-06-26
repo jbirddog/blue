@@ -118,7 +118,7 @@ _handle_word:
 	push	rax
 	call	_flow_in
 
-	mov	al, 0x48_
+	mov	al, 0x48
 	call	_core_code.b_comma
 	mov	al, 0xc7
 	call	_core_code.b_comma
