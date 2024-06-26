@@ -3,37 +3,45 @@
 ;
 ; 08	- 1 byte flags
 ;	- 1 byte word len
-;	- 6 bytes reserved
+;	- 1 byte input stack effects len
+;	- 5 bytes reserved
 ; 08	- prev addr
 ; 08	- code addr
-; ??	- word chars (padded to dq)
-; ??	- stack effects
+; ??	- word chars (padded to quad)
+; ??	- stack effects (double padded to quad)
 ;
 
 DE_HIDDEN	= 1
 DE_IMMEDIATE	= 2
 
+_AL		= REG_RAX or _BYTE
+_EAX		= REG_RAX or _DWORD
+
 _core_words:
 	.b_comma:
 	db	DE_IMMEDIATE
 	db	2
-	dw	0
+	db	1
+	db	0
 	dd	0
 	dq	0
 	dq	_core_code.b_comma
 	dq	'b,'
-	dq	0 ; TODO: stack effects (( b al -- | rdi ))
+	dq	_AL
+	; TODO: clobbers rdi
 	
 	.latest:
 	.d_comma:
 	db	DE_IMMEDIATE
 	db	2
-	dw	0
+	db	1
+	db	0
 	dd	0
 	dq	.b_comma
 	dq	_core_code.d_comma
 	dq	'd,'
-	dq	0 ; TODO: stack effects (( d ax -- | rdi ))
+	dq	_EAX
+	; TODO: clobbers rdi
 
 dictionary_init:
 	mov	esi, _dictionary.length
