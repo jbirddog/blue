@@ -82,10 +82,6 @@ _interpretive_dance:
 	
 	call	rsi
 	
-	mov	edi, 21
-	mov	eax, 60
-	syscall
-	
 	ret
 
 _compile:
@@ -119,10 +115,25 @@ _flow_out:
 ;	- word in rax
 ;
 _handle_word:
-	call _flow_in
+	call	_flow_in
 
-	xor eax, eax
+	mov	al, 0x48
+	call	_core_code.b_comma
+	mov	al, 0xc7
+	call	_core_code.b_comma
+	mov	al, 0xc0
+	call	_core_code.b_comma
+	
+	mov	rax, _core_code.b_comma	
+	call	_core_code.d_comma
 
+	mov	al, 0xff
+	call	_core_code.b_comma
+	mov	al, 0xd0
+	call	_core_code.b_comma
+
+	ret
+	
 	mov	al, 49
 	call	_core_code.b_comma
 	mov	al, 255
@@ -138,10 +149,14 @@ _handle_word:
 	mov	al, 5
 	call	_core_code.b_comma
 	
+	;mov	rax, [_code_buffer.mark]
+	;add	rax, _code_buffer.interpret_offset
+	;call	rax
+
 	ret
 
 	.ok:
-	mov	edi, 21
+	mov	edi, 31
 	mov	eax, 60
 	syscall
 	

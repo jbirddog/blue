@@ -12,6 +12,12 @@ _core_code:
 	mov	[_code_buffer.here], rdi
 	ret
 	
+	.q_comma:
+	mov	rdi, [_code_buffer.here]
+	stosq
+	mov	[_code_buffer.here], rdi
+	ret
+	
 code_buffer_init:
 	mov	esi, _code_buffer.length
 	mov	edx, PROT_RWX
