@@ -118,7 +118,7 @@ _handle_word:
 	push	rax
 	call	_flow_in
 
-	mov	al, 0x48			; mov rdi, _word's code_
+	mov	al, 0x48_
 	call	_core_code.b_comma
 	mov	al, 0xc7
 	call	_core_code.b_comma
@@ -130,7 +130,7 @@ _handle_word:
 	mov	rax, [rax]
 	call	_core_code.d_comma
 
-	mov	al, 0xff			; call rdi
+	mov	al, 0xff
 	call	_core_code.b_comma
 	mov	al, 0xd7
 	call	_core_code.b_comma
