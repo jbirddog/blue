@@ -60,6 +60,9 @@ kernel_deinit:
 _interpret:
 	mov	rdi, [_code_buffer.here]
 	mov	[_code_buffer.mark], rdi
+
+	add	rdi, _code_buffer.interpret_offset
+	mov	[_code_buffer.here], rdi
 	
 	mov	[_blue.mode], INTERPRET
 	ret
@@ -67,17 +70,27 @@ _interpret:
 _interpretive_dance:
 	mov	al, 0xc3
 	call	_core_code.b_comma
-	;call	[_code_buffer.mark]
+
+	mov	rsi, [_code_buffer.mark]
+	add	rsi, _code_buffer.interpret_offset
+
+	mov	rdi, [_code_buffer.mark]
+	mov	[_code_buffer.here], rdi
+
+	xor	rdi, rdi
+	mov	[_code_buffer.mark], rdi
+	
+	call	rsi
+	
+	mov	edi, 21
+	mov	eax, 60
+	syscall
 	
 	ret
 
 _compile:
 	call	_interpretive_dance
-	mov	rdi, [_code_buffer.mark]
-	mov	[_code_buffer.here], rdi
-	xor	rdi, rdi
-	mov	[_code_buffer.mark], rdi
-	
+
 	mov	[_blue.mode], COMPILE
 	ret
 
@@ -106,6 +119,33 @@ _flow_out:
 ;	- word in rax
 ;
 _handle_word:
+	call _flow_in
+
+	xor eax, eax
+
+	mov	al, 49
+	call	_core_code.b_comma
+	mov	al, 255
+	call	_core_code.b_comma
+
+	mov	al, 184
+	call	_core_code.b_comma
+	mov	al, 60
+	call	_core_code.d_comma
+	
+	mov	al, 15
+	call	_core_code.b_comma
+	mov	al, 5
+	call	_core_code.b_comma
+	
+	ret
+
+	.ok:
+	mov	edi, 21
+	mov	eax, 60
+	syscall
+	
+_bak:
 	push	rax
 	push	rax
 
@@ -115,11 +155,14 @@ _handle_word:
 	call	_core_code.b_comma
 
 	pop	rax
-
-	add	rax, _dictionary.code_offset
-	mov	rax, [rax]
+	mov	rax, _core_code.b_comma
 	sub	rax, [_code_buffer.here]
 	sub	rax, 4
+
+	;add	rax, _dictionary.code_offset
+	;mov	rax, [rax]
+	;sub	rax, [_code_buffer.here]
+	;sub	rax, 4
 
 	call	_core_code.d_comma
 
