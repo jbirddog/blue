@@ -90,9 +90,9 @@ check_code_buffer:
 
 	cmp	edi, ecx
 	jne	failure
-
+	
 	mov	rdi, [_code_buffer.base]
-
+	
 	.loop:
 	cmpsb
 	jne	failure

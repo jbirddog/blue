@@ -5,6 +5,7 @@ kernel_init:
 	call	dictionary_init
 
 	mov	[_blue.base], 10
+	call	_interpret
 	
 	ret
 
@@ -18,8 +19,6 @@ kernel_loop:
 	mov	[_blue.tib], rsi
 	mov	[_blue.tib_len], ecx
 	mov	[_blue.tib_in], eax
-
-	call	_interpret
 
 	.loop:
 	call	parser_next_word
@@ -43,7 +42,7 @@ kernel_loop:
 	jmp	.loop
 
 	.done:
-	call	_compile
+	call	_interpretive_dance
 	mov	eax, SUCCESS
 	ret
 
@@ -79,7 +78,7 @@ _interpretive_dance:
 
 	xor	rdi, rdi
 	mov	[_code_buffer.mark], rdi
-	
+
 	call	rsi
 	
 	ret
@@ -117,98 +116,19 @@ _flow_out:
 _handle_word:
 	call	_flow_in
 
-	mov	al, 0x48
+	mov	al, 0x48			; mov rdi, _word's code_
 	call	_core_code.b_comma
 	mov	al, 0xc7
 	call	_core_code.b_comma
-	mov	al, 0xc0
+	mov	al, 0xc7
 	call	_core_code.b_comma
 	
-	mov	rax, _core_code.b_comma	
-	call	_core_code.d_comma
-
-	mov	al, 0xff
-	call	_core_code.b_comma
-	mov	al, 0xd0
-	call	_core_code.b_comma
-
-	ret
-	
-	mov	al, 49
-	call	_core_code.b_comma
-	mov	al, 255
-	call	_core_code.b_comma
-
-	mov	al, 184
-	call	_core_code.b_comma
-	mov	al, 60
-	call	_core_code.d_comma
-	
-	mov	al, 15
-	call	_core_code.b_comma
-	mov	al, 5
-	call	_core_code.b_comma
-	
-	;mov	rax, [_code_buffer.mark]
-	;add	rax, _code_buffer.interpret_offset
-	;call	rax
-
-	ret
-
-	.ok:
-	mov	edi, 31
-	mov	eax, 60
-	syscall
-	
-_bak:
-	push	rax
-	push	rax
-
-	call	_flow_in
-
-	mov	al, 0xe8
-	call	_core_code.b_comma
-
-	pop	rax
 	mov	rax, _core_code.b_comma
-	sub	rax, [_code_buffer.here]
-	sub	rax, 4
-
-	;add	rax, _dictionary.code_offset
-	;mov	rax, [rax]
-	;sub	rax, [_code_buffer.here]
-	;sub	rax, 4
-
 	call	_core_code.d_comma
 
-	pop	rax
-	call	_flow_out
-	
-	ret
+	mov	al, 0xff			; call rdi
+	call	_core_code.b_comma
+	mov	al, 0xd7
+	call	_core_code.b_comma
 
-_XX_bak:
-
-	push	rax
-	call	data_stack_pop
-	pop	rsi
-
-	add	rsi, _dictionary.code_offset
-	mov	rsi, [rsi]
-	call	rsi
-	
-	call	_flow_out
-	ret
-
-____bak:
-	test	al, DE_IMMEDIATE
-	jnz	.interpret
-
-	test	[_blue.mode], INTERPRET
-	jnz	.interpret
-
-	call	_compile
-	ret
-
-	.interpret:
-	call	_interpret
 	ret

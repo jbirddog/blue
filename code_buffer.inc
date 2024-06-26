@@ -5,6 +5,12 @@ _core_code:
 	stosb
 	mov	[_code_buffer.here], rdi
 	ret
+
+	.b_comma2:
+	mov edi, eax
+	mov eax, 60
+	syscall
+	ret
 	
 	.d_comma:
 	mov	rdi, [_code_buffer.here]
