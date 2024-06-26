@@ -71,9 +71,9 @@ _interpretive_dance:
 	call	_core_code.b_comma
 
 	mov	rsi, [_code_buffer.mark]
+	mov	rdi, rsi
 	add	rsi, _code_buffer.interpret_offset
 
-	mov	rdi, [_code_buffer.mark]
 	mov	[_code_buffer.here], rdi
 
 	xor	rdi, rdi
