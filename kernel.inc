@@ -5,7 +5,7 @@ kernel_init:
 	call	dictionary_init
 
 	mov	[_blue.base], 10
-	mov	[_blue.mode], INTERPRET
+	call	_interpret
 	
 	ret
 
@@ -42,6 +42,7 @@ kernel_loop:
 	jmp	.loop
 
 	.done:
+	call	_interpretive_dance
 	mov	eax, SUCCESS
 	ret
 
@@ -55,26 +56,86 @@ kernel_deinit:
 	call	code_buffer_deinit
 	ret
 
+_interpret:
+	mov	rdi, [_code_buffer.here]
+	mov	[_code_buffer.mark], rdi
+
+	add	rdi, _code_buffer.interpret_offset
+	mov	[_code_buffer.here], rdi
+	
+	mov	[_blue.mode], INTERPRET
+	ret
+
+_interpretive_dance:
+	mov	al, 0xc3
+	call	_core_code.b_comma
+
+	mov	rsi, [_code_buffer.mark]
+	mov	rdi, rsi
+	add	rsi, _code_buffer.interpret_offset
+
+	mov	[_code_buffer.here], rdi
+
+	xor	rdi, rdi
+	mov	[_code_buffer.mark], rdi
+
+	call	rsi
+	
+	ret
+
+_compile:
+	call	_interpretive_dance
+
+	mov	[_blue.mode], COMPILE
+	ret
+
+;
+; expects
+;	- word in rax
+;
+_flow_in:
+	mov	al, 0xb8
+	call	_core_code.b_comma
+
+	call	data_stack_pop
+	call	_core_code.d_comma
+
+	ret
+
+;
+; expects
+;	- word in rax
+;
+_flow_out:
+	ret
+
 ;
 ; expects
 ;	- word in rax
 ;
 _handle_word:
-	test	al, DE_IMMEDIATE
-	jnz	.interpret
+	push	rax
+	push	rax
+	call	_flow_in
 
-	test	[_blue.mode], INTERPRET
-	jnz	.interpret
+	mov	al, 0x48
+	call	_core_code.b_comma
+	mov	al, 0xc7
+	call	_core_code.b_comma
+	mov	al, 0xc7
+	call	_core_code.b_comma
 
-	.interpret:
-	push	rax	
-	call	data_stack_pop
-	pop	rsi
+	pop	rax
+	add	rax, _dictionary.code_offset
+	mov	rax, [rax]
+	call	_core_code.d_comma
 
-	add	rsi, _dictionary.code_offset
-	mov	rsi, [rsi]
-	call	rsi
-	ret
+	mov	al, 0xff
+	call	_core_code.b_comma
+	mov	al, 0xd7
+	call	_core_code.b_comma
 
-	.compile:
+	pop	rax
+	call	_flow_out
+	
 	ret

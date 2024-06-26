@@ -18,8 +18,10 @@ _blue:
 	
 _code_buffer:
 	.length = 4096
+	.interpret_offset = 1024
 	.base dq 1
 	.here dq 1
+	.mark dq 1
 	.entry dd 1
 
 _data_stack:

@@ -17,6 +17,12 @@ entry $
 	cmp	rax, [_code_buffer.here]
 	jne	exit
 
+	cmp	[_code_buffer.mark], 0
+	jne	exit
+
+	cmp	[_code_buffer.entry], 0
+	jne	exit
+
 	mov	al, 123
 	call	_core_code.b_comma
 	

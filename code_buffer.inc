@@ -5,13 +5,13 @@ _core_code:
 	stosb
 	mov	[_code_buffer.here], rdi
 	ret
-	
+
 	.d_comma:
 	mov	rdi, [_code_buffer.here]
 	stosd
 	mov	[_code_buffer.here], rdi
 	ret
-	
+		
 code_buffer_init:
 	mov	esi, _code_buffer.length
 	mov	edx, PROT_RWX
@@ -22,6 +22,7 @@ code_buffer_init:
 	stosq
 
 	xor	eax, eax
+	stosq
 	stosd
 	
 	ret

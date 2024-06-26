@@ -63,12 +63,15 @@ entry $
 	inc	[test_num]
 	cmp	[_blue.base], 10
 	jne	failure
-	
+
 	inc	[test_num]
 	cmp	[_blue.mode], INTERPRET
 	jne	failure
 	
 	call	kernel_deinit
+
+	tc1	one.blue, one.blue_length, \
+		one.expected, one.expected_length 
 
 	tc1	clean_exit.blue, clean_exit.blue_length, \
 		clean_exit.expected, clean_exit.expected_length 
@@ -88,11 +91,12 @@ failure:
 check_code_buffer:
 	mov	rdi, [_code_buffer.here]
 	sub	rdi, [_code_buffer.base]
+
 	cmp	edi, ecx
 	jne	failure
-
+	
 	mov	rdi, [_code_buffer.base]
-
+	
 	.loop:
 	cmpsb
 	jne	failure
@@ -109,6 +113,15 @@ bogus:
 	db	'^%^*^%'
 	.blue_length = $ - .blue
 
+one:
+	.blue:
+	db	'1 b,'
+	.blue_length = $ - .blue
+
+	.expected:
+	db	0x01
+	.expected_length = $ - .expected
+	
 clean_exit:
 	.blue:
 	db	'49 b, 255 b, '		; xor edi, edi
