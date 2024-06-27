@@ -96,53 +96,10 @@ _compile:
 ; expects
 ;	- word in rax
 ;
-_flow_in:
-	call	word_input_stack_effects
-	mov	edi, esi
-
-	.loop:
-	dec	ecx
-	js	.done
-
-	lea	ebx, [edi + (ecx * 8)]
-	mov	ebx, [ebx]
-	and	ebx, REG_MASK
-	shr	ebx, REG_OFFSET
-
-	call	data_stack_pop
-	cmp	eax, _IMMEDIATE
-	jne	.flow_reg
-
-	mov	al, 0xb8
-	add	al, bl
-	call	_core_code.b_comma
-
-	call	data_stack_pop
-	call	_core_code.d_comma
-
-	jmp	.loop
-
-	.flow_reg:
-	die	ERR_NO_IMPL
-	
-	.done:
-	ret
-
-;
-; expects
-;	- word in rax
-;
-_flow_out:
-	ret
-
-;
-; expects
-;	- word in rax
-;
 _handle_word:
 	push	rax
 	push	rax
-	call	_flow_in
+	call	flow_in
 
 	mov	al, 0x48
 	call	_core_code.b_comma
@@ -162,6 +119,6 @@ _handle_word:
 	call	_core_code.b_comma
 
 	pop	rax
-	call	_flow_out
+	call	flow_out
 	
 	ret

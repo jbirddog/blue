@@ -52,33 +52,30 @@ include "code_buffer.inc"
 include "data_stack.inc"
 include "dictionary.inc"
 include	"flow.inc"
-include "parser.inc"
-include "to_number.inc"
-include "kernel.inc"
 
 entry $
 	mov	[test_num], 0
 
-	call kernel_init
+	call	code_buffer_init
+	call	data_stack_init
+
+	mov	eax, 0x3c
+	call	data_stack_push
+
+	mov	eax, _IMMEDIATE
+	call	data_stack_push
 	
-	inc	[test_num]
-	cmp	[_blue.base], 10
-	jne	failure
+	mov	rax, _core_words.b_comma
+	call	flow_in
 
 	inc	[test_num]
-	cmp	[_blue.mode], INTERPRET
-	jne	failure
+	mov	rsi, flow_1
+	mov	ecx, flow_1.length
+	call	check_code_buffer
 	
-	call	kernel_deinit
-
-	tc1	one.blue, one.blue_length, \
-		one.expected, one.expected_length 
-
-	tc1	clean_exit.blue, clean_exit.blue_length, \
-		clean_exit.expected, clean_exit.expected_length 
-
-	tc2	bogus.blue, bogus.blue_length
-		
+	call	code_buffer_deinit
+	call	data_stack_deinit
+	
 	xor	edi, edi
 	
 exit:
@@ -109,30 +106,7 @@ check_code_buffer:
 
 segment readable
 
-bogus:
-	.blue:
-	db	'^%^*^%'
-	.blue_length = $ - .blue
-
-one:
-	.blue:
-	db	'1 b,'
-	.blue_length = $ - .blue
-
-	.expected:
-	db	0x01
-	.expected_length = $ - .expected
-	
-clean_exit:
-	.blue:
-	db	'49 b, 255 b, '		; xor edi, edi
-	db	'184 b, 60 d, '		; mov eax, 60
-	db	'15 b, 5 b,'		; syscall
-	.blue_length = $ - .blue
-
-	.expected:
-	db	0x31, 0xff
+flow_1:
 	db	0xb8
 	dd	0x3c
-	db	0x0f, 0x05
-	.expected_length = $ - .expected
+	.length = $ - flow_1
