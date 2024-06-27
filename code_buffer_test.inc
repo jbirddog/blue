@@ -1,64 +1,68 @@
-format elf64 executable 3
 
-segment readable writeable
-
-include "defs.inc"
-
-segment readable executable
-
-include "linux.inc"
-include "code_buffer.inc"
-
-entry $
+code_buffer_test:
 	call	code_buffer_init
-	
-	mov	edi, 1
+
+	t 'it inits correctly'
+
 	mov	rax, [_code_buffer.base]
 	cmp	rax, [_code_buffer.here]
-	jne	exit
+	jne	failure
 
 	cmp	[_code_buffer.mark], 0
-	jne	exit
+	jne	failure
 
 	cmp	[_code_buffer.entry], 0
-	jne	exit
+	jne	failure
+
+	ok
+
+	t 'b, writes a byte'
 
 	mov	al, 123
 	call	_core_code.b_comma
 	
-	mov	edi, 2
 	mov	rax, [_code_buffer.base]
 	mov	rcx, [_code_buffer.here]
 	sub	rcx, rax
 	cmp	ecx, 1
-	jne	exit
+	jne	failure
+	push	rax
 
-	mov	edi, 3
+	ok
+
+	t 'b, writes the correct value'
+
+	pop	rax
 	mov	rax, [rax]
 	cmp	al, 123
-	jne	exit
+	jne	failure
 
+	ok
+
+	t 'd, writes a dword'
+	
 	mov	eax, 123456
 	call	_core_code.d_comma
 
-	mov	edi, 4
 	mov	rax, [_code_buffer.base]
 	inc	rax
 	mov	rcx, [_code_buffer.here]
 	sub	rcx, rax
 	cmp	ecx, 4
-	jne	exit
+	jne	failure
+	push	rax
 
-	mov	edi, 5
+	ok
+
+	t 'd, writes the correct value'
+
+	pop	rax
 	mov	rax, [rax]
 	cmp	eax, 123456
-	jne	exit
+	jne	failure
+
+	ok
 
 	call code_buffer_deinit
 
-	xor 	edi, edi
-
-exit:
-	mov eax, 60
-	syscall
 	ret
