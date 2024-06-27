@@ -2,15 +2,23 @@
 code_buffer_test:
 	call	code_buffer_init
 
-	t 'it inits correctly'
+	t 'it inits base and here correctly'
 
 	mov	rax, [_code_buffer.base]
 	cmp	rax, [_code_buffer.here]
 	jne	failure
 
+	ok
+
+	t 'it inits mark correctly'
+
 	cmp	[_code_buffer.mark], 0
 	jne	failure
 
+	ok
+
+	t 'it inits entry correctly'
+	
 	cmp	[_code_buffer.entry], 0
 	jne	failure
 

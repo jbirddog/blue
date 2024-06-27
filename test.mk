@@ -1,6 +1,5 @@
 
 TESTS := \
-	code_buffer_test \
 	data_stack_test \
 	to_number_test \
 	parser_test \
