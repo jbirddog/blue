@@ -123,7 +123,7 @@ dictionary_find:
 ;	- word in rax
 ;
 _padded_word_length:
-	lea	ecx, [eax+1]
+	lea	ecx, [eax + 1]
 	mov	ecx, [ecx]
 	and	ecx, 0xff
 	
@@ -137,14 +137,13 @@ _padded_word_length:
 ;	- word in rax
 ;
 word_input_stack_effects:
-	lea	ebx, [eax+2]
-	mov	ebx, [ebx]
-	and	ebx, 0xff
+	lea	esi, [eax + 2]
+	mov	esi, [esi]
+	and	esi, 0xff
 
 	call	_padded_word_length
-	xchg	ebx, ecx
+	xchg	esi, ecx
 
-	add	eax, _dictionary.word_offset
-	add	eax, ebx
+	lea	esi, [eax + _dictionary.word_offset + esi]
 	
 	ret

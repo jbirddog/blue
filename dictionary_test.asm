@@ -53,7 +53,7 @@ entry $
 	jne	failure
 
 	inc	[test_num]
-	cmp	rax, _core_words.b_comma + _dictionary.word_offset + 8
+	cmp	rsi, _core_words.b_comma + _dictionary.word_offset + 8
 	jne	failure
 	
 	call	dictionary_deinit
