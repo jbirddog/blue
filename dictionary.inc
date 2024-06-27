@@ -7,15 +7,21 @@
 ;	- 5 bytes reserved
 ; 08	- prev addr
 ; 08	- code addr
-; ??	- word chars (padded to quad)
-; ??	- stack effects (double padded to quad)
+; ??	- word chars (bytes padded to quad)
+; ??	- stack effects (quads)
 ;
 
-DE_HIDDEN	= 1
-DE_IMMEDIATE	= 2
+DE_HIDDEN		= 1
+DE_IMMEDIATE		= 2
 
-_AL		= REG_RAX or _BYTE
-_EAX		= REG_RAX or _DWORD
+FLAGS_OFFSET		= 0
+FLAGS_MASK		= 0xff
+
+WORD_LEN_OFFSET		= 0x08
+WORD_LEN_MASK		= 0x00ff
+
+IN_EFFECTS_LEN_OFFSET	= 0x10
+IN_EFFECTS_LEN_MASK	= 0x0000ff
 
 _core_words:
 	.b_comma:
@@ -110,4 +116,35 @@ dictionary_find:
 	xor	eax, eax
 	
 	.done:
+	ret
+
+;
+; expects
+;	- word in rax
+;
+_padded_word_length:
+	lea	ecx, [eax+1]
+	mov	ecx, [ecx]
+	and	ecx, 0xff
+	
+	add	ecx, 7
+	and	ecx, -8
+
+	ret
+
+;
+; expects
+;	- word in rax
+;
+word_input_stack_effects:
+	lea	ebx, [eax+2]
+	mov	ebx, [ebx]
+	and	ebx, 0xff
+
+	call	_padded_word_length
+	xchg	ebx, ecx
+
+	add	eax, _dictionary.word_offset
+	add	eax, ebx
+	
 	ret
