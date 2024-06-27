@@ -28,6 +28,7 @@ macro ok {
 }
 
 include "code_buffer_test.inc"
+include "data_stack_test.inc"
 
 macro ts it {
 	inc	[test_id]
@@ -38,14 +39,16 @@ macro ts it {
 	
 	call	it
 
-	mov	esi, nl
-	call	print_char	
+	mov	esi, ts_ok
+	mov	edx, 4
+	call	print
 }
 
 entry $
 	mov	[test_id], 32
 
 	ts	code_buffer_test
+	ts	data_stack_test
 	
 	xor	edi, edi
 	
@@ -58,13 +61,15 @@ failure:
 	call	print_char
 
 	mov	esi, nl
-	call	print_char	
+	call	print_char
 	
 	mov	dil, [test_num]
 	jmp	_exit
 
 print_char:
 	mov	edx, 1
+
+print:
 	mov	edi, STDOUT_FILENO
 	mov	eax, SYS_WRITE
 	syscall
@@ -75,3 +80,4 @@ segment readable
 nl db 10
 dot db '.'
 X db 'X'
+ts_ok db ' ok', 10
