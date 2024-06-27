@@ -40,8 +40,6 @@ REG_R13		= _REGISTER or (0x0d shl REG_OFFSET)
 REG_R14		= _REGISTER or (0x0e shl REG_OFFSET)
 REG_R15		= _REGISTER or (0x0f shl REG_OFFSET)
 
-assert (1 shl 1) = 2
-
 _AL		= REG_RAX or _BYTE
 _EAX		= REG_RAX or _DWORD
 
