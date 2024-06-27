@@ -39,6 +39,9 @@ kernel_loop:
 
 	mov	eax, edi
 	call	data_stack_push
+
+	mov	eax, _IMMEDIATE
+	call	data_stack_push
 	jmp	.loop
 
 	.done:
@@ -93,30 +96,10 @@ _compile:
 ; expects
 ;	- word in rax
 ;
-_flow_in:
-	mov	al, 0xb8
-	call	_core_code.b_comma
-
-	call	data_stack_pop
-	call	_core_code.d_comma
-
-	ret
-
-;
-; expects
-;	- word in rax
-;
-_flow_out:
-	ret
-
-;
-; expects
-;	- word in rax
-;
 _handle_word:
 	push	rax
 	push	rax
-	call	_flow_in
+	call	flow_in
 
 	mov	al, 0x48
 	call	_core_code.b_comma
@@ -136,6 +119,6 @@ _handle_word:
 	call	_core_code.b_comma
 
 	pop	rax
-	call	_flow_out
+	call	flow_out
 	
 	ret

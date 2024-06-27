@@ -22,6 +22,14 @@ STDIN_FILENO	= 0
 STDOUT_FILENO	= 1
 STDERR_FILENO	= 2
 
+
+macro die how {
+	mov	edi, how
+	mov	eax, 60
+	syscall
+}
+
+
 ;
 ; expects
 ;	- buffer length in esi

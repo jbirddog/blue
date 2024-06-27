@@ -42,8 +42,19 @@ entry $
 	jne	failure
 
 	tc1	unknown, 4, 0
-	tc1	d_comma, 2, _core_words.d_comma
 	tc1	b_comma, 2, _core_words.b_comma
+	tc1	d_comma, 2, _core_words.d_comma
+
+	mov	rax, _core_words.b_comma
+	call	word_input_stack_effects
+
+	inc	[test_num]
+	cmp	ecx, 1
+	jne	failure
+
+	inc	[test_num]
+	cmp	rsi, _core_words.b_comma + _dictionary.word_offset + 8
+	jne	failure
 	
 	call	dictionary_deinit
 

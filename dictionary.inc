@@ -3,37 +3,51 @@
 ;
 ; 08	- 1 byte flags
 ;	- 1 byte word len
-;	- 6 bytes reserved
+;	- 1 byte input stack effects len
+;	- 5 bytes reserved
 ; 08	- prev addr
 ; 08	- code addr
-; ??	- word chars (padded to dq)
-; ??	- stack effects
+; ??	- word chars (bytes padded to quad)
+; ??	- stack effects (quads)
 ;
 
-DE_HIDDEN	= 1
-DE_IMMEDIATE	= 2
+DE_HIDDEN		= 1
+DE_IMMEDIATE		= 2
+
+FLAGS_OFFSET		= 0
+FLAGS_MASK		= 0xff
+
+WORD_LEN_OFFSET		= 0x08
+WORD_LEN_MASK		= 0x00ff
+
+IN_EFFECTS_LEN_OFFSET	= 0x10
+IN_EFFECTS_LEN_MASK	= 0x0000ff
 
 _core_words:
 	.b_comma:
 	db	DE_IMMEDIATE
 	db	2
-	dw	0
+	db	1
+	db	0
 	dd	0
 	dq	0
 	dq	_core_code.b_comma
 	dq	'b,'
-	dq	0 ; TODO: stack effects (( b al -- | rdi ))
+	dq	_AL
+	; TODO: clobbers rdi
 	
 	.latest:
 	.d_comma:
 	db	DE_IMMEDIATE
 	db	2
-	dw	0
+	db	1
+	db	0
 	dd	0
 	dq	.b_comma
 	dq	_core_code.d_comma
 	dq	'd,'
-	dq	0 ; TODO: stack effects (( d ax -- | rdi ))
+	dq	_EAX
+	; TODO: clobbers rdi
 
 dictionary_init:
 	mov	esi, _dictionary.length
@@ -102,4 +116,34 @@ dictionary_find:
 	xor	eax, eax
 	
 	.done:
+	ret
+
+;
+; expects
+;	- word in rax
+;
+_padded_word_length:
+	lea	ecx, [eax + 1]
+	mov	ecx, [ecx]
+	and	ecx, 0xff
+	
+	add	ecx, 7
+	and	ecx, -8
+
+	ret
+
+;
+; expects
+;	- word in rax
+;
+word_input_stack_effects:
+	lea	esi, [eax + 2]
+	mov	esi, [esi]
+	and	esi, 0xff
+
+	call	_padded_word_length
+	xchg	esi, ecx
+
+	lea	esi, [eax + _dictionary.word_offset + esi]
+	
 	ret
