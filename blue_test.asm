@@ -8,6 +8,12 @@ include "elf_template.inc"
 test_id db 1
 test_num db 1
 
+fstat_buffer:
+	rb	48
+	.file_size:
+	rq	1
+	rb	88
+
 segment readable executable
 
 include "linux.inc"
@@ -63,12 +69,11 @@ entry $
 	ts	flow_test
 	ts	kernel_test
 	ts	elf_test
-	
-	xor	edi, edi
-	
-_exit:
-	mov	eax, 60
-	syscall
+
+	mov	esi, newline
+	call	print_char
+
+	call	execve_hello_world
 
 failure:
 	mov	esi, X
@@ -78,7 +83,8 @@ failure:
 	call	print_char
 	
 	mov	dil, [test_num]
-	jmp	_exit
+	mov	eax, 60
+	syscall
 
 print_char:
 	mov	edx, 1

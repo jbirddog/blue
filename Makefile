@@ -41,5 +41,3 @@ clean:
 .PHONY:
 	dev-env dev-start dev-stop \
 	compile run dis clean
-
-include test.mk

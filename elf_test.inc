@@ -20,6 +20,10 @@ program_code:
 
 	.length = $ - program_code
 
+expected_output_size = elf_binary_wrapper_length + program_code.length
+
+assert expected_output_size = 384
+
 elf_test:	
 	mov	eax, program_code.entry_offset
 	mov	ecx, program_code.length
@@ -87,4 +91,45 @@ elf_test:
 
 	ok
 
+	t 'can write an elf binary of the expected size'
+	
+	mov	rdi, output_file
+	mov	esi, 0x01 or 0x40 or 0x200
+	mov	edx, 0x1ed
+	mov	eax, SYS_OPEN
+	syscall
+
+	mov	rdi, rax
+	mov	rsi, program_code
+	mov	eax, program_code.entry_offset
+	mov	ecx, program_code.length
+	call	elf_binary_write
+
+	mov	rsi, fstat_buffer
+	mov	eax, SYS_FSTAT
+	syscall
+	
+	mov	eax, SYS_CLOSE
+	syscall
+
+	cmp	qword [fstat_buffer.file_size], expected_output_size
+	jne	failure
+
+	ok
+	
 	ret
+
+execve_hello_world:
+    	mov 	rdi, output_file
+    	mov 	rsi, execve_args
+    	xor 	rdx, rdx
+	mov	eax, SYS_EXECVE
+    	syscall
+
+output_file:
+	db	"elf_test_hello_world.out"
+	db	0x00
+
+execve_args:
+	dq	output_file
+	dq	0x0
