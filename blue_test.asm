@@ -45,13 +45,13 @@ include "kernel_test.inc"
 include "elf_test.inc"
 
 macro ts it {
-	inc	[test_id]
 	mov	[test_num], 0
 
-	mov	esi, test_id
-	call	print_char
+	mov	esi, it##_lbl
+	mov	edx, it##_lbl.length
+	call	print
 	
-	call	it
+	call	it##_test
 
 	mov	esi, ts_ok
 	mov	edx, 4
@@ -59,16 +59,18 @@ macro ts it {
 }
 
 entry $
-	mov	[test_id], 32
+	mov	esi, header
+	mov	edx, header.length
+	call	print
 
-	ts	code_buffer_test
-	ts	data_stack_test
-	ts	parser_test
-	ts	to_number_test
-	ts	dictionary_test
-	ts	flow_test
-	ts	kernel_test
-	ts	elf_test
+	ts	code_buffer
+	ts	data_stack
+	ts	parser
+	ts	to_number
+	ts	dictionary
+	ts	flow
+	ts	kernel
+	ts	elf
 
 	mov	esi, newline
 	call	print_char
@@ -99,3 +101,39 @@ newline db 10
 dot db '.'
 X db 'X'
 ts_ok db ' ok', 10
+
+header:
+	db 'Blue Compiler Test Suite', 10, 10
+	.length = $ - header
+
+code_buffer_lbl:
+	db 'code buffer'
+	.length = $ - code_buffer_lbl
+
+data_stack_lbl:
+	db 'data stack'
+	.length = $ - data_stack_lbl
+
+parser_lbl:
+	db 'parser'
+	.length = $ - parser_lbl
+
+to_number_lbl:
+	db 'to_number'
+	.length = $ - to_number_lbl
+
+dictionary_lbl:
+	db 'dictionary'
+	.length = $ - dictionary_lbl
+
+flow_lbl:
+	db 'flow'
+	.length = $ - flow_lbl
+
+kernel_lbl:
+	db 'kernel'
+	.length = $ - kernel_lbl
+
+elf_lbl:
+	db 'elf'
+	.length = $ - elf_lbl
