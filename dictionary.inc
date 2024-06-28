@@ -62,6 +62,17 @@ _core_words:
 	dq	':'
 	assert ($ - .colon) mod 8 = 0
 
+	.semi:
+	db	DE_IMMEDIATE
+	db	1
+	db	0
+	db	0
+	dd	0
+	dq	.colon
+	dq	semi
+	dq	';'
+	assert ($ - .semi) mod 8 = 0
+
 dictionary_init:
 	mov	esi, _dictionary.length
 	mov	edx, PROT_RW
@@ -72,6 +83,7 @@ dictionary_init:
 	stosq
 	
 	mov	rax, _core_words.latest
+	stosq
 	stosq
 
 	ret
@@ -162,5 +174,3 @@ word_input_stack_effects:
 	
 	ret
 
-colon:
-	ret

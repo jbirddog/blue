@@ -45,7 +45,12 @@ kernel_loop:
 	jmp	.loop
 
 	.done:
+	cmp	[_blue.mode], INTERPRET
+	jne	.success
+	
 	call	_interpretive_dance
+
+	.success:
 	mov	eax, SUCCESS
 	ret
 
@@ -83,7 +88,7 @@ _interpretive_dance:
 	mov	[_code_buffer.mark], rdi
 
 	call	rsi
-	
+
 	ret
 
 _compile:
@@ -121,4 +126,26 @@ _handle_word:
 	pop	rax
 	call	flow_out
 	
+	ret
+
+colon:
+	call	_compile
+	
+	mov	rdi, [_dictionary.here]
+	mov	[_dictionary.current], rdi
+
+	xor	rax, rax
+	stosq
+
+	mov	rax, [_dictionary.latest]
+	stosq
+
+	mov	rax, [_code_buffer.here]
+	stosq
+	
+	ret
+
+semi:
+	call _interpret
+
 	ret
