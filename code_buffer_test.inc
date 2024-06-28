@@ -89,10 +89,13 @@ check_code_buffer:
 	mov	rdi, [_code_buffer.base]
 	
 	.loop:
+	dec	ecx
+	js	.done
+	
 	cmpsb
 	jne	failure
 
-	dec	ecx
 	jnz	.loop
-	
+
+	.done:
 	ret

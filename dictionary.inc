@@ -35,6 +35,7 @@ _core_words:
 	dq	'b,'
 	dq	_AL
 	; TODO: clobbers rdi
+	assert ($ - .b_comma) mod 8 = 0
 	
 	.latest:
 	.d_comma:
@@ -48,6 +49,18 @@ _core_words:
 	dq	'd,'
 	dq	_EAX
 	; TODO: clobbers rdi
+	assert ($ - .d_comma) mod 8 = 0
+
+	.colon:
+	db	DE_IMMEDIATE
+	db	1
+	db	0
+	db	0
+	dd	0
+	dq	.d_comma
+	dq	colon
+	dq	':'
+	assert ($ - .colon) mod 8 = 0
 
 dictionary_init:
 	mov	esi, _dictionary.length
@@ -58,7 +71,8 @@ dictionary_init:
 	stosq
 	stosq
 	
-	mov	[_dictionary.latest], _core_words.latest
+	mov	rax, _core_words.latest
+	stosq
 
 	ret
 
@@ -146,4 +160,7 @@ word_input_stack_effects:
 
 	lea	esi, [eax + _dictionary.word_offset + esi]
 	
+	ret
+
+colon:
 	ret
