@@ -1,4 +1,3 @@
-format elf64 executable 3
 
 macro tc1 tib, tib_len, result, expected {
 	mov	[_blue.tib], tib
@@ -8,29 +7,24 @@ macro tc1 tib, tib_len, result, expected {
 	call	parser_next_word
 	call	to_number
 
-	inc	[test_num]
+	t 'has expected result'
+	
 	cmp	eax, result
 	jne	failure
+	push	rdi
 
-	inc	[test_num]
+	ok
+
+	t 'has expected value'
+
+	pop	rdi
 	cmp	edi, expected
-	jne	failure	
+	jne	failure
+
+	ok
 }
 
-segment readable writeable
-
-include "defs.inc"
-
-test_num db 1
-
-segment readable executable
-
-include "linux.inc"
-include "parser.inc"
-include "to_number.inc"
-
-entry $
-	mov	[test_num], 0
+to_number_test:
 	mov	[_blue.base], 10
 
 	tc1	not_number, 4, FAILURE, 0
@@ -40,17 +34,7 @@ entry $
 	tc1	thirteen, 2, SUCCESS, 13
 	tc1	thousand, 4, SUCCESS, 1000
 
-	xor	edi, edi
-	
-exit:
-	mov	eax, 60
-	syscall
-
-failure:
-	mov	dil, [test_num]
-	jmp	exit
-
-segment readable
+	ret
 
 not_number	db '!@#$'
 not_number2	db '1234p'

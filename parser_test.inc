@@ -1,17 +1,25 @@
-format elf64 executable 3
 
 macro tc2 word_in, word_len {
 	call	parser_next_word
 
-	inc	[test_num]
+	t 'has the expected length'
+	
 	xor	eax, eax
 	mov	al, [_blue.word_len]
 	cmp	al, word_len
 	jne	failure
+	push	rax
 
+	ok
+
+	t 'has the expected word'
+
+	pop	rax
 	mov	ecx, eax
 	mov	eax, word_in
 	call	check_word
+
+	ok
 }
 
 macro tc1 tib, tib_len, word_in, word_len {
@@ -22,20 +30,7 @@ macro tc1 tib, tib_len, word_in, word_len {
 	tc2	word_in, word_len
 }
 
-segment readable writeable
-
-include "defs.inc"
-
-test_num db 1
-
-segment readable executable
-
-include "linux.inc"
-include "parser.inc"
-
-entry $
-	mov	[test_num], 0
-
+parser_test:
 	tc1	nothing, 0, 0, 0
 	
 	tc1	space, 1, 0, 0
@@ -57,20 +52,7 @@ entry $
 	tc2	9, 4
 	tc2	14, 6
 
-	xor	edi, edi
-
-exit:
-	mov	eax, 60
-	syscall
-
-failure:
-	mov	dil, [test_num]
-	jmp	exit
-
-failure2:
-	mov	dil, [test_num]
-	add	dil, 100
-	jmp	exit
+	ret
 
 ;
 ; expects
@@ -87,7 +69,7 @@ check_word:
 
 	.loop:
 	cmpsb
-	jne	failure2
+	jne	failure
 
 	dec	ecx
 	jnz	.loop
@@ -95,12 +77,9 @@ check_word:
 	.done:
 	ret
 
-segment readable
-
 nothing		db 0
 space		db 32
 tab		db 9
-newline		db 10
 spaces		db 32, 32
 ws_4		db 32, 9, 10, 32
 six		db '6'
