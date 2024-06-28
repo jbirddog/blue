@@ -30,6 +30,7 @@ macro ok {
 include "code_buffer_test.inc"
 include "data_stack_test.inc"
 include "to_number_test.inc"
+include "parser_test.inc"
 
 macro ts it {
 	inc	[test_id]
@@ -51,6 +52,7 @@ entry $
 	ts	code_buffer_test
 	ts	data_stack_test
 	ts	to_number_test
+	ts	parser_test
 	
 	xor	edi, edi
 	
@@ -62,7 +64,7 @@ failure:
 	mov	esi, X
 	call	print_char
 
-	mov	esi, nl
+	mov	esi, newline
 	call	print_char
 	
 	mov	dil, [test_num]
@@ -77,7 +79,7 @@ print:
 	syscall
 	ret
 
-nl db 10
+newline db 10
 dot db '.'
 X db 'X'
 ts_ok db ' ok', 10

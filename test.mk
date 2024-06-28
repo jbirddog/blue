@@ -1,6 +1,5 @@
 
 TESTS := \
-	parser_test \
 	dictionary_test \
 	flow_test \
 	kernel_test \
