@@ -29,6 +29,7 @@ macro ok {
 
 include "code_buffer_test.inc"
 include "data_stack_test.inc"
+include "to_number_test.inc"
 
 macro ts it {
 	inc	[test_id]
@@ -49,6 +50,7 @@ entry $
 
 	ts	code_buffer_test
 	ts	data_stack_test
+	ts	to_number_test
 	
 	xor	edi, edi
 	
@@ -74,8 +76,6 @@ print:
 	mov	eax, SYS_WRITE
 	syscall
 	ret
-	
-segment readable
 
 nl db 10
 dot db '.'
