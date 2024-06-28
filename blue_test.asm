@@ -12,10 +12,10 @@ segment readable executable
 include "linux.inc"
 include "code_buffer.inc"
 include "data_stack.inc"
-include "dictionary.inc"
-include	"flow.inc"
 include "parser.inc"
 include "to_number.inc"
+include "dictionary.inc"
+include	"flow.inc"
 include "kernel.inc"
 
 macro t what {
@@ -29,8 +29,9 @@ macro ok {
 
 include "code_buffer_test.inc"
 include "data_stack_test.inc"
-include "to_number_test.inc"
 include "parser_test.inc"
+include "to_number_test.inc"
+include "dictionary_test.inc"
 
 macro ts it {
 	inc	[test_id]
@@ -51,8 +52,9 @@ entry $
 
 	ts	code_buffer_test
 	ts	data_stack_test
-	ts	to_number_test
 	ts	parser_test
+	ts	to_number_test
+	ts	dictionary_test
 	
 	xor	edi, edi
 	
