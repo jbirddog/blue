@@ -74,3 +74,25 @@ code_buffer_test:
 	call code_buffer_deinit
 
 	ret
+;
+; expects
+;	- expected value in rsi
+;	- expected length in ecx
+;
+check_code_buffer:
+	mov	rdi, [_code_buffer.here]
+	sub	rdi, [_code_buffer.base]
+
+	cmp	edi, ecx
+	jne	failure
+	
+	mov	rdi, [_code_buffer.base]
+	
+	.loop:
+	cmpsb
+	jne	failure
+
+	dec	ecx
+	jnz	.loop
+	
+	ret

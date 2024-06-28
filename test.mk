@@ -1,6 +1,5 @@
 
 TESTS := \
-	flow_test \
 	kernel_test \
 	elf_test \
 	elf_test_hello_world

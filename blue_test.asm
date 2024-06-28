@@ -32,6 +32,7 @@ include "data_stack_test.inc"
 include "parser_test.inc"
 include "to_number_test.inc"
 include "dictionary_test.inc"
+include "flow_test.inc"
 
 macro ts it {
 	inc	[test_id]
@@ -55,6 +56,7 @@ entry $
 	ts	parser_test
 	ts	to_number_test
 	ts	dictionary_test
+	ts	flow_test
 	
 	xor	edi, edi
 	
