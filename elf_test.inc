@@ -1,13 +1,3 @@
-format elf64 executable 3
-
-segment readable writeable
-
-include "elf_template.inc"
-
-segment readable executable
-
-include "elf.inc"
-include "linux.inc"
 
 program_code:
 	.entry_offset = $ - program_code
@@ -30,52 +20,71 @@ program_code:
 
 	.length = $ - program_code
 
-entry $	
+elf_test:	
 	mov	eax, program_code.entry_offset
 	mov	ecx, program_code.length
 	call	elf_binary_calculate_fields
 
-	mov	edi, 1
+	t 'start address is correct'
+	
 	cmp	qword [elf_header.start_address], 0x400078
-	jne	exit
+	jne	failure
 
-	mov	edi, 2
+	ok
+
+	t 'section header offset is correct'
+	
 	cmp	qword [elf_header.section_header_offset], 0xc0
-	jne	exit
+	jne	failure
 
-	mov	edi, 3
+	ok
+
+	t 'size in file is correct'
+	
 	cmp	qword [program_header.size_in_file], 0xb0
-	jne	exit
+	jne	failure
 
-	mov	edi, 4
+	ok
+
+	t 'size in memory is correct'
+	
 	cmp	qword [program_header.size_in_memory], 0xb0
-	jne	exit
+	jne	failure
 
-	mov	edi, 5
+	ok
+
+	t 'section header address is correct'
+	
 	cmp	qword [program_code_section_header.address], 0x400078
-	jne	exit
+	jne	failure
 
-	mov	edi, 6
+	ok
+
+	t 'section header offset is correct'
+	
 	cmp	qword [program_code_section_header.offset], 0x78
-	jne	exit
+	jne	failure
 
-	mov	edi, 7
+	ok
+
+	t 'section header size is correct'
+
 	cmp	qword [program_code_section_header.size], 0x38
-	jne	exit
+	jne	failure
 
-	mov	edi, 8
+	ok
+
+	t 'section header offset is correct'
 	cmp	qword [shstrtab_section_header.offset], 0xb0
-	jne	exit
+	jne	failure
 
-	mov	edi, 9
+	ok
+
+	t 'section header size is correct'
+
 	cmp	qword [shstrtab_section_header.size], 0x10
-	jne	exit
+	jne	failure
 
-	;
-	; exit cleanly
-	;
-	xor 	edi, edi
+	ok
 
-exit:
-	mov 	eax, SYS_EXIT
-	syscall
+	ret

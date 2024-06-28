@@ -1,6 +1,5 @@
 
 TESTS := \
-	elf_test \
 	elf_test_hello_world
 
 $(TESTS):

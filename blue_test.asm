@@ -3,6 +3,7 @@ format elf64 executable 3
 segment readable writeable
 
 include "defs.inc"
+include "elf_template.inc"
 
 test_id db 1
 test_num db 1
@@ -17,6 +18,7 @@ include "to_number.inc"
 include "dictionary.inc"
 include	"flow.inc"
 include "kernel.inc"
+include "elf.inc"
 
 macro t what {
 	inc	[test_num]
@@ -34,6 +36,7 @@ include "to_number_test.inc"
 include "dictionary_test.inc"
 include "flow_test.inc"
 include "kernel_test.inc"
+include "elf_test.inc"
 
 macro ts it {
 	inc	[test_id]
@@ -59,6 +62,7 @@ entry $
 	ts	dictionary_test
 	ts	flow_test
 	ts	kernel_test
+	ts	elf_test
 	
 	xor	edi, edi
 	
