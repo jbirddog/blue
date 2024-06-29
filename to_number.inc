@@ -18,6 +18,8 @@ to_number:
 	cmp	bl, 16
 	je	.base16_loop
 
+	die	ERR_BAD_BASE
+	
 	.failure:
 	mov	eax, FAILURE
 	ret

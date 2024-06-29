@@ -73,7 +73,8 @@ kernel_test:
 	
 	call	kernel_deinit
 
-	tc1	one_byte 
+	tc1	one_byte
+	tc1	one_byte_base16
 	tc1	clean_exit
 	
 	tc2	bogus
@@ -92,6 +93,15 @@ one_byte:
 
 	.expected:
 	db	0x01
+	.expected_length = $ - .expected
+
+one_byte_base16:
+	.blue:
+	db	'16 base FF b,'
+	.blue_length = $ - .blue
+
+	.expected:
+	db	0xFF
 	.expected_length = $ - .expected
 	
 clean_exit:
