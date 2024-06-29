@@ -35,6 +35,7 @@ to_number_test:
 	tc1	thousand, 4, SUCCESS, 1000
 
 	mov	[_blue.base], 16
+	
 	tc1	not_number, 4, FAILURE, 0
 	tc1	not_number2, 5, FAILURE, 4660
 	tc1	zero, 1, SUCCESS, 0
