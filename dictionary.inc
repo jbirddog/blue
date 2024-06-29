@@ -36,7 +36,6 @@ _core_words:
 	dq	_AL
 	; TODO: clobbers rdi
 	
-	.latest:
 	.d_comma:
 	db	DE_IMMEDIATE
 	db	2
@@ -48,6 +47,18 @@ _core_words:
 	dq	'd,'
 	dq	_EAX
 	; TODO: clobbers rdi
+	
+	.latest:
+	.base:
+	db	DE_IMMEDIATE
+	db	4
+	db	1
+	db	0
+	dd	0
+	dq	.d_comma
+	dq	_core_code.base
+	dq	'base'
+	dq	_AL
 
 dictionary_init:
 	mov	esi, _dictionary.length
