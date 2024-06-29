@@ -79,7 +79,7 @@ _interpretive_dance:
 	je	.done
 	
 	mov	al, 0xc3
-	call	_core_code.b_comma
+	call	b_comma
 
 	mov	rsi, [_code_buffer.mark]
 	mov	rdi, rsi
@@ -111,21 +111,21 @@ _handle_word:
 	call	flow_in
 
 	mov	al, 0x48
-	call	_core_code.b_comma
+	call	b_comma
 	mov	al, 0xc7
-	call	_core_code.b_comma
+	call	b_comma
 	mov	al, 0xc7
-	call	_core_code.b_comma
+	call	b_comma
 
 	pop	rax
 	add	rax, _dictionary.code_offset
 	mov	rax, [rax]
-	call	_core_code.d_comma
+	call	d_comma
 
 	mov	al, 0xff
-	call	_core_code.b_comma
+	call	b_comma
 	mov	al, 0xd7
-	call	_core_code.b_comma
+	call	b_comma
 
 	pop	rax
 	call	flow_out

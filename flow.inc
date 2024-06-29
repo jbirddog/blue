@@ -21,10 +21,10 @@ flow_in:
 
 	mov	al, 0xb8
 	add	al, bl
-	call	_core_code.b_comma
+	call	b_comma
 
 	call	data_stack_pop
-	call	_core_code.d_comma
+	call	d_comma
 
 	jmp	.loop
 

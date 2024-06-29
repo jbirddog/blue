@@ -31,7 +31,7 @@ _core_words:
 	db	0
 	dd	0
 	dq	0
-	dq	_core_code.b_comma
+	dq	b_comma
 	dq	'b,'
 	dq	_AL
 	; TODO: clobbers rdi
@@ -44,7 +44,7 @@ _core_words:
 	db	0
 	dd	0
 	dq	.b_comma
-	dq	_core_code.d_comma
+	dq	d_comma
 	dq	'd,'
 	dq	_EAX
 	; TODO: clobbers rdi
@@ -80,7 +80,7 @@ _core_words:
 	db	0
 	dd	0
 	dq	.semi
-	dq	_core_code.base
+	dq	base
 	dq	'base'
 	dq	_AL
 	assert ($ - .base) mod 8 = 0
@@ -186,3 +186,30 @@ word_input_stack_effects:
 	
 	ret
 
+;
+; expects
+;	- value in al
+;
+b_comma:
+	mov	rdi, [_code_buffer.here]
+	stosb
+	mov	[_code_buffer.here], rdi
+	ret
+
+;
+; expects
+;	- value in eax
+;
+d_comma:
+	mov	rdi, [_code_buffer.here]
+	stosd
+	mov	[_code_buffer.here], rdi
+	ret
+
+;
+; expects
+;	- value in al
+;
+base:
+	mov	[_blue.base], al
+	ret

@@ -1,20 +1,3 @@
-
-_core_code:
-	.b_comma:
-	mov	rdi, [_code_buffer.here]
-	stosb
-	mov	[_code_buffer.here], rdi
-	ret
-
-	.d_comma:
-	mov	rdi, [_code_buffer.here]
-	stosd
-	mov	[_code_buffer.here], rdi
-	ret
-
-	.base:
-	mov	[_blue.base], al
-	ret
 		
 code_buffer_init:
 	mov	esi, _code_buffer.length

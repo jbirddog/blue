@@ -54,6 +54,53 @@ dictionary_test:
 	jne	failure
 
 	ok
+	
+	t 'b, writes a byte'
+
+	mov	al, 123
+	call	b_comma
+	
+	mov	rax, [_code_buffer.base]
+	mov	rcx, [_code_buffer.here]
+	sub	rcx, rax
+	cmp	ecx, 1
+	jne	failure
+	push	rax
+
+	ok
+
+	t 'b, writes the correct value'
+
+	pop	rax
+	mov	rax, [rax]
+	cmp	al, 123
+	jne	failure
+
+	ok
+
+	t 'd, writes a dword'
+	
+	mov	eax, 123456
+	call	d_comma
+
+	mov	rax, [_code_buffer.base]
+	inc	rax
+	mov	rcx, [_code_buffer.here]
+	sub	rcx, rax
+	cmp	ecx, 4
+	jne	failure
+	push	rax
+
+	ok
+
+	t 'd, writes the correct value'
+
+	pop	rax
+	mov	rax, [rax]
+	cmp	eax, 123456
+	jne	failure
+
+	ok
 
 	t 'inits current correctly'
 	
@@ -64,9 +111,9 @@ dictionary_test:
 	ok
 
 	tc1	unknown, 4, 0
-	tc1	b_comma, 2, _core_words.b_comma
-	tc1	d_comma, 2, _core_words.d_comma
-	tc1	base, 4, _core_words.base
+	tc1	word_b_comma, 2, _core_words.b_comma
+	tc1	word_d_comma, 2, _core_words.d_comma
+	tc1	word_base, 4, _core_words.base
 
 	tc2	_core_words.b_comma, 1, 8
 	
@@ -75,6 +122,6 @@ dictionary_test:
 	ret
 
 unknown		db '!@#$'
-b_comma		db 'b,'
-d_comma		db 'd,'
-base		db 'base'
+word_b_comma	db 'b,'
+word_d_comma	db 'd,'
+word_base	db 'base'
