@@ -1,9 +1,9 @@
 
-macro tc1 tib, tib_len, expected, expected_len {
+macro tc1 what {
 	call	kernel_init
 
-	mov	rsi, tib
-	mov	ecx, tib_len
+	mov	rsi, what##.blue
+	mov	ecx, what##.blue_length
 	xor	eax, eax
 
 	call	kernel_loop
@@ -15,10 +15,10 @@ macro tc1 tib, tib_len, expected, expected_len {
 
 	ok
 
-	t 'has the exepected compilation'
+	t 'has the expected compilation'
 	
-	mov	rsi, expected
-	mov	ecx, expected_len
+	mov	rsi, what##.expected
+	mov	ecx, what##.expected_length
 	call	check_code_buffer
 
 	ok
@@ -26,11 +26,11 @@ macro tc1 tib, tib_len, expected, expected_len {
 	call	kernel_deinit
 }
 
-macro tc2 tib, tib_len {
+macro tc2 what {
 	call	kernel_init
 
-	mov	rsi, tib
-	mov	ecx, tib_len
+	mov	rsi, what##.blue
+	mov	ecx, what##.blue_length
 	xor	eax, eax
 
 	call	kernel_loop
@@ -73,13 +73,10 @@ kernel_test:
 	
 	call	kernel_deinit
 
-	tc1	one_byte.blue, one_byte.blue_length, \
-		one_byte.expected, one_byte.expected_length 
-
-	tc1	clean_exit.blue, clean_exit.blue_length, \
-		clean_exit.expected, clean_exit.expected_length 
-
-	tc2	bogus.blue, bogus.blue_length
+	tc1	one_byte 
+	tc1	clean_exit
+	
+	tc2	bogus
 		
 	ret
 
