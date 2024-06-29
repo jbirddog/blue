@@ -91,11 +91,11 @@ check_code_buffer:
 	.loop:
 	dec	ecx
 	js	.done
-	
+
 	cmpsb
 	jne	failure
 
-	jnz	.loop
+	jmp	.loop
 
 	.done:
 	ret
