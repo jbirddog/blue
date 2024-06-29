@@ -37,7 +37,6 @@ _core_words:
 	; TODO: clobbers rdi
 	assert ($ - .b_comma) mod 8 = 0
 	
-	.latest:
 	.d_comma:
 	db	DE_IMMEDIATE
 	db	2
@@ -72,6 +71,18 @@ _core_words:
 	dq	semi
 	dq	';'
 	assert ($ - .semi) mod 8 = 0
+	
+	.latest:
+	.base:
+	db	DE_IMMEDIATE
+	db	4
+	db	1
+	db	0
+	dd	0
+	dq	.semi
+	dq	_core_code.base
+	dq	'base'
+	dq	_AL
 
 dictionary_init:
 	mov	esi, _dictionary.length

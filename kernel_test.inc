@@ -73,7 +73,9 @@ kernel_test:
 	
 	call	kernel_deinit
 
-	tc1	one_byte 
+	tc1	one_byte
+	tc1	two_bytes
+	tc1	one_byte_base16
 	tc1	clean_exit
 	;tc1	user_one_byte
 	
@@ -94,12 +96,31 @@ one_byte:
 	.expected:
 	db	0x01
 	.expected_length = $ - .expected
+
+two_bytes:
+	.blue:
+	db	'1 b, 2 b,'
+	.blue_length = $ - .blue
+
+	.expected:
+	db	0x01, 0x02
+	.expected_length = $ - .expected
+
+one_byte_base16:
+	.blue:
+	db	'16 base FF b,'
+	.blue_length = $ - .blue
+
+	.expected:
+	db	0xFF
+	.expected_length = $ - .expected
 	
 clean_exit:
 	.blue:
-	db	'49 b, 255 b, '		; xor edi, edi
-	db	'184 b, 60 d, '		; mov eax, 60
-	db	'15 b, 5 b,'		; syscall
+	db	'16 base '
+	db	'31 b, FF b, '		; xor edi, edi
+	db	'B8 b, 3C d, '		; mov eax, 60
+	db	'0F b, 05 b,'		; syscall
 	.blue_length = $ - .blue
 
 	.expected:

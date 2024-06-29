@@ -1,11 +1,10 @@
 
 flow_test:
+	t 'b, has the expected flow in'
+	
+	call	code_buffer_init
 	call	data_stack_init
 
-	t 'b, has the expected flow in'
-
-	call	code_buffer_init
-	
 	mov	eax, 0x3c
 	call	data_stack_push
 
@@ -19,6 +18,7 @@ flow_test:
 	mov	ecx, b_comma_flow_in.length
 	call	check_code_buffer
 	
+	call	data_stack_deinit
 	call	code_buffer_deinit
 
 	ok
@@ -26,6 +26,7 @@ flow_test:
 	t 'd, has the expected flow in'
 
 	call	code_buffer_init
+	call	data_stack_init
 	
 	mov	eax, 0x3c
 	call	data_stack_push
@@ -40,6 +41,7 @@ flow_test:
 	mov	ecx, d_comma_flow_in.length
 	call	check_code_buffer
 	
+	call	data_stack_deinit
 	call	code_buffer_deinit
 
 	ok
@@ -47,6 +49,7 @@ flow_test:
 	t ': has the expected flow in'
 
 	call	code_buffer_init
+	call	data_stack_init
 	
 	mov	rax, _core_words.colon
 	call	flow_in
@@ -55,11 +58,33 @@ flow_test:
 	xor	ecx, ecx
 	call	check_code_buffer
 	
+	call	data_stack_deinit
 	call	code_buffer_deinit
 
 	ok
 
+	t 'base has the expected flow in'
+	
+	call	code_buffer_init
+	call	data_stack_init
+
+	mov	eax, 0x10
+	call	data_stack_push
+
+	mov	eax, _IMMEDIATE
+	call	data_stack_push
+	
+	mov	rax, _core_words.base
+	call	flow_in
+
+	mov	rsi, base_flow_in
+	mov	ecx, base_flow_in.length
+	call	check_code_buffer
+	
 	call	data_stack_deinit
+	call	code_buffer_deinit
+
+	ok
 
 	ret
 
@@ -72,3 +97,8 @@ d_comma_flow_in:
 	db	0xb8
 	dd	0x3c
 	.length = $ - d_comma_flow_in
+
+base_flow_in:
+	db	0xb8
+	dd	0x10
+	.length = $ - base_flow_in

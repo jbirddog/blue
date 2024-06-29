@@ -66,6 +66,7 @@ dictionary_test:
 	tc1	unknown, 4, 0
 	tc1	b_comma, 2, _core_words.b_comma
 	tc1	d_comma, 2, _core_words.d_comma
+	tc1	base, 4, _core_words.base
 
 	tc2	_core_words.b_comma, 1, 8
 	
@@ -76,3 +77,4 @@ dictionary_test:
 unknown		db '!@#$'
 b_comma		db 'b,'
 d_comma		db 'd,'
+base		db 'base'

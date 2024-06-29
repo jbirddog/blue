@@ -75,6 +75,9 @@ _interpret:
 	ret
 
 _interpretive_dance:
+	cmp	[_code_buffer.mark], 0
+	je	.done
+	
 	mov	al, 0xc3
 	call	_core_code.b_comma
 
@@ -89,6 +92,7 @@ _interpretive_dance:
 
 	call	rsi
 
+	.done:
 	ret
 
 _compile:
@@ -125,6 +129,9 @@ _handle_word:
 
 	pop	rax
 	call	flow_out
+
+	call	_interpretive_dance
+	call	_interpret
 	
 	ret
 
