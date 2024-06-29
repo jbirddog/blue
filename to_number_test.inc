@@ -34,6 +34,16 @@ to_number_test:
 	tc1	thirteen, 2, SUCCESS, 13
 	tc1	thousand, 4, SUCCESS, 1000
 
+	mov	[_blue.base], 16
+	tc1	not_number, 4, FAILURE, 0
+	tc1	not_number2, 5, FAILURE, 4660
+	tc1	zero, 1, SUCCESS, 0
+	tc1	one, 1, SUCCESS, 1
+	tc1	thirteen, 2, SUCCESS, 19
+	tc1	thousand, 4, SUCCESS, 4096
+	tc1	FF, 2, SUCCESS, 255
+	tc1	ABCDEF, 6, SUCCESS, 11259375
+
 	ret
 
 not_number	db '!@#$'
@@ -42,3 +52,5 @@ zero		db '0'
 one		db '1'
 thirteen	db '13'
 thousand	db '1000'
+FF		db 'FF'
+ABCDEF		db 'ABCDEF'
