@@ -83,6 +83,7 @@ _core_words:
 	dq	_core_code.base
 	dq	'base'
 	dq	_AL
+	assert ($ - .base) mod 8 = 0
 
 dictionary_init:
 	mov	esi, _dictionary.length
