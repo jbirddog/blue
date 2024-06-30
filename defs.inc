@@ -74,4 +74,3 @@ _dictionary:
 	.base dq 1
 	.here dq 1
 	.latest dq 1
-	.current dq 1

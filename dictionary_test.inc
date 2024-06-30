@@ -102,14 +102,6 @@ dictionary_test:
 
 	ok
 
-	t 'inits current correctly'
-	
-	mov	rax, [_dictionary.current]
-	cmp	rax, [_dictionary.latest]
-	jne	failure
-
-	ok
-
 	tc1	unknown, 4, 0
 	tc1	word_b_comma, 2, _core_words.b_comma
 	tc1	word_d_comma, 2, _core_words.d_comma

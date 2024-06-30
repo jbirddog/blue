@@ -139,7 +139,6 @@ colon:
 	call	_compile
 	
 	mov	rdi, [_dictionary.here]
-	mov	[_dictionary.current], rdi
 
 	xor	rax, rax
 	stosq
@@ -149,6 +148,9 @@ colon:
 
 	mov	rax, [_code_buffer.here]
 	stosq
+
+	pop	rax
+	mov	[_dictionary.latest], rax
 	
 	ret
 

@@ -93,10 +93,8 @@ dictionary_init:
 	mov	rdi, _dictionary.base
 	stosq
 	stosq
-	
-	mov	rax, _core_words.latest
-	stosq
-	stosq
+
+	mov	[_dictionary.latest], _core_words.latest
 
 	ret
 

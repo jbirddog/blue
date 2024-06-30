@@ -5,7 +5,7 @@
 flow_in:
 	call	word_input_stack_effects
 	mov	edi, esi
-	
+
 	.loop:
 	dec	ecx
 	js	.done
