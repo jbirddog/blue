@@ -51,7 +51,7 @@ _core_words:
 	dq	'base'
 	dq	_AL
 
-assert ($ - _core_words) mod 8 = 0
+assert ($ - _core_words) and 7 = 0
 
 dictionary_init:
 	mov	esi, _dictionary.length
@@ -179,3 +179,22 @@ d_comma:
 base:
 	mov	[_blue.base], al
 	ret
+
+_create_entry:
+	mov	rdi, [_dictionary.here]
+	push	rdi
+	
+	xor	rax, rax
+	stosq
+
+	mov	rax, [_dictionary.latest]
+	stosq
+
+	mov	rax, [_code_buffer.here]
+	stosq
+
+	pop	rdi
+	mov	[_dictionary.latest], rdi
+	
+	ret
+

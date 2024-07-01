@@ -108,9 +108,20 @@ dictionary_test:
 	tc1	word_base, 4, _core_words.base
 
 	tc2	_core_words.b_comma, 1, 8
+
+	t 'can create new entry'
+
+	push	[_dictionary.latest]
+	call	_create_entry
+
+	pop	rax
+	cmp	rax, [_dictionary.latest]
+	je	failure
+
+	ok
 	
 	call	dictionary_deinit
-
+	
 	ret
 
 unknown		db '!@#$'
