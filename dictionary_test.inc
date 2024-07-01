@@ -118,6 +118,26 @@ dictionary_test:
 	cmp	rax, [_dictionary.latest]
 	je	failure
 
+	mov	rax, [_dictionary.latest]
+	mov	rax, [rax]
+	
+	cmp	al, DE_HIDDEN
+	jne	failure
+
+	mov	rax, [_dictionary.latest]
+	add	rax, _dictionary.prev_word_offset
+	mov	rax, [rax]
+	mov	rsi, _core_words.latest
+	add	rsi, _dictionary.prev_word_offset
+	cmp	rax, rsi
+	jne	failure
+
+	mov	rax, [_dictionary.latest]
+	add	rax, _dictionary.code_offset
+	mov	rax, [rax]
+	cmp	rax, [_code_buffer.here]
+	jne	failure
+	
 	ok
 	
 	call	dictionary_deinit

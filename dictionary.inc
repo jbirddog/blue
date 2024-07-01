@@ -183,16 +183,19 @@ base:
 _create_entry:
 	mov	rdi, [_dictionary.here]
 	push	rdi
-	
-	xor	rax, rax
+
+	mov	eax, DE_HIDDEN
 	stosq
 
 	mov	rax, [_dictionary.latest]
+	add	rax, _dictionary.prev_word_offset
 	stosq
 
 	mov	rax, [_code_buffer.here]
 	stosq
 
+	mov	[_dictionary.here], rdi
+	
 	pop	rdi
 	mov	[_dictionary.latest], rdi
 	
