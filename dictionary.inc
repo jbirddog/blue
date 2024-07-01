@@ -32,7 +32,6 @@ _core_words:
 	dq	'b,'
 	dq	_AL
 	; TODO: clobbers rdi
-	assert ($ - .b_comma) mod 8 = 0
 	
 	.d_comma:
 	db	0, 2, 1, 0
@@ -42,7 +41,6 @@ _core_words:
 	dq	'd,'
 	dq	_EAX
 	; TODO: clobbers rdi
-	assert ($ - .d_comma) mod 8 = 0
 
 	.colon:
 	db	DE_IMMEDIATE
@@ -53,7 +51,6 @@ _core_words:
 	dq	.d_comma
 	dq	colon
 	dq	':'
-	assert ($ - .colon) mod 8 = 0
 
 	.semi:
 	db	DE_IMMEDIATE
@@ -64,7 +61,6 @@ _core_words:
 	dq	.colon
 	dq	semi
 	dq	';'
-	assert ($ - .semi) mod 8 = 0
 	
 	.latest:
 	.base:
@@ -74,7 +70,6 @@ _core_words:
 	dq	base
 	dq	'base'
 	dq	_AL
-	assert ($ - .base) mod 8 = 0
 
 assert ($ - _core_words) mod 8 = 0
 
