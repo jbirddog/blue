@@ -130,9 +130,13 @@ _handle_word:
 	pop	rax
 	call	flow_out
 
+	cmp	[_blue.mode], INTERPRET
+	jne	.done
+	
 	call	_interpretive_dance
 	call	_interpret
-	
+
+	.done:
 	ret
 
 colon:
@@ -155,6 +159,9 @@ colon:
 	ret
 
 semi:
+	mov	al, 0xc3
+	call	b_comma
+	
 	call _interpret
 
 	ret

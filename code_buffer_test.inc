@@ -37,7 +37,7 @@ check_code_buffer:
 	sub	rdi, [_code_buffer.base]
 
 	cmp	edi, ecx
-	jne	failure
+	jne	.failure_length
 	
 	mov	rdi, [_code_buffer.base]
 	
@@ -46,9 +46,15 @@ check_code_buffer:
 	js	.done
 
 	cmpsb
-	jne	failure
+	jne	.failure_byte
 
 	jmp	.loop
 
 	.done:
 	ret
+
+	.failure_length:
+	jmp	failure
+
+	.failure_byte:
+	jmp	failure
