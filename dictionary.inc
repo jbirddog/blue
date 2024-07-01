@@ -25,10 +25,7 @@ IN_EFFECTS_LEN_MASK	= 0x0000ff
 
 _core_words:
 	.b_comma:
-	db	DE_IMMEDIATE
-	db	2
-	db	1
-	db	0
+	db	0, 2, 1, 0
 	dd	0
 	dq	0
 	dq	b_comma
@@ -38,10 +35,7 @@ _core_words:
 	assert ($ - .b_comma) mod 8 = 0
 	
 	.d_comma:
-	db	DE_IMMEDIATE
-	db	2
-	db	1
-	db	0
+	db	0, 2, 1, 0
 	dd	0
 	dq	.b_comma
 	dq	d_comma
@@ -74,16 +68,15 @@ _core_words:
 	
 	.latest:
 	.base:
-	db	DE_IMMEDIATE
-	db	4
-	db	1
-	db	0
+	db	0, 4, 1, 0
 	dd	0
 	dq	.semi
 	dq	base
 	dq	'base'
 	dq	_AL
 	assert ($ - .base) mod 8 = 0
+
+assert ($ - _core_words) mod 8 = 0
 
 dictionary_init:
 	mov	esi, _dictionary.length

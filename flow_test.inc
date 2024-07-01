@@ -1,57 +1,36 @@
 
-flow_test:
-	t 'b, has the expected flow in'
+macro tc1 what, lit {
+	t 'has the expected flow in'
 	
 	call	code_buffer_init
 	call	data_stack_init
 
-	mov	eax, 0x3c
+	mov	eax, lit
 	call	data_stack_push
 
 	mov	eax, _IMMEDIATE
 	call	data_stack_push
 	
-	mov	rax, _core_words.b_comma
+	mov	rax, _core_words.##what
 	call	flow_in
 
-	mov	rsi, b_comma_flow_in
-	mov	ecx, b_comma_flow_in.length
+	mov	rsi, what##_flow_in
+	mov	ecx, what##_flow_in.length
 	call	check_code_buffer
 	
 	call	data_stack_deinit
 	call	code_buffer_deinit
 
 	ok
+}
 
-	t 'd, has the expected flow in'
-
-	call	code_buffer_init
-	call	data_stack_init
-	
-	mov	eax, 0x3c
-	call	data_stack_push
-
-	mov	eax, _IMMEDIATE
-	call	data_stack_push
-	
-	mov	rax, _core_words.d_comma
-	call	flow_in
-
-	mov	rsi, d_comma_flow_in
-	mov	ecx, d_comma_flow_in.length
-	call	check_code_buffer
-	
-	call	data_stack_deinit
-	call	code_buffer_deinit
-
-	ok
-	
-	t ': has the expected flow in'
+macro tc2 what {
+	t 'has the expected flow in'
 
 	call	code_buffer_init
 	call	data_stack_init
 	
-	mov	rax, _core_words.colon
+	mov	rax, _core_words.##what
 	call	flow_in
 
 	mov	rsi, nothing
@@ -62,29 +41,14 @@ flow_test:
 	call	code_buffer_deinit
 
 	ok
+}
 
-	t 'base has the expected flow in'
-	
-	call	code_buffer_init
-	call	data_stack_init
-
-	mov	eax, 0x10
-	call	data_stack_push
-
-	mov	eax, _IMMEDIATE
-	call	data_stack_push
-	
-	mov	rax, _core_words.base
-	call	flow_in
-
-	mov	rsi, base_flow_in
-	mov	ecx, base_flow_in.length
-	call	check_code_buffer
-	
-	call	data_stack_deinit
-	call	code_buffer_deinit
-
-	ok
+flow_test:
+		
+	tc1	b_comma, 0x3c
+	tc1	d_comma, 0x3c
+	tc1	base, 0x10
+	tc2	colon
 
 	ret
 
