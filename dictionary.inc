@@ -190,6 +190,8 @@ _bad_pad:
 _check_pad:
 	mov	rax, [_dictionary.here]
 	mov	rdi, [_dictionary.latest]
+	cmp	rax, rdi
+	je	_bad_pad
 	
 	sub	rax, rdi
 	and	rax, 7

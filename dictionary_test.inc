@@ -173,9 +173,12 @@ _test_create_entry:
 
 	call	_name_entry
 
-	cmp	[_blue.word_len], 2
+	mov	rax, [_dictionary.latest]
+	inc	rax
+	mov	rax, [rax]
+	cmp	al, 2
 	jne	failure
-	
+
 	ok
 
 	ret
