@@ -94,14 +94,14 @@ dictionary_find:
 	mov	ecx, [esi]
 	
 	lodsb
-	cmp	al, byte [edi]
+	cmp	al, byte [rdi]
 	jne	.next
 
 	add	rdi, _dictionary.word_offset - 1
 	
 	.check_word:
 	lodsb
-	cmp	al, byte [edi]
+	cmp	al, byte [rdi]
 	jne	.next
 
 	inc	rdi
@@ -267,3 +267,11 @@ _name_entry:
 
 	.no_word:
 	die	ERR_NO_WORD
+
+_reveal:
+	mov	rdi, [_dictionary.latest]
+	mov	al, byte [rdi]
+	xor	al, DE_HIDDEN
+	stosb
+
+	ret
