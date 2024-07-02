@@ -110,7 +110,7 @@ dictionary_test:
 
 	tc2	_core_words.b_comma, 1, 8
 
-	call	_test_new_entry
+	call	_test_create_entry
 
 	tc1	unknown, 4, 0
 	tc1	word_b_comma, 2, _core_words.b_comma
@@ -121,7 +121,7 @@ dictionary_test:
 	
 	ret
 
-_test_new_entry:
+_test_create_entry:
 	t 'can create new entry'
 
 	push	[_dictionary.latest]

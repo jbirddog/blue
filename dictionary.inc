@@ -184,6 +184,9 @@ base:
 	mov	[_blue.base], al
 	ret
 
+_bad_pad:
+	die	ERR_BAD_PAD
+
 _create_entry:
 	mov	rdi, [_dictionary.here]
 	push	rdi
@@ -198,9 +201,13 @@ _create_entry:
 	stosq
 
 	mov	[_dictionary.here], rdi
+	mov	rax, rdi
 	
 	pop	rdi
 	mov	[_dictionary.latest], rdi
+
+	sub	rax, rdi
+	and	rax, 7
+	jnz	_bad_pad
 	
 	ret
-
