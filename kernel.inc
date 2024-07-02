@@ -63,9 +63,6 @@ _interpret:
 	mov	rdi, [_code_buffer.here]
 	mov	[_code_buffer.mark], rdi
 
-	add	rdi, _code_buffer.interpret_offset
-	mov	[_code_buffer.here], rdi
-	
 	mov	[_blue.mode], INTERPRET
 	ret
 
@@ -77,13 +74,8 @@ _interpretive_dance:
 	call	b_comma
 
 	mov	rsi, [_code_buffer.mark]
-	mov	rdi, rsi
-	add	rsi, _code_buffer.interpret_offset
-
-	mov	[_code_buffer.here], rdi
-
-	xor	rdi, rdi
-	mov	[_code_buffer.mark], rdi
+	mov	[_code_buffer.here], rsi
+	mov	[_code_buffer.mark], 0
 
 	call	rsi
 
@@ -101,7 +93,6 @@ _compile:
 ;	- word in rax
 ;
 _handle_word:
-	push	rax
 	push	rax
 	call	flow_in
 
@@ -121,9 +112,6 @@ _handle_word:
 	call	b_comma
 	mov	al, 0xd7
 	call	b_comma
-
-	pop	rax
-	call	flow_out
 
 	call	_interpretive_dance
 	call	_interpret
