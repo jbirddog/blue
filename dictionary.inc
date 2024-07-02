@@ -51,7 +51,7 @@ _core_words:
 	dq	'base'
 	dq	_AL
 
-assert ($ - _core_words) mod 8 = 0
+assert ($ - _core_words) and 7 = 0
 
 dictionary_init:
 	mov	esi, _dictionary.length
@@ -84,8 +84,10 @@ dictionary_find:
 	.find:
 	push	rdi
 
-	test	byte [edi], DE_HIDDEN
-	jnz	.next
+	mov	rax, [rdi]
+
+	test	al, DE_HIDDEN
+	jnz	.hidden
 
 	inc	edi
 	mov	rsi, _blue.word_len
@@ -108,10 +110,12 @@ dictionary_find:
 
 	pop	rax
 	jmp	.done
+
+	.hidden:
 	
 	.next:
 	pop	rdi
-	add	edi, _dictionary.prev_word_offset
+	add	rdi, _dictionary.prev_word_offset
 	mov	rdi, [rdi]
 
 	test	rdi, rdi
@@ -178,4 +182,32 @@ d_comma:
 ;
 base:
 	mov	[_blue.base], al
+	ret
+
+_bad_pad:
+	die	ERR_BAD_PAD
+
+_create_entry:
+	mov	rdi, [_dictionary.here]
+	push	rdi
+
+	mov	eax, DE_HIDDEN
+	stosq
+
+	mov	rax, [_dictionary.latest]
+	stosq
+
+	mov	rax, [_code_buffer.here]
+	stosq
+
+	mov	[_dictionary.here], rdi
+	mov	rax, rdi
+	
+	pop	rdi
+	mov	[_dictionary.latest], rdi
+
+	sub	rax, rdi
+	and	rax, 7
+	jnz	_bad_pad
+	
 	ret
