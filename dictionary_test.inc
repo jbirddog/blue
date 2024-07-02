@@ -38,8 +38,7 @@ macro tc2 word, in_len, word_len {
 
 dictionary_test:
 	call dictionary_init
-	
-	
+
 	t 'inits base and here correctly'
 	
 	mov	rax, [_dictionary.base]
