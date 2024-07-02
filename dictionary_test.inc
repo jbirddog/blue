@@ -102,12 +102,12 @@ dictionary_test:
 
 	ok
 
-	;tc1	unknown, 4, 0
-	;tc1	word_b_comma, 2, _core_words.b_comma
-	;tc1	word_d_comma, 2, _core_words.d_comma
-	;tc1	word_base, 4, _core_words.base
+	tc1	unknown, 4, 0
+	tc1	word_b_comma, 2, _core_words.b_comma
+	tc1	word_d_comma, 2, _core_words.d_comma
+	tc1	word_base, 4, _core_words.base
 
-	;tc2	_core_words.b_comma, 1, 8
+	tc2	_core_words.b_comma, 1, 8
 
 	call	_test_create_entry
 
