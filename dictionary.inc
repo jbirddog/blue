@@ -114,14 +114,14 @@ dictionary_find:
 	mov	ecx, [esi]
 	
 	lodsb
-	cmp	al, byte [edi]
+	cmp	al, byte [rdi]
 	jne	.next
 
 	add	rdi, _dictionary.word_offset - 1
 	
 	.check_word:
 	lodsb
-	cmp	al, byte [edi]
+	cmp	al, byte [rdi]
 	jne	.next
 
 	inc	rdi
@@ -288,23 +288,27 @@ _name_entry:
 	.no_word:
 	die	ERR_NO_WORD
 
+_reveal:
+	mov	rdi, [_dictionary.latest]
+	mov	al, byte [rdi]
+	xor	al, DE_HIDDEN
+	stosb
+
+	ret
+
 colon:
 	call	_compile
-	call	_create_entry	
-
-	call	parser_next_word
-	cmp	[_blue.word_len], 0
-	je	.done
-
-	die 33
+	call	_create_entry
+	call	_name_entry
 	
-	.done:
 	ret
 
 semi:
 	mov	al, 0xc3
 	call	b_comma
-	
-	call _interpret
+
+	call	_reveal
+	call	_interpret
 
 	ret
+
