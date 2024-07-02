@@ -84,8 +84,10 @@ dictionary_find:
 	.find:
 	push	rdi
 
-	test	byte [edi], DE_HIDDEN
-	jnz	.next
+	mov	rax, [rdi]
+
+	test	al, DE_HIDDEN
+	jnz	.hidden
 
 	inc	edi
 	mov	rsi, _blue.word_len
@@ -108,10 +110,12 @@ dictionary_find:
 
 	pop	rax
 	jmp	.done
+
+	.hidden:
 	
 	.next:
 	pop	rdi
-	add	edi, _dictionary.prev_word_offset
+	add	rdi, _dictionary.prev_word_offset
 	mov	rdi, [rdi]
 
 	test	rdi, rdi
@@ -188,7 +192,6 @@ _create_entry:
 	stosq
 
 	mov	rax, [_dictionary.latest]
-	add	rax, _dictionary.prev_word_offset
 	stosq
 
 	mov	rax, [_code_buffer.here]

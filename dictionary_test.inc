@@ -38,7 +38,8 @@ macro tc2 word, in_len, word_len {
 
 dictionary_test:
 	call dictionary_init
-
+	
+	
 	t 'inits base and here correctly'
 	
 	mov	rax, [_dictionary.base]
@@ -109,12 +110,25 @@ dictionary_test:
 
 	tc2	_core_words.b_comma, 1, 8
 
+	call	_test_new_entry
+
+	tc1	unknown, 4, 0
+	tc1	word_b_comma, 2, _core_words.b_comma
+	tc1	word_d_comma, 2, _core_words.d_comma
+	tc1	word_base, 4, _core_words.base
+	
+	call	dictionary_deinit
+	
+	ret
+
+_test_new_entry:
 	t 'can create new entry'
 
 	push	[_dictionary.latest]
 	call	_create_entry
 
 	pop	rax
+	mov	rax, [rax]
 	cmp	rax, [_dictionary.latest]
 	je	failure
 
@@ -137,7 +151,6 @@ dictionary_test:
 	mov	rax, [rax]
 
 	mov	rsi, _core_words.latest
-	add	rsi, _dictionary.prev_word_offset
 	cmp	rax, rsi
 	jne	failure
 
@@ -152,11 +165,10 @@ dictionary_test:
 	jne	failure
 	
 	ok
-	
-	call	dictionary_deinit
-	
+
 	ret
 
+	
 unknown		db '!@#$'
 word_b_comma	db 'b,'
 word_d_comma	db 'd,'

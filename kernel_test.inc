@@ -2,8 +2,6 @@
 macro tc1 what {
 	call	kernel_init
 
-	;call	_create_entry
-	
 	mov	rsi, what##.blue
 	mov	ecx, what##.blue_length
 	xor	eax, eax
