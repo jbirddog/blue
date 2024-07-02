@@ -135,6 +135,7 @@ dictionary_test:
 	mov	rax, [_dictionary.latest]
 	add	rax, _dictionary.prev_word_offset
 	mov	rax, [rax]
+
 	mov	rsi, _core_words.latest
 	add	rsi, _dictionary.prev_word_offset
 	cmp	rax, rsi
