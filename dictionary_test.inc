@@ -165,9 +165,26 @@ _test_create_entry:
 	
 	ok
 
+	t 'can name new entry'
+
+	mov	[_blue.tib], word_gg
+	mov	[_blue.tib_len], 2
+	mov	[_blue.tib_in], 0
+
+	call	_name_entry
+
+	mov	rax, [_dictionary.latest]
+	inc	rax
+	mov	rax, [rax]
+	cmp	al, 2
+	jne	failure
+
+	ok
+
 	ret
 
 unknown		db '!@#$'
 word_b_comma	db 'b,'
 word_d_comma	db 'd,'
 word_base	db 'base'
+word_gg		db 'gg'
