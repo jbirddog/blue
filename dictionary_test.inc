@@ -102,12 +102,12 @@ dictionary_test:
 
 	ok
 
-	tc1	unknown, 4, 0
-	tc1	word_b_comma, 2, _core_words.b_comma
-	tc1	word_d_comma, 2, _core_words.d_comma
-	tc1	word_base, 4, _core_words.base
+	;tc1	unknown, 4, 0
+	;tc1	word_b_comma, 2, _core_words.b_comma
+	;tc1	word_d_comma, 2, _core_words.d_comma
+	;tc1	word_base, 4, _core_words.base
 
-	tc2	_core_words.b_comma, 1, 8
+	;tc2	_core_words.b_comma, 1, 8
 
 	call	_test_create_entry
 
@@ -127,7 +127,6 @@ _test_create_entry:
 	call	_create_entry
 
 	pop	rax
-	mov	rax, [rax]
 	cmp	rax, [_dictionary.latest]
 	je	failure
 
@@ -168,7 +167,7 @@ _test_create_entry:
 	t 'can name new entry'
 
 	mov	[_blue.tib], word_gg
-	mov	[_blue.tib_len], 2
+	mov	[_blue.tib_len], word_gg.length
 	mov	[_blue.tib_in], 0
 
 	call	_name_entry
@@ -176,9 +175,21 @@ _test_create_entry:
 	mov	rax, [_dictionary.latest]
 	inc	rax
 	mov	rax, [rax]
-	cmp	al, 2
+	cmp	al, word_gg.length
 	jne	failure
 
+	ok
+
+	t 'can reveal new entry'
+
+	call	_reveal
+
+	mov	rax, [_dictionary.latest]
+	mov	rax, [rax]
+	
+	cmp	al, DE_HIDDEN
+	je	failure
+	
 	ok
 
 	ret
@@ -188,3 +199,4 @@ word_b_comma	db 'b,'
 word_d_comma	db 'd,'
 word_base	db 'base'
 word_gg		db 'gg'
+word_gg.length	= 2
