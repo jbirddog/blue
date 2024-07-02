@@ -118,11 +118,19 @@ dictionary_test:
 	cmp	rax, [_dictionary.latest]
 	je	failure
 
+	ok
+
+	t 'new entry is hidden'
+
 	mov	rax, [_dictionary.latest]
 	mov	rax, [rax]
 	
 	cmp	al, DE_HIDDEN
 	jne	failure
+
+	ok
+
+	t 'new entry has pointer to previous latest'
 
 	mov	rax, [_dictionary.latest]
 	add	rax, _dictionary.prev_word_offset
@@ -131,6 +139,10 @@ dictionary_test:
 	add	rsi, _dictionary.prev_word_offset
 	cmp	rax, rsi
 	jne	failure
+
+	ok
+
+	t 'new entry has pointer to code buffer'
 
 	mov	rax, [_dictionary.latest]
 	add	rax, _dictionary.code_offset
