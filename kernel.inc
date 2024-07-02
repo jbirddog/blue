@@ -138,30 +138,3 @@ _handle_word:
 
 	.done:
 	ret
-
-colon:
-	call	_compile
-	
-	mov	rdi, [_dictionary.here]
-
-	xor	rax, rax
-	stosq
-
-	mov	rax, [_dictionary.latest]
-	stosq
-
-	mov	rax, [_code_buffer.here]
-	stosq
-
-	pop	rax
-	mov	[_dictionary.latest], rax
-	
-	ret
-
-semi:
-	mov	al, 0xc3
-	call	b_comma
-	
-	call _interpret
-
-	ret

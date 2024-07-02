@@ -231,3 +231,24 @@ _create_entry:
 	jnz	_bad_pad
 	
 	ret
+	
+colon:
+	call	_compile
+	call	_create_entry	
+
+	call	parser_next_word
+	cmp	[_blue.word_len], 0
+	je	.done
+
+	die 33
+	
+	.done:
+	ret
+
+semi:
+	mov	al, 0xc3
+	call	b_comma
+	
+	call _interpret
+
+	ret
