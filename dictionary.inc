@@ -89,7 +89,7 @@ dictionary_find:
 	test	al, DE_HIDDEN
 	jnz	.hidden
 
-	inc	edi
+	inc	rdi
 	mov	rsi, _blue.word_len
 	mov	ecx, [esi]
 	
@@ -97,14 +97,14 @@ dictionary_find:
 	cmp	al, byte [edi]
 	jne	.next
 
-	add	edi, _dictionary.word_offset - 1
+	add	rdi, _dictionary.word_offset - 1
 	
 	.check_word:
 	lodsb
 	cmp	al, byte [edi]
 	jne	.next
 
-	inc	edi
+	inc	rdi
 	dec	ecx
 	js	.check_word
 
@@ -187,6 +187,16 @@ base:
 _bad_pad:
 	die	ERR_BAD_PAD
 
+_check_pad:
+	mov	rax, [_dictionary.here]
+	mov	rdi, [_dictionary.latest]
+	
+	sub	rax, rdi
+	and	rax, 7
+	jnz	_bad_pad
+
+	ret
+	
 _create_entry:
 	mov	rdi, [_dictionary.here]
 	push	rdi
@@ -201,13 +211,57 @@ _create_entry:
 	stosq
 
 	mov	[_dictionary.here], rdi
-	mov	rax, rdi
 	
 	pop	rdi
 	mov	[_dictionary.latest], rdi
 
-	sub	rax, rdi
-	and	rax, 7
-	jnz	_bad_pad
+	call	_check_pad
 	
 	ret
+
+_name_entry:
+	call	parser_next_word
+	xor	eax, eax
+	mov	al, [_blue.word_len]
+	test	al, al
+	jz	.no_word
+
+	mov	rdi, [_dictionary.latest]
+	inc	rdi
+	stosb
+
+	mov	ecx, eax
+	mov	ebx, eax
+	add	ebx, 7
+	and	ebx, -8
+	sub	ebx, ecx
+
+	mov	rdi, [_dictionary.here]
+	mov	rsi, _blue.word
+
+	.loop:
+	movsb
+
+	dec	ecx
+	jnz	.loop
+
+	mov	ecx, ebx
+	test	ecx, ecx
+	jz	.done
+	
+	xor	eax, eax
+	
+	.pad:
+	stosb
+
+	dec	ecx
+	jnz	.pad
+
+	.done:
+	mov	[_dictionary.here], rdi
+	call	_check_pad
+	
+	ret
+
+	.no_word:
+	die	ERR_NO_WORD
