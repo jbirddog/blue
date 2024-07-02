@@ -168,7 +168,6 @@ _test_create_entry:
 
 	ret
 
-	
 unknown		db '!@#$'
 word_b_comma	db 'b,'
 word_d_comma	db 'd,'
