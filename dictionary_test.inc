@@ -108,8 +108,62 @@ dictionary_test:
 	tc1	word_base, 4, _core_words.base
 
 	tc2	_core_words.b_comma, 1, 8
+
+	call	_test_create_entry
+
+	tc1	unknown, 4, 0
+	tc1	word_b_comma, 2, _core_words.b_comma
+	tc1	word_d_comma, 2, _core_words.d_comma
+	tc1	word_base, 4, _core_words.base
 	
 	call	dictionary_deinit
+	
+	ret
+
+_test_create_entry:
+	t 'can create new entry'
+
+	push	[_dictionary.latest]
+	call	_create_entry
+
+	pop	rax
+	mov	rax, [rax]
+	cmp	rax, [_dictionary.latest]
+	je	failure
+
+	ok
+
+	t 'new entry is hidden'
+
+	mov	rax, [_dictionary.latest]
+	mov	rax, [rax]
+	
+	cmp	al, DE_HIDDEN
+	jne	failure
+
+	ok
+
+	t 'new entry has pointer to previous latest'
+
+	mov	rax, [_dictionary.latest]
+	add	rax, _dictionary.prev_word_offset
+	mov	rax, [rax]
+
+	mov	rsi, _core_words.latest
+	cmp	rax, rsi
+	jne	failure
+
+	ok
+
+	t 'new entry has pointer to code buffer'
+
+	mov	rax, [_dictionary.latest]
+	add	rax, _dictionary.code_offset
+	mov	rax, [rax]
+	cmp	rax, [_code_buffer.here]
+	jne	failure
+	
+	ok
 
 	ret
 
