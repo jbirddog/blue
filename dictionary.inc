@@ -308,7 +308,7 @@ semi:
 	mov	al, 0xc3
 	call	b_comma
 
-	call	_reveal
+	;call	_reveal
 
 	mov	[_blue.mode], INTERPRET
 

@@ -111,6 +111,10 @@ _handle_word:
 	cmp	[_blue.mode], INTERPRET
 	je	.interpret
 
+	mov	rsi, [rax]
+	test	sil, DE_IMMEDIATE
+	jnz	.interpret
+
 	call	_compile_word
 	jmp	.done
 
