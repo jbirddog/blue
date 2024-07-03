@@ -120,6 +120,17 @@ macro die_dict offset, how {
 	pop	rbx
 }
 
+macro	die_word how {
+	mov	rsi, _blue.word
+	mov	rdx, _blue.word_len
+	mov	rdx, [rdx]
+	and	rdx, 0xFF
+	mov	edi, STDOUT_FILENO
+	mov	eax, SYS_WRITE
+	syscall
+
+	die	how
+}
 
 ;
 ; expects

@@ -134,8 +134,7 @@ clean_exit:
 
 user_one_byte:
 	.blue:
-	;db	': 1b 1 b, ; '
-	db	': 1b ; '
+	db	': 1b 1 b, ; '
 	db	'1b'
 	.blue_length = $ - .blue
 

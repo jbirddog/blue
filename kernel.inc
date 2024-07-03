@@ -49,6 +49,7 @@ kernel_loop:
 	ret
 
 	.not_a_word:
+	die_word 33
 	mov	edi, ERR_NOT_A_WORD
 	ret
 
