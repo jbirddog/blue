@@ -8,10 +8,6 @@ code_buffer_init:
 	stosq
 	stosq
 
-	xor	eax, eax
-	stosq
-	stosd
-	
 	ret
 
 code_buffer_deinit:

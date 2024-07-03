@@ -47,30 +47,30 @@ _AL		= REG_RAX or _BYTE
 _EAX		= REG_RAX or _DWORD
 
 _blue:
-	.tib dq 1
-	.tib_len dd 1
-	.tib_in dd 1
-	.word_len db 1
+	.tib dq 0
+	.tib_len dd 0
+	.tib_in dd 0
+	.entry dd 0
+	.word_len db 0
 	.word rb 255
-	.mode db 1
-	.base db 1
+	.mode db 0
+	.base db 0
 	
 _code_buffer:
 	.length = 4096
-	.base dq 1
-	.here dq 1
-	.entry dd 1
+	.base dq 0
+	.here dq 0
 
 _data_stack:
 	.length = 4096
-	.base dq 1
-	.here dq 1
+	.base dq 0
+	.here dq 0
 
 _dictionary:
 	.prev_word_offset = 8
 	.code_offset = 16
 	.word_offset = 24
 	.length = 4096
-	.base dq 1
-	.here dq 1
-	.latest dq 1
+	.base dq 0
+	.here dq 0
+	.latest dq 0
