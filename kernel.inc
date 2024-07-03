@@ -5,7 +5,7 @@ kernel_init:
 	call	dictionary_init
 
 	mov	[_blue.base], 10
-	call	_interpret
+	mov	[_blue.mode], INTERPRET
 	
 	ret
 
@@ -26,7 +26,7 @@ kernel_loop:
 	je	.done
 
 	call	dictionary_find
-	test	eax, eax
+	test	rax, rax
 	jz	.number_or_bail
 
 	call	_handle_word
@@ -45,7 +45,6 @@ kernel_loop:
 	jmp	.loop
 
 	.done:
-	call	_interpretive_dance
 	mov	eax, SUCCESS
 	ret
 
@@ -59,40 +58,11 @@ kernel_deinit:
 	call	code_buffer_deinit
 	ret
 
-_interpret:
-	mov	rdi, [_code_buffer.here]
-	mov	[_code_buffer.mark], rdi
-
-	mov	[_blue.mode], INTERPRET
-	ret
-
-_interpretive_dance:
-	cmp	[_code_buffer.mark], 0
-	je	.done
-	
-	mov	al, 0xc3
-	call	b_comma
-
-	mov	rsi, [_code_buffer.mark]
-	mov	[_code_buffer.here], rsi
-	mov	[_code_buffer.mark], 0
-
-	call	rsi
-
-	.done:
-	ret
-
-_compile:
-	call	_interpretive_dance
-
-	mov	[_blue.mode], COMPILE
-	ret
-
 ;
 ; expects
 ;	- word in rax
 ;
-_handle_word:
+_compile_word:
 	push	rax
 	call	flow_in
 
@@ -113,14 +83,39 @@ _handle_word:
 	mov	al, 0xd7
 	call	b_comma
 
+	ret
+
+;
+; expects
+;	- word in rax
+;
+_interpret_word:
+	push	[_code_buffer.here]
+
+	call	_compile_word
+
+	mov	al, 0xc3
+	call	b_comma
+
+	pop	rsi
+	mov	[_code_buffer.here], rsi
+	call	rsi
+
+	ret
+
+;
+; expects
+;	- word in rax
+;
+_handle_word:
 	cmp	[_blue.mode], INTERPRET
 	je	.interpret
 
+	call	_compile_word
 	jmp	.done
 
 	.interpret:
-	call	_interpretive_dance
-	call	_interpret
+	call	_interpret_word
 
 	.done:
 	ret

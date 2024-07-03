@@ -10,13 +10,6 @@ code_buffer_test:
 
 	ok
 
-	t 'it inits mark correctly'
-
-	cmp	[_code_buffer.mark], 0
-	jne	failure
-
-	ok
-
 	t 'it inits entry correctly'
 	
 	cmp	[_code_buffer.entry], 0
