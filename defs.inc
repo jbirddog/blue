@@ -54,12 +54,15 @@ _blue:
 	.word rb 255
 	.mode db 1
 	.base db 1
-	
-_code_buffer:
+
+struc code_buffer_t {
 	.length = 4096
 	.base dq 1
 	.here dq 1
-	.entry dd 1
+}
+	
+_code_buffer code_buffer_t
+_code_buffer_i code_buffer_t
 
 _data_stack:
 	.length = 4096

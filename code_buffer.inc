@@ -7,10 +7,6 @@ code_buffer_init:
 	mov 	rdi, _code_buffer.base
 	stosq
 	stosq
-
-	xor	eax, eax
-	stosq
-	stosd
 	
 	ret
 

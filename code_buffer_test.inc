@@ -10,13 +10,6 @@ code_buffer_test:
 
 	ok
 
-	t 'it inits entry correctly'
-	
-	cmp	[_code_buffer.entry], 0
-	jne	failure
-
-	ok
-
 	call code_buffer_deinit
 
 	ret
