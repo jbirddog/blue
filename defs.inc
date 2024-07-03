@@ -2,8 +2,8 @@
 FAILURE		= 0
 SUCCESS		= 1
 
-INTERPRET	= 0
-COMPILE		= 1
+COMPILE		= 0
+INTERPRET	= 1
 
 ERR_NOT_A_WORD	= 165
 ERR_NO_IMPL	= 166
@@ -57,10 +57,8 @@ _blue:
 	
 _code_buffer:
 	.length = 4096
-	.interpret_offset = 1024
 	.base dq 1
 	.here dq 1
-	.mark dq 1
 	.entry dd 1
 
 _data_stack:
