@@ -113,7 +113,14 @@ _handle_word:
 	mov	al, 0xd7
 	call	b_comma
 
+	cmp	[_blue.mode], INTERPRET
+	je	.interpret
+
+	jmp	.done
+
+	.interpret:
 	call	_interpretive_dance
 	call	_interpret
-	
+
+	.done:
 	ret
