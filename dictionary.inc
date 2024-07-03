@@ -297,9 +297,10 @@ _reveal:
 	ret
 
 colon:
-	call	_compile
 	call	_create_entry
 	call	_name_entry
+	
+	mov	[_blue.mode], COMPILE
 	
 	ret
 
@@ -308,7 +309,8 @@ semi:
 	call	b_comma
 
 	call	_reveal
-	call	_interpret
+
+	mov	[_blue.mode], INTERPRET
 
 	ret
 
