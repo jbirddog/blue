@@ -94,6 +94,33 @@ dictionary_deinit:
 	
 	ret
 
+_die_dict:
+	cmp	rbx, [_dictionary.latest]
+	jne	.done
+
+	syscall
+
+	.done:
+	ret
+	
+macro die_dict offset, how {
+	push	rbx
+	push	rdi
+	push	rax
+
+	mov	rbx, [_dictionary.base]
+	add	rbx, offset
+	mov	edi, how
+	mov	eax, 60
+
+	call	_die_dict
+
+	pop	rax
+	pop	rdi
+	pop	rbx
+}
+
+
 ;
 ; expects
 ;	- properly configured blue structure with non zero word len
@@ -308,7 +335,7 @@ semi:
 	mov	al, 0xc3
 	call	b_comma
 
-	;call	_reveal
+	call	_reveal
 
 	mov	[_blue.mode], INTERPRET
 
