@@ -47,7 +47,8 @@ _AL		= REG_RAX or _BYTE
 _EAX		= REG_RAX or _DWORD
 
 _blue:
-	.tib dq 1
+	.code_buffer dq 1
+	.tib dq 0
 	.tib_len dd 1
 	.tib_in dd 1
 	.word_len db 1
@@ -62,7 +63,7 @@ struc code_buffer_t {
 }
 	
 _code_buffer code_buffer_t
-_code_buffer_i code_buffer_t
+_code_buffer_interpret code_buffer_t
 
 _data_stack:
 	.length = 4096
