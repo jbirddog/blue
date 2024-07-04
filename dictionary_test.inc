@@ -163,8 +163,8 @@ _test_create_entry:
 	mov	rax, [_dictionary.latest]
 	mov	rax, [rax]
 	
-	cmp	al, DE_HIDDEN
-	jne	failure
+	test	al, DE_HIDDEN
+	jz	failure
 
 	ok
 
@@ -206,6 +206,28 @@ _test_create_entry:
 
 	ok
 
+	t 'can mark new entry as immediate'
+
+	call	immediate
+
+	mov	rax, [_dictionary.latest]
+	mov	rax, [rax]
+	
+	test	al, DE_IMMEDIATE
+	jz	failure
+
+	ok
+
+	t 'new entry is still hidden'
+
+	mov	rax, [_dictionary.latest]
+	mov	rax, [rax]
+	
+	test	al, DE_HIDDEN
+	jz	failure
+
+	ok
+
 	t 'can reveal new entry'
 
 	call	_reveal
@@ -216,6 +238,16 @@ _test_create_entry:
 	cmp	al, DE_HIDDEN
 	je	failure
 	
+	ok
+
+	t 'new entry is still immediate'
+
+	mov	rax, [_dictionary.latest]
+	mov	rax, [rax]
+	
+	test	al, DE_IMMEDIATE
+	jz	failure
+
 	ok
 
 	ret
