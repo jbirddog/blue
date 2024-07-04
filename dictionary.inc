@@ -279,7 +279,7 @@ _create_entry:
 	mov	rax, [_dictionary.latest]
 	stosq
 
-	mov	rax, _ok ;[_code_buffer.here]
+	mov	rax, [_code_buffer.here]
 	stosq
 
 	mov	[_dictionary.here], rdi

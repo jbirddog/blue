@@ -65,19 +65,24 @@ kernel_deinit:
 _compile_word:
 	push	rax
 	call	flow_in
+call here
 
 	mov	al, 0x48
 	call	b_comma
-	mov	al, 0xc7
+
+	mov	al, 0xbf
 	call	b_comma
-	mov	al, 0xc7
-	call	b_comma
+
+	;mov	al, 0xc7
+	;call	b_comma
+	;mov	al, 0xc7
+	;call	b_comma
 
 	pop	rax
 	add	rax, _dictionary.code_offset
 	mov	rax, [rax]
 
-	call	d_comma
+	call	q_comma
 
 	mov	al, 0xff
 	call	b_comma
@@ -101,7 +106,6 @@ _interpret_word:
 	pop	rsi
 	mov	[_code_buffer.here], rsi
 	call	rsi
-call here
 
 	ret
 
