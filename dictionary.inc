@@ -165,7 +165,7 @@ dictionary_find:
 	inc	rdi
 	dec	ecx
 	js	.check_word
-
+	
 	pop	rax
 	jmp	.done
 
@@ -233,6 +233,15 @@ d_comma:
 	stosd
 	mov	[_code_buffer.here], rdi
 	ret
+;
+; expects
+;	- value in rax
+;
+q_comma:
+	mov	rdi, [_code_buffer.here]
+	stosq
+	mov	[_code_buffer.here], rdi
+	ret
 
 ;
 ; expects
@@ -256,6 +265,9 @@ _check_pad:
 	jnz	_bad_pad
 
 	ret
+
+_ok:
+	die 11
 	
 _create_entry:
 	mov	rdi, [_dictionary.here]
@@ -267,7 +279,7 @@ _create_entry:
 	mov	rax, [_dictionary.latest]
 	stosq
 
-	mov	rax, [_code_buffer.here]
+	mov	rax, _ok ;[_code_buffer.here]
 	stosq
 
 	mov	[_dictionary.here], rdi

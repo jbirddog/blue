@@ -76,6 +76,7 @@ _compile_word:
 	pop	rax
 	add	rax, _dictionary.code_offset
 	mov	rax, [rax]
+
 	call	d_comma
 
 	mov	al, 0xff
@@ -100,6 +101,7 @@ _interpret_word:
 	pop	rsi
 	mov	[_code_buffer.here], rsi
 	call	rsi
+call here
 
 	ret
 

@@ -63,12 +63,12 @@ entry $
 	mov	edx, header.length
 	call	print
 
-	ts	code_buffer
-	ts	data_stack
-	ts	parser
-	ts	to_number
-	ts	dictionary
-	ts	flow
+	;ts	code_buffer
+	;ts	data_stack
+	;ts	parser
+	;ts	to_number
+	;ts	dictionary
+	;ts	flow
 	ts	kernel
 	ts	elf
 
@@ -97,9 +97,21 @@ print:
 	syscall
 	ret
 
+here:
+	push	rax
+	push	rdi
+	push	rdx
+	mov	esi, H
+	call	print_char
+	pop	rdx
+	pop	rdi
+	pop	rax
+	ret
+	
 newline db 10
 dot db '.'
 X db 'X'
+H db 'H'
 ts_ok db ' ok', 10
 
 header:
