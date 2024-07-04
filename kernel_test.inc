@@ -25,7 +25,7 @@ macro tc1 what {
 	t 'has the expected compilation'
 	
 	mov	rsi, what##.expected
-	mov	ecx, what##.expected_length
+	mov	rcx, what##.expected_length
 	call	check_code_buffer
 
 	ok
@@ -86,7 +86,7 @@ kernel_test:
 	tc1	two_bytes
 	tc1	one_byte_base16
 	tc1	clean_exit
-	;tc1	user_one_byte
+	tc1	user_one_byte
 	
 	tc2	bogus
 		

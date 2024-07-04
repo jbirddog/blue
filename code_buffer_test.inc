@@ -23,9 +23,10 @@ check_code_buffer:
 	sub	rdi, [_code_buffer.base]
 
 	cmp	edi, ecx
-	jne	.failure_length
+	jl	.failure_length
 	
-	mov	rdi, [_code_buffer.base]
+	mov	rdi, [_code_buffer.here]
+	sub	rdi, rcx
 	
 	.loop:
 	dec	ecx
