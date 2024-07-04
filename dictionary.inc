@@ -62,7 +62,6 @@ _core_words:
 	dq	semi
 	dq	';'
 	
-	.latest:
 	.base:
 	db	0, 4, 1, 0
 	dd	0
@@ -70,6 +69,14 @@ _core_words:
 	dq	base
 	dq	'base'
 	dq	_AL
+
+	.latest:
+	.entry:
+	db	DE_IMMEDIATE, 5, 0, 0
+	dd	0
+	dq	.base
+	dq	_entry
+	dq	'entry'
 
 assert ($ - _core_words) and 7 = 0
 
@@ -323,3 +330,11 @@ semi:
 
 	ret
 
+_entry:
+	mov	rax, [_dictionary.latest]
+	add	rax, _dictionary.code_offset
+	mov	rax, [rax]
+	sub	rax, [_code_buffer.base]
+	mov	[_blue.entry], eax
+
+	ret
