@@ -61,6 +61,41 @@ macro tc2 what {
 	call	kernel_deinit
 }
 
+macro tc3 what {
+	call	kernel_init
+
+	mov	rsi, what##.blue
+	mov	ecx, what##.blue_length
+	xor	eax, eax
+
+	call	kernel_loop
+
+	t 'parsed blue successfully'
+	
+	cmp	eax, SUCCESS
+	jne	failure
+
+	ok
+
+	t 'has the expected mode'
+	
+	cmp	[_blue.mode], INTERPRET
+	jne	failure
+
+	ok
+
+	t 'has the expected entry'
+	
+	mov	ecx, [what##.expected]
+	mov	eax, [_blue.entry]
+	cmp	eax, ecx
+	jne	failure
+	
+	ok
+	
+	call	kernel_deinit
+}
+
 kernel_test:
 	call kernel_init
 
@@ -96,7 +131,10 @@ kernel_test:
 	tc1	user_one_byte
 	
 	tc2	bogus
-		
+
+	tc3	entry_0
+	tc3	entry_18
+	
 	ret
 
 bogus:
@@ -155,3 +193,21 @@ user_one_byte:
 	.expected:
 	db	0x01
 	.expected_length = $ - .expected
+
+entry_0:
+	.blue:
+	db	': 1b 1 b, ; entry '
+	.blue_length = $ - .blue
+
+	.expected:
+	dd	0x00
+
+entry_18:
+	.blue:
+	db	': 1b 1 b, ; '
+	db	': _start ; entry '
+	.blue_length = $ - .blue
+
+	.expected:
+	dd	0x12
+	
