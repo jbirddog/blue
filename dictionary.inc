@@ -41,6 +41,15 @@ _core_words:
 	dq	'd,'
 	dq	_EAX
 	; TODO: clobbers rdi
+	
+	.q_comma:
+	db	0, 2, 1, 0
+	dd	0
+	dq	.d_comma
+	dq	q_comma
+	dq	'q,'
+	dq	_RAX
+	; TODO: clobbers rdi
 
 	.colon:
 	db	DE_IMMEDIATE
@@ -48,7 +57,7 @@ _core_words:
 	db	0
 	db	0
 	dd	0
-	dq	.d_comma
+	dq	.q_comma
 	dq	colon
 	dq	':'
 
@@ -93,44 +102,6 @@ dictionary_deinit:
 	syscall
 	
 	ret
-
-_die_dict:
-	cmp	rbx, [_dictionary.latest]
-	jne	.done
-
-	syscall
-
-	.done:
-	ret
-	
-macro die_dict offset, how {
-	push	rbx
-	push	rdi
-	push	rax
-
-	mov	rbx, [_dictionary.base]
-	add	rbx, offset
-	mov	edi, how
-	mov	eax, 60
-
-	call	_die_dict
-
-	pop	rax
-	pop	rdi
-	pop	rbx
-}
-
-macro	die_word how {
-	mov	rsi, _blue.word
-	mov	rdx, _blue.word_len
-	mov	rdx, [rdx]
-	and	rdx, 0xFF
-	mov	edi, STDOUT_FILENO
-	mov	eax, SYS_WRITE
-	syscall
-
-	die	how
-}
 
 ;
 ; expects

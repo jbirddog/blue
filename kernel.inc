@@ -72,11 +72,6 @@ _compile_word:
 	mov	al, 0xbf
 	call	b_comma
 
-	;mov	al, 0xc7
-	;call	b_comma
-	;mov	al, 0xc7
-	;call	b_comma
-
 	pop	rax
 	add	rax, _dictionary.code_offset
 	mov	rax, [rax]
