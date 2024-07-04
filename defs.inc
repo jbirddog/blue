@@ -48,12 +48,12 @@ _EAX		= REG_RAX or _DWORD
 
 _blue:
 	.tib dq 0
-	.tib_len dd 1
-	.tib_in dd 1
-	.word_len db 1
+	.tib_len dd 0
+	.tib_in dd 0
+	.word_len db 0
 	.word rb 255
-	.mode db 1
-	.base db 1
+	.mode db 0
+	.base db 0
 
 _code_buffer:
 	.length = 4096
