@@ -122,13 +122,12 @@ kernel_test:
 	
 	call	kernel_deinit
 
-	tc1	user_one_byte
-
 	tc1	one_byte
 	tc1	two_bytes
 	tc1	one_byte_base16
 	tc1	clean_exit
 	tc1	user_one_byte
+	tc1	user_empty_words
 	
 	tc2	bogus
 
@@ -210,4 +209,19 @@ entry_18:
 
 	.expected:
 	dd	0x12
+	
+user_empty_words:
+	.blue:
+	db	'16 base '
+	db	'90 b, 90 b, 90 b, '
+	db	': x ; '
+	db	': y ; '
+	db	': z ; '
+	db	'x y z '
+	.blue_length = $ - .blue
+
+	.expected:
+	db	0x90, 0x90, 0x90
+	db	0xc3, 0xc3, 0xc3
+	.expected_length = $ - .expected
 	

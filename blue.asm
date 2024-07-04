@@ -16,6 +16,7 @@ include "flow.inc"
 include "parser.inc"
 include "to_number.inc"
 include "kernel.inc"
+include "debug.inc"
 
 entry $
 	call	kernel_init
@@ -28,6 +29,8 @@ entry $
 
 	cmp	eax, SUCCESS
 	jne	.exit
+
+	call	dump_code_buffer
 	
 	;
 	; write the output to ./a.out
