@@ -50,6 +50,7 @@ flow_test:
 	tc1	q_comma, 0x3c
 	tc1	base, 0x10
 	tc2	colon
+	tc2	semi
 
 	ret
 
