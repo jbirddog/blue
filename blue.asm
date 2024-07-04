@@ -61,18 +61,18 @@ blue_bye:
 	db	'16 base '
 	db	'31 b, FF b, '		; xor edi, edi
 	db	'B8 b, 3C d, '		; mov eax, 60
-	db	'0F b, 05 b,'		; syscall
+	db	'0F b, 05 b, '		; syscall
 	.length = $ - blue_bye
 
 blue_bye2:
 	db	'16 base '
 
-	db	': bye immediate '
+	db	': bye '
 	db	'	31 b, FF b, '
 	db	'	B8 b, 3C d, '
 	db	'	0F b, 05 b, '
 	db	'	; '
-	;db	'immediate '
+	db	'immediate '
 	
 	db	': _start bye ; entry '
 	.length = $ - blue_bye2
