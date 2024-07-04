@@ -236,9 +236,6 @@ _check_pad:
 	jnz	_bad_pad
 
 	ret
-
-_ok:
-	die 11
 	
 _create_entry:
 	mov	rdi, [_dictionary.here]

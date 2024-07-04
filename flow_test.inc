@@ -47,6 +47,7 @@ flow_test:
 		
 	tc1	b_comma, 0x3c
 	tc1	d_comma, 0x3c
+	tc1	q_comma, 0x3c
 	tc1	base, 0x10
 	tc2	colon
 
@@ -61,6 +62,11 @@ d_comma_flow_in:
 	db	0xb8
 	dd	0x3c
 	.length = $ - d_comma_flow_in
+
+q_comma_flow_in:
+	db	0xb8
+	dd	0x3c
+	.length = $ - q_comma_flow_in
 
 base_flow_in:
 	db	0xb8

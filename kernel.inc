@@ -68,7 +68,6 @@ _compile_word:
 
 	mov	al, 0x48
 	call	b_comma
-
 	mov	al, 0xbf
 	call	b_comma
 
