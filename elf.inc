@@ -1,25 +1,25 @@
 
 ;
 ; expects
-; 	- program code entry offset in eax
-;	- program code length in ecx
+; 	- program code entry offset in rax
+;	- program code length in rcx
 ;
 elf_binary_calculate_fields:
-	add	eax, elf_binary_headers_length
+	add	rax, elf_binary_headers_length
 	push	rax
-	add	eax, elf_binary.base_address
+	add	rax, elf_binary.base_address
 	mov	qword [elf_header.start_address], rax
 
 	pop	rax
 	mov	qword [program_code_section_header.offset], rax
 
-	mov	edi, eax
-	add	edi, elf_binary.base_address
+	mov	rdi, rax
+	add	rdi, elf_binary.base_address
 	mov	qword [program_code_section_header.address], rdi
 	
 	mov	qword [program_code_section_header.size], rcx
 	
-	add	eax, ecx
+	add	rax, rcx
 	mov 	rdi, program_header.sizes
 	stosq
 	stosq
@@ -30,7 +30,7 @@ elf_binary_calculate_fields:
 	mov	eax, shstrtab.length
 	stosq
 
-	add	ecx, elf_binary_section_headers_offset
+	add	rcx, elf_binary_section_headers_offset
 	mov	qword [elf_header.section_header_offset], rcx
 
 	ret
