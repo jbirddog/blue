@@ -68,15 +68,14 @@ _compile_word:
 
 	mov	al, 0x48
 	call	b_comma
-	mov	al, 0xc7
-	call	b_comma
-	mov	al, 0xc7
+	mov	al, 0xbf
 	call	b_comma
 
 	pop	rax
 	add	rax, _dictionary.code_offset
 	mov	rax, [rax]
-	call	d_comma
+
+	call	q_comma
 
 	mov	al, 0xff
 	call	b_comma
@@ -110,6 +109,10 @@ _interpret_word:
 _handle_word:
 	cmp	[_blue.mode], INTERPRET
 	je	.interpret
+
+	mov	rsi, [rax]
+	test	sil, DE_IMMEDIATE
+	jnz	.interpret
 
 	call	_compile_word
 	jmp	.done

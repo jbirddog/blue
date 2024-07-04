@@ -102,9 +102,34 @@ dictionary_test:
 
 	ok
 
+	t 'q, writes a qword'
+	
+	mov	rax, 1234567890
+	call	q_comma
+
+	mov	rax, [_code_buffer.base]
+	add	rax, 5
+	mov	rcx, [_code_buffer.here]
+	sub	rcx, rax
+	cmp	ecx, 8
+	jne	failure
+	push	rax
+
+	ok
+
+	t 'q, writes the correct value'
+
+	pop	rax
+	mov	rax, [rax]
+	cmp	rax, 1234567890
+	jne	failure
+
+	ok
+
 	tc1	unknown, 4, 0
 	tc1	word_b_comma, 2, _core_words.b_comma
 	tc1	word_d_comma, 2, _core_words.d_comma
+	tc1	word_q_comma, 2, _core_words.q_comma
 	tc1	word_base, 4, _core_words.base
 
 	tc2	_core_words.b_comma, 1, 8
@@ -114,6 +139,7 @@ dictionary_test:
 	tc1	unknown, 4, 0
 	tc1	word_b_comma, 2, _core_words.b_comma
 	tc1	word_d_comma, 2, _core_words.d_comma
+	tc1	word_q_comma, 2, _core_words.q_comma
 	tc1	word_base, 4, _core_words.base
 	
 	call	dictionary_deinit
@@ -197,6 +223,7 @@ _test_create_entry:
 unknown		db '!@#$'
 word_b_comma	db 'b,'
 word_d_comma	db 'd,'
+word_q_comma	db 'q,'
 word_base	db 'base'
 word_gg		db 'gg'
 word_gg.length	= 2

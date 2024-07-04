@@ -31,7 +31,6 @@ _core_words:
 	dq	b_comma
 	dq	'b,'
 	dq	_AL
-	; TODO: clobbers rdi
 	
 	.d_comma:
 	db	0, 2, 1, 0
@@ -40,13 +39,34 @@ _core_words:
 	dq	d_comma
 	dq	'd,'
 	dq	_EAX
-	; TODO: clobbers rdi
+	
+	.q_comma:
+	db	0, 2, 1, 0
+	dd	0
+	dq	.d_comma
+	dq	q_comma
+	dq	'q,'
+	dq	_RAX
+
+	.colon:
+	db	DE_IMMEDIATE, 1, 0, 0
+	dd	0
+	dq	.q_comma
+	dq	colon
+	dq	':'
+
+	.semi:
+	db	DE_IMMEDIATE, 1, 0, 0
+	dd	0
+	dq	.colon
+	dq	semi
+	dq	';'
 	
 	.latest:
 	.base:
 	db	0, 4, 1, 0
 	dd	0
-	dq	.d_comma
+	dq	.semi
 	dq	base
 	dq	'base'
 	dq	_AL
@@ -61,7 +81,7 @@ dictionary_init:
 	mov	rdi, _dictionary.base
 	stosq
 	stosq
-	
+
 	mov	[_dictionary.latest], _core_words.latest
 
 	ret
@@ -107,7 +127,7 @@ dictionary_find:
 	inc	rdi
 	dec	ecx
 	js	.check_word
-
+	
 	pop	rax
 	jmp	.done
 
@@ -131,8 +151,8 @@ dictionary_find:
 ;	- word in rax
 ;
 _padded_word_length:
-	lea	ecx, [eax + 1]
-	mov	ecx, [ecx]
+	lea	rcx, [rax + 1]
+	mov	rcx, [rcx]
 	and	ecx, 0xff
 	
 	add	ecx, 7
@@ -145,14 +165,14 @@ _padded_word_length:
 ;	- word in rax
 ;
 word_input_stack_effects:
-	lea	esi, [eax + 2]
-	mov	esi, [esi]
+	lea	rsi, [rax + 2]
+	mov	rsi, [rsi]
 	and	esi, 0xff
 
 	call	_padded_word_length
-	xchg	esi, ecx
+	xchg	rsi, rcx
 
-	lea	esi, [eax + _dictionary.word_offset + esi]
+	lea	rsi, [rax + _dictionary.word_offset + rsi]
 	
 	ret
 
@@ -173,6 +193,15 @@ b_comma:
 d_comma:
 	mov	rdi, [_code_buffer.here]
 	stosd
+	mov	[_code_buffer.here], rdi
+	ret
+;
+; expects
+;	- value in rax
+;
+q_comma:
+	mov	rdi, [_code_buffer.here]
+	stosq
 	mov	[_code_buffer.here], rdi
 	ret
 
@@ -220,7 +249,7 @@ _create_entry:
 	call	_check_pad
 	
 	ret
-
+	
 _name_entry:
 	call	parser_next_word
 	xor	eax, eax
@@ -275,3 +304,22 @@ _reveal:
 	stosb
 
 	ret
+
+colon:
+	call	_create_entry
+	call	_name_entry
+	
+	mov	[_blue.mode], COMPILE
+	
+	ret
+
+semi:
+	mov	al, 0xc3
+	call	b_comma
+
+	call	_reveal
+
+	mov	[_blue.mode], INTERPRET
+
+	ret
+

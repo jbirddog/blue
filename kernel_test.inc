@@ -15,10 +15,17 @@ macro tc1 what {
 
 	ok
 
+	t 'has the expected mode'
+	
+	cmp	[_blue.mode], INTERPRET
+	jne	failure
+
+	ok
+
 	t 'has the expected compilation'
 	
 	mov	rsi, what##.expected
-	mov	ecx, what##.expected_length
+	mov	rcx, what##.expected_length
 	call	check_code_buffer
 
 	ok
@@ -73,10 +80,13 @@ kernel_test:
 	
 	call	kernel_deinit
 
+	tc1	user_one_byte
+
 	tc1	one_byte
 	tc1	two_bytes
 	tc1	one_byte_base16
 	tc1	clean_exit
+	tc1	user_one_byte
 	
 	tc2	bogus
 		
@@ -127,4 +137,14 @@ clean_exit:
 	db	0xb8
 	dd	0x3c
 	db	0x0f, 0x05
+	.expected_length = $ - .expected
+
+user_one_byte:
+	.blue:
+	db	': 1b 1 b, ; '
+	db	'1b'
+	.blue_length = $ - .blue
+
+	.expected:
+	db	0x01
 	.expected_length = $ - .expected

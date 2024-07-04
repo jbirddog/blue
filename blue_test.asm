@@ -97,9 +97,28 @@ print:
 	syscall
 	ret
 
+here:
+	push	rax
+	push	rcx
+	push	rdi
+	push	rdx
+	push	rsi
+	
+	mov	esi, H
+	call	print_char
+
+	pop	rsi
+	pop	rdx
+	pop	rdi
+	pop	rcx
+	pop	rax
+
+	ret
+	
 newline db 10
 dot db '.'
 X db 'X'
+H db 'H'
 ts_ok db ' ok', 10
 
 header:

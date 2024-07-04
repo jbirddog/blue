@@ -45,6 +45,7 @@ REG_R15		= _REGISTER or (0x0f shl REG_OFFSET)
 
 _AL		= REG_RAX or _BYTE
 _EAX		= REG_RAX or _DWORD
+_RAX		= REG_RAX or _QWORD
 
 _blue:
 	.tib dq 0
@@ -55,7 +56,7 @@ _blue:
 	.word rb 255
 	.mode db 0
 	.base db 0
-	
+
 _code_buffer:
 	.length = 4096
 	.base dq 0
