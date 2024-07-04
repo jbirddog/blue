@@ -205,7 +205,7 @@ entry_0:
 entry_18:
 	.blue:
 	db	': 1b 1 b, ; '
-	db	': _start ; entry '
+	db	': _start 1b ; entry '
 	.blue_length = $ - .blue
 
 	.expected:
