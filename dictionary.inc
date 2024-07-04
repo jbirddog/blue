@@ -23,60 +23,53 @@ WORD_LEN_MASK		= 0x00ff
 IN_EFFECTS_LEN_OFFSET	= 0x10
 IN_EFFECTS_LEN_MASK	= 0x0000ff
 
+_prev_word = 0
+
+macro __w word, word_len, flags, code, ise_len, ose_len {
+	.##code:
+	db	flags, word_len, ise_len, ose_len
+	dd	0
+	dq	_prev_word
+	dq	code
+	dq	word
+
+	_prev_word = .##code
+	_core_words.latest = .##code
+}
+
+macro _w word, word_len, code, ise_len, ose_len {
+	__w	word, word_len, 0, code, ise_len, ose_len
+}
+
+macro _wi word, word_len, code, ise_len, ose_len {
+	__w	word, word_len, DE_IMMEDIATE, code, ise_len, ose_len
+}
+
+macro _ise e {
+	dq	e
+}
+
+macro _ose e {
+	dq	e
+}
+
 _core_words:
-	.b_comma:
-	db	0, 2, 1, 0
-	dd	0
-	dq	0
-	dq	b_comma
-	dq	'b,'
-	dq	_AL
-	
-	.d_comma:
-	db	0, 2, 1, 0
-	dd	0
-	dq	.b_comma
-	dq	d_comma
-	dq	'd,'
-	dq	_EAX
-	
-	.q_comma:
-	db	0, 2, 1, 0
-	dd	0
-	dq	.d_comma
-	dq	q_comma
-	dq	'q,'
-	dq	_RAX
+	_w	'b,', 2, b_comma, 1, 0
+	_ise	_AL
 
-	.colon:
-	db	DE_IMMEDIATE, 1, 0, 0
-	dd	0
-	dq	.q_comma
-	dq	colon
-	dq	':'
+	_w	'd,', 2, d_comma, 1, 0
+	_ise	_EAX
 
-	.semi:
-	db	DE_IMMEDIATE, 1, 0, 0
-	dd	0
-	dq	.colon
-	dq	semi
-	dq	';'
-	
-	.base:
-	db	0, 4, 1, 0
-	dd	0
-	dq	.semi
-	dq	base
-	dq	'base'
-	dq	_AL
+	_w	'q,', 2, q_comma, 1, 0
+	_ise	_RAX
 
-	.latest:
-	.entry:
-	db	DE_IMMEDIATE, 5, 0, 0
-	dd	0
-	dq	.base
-	dq	_entry
-	dq	'entry'
+	_wi	':', 1, colon, 0, 0
+	_wi	';', 1, semi, 0, 0
+
+	_w	'base', 4, base, 1, 0
+	_ise	_AL
+
+	_wi	'entry', 5, _entry, 0, 0
 
 assert ($ - _core_words) and 7 = 0
 
