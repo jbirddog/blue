@@ -23,13 +23,11 @@ WORD_LEN_MASK		= 0x00ff
 IN_EFFECTS_LEN_OFFSET	= 0x10
 IN_EFFECTS_LEN_MASK	= 0x0000ff
 
-_prev_word = 0
-
 macro __w word, word_len, flags, code, ise_len, ose_len {
 	.##code:
 	db	flags, word_len, ise_len, ose_len
 	dd	0
-	dq	_prev_word
+	dq	_core_words.prev_word
 	dq	code
 	db	word
 
@@ -37,8 +35,7 @@ macro __w word, word_len, flags, code, ise_len, ose_len {
 		db	0
 	end repeat
 
-	_prev_word = .##code
-	_core_words.latest = .##code
+	_core_words.prev_word = .##code
 }
 
 macro _w word, word_len, code, ise_len, ose_len {
@@ -58,6 +55,8 @@ macro _ose e {
 }
 
 _core_words:
+	.prev_word = 0
+	
 	_w	'b,', 2, b_comma, 1, 0
 	_ise	_AL
 
@@ -74,6 +73,8 @@ _core_words:
 	_ise	_AL
 
 	_wi	'entry', 5, _entry, 0, 0
+
+	.latest = .prev_word
 
 assert ($ - _core_words) and 7 = 0
 
