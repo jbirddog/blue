@@ -31,7 +31,6 @@ _core_words:
 	dq	b_comma
 	dq	'b,'
 	dq	_AL
-	; TODO: clobbers rdi
 	
 	.d_comma:
 	db	0, 2, 1, 0
@@ -40,7 +39,6 @@ _core_words:
 	dq	d_comma
 	dq	'd,'
 	dq	_EAX
-	; TODO: clobbers rdi
 	
 	.q_comma:
 	db	0, 2, 1, 0
@@ -49,23 +47,16 @@ _core_words:
 	dq	q_comma
 	dq	'q,'
 	dq	_RAX
-	; TODO: clobbers rdi
 
 	.colon:
-	db	DE_IMMEDIATE
-	db	1
-	db	0
-	db	0
+	db	DE_IMMEDIATE, 1, 0, 0
 	dd	0
 	dq	.q_comma
 	dq	colon
 	dq	':'
 
 	.semi:
-	db	DE_IMMEDIATE
-	db	1
-	db	0
-	db	0
+	db	DE_IMMEDIATE, 1, 0, 0
 	dd	0
 	dq	.colon
 	dq	semi
