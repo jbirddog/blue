@@ -209,5 +209,5 @@ entry_18:
 	.blue_length = $ - .blue
 
 	.expected:
-	dd	18
+	dd	0x12
 	
