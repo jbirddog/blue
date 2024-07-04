@@ -42,7 +42,11 @@ check_code_buffer:
 	.failure_length:
 	.failure_byte:
 
-	mov	rdi, _code_buffer_failure_file
+	call	dump_code_buffer
+	jmp	failure
+
+dump_code_buffer:
+	mov	rdi, _code_buffer_dump_file
 	mov	esi, 0x01 or 0x40 or 0x200
 	mov	edx, 0x1ed
 	mov	eax, SYS_OPEN
@@ -58,9 +62,9 @@ check_code_buffer:
 	mov	eax, SYS_CLOSE
 	syscall
 	
-	jmp	failure
+	ret
 
-_code_buffer_failure_file:
-	db	"bad_code_buffer.out"
+_code_buffer_dump_file:
+	db	"code_buffer_dump.out"
 	db	0x00
 

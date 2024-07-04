@@ -10,7 +10,7 @@ DEV_DOCKER_FILE ?= dev.Dockerfile
 DEV_IMAGE ?= blue-dev
 
 IN_DEV_CONTAINER ?= docker exec $(DEV_CONTAINER)
-DISASM ?= $(IN_DEV_CONTAINER) objdump -d -M intel
+DISASM ?= $(IN_DEV_CONTAINER) objdump -b binary -D -M intel -m i386:x86-64
 
 FASM ?= fasm
 
@@ -33,10 +33,10 @@ run:
 	$(IN_DEV_CONTAINER) ./$(WHAT)
 
 dis:
-	$(DISASM) a.out
+	$(DISASM) $(WHAT)
 
 clean:
-	rm -f $(BLUE) a.out
+	rm -f $(BLUE) *.out
 	
 .PHONY:
 	dev-env dev-start dev-stop \
