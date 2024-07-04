@@ -65,7 +65,6 @@ kernel_deinit:
 _compile_word:
 	push	rax
 	call	flow_in
-call here
 
 	mov	al, 0x48
 	call	b_comma
