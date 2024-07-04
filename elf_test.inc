@@ -1,23 +1,25 @@
 
 blue_code:
 	db	'16 base '
-	
-	;db	0x48, 0xc7, 0xc0	; mov rax, 1 - sys_write
-	;dd	0x01
-	;db	0x48, 0xc7, 0xc7	; mov rdi, 1 - stdout fd
-	;dd	0x01
-	;db	0x48, 0xc7, 0xc6	; mov rsi, 0x4000a2 - location of string
-	;dd	0x4000a2
-	;db	0x48, 0xc7, 0xc2	; mov rdx, 13 - size of string
-	;dd	0x0d
-	;db	0x0f, 0x05		; syscall
-	;db	0x48, 0xc7, 0xc0	; mov rax, 60 - sys_exit
-	;dd	0x3c
-	;db	0x48, 0x31, 0xff	; xor rdi, rdi
-	;db	0x0f, 0x05		; syscall
+	db	'48 b, C7 b, C0 b, '	; mov rax, 1 - sys_write
+	db	'01 d, '
+	db	'48 b, C7 b, C7 b, '	; mov rdi, 1 - stdout fd
+	db	'01 d, '
+	db	'48 b, C7 b, C6 b, '	; mov rsi, 0x4000a2 - location of string
+	db	'4000A2 d, '
+	db	'48 b, C7 b, C2 b, '	; mov rdx, 13 - size of string
+	db	'0D d, '
+	db	'0F b, 05 b, '		; syscall
+	db	'48 b, C7 b, C0 b, '	; mov rax, 60 - sys_exit
+	db	'3C d, '
+	db	'48 b, 31 b, FF b, '	; xor rdi, rdi
+	db	'0F b, 05 b, '		; syscall
 
-	;db	"Hello, world"
-	;db	0x0a, 0x00
+	db	'48 b, 65 b, 6C b, '	; Hel
+	db	'6C b, 6F b, 2C b, '	; lo,
+	db	'20 b, 77 b, 6F b, '	;  wo
+	db	'72 b, 6C b, 64 b, '	; rld
+	db	'0A b, 00 b, '
 
 	.length = $ - blue_code
 
