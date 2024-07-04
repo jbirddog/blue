@@ -27,9 +27,24 @@ expected_output_size = 384
 
 elf_test:	
 	call	kernel_init
-	
-	mov	eax, [_blue.entry]
+
+	t 'example blue code parses correctly'
+
+	mov	rsi, blue_code
 	mov	ecx, blue_code.length
+	xor	eax, eax
+
+	call	kernel_loop
+
+	cmp	eax, SUCCESS
+	jne	failure
+
+	ok
+	
+	mov	rsi, [_code_buffer.base]
+	mov	eax, [_blue.entry]
+	mov	rcx, [_code_buffer.here]
+	sub	rcx, rsi
 	call	elf_binary_calculate_fields
 
 	t 'start address is correct'
@@ -95,12 +110,6 @@ elf_test:
 	ok
 
 	t 'can write an elf binary of the expected size'
-
-	mov	rsi, blue_code
-	mov	ecx, blue_code.length
-	xor	eax, eax
-
-	call	kernel_loop
 
 	mov	rdi, output_file
 	mov	esi, 0x01 or 0x40 or 0x200
