@@ -25,6 +25,7 @@ include "dictionary.inc"
 include	"flow.inc"
 include "kernel.inc"
 include "elf.inc"
+include "debug.inc"
 
 macro t what {
 	inc	[test_num]
