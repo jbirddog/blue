@@ -50,6 +50,7 @@ _blue:
 	.tib dq 0
 	.tib_len dd 0
 	.tib_in dd 0
+	.entry dd 0
 	.word_len db 0
 	.word rb 255
 	.mode db 0
