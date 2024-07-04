@@ -40,7 +40,7 @@ entry $
 
 	mov	rdi, rax
 	mov	rsi, [_code_buffer.base]
-	mov	eax, [_code_buffer.entry]
+	mov	eax, [_blue.entry]
 	mov	rcx, [_code_buffer.here]
 	sub	rcx, rsi
 	call	elf_binary_write
