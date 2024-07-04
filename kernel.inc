@@ -6,6 +6,7 @@ kernel_init:
 
 	mov	[_blue.base], 10
 	mov	[_blue.mode], INTERPRET
+	mov	[_blue.entry], 0
 	
 	ret
 
