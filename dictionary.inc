@@ -31,9 +31,7 @@ macro __w word, word_len, flags, code, ise_len, ose_len {
 	dq	code
 	db	word
 
-	repeat ((word_len + 7) and -8) - word_len
-		db	0
-	end repeat
+	times ((word_len + 7) and -8) - word_len db 0
 
 	_core_words.prev_word = .##code
 }
