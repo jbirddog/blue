@@ -15,6 +15,13 @@ macro tc1 what {
 
 	ok
 
+	t 'has the expected mode'
+	
+	cmp	[_blue.mode], INTERPRET
+	jne	failure
+
+	ok
+
 	t 'has the expected compilation'
 	
 	mov	rsi, what##.expected
@@ -73,7 +80,7 @@ kernel_test:
 	
 	call	kernel_deinit
 
-	;tc1	user_one_byte
+	tc1	user_one_byte
 
 	tc1	one_byte
 	tc1	two_bytes
@@ -135,7 +142,7 @@ clean_exit:
 user_one_byte:
 	.blue:
 	db	': 1b 1 b, ; '
-	db	'1b'
+	;db	'1b'
 	.blue_length = $ - .blue
 
 	.expected:
