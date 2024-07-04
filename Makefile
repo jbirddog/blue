@@ -4,13 +4,14 @@ ME := $(MY_USER):$(MY_GROUP)
 
 BLUE := blue
 WHAT ?= $(BLUE)
+ARGS ?=
 
 DEV_CONTAINER ?= $(BLUE)-dev
 DEV_DOCKER_FILE ?= dev.Dockerfile
 DEV_IMAGE ?= blue-dev
 
 IN_DEV_CONTAINER ?= docker exec $(DEV_CONTAINER)
-DISASM ?= $(IN_DEV_CONTAINER) objdump -b binary -D -M intel -m i386:x86-64
+DISASM ?= $(IN_DEV_CONTAINER) objdump $(ARGS) -D -M intel -m i386:x86-64
 
 FASM ?= fasm
 

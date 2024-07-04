@@ -71,6 +71,7 @@ _core_words:
 	_ise	_AL
 
 	_wi	'entry', 5, _entry, 0, 0
+	_wi	'immediate', 9, immediate, 0, 0
 
 	.latest = .prev_word
 
@@ -332,5 +333,13 @@ _entry:
 	mov	rax, [rax]
 	sub	rax, [_code_buffer.base]
 	mov	[_blue.entry], eax
+
+	ret
+
+immediate:
+	mov	rdi, [_dictionary.latest]
+	mov	al, byte [rdi]
+	or	al, DE_IMMEDIATE
+	stosb
 
 	ret
