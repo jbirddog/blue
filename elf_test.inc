@@ -1,32 +1,50 @@
 
-program_code:
-	.entry_offset = $ - program_code
-	db	0x48, 0xc7, 0xc0	; mov rax, 1 - sys_write
-	dd	0x01
-	db	0x48, 0xc7, 0xc7	; mov rdi, 1 - stdout fd
-	dd	0x01
-	db	0x48, 0xc7, 0xc6	; mov rsi, 0x4000a2 - location of string
-	dd	0x4000a2
-	db	0x48, 0xc7, 0xc2	; mov rdx, 13 - size of string
-	dd	0x0d
-	db	0x0f, 0x05		; syscall
-	db	0x48, 0xc7, 0xc0	; mov rax, 60 - sys_exit
-	dd	0x3c
-	db	0x48, 0x31, 0xff	; xor rdi, rdi
-	db	0x0f, 0x05		; syscall
+blue_code:
+	db	'16 base '
+	db	'48 b, C7 b, C0 b, '	; mov rax, 1 - sys_write
+	db	'01 d, '
+	db	'48 b, C7 b, C7 b, '	; mov rdi, 1 - stdout fd
+	db	'01 d, '
+	db	'48 b, C7 b, C6 b, '	; mov rsi, 0x4000a2 - location of string
+	db	'4000A2 d, '
+	db	'48 b, C7 b, C2 b, '	; mov rdx, 13 - size of string
+	db	'0D d, '
+	db	'0F b, 05 b, '		; syscall
+	db	'48 b, C7 b, C0 b, '	; mov rax, 60 - sys_exit
+	db	'3C d, '
+	db	'48 b, 31 b, FF b, '	; xor rdi, rdi
+	db	'0F b, 05 b, '		; syscall
 
-	db	"Hello, world"
-	db	0x0a, 0x00
+	db	'48 b, 65 b, 6C b, '	; Hel
+	db	'6C b, 6F b, 2C b, '	; lo,
+	db	'20 b, 77 b, 6F b, '	;  wo
+	db	'72 b, 6C b, 64 b, '	; rld
+	db	'0A b, 00 b, '
 
-	.length = $ - program_code
+	.length = $ - blue_code
 
-expected_output_size = elf_binary_wrapper_length + program_code.length
-
-assert expected_output_size = 384
+expected_output_size = 384
 
 elf_test:	
-	mov	eax, program_code.entry_offset
-	mov	ecx, program_code.length
+	call	kernel_init
+
+	t 'example blue code parses correctly'
+
+	mov	rsi, blue_code
+	mov	ecx, blue_code.length
+	xor	eax, eax
+
+	call	kernel_loop
+
+	cmp	eax, SUCCESS
+	jne	failure
+
+	ok
+	
+	mov	rsi, [_code_buffer.base]
+	mov	eax, [_blue.entry]
+	mov	rcx, [_code_buffer.here]
+	sub	rcx, rsi
 	call	elf_binary_calculate_fields
 
 	t 'start address is correct'
@@ -92,7 +110,7 @@ elf_test:
 	ok
 
 	t 'can write an elf binary of the expected size'
-	
+
 	mov	rdi, output_file
 	mov	esi, 0x01 or 0x40 or 0x200
 	mov	edx, 0x1ed
@@ -100,9 +118,10 @@ elf_test:
 	syscall
 
 	mov	rdi, rax
-	mov	rsi, program_code
-	mov	eax, program_code.entry_offset
-	mov	ecx, program_code.length
+	mov	rsi, [_code_buffer.base]
+	mov	eax, [_blue.entry]
+	mov	rcx, [_code_buffer.here]
+	sub	rcx, rsi
 	call	elf_binary_write
 
 	mov	rsi, fstat_buffer
@@ -116,6 +135,8 @@ elf_test:
 	jne	failure
 
 	ok
+
+	call	kernel_deinit
 	
 	ret
 

@@ -77,6 +77,13 @@ kernel_test:
 	jne	failure
 
 	ok
+
+	t 'inits entry correctly'
+	
+	cmp	[_blue.entry], 0
+	jne	failure
+
+	ok
 	
 	call	kernel_deinit
 

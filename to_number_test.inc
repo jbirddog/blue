@@ -30,6 +30,7 @@ to_number_test:
 	tc1	not_number, 4, FAILURE, 0
 	tc1	not_number2, 5, FAILURE, 1234
 	tc1	zero, 1, SUCCESS, 0
+	tc1	zero_zero, 2, SUCCESS, 0
 	tc1	one, 1, SUCCESS, 1
 	tc1	thirteen, 2, SUCCESS, 13
 	tc1	thousand, 4, SUCCESS, 1000
@@ -39,6 +40,7 @@ to_number_test:
 	tc1	not_number, 4, FAILURE, 0
 	tc1	not_number2, 5, FAILURE, 4660
 	tc1	zero, 1, SUCCESS, 0
+	tc1	zero_zero, 2, SUCCESS, 0
 	tc1	one, 1, SUCCESS, 1
 	tc1	thirteen, 2, SUCCESS, 19
 	tc1	thousand, 4, SUCCESS, 4096
@@ -50,6 +52,7 @@ to_number_test:
 not_number	db '!@#$'
 not_number2	db '1234p'
 zero		db '0'
+zero_zero	db '00'
 one		db '1'
 thirteen	db '13'
 thousand	db '1000'
