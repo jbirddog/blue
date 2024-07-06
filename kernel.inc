@@ -76,6 +76,11 @@ _compile_word:
 	add	rax, _dictionary.code_offset
 	mov	rax, [rax]
 
+	cmp	rax, _code_buffer.base
+	jl	.c
+
+	
+	.c:
 	call	q_comma
 
 	mov	al, 0xff
@@ -92,7 +97,24 @@ _compile_word:
 _interpret_word:
 	push	[_code_buffer.here]
 
-	call	_compile_word
+	push	rax
+	call	flow_in
+
+	mov	al, 0x48
+	call	b_comma
+	mov	al, 0xbf
+	call	b_comma
+
+	pop	rax
+	add	rax, _dictionary.code_offset
+	mov	rax, [rax]
+
+	call	q_comma
+
+	mov	al, 0xff
+	call	b_comma
+	mov	al, 0xd7
+	call	b_comma
 
 	mov	al, 0xc3
 	call	b_comma

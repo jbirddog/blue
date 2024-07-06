@@ -21,3 +21,60 @@ dump_code_buffer:
 _code_buffer_dump_file:
 	db	"code_buffer_dump.out"
 	db	0x00
+
+H db 'H'
+newline db 10
+
+print_char:
+	mov	edx, 1
+
+print:
+	mov	edi, STDOUT_FILENO
+	mov	eax, SYS_WRITE
+	syscall
+	ret
+
+print_word:
+	push	rax
+	push	rcx
+	push	rdi
+	push	rdx
+	push	rsi
+
+	xor	edx, edx
+	mov	dl, [_blue.word_len]
+	mov	esi, _blue.word
+	call	print
+
+	mov	esi, newline
+	call	print_char
+
+	pop	rsi
+	pop	rdx
+	pop	rdi
+	pop	rcx
+	pop	rax
+
+	ret
+	
+here:
+	push	rax
+	push	rcx
+	push	rdi
+	push	rdx
+	push	rsi
+	
+	mov	esi, H
+	call	print_char
+
+	mov	esi, newline
+	call	print_char
+
+	pop	rsi
+	pop	rdx
+	pop	rdi
+	pop	rcx
+	pop	rax
+
+	ret
+
