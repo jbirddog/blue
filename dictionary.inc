@@ -55,6 +55,12 @@ macro _ose e {
 
 _core_words:
 	.prev_word = 0
+
+	_wi	'--', 2, seX_o_parse, 0, 0
+	_wi	'))', 2, seX_parse_end, 0, 0
+
+	.latest_se = .prev_word
+	.prev_word = 0
 	
 	_w	'b,', 2, b_comma, 1, 0
 	_ise	_AL
@@ -73,6 +79,8 @@ _core_words:
 
 	_wi	'entry', 5, _entry, 0, 0
 	_wi	'immediate', 9, immediate, 0, 0
+
+	_wi	'((', 2, seX_i_parse, 0, 0
 
 	.latest = .prev_word
 
@@ -343,4 +351,13 @@ immediate:
 	or	al, DE_IMMEDIATE
 	stosb
 
+	ret
+	
+seX_i_parse:
+	ret
+	
+seX_o_parse:
+	ret
+	
+seX_parse_end:
 	ret
