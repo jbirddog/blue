@@ -36,6 +36,10 @@ run:
 dis:
 	$(DISASM) $(WHAT)
 
+disa: WHAT=a.out
+disa: dis
+	@true
+	
 disb: ARGS=-b binary
 disb: dis
 	@true
@@ -49,4 +53,5 @@ clean:
 	
 .PHONY:
 	dev-env dev-start dev-stop \
-	compile run dis disb discb clean
+	compile run clean \
+	dis disa disb discb

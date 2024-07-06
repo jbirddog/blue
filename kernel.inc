@@ -63,7 +63,7 @@ kernel_deinit:
 ; expects
 ;	- word in rax
 ;
-_compile_word:
+_compile_word_abs:
 	push	rax
 	call	flow_in
 
@@ -89,11 +89,32 @@ _compile_word:
 ; expects
 ;	- word in rax
 ;
+_compile_word_rel:
+	push	rax
+	call	flow_in
+
+	mov	al, 0xe8
+	call	b_comma
+
+	pop	rax
+	add	rax, _dictionary.code_offset
+	mov	rax, [rax]
+	sub	rax, [_code_buffer.here]
+	sub	rax, 4
+
+	call	d_comma
+
+	ret
+
+;
+; expects
+;	- word in rax
+;
 _interpret_word:
 	push	[_code_buffer.here]
 
-	call	_compile_word
-
+	call	_compile_word_abs
+	
 	mov	al, 0xc3
 	call	b_comma
 
@@ -114,12 +135,17 @@ _handle_word:
 	mov	rsi, [rax]
 	test	sil, DE_IMMEDIATE
 	jnz	.interpret
+	
+	test	sil, DE_CORE
+	jnz	.compile_core
 
-	call	_compile_word
-	jmp	.done
+	call	_compile_word_rel
+	ret
+	
+	.compile_core:
+	call	_compile_word_abs
+	ret
 
 	.interpret:
 	call	_interpret_word
-
-	.done:
 	ret
