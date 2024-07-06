@@ -31,7 +31,7 @@ compile:
 	$(IN_DEV_CONTAINER) $(FASM) $(WHAT).asm $(WHAT) && chmod +x $(WHAT)
 
 run:
-	$(IN_DEV_CONTAINER) ./$(WHAT) && ./a.out
+	$(IN_DEV_CONTAINER) ./$(WHAT)
 
 dis:
 	$(DISASM) $(WHAT)
