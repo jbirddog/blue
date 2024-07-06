@@ -31,11 +31,15 @@ compile:
 	$(IN_DEV_CONTAINER) $(FASM) $(WHAT).asm $(WHAT) && chmod +x $(WHAT)
 
 run:
-	$(IN_DEV_CONTAINER) ./$(WHAT)
+	$(IN_DEV_CONTAINER) ./$(WHAT) && ./a.out
 
 dis:
 	$(DISASM) $(WHAT)
 
+disa: WHAT=a.out
+disa: dis
+	@true
+	
 disb: ARGS=-b binary
 disb: dis
 	@true
@@ -49,4 +53,5 @@ clean:
 	
 .PHONY:
 	dev-env dev-start dev-stop \
-	compile run dis disb discb clean
+	compile run clean \
+	dis disa disb discb
