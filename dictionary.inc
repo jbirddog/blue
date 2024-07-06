@@ -59,7 +59,7 @@ _core_words:
 	_wi	'--', 2, seX_o_parse, 0, 0
 	_wi	'))', 2, seX_parse_end, 0, 0
 
-	.latest_se = .prev_word
+	.se_latest = .prev_word
 	.prev_word = 0
 	
 	_w	'b,', 2, b_comma, 1, 0
@@ -114,6 +114,7 @@ dictionary_deinit:
 dictionary_find:
 	mov	rdi, [_dictionary.latest]
 
+_find_from:
 	.find:
 	push	rdi
 
@@ -352,12 +353,35 @@ immediate:
 	stosb
 
 	ret
+
+se_bad:
+	die	ERR_BAD_SE
 	
 seX_i_parse:
-	ret
+	call	parser_next_word
+	cmp	[_blue.word_len], 0
+	je	se_bad
+
+	mov	rdi, _core_words.se_latest
+	call	_find_from
+
+	cmp	rax, _core_words.seX_o_parse
+	je	seX_o_parse
+
+	jmp	se_bad
 	
 seX_o_parse:
-	ret
+	call	parser_next_word
+	cmp	[_blue.word_len], 0
+	je	se_bad
+
+	mov	rdi, _core_words.se_latest
+	call	_find_from
+
+	cmp	rax, _core_words.seX_parse_end
+	je	seX_parse_end
+
+	jmp	se_bad
 	
 seX_parse_end:
 	ret
