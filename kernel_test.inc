@@ -128,6 +128,7 @@ kernel_test:
 	tc1	clean_exit
 	tc1	user_one_byte
 	tc1	user_empty_words
+	tc1	seX_empty
 	
 	tc2	bogus
 
@@ -186,6 +187,16 @@ clean_exit:
 user_one_byte:
 	.blue:
 	db	': 1b 1 b, ; '
+	db	'1b'
+	.blue_length = $ - .blue
+
+	.expected:
+	db	0x01
+	.expected_length = $ - .expected
+
+seX_empty:
+	.blue:
+	db	': 1b (( -- )) 1 b, ; '
 	db	'1b'
 	.blue_length = $ - .blue
 

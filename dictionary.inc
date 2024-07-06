@@ -4,16 +4,18 @@
 ; 08	- 1 byte flags
 ;	- 1 byte word len
 ;	- 1 byte input stack effects len
-;	- 5 bytes reserved
+;	- 1 byte output stack effects len
+;	- 4 bytes reserved
 ; 08	- prev addr
 ; 08	- code addr
 ; ??	- word chars (bytes padded to quad)
 ; ??	- stack effects (quads)
 ;
 
-DE_HIDDEN		= 1
-DE_IMMEDIATE		= 2
-DE_CORE			= 4
+DE_HIDDEN		= 00000001b
+DE_IMMEDIATE		= 00000010b
+DE_CORE			= 00000100b
+DE_SE_KNOWN		= 00001000b
 
 FLAGS_OFFSET		= 0
 FLAGS_MASK		= 0xff
@@ -55,6 +57,12 @@ macro _ose e {
 
 _core_words:
 	.prev_word = 0
+
+	_wi	'--', 2, seX_o_parse, 0, 0
+	_wi	'))', 2, seX_parse_end, 0, 0
+
+	.se_latest = .prev_word
+	.prev_word = 0
 	
 	_w	'b,', 2, b_comma, 1, 0
 	_ise	_AL
@@ -73,6 +81,8 @@ _core_words:
 
 	_wi	'entry', 5, _entry, 0, 0
 	_wi	'immediate', 9, immediate, 0, 0
+
+	_wi	'((', 2, seX_i_parse, 0, 0
 
 	.latest = .prev_word
 
@@ -106,6 +116,7 @@ dictionary_deinit:
 dictionary_find:
 	mov	rdi, [_dictionary.latest]
 
+_find_from:
 	.find:
 	push	rdi
 
@@ -341,6 +352,43 @@ immediate:
 	mov	rdi, [_dictionary.latest]
 	mov	al, byte [rdi]
 	or	al, DE_IMMEDIATE
+	stosb
+
+	ret
+
+se_bad:
+	die	ERR_BAD_SE
+	
+seX_i_parse:
+	call	parser_next_word
+	cmp	[_blue.word_len], 0
+	je	se_bad
+
+	mov	rdi, _core_words.se_latest
+	call	_find_from
+
+	cmp	rax, _core_words.seX_o_parse
+	je	seX_o_parse
+
+	jmp	se_bad
+	
+seX_o_parse:
+	call	parser_next_word
+	cmp	[_blue.word_len], 0
+	je	se_bad
+
+	mov	rdi, _core_words.se_latest
+	call	_find_from
+
+	cmp	rax, _core_words.seX_parse_end
+	je	seX_parse_end
+
+	jmp	se_bad
+	
+seX_parse_end:
+	mov	rdi, [_dictionary.latest]
+	mov	al, byte [rdi]
+	or	al, DE_SE_KNOWN
 	stosb
 
 	ret
