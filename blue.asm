@@ -63,11 +63,13 @@ segment readable
 blue_bye:
 	db	'16 base '
 	db	''
-	db	': bye '
-	db	'	31 b, FF b, '
-	db	'	B8 b, 3C d, '
-	db	'	0F b, 05 b, '
-	db	'; immediate '
+	db	': xor-edi 31 b, FF b, ; '
+	db	': mov-eax-60 B8 b, 3C d, ; '
+	db	': syscall 0F b, 05 b, ; '
+	db	''
+	db	': ok xor-edi ; '
+	db	': exit mov-eax-60 syscall ; '
+	db	': bye ok exit ; immediate '
 	db	''
 	db	': _start bye ; entry '
 	.length = $ - blue_bye

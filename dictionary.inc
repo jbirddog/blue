@@ -13,6 +13,7 @@
 
 DE_HIDDEN		= 1
 DE_IMMEDIATE		= 2
+DE_CORE			= 4
 
 FLAGS_OFFSET		= 0
 FLAGS_MASK		= 0xff
@@ -25,7 +26,7 @@ IN_EFFECTS_LEN_MASK	= 0x0000ff
 
 macro __w word, word_len, flags, code, ise_len, ose_len {
 	.##code:
-	db	flags, word_len, ise_len, ose_len
+	db	flags or DE_CORE, word_len, ise_len, ose_len
 	dd	0
 	dq	_core_words.prev_word
 	dq	code
