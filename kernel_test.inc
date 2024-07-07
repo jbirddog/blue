@@ -207,14 +207,17 @@ seX_empty:
 
 ise_1:
 	.blue:
-	db	': syscall (( num eax -- )) 15 b, 5 b, ; '
-	db	'60 syscall'
+	db	': syscall (( num eax -- )) ; '
+	db	': _ (( -- )) 60 syscall ; entry '
 	.blue_length = $ - .blue
 
 	.expected:
+	db	0xc3
 	db	0xb8
-	dd	0xc3
-	db	0x0f, 0x05
+	dd	0x3c
+	db	0xe8
+	db	0xf5, 0xff, 0xff, 0xff
+	db	0xc3
 	.expected_length = $ - .expected
 
 entry_0:

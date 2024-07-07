@@ -412,5 +412,16 @@ seX_parse_end:
 	ret
 
 se_reg_eax:
-	die 9
+	mov	rax, _EAX
+	mov	rdi, [_dictionary.here]
+	stosq
+
+	mov	rdi, [_dictionary.latest]
+	add	rdi, 2
+	mov	al, byte [rdi]
+	inc	al
+	stosb
+	
+	ret
+die 9
 	ret

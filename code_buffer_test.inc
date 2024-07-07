@@ -43,6 +43,5 @@ check_code_buffer:
 	.failure_length:
 	.failure_byte:
 
-	call	dump_code_buffer
 	jmp	failure
 
