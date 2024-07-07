@@ -208,7 +208,7 @@ seX_empty:
 ise_1:
 	.blue:
 	db	': syscall (( num eax -- )) ; '
-	db	': _ (( -- )) 60 syscall ; entry '
+	db	': _ 60 syscall ; entry '
 	.blue_length = $ - .blue
 
 	.expected:

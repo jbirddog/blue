@@ -423,5 +423,3 @@ se_reg_eax:
 	stosb
 	
 	ret
-die 9
-	ret
