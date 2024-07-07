@@ -58,10 +58,15 @@ macro _ose e {
 _core_words:
 	.prev_word = 0
 
+	_wi	'eax', 3, se_reg_eax, 0, 0
+
+	.se_reg_latest = .prev_word
+	.prev_word = 0
+
 	_wi	'--', 2, seX_o_parse, 0, 0
 	_wi	'))', 2, seX_parse_end, 0, 0
 
-	.se_latest = .prev_word
+	.se_parse_latest = .prev_word
 	.prev_word = 0
 	
 	_w	'b,', 2, b_comma, 1, 0
@@ -364,20 +369,33 @@ seX_i_parse:
 	cmp	[_blue.word_len], 0
 	je	se_bad
 
-	mov	rdi, _core_words.se_latest
+	mov	rdi, _core_words.se_parse_latest
 	call	_find_from
 
 	cmp	rax, _core_words.seX_o_parse
 	je	seX_o_parse
 
-	jmp	se_bad
+	call	parser_next_word
+	cmp	[_blue.word_len], 0
+	je	se_bad
+
+	mov	rdi, _core_words.se_reg_latest
+	call	_find_from
+
+	test	rax, rax
+	jz	se_bad
+
+	add	rax, _dictionary.code_offset
+	call	qword [rax]
+	
+	jmp	seX_i_parse
 	
 seX_o_parse:
 	call	parser_next_word
 	cmp	[_blue.word_len], 0
 	je	se_bad
 
-	mov	rdi, _core_words.se_latest
+	mov	rdi, _core_words.se_parse_latest
 	call	_find_from
 
 	cmp	rax, _core_words.seX_parse_end
@@ -391,4 +409,17 @@ seX_parse_end:
 	or	al, DE_SE_KNOWN
 	stosb
 
+	ret
+
+se_reg_eax:
+	mov	rax, _EAX
+	mov	rdi, [_dictionary.here]
+	stosq
+
+	mov	rdi, [_dictionary.latest]
+	add	rdi, 2
+	mov	al, byte [rdi]
+	inc	al
+	stosb
+	
 	ret

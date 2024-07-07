@@ -84,6 +84,8 @@ failure:
 
 	mov	esi, newline
 	call	print_char
+
+	call	dump_code_buffer
 	
 	mov	dil, [test_num]
 	mov	eax, 60
