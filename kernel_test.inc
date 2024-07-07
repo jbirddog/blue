@@ -129,6 +129,7 @@ kernel_test:
 	tc1	user_one_byte
 	tc1	user_empty_words
 	tc1	seX_empty
+	tc1	ise_1
 	
 	tc2	bogus
 
@@ -202,6 +203,18 @@ seX_empty:
 
 	.expected:
 	db	0x01
+	.expected_length = $ - .expected
+
+ise_1:
+	.blue:
+	db	': syscall (( num eax -- )) 15 b, 5 b, ; '
+	db	'60 syscall'
+	.blue_length = $ - .blue
+
+	.expected:
+	db	0xb8
+	dd	0xc3
+	db	0x0f, 0x05
 	.expected_length = $ - .expected
 
 entry_0:

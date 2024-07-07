@@ -4,16 +4,16 @@
 ;
 flow_in:
 	call	word_input_stack_effects
-	mov	edi, esi
+	mov	rdi, rsi
 
 	.loop:
 	dec	ecx
 	js	.done
 
-	lea	ebx, [edi + (ecx * 8)]
-	mov	ebx, [ebx]
-	and	ebx, REG_MASK
-	shr	ebx, REG_OFFSET
+	lea	rbx, [rdi + (rcx * 8)]
+	mov	rbx, [rbx]
+	and	rbx, REG_MASK
+	shr	rbx, REG_OFFSET
 
 	call	data_stack_pop
 	cmp	eax, _IMMEDIATE
