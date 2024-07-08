@@ -28,12 +28,19 @@ data_stack_push:
 
 data_stack_pop:
 	mov	rsi, [_data_stack.here]
+	cmp	rsi, [_data_stack.base]
+	jle	.underflow
+	
 	std
 	lodsq
 	mov	[_data_stack.here], rsi
 	lodsq
 	cld
+	
 	ret
+	
+	.underflow:
+	die	ERR_UNDERFLOW
 
 data_stack_depth:
 	mov	rax, [_data_stack.here]
