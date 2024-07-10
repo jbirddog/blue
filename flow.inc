@@ -29,7 +29,6 @@ flow_in:
 	jmp	.loop
 
 	.flow_reg:
-	die	ERR_NO_IMPL
 	
 	.done:
 	ret
