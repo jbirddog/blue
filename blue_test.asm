@@ -64,12 +64,12 @@ entry $
 	mov	edx, header.length
 	call	print
 
-	;ts	code_buffer
-	;ts	data_stack
-	;ts	parser
-	;ts	to_number
-	;ts	dictionary
-	;ts	flow
+	ts	code_buffer
+	ts	data_stack
+	ts	parser
+	ts	to_number
+	ts	dictionary
+	ts	flow
 	ts	kernel
 	ts	elf
 

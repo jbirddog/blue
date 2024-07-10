@@ -122,20 +122,20 @@ kernel_test:
 	
 	call	kernel_deinit
 
-	;tc1	one_byte
-	;tc1	two_bytes
-	;tc1	one_byte_base16
-	;tc1	clean_exit
-	;tc1	user_one_byte
-	;tc1	user_empty_words
-	;tc1	seX_empty
-	;tc1	ise_1
+	tc1	one_byte
+	tc1	two_bytes
+	tc1	one_byte_base16
+	tc1	clean_exit
+	tc1	user_one_byte
+	tc1	user_empty_words
+	tc1	seX_empty
+	tc1	ise_1
 	tc1	ise_2
 	
-	;tc2	bogus
+	tc2	bogus
 
-	;tc3	entry_0
-	;tc3	entry_18
+	tc3	entry_0
+	tc3	entry_18
 	
 	ret
 
