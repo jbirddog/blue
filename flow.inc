@@ -19,6 +19,7 @@ flow_in:
 	cmp	eax, _IMMEDIATE
 	jne	.flow_reg
 
+	.flow_lit:
 	mov	al, 0xb8
 	add	al, bl
 	call	b_comma
@@ -29,11 +30,47 @@ flow_in:
 	jmp	.loop
 
 	.flow_reg:
-	die	ERR_NO_IMPL
+	and	ebx, 7
+	shl	ebx, 3
+	
+	and	rax, REG_MASK
+	shr	rax, REG_OFFSET
+	and	eax, 7
+
+	or	ebx, eax
+	or	ebx, 0xc0
+
+	mov	al, 0x89
+	call	b_comma
+
+	mov	al, bl
+	call	b_comma
+	
+	jmp	.loop
 	
 	.done:
 	ret
 
+;
+; expects
+;	- word in rax
+;
+push_flow_in:
+	call	word_input_stack_effects
+
+	.loop:
+	dec	ecx
+	js	.done
+
+	lea	rax, [rsi + (rcx * 8)]
+	mov	rax, [rax]
+
+	call	data_stack_push
+	jmp	.loop
+	
+	.done:
+	ret
+	
 ;
 ; expects
 ;	- word in rax

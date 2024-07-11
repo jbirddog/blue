@@ -409,6 +409,9 @@ seX_parse_end:
 	or	al, DE_SE_KNOWN
 	stosb
 
+	mov	rax, [_dictionary.latest]
+	call	push_flow_in
+
 	ret
 
 se_reg_eax:

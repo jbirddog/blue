@@ -130,6 +130,7 @@ kernel_test:
 	tc1	user_empty_words
 	tc1	seX_empty
 	tc1	ise_1
+	tc1	ise_2
 	
 	tc2	bogus
 
@@ -217,6 +218,18 @@ ise_1:
 	dd	0x3c
 	db	0xe8
 	db	0xf5, 0xff, 0xff, 0xff
+	db	0xc3
+	.expected_length = $ - .expected
+
+ise_2:
+	.blue:
+	db	': myd, (( num eax -- )) d, ; immediate '
+	db	': _ 7 myd, ; entry '
+	.blue_length = $ - .blue
+
+	.expected:
+	db	0xc3
+	dd	0x07
 	db	0xc3
 	.expected_length = $ - .expected
 
