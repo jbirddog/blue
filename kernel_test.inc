@@ -223,7 +223,7 @@ ise_1:
 
 ise_2:
 	.blue:
-	db	': syscall (( num eax -- )) d, ; immediate '
+	db	': syscall (( num ecx -- )) d, ; '
 	db	': _ 7 syscall ; entry '
 	.blue_length = $ - .blue
 

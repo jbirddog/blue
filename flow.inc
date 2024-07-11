@@ -30,6 +30,22 @@ flow_in:
 	jmp	.loop
 
 	.flow_reg:
+	and	ebx, 7
+	shl	ebx, 3
+	
+	and	rax, REG_MASK
+	shr	rax, REG_OFFSET
+	and	eax, 7
+
+	or	ebx, eax
+	or	ebx, 0xc0
+
+	mov	al, 0x89
+	call	b_comma
+
+	mov	al, bl
+	call	b_comma
+	
 	jmp	.loop
 	
 	.done:
