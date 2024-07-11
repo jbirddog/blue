@@ -64,10 +64,9 @@ push_flow_in:
 
 	lea	rax, [rsi + (rcx * 8)]
 	mov	rax, [rax]
-	and	rax, REG_MASK
-	shr	rax, REG_OFFSET
 
 	call	data_stack_push
+	jmp	.loop
 	
 	.done:
 	ret
