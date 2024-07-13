@@ -49,6 +49,8 @@ _AL		= REG_RAX or _BYTE
 _EAX		= REG_RAX or _DWORD
 _RAX		= REG_RAX or _QWORD
 
+_ECX		= REG_RCX or _DWORD
+
 _blue:
 	.tib dq 0
 	.tib_len dd 0
