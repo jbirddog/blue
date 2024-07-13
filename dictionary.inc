@@ -58,6 +58,7 @@ macro _ose e {
 _core_words:
 	.prev_word = 0
 
+	_wi	'ecx', 3, se_reg_ecx, 0, 0
 	_wi	'eax', 3, se_reg_eax, 0, 0
 
 	.se_reg_latest = .prev_word
@@ -146,9 +147,9 @@ _find_from:
 	jne	.next
 
 	inc	rdi
-	dec	ecx
-	js	.check_word
-	
+	dec	cl
+	jnz	.check_word
+
 	pop	rax
 	jmp	.done
 
@@ -416,6 +417,19 @@ seX_parse_end:
 
 se_reg_eax:
 	mov	rax, _EAX
+	mov	rdi, [_dictionary.here]
+	stosq
+
+	mov	rdi, [_dictionary.latest]
+	add	rdi, 2
+	mov	al, byte [rdi]
+	inc	al
+	stosb
+	
+	ret
+
+se_reg_ecx:
+	mov	rax, _ECX
 	mov	rdi, [_dictionary.here]
 	stosq
 

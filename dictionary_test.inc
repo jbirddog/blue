@@ -36,6 +36,24 @@ macro tc2 word, in_len, word_len {
 	ok
 }
 
+macro tc3 word, from {
+	mov	[_blue.tib], _core_words.##word + _dictionary.word_offset
+	mov	[_blue.tib_len], _core_words.##word + 1
+	mov	[_blue.tib_in], 0
+
+	t 'finds the expected word'
+
+	call	parser_next_word
+
+	mov	rdi, from
+	call	_find_from	
+	
+	cmp	rax, _core_words.##word
+	jne	failure
+
+	ok
+}
+
 dictionary_test:
 	call dictionary_init
 
@@ -141,6 +159,12 @@ dictionary_test:
 	tc1	word_d_comma, 2, _core_words.d_comma
 	tc1	word_q_comma, 2, _core_words.q_comma
 	tc1	word_base, 4, _core_words.base
+
+	tc3	seX_o_parse, _core_words.se_parse_latest
+	tc3	seX_parse_end, _core_words.se_parse_latest
+
+	tc3	se_reg_eax, _core_words.se_reg_latest
+	tc3	se_reg_ecx, _core_words.se_reg_latest
 	
 	call	dictionary_deinit
 	
