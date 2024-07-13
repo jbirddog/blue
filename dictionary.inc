@@ -143,14 +143,16 @@ _find_from:
 	
 	.check_word:
 	lodsb
+
 	cmp	al, byte [rdi]
 	jne	.next
 
 	inc	rdi
-	dec	ecx
-	js	.check_word
-	
+	dec	cl
+	jnz	.check_word
+
 	pop	rax
+	
 	jmp	.done
 
 	.hidden:
