@@ -163,8 +163,8 @@ dictionary_test:
 	tc3	seX_o_parse, _core_words.se_parse_latest
 	tc3	seX_parse_end, _core_words.se_parse_latest
 
-	tc3	se_reg_eax, _core_words.se_reg_latest
-	tc3	se_reg_ecx, _core_words.se_reg_latest
+	tc3	se_reg.eax, _core_words.se_reg_latest
+	tc3	se_reg.ecx, _core_words.se_reg_latest
 	
 	call	dictionary_deinit
 	

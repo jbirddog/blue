@@ -58,8 +58,8 @@ macro _ose e {
 _core_words:
 	.prev_word = 0
 
-	_wi	'ecx', 3, se_reg_ecx, 0, 0
-	_wi	'eax', 3, se_reg_eax, 0, 0
+	_wi	'ecx', 3, se_reg.ecx, 0, 0
+	_wi	'eax', 3, se_reg.eax, 0, 0
 
 	.se_reg_latest = .prev_word
 	.prev_word = 0
@@ -415,10 +415,13 @@ seX_parse_end:
 
 	ret
 
-se_reg_eax:
-	mov	rax, _EAX
+se_reg:
+macro _se_reg reg, _REG {
+	.##reg:
+	mov	rax, _REG
 	mov	rdi, [_dictionary.here]
 	stosq
+	mov	[_dictionary.here], rdi
 
 	mov	rdi, [_dictionary.latest]
 	add	rdi, 2
@@ -427,16 +430,7 @@ se_reg_eax:
 	stosb
 	
 	ret
-
-se_reg_ecx:
-	mov	rax, _ECX
-	mov	rdi, [_dictionary.here]
-	stosq
-
-	mov	rdi, [_dictionary.latest]
-	add	rdi, 2
-	mov	al, byte [rdi]
-	inc	al
-	stosb
+}
 	
-	ret
+	_se_reg	eax, _EAX
+	_se_reg	ecx, _ECX

@@ -12,6 +12,10 @@ flow_in:
 
 	lea	rbx, [rdi + (rcx * 8)]
 	mov	rbx, [rbx]
+
+	cmp	bl, _REGISTER
+	jne	.bad_se
+	
 	and	rbx, REG_MASK
 	shr	rbx, REG_OFFSET
 
@@ -50,6 +54,9 @@ flow_in:
 	
 	.done:
 	ret
+
+	.bad_se:
+	die	ERR_BAD_SE
 
 ;
 ; expects
