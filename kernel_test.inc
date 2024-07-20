@@ -130,6 +130,8 @@ kernel_test:
 	tc1	user_empty_words
 	tc1	seX_empty
 	tc1	ise_1
+	tc1	ise_1a
+	tc1	ise_1b
 	tc1	ise_2
 	
 	tc2	bogus
@@ -218,6 +220,35 @@ ise_1:
 	dd	0x3c
 	db	0xe8
 	db	0xf5, 0xff, 0xff, 0xff
+	db	0xc3
+	.expected_length = $ - .expected
+
+ise_1a:
+	.blue:
+	db	': syscall (( num ecx -- )) ; '
+	db	': _ 60 syscall ; entry '
+	.blue_length = $ - .blue
+
+	.expected:
+	db	0xc3
+	db	0xb9
+	dd	0x3c
+	db	0xe8
+	db	0xf5, 0xff, 0xff, 0xff
+	db	0xc3
+	.expected_length = $ - .expected
+
+ise_1b:
+	.blue:
+	db	'16 base '
+	db	': syscall (( num ecx -- )) B8 b, d, 0F b, 05 b, ; immediate '
+	db	': _ 3C syscall ; entry '
+	.blue_length = $ - .blue
+
+	.expected:
+	db	0xb8
+	dd	0x3c
+	db	0x0f, 0x05
 	db	0xc3
 	.expected_length = $ - .expected
 
