@@ -64,7 +64,7 @@ blue_bye:
 	db	'16 base '
 	db	''
 	db	': xor-edi (( -- )) 31 b, FF b, ; '
-	db	': syscall (( num ecx -- )) B8 b, d, 0F b, 05 b, ; '
+	db	': syscall (( ecx num -- )) B8 b, d, 0F b, 05 b, ; '
 	db	''
 	db	': ok (( -- )) xor-edi ; '
 	db	''

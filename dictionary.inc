@@ -376,13 +376,9 @@ seX_i_parse:
 	cmp	rax, _core_words.seX_o_parse
 	je	seX_o_parse
 
-	call	parser_next_word
-	cmp	[_blue.word_len], 0
-	je	se_bad
-
 	mov	rdi, _core_words.se_reg_latest
 	call	_find_from
-
+	
 	test	rax, rax
 	jz	se_bad
 
@@ -415,9 +411,12 @@ seX_parse_end:
 
 	ret
 
-se_reg:
 macro _se_reg reg, _REG {
 	.##reg:
+	call	parser_next_word
+	cmp	[_blue.word_len], 0
+	je	se_bad
+	
 	mov	rax, _REG
 	mov	rdi, [_dictionary.here]
 	stosq
@@ -431,6 +430,7 @@ macro _se_reg reg, _REG {
 	
 	ret
 }
-	
+
+se_reg:	
 	_se_reg	eax, _EAX
 	_se_reg	ecx, _ECX
