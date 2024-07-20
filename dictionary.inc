@@ -58,6 +58,7 @@ macro _ose e {
 _core_words:
 	.prev_word = 0
 
+	_wi	'edx', 3, se_reg.edx, 0, 0
 	_wi	'ecx', 3, se_reg.ecx, 0, 0
 	_wi	'eax', 3, se_reg.eax, 0, 0
 
@@ -434,3 +435,4 @@ macro _se_reg reg, _REG {
 se_reg:	
 	_se_reg	eax, _EAX
 	_se_reg	ecx, _ECX
+	_se_reg	edx, _EDX
