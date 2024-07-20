@@ -210,7 +210,7 @@ seX_empty:
 
 ise_1:
 	.blue:
-	db	': syscall (( num eax -- )) ; '
+	db	': syscall (( eax num -- )) ; '
 	db	': _ 60 syscall ; entry '
 	.blue_length = $ - .blue
 
@@ -225,7 +225,7 @@ ise_1:
 
 ise_1a:
 	.blue:
-	db	': syscall (( num ecx -- )) ; '
+	db	': syscall (( ecx num -- )) ; '
 	db	': _ 60 syscall ; entry '
 	.blue_length = $ - .blue
 
@@ -241,7 +241,7 @@ ise_1a:
 ise_1b:
 	.blue:
 	db	'16 base '
-	db	': syscall (( num ecx -- )) B8 b, d, 0F b, 05 b, ; immediate '
+	db	': syscall (( ecx num -- )) B8 b, d, 0F b, 05 b, ; immediate '
 	db	'0A base '
 	db	': _ 60 syscall ; entry '
 	.blue_length = $ - .blue
@@ -255,7 +255,7 @@ ise_1b:
 
 ise_2:
 	.blue:
-	db	': myd, (( num eax -- )) d, ; immediate '
+	db	': myd, (( eax num -- )) d, ; immediate '
 	db	': _ 7 myd, ; entry '
 	.blue_length = $ - .blue
 
