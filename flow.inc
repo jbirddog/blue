@@ -35,11 +35,11 @@ flow_in:
 
 	.flow_reg:
 	and	ebx, 7
-	shl	ebx, 3
 	
 	and	rax, REG_MASK
 	shr	rax, REG_OFFSET
 	and	eax, 7
+	shl	eax, 3
 
 	or	ebx, eax
 	or	ebx, 0xc0
