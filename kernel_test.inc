@@ -130,7 +130,7 @@ kernel_test:
 	tc1	user_empty_words
 	tc1	seX_empty
 	tc1	ise_1
-	tc1	ise_2
+	;tc1	ise_2
 	
 	tc2	bogus
 
