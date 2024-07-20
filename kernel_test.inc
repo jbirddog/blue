@@ -242,7 +242,8 @@ ise_1b:
 	.blue:
 	db	'16 base '
 	db	': syscall (( num ecx -- )) B8 b, d, 0F b, 05 b, ; immediate '
-	db	': _ 3C syscall ; entry '
+	db	'0A base '
+	db	': _ 60 syscall ; entry '
 	.blue_length = $ - .blue
 
 	.expected:
