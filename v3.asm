@@ -2,14 +2,12 @@ format elf64 executable 3
 
 segment readable writable executable
 
+
 DATA_STACK_ELEMS = 64
 USER_CODE_BUFFER_SIZE = 1024
 WORD_SIZE = 16
 WORD_SIZE_SHL = 4
 
-; TODO: r* these?
-tib dq 0
-data_stack_here dq 0
 
 read_input:
 	;
@@ -37,8 +35,18 @@ push_tib:
 	stosq
 	mov [data_stack_here], rdi
 	ret
+
+data_stack_depth:
+	mov	rax, [data_stack_here]
+	sub	rax, data_stack
+	shr	rax, 3
+	ret
+	
 	
 entry $
+	;
+	; init
+	;
 	mov [data_stack_here], data_stack
 	
 	call read_input_b
@@ -48,11 +56,24 @@ entry $
 	add rax, code_buffer
 	call rax
 
-	; exit 7
-	db 0xbf, 0x07, 0x00, 0x00, 0x00
-  	db 0xb8, 0x3c, 0x00, 0x00, 0x00
-  	db 0x0f, 0x05
+	call data_stack_depth
 
+	mov edi, eax
+	mov eax, 60
+	syscall
+
+	; exit 7
+	;db 0xbf, 0x07, 0x00, 0x00, 0x00
+  	;db 0xb8, 0x3c, 0x00, 0x00, 0x00
+  	;db 0x0f, 0x05
+
+; TODO: macro op that takes body
+macro _op_size op {
+	assert ($ - op) <= WORD_SIZE
+	times (WORD_SIZE - ($ - op)) db 0
+	assert ($ - op) = WORD_SIZE
+}
+	
 code_buffer:
 _op_00:
 	; ( -- b ) - read byte from input, push on the data stack
@@ -60,13 +81,14 @@ _op_00:
 	call push_tib
 	ret
 
-	assert ($ - _op_00) <= WORD_SIZE
-	times (WORD_SIZE - ($ - _op_00)) db 0
-	assert ($ - _op_00) = WORD_SIZE
+	_op_size _op_00
 
 ;
 ; everything below here needs to be r* else bytes will be in the binary
 ;
+
+tib rq 1
+data_stack_here rq 1
 
 rb USER_CODE_BUFFER_SIZE
 
