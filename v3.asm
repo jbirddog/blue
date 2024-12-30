@@ -41,7 +41,7 @@ _op_00:
 ;
 ; everything below here needs to be r* else bytes will be in the binary
 ;
-	
+
 rb USER_CODE_BUFFER_SIZE
 
 data_stack rq DATA_STACK_SIZE
