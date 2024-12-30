@@ -8,16 +8,15 @@ USER_CODE_BUFFER_SIZE = 1024
 WORD_SIZE = 16
 WORD_SIZE_SHL = 4
 
-
 read_input:
 	;
 	; expects buffer size in edx
 	;
-	mov [tib], 0
+	mov	[tib], 0
 	
-	xor eax, eax
-	xor edi, edi
-	mov rsi, tib
+	xor	eax, eax
+	xor	edi, edi
+	mov	rsi, tib
 	syscall
 
 	; TODO: exit on error
@@ -26,14 +25,14 @@ read_input:
 	ret
 
 read_input_b:
-	mov edx, 1
-	jmp read_input
+	mov	edx, 1
+	jmp	read_input
 
 push_tib:
-	mov rax, [tib]
-	mov rdi, [data_stack_here]
+	mov	rax, [tib]
+	mov	rdi, [data_stack_here]
 	stosq
-	mov [data_stack_here], rdi
+	mov	[data_stack_here], rdi
 	ret
 
 data_stack_depth:
@@ -47,19 +46,19 @@ entry $
 	;
 	; init
 	;
-	mov [data_stack_here], data_stack
+	mov	[data_stack_here], data_stack
 	
-	call read_input_b
+	call	read_input_b
 
-	mov rax, [tib]
-	shl rax, WORD_SIZE_SHL
-	add rax, code_buffer
-	call rax
+	mov	rax, [tib]
+	shl	rax, WORD_SIZE_SHL
+	add	rax, code_buffer
+	call	rax
 
-	call data_stack_depth
+	call	data_stack_depth
 
-	mov edi, eax
-	mov eax, 60
+	mov	edi, eax
+	mov	eax, 60
 	syscall
 
 	; exit 7
@@ -68,7 +67,7 @@ entry $
   	;db 0x0f, 0x05
 
 ; TODO: macro op that takes body
-macro _op_size op {
+macro _pad op {
 	assert ($ - op) <= WORD_SIZE
 	times (WORD_SIZE - ($ - op)) db 0
 	assert ($ - op) = WORD_SIZE
@@ -77,19 +76,19 @@ macro _op_size op {
 code_buffer:
 _op_00:
 	; ( -- b ) - read byte from input, push on the data stack
-	call read_input_b
-	call push_tib
+	call	read_input_b
+	call	push_tib
 	ret
 
-	_op_size _op_00
+	_pad _op_00
 
 ;
 ; everything below here needs to be r* else bytes will be in the binary
 ;
 
+rb USER_CODE_BUFFER_SIZE
+
 tib rq 1
 data_stack_here rq 1
-
-rb USER_CODE_BUFFER_SIZE
 
 data_stack rq DATA_STACK_ELEMS
