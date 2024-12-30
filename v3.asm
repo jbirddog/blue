@@ -2,12 +2,14 @@ format elf64 executable 3
 
 segment readable writable executable
 
-DATA_STACK_SIZE = 64
+DATA_STACK_ELEMS = 64
 USER_CODE_BUFFER_SIZE = 1024
 WORD_SIZE = 16
 WORD_SIZE_SHL = 4
 
+; TODO: r* these?
 tib dq 0
+data_stack_here dq 0
 
 read_input:
 	;
@@ -28,9 +30,17 @@ read_input:
 read_input_b:
 	mov edx, 1
 	jmp read_input
-	
 
+push_tib:
+	mov rax, [tib]
+	mov rdi, [data_stack_here]
+	stosq
+	mov [data_stack_here], rdi
+	ret
+	
 entry $
+	mov [data_stack_here], data_stack
+	
 	call read_input_b
 
 	mov rax, [tib]
@@ -47,6 +57,7 @@ code_buffer:
 _op_00:
 	; ( -- b ) - read byte from input, push on the data stack
 	call read_input_b
+	call push_tib
 	ret
 
 	assert ($ - _op_00) <= WORD_SIZE
@@ -59,4 +70,4 @@ _op_00:
 
 rb USER_CODE_BUFFER_SIZE
 
-data_stack rq DATA_STACK_SIZE
+data_stack rq DATA_STACK_ELEMS
