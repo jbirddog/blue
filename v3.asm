@@ -2,6 +2,11 @@ format elf64 executable 3
 
 segment readable writable executable
 
+_BYTE = 1
+_WORD = 2
+_DWORD = 4
+_QWORD = 8
+
 CELL_SIZE = 8
 DATA_STACK_CELLS = 64
 USER_CODE_BUFFER_SIZE = 1024
@@ -10,7 +15,7 @@ USER_CODE_BUFFER_SIZE = 1024
 macro _b2c b { shr b, 3 }
 macro _c2b c { shl c, 3 }
 
-read_input:
+_read:
 	;
 	; expects buffer size in edx
 	;
@@ -26,9 +31,10 @@ read_input:
 	
 	ret
 
-read_input_b:
-	mov	edx, 1
-	jmp	read_input
+macro read s {
+	mov	edx, s
+	call	_read
+}
 
 data_stack_depth:
 	mov	rax, [data_stack_here]
@@ -50,7 +56,7 @@ entry $
 	;
 	mov	[data_stack_here], data_stack
 	
-	call	read_input_b
+	read	_BYTE
 
 	mov	rax, [tib]
 	_c2b	rax
@@ -70,8 +76,22 @@ entry $
 
 
 _00:
-	; ( -- b ) - read byte from input, push on the data stack
-	call	read_input_b
+	read	_BYTE
+	call	data_stack_push_tib
+	ret
+
+_01:
+	read	_WORD
+	call	data_stack_push_tib
+	ret
+
+_02:
+	read	_DWORD
+	call	data_stack_push_tib
+	ret
+
+_03:
+	read	_QWORD
 	call	data_stack_push_tib
 	ret
 
@@ -87,6 +107,9 @@ macro _op l {
 
 code_buffer:
 	_op	_00	; ( -- b ) read byte from input, push on the data stack
+	_op	_01	; ( -- w ) read word from input, push on the data stack
+	_op	_02	; ( -- d ) read dword from input, push on the data stack
+	_op	_03	; ( -- q ) read qword from input, push on the data stack
 
 ;
 ; everything below here needs to be r* else bytes will be in the binary
