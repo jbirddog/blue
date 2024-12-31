@@ -11,9 +11,15 @@ CELL_SIZE = 8
 DATA_STACK_CELLS = 64
 USER_CODE_BUFFER_SIZE = 1024
 
-; bytes to cells, cells to bytes
-macro _b2c b { shr b, 3 }
-macro _c2b c { shl c, 3 }
+; bytes to cells
+macro _b2c b {
+	shr	b, 3
+}
+
+; cells to bytes
+macro _c2b c {
+	shl	c, 3
+}
 
 _read:
 	;
@@ -80,6 +86,17 @@ exit_depth:
 	mov	edi, eax
 	mov	eax, 60
 	syscall
+
+code_buffer_dump:
+	xor	eax, eax
+	inc	eax
+	xor	edi, edi
+	inc	edi
+	mov	rsi, code_buffer
+	mov	rdx, [code_buffer_here]
+	sub	rdx, rsi
+	syscall
+	ret
 	
 entry $
 	;
@@ -101,6 +118,7 @@ entry $
 	jmp	.read_op
 
 .done:
+	call	code_buffer_dump
 	call	exit_depth
 
 	; exit 7
