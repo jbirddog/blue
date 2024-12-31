@@ -1,0 +1,75 @@
+# push addr of code buffer
+04
+
+#
+# write minimal elf executable binary container to code buffer
+#
+
+# 00000000: 7f45 4c46 0201 0103 0000 0000 0000 0000  .ELF............
+03 7f45 4c46 0201 0103 09
+03 0000 0000 0000 0000 09
+
+# 00000010: 0200 3e00 0100 0000 7800 4000 0000 0000  ..>.....x.@.....
+03 0200 3e00 0100 0000 09
+03 7800 4000 0000 0000 09
+
+# 00000020: 4000 0000 0000 0000 0000 0000 0000 0000  @...............
+03 4000 0000 0000 0000 09
+03 0000 0000 0000 0000 09
+
+# 00000030: 0000 0000 4000 3800 0100 4000 0000 0000  ....@.8...@.....
+03 0000 0000 4000 3800 09
+03 0100 4000 0000 0000 09
+
+# 00000040: 0100 0000 0700 0000 0000 0000 0000 0000  ................
+03 0100 0000 0700 0000 09
+03 0000 0000 0000 0000 09
+
+# 00000050: 0000 4000 0000 0000 0000 4000 0000 0000  ..@.......@.....
+03 0000 4000 0000 0000 09
+03 0000 4000 0000 0000 09
+
+# 00000060: 8400 0000 0000 0000 8400 0000 0000 0000  ................
+
+# once app code is compiled in, these two qwords will be set with the file size
+03 0000 0000 0000 0000 09
+03 0000 0000 0000 0000 09
+
+# 00000070: 0010 0000 0000 0000
+03 0010 0000 0000 0000 09
+
+#
+# write application machine code to code buffer
+#
+
+# mov edi, 7
+00 BF 06
+02 07 00 00 00 08
+
+# mov eax, 60
+00 B8 06
+02 3C 00 00 00 08
+
+# syscall
+01 0F 05 07
+
+# set addr of code buffer's here
+05
+
+#
+# write file length back into the elf headers
+#
+
+# calc the offset of the file length in the elf header
+0A 00 60 0C
+
+# push address of code buffer's here and start, subtract them to get program length
+# write the value as a qword twice into the elf header.
+
+# TODO: instead of calc'ing twice this could be 04 0A 0B <op:tuck> 09 <op:swap> 09
+
+04 0A 0B 09
+04 0A 0B 09
+
+# drop the code buffer location after the last write
+0D
