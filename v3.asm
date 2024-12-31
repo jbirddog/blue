@@ -44,23 +44,39 @@ data_stack_depth:
 
 data_stack_push_tib:
 	mov	rax, [tib]
+	
+data_stack_push:
+	;
+	; expects value to push in rax
+	;
 	mov	rdi, [data_stack_here]
 	stosq
 	mov	[data_stack_here], rdi
 	ret
-	
+
+data_stack_pop:
+	;
+	; pops value into rax
+	;
+	mov	rdi, [data_stack_here]
+	sub	rdi, CELL_SIZE
+	mov	rax, [rdi]
+	mov	[data_stack_here], rdi
+	ret
 	
 entry $
 	;
 	; init
 	;
+	mov	[code_buffer_here], code_buffer
 	mov	[data_stack_here], data_stack
-	
+
+	; TODO: loop til done
 	read	_BYTE
 
 	mov	rax, [tib]
 	_c2b	rax
-	add	rax, code_buffer
+	add	rax, ops
 	call	rax
 
 	call	data_stack_depth
@@ -81,13 +97,18 @@ macro _op_read l, s {
 	call	data_stack_push_tib
 	ret
 }
-	
+
 _op_read _00, _BYTE
 _op_read _01, _WORD
 _op_read _02, _DWORD
 _op_read _03, _QWORD
 
-macro _op l {
+_04:
+	mov	rax, [code_buffer_here]
+	call	data_stack_push
+	ret
+
+macro op l {
 	._op##l:
 	call	l
 	ret
@@ -97,19 +118,21 @@ macro _op l {
 	assert ($ - ._op##l) = CELL_SIZE
 }
 
-code_buffer:
-	_op	_00	; ( -- b ) read byte from input, push on the data stack
-	_op	_01	; ( -- w ) read word from input, push on the data stack
-	_op	_02	; ( -- d ) read dword from input, push on the data stack
-	_op	_03	; ( -- q ) read qword from input, push on the data stack
+ops:
+	op	_00	; ( -- b ) read byte from input, push on the data stack
+	op	_01	; ( -- w ) read word from input, push on the data stack
+	op	_02	; ( -- d ) read dword from input, push on the data stack
+	op	_03	; ( -- q ) read qword from input, push on the data stack
+	op	_04	; ( -- a ) push addr of code buffer's here on the data stack
 
 ;
 ; everything below here needs to be r* else bytes will be in the binary
 ;
 
-rb USER_CODE_BUFFER_SIZE
-
-tib rq 1
-data_stack_here rq 1
+code_buffer rb USER_CODE_BUFFER_SIZE
+code_buffer_here rq 1
 
 data_stack rq DATA_STACK_CELLS
+data_stack_here rq 1
+
+tib rq 1
