@@ -54,8 +54,10 @@ compiler.
 _Stage 1_
 
 A textual file ending in `bs1` that allows minimal formatting/commenting. Line comments start with `#`. A stage 1
-file is lowered to a stage 0 file by stripping comments and passing it to `xxd`.
+file is lowered to a stage 0 file by stripping comments and running it through `xxd`.
 
 ### TODOs:
 
 1. demo needs to set entry point dynamically
+1. rename v3(.asm) to blue(.asm)
+1. rename min(.asm) to scratch(.asm)
