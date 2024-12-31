@@ -7,3 +7,6 @@ bootstrap.bin: bootstrap.xxd
 
 v3: v3.asm
 	fasm $<
+
+min: min.asm
+	fasm $<

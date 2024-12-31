@@ -41,3 +41,21 @@ vm works on byte code, multi-byte values are assumed to be little-endian
 09   - ( a q -- a' ) write qword to addr, push new addr on the data stack
 
 0a   - ( -- n ) push stack depth on the data stack
+
+### Stages
+
+_Stage 0_
+
+A binary file ending in `bs0` is a stage 0 file that contains a run of bytes that are executed by the blue
+compiler.
+
+_Stage 1_
+
+A textual file ending in `bs1` that allows minimal formatting/commenting. Line comments start with `#`. A stage 1
+file is lowered to a stage 0 file by stripping comments and passing it to `xxd`.
+
+### TODOs:
+
+1. Rename bootstrap.xxd to something like demo.bs1
+1. Rename bootstrap.bin to something like demo.bs0 (.gitignore)
+1. Rename out.bin to something like demo, chmod +x (.gitignore)
