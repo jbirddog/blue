@@ -25,9 +25,6 @@ _read:
 	xor	edi, edi
 	mov	rsi, tib
 	syscall
-
-	; TODO: exit on error
-	; TODO: exit on bytes read != edx
 	
 	ret
 
@@ -98,6 +95,8 @@ entry $
 macro _op_read l, s {
 ##l:
 	read	s
+	; TODO: exit on bytes read != edx
+	
 	call	data_stack_push_tib
 	ret
 }
