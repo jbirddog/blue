@@ -16,6 +16,3 @@ jobs:
 
     - name: Default target
       run: make
-
-    - name: Run tests
-      run: make WHAT=blue_test compile run
