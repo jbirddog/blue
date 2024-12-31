@@ -59,5 +59,3 @@ file is lowered to a stage 0 file by stripping comments and running it through `
 ### TODOs:
 
 1. demo needs to set entry point dynamically
-1. rename v3(.asm) to blue(.asm)
-1. rename min(.asm) to scratch(.asm)
