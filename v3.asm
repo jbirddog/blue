@@ -21,10 +21,8 @@ macro _c2b c {
 	shl	c, 3
 }
 
+; expects buffer size in edx
 _read:
-	;
-	; expects buffer size in edx
-	;
 	mov	[tib], 0
 	
 	xor	eax, eax
@@ -48,10 +46,8 @@ data_stack_depth:
 data_stack_push_tib:
 	mov	rax, [tib]
 	
+; expects value to push in rax
 data_stack_push:
-	;
-	; expects value to push in rax
-	;
 	mov	rdi, [data_stack_here]
 	stosq
 	mov	[data_stack_here], rdi
@@ -63,18 +59,14 @@ macro _pop1 {
 	mov	rax, [rdi]
 }
 
+; pops value into rax
 data_stack_pop:
-	;
-	; pops value into rax
-	;
 	_pop1
 	mov	[data_stack_here], rdi
 	ret
 
+; pops value into rax, second value into rdi
 data_stack_pop2:
-	;
-	; pops top of stack into rax, second into rdi
-	;
 	_pop1
 	sub	rdi, CELL_SIZE
 	mov	[data_stack_here], rdi
@@ -98,9 +90,6 @@ exit_depth:
 	syscall
 	
 entry $
-	;
-	; init
-	;
 	mov	[code_buffer_here], code_buffer
 	mov	[data_stack_here], data_stack
 
@@ -119,11 +108,6 @@ entry $
 .done:
 	call	code_buffer_dump
 	call	exit_depth
-
-	; exit 7
-	;db 0xbf, 0x07, 0x00, 0x00, 0x00
-  	;db 0xb8, 0x3c, 0x00, 0x00, 0x00
-  	;db 0x0f, 0x05
 
 
 macro _op_read l, s {
