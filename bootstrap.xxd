@@ -1,7 +1,9 @@
 # push addr of code buffer's here
 04
 
-# write minimal elf container to code buffer
+#
+# write minimal elf executable binary container to code buffer
+#
 
 # 00000000: 7f45 4c46 0201 0103 0000 0000 0000 0000  .ELF............
 03 7f45 4c46 0201 0103 09
@@ -37,16 +39,19 @@
 # 00000070: 0010 0000 0000 0000
 03 0010 0000 0000 0000 09
 
+#
+# write application machine code to code buffer
+#
 
-# write machine code for mov `edi, 7` to code buffer
+# mov edi, 7
 00 BF 06
 02 07 00 00 00 08
 
-# write machine code for `mov eax, 60` to code buffer
+# mov eax, 60
 00 B8 06
 02 3C 00 00 00 08
 
-# write machine code for `syscall` to code buffer
+# syscall
 01 0F 05 07
 
 # set addr of code buffer's here
