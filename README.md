@@ -40,7 +40,8 @@ vm works on byte code, multi-byte values are assumed to be little-endian. op cod
 | 08 | | ( a d -- a' ) | write dword to addr, push new addr on the data stack |
 | 09 | | ( a q -- a' ) | write qword to addr, push new addr on the data stack |
 | 0A | | ( -- a ) | push addr of code buffer start on the data stack |
-| 0B | | ( n1 n2 -- n ) | subtrack n1 - n2, push result on the data stack
+| 0B | | ( n1 n2 -- n ) | n1 - n2, push result on the data stack
+| 0C | | ( n1 n2 -- n ) | n1 + n2, push result on the data stack
 
 ### Stages
 

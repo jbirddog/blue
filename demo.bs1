@@ -60,10 +60,10 @@
 # write program length back into the elf headers using the addrs left on the stack
 #
 
-04
+# calc the offset of program length in the elf header
+0A 00 60 0C
 
 # push address of code buffer's here and start, subtract them to get program length
 04 0A 0B
 
-09 05
-
+09
