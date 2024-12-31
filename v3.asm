@@ -81,22 +81,21 @@ data_stack_pop2:
 	mov	rdi, [rdi]
 	ret
 
-exit_depth:
-	call	data_stack_depth
-	mov	edi, eax
-	mov	eax, 60
-	syscall
-
 code_buffer_dump:
 	xor	eax, eax
 	inc	eax
-	xor	edi, edi
-	inc	edi
+	mov	edi, eax
 	mov	rsi, code_buffer
 	mov	rdx, [code_buffer_here]
 	sub	rdx, rsi
 	syscall
 	ret
+
+exit_depth:
+	call	data_stack_depth
+	mov	edi, eax
+	mov	eax, 60
+	syscall
 	
 entry $
 	;
@@ -151,12 +150,19 @@ _05:
 	mov	[code_buffer_here], rax
 	ret
 
-_06:
+macro _op_write l, w {
+##l:
 	call	data_stack_pop2
-	stosb
+	w
 	mov	rax, rdi
 	call	data_stack_push
 	ret
+}
+
+_op_write _06, stosb
+_op_write _07, stosw
+_op_write _08, stosd
+_op_write _09, stosq
 
 macro op l {
 	._op##l:
@@ -176,6 +182,9 @@ ops:
 	op	_04	; ( -- a ) push addr of code buffer's here on the data stack
 	op	_05	; ( a -- ) set addr of code buffer's here
 	op	_06	; ( a b -- a' ) write byte to addr, push new addr on the data stack
+	op	_07	; ( a b -- a' ) write word to addr, push new addr on the data stack
+	op	_08	; ( a b -- a' ) write dword to addr, push new addr on the data stack
+	op	_09	; ( a b -- a' ) write qword to addr, push new addr on the data stack
 
 ;
 ; everything below here needs to be r* else bytes will be in the binary
