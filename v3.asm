@@ -51,14 +51,28 @@ data_stack_push:
 	mov	[data_stack_here], rdi
 	ret
 
+macro _pop1 {
+	mov	rdi, [data_stack_here]
+	sub	rdi, CELL_SIZE
+	mov	rax, [rdi]
+}
+
 data_stack_pop:
 	;
 	; pops value into rax
 	;
-	mov	rdi, [data_stack_here]
-	sub	rdi, CELL_SIZE
-	mov	rax, [rdi]
+	_pop1
 	mov	[data_stack_here], rdi
+	ret
+
+data_stack_pop2:
+	;
+	; pops top of stack into rax, second into rdi
+	;
+	_pop1
+	sub	rdi, CELL_SIZE
+	mov	[data_stack_here], rdi
+	mov	rdi, [rdi]
 	ret
 
 exit_depth:
@@ -120,11 +134,7 @@ _05:
 	ret
 
 _06:
-	call	data_stack_pop
-	push	rax
-	call	data_stack_pop
-	mov	rdi, rax
-	pop	rax
+	call	data_stack_pop2
 	stosb
 	mov	rax, rdi
 	call	data_stack_push
