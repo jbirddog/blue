@@ -59,3 +59,4 @@ file is lowered to a stage 0 file by stripping comments and running it through `
 ### TODOs:
 
 1. demo needs to set entry point dynamically
+1. extract elf logic into own bs0 file
