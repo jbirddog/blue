@@ -115,7 +115,16 @@ _05:
 	call	data_stack_pop
 	mov	[code_buffer_here], rax
 	ret
-	
+
+_06:
+	call	data_stack_pop
+	push	rax
+	call	data_stack_pop
+	pop	rdi
+	xchg	rax, rdi
+	stosb
+	xchg	rdi, rax
+	call	data_stack_push
 
 macro op l {
 	._op##l:
@@ -134,6 +143,7 @@ ops:
 	op	_03	; ( -- q ) read qword from input, push on the data stack
 	op	_04	; ( -- a ) push addr of code buffer's here on the data stack
 	op	_05	; ( a -- ) set addr of code buffer's here
+	op	_06	; ( a b -- a' ) write byte to addr, push new addr on the data stack
 
 ;
 ; everything below here needs to be r* else bytes will be in the binary
