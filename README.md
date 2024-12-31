@@ -56,6 +56,5 @@ file is lowered to a stage 0 file by stripping comments and passing it to `xxd`.
 
 ### TODOs:
 
-1. Rename bootstrap.xxd to something like demo.bs1
 1. Rename bootstrap.bin to something like demo.bs0 (.gitignore)
 1. Rename out.bin to something like demo, chmod +x (.gitignore)
