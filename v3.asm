@@ -60,6 +60,12 @@ data_stack_pop:
 	mov	rax, [rdi]
 	mov	[data_stack_here], rdi
 	ret
+
+exit_depth:
+	call	data_stack_depth
+	mov	edi, eax
+	mov	eax, 60
+	syscall
 	
 entry $
 	;
@@ -81,10 +87,7 @@ entry $
 	jmp	.read_op
 
 .done:
-	call	data_stack_depth
-	mov	edi, eax
-	mov	eax, 60
-	syscall
+	call	exit_depth
 
 	; exit 7
 	;db 0xbf, 0x07, 0x00, 0x00, 0x00
@@ -120,11 +123,12 @@ _06:
 	call	data_stack_pop
 	push	rax
 	call	data_stack_pop
-	pop	rdi
-	xchg	rax, rdi
+	mov	rdi, rax
+	pop	rax
 	stosb
-	xchg	rdi, rax
+	mov	rax, rdi
 	call	data_stack_push
+	ret
 
 macro op l {
 	._op##l:
