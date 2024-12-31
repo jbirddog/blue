@@ -56,5 +56,4 @@ file is lowered to a stage 0 file by stripping comments and passing it to `xxd`.
 
 ### TODOs:
 
-1. Rename bootstrap.bin to something like demo.bs0 (.gitignore)
-1. Rename out.bin to something like demo, chmod +x (.gitignore)
+1. Demo needs to be able to dynamically set file size in elf header
