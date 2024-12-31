@@ -31,9 +31,9 @@
 
 # 00000060: 8400 0000 0000 0000 8400 0000 0000 0000  ................
 
-# TODO: zero these out, set them after the app code is compiled in
-03 8400 0000 0000 0000 09
-03 8400 0000 0000 0000 09
+# once app code is compile in, these two qwords will be set with the file size
+03 0000 0000 0000 0000 09
+03 0000 0000 0000 0000 09
 
 # 00000070: 0010 0000 0000 0000
 03 0010 0000 0000 0000 09
@@ -57,13 +57,19 @@
 05
 
 #
-# write program length back into the elf headers using the addrs left on the stack
+# write file length back into the elf headers
 #
 
-# calc the offset of program length in the elf header
+# calc the offset of the file length in the elf header
 0A 00 60 0C
 
 # push address of code buffer's here and start, subtract them to get program length
-04 0A 0B
+# write the value as a qword twice into the elf header.
 
-09
+# TODO: instead of calc'ing twice this could be 04 0A 0B <op:tuck> 09 <op:swap> 09
+
+04 0A 0B 09
+04 0A 0B 09
+
+# drop the code buffer location after the last write
+0D

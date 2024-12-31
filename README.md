@@ -42,6 +42,7 @@ vm works on byte code, multi-byte values are assumed to be little-endian. op cod
 | 0A | | ( -- a ) | push addr of code buffer start on the data stack |
 | 0B | | ( n1 n2 -- n ) | n1 - n2, push result on the data stack
 | 0C | | ( n1 n2 -- n ) | n1 + n2, push result on the data stack
+| 0D | | ( x -- ) | drop top of the data stack
 
 ### Stages
 
@@ -57,4 +58,3 @@ file is lowered to a stage 0 file by stripping comments and passing it to `xxd`.
 
 ### TODOs:
 
-1. Demo needs to be able to dynamically set file size in elf header

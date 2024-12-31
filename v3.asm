@@ -167,6 +167,10 @@ _0C:
 	call	data_stack_push
 	ret
 
+_0D:
+	call	data_stack_pop
+	ret
+
 macro op l {
 	._op##l:
 	call	l
@@ -191,6 +195,7 @@ ops:
 	op	_0A	; ( -- a ) push addr of code buffer start on the data stack
 	op	_0B	; ( n1 n2 -- n ) n1 - n2, push result on the data stack
 	op	_0C	; ( n1 n2 -- n ) n1 + n2, push result on the data stack
+	op	_0D	; ( x -- ) drop top of the data stack
 
 ;
 ; everything below here needs to be r* else bytes will be in the binary
