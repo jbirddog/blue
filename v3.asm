@@ -75,25 +75,17 @@ entry $
   	;db 0x0f, 0x05
 
 
-_00:
-	read	_BYTE
+macro _op_read l, s {
+##l:
+	read	s
 	call	data_stack_push_tib
 	ret
-
-_01:
-	read	_WORD
-	call	data_stack_push_tib
-	ret
-
-_02:
-	read	_DWORD
-	call	data_stack_push_tib
-	ret
-
-_03:
-	read	_QWORD
-	call	data_stack_push_tib
-	ret
+}
+	
+_op_read _00, _BYTE
+_op_read _01, _WORD
+_op_read _02, _DWORD
+_op_read _03, _QWORD
 
 macro _op l {
 	._op##l:
