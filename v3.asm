@@ -71,16 +71,20 @@ entry $
 	mov	[code_buffer_here], code_buffer
 	mov	[data_stack_here], data_stack
 
-	; TODO: loop til done
+.read_op:
 	read	_BYTE
+	cmp	eax, _BYTE
+	jne	.done
 
+.call_op:
 	mov	rax, [tib]
 	_c2b	rax
 	add	rax, ops
 	call	rax
+	jmp	.read_op
 
+.done:
 	call	data_stack_depth
-
 	mov	edi, eax
 	mov	eax, 60
 	syscall
@@ -108,6 +112,12 @@ _04:
 	call	data_stack_push
 	ret
 
+_05:
+	call	data_stack_pop
+	mov	[code_buffer_here], rax
+	ret
+	
+
 macro op l {
 	._op##l:
 	call	l
@@ -124,6 +134,7 @@ ops:
 	op	_02	; ( -- d ) read dword from input, push on the data stack
 	op	_03	; ( -- q ) read qword from input, push on the data stack
 	op	_04	; ( -- a ) push addr of code buffer's here on the data stack
+	op	_05	; ( a -- ) set addr of code buffer's here
 
 ;
 ; everything below here needs to be r* else bytes will be in the binary
