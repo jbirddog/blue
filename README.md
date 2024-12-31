@@ -39,7 +39,6 @@ vm works on byte code, multi-byte values are assumed to be little-endian
 | 07 | | ( a w -- a' ) | write word to addr, push new addr on the data stack |
 | 08 | | ( a d -- a' ) | write dword to addr, push new addr on the data stack |
 | 09 | | ( a q -- a' ) | write qword to addr, push new addr on the data stack |
-| 0a | | ( -- n ) | push stack depth on the data stack |
 
 ### Stages
 
