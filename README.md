@@ -58,3 +58,4 @@ file is lowered to a stage 0 file by stripping comments and passing it to `xxd`.
 
 ### TODOs:
 
+1. demo needs to set entry point dynamically
