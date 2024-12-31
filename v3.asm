@@ -148,6 +148,18 @@ _op_write _07, stosw
 _op_write _08, stosd
 _op_write _09, stosq
 
+_0A:
+	mov	rax, code_buffer
+	call	data_stack_push
+	ret
+
+_0B:
+	call	data_stack_pop2
+	xchg	rdi, rax
+	sub	rax, rdi
+	call	data_stack_push
+	ret
+
 macro op l {
 	._op##l:
 	call	l
@@ -169,6 +181,8 @@ ops:
 	op	_07	; ( a b -- a' ) write word to addr, push new addr on the data stack
 	op	_08	; ( a b -- a' ) write dword to addr, push new addr on the data stack
 	op	_09	; ( a b -- a' ) write qword to addr, push new addr on the data stack
+	op	_0A	; ( -- a ) push addr of code buffer start on the data stack
+	op	_0B	; ( n1 n2 -- n ) subtrack n1 - n2, push result on the data stack
 
 ;
 ; everything below here needs to be r* else bytes will be in the binary

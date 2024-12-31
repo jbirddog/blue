@@ -1,4 +1,4 @@
-# push addr of code buffer's here
+# push addr of code buffer
 04
 
 #
@@ -30,9 +30,8 @@
 03 0000 4000 0000 0000 09
 
 # 00000060: 8400 0000 0000 0000 8400 0000 0000 0000  ................
-#
-# this appears to be the program size
-#
+
+# TODO: zero these out, set them after the app code is compiled in
 03 8400 0000 0000 0000 09
 03 8400 0000 0000 0000 09
 
@@ -56,3 +55,15 @@
 
 # set addr of code buffer's here
 05
+
+#
+# write program length back into the elf headers using the addrs left on the stack
+#
+
+04
+
+# push address of code buffer's here and start, subtract them to get program length
+04 0A 0B
+
+09 05
+
