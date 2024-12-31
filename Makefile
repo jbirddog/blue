@@ -7,6 +7,3 @@ demo.bs0: demo.bs1
 
 v3: v3.asm
 	fasm $<
-
-min: min.asm
-	fasm $<
