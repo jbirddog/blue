@@ -31,7 +31,7 @@
 
 # 00000060: 8400 0000 0000 0000 8400 0000 0000 0000  ................
 
-# once app code is compile in, these two qwords will be set with the file size
+# once app code is compiled in, these two qwords will be set with the file size
 03 0000 0000 0000 0000 09
 03 0000 0000 0000 0000 09
 
