@@ -58,5 +58,13 @@ file is lowered to a stage 0 file by stripping comments and running it through `
 
 ### TODOs:
 
-1. demo needs to set entry point dynamically
-1. extract elf logic into own bs0 file
+1. add example that prints hello world and exits cleanly
+1. rename demo to examples/exit7.bs1
+1. extract elf logic into own bs1 files (pre and post)
+1. elf bs1 file could contain compile time helper functions for setting file size and entry
+1. replace usage of `xxd` with own program that lowers bs1 files to bs0 files
+1. add tuck op
+1. add swap op
+1. fix TODO in demo with tuck/swap
+1. start having bs1 files in os/arch and executable format dirs
+1. update Makefile to build all examples
