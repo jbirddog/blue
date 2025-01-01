@@ -171,6 +171,15 @@ _0D:
 	call	data_stack_pop
 	ret
 
+_0E:
+	call	data_stack_pop2
+	push	rax
+	mov	rax, rdi
+	call	data_stack_push
+	pop	rax
+	call	data_stack_push
+	ret
+
 macro op l {
 	._op##l:
 	call	l
@@ -196,6 +205,7 @@ ops:
 	op	_0B	; ( n1 n2 -- n ) n1 - n2, push result on the data stack
 	op	_0C	; ( n1 n2 -- n ) n1 + n2, push result on the data stack
 	op	_0D	; ( x -- ) drop top of the data stack
+	op	_0E	; ( a b -- b a ) swap the top two items of the data stack
 
 ;
 ; everything below here needs to be r* else bytes will be in the binary
