@@ -1,13 +1,12 @@
 #
-# example that exits with a status code of 7
+# example that prints `Hello, World!\n` and exits with a status code of 0
 #
 
 # push addr of code buffer
 04
 
-# mov edi, 7
-00 BF 06
-02 07 00 00 00 08
+# xor edi, edi
+01 31 FF 07
 
 # mov eax, 60
 00 B8 06
@@ -15,6 +14,22 @@
 
 # syscall
 01 0F 05 07
+
+# Create a buffer that contains `Hello, World!\n`
+00 48 06
+00 65 06
+00 6C 06
+00 6C 06
+00 6F 06
+00 2C 06
+00 20 06
+00 57 06
+00 6F 06
+00 72 06
+00 6C 06
+00 64 06
+00 21 06
+00 0A 06
 
 # set addr of code buffer's here
 05
