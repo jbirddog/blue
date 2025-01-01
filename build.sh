@@ -1,8 +1,12 @@
-#!/usr/bin/sh
+#!/bin/bash
+
+set -e
 
 mkdir -p bin
 
 fasm blue.asm bin/blue
+
+echo "Building example exit7"
 
 cat \
   x86_64/elf/pre.bs1 \
