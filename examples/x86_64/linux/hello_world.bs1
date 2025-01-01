@@ -5,6 +5,41 @@
 # push addr of code buffer
 04
 
+#
+# write the hello world string to stdout
+#
+
+# TODO: calculate this
+# 00000080: 48c7 c695 0040 00
+# mov rsi, hello_world_str
+00 48 06
+00 C7 06
+00 C6 06
+02 95 00 40 00 08
+
+# 31 c0
+# ff c0
+# xor eax, eax
+# inc eax
+01 31 C0 07
+01 FF C0 07
+
+# 89 c7
+# mov edi, eax
+01 89 C7 07
+
+# ba 0e 00 00 00
+# mov edx, 14
+00 BA 06
+02 0E 00 00 00 08
+
+# syscall
+01 0F 05 07
+
+#
+# exit with status 0
+#
+
 # xor edi, edi
 01 31 FF 07
 
