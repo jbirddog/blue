@@ -1,9 +1,8 @@
-# Compiler for the Blue Language
+# Blue Compiler
 
 _Please note: the compiler is currently undergoing a complete rewrite. Earlier versions can be found in the bak* directories._
 
 More details will be added as the new version of the compiler is fleshed out.
-
 
 ## v3
 
@@ -40,9 +39,10 @@ vm works on byte code, multi-byte values are assumed to be little-endian. op cod
 | 08 | | ( a d -- a' ) | write dword to addr, push new addr on the data stack |
 | 09 | | ( a q -- a' ) | write qword to addr, push new addr on the data stack |
 | 0A | | ( -- a ) | push addr of code buffer start on the data stack |
-| 0B | | ( n1 n2 -- n ) | n1 - n2, push result on the data stack
-| 0C | | ( n1 n2 -- n ) | n1 + n2, push result on the data stack
-| 0D | | ( x -- ) | drop top of the data stack
+| 0B | | ( n1 n2 -- n ) | n1 - n2, push result on the data stack |
+| 0C | | ( n1 n2 -- n ) | n1 + n2, push result on the data stack |
+| 0D | | ( x -- ) | drop top of the data stack |
+| 0E | | ( a b -- b a ) | swap the top two items of the data stack |
 
 ### Stages
 
@@ -62,8 +62,14 @@ file is lowered to a stage 0 file by stripping comments and running it through `
 1. add code_buffer_start that can be different from code_buffer
 1. elf pre bs1 file can write addrs (file size, entry, etc) into code buffer, push code buffer start below
 1. replace usage of grep/xxd with own program that lowers bs1 files to bs0 files
-1. add tuck op
-1. add swap op
+1. add = op
+1. add assert op
+1. add over op
+1. add tuck op (swap over)
 1. fix elf post TODO with tuck/swap
 1. pull linux specific code out of blue.asm, have x86_64/linux/blue.inc
 1. current blue.asm is really blue_x86_64_linux.asm
+1. add stack over/underflow error checks
+1. add code buffer over/underflow error checks
+1. add opcode overflow error check
+1. need a bs1 test case file
