@@ -1,0 +1,65 @@
+#
+# example that prints `Hello, World!\n` and exits with a status code of 0
+#
+
+# push addr of code buffer
+04
+
+#
+# write the hello world string to stdout
+#
+
+# TODO: calculate this
+# mov rsi, _address of buffer that holds `Hello, World!\n`_
+00 48 06
+00 C7 06
+00 C6 06
+02 95 00 40 00 08
+
+# xor eax, eax
+# inc eax
+01 31 C0 07
+01 FF C0 07
+
+# mov edi, eax
+01 89 C7 07
+
+# mov edx, 14 (length of `Hello, World!\n`)
+00 BA 06
+02 0E 00 00 00 08
+
+# syscall
+01 0F 05 07
+
+#
+# exit with status 0
+#
+
+# xor edi, edi
+01 31 FF 07
+
+# mov eax, 60
+00 B8 06
+02 3C 00 00 00 08
+
+# syscall
+01 0F 05 07
+
+# Create a buffer that contains `Hello, World!\n`
+00 48 06
+00 65 06
+00 6C 06
+00 6C 06
+00 6F 06
+00 2C 06
+00 20 06
+00 57 06
+00 6F 06
+00 72 06
+00 6C 06
+00 64 06
+00 21 06
+00 0A 06
+
+# set addr of code buffer's here
+05

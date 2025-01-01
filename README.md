@@ -58,9 +58,12 @@ file is lowered to a stage 0 file by stripping comments and running it through `
 
 ### TODOs:
 
-1. add example that prints hello world and exits cleanly
-1. elf bs1 file could contain compile time helper functions for setting file size and entry
+1. calculate string location/length in hello world example
+1. add code_buffer_start that can be different from code_buffer
+1. elf pre bs1 file can write addrs (file size, entry, etc) into code buffer, push code buffer start below
 1. replace usage of grep/xxd with own program that lowers bs1 files to bs0 files
 1. add tuck op
 1. add swap op
 1. fix elf post TODO with tuck/swap
+1. pull linux specific code out of blue.asm, have x86_64/linux/blue.inc
+1. current blue.asm is really blue_x86_64_linux.asm
