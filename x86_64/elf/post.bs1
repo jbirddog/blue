@@ -1,0 +1,17 @@
+#
+# write file length back into the elf headers
+#
+
+# calc the offset of the file length in the elf header
+0A 00 60 0C
+
+# push address of code buffer's here and start, subtract them to get program length
+# write the value as a qword twice into the elf header.
+
+# TODO: instead of calc'ing twice this could be 04 0A 0B <op:tuck> 09 <op:swap> 09
+
+04 0A 0B 09
+04 0A 0B 09
+
+# drop the code buffer location after the last write
+0D

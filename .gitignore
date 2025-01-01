@@ -1,4 +1,3 @@
 bin/blue
-*.bs0
+bin/demo
 scratch*
-demo

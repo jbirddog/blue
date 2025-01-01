@@ -2,8 +2,10 @@
 
 fasm blue.asm bin/blue
 
-cat x86_64/elf/pre.bs1 \
+cat
+  x86_64/elf/pre.bs1 \
   demo.bs1 \
+  x86_64/elf/post.bs1 \
   | grep -v "#" \
   | xxd -p -r \
-  | ./bin/blue > demo && chmod +x demo
+  | ./bin/blue > bin/demo && chmod +x bin/demo
