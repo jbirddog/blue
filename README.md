@@ -64,3 +64,4 @@ file is lowered to a stage 0 file by stripping comments and running it through `
 1. add tuck op
 1. add swap op
 1. fix elf post TODO with tuck/swap
+1. pull linux specific code out of blue.asm, have x86_64/linux/blue.inc
