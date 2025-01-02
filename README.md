@@ -73,3 +73,20 @@ file is lowered to a stage 0 file by stripping comments and running it through `
 1. add code buffer over/underflow error checks
 1. add opcode overflow error check
 1. need a bs1 test case file
+
+### s120
+
+This will be a program written in bs1 that converts bs1 files to bs0 files. It will replace the current use of
+grep/xxd in build.sh. It will still be built initially with grep/xxd, then it will rebuild itself.
+
+The program will be minimalist and require valid input else invalid output.
+
+Will need to do:
+
+1. Read byte from stdin, if eof then write code buffer to stdout, exit success
+1. If byte == "#" read until byte == "\n" then goto 1
+1. If byte <= " " then goto 1
+1. Assume byte is hex digit, convert to decimal, shl 4, push on stack
+1. Read byte from stdin, assume byte is hex digit, convert to decimal, add to value on stack
+1. Write byte to code buffer
+1. Goto 1
