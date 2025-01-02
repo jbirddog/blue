@@ -27,6 +27,26 @@ entry $
 	mov	eax, SYS_MMAP
 	syscall
 
+	mov	[buf], rax
+
+	; read stdin into buf
+	xor	edi, edi
+	xor	eax, eax
+	mov	rsi, [buf]
+	mov	edx, BUF_LEN
+	syscall
+
+	mov edi, eax
+	mov eax, SYS_EXIT
+	syscall
+
+	; munmap buf
+	mov	esi, 0 ; TODO: buf len
+	mov	rdi, [buf]
+	mov	eax, SYS_MUNMAP
+	syscall
+
+	; exit
 	xor	edi, edi
 	mov	eax, SYS_EXIT
 	syscall
