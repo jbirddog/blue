@@ -79,11 +79,13 @@ file is lowered to a stage 0 file by stripping comments and running it through `
 This will be a program written in bs1 that converts bs1 files to bs0 files. It will replace the current use of
 grep/xxd in build.sh. It will still be built initially with grep/xxd, then it will rebuild itself.
 
-The program will be minimalist and require valid input else invalid output.
+The program will be minimalist and require valid input else invalid output. Simplicity of this implementation
+is more important than performance. Likely once a higher level language is implemented it will re-implement
+s120 with more nice things.
 
 Will need to do:
 
-1. Read byte from stdin, if eof then write code buffer to stdout, exit success
+1. Read byte from input, if eof then write output to stdout, exit success
 1. If byte == "#" read until byte == "\n" then goto 1
 1. If byte <= " " then goto 1
 1. Assume byte is hex digit, convert to decimal, shl 4, push on stack
