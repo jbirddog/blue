@@ -14,8 +14,11 @@ SYS_MMAP = 9
 SYS_MUNMAP = 11
 SYS_EXIT = 60
 
-buf dq 1
-buf_len dd 1
+buf dq 0
+buf_len dd 0
+
+skip dd 0xFFFFFFFF
+cont dd 0
 
 entry $
 	; mmap buf
@@ -47,14 +50,15 @@ entry $
 	; rdi - output buf
 	; rsi - input buf
 	; ecx - length of input buf
-	; al - current byte
-	; ah - helper byte
+	;  al - current byte
+	;  dl - helper byte
 	;
 	
 	mov	rdi, [buf]
 	mov	rsi, rdi
 	mov	ecx, eax
-	mov	eax, 0xFF shl 8
+	xor	eax, eax
+	xor	edx, edx
 
 .read_byte:
 	lodsb
@@ -63,16 +67,24 @@ entry $
 	; for "\n" set ah to FF, jmp .next_byte
 	; for # set ah to "\n", jmp .next_byte
 
-	; if al & ah != ah, jmp .next_byte
+	; if al & ah has parity, jmp .next_byte
 	; convert byte hex char to byte, shl 4, move to ah
 	; lodsb, convert byte hex char to byte, and al, ah
 	; stosb
-
+	
 	cmp	al, " "
-	jle	.next_byte
+	je	.next_byte
+
+	cmp	al, 10
+	cmove	edx, [cont]
+	je	.next_byte
 
 	cmp	al, "#"
+	cmove	edx, [skip]
 	je	.next_byte
+
+	test	edx, edx
+	jnz	.next_byte
 	
 	stosb
 	
