@@ -14,12 +14,6 @@ echo "* Confirming s120 output"
 grep -v "#" test_data/000.bs1 | xxd -p -r > obj/000_xxd.bs0
 ./bin/s120 < test_data/000.bs1 > obj/000_s120.bs0
 
-echo ""
-xxd obj/000_xxd.bs0
-echo ""
-xxd obj/000_s120.bs0
-echo ""
-
 cmp obj/000_xxd.bs0 obj/000_s120.bs0
 
 echo "* Building Blue x86_64/linux"
