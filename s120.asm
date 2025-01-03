@@ -54,7 +54,7 @@ entry $
 	mov	rdi, [buf]
 	mov	rsi, rdi
 	mov	ecx, eax
-	xor	eax, eax
+	mov	eax, 0xFF shl 8
 
 .read_byte:
 	lodsb
@@ -68,11 +68,11 @@ entry $
 	; lodsb, convert byte hex char to byte, and al, ah
 	; stosb
 
-	cmp	al, "#"
-	je	.next_byte
-
 	cmp	al, " "
 	jle	.next_byte
+
+	cmp	al, "#"
+	je	.next_byte
 	
 	stosb
 	
