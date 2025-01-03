@@ -16,6 +16,7 @@ SYS_EXIT = 60
 
 buf dq 1
 buf_len dd 1
+flags dd 1
 
 entry $
 	; mmap buf
@@ -38,14 +39,24 @@ entry $
 	xor	eax, eax
 	syscall
 
+	test	eax, eax
+	jz	.done
+
 	mov	[buf_len], eax
 
 	; use the buf for both input and output
 	mov	rdi, [buf]
 	mov	rsi, rdi
+	
+	mov	ecx, eax
 
 .read_byte:
 	lodsb
+	stosb
+
+.next_byte:
+	dec	ecx
+	jnz	.read_byte
 	
 .done:
 	; write output part of buf to stdout
