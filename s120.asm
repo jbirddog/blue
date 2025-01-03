@@ -34,15 +34,35 @@ entry $
 	mov	rsi, rax
 	
 	xor	edi, edi
-	xor	eax, eax
 	mov	edx, BUF_LEN
+	xor	eax, eax
 	syscall
 
-	mov [buf_len], eax
+	mov	[buf_len], eax
 
-	; munmap buf
-	mov	esi, [buf_len]
+	; use the buf for both input and output
 	mov	rdi, [buf]
+	mov	rsi, rdi
+
+.read_byte:
+	lodsb
+	
+.done:
+	; write output part of buf to stdout
+	xor	eax, eax
+	inc	eax
+
+	mov	rdx, rdi
+	sub	rdx, [buf]
+
+	mov	rsi, [buf]
+	
+	mov	edi, eax
+	syscall
+	
+	; munmap buf
+	mov	rdi, [buf]
+	mov	esi, [buf_len]
 	mov	eax, SYS_MUNMAP
 	syscall
 
