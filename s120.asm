@@ -16,7 +16,6 @@ SYS_EXIT = 60
 
 buf dq 1
 buf_len dd 1
-flags dd 1
 
 entry $
 	; mmap buf
@@ -44,16 +43,39 @@ entry $
 
 	mov	[buf_len], eax
 
-	; use the buf for both input and output
+	;
+	; rdi - output buf
+	; rsi - input buf
+	; ecx - length of input buf
+	; al - current byte
+	; ah - helper byte
+	;
+	
 	mov	rdi, [buf]
 	mov	rsi, rdi
-	
 	mov	ecx, eax
+	xor	eax, eax
 
 .read_byte:
 	lodsb
-	stosb
 
+	; for " ", jmp .next_byte
+	; for "\n" set ah to FF, jmp .next_byte
+	; for # set ah to "\n", jmp .next_byte
+
+	; if al & ah != ah, jmp .next_byte
+	; convert byte hex char to byte, shl 4, move to ah
+	; lodsb, convert byte hex char to byte, and al, ah
+	; stosb
+
+	cmp	al, "#"
+	je	.next_byte
+
+	cmp	al, " "
+	jle	.next_byte
+	
+	stosb
+	
 .next_byte:
 	dec	ecx
 	jnz	.read_byte
