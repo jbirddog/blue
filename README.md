@@ -73,6 +73,7 @@ file is lowered to a stage 0 file by stripping comments and running it through `
 1. add code buffer over/underflow error checks
 1. add opcode overflow error check
 1. need a bs1 test case file
+1. move elf out of x86_64
 
 ### s120
 
@@ -83,12 +84,7 @@ The program will be minimalist and require valid input else invalid output. Simp
 is more important than performance. Likely once a higher level language is implemented it will re-implement
 s120 with more nice things.
 
-Will need to do:
+Needs:
 
-1. Read byte from input, if eof then write output to stdout, exit success
-1. If byte == "#" read until byte == "\n" then goto 1
-1. If byte <= " " then goto 1
-1. Assume byte is hex digit, convert to decimal, shl 4, push on stack
-1. Read byte from stdin, assume byte is hex digit, convert to decimal, add to value on stack
-1. Write byte to code buffer
-1. Goto 1
+1. Port s120.asm to bs1
+
