@@ -2,4 +2,4 @@
 # basic test file for bs1 -> bs0 conversion
 #
 
-03 0001 0203 0405 0607 09
+00 01 10 11

@@ -85,6 +85,33 @@ entry $
 
 	test	edx, edx
 	jnz	.next_byte
+
+	mov	r8b, al
+	and	r8b, 0x40
+	mov	r9b, r8b
+	shr	r9b, 3
+	mov	r10b, r8b
+	shr	r10b, 6
+	or	r9b, r10b
+	add	al, r9b
+	and	al, 0x0F
+
+	shl	eax, 12
+
+	dec	ecx
+	lodsb
+
+	mov	r8b, al
+	and	r8b, 0x40
+	mov	r9b, r8b
+	shr	r9b, 3
+	mov	r10b, r8b
+	shr	r10b, 6
+	or	r9b, r10b
+	add	al, r9b
+	and	al, 0x0F
+
+	or	al, ah
 	
 	stosb
 	
