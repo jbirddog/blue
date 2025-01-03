@@ -15,6 +15,7 @@ SYS_MUNMAP = 11
 SYS_EXIT = 60
 
 buf dq 1
+buf_len dd 1
 
 entry $
 	; mmap buf
@@ -30,18 +31,17 @@ entry $
 	mov	[buf], rax
 
 	; read stdin into buf
+	mov	rsi, rax
+	
 	xor	edi, edi
 	xor	eax, eax
-	mov	rsi, [buf]
 	mov	edx, BUF_LEN
 	syscall
 
-	mov edi, eax
-	mov eax, SYS_EXIT
-	syscall
+	mov [buf_len], eax
 
 	; munmap buf
-	mov	esi, 0 ; TODO: buf len
+	mov	esi, [buf_len]
 	mov	rdi, [buf]
 	mov	eax, SYS_MUNMAP
 	syscall
