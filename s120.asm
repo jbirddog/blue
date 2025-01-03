@@ -86,33 +86,15 @@ entry $
 	test	edx, edx
 	jnz	.next_byte
 
-	mov	r8b, al
-	and	r8b, 0x40
-	mov	r9b, r8b
-	shr	r9b, 3
-	mov	r10b, r8b
-	shr	r10b, 6
-	or	r9b, r10b
-	add	al, r9b
-	and	al, 0x0F
-
+	call	h2b
 	shl	eax, 12
 
 	dec	ecx
 	lodsb
 
-	mov	r8b, al
-	and	r8b, 0x40
-	mov	r9b, r8b
-	shr	r9b, 3
-	mov	r10b, r8b
-	shr	r10b, 6
-	or	r9b, r10b
-	add	al, r9b
-	and	al, 0x0F
-
+	call	h2b
 	or	al, ah
-	
+
 	stosb
 	
 .next_byte:
@@ -142,3 +124,15 @@ entry $
 	xor	edi, edi
 	mov	eax, SYS_EXIT
 	syscall
+
+h2b:
+	mov	r8b, al
+	and	r8b, 0x40
+	mov	r9b, r8b
+	shr	r9b, 3
+	mov	r10b, r8b
+	shr	r10b, 6
+	or	r9b, r10b
+	add	al, r9b
+	and	al, 0x0F
+	ret
