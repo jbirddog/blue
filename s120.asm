@@ -59,8 +59,8 @@ entry $
 	;
 	; rdi - output buf
 	; rsi - input buf
-	; ecx - length of input buf
-	; edx - parsing status
+	; ecx - bytes of input left to parse
+	; edx - 0xFFFFFFFF if parsing comment to end of line else 0
 	;  al - current byte
 	;
 	
