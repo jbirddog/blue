@@ -73,3 +73,18 @@ file is lowered to a stage 0 file by stripping comments and running it through `
 1. add code buffer over/underflow error checks
 1. add opcode overflow error check
 1. need a bs1 test case file
+1. move elf out of x86_64
+
+### s120
+
+This will be a program written in bs1 that converts bs1 files to bs0 files. It will replace the current use of
+grep/xxd in build.sh. It will still be built initially with grep/xxd, then it will rebuild itself.
+
+The program will be minimalist and require valid input else invalid output. Simplicity of this implementation
+is more important than performance. Likely once a higher level language is implemented it will re-implement
+s120 with more nice things.
+
+Needs:
+
+1. Port s120.asm to bs1
+
