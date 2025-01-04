@@ -17,8 +17,18 @@ SYS_EXIT = 60
 buf dq 0
 buf_len dd 0
 
-skip dd 0xFFFFFFFF
-cont dd 0
+; convert hex character to byte value
+h2b:
+	mov	r8b, al
+	and	r8b, 0x40
+	mov	r9b, r8b
+	shr	r9b, 3
+	mov	r10b, r8b
+	shr	r10b, 6
+	or	r9b, r10b
+	add	al, r9b
+	and	al, 0x0F
+	ret
 
 entry $
 	; mmap buf
@@ -44,14 +54,14 @@ entry $
 	test	eax, eax
 	jz	.done
 
-	mov	[buf_len], eax
+	push	rax
 
 	;
 	; rdi - output buf
 	; rsi - input buf
 	; ecx - length of input buf
+	; edx - parsing status
 	;  al - current byte
-	;  dl - helper byte
 	;
 	
 	mov	rdi, [buf]
@@ -62,25 +72,20 @@ entry $
 
 .read_byte:
 	lodsb
-
-	; for " ", jmp .next_byte
-	; for "\n" set ah to FF, jmp .next_byte
-	; for # set ah to "\n", jmp .next_byte
-
-	; if al & ah has parity, jmp .next_byte
-	; convert byte hex char to byte, shl 4, move to ah
-	; lodsb, convert byte hex char to byte, and al, ah
-	; stosb
 	
 	cmp	al, " "
 	je	.next_byte
 
+	xor	ebx, ebx
+
 	cmp	al, 10
-	cmove	edx, [cont]
+	cmove	edx, ebx
 	je	.next_byte
 
+	not	ebx
+	
 	cmp	al, "#"
-	cmove	edx, [skip]
+	cmove	edx, ebx
 	je	.next_byte
 
 	test	edx, edx
@@ -115,8 +120,9 @@ entry $
 	syscall
 	
 	; munmap buf
+	pop	rsi
+	
 	mov	rdi, [buf]
-	mov	esi, [buf_len]
 	mov	eax, SYS_MUNMAP
 	syscall
 
@@ -124,15 +130,3 @@ entry $
 	xor	edi, edi
 	mov	eax, SYS_EXIT
 	syscall
-
-h2b:
-	mov	r8b, al
-	and	r8b, 0x40
-	mov	r9b, r8b
-	shr	r9b, 3
-	mov	r10b, r8b
-	shr	r10b, 6
-	or	r9b, r10b
-	add	al, r9b
-	and	al, 0x0F
-	ret
