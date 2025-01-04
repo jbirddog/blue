@@ -15,7 +15,6 @@ SYS_MUNMAP = 11
 SYS_EXIT = 60
 
 buf dq 0
-buf_len dd 0
 
 ; convert hex character to byte value
 h2b:
