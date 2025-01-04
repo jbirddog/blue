@@ -16,9 +16,9 @@ fasm s120.asm bin/s120
 echo "* Creating bs1 files"
 
 cat \
-  x86_64/elf/pre.bs1 \
+  elf/pre.bs1 \
   examples/x86_64/linux/hello_world.bs1 \
-  x86_64/elf/post.bs1 > obj/hello_world.bs1
+  elf/post.bs1 > obj/hello_world.bs1
 
 echo "* Confirming s120 output"
 
