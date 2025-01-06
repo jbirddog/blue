@@ -180,7 +180,6 @@ _0E:
 	call	data_stack_push
 	ret
 
-; TODO: make this just store l as an addr, avoid the call/ret
 macro op l, b, f {
 	._op##l:
 	call	l
