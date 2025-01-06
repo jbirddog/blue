@@ -9,18 +9,20 @@ More details will be added as the new version of the compiler is fleshed out.
 Extremely minimal version of a 64bit forth-like compiler that aims to:
 
 1. Be completely stand alone (nostdlib)
-1. Supports compile time execution of any previously defined word
-1. Supports multiple os/architectures/executable formats
 1. Works on byte code (no textual parsing)
-1. Quickly be bootstrapped to a higher level language(s)
+1. Supports compile time execution of any previously defined code
+1. Supports multiple os/architectures/executable formats
+1. Quickly be bootstrapped to higher level languages
 
-### Requirements
+### Requirements to run ./build.sh
 
 version numbers are not exact requirements, just what i am using at time of writing
 
 1. linux 6.12.7_1 x86_64
 1. fasm 1.73.30
 1. xxd 2024-09-15
+1. grep 3.11
+1. cmp 3.10
 
 ### Byte code
 
@@ -85,4 +87,3 @@ s120 with more nice things.
 Needs:
 
 1. Port s120.asm to bs1
-
