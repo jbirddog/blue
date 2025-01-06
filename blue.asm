@@ -11,6 +11,8 @@ CELL_SIZE = 8
 DATA_STACK_CELLS = 64
 USER_CODE_BUFFER_SIZE = 1024
 
+FLAG_COMPILING = 1 shl 0
+
 ; bytes to cells
 macro _b2c b {
 	shr	b, 3
@@ -92,17 +94,26 @@ exit_depth:
 entry $
 	mov	[code_buffer_here], code_buffer
 	mov	[data_stack_here], data_stack
+	mov	[flags], 0
 
 .read_op:
 	read	_BYTE
 	cmp	eax, _BYTE
 	jne	.done
 
-.call_op:
 	mov	rax, [tib]
 	_c2b	rax
 	add	rax, ops
+
+	test	[flags], FLAG_COMPILING
+	jnz	.compile
+
+.interpret:
 	call	rax
+	jmp	.read_op
+
+.compile:
+	; TODO: compile n bytes into code buffer
 	jmp	.read_op
 
 .done:
@@ -180,6 +191,7 @@ _0E:
 	call	data_stack_push
 	ret
 
+; TODO: could just store the offset of ops - l in dword to have more bytes for header and drop one call/ret
 macro op l, b, f {
 	._op##l:
 	call	l
@@ -219,3 +231,4 @@ data_stack rq DATA_STACK_CELLS
 data_stack_here rq 1
 
 tib rq 1
+flags rb 1
