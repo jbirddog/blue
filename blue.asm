@@ -180,32 +180,34 @@ _0E:
 	call	data_stack_push
 	ret
 
-macro op l {
+; TODO: make this just store l as an addr, avoid the call/ret
+macro op l, b, f {
 	._op##l:
 	call	l
 	ret
 	
-	assert ($ - ._op##l) <= CELL_SIZE
-	times (CELL_SIZE - ($ - ._op##l)) db 0
+	assert ($ - ._op##l) <= CELL_SIZE - 2
+	times (CELL_SIZE - 2 - ($ - ._op##l)) db 0
+	db b, f
 	assert ($ - ._op##l) = CELL_SIZE
 }
 
 ops:
-	op	_00	; ( -- b ) read byte from input, push on the data stack
-	op	_01	; ( -- w ) read word from input, push on the data stack
-	op	_02	; ( -- d ) read dword from input, push on the data stack
-	op	_03	; ( -- q ) read qword from input, push on the data stack
-	op	_04	; ( -- a ) push addr of code buffer's here on the data stack
-	op	_05	; ( a -- ) set addr of code buffer's here
-	op	_06	; ( a b -- a' ) write byte to addr, push new addr on the data stack
-	op	_07	; ( a b -- a' ) write word to addr, push new addr on the data stack
-	op	_08	; ( a b -- a' ) write dword to addr, push new addr on the data stack
-	op	_09	; ( a b -- a' ) write qword to addr, push new addr on the data stack
-	op	_0A	; ( -- a ) push addr of code buffer start on the data stack
-	op	_0B	; ( n1 n2 -- n ) n1 - n2, push result on the data stack
-	op	_0C	; ( n1 n2 -- n ) n1 + n2, push result on the data stack
-	op	_0D	; ( x -- ) drop top of the data stack
-	op	_0E	; ( a b -- b a ) swap the top two items of the data stack
+	op	_00, 2, 0	; ( -- b ) read byte from input, push on the data stack
+	op	_01, 3, 0	; ( -- w ) read word from input, push on the data stack
+	op	_02, 5, 0	; ( -- d ) read dword from input, push on the data stack
+	op	_03, 9, 0	; ( -- q ) read qword from input, push on the data stack
+	op	_04, 1, 0	; ( -- a ) push addr of code buffer's here on the data stack
+	op	_05, 1, 0	; ( a -- ) set addr of code buffer's here
+	op	_06, 1, 0	; ( a b -- a' ) write byte to addr, push new addr on the data stack
+	op	_07, 1, 0	; ( a b -- a' ) write word to addr, push new addr on the data stack
+	op	_08, 1, 0	; ( a b -- a' ) write dword to addr, push new addr on the data stack
+	op	_09, 1, 0	; ( a b -- a' ) write qword to addr, push new addr on the data stack
+	op	_0A, 1, 0	; ( -- a ) push addr of code buffer start on the data stack
+	op	_0B, 1, 0	; ( n1 n2 -- n ) n1 - n2, push result on the data stack
+	op	_0C, 1, 0	; ( n1 n2 -- n ) n1 + n2, push result on the data stack
+	op	_0D, 1, 0	; ( x -- ) drop top of the data stack
+	op	_0E, 1, 0	; ( a b -- b a ) swap the top two items of the data stack
 
 ;
 ; everything below here needs to be r* else bytes will be in the binary
