@@ -60,16 +60,19 @@ file is lowered to a stage 0 file by stripping comments and running it through `
 
 ### TODOs:
 
+1. mmap stdin into input buffer like s120.asm
+1. provide syscalls in x86_64/linux/syscall.bs1
+1. instead of dumping the whole code buffer, have app write output giving start/end
 1. calculate string location/length in hello world example
 1. add code_buffer_start that can be different from code_buffer
-1. elf pre bs1 file can write addrs (file size, entry, etc) into code buffer, push code buffer start below
+1. elf pre/post needs to be combined and moved to compiled words that can be called by the app
 1. add = op
-1. add assert op
 1. add over op
-1. add tuck op (swap over)
-1. fix elf post TODO with tuck/swap
-1. pull linux specific code out of blue.asm, have x86_64/linux/blue.inc
-1. current blue.asm is really blue_x86_64_linux.asm
+1. add op to enter compile mode
+1. add op to enter interpret mode
+1. add op to call bytecode at location
+1. add assert op (in block)
+1. add tuck (swap over in block)
 1. add stack over/underflow error checks
 1. add code buffer over/underflow error checks
 1. add opcode overflow error check
