@@ -77,7 +77,6 @@ file is lowered to a stage 0 file by stripping comments and running it through `
 1. add stack over/underflow error checks
 1. add code buffer over/underflow error checks
 1. add opcode overflow error check
-1. need a bs1/bs0 test case file to test blue
 
 ### s120
 

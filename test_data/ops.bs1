@@ -13,13 +13,20 @@
 # 08 - y
 # 09 - y
 # 0A - y
-# 0B -
-# 0C -
+# 0B - y
+# 0C - y
 # 0D - y
-# 0E -
-# 0F -
-# 10 -
+# 0E - y
+# 0F - y
+# 10 - y
 #
+
+#
+# modes
+#
+
+# set to compile, back to interpret
+0F 10
 
 #
 # code buffer address
@@ -54,5 +61,20 @@
 0D
 
 #
-# 
+# stack ops
 #
+
+# push two values, subtract them, drop result
+00 03
+00 01
+0B 0D
+
+# push two values, add them, drop the result
+00 07
+00 00
+0C 0D
+
+# push two values, swap them, drop them
+00 07
+00 10
+0E 0D 0D
