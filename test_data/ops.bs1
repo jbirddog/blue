@@ -1,0 +1,58 @@
+
+#
+# op - tested
+#
+# 00 - y
+# 01 - y
+# 02 - y
+# 03 - y
+# 04 - y
+# 05 - y
+# 06 - y
+# 07 - y
+# 08 - y
+# 09 - y
+# 0A - y
+# 0B -
+# 0C -
+# 0D - y
+# 0E -
+# 0F -
+# 10 -
+#
+
+#
+# code buffer address
+#
+
+# push addr of code buffer start and set here
+0A 05
+
+# push addr of code buffer here and set here
+04 05
+
+#
+# read from input/write to code buffer
+#
+
+# push addr of code buffer
+04
+
+# read/write a byte
+00 48 06
+
+# read/write a word
+01 31 C0 07
+
+# read/write a dword
+02 95 00 40 00 08
+
+# read/write a qword
+03 7f45 4c46 0201 0103 09
+
+# drop the addr on the stack
+0D
+
+#
+# 
+#
