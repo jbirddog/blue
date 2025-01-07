@@ -2,16 +2,13 @@ format elf64 executable 3
 
 segment readable writable executable
 
+; TODO: remove once read is replaced with mmap
 _BYTE = 1
 _WORD = 2
 _DWORD = 4
 _QWORD = 8
 
 CELL_SIZE = 8
-DATA_STACK_CELLS = 64
-USER_CODE_BUFFER_SIZE = 1024
-
-FLAG_COMPILING = 1 shl 0
 
 ; bytes to cells
 macro _b2c b {
@@ -21,6 +18,50 @@ macro _b2c b {
 ; cells to bytes
 macro _c2b c {
 	shl	c, 3
+}
+
+DATA_STACK_CELLS = 64
+INPUT_BUF_SIZE = 4096
+USER_CODE_BUFFER_SIZE = 1024
+
+DEFAULT_FLAGS = 0
+COMPILING = 1 shl 0
+INTERPRETING = not COMPILING
+
+MAP_ANONYMOUS = 32
+MAP_PRIVATE = 2
+
+PROT_READ = 1
+PROT_WRITE = 2
+
+
+; expects status in edi
+_exit:
+	mov	eax, 60
+	syscall
+
+macro exit s {
+	mov edi, s
+	jmp _exit
+}
+
+; expects buf len in esi
+_mmap:
+	xor	edi, edi
+	mov	edx, PROT_READ or PROT_WRITE
+	mov	r8d, -1
+	xor	r9d, r9d
+	mov	r10d, MAP_ANONYMOUS or MAP_PRIVATE
+	mov	eax, 9
+	syscall
+	; TODO: check for error and exit
+	ret
+
+macro mmap buf, here, size {
+	mov	esi, size
+	call	_mmap
+	mov	[buf], rax
+	mov	[here], rax
 }
 
 ; expects buffer size in edx
@@ -85,16 +126,12 @@ code_buffer_dump:
 	syscall
 	ret
 
-exit_depth:
-	call	data_stack_depth
-	mov	edi, eax
-	mov	eax, 60
-	syscall
-	
 entry $
+	mmap	tib, tib_here, INPUT_BUF_SIZE
+
 	mov	[code_buffer_here], code_buffer
 	mov	[data_stack_here], data_stack
-	mov	[flags], 0
+	mov	[flags], DEFAULT_FLAGS
 
 .read_op:
 	read	_BYTE
@@ -105,7 +142,7 @@ entry $
 	_c2b	rax
 	add	rax, ops
 
-	test	[flags], FLAG_COMPILING
+	test	byte [flags], COMPILING
 	jnz	.compile
 
 .interpret:
@@ -114,11 +151,18 @@ entry $
 
 .compile:
 	; TODO: compile n bytes into code buffer
+	mov 	rax, [rax]
+	shr	rax, 48
+	mov dil, al
+	mov eax, 60
+	syscall
 	jmp	.read_op
 
 .done:
 	call	code_buffer_dump
-	call	exit_depth
+	
+	call	data_stack_depth
+	exit	eax
 
 
 macro _op_read l, s {
@@ -191,6 +235,14 @@ _0E:
 	call	data_stack_push
 	ret
 
+_0F:
+	or	[flags], COMPILING
+	ret
+
+_10:
+	and	[flags], INTERPRETING
+	ret
+
 ; TODO: could just store the offset of ops - l in dword to have more bytes for header and drop one call/ret
 macro op l, b, f {
 	._op##l:
@@ -219,6 +271,8 @@ ops:
 	op	_0C, 1, 0	; ( n1 n2 -- n ) n1 + n2, push result on the data stack
 	op	_0D, 1, 0	; ( x -- ) drop top of the data stack
 	op	_0E, 1, 0	; ( a b -- b a ) swap the top two items of the data stack
+	op	_0F, 1, 0	; ( -- ) set mode to compile
+	op	_10, 1, 0	; ( -- ) set mode to interpret
 
 ;
 ; everything below here needs to be r* else bytes will be in the binary
@@ -231,4 +285,7 @@ data_stack rq DATA_STACK_CELLS
 data_stack_here rq 1
 
 tib rq 1
+tib_here rq 1
+tib_left rd 1
+
 flags rb 1

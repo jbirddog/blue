@@ -61,6 +61,7 @@ file is lowered to a stage 0 file by stripping comments and running it through `
 ### TODOs:
 
 1. mmap stdin into input buffer like s120.asm
+1. mmap code buffer
 1. provide syscalls in x86_64/linux/syscall.bs1
 1. instead of dumping the whole code buffer, have app write output giving start/end
 1. calculate string location/length in hello world example
