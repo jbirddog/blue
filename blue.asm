@@ -140,7 +140,8 @@ code_buffer_dump:
 
 entry $
 	mmap	tib, tib_here, INPUT_BUF_SIZE
-	read	tib_here, tib_len, INPUT_BUF_SIZE
+	read	tib, tib_len, INPUT_BUF_SIZE
+	
 	mov	[code_buffer_here], code_buffer
 	mov	[data_stack_here], data_stack
 	mov	[flags], DEFAULT_FLAGS

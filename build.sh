@@ -30,7 +30,12 @@ cmp obj/000_xxd.bs0 obj/000.bs0
 grep -v "#" obj/hello_world.bs1 | xxd -p -r > obj/hello_world_xxd.bs0
 ./bin/s120 < obj/hello_world.bs1 > obj/hello_world.bs0
 
-#cmp obj/hello_world_xxd.bs0 obj/hello_world.bs0
+cmp obj/hello_world_xxd.bs0 obj/hello_world.bs0
+
+echo "* Building ops test"
+
+./bin/s120 < test_data/ops.bs1 > obj/ops.bs0
+./bin/blue < obj/ops.bs0 > bin/test_ops
 
 echo "* Building example hello_world"
 
