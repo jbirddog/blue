@@ -28,12 +28,9 @@ DEFAULT_FLAGS = 0
 COMPILING = 1 shl 0
 INTERPRETING = not COMPILING
 
-MAP_ANONYMOUS = 32
-MAP_PRIVATE = 2
-
-PROT_READ = 1
-PROT_WRITE = 2
-
+;
+; syscalls
+;
 
 ; expects status in edi
 _exit:
@@ -47,6 +44,12 @@ macro exit s {
 
 ; expects buf len in esi
 _mmap:
+	MAP_ANONYMOUS = 32
+	MAP_PRIVATE = 2
+
+	PROT_READ = 1
+	PROT_WRITE = 2
+
 	xor	edi, edi
 	mov	edx, PROT_READ or PROT_WRITE
 	mov	r8d, -1
@@ -64,21 +67,25 @@ macro mmap buf, here, size {
 	mov	[here], rax
 }
 
-; expects buffer size in edx
+; expects buffer in rsi, size in edx
 _read:
-	mov	[tib], 0
-	
-	xor	eax, eax
 	xor	edi, edi
-	mov	rsi, tib
+	xor	eax, eax
 	syscall
 	
 	ret
 
-macro read s {
-	mov	edx, s
+macro read buf, len, size {
+	mov	rsi, [buf]
+	mov	edx, size
 	call	_read
+	; TODO: check for error and exit
+	mov	[len], eax
 }
+
+;
+; data stack
+;
 
 data_stack_depth:
 	mov	rax, [data_stack_here]
@@ -86,9 +93,6 @@ data_stack_depth:
 	_b2c	rax
 	ret
 
-data_stack_push_tib:
-	mov	rax, [tib]
-	
 ; expects value to push in rax
 data_stack_push:
 	mov	rdi, [data_stack_here]
@@ -116,6 +120,10 @@ data_stack_pop2:
 	mov	rdi, [rdi]
 	ret
 
+;
+; code buffer
+;
+	
 code_buffer_dump:
 	xor	eax, eax
 	inc	eax
@@ -126,24 +134,34 @@ code_buffer_dump:
 	syscall
 	ret
 
+;
+; driver
+;
+
 entry $
 	mmap	tib, tib_here, INPUT_BUF_SIZE
-
+	read	tib_here, tib_len, INPUT_BUF_SIZE
 	mov	[code_buffer_here], code_buffer
 	mov	[data_stack_here], data_stack
 	mov	[flags], DEFAULT_FLAGS
 
 .read_op:
-	read	_BYTE
-	cmp	eax, _BYTE
-	jne	.done
+	mov	rax, [tib_here]
+	sub	rax, [tib]
+	cmp	eax, [tib_len]
+	jge	.done
+	
+	xor	eax, eax
+	mov	rsi, [tib_here]
+	lodsb
+	mov	[tib_here], rsi
 
-	mov	rax, [tib]
+	; TODO: eax or al
 	_c2b	rax
 	add	rax, ops
 
-	test	byte [flags], COMPILING
-	jnz	.compile
+	;test	byte [flags], COMPILING
+	;jnz	.compile
 
 .interpret:
 	call	rax
@@ -165,19 +183,24 @@ entry $
 	exit	eax
 
 
-macro _op_read l, s {
-##l:
-	read	s
-	; TODO: exit on bytes read != edx
+;
+; ops
+;
+
+macro _op_read lbl, how {
+##lbl:
+	mov	rsi, [tib_here]
+	how
+	mov	[tib_here], rsi
 	
-	call	data_stack_push_tib
+	call	data_stack_push
 	ret
 }
 
-_op_read _00, _BYTE
-_op_read _01, _WORD
-_op_read _02, _DWORD
-_op_read _03, _QWORD
+_op_read _00, lodsb
+_op_read _01, lodsw
+_op_read _02, lodsd
+_op_read _03, lodsq
 
 _04:
 	mov	rax, [code_buffer_here]
@@ -286,6 +309,6 @@ data_stack_here rq 1
 
 tib rq 1
 tib_here rq 1
-tib_left rd 1
+tib_len rd 1
 
 flags rb 1
