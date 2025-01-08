@@ -16,3 +16,5 @@ echo "* Building bs0 files"
 echo "* Testing bs0 files"
 
 ./bin/bluevm < obj/halt.bs0 > bin/halt
+
+echo "* Done"
