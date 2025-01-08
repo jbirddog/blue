@@ -23,10 +23,22 @@ mem dq 0
 
 segment readable executable
 
+exit_ok:
+	xor	edi, edi
+
 ; expects status in edi
 exit:
 	mov	eax, 60
 	syscall
+
+syscall_or_die:
+	syscall
+	
+	test	rax, rax
+	cmovs	edi, eax
+	js	exit
+
+	ret
 
 mmap_mem:
 	MAP_ANONYMOUS = 32
@@ -43,16 +55,10 @@ mmap_mem:
 	xor	r9d, r9d
 	mov	r10d, MAP_ANONYMOUS or MAP_PRIVATE
 	mov	eax, 9
-	syscall
-
-	cmp	rax, 0
-	jle	.err
+	call	syscall_or_die
 
 	mov	[mem], rax
 	ret
-.err:
-	mov	edi, eax
-	jmp	exit
 
 init_vm_data:
 	mov	rsi, [mem]
@@ -65,6 +71,7 @@ init_vm_data:
 
 	; Location of input buffer, here and size
 	mov	rax, rsi
+	add	rax, CODE_BUFFER_OFFSET
 	stosq
 	stosq
 	xor	eax, eax
@@ -97,9 +104,23 @@ init_vm_data:
 
 	ret
 
+read_boot_code:
+	xor	edi, edi
+	mov	rsi, [mem]
+	add	rsi, INPUT_BUFFER_OFFSET
+	mov	edx, INPUT_BUFFER_SIZE
+	xor	eax, eax
+	call	syscall_or_die
+	
+	ret
+
+handle_input:
+	ret
+
 entry $
 	call	mmap_mem
 	call	init_vm_data
+	call	read_boot_code
+	call	handle_input
 	
-	xor	edi, edi
-	jmp	exit
+	jmp	exit_ok
