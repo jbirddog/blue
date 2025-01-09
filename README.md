@@ -1,92 +1,109 @@
-# Blue Compiler
+# BlueVM
 
-_Please note: the compiler is currently undergoing a complete rewrite. Earlier versions can be found in the bak* directories._
+Minimalistic 64 bit Forth-like virtual machine for hackers. The BlueVM aims to:
 
-More details will be added as the new version of the compiler is fleshed out.
+1. Have a simplistic and hackable codebase
+1. Support execution of any previously compiled bytecode
+1. Provide a minimal set of opcodes that can be extended by the host
+1. Serve as the basis for minimalistic handcrafted applications
+1. Allow the host full control
+1. Bring some fun back into the world
 
-## v3
+By convention BlueVM bytecode files have a `bs0` (BlueVM Stage 0) extension.
 
-Extremely minimal version of a 64bit forth-like compiler that aims to:
+## Building
 
-1. Be completely stand alone (nostdlib)
-1. Works on byte code (no textual parsing)
-1. Supports compile time execution of any previously defined code
-1. Supports multiple os/architectures/executable formats
-1. Quickly be bootstrapped to higher level languages
+To build the BlueVM, tools and examples run ./build.sh
 
-### Requirements to run ./build.sh
+## Memory Layout
 
-version numbers are not exact requirements, just what i am using at time of writing
+The BlueVM requires a single allocation with the following layout in rwx memory:
 
-1. linux 6.12.7_1 x86_64
-1. fasm 1.73.30
-1. xxd 2024-09-15
-1. grep 3.11
-1. cmp 3.10
+1. Input Buffer (1024 bytes)
+1. Data Stack (1024 bytes)
+1. Opcode Map (2048 bytes)
+   1. BlueVM Opcode Map: 0x00 - 0x7F (1024 bytes)
+   1. Extended Opcode Map: 0x80 - 0xFF (1024 bytes)
+1. Code Buffer (4096 bytes)
+   1. BlueVM Data (128 bytes)
+   1. Space for Host (3968 bytes)
 
-### Byte code
+## Boot
 
-vm works on byte code, multi-byte values are assumed to be little-endian. op codes are subject to change.
+When the BlueVM starts it will perform the allocation mentioned above and set the following 8 byte values in the
+BlueVM Data portion of the beginning of the code buffer:
 
-| Op Code | Reads | Stack Effect | Description |
-|----|----|----|----|
-| 00 | byte | ( -- b ) | read byte from input, push on the data stack |
-| 01 | word | ( -- w ) | read word from input, push on the data stack |
-| 02 | dword | ( -- d ) | read dword from input, push on the data stack |
-| 03 | qword | ( -- q ) | read qword from input, push on the data stack |
-| 04 | | ( -- a ) | push addr of code buffer's here on the data stack |
-| 05 | | ( a -- ) | set addr of code buffer's here |
-| 06 | | ( a b -- a' ) | write byte to addr, push new addr on the data stack |
-| 07 | | ( a w -- a' ) | write word to addr, push new addr on the data stack |
-| 08 | | ( a d -- a' ) | write dword to addr, push new addr on the data stack |
-| 09 | | ( a q -- a' ) | write qword to addr, push new addr on the data stack |
-| 0A | | ( -- a ) | push addr of code buffer start on the data stack |
-| 0B | | ( n1 n2 -- n ) | n1 - n2, push result on the data stack |
-| 0C | | ( n1 n2 -- n ) | n1 + n2, push result on the data stack |
-| 0D | | ( x -- ) | drop top of the data stack |
-| 0E | | ( a b -- b a ) | swap the top two items of the data stack |
+1. BlueVM state
+1. Location of the input buffer
+1. Location of the input buffer's here
+1. Input buffer size in bytes
+1. Location of the data stack
+1. Location of the data stack's here
+1. Data stack size in bytes
+1. Location of the opcode map
+1. Location of the code buffer
+1. Location of the code buffer's here
+1. Code buffer size in bytes
+1. Location of opcode handler
 
-### Stages
+BlueVM will then read 1024 bytes from stdin into the input buffer and begin interpreting the bytecode. The contents
+of this initial 1024 bytes serve as the bootstrap for the host.
 
-_Stage 0_
+## Execution
 
-A binary file ending in `bs0` is a stage 0 file that contains a run of bytes that are executed by the blue
-compiler.
+BlueVM follows a simple byte oriented execution strategy. Using the values from the BlueVM data portion of the code
+buffer it:
 
-_Stage 1_
+1. Checks if a byte is available in the input buffer
+   1. If not exit
+   1. If so read a byte and increment the input buffer's here by one byte
+1. Locate the opcode entry in the opcode map
+   1. If it is 0 exit with bad opcode
+1. Call the opcode handler
+1. Goto 1
 
-A textual file ending in `bs1` that allows minimal formatting/commenting. Line comments start with `#`. A stage 1
-file is lowered to a stage 0 file by stripping comments and running it through `xxd`.
+Because of this "late binding" approach, the host can change the values that the BlueVM uses to execute, including
+opcodes, granting it full control.
 
-### TODOs:
+## Opcode Map Structure
 
-1. mmap stdin into input buffer like s120.asm
-1. provide syscalls in x86_64/linux/syscall.bs1
-1. instead of dumping the whole code buffer, have app write output giving start/end
-1. calculate string location/length in hello world example
-1. add code_buffer_start that can be different from code_buffer
-1. elf pre/post needs to be combined and moved to compiled words that can be called by the app
-1. add = op
-1. add over op
-1. add op to enter compile mode
-1. add op to enter interpret mode
-1. add op to call bytecode at location
-1. add assert op (in block)
-1. add tuck (swap over in block)
-1. add stack over/underflow error checks
-1. add code buffer over/underflow error checks
-1. add opcode overflow error check
-1. need a bs1/bs0 test case file to test blue
+Each entry in the opcode map is 8 bytes.
 
-### s120
+1. Relative offset from code buffer start (4 bytes)
+1. Opcode length (1 byte)
+1. Flags (1 byte)
+1. Reserved (1 byte)
 
-This will be a program written in bs1 that converts bs1 files to bs0 files. It will replace the current use of
-grep/xxd in build.sh. It will still be built initially with grep/xxd, then it will rebuild itself.
+## Opcode Handler
 
-The program will be minimalist and require valid input else invalid output. Simplicity of this implementation
-is more important than performance. Likely once a higher level language is implemented it will re-implement
-s120 with more nice things.
+Once an opcode entry is located in the opcode map the opcode handler is called. The BlueVM has two opcode handlers,
+interpret (default) and compile. The interpret handler calls the code using the relative offset from the code
+buffer specified in the op code entry. The compile handler finds the opcode length in the opcode entry and copies
+that many bytes, including the opcode, into the code buffer and advances the code buffer's here.
 
-Needs:
+## Opcodes
 
-1. Port s120.asm to bs1
+All opcodes are represented in hexdecimal. Stack effect abbreviations:
+
+| Abbreviation | Description |
+|----|----|
+| b | Byte |
+| w | Word |
+| d | Double word |
+| q | Quad word |
+
+| Opcode | Stack Effect | Description |
+|----|----|----|
+| 00 | ( -- ) | Halt execution of the BlueVM |
+
+## Tools/Examples
+
+Along with the code for BlueVM this repository also contains some tools and examples that can be used as reference:
+
+| Name | Descripton | Location |
+|----|----|----|
+| blang | Quick and dirty compiler for a textual representation of the BlueVM bytecode | examples/blang |
+
+## TODOs
+
+1. Consider taking a bvm file that contains the full memory mapping. State can be dumped/restored this way
