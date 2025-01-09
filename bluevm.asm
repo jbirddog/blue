@@ -1,11 +1,9 @@
 format elf64 executable 3
 
-CELL_SIZE = 8
-
 INPUT_BUFFER_OFFSET = 0
 INPUT_BUFFER_SIZE = 2048
 
-DATA_STACK_OFFSET = INPUT_BUFFER_SIZE
+DATA_STACK_OFFSET = INPUT_BUFFER_OFFSET + INPUT_BUFFER_SIZE
 DATA_STACK_SIZE = 2048
 
 OPCODE_MAP_OFFSET = DATA_STACK_OFFSET + DATA_STACK_SIZE
@@ -15,7 +13,7 @@ CODE_BUFFER_OFFSET = OPCODE_MAP_OFFSET + OPCODE_MAP_SIZE
 CODE_BUFFER_SIZE = 4096
 
 MEM_SIZE = CODE_BUFFER_OFFSET + CODE_BUFFER_SIZE
-assert MEM_SIZE = 12288
+assert MEM_SIZE = (4096 * 3)
 
 VM_DATA_OFFSET_STATE = 0 shl 3
 VM_DATA_OFFSET_INPUT_BUFFER_LOCATION = 1 shl 3
@@ -112,12 +110,10 @@ init_vm_data:
 	mov	eax, CODE_BUFFER_SIZE
 	stosq
 
-	; TODO: Location of opcode handler
-	xor	eax, eax
+	; Location of opcode handlers
+	mov	rax, interpret_opcode_handler
 	stosq
-
-	; TODO: Location of invalid opcode handler
-	xor	eax, eax
+	mov	rax, invalid_opcode_handler
 	stosq
 
 	ret
@@ -161,6 +157,21 @@ bytes_available:
 
 	ret
 
+interpret_opcode_handler:
+	mov edi, 23
+	jmp exit
+	ret
+
+compile_opcode_handler:
+	mov edi, 67
+	jmp exit
+	ret
+
+invalid_opcode_handler:
+	mov edi, 53
+	jmp exit
+	ret
+
 handle_opcode:
 	mov	rsi, [mem]
 	add	rsi, OPCODE_MAP_OFFSET
@@ -170,11 +181,18 @@ handle_opcode:
 	mov	rdi, [rsi]
 	test	rdi, rdi
 	jz	.invalid_opcode
-	
-	lodsq
+
+	; TODO: make sure we have two slots available on the data stack
+	; push the opcode's code address and flags on the data stack
+	mov	rdi, [mem]
+	add	rdi, CODE_BUFFER_OFFSET + VM_DATA_OFFSET_DATA_STACK_HERE_LOCATION
+	mov	rdi, [rdi]
+
+	movsq
+	movsq
 
 	; TODO: push code address and flags onto data stack, call opcode handler
-	call	rax
+	;call	rax
 
 	ret
 

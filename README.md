@@ -112,3 +112,5 @@ Along with the code for BlueVM this repository also contains some tools and exam
 ## TODOs
 
 1. Consider taking a bvm file that contains the full memory mapping. State can be dumped/restored this way
+1. Print error messages to disambiguate exit status
+1. Expand BlueVM data at start of code buffer to 256 bytes
