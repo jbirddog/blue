@@ -19,11 +19,11 @@ To build the BlueVM, tools and examples run ./build.sh
 
 The BlueVM requires a single allocation with the following layout in rwx memory:
 
-1. Input Buffer (1024 bytes)
-1. Data Stack (1024 bytes)
-1. Opcode Map (2048 bytes)
-   1. BlueVM Opcode Map: 0x00 - 0x7F (1024 bytes)
-   1. Extended Opcode Map: 0x80 - 0xFF (1024 bytes)
+1. Input Buffer (2048 bytes)
+1. Data Stack (2048 bytes)
+1. Opcode Map (4096 bytes)
+   1. BlueVM Opcode Map: 0x00 - 0x7F (2048 bytes)
+   1. Extended Opcode Map: 0x80 - 0xFF (2048 bytes)
 1. Code Buffer (4096 bytes)
    1. BlueVM Data (128 bytes)
    1. Space for Host (3968 bytes)
@@ -46,8 +46,9 @@ BlueVM Data portion of the beginning of the code buffer:
 1. Code buffer size in bytes
 1. Location of opcode handler
 
-BlueVM will then read 1024 bytes from stdin into the input buffer and begin interpreting the bytecode. The contents
-of this initial 1024 bytes serve as the bootstrap for the host.
+BlueVM will then set entries in the BlueVM opcode map and read 2048 bytes from stdin into the input buffer. This
+initial read will serve as the bootstrap for the host and is interpreted. Once the input buffer is exhausted the
+BlueVM exists.
 
 ## Execution
 
@@ -67,19 +68,20 @@ opcodes, granting it full control.
 
 ## Opcode Map Structure
 
-Each entry in the opcode map is 8 bytes.
+Each entry in the opcode map is 16 bytes.
 
-1. Relative offset from code buffer start (4 bytes)
-1. Opcode length (1 byte)
-1. Flags (1 byte)
-1. Reserved (1 byte)
+1. Header (8 bytes)
+   1. Flags (1 byte)
+   1. Opcode size (1 byte)
+   1. Reserved (6 bytes)
+1. Code address (8 bytes)
 
 ## Opcode Handler
 
 Once an opcode entry is located in the opcode map the opcode handler is called. The BlueVM has two opcode handlers,
-interpret (default) and compile. The interpret handler calls the code using the relative offset from the code
-buffer specified in the op code entry. The compile handler finds the opcode length in the opcode entry and copies
-that many bytes, including the opcode, into the code buffer and advances the code buffer's here.
+interpret (default) and compile. The interpret handler calls the code address specified in the opcode entry. The
+compile handler finds the opcode length in the opcode entry and copies that many bytes, including the opcode, into
+the code buffer and advances the code buffer's here.
 
 ## Opcodes
 
