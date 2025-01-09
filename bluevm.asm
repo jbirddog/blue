@@ -17,6 +17,9 @@ CODE_BUFFER_SIZE = 4096
 MEM_SIZE = CODE_BUFFER_OFFSET + CODE_BUFFER_SIZE
 assert MEM_SIZE = 8192
 
+; TODO: add constants for data fields at start of code buffer
+; TODO: change mov x, [mem]; add x, OFFSET to lea
+
 segment readable writable
 
 mem dq 0
@@ -71,7 +74,7 @@ init_vm_data:
 
 	; Location of input buffer, here and size
 	mov	rax, rsi
-	add	rax, CODE_BUFFER_OFFSET
+	add	rax, INPUT_BUFFER_OFFSET
 	stosq
 	stosq
 	xor	eax, eax
@@ -111,10 +114,39 @@ read_boot_code:
 	mov	edx, INPUT_BUFFER_SIZE
 	xor	eax, eax
 	call	syscall_or_die
-	
+
+	; store input buffer size
+	mov	rdi, [mem]
+	mov	[rdi + CODE_BUFFER_OFFSET + 24], rax
+
 	ret
 
+bytes_available:
+	mov	rsi, [mem]
+	add	rsi, CODE_BUFFER_OFFSET + 8
+	mov	rcx, [rsi]
+	sub	rcx, [rsi + 8]
+	add	rcx, [rsi + 16]
+	
+	ret
+	
 handle_input:
+	call	bytes_available
+	jna	.done
+
+	xor	eax, eax
+	
+	lea	rax, [mem + CODE_BUFFER_OFFSET + 16]
+	mov	rax, [rax]
+	
+	;add	rsi, CODE_BUFFER_OFFSET + 16
+	;mov	rsi, [rsi]
+	;lodsb
+
+	mov dil, al
+	jmp exit
+	
+.done:
 	ret
 
 entry $
