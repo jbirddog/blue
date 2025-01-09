@@ -18,7 +18,6 @@ MEM_SIZE = CODE_BUFFER_OFFSET + CODE_BUFFER_SIZE
 assert MEM_SIZE = 8192
 
 ; TODO: add constants for data fields at start of code buffer
-; TODO: change mov x, [mem]; add x, OFFSET to lea
 
 segment readable writable
 
@@ -63,6 +62,7 @@ mmap_mem:
 	mov	[mem], rax
 	ret
 
+; TODO: change mov x, [mem]/rsi; add x, OFFSET to lea
 init_vm_data:
 	mov	rsi, [mem]
 	mov	rdi, rsi
@@ -109,25 +109,23 @@ init_vm_data:
 
 read_boot_code:
 	xor	edi, edi
-	mov	rsi, [mem]
-	add	rsi, INPUT_BUFFER_OFFSET
+	lea	rsi, [mem + INPUT_BUFFER_OFFSET]
 	mov	edx, INPUT_BUFFER_SIZE
 	xor	eax, eax
 	call	syscall_or_die
 
 	; store input buffer size
-	mov	rdi, [mem]
-	mov	[rdi + CODE_BUFFER_OFFSET + 24], rax
+	lea	rdi, [mem + CODE_BUFFER_OFFSET + 24]
+	mov	rdi, rax
 
 	ret
 
 bytes_available:
-	mov	rsi, [mem]
-	add	rsi, CODE_BUFFER_OFFSET + 8
+	lea	rsi, [mem + CODE_BUFFER_OFFSET + 8]
 	mov	rcx, [rsi]
 	sub	rcx, [rsi + 8]
 	add	rcx, [rsi + 16]
-	
+
 	ret
 	
 handle_input:
@@ -138,11 +136,9 @@ handle_input:
 	
 	lea	rax, [mem + CODE_BUFFER_OFFSET + 16]
 	mov	rax, [rax]
-	
-	;add	rsi, CODE_BUFFER_OFFSET + 16
-	;mov	rsi, [rsi]
-	;lodsb
 
+	; TODO: handle opcode in al
+	
 	mov dil, al
 	jmp exit
 	
