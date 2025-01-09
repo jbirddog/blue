@@ -62,7 +62,6 @@ mmap_mem:
 	mov	[mem], rax
 	ret
 
-; TODO: change mov x, [mem]/rsi; add x, OFFSET to lea
 init_vm_data:
 	mov	rsi, [mem]
 	mov	rdi, rsi
@@ -109,39 +108,45 @@ init_vm_data:
 
 read_boot_code:
 	xor	edi, edi
-	lea	rsi, [mem + INPUT_BUFFER_OFFSET]
+	mov	rsi, [mem + INPUT_BUFFER_OFFSET]
 	mov	edx, INPUT_BUFFER_SIZE
 	xor	eax, eax
 	call	syscall_or_die
 
 	; store input buffer size
-	lea	rdi, [mem + CODE_BUFFER_OFFSET + 24]
-	mov	rdi, rax
+	mov	rdi, [mem]
+	add	rdi, CODE_BUFFER_OFFSET + 24
+	stosq
 
 	ret
 
 bytes_available:
-	lea	rsi, [mem + CODE_BUFFER_OFFSET + 8]
-	mov	rcx, [rsi]
-	sub	rcx, [rsi + 8]
-	add	rcx, [rsi + 16]
+	mov	rsi, [mem]
+	add	rsi, CODE_BUFFER_OFFSET
+
+	mov	rcx, [rsi + 8]
+	sub	rcx, [rsi + 16]
+	add	rcx, [rsi + 24]
 
 	ret
 	
 handle_input:
 	call	bytes_available
-	jna	.done
+	cmp	ecx, 0
+	jle	.done
 
-	xor	eax, eax
-	
-	lea	rax, [mem + CODE_BUFFER_OFFSET + 16]
-	mov	rax, [rax]
+	lea	rsi, [mem + CODE_BUFFER_OFFSET + 16]
+	mov	al, byte [esi]
 
 	; TODO: handle opcode in al
+	;mov dil, al
+	;jmp exit
 	
-	mov dil, al
-	jmp exit
+	mov	rdi, [mem]
+	add	rdi, CODE_BUFFER_OFFSET + 16
+	inc	qword [rdi]
 	
+	jmp	handle_input
 .done:
 	ret
 

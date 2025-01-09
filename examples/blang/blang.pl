@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 my %kw_to_op = qw(
-  halt 05
+  halt 00
 );
 
 my $prog = join " ", grep { /^[^#]/ } <STDIN>;
