@@ -117,6 +117,20 @@ init_vm_data:
 
 	ret
 
+init_opcode_map:
+	mov	rdi, [mem]
+	add	rdi, OPCODE_MAP_OFFSET
+
+	; TODO: repnz stosq this from the binary
+
+	; TODO: store flags
+	xor	eax, eax
+	stosq
+	mov	rax, op_00
+	stosq
+	
+	ret
+
 read_boot_code:
 	xor	edi, edi
 	mov	rsi, [mem]
@@ -140,21 +154,6 @@ bytes_available:
 	sub	rcx, [rsi + VM_DATA_OFFSET_INPUT_BUFFER_HERE_LOCATION]
 	add	rcx, [rsi + VM_DATA_OFFSET_INPUT_BUFFER_SIZE]
 
-	ret
-
-; TODO: move back up with init_vm_mem
-init_opcode_map:
-	mov	rdi, [mem]
-	add	rdi, OPCODE_MAP_OFFSET
-
-	; TODO: repnz stosq this from the binary
-
-	; TODO: store flags
-	xor	eax, eax
-	stosq
-	mov	rax, op_00
-	stosq
-	
 	ret
 
 handle_opcode:
