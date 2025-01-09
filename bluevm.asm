@@ -108,7 +108,8 @@ init_vm_data:
 
 read_boot_code:
 	xor	edi, edi
-	mov	rsi, [mem + INPUT_BUFFER_OFFSET]
+	mov	rsi, [mem]
+	add	rsi, INPUT_BUFFER_OFFSET
 	mov	edx, INPUT_BUFFER_SIZE
 	xor	eax, eax
 	call	syscall_or_die
@@ -135,12 +136,14 @@ handle_input:
 	cmp	ecx, 0
 	jle	.done
 
-	lea	rsi, [mem + CODE_BUFFER_OFFSET + 16]
-	mov	al, byte [esi]
+	mov	rsi, [mem]
+	add	rsi, CODE_BUFFER_OFFSET + 16
+	mov	rsi, [rsi]
+	mov	rax, [rsi]
 
 	; TODO: handle opcode in al
-	;mov dil, al
-	;jmp exit
+	mov dil, al
+	jmp exit
 	
 	mov	rdi, [mem]
 	add	rdi, CODE_BUFFER_OFFSET + 16
