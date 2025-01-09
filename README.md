@@ -45,6 +45,9 @@ BlueVM Data portion of the beginning of the code buffer:
 1. Location of the code buffer's here
 1. Code buffer size in bytes
 1. Location of opcode handler
+1. Location of invalid opcode handler
+
+These values act as hooks into the BlueVM and can be changed by the host at any step.
 
 BlueVM will then set entries in the BlueVM opcode map and read 2048 bytes from stdin into the input buffer. This
 initial read will serve as the bootstrap for the host and is interpreted. Once the input buffer is exhausted the
@@ -59,8 +62,8 @@ buffer it:
    1. If not exit
    1. If so read a byte and increment the input buffer's here by one byte
 1. Locate the opcode entry in the opcode map
-   1. If it is 0 exit with bad opcode
-1. Call the opcode handler
+   1. If code address is 0 push the opcode on the data stack and call invalid opcode handler
+1. Push the code address and flags on the data stack and call the opcode handler
 1. Goto 1
 
 Because of this "late binding" approach, the host can change the values that the BlueVM uses to execute, including
@@ -70,11 +73,11 @@ opcodes, granting it full control.
 
 Each entry in the opcode map is 16 bytes.
 
+1. Code address (8 bytes)
 1. Header (8 bytes)
    1. Flags (1 byte)
    1. Opcode size (1 byte)
    1. Reserved (6 bytes)
-1. Code address (8 bytes)
 
 ## Opcode Handler
 

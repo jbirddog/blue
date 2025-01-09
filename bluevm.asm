@@ -29,6 +29,7 @@ VM_DATA_OFFSET_CODE_BUFFER_LOCATION = 8 shl 3
 VM_DATA_OFFSET_CODE_BUFFER_HERE_LOCATION = 9 shl 3
 VM_DATA_OFFSET_CODE_BUFFER_SIZE = 10 shl 3
 VM_DATA_OFFSET_OPCODE_HANDLER_LOCATION = 11 shl 3
+VM_DATA_OFFSET_OPCODE_INVALID_HANDLER_LOCATION = 12 shl 3
 
 segment readable writable
 
@@ -115,6 +116,10 @@ init_vm_data:
 	xor	eax, eax
 	stosq
 
+	; TODO: Location of invalid opcode handler
+	xor	eax, eax
+	stosq
+
 	ret
 
 init_opcode_map:
@@ -123,10 +128,10 @@ init_opcode_map:
 
 	; TODO: repnz stosq this from the binary
 
+	mov	rax, op_00
+	stosq
 	; TODO: store flags
 	xor	eax, eax
-	stosq
-	mov	rax, op_00
 	stosq
 	
 	ret
@@ -157,17 +162,25 @@ bytes_available:
 	ret
 
 handle_opcode:
-	xor	rax, rax
 	mov	rsi, [mem]
 	add	rsi, OPCODE_MAP_OFFSET
+	shl	eax, 4
+	add	rsi, rax
 
-	; TODO: calc offset to opcode entry using al
-	; TODO: check flags
-	lodsq
-	lodsq
-
-	call	rax
+	mov	rdi, [rsi]
+	test	rdi, rdi
+	jz	.invalid_opcode
 	
+	lodsq
+
+	; TODO: push code address and flags onto data stack, call opcode handler
+	call	rax
+
+	ret
+
+.invalid_opcode:
+	shr	eax, 4
+	; TODO: push opcode on data stack and call invalid opcode handler
 	ret
 	
 handle_input:
@@ -179,6 +192,7 @@ handle_input:
 	add	rsi, CODE_BUFFER_OFFSET + VM_DATA_OFFSET_INPUT_BUFFER_HERE_LOCATION
 	mov	rsi, [rsi]
 	mov	rax, [rsi]
+	and	rax, 0xFF
 
 	call	handle_opcode
 	
