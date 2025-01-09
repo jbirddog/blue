@@ -158,8 +158,17 @@ bytes_available:
 	ret
 
 interpret_opcode_handler:
-	mov edi, 23
-	jmp exit
+	mov	rdi, [mem]
+	add	rdi, CODE_BUFFER_OFFSET + VM_DATA_OFFSET_DATA_STACK_HERE_LOCATION
+
+	mov	rdi, [rdi]
+	sub	rdi, 16
+	mov	rdi, [rdi]
+	call	rdi
+	
+	
+	; TODO: check flags
+
 	ret
 
 compile_opcode_handler:
@@ -178,15 +187,16 @@ push_opcode_entry:
 	
 	mov	rdi, [mem]
 	add	rdi, CODE_BUFFER_OFFSET + VM_DATA_OFFSET_DATA_STACK_HERE_LOCATION
-	push	rdi
 	mov	rdi, [rdi]
 
 	movsq
 	movsq
 
-	pop	rsi
-	mov	[rsi], rdi
-	
+	mov	rsi, rdi
+	mov	rdi, [mem]
+	add	rdi, CODE_BUFFER_OFFSET + VM_DATA_OFFSET_DATA_STACK_HERE_LOCATION
+	mov	[rdi], rsi
+
 	ret
 
 handle_opcode:
@@ -204,7 +214,6 @@ handle_opcode:
 	mov	rdi, [mem]
 	add	rdi, CODE_BUFFER_OFFSET + VM_DATA_OFFSET_OPCODE_HANDLER_LOCATION
 	mov	rdi, [rdi]
-
 	call	rdi
 
 	ret
@@ -212,6 +221,7 @@ handle_opcode:
 .invalid_opcode:
 	shr	eax, 4
 	; TODO: push opcode on data stack and call invalid opcode handler
+	call	invalid_opcode_handler
 	ret
 	
 handle_input:
