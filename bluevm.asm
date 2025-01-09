@@ -172,6 +172,23 @@ invalid_opcode_handler:
 	jmp exit
 	ret
 
+; expects opcode entry in rsi
+push_opcode_entry:
+	; TODO: make sure two slots are available on the data stack
+	
+	mov	rdi, [mem]
+	add	rdi, CODE_BUFFER_OFFSET + VM_DATA_OFFSET_DATA_STACK_HERE_LOCATION
+	push	rdi
+	mov	rdi, [rdi]
+
+	movsq
+	movsq
+
+	pop	rsi
+	mov	[rsi], rdi
+	
+	ret
+
 handle_opcode:
 	mov	rsi, [mem]
 	add	rsi, OPCODE_MAP_OFFSET
@@ -182,17 +199,13 @@ handle_opcode:
 	test	rdi, rdi
 	jz	.invalid_opcode
 
-	; TODO: make sure we have two slots available on the data stack
-	; push the opcode's code address and flags on the data stack
+	call	push_opcode_entry
+	
 	mov	rdi, [mem]
-	add	rdi, CODE_BUFFER_OFFSET + VM_DATA_OFFSET_DATA_STACK_HERE_LOCATION
+	add	rdi, CODE_BUFFER_OFFSET + VM_DATA_OFFSET_OPCODE_HANDLER_LOCATION
 	mov	rdi, [rdi]
 
-	movsq
-	movsq
-
-	; TODO: push code address and flags onto data stack, call opcode handler
-	;call	rax
+	call	rdi
 
 	ret
 
