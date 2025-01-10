@@ -88,7 +88,7 @@ the code buffer and advances the code buffer's here.
 
 ## Opcodes
 
-All opcodes are represented in hexdecimal.
+All opcodes are represented in hexdecimal and subject to change.
 
 | Opcode | Name | Stack Effect | Description |
 |----|----|----|
@@ -96,6 +96,8 @@ All opcodes are represented in hexdecimal.
 | 01 | depth | ( -- n ) | Push depth of the data stack |
 | 01 | b> | ( -- n ) | Push next byte from the input buffer |
 | 02 | = | ( a b -- t/f ) | Check top two items for equality and push result |
+| 03 | assert | ( t/f -- ) | Exits with 255 status code if top of stack is false (tmp) |
+| 04 | drop | ( x -- ) | Drops top of the data stack |
 
 ## Tools/Examples
 

@@ -8,9 +8,11 @@ my @ops = qw(
   depth
   b>
   =
+  assert
+  drop
 );
 
-my %kw_to_op = map { $ops[$_] => sprintf("%X", $_) } 0..$#ops;
+my %kw_to_op = map { $ops[$_] => sprintf("%02X", $_) } 0..$#ops;
 
 my $prog = join " ", grep { /^[^#]/ } <STDIN>;
 my @tokens = split /\s+/, $prog;

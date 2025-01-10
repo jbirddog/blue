@@ -271,6 +271,8 @@ opcode_map:
 	dq op_depth, 0
 	dq op_b_push, 0
 	dq op_eq, 0
+	dq op_assert, 0
+	dq op_drop, 0
 opcode_map_qwords = ($ - opcode_map) shr 3
 
 op_halt:
@@ -301,4 +303,18 @@ op_eq:
 
 	call	data_stack_push
 	
+	ret
+
+; TODO: replace with bytecode in extended opcode
+op_assert:
+	call	data_stack_pop
+	mov	edi, eax
+	not	edi
+	test	edi, edi
+	jnz	exit
+	
+	ret
+
+op_drop:
+	call	data_stack_pop
 	ret

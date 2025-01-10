@@ -1,5 +1,12 @@
 # check initial stack depth is 0
-depth b> 00 =
+depth b> 00 = assert
 
-# Tell BlueVM to halt execution
-#halt
+# stack depth is 1 after pushing a value
+b> 10 depth b> 01 = assert
+
+# stack depth is 0 after dropping the value
+drop depth b> 00 = assert
+
+# check stack is prestine and halt
+depth b> 00 = assert
+halt
