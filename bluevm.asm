@@ -233,11 +233,15 @@ input_buffer_read_bytes:
 	mov	[rdi], rsi
 .done:
 	ret
-	
-handle_input:
+
+input_buffer_read_byte:
 	xor	eax, eax
 	inc	eax
 	call	input_buffer_read_bytes
+	ret
+	
+handle_input:
+	call	input_buffer_read_byte
 	test	ecx, ecx
 	jz	.done
 	
@@ -280,4 +284,6 @@ op_depth:
 	ret
 
 op_b_push:
+	call	input_buffer_read_byte
+	call	data_stack_push
 	ret
