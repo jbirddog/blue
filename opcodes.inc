@@ -56,9 +56,17 @@ op_swap:
 	ret
 
 op_mode_compile:
+	mov	edi, VM_DATA_OFFSET_OPCODE_HANDLER_LOCATION
+	mov	rax, compile_opcode_handler
+	call	vm_data_field_set
+
 	ret
 
 op_mode_interpret:
+	mov	edi, VM_DATA_OFFSET_OPCODE_HANDLER_LOCATION
+	mov	rax, interpret_opcode_handler
+	call	vm_data_field_set
+
 	ret
 
 
@@ -76,7 +84,7 @@ opcode_map:
 opcode_map_qwords = ($ - opcode_map) shr 3
 
 
-init_opcode_map:
+opcode_map_init:
 	mov	rdi, [mem]
 	add	rdi, OPCODE_MAP_OFFSET
 	mov	rsi, opcode_map

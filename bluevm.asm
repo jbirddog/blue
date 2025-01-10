@@ -11,6 +11,14 @@ include "data_stack.inc"
 include "input_buffer.inc"
 include "opcodes.inc"
 
+; expects vm data field offset in rdi and value in rax
+vm_data_field_set:
+	add	edi, CODE_BUFFER_OFFSET
+	add	rdi, [mem]
+
+	stosq
+	
+	ret
 
 ; expects status in edi
 exit:
@@ -46,7 +54,7 @@ mmap_mem:
 	mov	[mem], rax
 	ret
 
-init_vm_data:
+vm_data_init:
 	mov	rsi, [mem]
 	mov	rdi, rsi
 	add	rdi, CODE_BUFFER_OFFSET
@@ -183,8 +191,8 @@ handle_input:
 
 entry $
 	call	mmap_mem
-	call	init_vm_data
-	call	init_opcode_map
+	call	vm_data_init
+	call	opcode_map_init
 	call	read_boot_code
 	call	handle_input
 
