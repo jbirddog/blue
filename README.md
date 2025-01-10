@@ -88,19 +88,12 @@ the code buffer and advances the code buffer's here.
 
 ## Opcodes
 
-All opcodes are represented in hexdecimal. Stack effect abbreviations:
-
-| Abbreviation | Description |
-|----|----|
-| b | Byte |
-| w | Word |
-| d | Double word |
-| q | Quad word |
+All opcodes are represented in hexdecimal.
 
 | Opcode | Stack Effect | Description |
 |----|----|----|
 | 00 | ( -- ) | Halt execution of the BlueVM |
-| 01 | ( -- w ) | Push depth of the data stack on the data stack |
+| 01 | ( -- n ) | Push depth of the data stack |
 
 ## Tools/Examples
 
@@ -116,4 +109,5 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. Print error messages to disambiguate exit status
 1. Expand BlueVM data at start of code buffer to 256 bytes
 1. If the host has not set an opcode handler, can bypass push/popping the opcode entry
+1. If the host has not set an invalid opcode handler, can bypass push/popping the opcode
 1. See about improving data_stack_push/pop
