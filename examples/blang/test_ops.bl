@@ -1,0 +1,5 @@
+# push data stack depth
+depth
+
+# Tell BlueVM to halt execution
+#halt

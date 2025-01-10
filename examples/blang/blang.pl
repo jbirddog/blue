@@ -5,6 +5,7 @@ use warnings;
 
 my %kw_to_op = qw(
   halt 00
+  depth 01
 );
 
 my $prog = join " ", grep { /^[^#]/ } <STDIN>;

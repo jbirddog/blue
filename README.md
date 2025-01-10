@@ -100,6 +100,7 @@ All opcodes are represented in hexdecimal. Stack effect abbreviations:
 | Opcode | Stack Effect | Description |
 |----|----|----|
 | 00 | ( -- ) | Halt execution of the BlueVM |
+| 01 | ( -- w ) | Push depth of the data stack on the data stack |
 
 ## Tools/Examples
 
@@ -114,3 +115,5 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. Consider taking a bvm file that contains the full memory mapping. State can be dumped/restored this way
 1. Print error messages to disambiguate exit status
 1. Expand BlueVM data at start of code buffer to 256 bytes
+1. If the host has not set an opcode handler, can bypass push/popping the opcode entry
+1. See about improving data_stack_push/pop

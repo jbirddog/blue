@@ -35,6 +35,8 @@ mem dq 0
 
 segment readable executable
 
+include "data_stack.inc"
+
 exit_ok:
 	xor	edi, edi
 
@@ -121,17 +123,13 @@ init_vm_data:
 init_opcode_map:
 	mov	rdi, [mem]
 	add	rdi, OPCODE_MAP_OFFSET
-	mov	rsi, .opcode_map
-	mov	ecx, .qwords
+	mov	rsi, opcode_map
+	mov	ecx, opcode_map_qwords
 
 	rep	movsq
 	
 	ret
 
-.opcode_map:
-	dq op_00, 0
-.qwords = ($ - .opcode_map) shr 3
-	
 read_boot_code:
 	xor	edi, edi
 	mov	rsi, [mem]
@@ -162,20 +160,24 @@ interpret_opcode_handler:
 	add	rsi, CODE_BUFFER_OFFSET + VM_DATA_OFFSET_DATA_STACK_HERE_LOCATION
 	push	rsi
 
-	; TODO: check flags
+	mov	rsi, [rsi]
+	std
+	lodsq
 
-	; TODO: clean this up
-	mov	rdi, [rsi]
-	mov	rsi, [rsi]
-	sub	rsi, 16
-	mov	[rdi], rsi
+	; TODO: check flags
+	lodsq
+
+	push	rsi
 	
+	lodsq
+	cld
+
 	pop	rsi
-	mov	rsi, [rsi]
-	sub	rsi, 16
-	mov	rsi, [rsi]
-	call	rsi
-	
+	pop	rdi
+	mov	[rdi], rsi
+
+	call	rax
+
 	ret
 
 compile_opcode_handler:
@@ -186,24 +188,6 @@ compile_opcode_handler:
 invalid_opcode_handler:
 	mov edi, 53
 	jmp exit
-	ret
-
-; expects opcode entry in rsi
-data_stack_push_opcode_entry:
-	; TODO: make sure two slots are available on the data stack
-	
-	mov	rdi, [mem]
-	add	rdi, CODE_BUFFER_OFFSET + VM_DATA_OFFSET_DATA_STACK_HERE_LOCATION
-	push	rdi
-	mov	rdi, [rdi]
-
-	movsq
-	movsq
-
-	mov	rsi, rdi
-	pop	rdi
-	mov	[rdi], rsi
-
 	ret
 
 handle_opcode:
@@ -259,15 +243,24 @@ entry $
 	call	init_opcode_map
 	call	read_boot_code
 	call	handle_input
-	
-	mov	edi, 11
-	jmp	exit
+
 	jmp	exit_ok
 
 ;
 ; opcodes
 ;
 
-op_00:
+opcode_map:
+	dq op_halt, 0
+	dq op_depth, 0
+opcode_map_qwords = ($ - opcode_map) shr 3
+
+op_halt:
 	jmp	exit_ok
 
+op_depth:
+	call	data_stack_depth
+	mov	eax, ecx
+	call	data_stack_push
+	
+	ret
