@@ -10,37 +10,11 @@ include "defs.inc"
 include "data_stack.inc"
 include "input_buffer.inc"
 include "opcodes.inc"
+include "sys.inc"
 
-; expects status in edi
-exit:
-	mov	eax, 60
-	syscall
-
-syscall_or_die:
-	syscall
-	
-	test	rax, rax
-	cmovs	edi, eax
-	js	exit
-
-	ret
-
-mmap_mem:
-	MAP_ANONYMOUS = 32
-	MAP_PRIVATE = 2
-
-	PROT_READ = 1
-	PROT_WRITE = 2
-	PROT_EXEC = 4
-
-	xor	edi, edi
+mem_alloc:
 	mov	esi, MEM_SIZE
-	mov	edx, PROT_READ or PROT_WRITE or PROT_EXEC
-	mov	r8d, -1
-	xor	r9d, r9d
-	mov	r10d, MAP_ANONYMOUS or MAP_PRIVATE
-	mov	eax, 9
-	call	syscall_or_die
+	call	mmap_wrx
 
 	mov	[mem], rax
 	ret
@@ -135,7 +109,7 @@ process_input:
 	ret
 
 entry $
-	call	mmap_mem
+	call	mem_alloc
 	call	vm_data_init
 	call	opcode_map_init
 	call	read_boot_code
