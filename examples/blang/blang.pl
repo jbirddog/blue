@@ -14,6 +14,8 @@ my @ops = qw(
   drop
   not
   swap
+  [
+  ]
 );
 
 my %kw_to_op = map { $ops[$_] => sprintf("%02X", $_) } 0..$#ops;

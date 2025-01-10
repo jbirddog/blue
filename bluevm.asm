@@ -1,53 +1,15 @@
 format elf64 executable 3
 
-INPUT_BUFFER_OFFSET = 0
-INPUT_BUFFER_SIZE = 2048
-
-DATA_STACK_OFFSET = INPUT_BUFFER_OFFSET + INPUT_BUFFER_SIZE
-DATA_STACK_SIZE = 2048
-
-OPCODE_MAP_OFFSET = DATA_STACK_OFFSET + DATA_STACK_SIZE
-OPCODE_MAP_SIZE = 4096
-
-CODE_BUFFER_OFFSET = OPCODE_MAP_OFFSET + OPCODE_MAP_SIZE
-CODE_BUFFER_SIZE = 4096
-
-MEM_SIZE = CODE_BUFFER_OFFSET + CODE_BUFFER_SIZE
-assert MEM_SIZE = (4096 * 3)
-
-VM_DATA_OFFSET_STATE = 0 shl 3
-VM_DATA_OFFSET_INPUT_BUFFER_LOCATION = 1 shl 3
-VM_DATA_OFFSET_INPUT_BUFFER_HERE_LOCATION = 2 shl 3
-VM_DATA_OFFSET_INPUT_BUFFER_SIZE = 3 shl 3
-VM_DATA_OFFSET_DATA_STACK_LOCATION = 4 shl 3
-VM_DATA_OFFSET_DATA_STACK_HERE_LOCATION = 5 shl 3
-VM_DATA_OFFSET_DATA_STACK_SIZE = 6 shl 3
-VM_DATA_OFFSET_OPCODE_MAP_LOCATION = 7 shl 3
-VM_DATA_OFFSET_CODE_BUFFER_LOCATION = 8 shl 3
-VM_DATA_OFFSET_CODE_BUFFER_HERE_LOCATION = 9 shl 3
-VM_DATA_OFFSET_CODE_BUFFER_SIZE = 10 shl 3
-VM_DATA_OFFSET_OPCODE_HANDLER_LOCATION = 11 shl 3
-VM_DATA_OFFSET_OPCODE_INVALID_HANDLER_LOCATION = 12 shl 3
-
 segment readable writable
 
 mem dq 0
 
 segment readable executable
 
+include "defs.inc"
 include "data_stack.inc"
+include "input_buffer.inc"
 include "opcodes.inc"
-
-opcode_map:
-	dq op_halt, 0
-	dq op_depth, 0
-	dq op_litb, 0
-	dq op_eq, 0
-	dq op_assert, 0
-	dq op_drop, 0
-	dq op_not, 0
-	dq op_swap, 0
-opcode_map_qwords = ($ - opcode_map) shr 3
 
 
 ; expects status in edi
@@ -130,16 +92,6 @@ init_vm_data:
 
 	ret
 
-init_opcode_map:
-	mov	rdi, [mem]
-	add	rdi, OPCODE_MAP_OFFSET
-	mov	rsi, opcode_map
-	mov	ecx, opcode_map_qwords
-
-	rep	movsq
-	
-	ret
-
 read_boot_code:
 	xor	edi, edi
 	mov	rsi, [mem]
@@ -152,16 +104,6 @@ read_boot_code:
 	mov	rdi, [mem]
 	add	rdi, CODE_BUFFER_OFFSET + VM_DATA_OFFSET_INPUT_BUFFER_SIZE
 	stosq
-
-	ret
-
-bytes_available:
-	mov	rsi, [mem]
-	add	rsi, CODE_BUFFER_OFFSET
-
-	mov	rcx, [rsi + VM_DATA_OFFSET_INPUT_BUFFER_LOCATION]
-	sub	rcx, [rsi + VM_DATA_OFFSET_INPUT_BUFFER_HERE_LOCATION]
-	add	rcx, [rsi + VM_DATA_OFFSET_INPUT_BUFFER_SIZE]
 
 	ret
 
@@ -193,11 +135,13 @@ interpret_opcode_handler:
 compile_opcode_handler:
 	mov edi, 67
 	jmp exit
+	
 	ret
 
 invalid_opcode_handler:
 	mov edi, 53
 	jmp exit
+	
 	ret
 
 handle_opcode:
@@ -223,33 +167,7 @@ handle_opcode:
 	shr	eax, 4
 	; TODO: push opcode on data stack and call invalid opcode handler
 	call	invalid_opcode_handler
-	ret
-
-; expects bytes to read in eax
-input_buffer_read_bytes:
-	call	bytes_available
-	xor	esi, esi
-	cmp	ecx, eax
-	cmovl	ecx, esi
-	jl	.done
-
-	mov	rsi, [mem]
-	add	rsi, CODE_BUFFER_OFFSET + VM_DATA_OFFSET_INPUT_BUFFER_HERE_LOCATION
-	push	rsi
-	mov	rsi, [rsi]
-
-	; TODO: lods* for other byte counts
-	lodsb
-
-	pop	rdi
-	mov	[rdi], rsi
-.done:
-	ret
-
-input_buffer_read_byte:
-	xor	eax, eax
-	inc	eax
-	call	input_buffer_read_bytes
+	
 	ret
 	
 handle_input:
@@ -273,7 +191,3 @@ entry $
 	call	data_stack_depth
 	mov	edi, ecx
 	jmp	exit
-
-;
-; opcodes
-;
