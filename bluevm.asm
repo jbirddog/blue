@@ -121,17 +121,17 @@ init_vm_data:
 init_opcode_map:
 	mov	rdi, [mem]
 	add	rdi, OPCODE_MAP_OFFSET
+	mov	rsi, .opcode_map
+	mov	ecx, .qwords
 
-	; TODO: repnz stosq this from the binary
-
-	mov	rax, op_00
-	stosq
-	; TODO: store flags
-	xor	eax, eax
-	stosq
+	rep	movsq
 	
 	ret
 
+.opcode_map:
+	dq op_00, 0
+.qwords = ($ - .opcode_map) shr 3
+	
 read_boot_code:
 	xor	edi, edi
 	mov	rsi, [mem]
@@ -158,17 +158,24 @@ bytes_available:
 	ret
 
 interpret_opcode_handler:
-	mov	rdi, [mem]
-	add	rdi, CODE_BUFFER_OFFSET + VM_DATA_OFFSET_DATA_STACK_HERE_LOCATION
+	mov	rsi, [mem]
+	add	rsi, CODE_BUFFER_OFFSET + VM_DATA_OFFSET_DATA_STACK_HERE_LOCATION
+	push	rsi
 
-	mov	rdi, [rdi]
-	sub	rdi, 16
-	mov	rdi, [rdi]
-	call	rdi
-	
-	
 	; TODO: check flags
 
+	; TODO: clean this up
+	mov	rdi, [rsi]
+	mov	rsi, [rsi]
+	sub	rsi, 16
+	mov	[rdi], rsi
+	
+	pop	rsi
+	mov	rsi, [rsi]
+	sub	rsi, 16
+	mov	rsi, [rsi]
+	call	rsi
+	
 	ret
 
 compile_opcode_handler:
@@ -182,19 +189,19 @@ invalid_opcode_handler:
 	ret
 
 ; expects opcode entry in rsi
-push_opcode_entry:
+data_stack_push_opcode_entry:
 	; TODO: make sure two slots are available on the data stack
 	
 	mov	rdi, [mem]
 	add	rdi, CODE_BUFFER_OFFSET + VM_DATA_OFFSET_DATA_STACK_HERE_LOCATION
+	push	rdi
 	mov	rdi, [rdi]
 
 	movsq
 	movsq
 
 	mov	rsi, rdi
-	mov	rdi, [mem]
-	add	rdi, CODE_BUFFER_OFFSET + VM_DATA_OFFSET_DATA_STACK_HERE_LOCATION
+	pop	rdi
 	mov	[rdi], rsi
 
 	ret
@@ -209,7 +216,7 @@ handle_opcode:
 	test	rdi, rdi
 	jz	.invalid_opcode
 
-	call	push_opcode_entry
+	call	data_stack_push_opcode_entry
 	
 	mov	rdi, [mem]
 	add	rdi, CODE_BUFFER_OFFSET + VM_DATA_OFFSET_OPCODE_HANDLER_LOCATION
@@ -232,14 +239,15 @@ handle_input:
 	mov	rsi, [mem]
 	add	rsi, CODE_BUFFER_OFFSET + VM_DATA_OFFSET_INPUT_BUFFER_HERE_LOCATION
 	mov	rsi, [rsi]
-	mov	rax, [rsi]
-	and	rax, 0xFF
+	
+	xor	eax, eax
+	mov	al, byte [rsi]
 
 	call	handle_opcode
 	
 	mov	rdi, [mem]
 	add	rdi, CODE_BUFFER_OFFSET + VM_DATA_OFFSET_INPUT_BUFFER_HERE_LOCATION
-	inc	qword [rdi]
+	inc	byte [rdi]
 	
 	jmp	handle_input
 .done:
@@ -262,3 +270,4 @@ entry $
 
 op_00:
 	jmp	exit_ok
+
