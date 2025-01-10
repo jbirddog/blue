@@ -1,19 +1,23 @@
+
 # check initial stack depth is 0
-depth b> 00 = assert
+depth litb 00 = assert
 
 # stack depth is 1 after pushing a value
-b> 10 depth b> 01 = assert
+litb 10 depth litb 01 = assert
 
 # stack depth is 0 after dropping the value
 drop
-depth b> 00 = assert
+depth litb 00 = assert
 
 # test not
-depth b> 02 = not assert
+depth litb 02 = not assert
+
+# test swap
+litb 02 litb 01 swap depth = assert drop
 
 # check stack is prestine and halt
-depth b> 00 = assert
+depth litb 00 = assert
 halt
 
 # this shouldn't run
-b> FF depth assert = 
+litb FF depth assert = 

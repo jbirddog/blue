@@ -94,11 +94,12 @@ All opcodes are represented in hexdecimal and subject to change.
 |----|----|----|
 | 00 | halt | ( -- ) | Halt execution of the BlueVM |
 | 01 | depth | ( -- n ) | Push depth of the data stack |
-| 01 | b> | ( -- n ) | Push next byte from the input buffer |
+| 01 | litb | ( -- n ) | Push next byte from the input buffer |
 | 02 | = | ( a b -- t/f ) | Check top two items for equality and push result |
 | 03 | assert | ( t/f -- ) | Exits with 255 status code if top of stack is false (tmp) |
 | 04 | drop | ( x -- ) | Drops top of the data stack |
 | 05 | not | ( x -- 'x ) | Bitwise not top of the data stack |
+| 06 | swap | ( a b -- b a ) | Swap top two values on the data stack |
 
 ## Tools/Examples
 

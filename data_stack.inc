@@ -62,6 +62,23 @@ data_stack_push:
 
 	ret
 
+; expects value to push in rax then rcx
+data_stack_push2:
+	mov	rdi, [mem]
+	add	rdi, CODE_BUFFER_OFFSET + VM_DATA_OFFSET_DATA_STACK_HERE_LOCATION
+	push	rdi
+	mov	rdi, [rdi]
+
+	stosq
+	mov	rax, rcx
+	stosq
+
+	mov	rsi, rdi
+	pop	rdi
+	mov	[rdi], rsi
+
+	ret
+
 ; expects opcode entry in rsi
 data_stack_push_opcode_entry:
 	; TODO: make sure two slots are available on the data stack

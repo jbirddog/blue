@@ -269,11 +269,12 @@ entry $
 opcode_map:
 	dq op_halt, 0
 	dq op_depth, 0
-	dq op_b_push, 0
+	dq op_litb, 0
 	dq op_eq, 0
 	dq op_assert, 0
 	dq op_drop, 0
 	dq op_not, 0
+	dq op_swap, 0
 opcode_map_qwords = ($ - opcode_map) shr 3
 
 op_halt:
@@ -287,7 +288,7 @@ op_depth:
 	
 	ret
 
-op_b_push:
+op_litb:
 	call	input_buffer_read_byte
 	call	data_stack_push
 	ret
@@ -324,4 +325,10 @@ op_not:
 	call	data_stack_pop
 	not	rax
 	call	data_stack_push
+	ret
+
+op_swap:
+	call	data_stack_pop2
+	xchg	rcx, rax
+	call	data_stack_push2
 	ret
