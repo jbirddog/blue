@@ -3,13 +3,15 @@
 use strict;
 use warnings;
 
-my %kw_to_op = qw(
-  halt 00
-  depth 01
+my @ops = qw(
+  halt
+  depth
 );
+
+my %kw_to_op = map { $ops[$_] => sprintf("%X", $_) } 0..$#ops;
 
 my $prog = join " ", grep { /^[^#]/ } <STDIN>;
 my @tokens = split /\s+/, $prog;
-my @bytes = map { chr hex($kw_to_op{$_} || $_) } @tokens;
+my @bytes = map { chr(hex($kw_to_op{$_} || $_)) } @tokens;
 
 print @bytes;

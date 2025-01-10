@@ -37,8 +37,6 @@ segment readable executable
 
 include "data_stack.inc"
 
-exit_ok:
-	xor	edi, edi
 
 ; expects status in edi
 exit:
@@ -244,7 +242,9 @@ entry $
 	call	read_boot_code
 	call	handle_input
 
-	jmp	exit_ok
+	call	data_stack_depth
+	mov	edi, ecx
+	jmp	exit
 
 ;
 ; opcodes
@@ -256,7 +256,8 @@ opcode_map:
 opcode_map_qwords = ($ - opcode_map) shr 3
 
 op_halt:
-	jmp	exit_ok
+	xor	edi, edi
+	jmp	exit
 
 op_depth:
 	call	data_stack_depth
