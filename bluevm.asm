@@ -11,15 +11,6 @@ include "data_stack.inc"
 include "input_buffer.inc"
 include "opcodes.inc"
 
-; expects vm data field offset in rdi and value in rax
-vm_data_field_set:
-	add	edi, CODE_BUFFER_OFFSET
-	add	rdi, [mem]
-
-	stosq
-	
-	ret
-
 ; expects status in edi
 exit:
 	mov	eax, 60
@@ -52,6 +43,24 @@ mmap_mem:
 	call	syscall_or_die
 
 	mov	[mem], rax
+	ret
+
+; expects vm data field offset in rsi
+vm_data_field_get:
+	add	esi, CODE_BUFFER_OFFSET
+	add	rsi, [mem]
+
+	lodsq
+	
+	ret
+
+; expects vm data field offset in rdi and value in rax
+vm_data_field_set:
+	add	edi, CODE_BUFFER_OFFSET
+	add	rdi, [mem]
+
+	stosq
+	
 	ret
 
 vm_data_init:
@@ -93,9 +102,9 @@ vm_data_init:
 	stosq
 
 	; Location of opcode handlers
-	mov	rax, interpret_opcode_handler
+	mov	rax, OPCODE_HANDLER_INTERPRET
 	stosq
-	mov	rax, invalid_opcode_handler
+	mov	rax, OPCODE_HANDLER_INVALID
 	stosq
 
 	ret
@@ -108,84 +117,20 @@ read_boot_code:
 	xor	eax, eax
 	call	syscall_or_die
 
-	; store input buffer size
-	mov	rdi, [mem]
-	add	rdi, CODE_BUFFER_OFFSET + VM_DATA_OFFSET_INPUT_BUFFER_SIZE
-	stosq
-
-	ret
-
-interpret_opcode_handler:
-	mov	rsi, [mem]
-	add	rsi, CODE_BUFFER_OFFSET + VM_DATA_OFFSET_DATA_STACK_HERE_LOCATION
-	push	rsi
-
-	mov	rsi, [rsi]
-	std
-	lodsq
-
-	; TODO: check flags
-	lodsq
-
-	push	rsi
-	
-	lodsq
-	cld
-
-	pop	rsi
-	pop	rdi
-	mov	[rdi], rsi
-
-	call	rax
-
-	ret
-
-compile_opcode_handler:
-	mov edi, 67
-	jmp exit
-	
-	ret
-
-invalid_opcode_handler:
-	mov edi, 53
-	jmp exit
-	
-	ret
-
-handle_opcode:
-	mov	rsi, [mem]
-	add	rsi, OPCODE_MAP_OFFSET
-	shl	eax, 4
-	add	rsi, rax
-
-	mov	rdi, [rsi]
-	test	rdi, rdi
-	jz	.invalid_opcode
-
-	call	data_stack_push_opcode_entry
-	
-	mov	rdi, [mem]
-	add	rdi, CODE_BUFFER_OFFSET + VM_DATA_OFFSET_OPCODE_HANDLER_LOCATION
-	mov	rdi, [rdi]
-	call	rdi
-
-	ret
-
-.invalid_opcode:
-	shr	eax, 4
-	; TODO: push opcode on data stack and call invalid opcode handler
-	call	invalid_opcode_handler
+	mov	rdi, VM_DATA_OFFSET_INPUT_BUFFER_SIZE
+	call	vm_data_field_set
 	
 	ret
 	
-handle_input:
+process_input:
 	call	input_buffer_read_byte
 	test	ecx, ecx
 	jz	.done
 	
-	call	handle_opcode
+	call	opcode_handler_call
 	
-	jmp	handle_input
+	jmp	process_input
+	
 .done:
 	ret
 
@@ -194,7 +139,7 @@ entry $
 	call	vm_data_init
 	call	opcode_map_init
 	call	read_boot_code
-	call	handle_input
+	call	process_input
 
 	call	data_stack_depth
 	mov	edi, ecx

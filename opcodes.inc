@@ -57,14 +57,14 @@ op_swap:
 
 op_mode_compile:
 	mov	edi, VM_DATA_OFFSET_OPCODE_HANDLER_LOCATION
-	mov	rax, compile_opcode_handler
+	mov	rax, OPCODE_HANDLER_COMPILE
 	call	vm_data_field_set
 
 	ret
 
 op_mode_interpret:
 	mov	edi, VM_DATA_OFFSET_OPCODE_HANDLER_LOCATION
-	mov	rax, interpret_opcode_handler
+	mov	rax, OPCODE_HANDLER_INTERPRET
 	call	vm_data_field_set
 
 	ret
@@ -94,3 +94,64 @@ opcode_map_init:
 	
 	ret
 
+; expects opcode in rax
+opcode_map_entry:
+	mov	rsi, [mem]
+	add	rsi, OPCODE_MAP_OFFSET
+	shl	eax, 4
+	add	rsi, rax
+
+	mov	rdi, [rsi]
+	mov	rcx, [rsi + 8]
+
+	ret
+
+; expects opcode in rax, address in rdi and flags in rcx
+opcode_handler_compile:
+	; TODO: check flags
+	mov edi, 68
+	jmp exit
+	
+	ret
+
+; expects opcode in rax, address in rdi and flags in rcx
+opcode_handler_interpret:
+	; TODO: check flags
+	call	rdi
+
+	ret
+
+; expects opcode in rax
+opcode_handler_invalid:
+	mov	edi, eax
+	jmp	exit
+
+; expects opcode in rax
+opcode_handler_call:
+	push	rax
+	call	opcode_map_entry
+
+	test	rdi, rdi
+	jz	.invalid
+
+	mov	esi, VM_DATA_OFFSET_OPCODE_HANDLER_LOCATION
+	call	vm_data_field_get
+
+	; TODO: if the host has specified the opcode handler push rdi, rcx, rax and call it
+	mov	rsi, rax
+	pop	rax
+	call	rsi
+
+	jmp	.done
+
+.invalid:
+	mov	esi, VM_DATA_OFFSET_OPCODE_INVALID_HANDLER_LOCATION
+	call	vm_data_field_get
+
+	; TODO: if the host has specified the opcode invalid handler push rax and call it
+	mov	rsi, rax
+	pop	rax
+	call	rsi
+	
+.done:
+	ret

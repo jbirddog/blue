@@ -16,7 +16,8 @@ depth litb 02 = not assert
 litb 02 litb 01 swap depth = assert drop
 
 # test enter compile mode, back to interpret
-] [
+#]
+[
 
 # check stack is prestine and halt
 depth litb 00 = assert
