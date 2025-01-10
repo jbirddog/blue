@@ -273,6 +273,7 @@ opcode_map:
 	dq op_eq, 0
 	dq op_assert, 0
 	dq op_drop, 0
+	dq op_not, 0
 opcode_map_qwords = ($ - opcode_map) shr 3
 
 op_halt:
@@ -317,4 +318,10 @@ op_assert:
 
 op_drop:
 	call	data_stack_pop
+	ret
+
+op_not:
+	call	data_stack_pop
+	not	rax
+	call	data_stack_push
 	ret

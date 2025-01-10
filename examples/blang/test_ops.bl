@@ -5,8 +5,15 @@ depth b> 00 = assert
 b> 10 depth b> 01 = assert
 
 # stack depth is 0 after dropping the value
-drop depth b> 00 = assert
+drop
+depth b> 00 = assert
+
+# test not
+depth b> 02 = not assert
 
 # check stack is prestine and halt
 depth b> 00 = assert
 halt
+
+# this shouldn't run
+b> FF depth assert = 

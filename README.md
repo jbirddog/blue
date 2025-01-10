@@ -98,6 +98,7 @@ All opcodes are represented in hexdecimal and subject to change.
 | 02 | = | ( a b -- t/f ) | Check top two items for equality and push result |
 | 03 | assert | ( t/f -- ) | Exits with 255 status code if top of stack is false (tmp) |
 | 04 | drop | ( x -- ) | Drops top of the data stack |
+| 05 | not | ( x -- 'x ) | Bitwise not top of the data stack |
 
 ## Tools/Examples
 

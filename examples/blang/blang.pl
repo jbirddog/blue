@@ -10,6 +10,7 @@ my @ops = qw(
   =
   assert
   drop
+  not
 );
 
 my %kw_to_op = map { $ops[$_] => sprintf("%02X", $_) } 0..$#ops;
