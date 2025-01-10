@@ -212,24 +212,36 @@ handle_opcode:
 	; TODO: push opcode on data stack and call invalid opcode handler
 	call	invalid_opcode_handler
 	ret
-	
-handle_input:
+
+; expects bytes to read in eax
+input_buffer_read_bytes:
 	call	bytes_available
-	cmp	ecx, 0
-	jle	.done
+	xor	esi, esi
+	cmp	ecx, eax
+	cmovl	ecx, esi
+	jl	.done
 
 	mov	rsi, [mem]
 	add	rsi, CODE_BUFFER_OFFSET + VM_DATA_OFFSET_INPUT_BUFFER_HERE_LOCATION
+	push	rsi
 	mov	rsi, [rsi]
-	
-	xor	eax, eax
-	mov	al, byte [rsi]
 
-	call	handle_opcode
+	; TODO: lods* for other byte counts
+	lodsb
+
+	pop	rdi
+	mov	[rdi], rsi
+.done:
+	ret
 	
-	mov	rdi, [mem]
-	add	rdi, CODE_BUFFER_OFFSET + VM_DATA_OFFSET_INPUT_BUFFER_HERE_LOCATION
-	inc	byte [rdi]
+handle_input:
+	xor	eax, eax
+	inc	eax
+	call	input_buffer_read_bytes
+	test	ecx, ecx
+	jz	.done
+	
+	call	handle_opcode
 	
 	jmp	handle_input
 .done:
