@@ -270,6 +270,7 @@ opcode_map:
 	dq op_halt, 0
 	dq op_depth, 0
 	dq op_b_push, 0
+	dq op_eq, 0
 opcode_map_qwords = ($ - opcode_map) shr 3
 
 op_halt:
@@ -286,4 +287,18 @@ op_depth:
 op_b_push:
 	call	input_buffer_read_byte
 	call	data_stack_push
+	ret
+
+op_eq:
+	call	data_stack_pop2
+
+	xor	edi, edi
+	xor	esi, esi
+	not	rsi
+	cmp	rcx, rax
+	cmove	rax, rsi
+	cmovne	rax, rdi
+
+	call	data_stack_push
+	
 	ret

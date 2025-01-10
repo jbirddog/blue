@@ -90,10 +90,12 @@ the code buffer and advances the code buffer's here.
 
 All opcodes are represented in hexdecimal.
 
-| Opcode | Stack Effect | Description |
+| Opcode | Name | Stack Effect | Description |
 |----|----|----|
-| 00 | ( -- ) | Halt execution of the BlueVM |
-| 01 | ( -- n ) | Push depth of the data stack |
+| 00 | halt | ( -- ) | Halt execution of the BlueVM |
+| 01 | depth | ( -- n ) | Push depth of the data stack |
+| 01 | b> | ( -- n ) | Push next byte from the input buffer |
+| 02 | = | ( a b -- t/f ) | Check top two items for equality and push result |
 
 ## Tools/Examples
 

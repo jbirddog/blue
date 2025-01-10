@@ -27,6 +27,26 @@ data_stack_pop:
 
 	ret
 
+data_stack_pop2:
+	mov	rsi, [mem]
+	add	rsi, CODE_BUFFER_OFFSET + VM_DATA_OFFSET_DATA_STACK_HERE_LOCATION
+	push	rsi
+	mov	rsi, [rsi]
+
+	std
+	lodsq
+	lodsq
+	mov	rcx, rax
+	push	rsi
+	lodsq
+	cld
+
+	pop	rsi
+	pop	rdi
+	mov	[rdi], rsi
+
+	ret
+
 ; expects value to push in rax
 data_stack_push:
 	mov	rdi, [mem]

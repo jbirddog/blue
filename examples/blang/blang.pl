@@ -7,6 +7,7 @@ my @ops = qw(
   halt
   depth
   b>
+  =
 );
 
 my %kw_to_op = map { $ops[$_] => sprintf("%X", $_) } 0..$#ops;
