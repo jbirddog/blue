@@ -51,7 +51,7 @@ These values act as hooks into the BlueVM and can be changed by the host at any 
 
 BlueVM will then set entries in the BlueVM opcode map and read 2048 bytes from stdin into the input buffer. This
 initial read will serve as the bootstrap for the host and is interpreted. Once the input buffer is exhausted the
-BlueVM exists.
+BlueVM exists using the stack depth as the status code.
 
 ## Execution
 
@@ -59,7 +59,7 @@ BlueVM follows a simple byte oriented execution strategy. Using the values from 
 buffer it:
 
 1. Checks if a byte is available in the input buffer
-   1. If not exit
+   1. If not exit using stack depth as status code
    1. If so read a byte and increment the input buffer's here by one byte
 1. Locate the opcode entry in the opcode map
    1. If code address is 0 push the opcode on the data stack and call invalid opcode handler

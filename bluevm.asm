@@ -253,6 +253,7 @@ entry $
 opcode_map:
 	dq op_halt, 0
 	dq op_depth, 0
+	dq op_b_push, 0
 opcode_map_qwords = ($ - opcode_map) shr 3
 
 op_halt:
@@ -264,4 +265,7 @@ op_depth:
 	mov	eax, ecx
 	call	data_stack_push
 	
+	ret
+
+op_b_push:
 	ret
