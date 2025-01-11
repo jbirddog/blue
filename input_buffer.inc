@@ -1,7 +1,7 @@
 
 input_buffer_bytes_available:
 	mov	rsi, [mem]
-	add	rsi, CODE_BUFFER_OFFSET
+	add	rsi, VM_DATA_OFFSET
 
 	mov	rcx, [rsi + VM_DATA_OFFSET_INPUT_BUFFER_LOCATION]
 	sub	rcx, [rsi + VM_DATA_OFFSET_INPUT_BUFFER_HERE_LOCATION]
@@ -18,7 +18,7 @@ input_buffer_read_bytes:
 	jl	.done
 
 	mov	rsi, [mem]
-	add	rsi, CODE_BUFFER_OFFSET + VM_DATA_OFFSET_INPUT_BUFFER_HERE_LOCATION
+	add	rsi, VM_DATA_OFFSET + VM_DATA_OFFSET_INPUT_BUFFER_HERE_LOCATION
 	push	rsi
 	mov	rsi, [rsi]
 	
