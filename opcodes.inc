@@ -73,11 +73,10 @@ op_interpret:
 
 	ret
 
-op_code_buffer_fields:
-	mov	rsi, [mem]
-	add	rsi, VM_DATA_OFFSET + VM_DATA_OFFSET_CODE_BUFFER_LOCATION
-	mov	ecx, 3
-	call	data_stack_pushN
+op_start:
+	mov	rsi, VM_DATA_OFFSET_CODE_BUFFER_LOCATION
+	call	vm_data_field_get
+	call	data_stack_push
 	
 	ret
 
@@ -104,6 +103,13 @@ op_byte_at:
 
 	ret
 
+op_here:
+	mov	rsi, VM_DATA_OFFSET_CODE_BUFFER_HERE_LOCATION
+	call	vm_data_field_get
+	call	data_stack_push
+
+	ret
+
 macro op lbl, size, flags {
 	dq lbl
 	db flags, size
@@ -122,10 +128,11 @@ opcode_map:
 	op	op_swap, 1, 0
 	op	op_interpret, 1, OPCODE_ENTRY_FLAG_IMMEDIATE
 	op	op_compile, 1, 0
-	op	op_code_buffer_fields, 1, 0
+	op	op_start, 1, 0
 	op	op_sub, 1, 0
 	op	op_add, 1, 0
 	op	op_byte_at, 1, 0
+	op	op_here, 1, 0
 opcode_map_qwords = ($ - opcode_map) shr 3
 assert ($ - opcode_map) <= OPCODE_MAP_SIZE
 

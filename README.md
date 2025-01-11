@@ -102,10 +102,11 @@ All opcodes are represented in hexdecimal and subject to change.
 | 07 | swap | ( a b -- b a ) | Swap top two values on the data stack |
 | 08 | [ | ( -- ) | Set the opcode handler to interpret |
 | 09 | ] | ( -- ) | Set the opcode handler to compile |
-| 0A | cbf ( -- c h s ) | Pushed the code buffer location, here and size |
+| 0A | start ( -- a ) | Push the code buffer location |
 | 0B | - ( a b -- n ) | Push a - b |
 | 0C | + ( a b -- n ) | Push a + b |
-| 0D | b@ ( a -- b ) | Push byte found at addr |
+| 0D | b@ ( a -- b ) | Push byte value found at addr |
+| 0E | here ( -- a ) | Push location of code buffer's here |
 
 ## Tools/Examples
 

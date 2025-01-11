@@ -7,7 +7,7 @@
 depth litb 00 = assert
 
 # code buffer here is same as its start
-cbf drop = assert
+start here = assert
 
 #
 # check data stack ops
@@ -43,16 +43,16 @@ litb 07 litb 02 + litb 09 = assert
 ] halt [
 
 # check code buffer here is one byte from the start
-cbf drop swap - litb 01 = assert
+here start - litb 01 = assert
 
 # compile multi byte opcodes
 ] litb FF [
 
 # check code buffer here is three bytes from the start
-cbf drop swap - litb 03 = assert
+here start - litb 03 = assert
 
 # compile writes expected bytes
-cbf drop swap drop litb 01 - b@ litb FF = assert
+here litb 01 - b@ litb FF = assert
 
 #
 # fin
