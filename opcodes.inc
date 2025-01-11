@@ -69,18 +69,24 @@ op_mode_interpret:
 
 	ret
 
+macro op lbl, size, flags {
+	dq lbl
+	db flags, size
+	dw 0
+	dd 0
+}
 
 opcode_map:
-	dq op_halt, 0
-	dq op_depth, 0
-	dq op_litb, 0
-	dq op_eq, 0
-	dq op_assert, 0
-	dq op_drop, 0
-	dq op_not, 0
-	dq op_swap, 0
-	dq op_mode_interpret, 0
-	dq op_mode_compile, 0
+	op	op_halt, 1, 0
+	op	op_depth, 1, 0
+	op	op_litb, 2, 0
+	op	op_eq, 1, 0
+	op	op_assert, 1, 0
+	op	op_drop, 1, 0
+	op	op_not, 1, 0
+	op	op_swap, 1, 0
+	op	op_mode_interpret, 1, 9 ; TODO: const and actual value
+	op	op_mode_compile, 1, 0
 opcode_map_qwords = ($ - opcode_map) shr 3
 
 
@@ -105,10 +111,18 @@ opcode_map_entry:
 	mov	rcx, [rsi + 8]
 
 	ret
+	
+opcode_interpret:
+	; TODO: if the opcode is defined by the host, run it
+	call	rdi
 
-; expects opcode in rax, address in rdi and flags in rcx
-opcode_handler_compile:
-	; TODO: check flags
+	ret
+
+opcode_compile:
+	test	cl, OPCODE_ENTRY_FLAG_IMMEDIATE
+	jnz	opcode_interpret
+
+	; TODO: copy bytes into code buffer
 	mov edi, 68
 	jmp exit
 	
@@ -116,10 +130,12 @@ opcode_handler_compile:
 
 ; expects opcode in rax, address in rdi and flags in rcx
 opcode_handler_interpret:
+	jmp	opcode_interpret
+	
+; expects opcode in rax, address in rdi and flags in rcx
+opcode_handler_compile:
 	; TODO: check flags
-	call	rdi
-
-	ret
+	jmp	opcode_compile
 
 ; expects opcode in rax
 opcode_handler_invalid:

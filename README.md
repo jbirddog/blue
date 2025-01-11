@@ -100,6 +100,8 @@ All opcodes are represented in hexdecimal and subject to change.
 | 05 | drop | ( x -- ) | Drops top of the data stack |
 | 06 | not | ( x -- 'x ) | Bitwise not top of the data stack |
 | 07 | swap | ( a b -- b a ) | Swap top two values on the data stack |
+| 08 | [ | ( -- ) | Set the opcode handler to interpret |
+| 09 | ] | ( -- ) | Set the opcode handler to compile |
 
 ## Tools/Examples
 

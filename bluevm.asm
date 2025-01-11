@@ -84,12 +84,10 @@ vm_data_init:
 	ret
 
 read_boot_code:
-	xor	edi, edi
 	mov	rsi, [mem]
 	add	rsi, INPUT_BUFFER_OFFSET
 	mov	edx, INPUT_BUFFER_SIZE
-	xor	eax, eax
-	call	syscall_or_die
+	call	read
 
 	mov	rdi, VM_DATA_OFFSET_INPUT_BUFFER_SIZE
 	call	vm_data_field_set

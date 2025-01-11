@@ -31,3 +31,11 @@ mmap_wrx:
 	call	syscall_or_die
 
 	ret
+
+; expects buffer in rsi, size in edx
+read:
+	xor	edi, edi
+	xor	eax, eax
+	call	syscall_or_die
+	
+	ret
