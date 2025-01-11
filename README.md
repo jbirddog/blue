@@ -34,8 +34,8 @@ When the BlueVM starts it will perform the allocation mentioned above and set th
 BlueVM Data portion of the beginning of the code buffer:
 
 1. BlueVM state
+1. Instruction pointer
 1. Location of the input buffer
-1. Location of the input buffer's here
 1. Input buffer size in bytes
 1. Location of the data stack
 1. Location of the data stack's here
@@ -55,12 +55,12 @@ BlueVM exists using the stack depth as the status code.
 
 ## Execution
 
-BlueVM follows a simple byte oriented execution strategy. Using the values from the BlueVM data portion of the code
-buffer it:
+BlueVM follows a simple byte oriented execution strategy. Using the values from the BlueVM data portion of memory
+it begins the outer interpreter:
 
-1. Checks if a byte is available in the input buffer
+1. Check if the instruction pointer is within bounds of the input buffer
    1. If not exit using stack depth as status code
-   1. If so read a byte and increment the input buffer's here by one byte
+   1. If so read a byte and increment the instruction pointer by one
 1. Locate the opcode entry in the opcode map
    1. If code address is 0 push the opcode on the data stack and call invalid opcode handler
 1. Push the code address and flags on the data stack and call the opcode handler
@@ -122,4 +122,5 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. See about improving data_stack_push/pop
 1. See about improving vm_data_field_get/set
 1. Add under/overflow checks for vm memory regions
-1. Move test_ops.bl out of blang, rename to vmtest.bl or similar
+1. Rename test_ops.bl to vmtest.bl or similar
+1. Move compile/interpret etc logic to outer_interpreter.inc

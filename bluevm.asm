@@ -8,13 +8,13 @@ segment readable executable
 
 include "defs.inc"
 include "data_stack.inc"
-include "input_buffer.inc"
+include "outer_interpreter.inc"
 include "opcodes.inc"
 include "sys.inc"
 
 mem_alloc:
 	mov	esi, MEM_SIZE
-	call	mmap_wrx
+	call	mmap_rwx
 
 	mov	[mem], rax
 	ret
@@ -28,10 +28,12 @@ vm_data_init:
 	xor	eax, eax
 	stosq
 
-	; Location of input buffer, here and size
+	; Location of instruction pointer
 	mov	rax, rsi
 	add	rax, INPUT_BUFFER_OFFSET
 	stosq
+
+	; Location of the input buffer and size
 	stosq
 	xor	eax, eax
 	stosq
@@ -75,26 +77,10 @@ read_boot_code:
 	call	vm_data_field_set
 	
 	ret
-	
-process_input:
-	call	input_buffer_read_byte
-	test	ecx, ecx
-	jz	.done
-	
-	call	opcode_handler_call
-	
-	jmp	process_input
-	
-.done:
-	ret
 
 entry $
 	call	mem_alloc
 	call	vm_data_init
 	call	opcode_map_init
 	call	read_boot_code
-	call	process_input
-
-	call	data_stack_depth
-	mov	edi, ecx
-	jmp	exit
+	call	outer_interpreter

@@ -14,7 +14,7 @@ syscall_or_die:
 	ret
 
 ; expects allocation size in esi
-mmap_wrx:
+mmap_rwx:
 	MAP_ANONYMOUS = 32
 	MAP_PRIVATE = 2
 

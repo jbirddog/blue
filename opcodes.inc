@@ -11,7 +11,7 @@ op_depth:
 	ret
 
 op_litb:
-	call	input_buffer_read_byte
+	call	read_byte
 	call	data_stack_push
 	
 	ret
@@ -162,7 +162,7 @@ opcode_compile:
 	and	ecx, 0xFF
 
 	mov	r8, VM_DATA_OFFSET_CODE_BUFFER_HERE_LOCATION
-	mov	r9, VM_DATA_OFFSET_INPUT_BUFFER_HERE_LOCATION
+	mov	r9, VM_DATA_OFFSET_INSTRUCTION_POINTER
 
 	mov	rsi, r8
 	call	vm_data_field_get
