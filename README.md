@@ -107,6 +107,7 @@ All opcodes are represented in hexdecimal and subject to change.
 | 0C | + ( a b -- n ) | Push a + b |
 | 0D | b@ ( a -- b ) | Push byte value found at addr |
 | 0E | here ( -- a ) | Push location of code buffer's here |
+| 0F | execute ( a -- ? ) | Execute bytecode located at address |
 
 ## Tools/Examples
 
@@ -125,3 +126,4 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. Add under/overflow checks for vm memory regions
 1. Rename test_ops.bl to vmtest.bl or similar
 1. Move compile/interpret etc logic to outer_interpreter.inc
+1. Before vm_data_field_get/set just mov esi/edi

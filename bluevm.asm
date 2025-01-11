@@ -9,7 +9,7 @@ segment readable executable
 include "defs.inc"
 include "data_stack.inc"
 include "opcodes.inc"
-include "outer_interpreter.inc"
+include "interpreter.inc"
 include "sys.inc"
 
 mem_alloc:

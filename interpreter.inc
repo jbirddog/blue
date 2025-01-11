@@ -15,6 +15,7 @@ read_byte:
 	push	rsi
 	mov	rsi, [rsi]
 	
+	xor	eax, eax
 	lodsb
 
 	pop	rdi
@@ -27,7 +28,6 @@ outer_interpreter:
 	cmp	ecx, 0
 	jle	.done
 
-	xor	eax, eax
 	call	read_byte
 	call	opcode_handler_call
 	

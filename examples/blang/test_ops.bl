@@ -1,6 +1,6 @@
 
 #
-# check initial vm state
+# test initial vm state
 #
 
 # stack depth is 0
@@ -10,30 +10,29 @@ depth litb 00 = assert
 start here = assert
 
 #
-# check data stack ops
+# test data stack ops
 #
 
 # stack depth is 1 after pushing a value
 litb 10 depth litb 01 = assert
 
 # stack depth is 0 after dropping the value
-drop
-depth litb 00 = assert
+drop depth litb 00 = assert
 
-# test not
+# not
 depth litb 02 = not assert
 
-# test swap
+# swap
 litb 02 litb 01 swap depth = assert drop
 
-# test -
+# -
 litb 09 litb 07 - litb 02 = assert
 
-# test +
+# +
 litb 07 litb 02 + litb 09 = assert
 
 #
-# check opcode handlers
+# test opcode handlers
 #
 
 # set opcode handler to compile, back to interpret
@@ -51,8 +50,18 @@ here start - litb 01 = assert
 # check code buffer here is three bytes from the start
 here start - litb 03 = assert
 
-# compile writes expected bytes
+# compile writes expected byte
 here litb 01 - b@ litb FF = assert
+
+#
+# test calling compiled code
+#
+
+# here ] here start - [ execute
+here ] here [ execute
+
+depth litb 01 = assert
+drop
 
 #
 # fin

@@ -110,6 +110,30 @@ op_here:
 
 	ret
 
+op_execute:
+	mov	r8d, VM_DATA_OFFSET_INSTRUCTION_POINTER
+	mov	esi, r8d
+	call	vm_data_field_get
+	push	rax
+
+	call	data_stack_pop
+	mov	edi, r8d
+	call	vm_data_field_set
+
+	call	read_byte
+	call	opcode_handler_call
+
+	pop	rax
+	mov	edi, r8d
+	call	vm_data_field_set
+	
+	ret
+
+op_tmp:
+	ret
+	mov edi, 93
+	jmp exit
+	
 macro op lbl, size, flags {
 	dq lbl
 	db flags, size
@@ -133,6 +157,8 @@ opcode_map:
 	op	op_add, 1, 0
 	op	op_byte_at, 1, 0
 	op	op_here, 1, 0
+	op	op_execute, 1, 0
+	op	op_tmp, 1, 0
 opcode_map_qwords = ($ - opcode_map) shr 3
 assert ($ - opcode_map) <= OPCODE_MAP_SIZE
 
