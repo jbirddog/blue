@@ -92,7 +92,7 @@ the code buffer and advances the code buffer's here.
 All opcodes are represented in hexdecimal and subject to change.
 
 | Opcode | Name | Stack Effect | Description |
-|----|----|----|
+|----|----|----|----|
 | 00 | halt | ( -- ) | Halt execution of the BlueVM |
 | 01 | depth | ( -- n ) | Push depth of the data stack |
 | 02 | litb | ( -- n ) | Push next byte from the input buffer |
