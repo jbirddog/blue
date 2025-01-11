@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-my @kws = qw(
+my @kw = qw(
   halt
   depth
   litb
@@ -16,7 +16,7 @@ my @kws = qw(
   ]
 );
 
-my %op = map { $kws[$_] => sprintf("%02X", $_) } 0..$#kws;
+my %op = map { $kw[$_] => sprintf("%02X", $_) } 0..$#kw;
 my $prog = join " ", grep { /^[^#]/ } <STDIN>;
 my @tokens = split " ", $prog;
 my @bytes = map { chr hex($op{$_} || $_) } @tokens;
