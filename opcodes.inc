@@ -88,6 +88,22 @@ op_sub:
 
 	ret
 
+op_add:
+	call	data_stack_pop2
+	add	rax, rcx
+	call	data_stack_push
+
+	ret
+
+op_byte_at:
+	call	data_stack_pop
+	mov	rsi, rax
+	xor	eax, eax
+	lodsb
+	call	data_stack_push
+
+	ret
+
 macro op lbl, size, flags {
 	dq lbl
 	db flags, size
@@ -108,8 +124,10 @@ opcode_map:
 	op	op_compile, 1, 0
 	op	op_code_buffer_fields, 1, 0
 	op	op_sub, 1, 0
+	op	op_add, 1, 0
+	op	op_byte_at, 1, 0
 opcode_map_qwords = ($ - opcode_map) shr 3
-
+assert ($ - opcode_map) <= OPCODE_MAP_SIZE
 
 opcode_map_init:
 	mov	rdi, [mem]

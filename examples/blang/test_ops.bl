@@ -29,6 +29,9 @@ litb 02 litb 01 swap depth = assert drop
 # test -
 litb 09 litb 07 - litb 02 = assert
 
+# test +
+litb 07 litb 02 + litb 09 = assert
+
 #
 # check opcode handlers
 #
@@ -43,10 +46,13 @@ litb 09 litb 07 - litb 02 = assert
 cbf drop swap - litb 01 = assert
 
 # compile multi byte opcodes
-] litb 00 [
+] litb FF [
 
 # check code buffer here is three bytes from the start
 cbf drop swap - litb 03 = assert
+
+# compile writes expected bytes
+cbf drop swap drop litb 01 - b@ litb FF = assert
 
 #
 # fin
