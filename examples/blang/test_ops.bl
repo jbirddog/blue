@@ -21,6 +21,9 @@ litb 02 litb 01 swap depth = assert drop
 # compile does not interpret non immediate opcodes
 ] halt [
 
+# compile multi byte opcodes
+] litb 00 [
+
 # check stack is prestine and halt
 depth litb 00 = assert
 halt

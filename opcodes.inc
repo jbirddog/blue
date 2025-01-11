@@ -123,12 +123,29 @@ opcode_interpret:
 	ret
 
 opcode_compile:
-	shr ecx, 8
-	and ecx, 0xFF
+	shr	ecx, 8
+	and	ecx, 0xFF
 
-	; TODO: copy bytes into code buffer
-	mov edi, ecx
-	jmp exit
+	mov	r8, VM_DATA_OFFSET_CODE_BUFFER_HERE_LOCATION
+	mov	r9, VM_DATA_OFFSET_INPUT_BUFFER_HERE_LOCATION
+
+	mov	rsi, r8
+	call	vm_data_field_get
+	mov	rdi, rsi
+	
+	mov	rsi, r9
+	call	vm_data_field_get
+	dec	rsi
+
+	rep	movsb
+
+	mov	rax, rdi
+	mov	rdi, r8
+	call	vm_data_field_set
+
+	mov	rax, rsi
+	mov	rdi, r9
+	call	vm_data_field_set
 	
 	ret
 
