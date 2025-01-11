@@ -3,9 +3,7 @@
 use strict;
 use warnings;
 
-use Data::Dumper;
-
-my @ops = qw(
+my @kws = qw(
   halt
   depth
   litb
@@ -18,10 +16,9 @@ my @ops = qw(
   ]
 );
 
-my %kw_to_op = map { $ops[$_] => sprintf("%02X", $_) } 0..$#ops;
-
+my %op = map { $kws[$_] => sprintf("%02X", $_) } 0..$#kws;
 my $prog = join " ", grep { /^[^#]/ } <STDIN>;
 my @tokens = split " ", $prog;
-my @bytes = map { chr hex($kw_to_op{$_} || $_) } @tokens;
+my @bytes = map { chr hex($op{$_} || $_) } @tokens;
 
 print @bytes;
