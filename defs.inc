@@ -38,3 +38,22 @@ OPCODE_HANDLER_INTERPRET = opcode_handler_interpret
 OPCODE_HANDLER_INVALID = opcode_handler_invalid
 
 OPCODE_ENTRY_FLAG_IMMEDIATE = 1 shl 0
+
+
+; expects vm data field offset in rsi
+vm_data_field_get:
+	add	esi, VM_DATA_OFFSET
+	add	rsi, [mem]
+
+	lodsq
+	
+	ret
+
+; expects vm data field offset in rdi and value in rax
+vm_data_field_set:
+	add	edi, VM_DATA_OFFSET
+	add	rdi, [mem]
+
+	stosq
+	
+	ret

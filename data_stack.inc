@@ -79,17 +79,14 @@ data_stack_push2:
 
 	ret
 
-; expects opcode entry in rsi
-data_stack_push_opcode_entry:
-	; TODO: make sure two slots are available on the data stack
-	
+; expects start of entries in rsi, count in rcx
+data_stack_pushN:
 	mov	rdi, [mem]
 	add	rdi, VM_DATA_OFFSET + VM_DATA_OFFSET_DATA_STACK_HERE_LOCATION
 	push	rdi
 	mov	rdi, [rdi]
 
-	movsq
-	movsq
+	rep movsq
 
 	mov	rsi, rdi
 	pop	rdi

@@ -19,24 +19,6 @@ mem_alloc:
 	mov	[mem], rax
 	ret
 
-; expects vm data field offset in rsi
-vm_data_field_get:
-	add	esi, VM_DATA_OFFSET
-	add	rsi, [mem]
-
-	lodsq
-	
-	ret
-
-; expects vm data field offset in rdi and value in rax
-vm_data_field_set:
-	add	edi, VM_DATA_OFFSET
-	add	rdi, [mem]
-
-	stosq
-	
-	ret
-
 vm_data_init:
 	mov	rsi, [mem]
 	mov	rdi, rsi

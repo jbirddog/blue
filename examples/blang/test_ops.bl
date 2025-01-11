@@ -1,6 +1,17 @@
 
-# check initial stack depth is 0
+#
+# check initial vm state
+#
+
+# stack depth is 0
 depth litb 00 = assert
+
+# code buffer here is same as its start
+cbf drop = assert
+
+#
+# check data stack ops
+#
 
 # stack depth is 1 after pushing a value
 litb 10 depth litb 01 = assert
@@ -15,14 +26,31 @@ depth litb 02 = not assert
 # test swap
 litb 02 litb 01 swap depth = assert drop
 
-# test set opcode handler to compile, back to interpret
+# test -
+litb 09 litb 07 - litb 02 = assert
+
+#
+# check opcode handlers
+#
+
+# set opcode handler to compile, back to interpret
 ] [
 
 # compile does not interpret non immediate opcodes
 ] halt [
 
+# check code buffer here is one byte from the start
+cbf drop swap - litb 01 = assert
+
 # compile multi byte opcodes
 ] litb 00 [
+
+# check code buffer here is three bytes from the start
+cbf drop swap - litb 03 = assert
+
+#
+# fin
+#
 
 # check stack is prestine and halt
 depth litb 00 = assert

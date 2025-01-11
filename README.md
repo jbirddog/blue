@@ -102,6 +102,8 @@ All opcodes are represented in hexdecimal and subject to change.
 | 07 | swap | ( a b -- b a ) | Swap top two values on the data stack |
 | 08 | [ | ( -- ) | Set the opcode handler to interpret |
 | 09 | ] | ( -- ) | Set the opcode handler to compile |
+| 0A | cbf ( -- c h s ) | Pushed the code buffer location, here and size |
+| 0B | - ( a b -- n ) | Push a - b |
 
 ## Tools/Examples
 
@@ -118,3 +120,4 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. See about improving data_stack_push/pop
 1. See about improving vm_data_field_get/set
 1. Add under/overflow checks for vm memory regions
+1. Move test_ops.bl out of blang, rename to vmtest.bl or similar

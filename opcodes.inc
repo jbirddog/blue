@@ -59,17 +59,32 @@ op_swap:
 	
 	ret
 
-op_mode_compile:
+op_compile:
 	mov	edi, VM_DATA_OFFSET_OPCODE_HANDLER_LOCATION
 	mov	rax, OPCODE_HANDLER_COMPILE
 	call	vm_data_field_set
 
 	ret
 
-op_mode_interpret:
+op_interpret:
 	mov	edi, VM_DATA_OFFSET_OPCODE_HANDLER_LOCATION
 	mov	rax, OPCODE_HANDLER_INTERPRET
 	call	vm_data_field_set
+
+	ret
+
+op_code_buffer_fields:
+	mov	rsi, [mem]
+	add	rsi, VM_DATA_OFFSET + VM_DATA_OFFSET_CODE_BUFFER_LOCATION
+	mov	ecx, 3
+	call	data_stack_pushN
+	
+	ret
+
+op_sub:
+	call	data_stack_pop2
+	sub	rax, rcx
+	call	data_stack_push
 
 	ret
 
@@ -89,8 +104,10 @@ opcode_map:
 	op	op_drop, 1, 0
 	op	op_not, 1, 0
 	op	op_swap, 1, 0
-	op	op_mode_interpret, 1, 9 ; TODO: const and actual value
-	op	op_mode_compile, 1, 0
+	op	op_interpret, 1, OPCODE_ENTRY_FLAG_IMMEDIATE
+	op	op_compile, 1, 0
+	op	op_code_buffer_fields, 1, 0
+	op	op_sub, 1, 0
 opcode_map_qwords = ($ - opcode_map) shr 3
 
 
