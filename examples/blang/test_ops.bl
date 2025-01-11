@@ -17,7 +17,9 @@ litb 02 litb 01 swap depth = assert drop
 
 # test set opcode handler to compile, back to interpret
 ] [
-] [
+
+# compile does not interpret non immediate opcodes
+] halt [
 
 # check stack is prestine and halt
 depth litb 00 = assert

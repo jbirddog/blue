@@ -13,6 +13,7 @@ op_depth:
 op_litb:
 	call	input_buffer_read_byte
 	call	data_stack_push
+	
 	ret
 
 op_eq:
@@ -41,18 +42,21 @@ op_assert:
 
 op_drop:
 	call	data_stack_pop
+	
 	ret
 
 op_not:
 	call	data_stack_pop
 	not	rax
 	call	data_stack_push
+	
 	ret
 
 op_swap:
 	call	data_stack_pop2
 	xchg	rcx, rax
 	call	data_stack_push2
+	
 	ret
 
 op_mode_compile:
@@ -119,11 +123,11 @@ opcode_interpret:
 	ret
 
 opcode_compile:
-	test	cl, OPCODE_ENTRY_FLAG_IMMEDIATE
-	jnz	opcode_interpret
+	shr ecx, 8
+	and ecx, 0xFF
 
 	; TODO: copy bytes into code buffer
-	mov edi, 68
+	mov edi, ecx
 	jmp exit
 	
 	ret
@@ -134,7 +138,9 @@ opcode_handler_interpret:
 	
 ; expects opcode in rax, address in rdi and flags in rcx
 opcode_handler_compile:
-	; TODO: check flags
+	test	cl, OPCODE_ENTRY_FLAG_IMMEDIATE
+	jnz	opcode_interpret
+
 	jmp	opcode_compile
 
 ; expects opcode in rax
