@@ -20,7 +20,8 @@ To build the BlueVM, tools and examples run ./build.sh
 The BlueVM requires a single allocation with the following layout in rwx memory:
 
 1. Input Buffer (2048 bytes)
-1. Data Stack (2048 bytes)
+1. Data Stack (1024 bytes)
+1. Reserved (1024 bytes)
 1. Opcode Map (4096 bytes)
    1. BlueVM Opcode Map: 0x00 - 0x7F (2048 bytes)
    1. Extended Opcode Map: 0x80 - 0xFF (2048 bytes)
@@ -115,6 +116,6 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 1. Consider taking a bvm file that contains the full memory mapping. State can be dumped/restored this way
 1. Print error messages to disambiguate exit status
-1. Cut data stack size back to 1024, move BlueVM Data to 256 bytes after data stack
+1. Move BlueVM Data to 256 bytes in reserved area after data stack
 1. See about improving data_stack_push/pop
 1. See about improving vm_data_field_get/set
