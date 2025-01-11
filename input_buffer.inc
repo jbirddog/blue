@@ -21,7 +21,7 @@ input_buffer_read_bytes:
 	add	rsi, CODE_BUFFER_OFFSET + VM_DATA_OFFSET_INPUT_BUFFER_HERE_LOCATION
 	push	rsi
 	mov	rsi, [rsi]
-
+	
 	; TODO: lods* for other byte counts
 	lodsb
 

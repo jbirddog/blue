@@ -76,7 +76,7 @@ Each entry in the opcode map is 16 bytes.
 1. Code address (8 bytes)
 1. Header (8 bytes)
    1. Flags (1 byte)
-   1. Opcode size (1 byte)
+   1. Size (1 byte)
    1. Reserved (6 bytes)
 
 ## Opcode Handler

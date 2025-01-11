@@ -131,10 +131,11 @@ opcode_compile:
 
 	mov	rsi, r8
 	call	vm_data_field_get
-	mov	rdi, rsi
+	mov	rdi, rax
 	
 	mov	rsi, r9
 	call	vm_data_field_get
+	mov	rsi, rax
 	dec	rsi
 
 	rep	movsb
