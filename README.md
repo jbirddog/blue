@@ -19,7 +19,8 @@ To build the BlueVM, tools and examples run ./build.sh
 
 The BlueVM requires a single allocation with the following layout in rwx memory:
 
-1. Input Buffer (2048 bytes)
+1. Input Buffer (1024 bytes)
+1. Return Stack (1024 bytes)
 1. Data Stack (1024 bytes)
 1. BlueVM Data (256 bytes)
 1. Reserved (768 bytes)
@@ -58,16 +59,14 @@ BlueVM exists using the stack depth as the status code.
 BlueVM follows a simple byte oriented execution strategy. Using the values from the BlueVM data portion of memory
 it begins the outer interpreter:
 
-1. Check if the instruction pointer is within bounds of the input buffer
-   1. If not exit using stack depth as status code
-   1. If so read a byte and increment the instruction pointer by one
+1. Read byte from and increment instruction pointer
 1. Locate the opcode entry in the opcode map
    1. If code address is 0 push the opcode on the data stack and call invalid opcode handler
 1. Push the code address and flags on the data stack and call the opcode handler
 1. Goto 1
 
-Because of this "late binding" approach, the host can change the values that the BlueVM uses to execute, including
-opcodes, granting it full control.
+Because of this "late binding" approach, the host can change the values that the BlueVM uses to execute. The outer
+interpreter requires that the host termintes execution properly. One way to do this is with the `halt` opcode.
 
 ## Opcode Map Structure
 
@@ -125,5 +124,14 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. See about improving vm_data_field_get/set
 1. Add under/overflow checks for vm memory regions
 1. Rename test_ops.bl to vmtest.bl or similar
-1. Move compile/interpret etc logic to outer_interpreter.inc
+1. Move compile/interpret etc logic to interpreter.inc
 1. Before vm_data_field_get/set just mov esi/edi
+1. New regions for first page of vm mem:
+   1. Input buffer (2048 bytes)
+   1. Return stack (1024 bytes)
+   1. Data stack (512 bytes)
+   1. BlueVM data (256 bytes)
+   1. Host data (256 bytes)
+1. Remove reserved region
+1. Move data_stack.inc to stack.inc, use for return stack and data stack
+1. Move blang out of examples

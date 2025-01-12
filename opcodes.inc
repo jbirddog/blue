@@ -128,11 +128,6 @@ op_execute:
 	call	vm_data_field_set
 	
 	ret
-
-op_tmp:
-	ret
-	mov edi, 93
-	jmp exit
 	
 macro op lbl, size, flags {
 	dq lbl
@@ -158,9 +153,8 @@ opcode_map:
 	op	op_byte_at, 1, 0
 	op	op_here, 1, 0
 	op	op_execute, 1, 0
-	op	op_tmp, 1, 0
+assert ($ - opcode_map) <= (0x7F shl 4)
 opcode_map_qwords = ($ - opcode_map) shr 3
-assert ($ - opcode_map) <= OPCODE_MAP_SIZE
 
 opcode_map_init:
 	mov	rdi, [mem]

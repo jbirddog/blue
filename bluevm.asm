@@ -73,6 +73,10 @@ read_boot_code:
 	mov	edx, INPUT_BUFFER_SIZE
 	call	read
 
+	test	eax, eax
+	cmovz	edi, eax
+	jz	exit
+	
 	mov	rdi, VM_DATA_OFFSET_INPUT_BUFFER_SIZE
 	call	vm_data_field_set
 	
