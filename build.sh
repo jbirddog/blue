@@ -17,7 +17,7 @@ fasm bluevm.asm bin/bluevm
 
 echo "* Building bs0 files"
 
-./examples/blang/blang.pl < examples/blang/test_ops.bl > obj/test_ops.bs0
+./examples/blang/blang.pl < tests/ops.bl > obj/test_ops.bs0
 
 echo "* Running bs0 test cases"
 

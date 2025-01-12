@@ -7,7 +7,7 @@ mem dq 0
 segment readable executable
 
 include "defs.inc"
-include "data_stack.inc"
+include "stack.inc"
 include "opcodes.inc"
 include "interpreter.inc"
 include "sys.inc"
