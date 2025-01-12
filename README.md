@@ -126,10 +126,8 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. Print error messages to disambiguate exit status
 1. See about improving data_stack_push/pop
 1. See about improving vm_data_field_get/set
-1. Add under/overflow checks for stacks
 1. Move compile/interpret etc logic to interpreter.inc
 1. Support opcodes written in bytecode
-1. Use the return stack when execute runs
 1. Write a bs0->blang decompiler by overwriting opcode map and opcode handler
 1. Dockerize and get a CI job that runs ./build.sh
 1. Bytecode needs to be able to call machine code

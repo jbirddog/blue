@@ -1,4 +1,6 @@
 
+CELL_SIZE = 8
+
 INPUT_BUFFER_OFFSET = 0
 INPUT_BUFFER_SIZE = 2048
 
@@ -49,6 +51,8 @@ OPCODE_HANDLER_INVALID = opcode_handler_invalid
 
 OPCODE_ENTRY_FLAG_IMMEDIATE = 1 shl 0
 
+ERR_STACK_UNDERFLOW = 105
+ERR_STACK_OVERFLOW = 106
 
 ; expects vm data field offset in rsi
 vm_data_field_get:
