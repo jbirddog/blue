@@ -114,7 +114,7 @@ op_execute:
 	mov	r8d, VM_DATA_OFFSET_INSTRUCTION_POINTER
 	mov	esi, r8d
 	call	vm_data_field_get
-	push	rax
+	call	return_stack_push
 
 	call	data_stack_pop
 	mov	edi, r8d
@@ -123,7 +123,7 @@ op_execute:
 	call	read_byte
 	call	opcode_handler_call
 
-	pop	rax
+	call	return_stack_pop
 	mov	edi, r8d
 	call	vm_data_field_set
 	

@@ -131,3 +131,5 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. Use the return stack when execute runs
 1. Write a bs0->blang decompiler by overwriting opcode map and opcode handler
 1. Dockerize and get a CI job that runs ./build.sh
+1. Bytecode needs to be able to call machine code
+1. Machine code needs to be able to call bytecode
