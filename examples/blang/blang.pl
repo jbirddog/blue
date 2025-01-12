@@ -20,6 +20,7 @@ my @kw = qw(
   b@
   here
   execute
+  ret
 );
 
 my %op = map { $kw[$_] => sprintf("%02X", $_) } 0..$#kw;

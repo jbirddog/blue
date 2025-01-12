@@ -110,6 +110,7 @@ All opcodes are represented in hexdecimal and subject to change.
 | 0D | b@ ( a -- b ) | Push byte value found at addr |
 | 0E | here ( -- a ) | Push location of code buffer's here |
 | 0F | execute ( a -- ? ) | Execute bytecode located at address |
+| 10 | ret ( -- ) | Restores previous instruction pointer |
 
 ## Tools/Examples
 

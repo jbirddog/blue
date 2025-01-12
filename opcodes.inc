@@ -119,12 +119,12 @@ op_execute:
 	call	data_stack_pop
 	mov	edi, r8d
 	call	vm_data_field_set
+	
+	ret
 
-	call	read_byte
-	call	opcode_handler_call
-
+op_ret:
 	call	return_stack_pop
-	mov	edi, r8d
+	mov	edi, VM_DATA_OFFSET_INSTRUCTION_POINTER
 	call	vm_data_field_set
 	
 	ret
@@ -153,6 +153,7 @@ opcode_map:
 	op	op_byte_at, 1, 0
 	op	op_here, 1, 0
 	op	op_execute, 1, 0
+	op	op_ret, 1, 0
 assert ($ - opcode_map) <= (0x7F shl 4)
 opcode_map_qwords = ($ - opcode_map) shr 3
 

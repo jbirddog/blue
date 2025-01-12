@@ -57,11 +57,10 @@ here litb 01 - b@ litb FF = assert
 # test calling compiled code
 #
 
-# here ] here start - [ execute
-here ] here [ execute
+here ] here start - ret [ execute
 
 depth litb 01 = assert
-drop
+litb 07 = assert
 
 #
 # fin
