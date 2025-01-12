@@ -19,11 +19,11 @@ To build the BlueVM, tools and examples run ./build.sh
 
 The BlueVM requires a single allocation with the following layout in rwx memory:
 
-1. Input Buffer (1024 bytes)
-1. Return Stack (1024 bytes)
-1. Data Stack (1024 bytes)
-1. BlueVM Data (256 bytes)
-1. Reserved (768 bytes)
+1. Input buffer (2048 bytes)
+1. Return stack (1024 bytes)
+1. Data stack (512 bytes)
+1. BlueVM data (256 bytes)
+1. Host data (256 bytes)
 1. Opcode Map (4096 bytes)
    1. BlueVM Opcode Map: 0x00 - 0x7F (2048 bytes)
    1. Extended Opcode Map: 0x80 - 0xFF (2048 bytes)
@@ -38,6 +38,9 @@ BlueVM Data portion of the beginning of the code buffer:
 1. Instruction pointer
 1. Location of the input buffer
 1. Input buffer size in bytes
+1. Location of the return stack
+1. Location of the return stack's here
+1. Return stack size in bytes
 1. Location of the data stack
 1. Location of the data stack's here
 1. Data stack size in bytes
@@ -125,13 +128,7 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. Add under/overflow checks for vm memory regions
 1. Rename test_ops.bl to vmtest.bl or similar
 1. Move compile/interpret etc logic to interpreter.inc
-1. New regions for first page of vm mem:
-   1. Input buffer (2048 bytes)
-   1. Return stack (1024 bytes)
-   1. Data stack (512 bytes)
-   1. BlueVM data (256 bytes)
-   1. Host data (256 bytes)
-1. Remove reserved region
 1. Move data_stack.inc to stack.inc, use for return stack and data stack
 1. Move blang test file out of examples
-1. Support native opcodes written in bytecode
+1. Support opcodes written in bytecode
+1. Use the return stack when execute runs

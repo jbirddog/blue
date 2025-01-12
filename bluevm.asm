@@ -37,6 +37,14 @@ vm_data_init:
 	stosq
 	xor	eax, eax
 	stosq
+	
+	; Location of return stack, here and size
+	mov	rax, rsi
+	add	rax, RETURN_STACK_OFFSET
+	stosq
+	stosq
+	mov	eax, RETURN_STACK_SIZE
+	stosq
 
 	; Location of data stack, here and size
 	mov	rax, rsi
