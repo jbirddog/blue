@@ -125,7 +125,6 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. Add under/overflow checks for vm memory regions
 1. Rename test_ops.bl to vmtest.bl or similar
 1. Move compile/interpret etc logic to interpreter.inc
-1. Before vm_data_field_get/set just mov esi/edi
 1. New regions for first page of vm mem:
    1. Input buffer (2048 bytes)
    1. Return stack (1024 bytes)
@@ -134,4 +133,5 @@ Along with the code for BlueVM this repository also contains some tools and exam
    1. Host data (256 bytes)
 1. Remove reserved region
 1. Move data_stack.inc to stack.inc, use for return stack and data stack
-1. Move blang out of examples
+1. Move blang test file out of examples
+1. Support native opcodes written in bytecode

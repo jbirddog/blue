@@ -77,7 +77,7 @@ read_boot_code:
 	cmovz	edi, eax
 	jz	exit
 	
-	mov	rdi, VM_DATA_OFFSET_INPUT_BUFFER_SIZE
+	mov	edi, VM_DATA_OFFSET_INPUT_BUFFER_SIZE
 	call	vm_data_field_set
 	
 	ret

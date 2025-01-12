@@ -74,7 +74,7 @@ op_interpret:
 	ret
 
 op_start:
-	mov	rsi, VM_DATA_OFFSET_CODE_BUFFER_LOCATION
+	mov	esi, VM_DATA_OFFSET_CODE_BUFFER_LOCATION
 	call	vm_data_field_get
 	call	data_stack_push
 	
@@ -104,7 +104,7 @@ op_byte_at:
 	ret
 
 op_here:
-	mov	rsi, VM_DATA_OFFSET_CODE_BUFFER_HERE_LOCATION
+	mov	esi, VM_DATA_OFFSET_CODE_BUFFER_HERE_LOCATION
 	call	vm_data_field_get
 	call	data_stack_push
 
@@ -188,14 +188,14 @@ opcode_compile:
 	shr	ecx, 8
 	and	ecx, 0xFF
 
-	mov	r8, VM_DATA_OFFSET_CODE_BUFFER_HERE_LOCATION
-	mov	r9, VM_DATA_OFFSET_INSTRUCTION_POINTER
+	mov	r8d, VM_DATA_OFFSET_CODE_BUFFER_HERE_LOCATION
+	mov	r9d, VM_DATA_OFFSET_INSTRUCTION_POINTER
 
-	mov	rsi, r8
+	mov	esi, r8d
 	call	vm_data_field_get
 	mov	rdi, rax
 	
-	mov	rsi, r9
+	mov	esi, r9d
 	call	vm_data_field_get
 	mov	rsi, rax
 	dec	rsi
@@ -203,11 +203,11 @@ opcode_compile:
 	rep	movsb
 
 	mov	rax, rdi
-	mov	rdi, r8
+	mov	edi, r8d
 	call	vm_data_field_set
 
 	mov	rax, rsi
-	mov	rdi, r9
+	mov	edi, r9d
 	call	vm_data_field_set
 	
 	ret
