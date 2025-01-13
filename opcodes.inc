@@ -111,21 +111,17 @@ op_here:
 	ret
 
 op_execute:
-	mov	r8d, VM_DATA_OFFSET_INSTRUCTION_POINTER
-	mov	esi, r8d
-	call	vm_data_field_get
+	mov	rax, [instruction_pointer]
 	call	return_stack_push
 
 	call	data_stack_pop
-	mov	edi, r8d
-	call	vm_data_field_set
-	
+	mov	[instruction_pointer], rax
+
 	ret
 
 op_ret:
 	call	return_stack_pop
-	mov	edi, VM_DATA_OFFSET_INSTRUCTION_POINTER
-	call	vm_data_field_set
+	mov	[instruction_pointer], rax
 	
 	ret
 
@@ -216,27 +212,22 @@ opcode_compile:
 	and	ecx, 0xFF
 
 	mov	r8d, VM_DATA_OFFSET_CODE_BUFFER_HERE_LOCATION
-	mov	r9d, VM_DATA_OFFSET_INSTRUCTION_POINTER
 
 	mov	esi, r8d
 	call	vm_data_field_get
 	mov	rdi, rax
-	
-	mov	esi, r9d
-	call	vm_data_field_get
-	mov	rsi, rax
+
+	mov	rsi, [instruction_pointer]
 	dec	rsi
 
 	rep	movsb
+
+	mov	[instruction_pointer], rsi
 
 	mov	rax, rdi
 	mov	edi, r8d
 	call	vm_data_field_set
 
-	mov	rax, rsi
-	mov	edi, r9d
-	call	vm_data_field_set
-	
 	ret
 
 ; expects opcode in rax, address in rdi and flags in rcx

@@ -1,15 +1,9 @@
 
 read_byte:
-	mov	rsi, [mem]
-	add	rsi, VM_DATA_OFFSET + VM_DATA_OFFSET_INSTRUCTION_POINTER
-	push	rsi
-	mov	rsi, [rsi]
-	
+	mov	rsi, [instruction_pointer]
 	xor	eax, eax
 	lodsb
-
-	pop	rdi
-	mov	[rdi], rsi
+	mov	[instruction_pointer], rsi
 
 	ret
 
