@@ -60,16 +60,12 @@ op_swap:
 	ret
 
 op_compile:
-	mov	edi, VM_DATA_OFFSET_OPCODE_HANDLER_LOCATION
-	mov	rax, OPCODE_HANDLER_COMPILE
-	call	vm_data_field_set
+	mov	[opcode_handler], OPCODE_HANDLER_COMPILE
 
 	ret
 
 op_interpret:
-	mov	edi, VM_DATA_OFFSET_OPCODE_HANDLER_LOCATION
-	mov	rax, OPCODE_HANDLER_INTERPRET
-	call	vm_data_field_set
+	mov	[opcode_handler], OPCODE_HANDLER_INTERPRET
 
 	ret
 
@@ -241,7 +237,7 @@ opcode_handler_compile:
 	jmp	opcode_compile
 
 ; expects opcode in rax
-opcode_handler_invalid:
+_opcode_handler_invalid:
 	mov	edi, eax
 	jmp	exit
 
@@ -253,24 +249,15 @@ opcode_handler_call:
 	test	rdi, rdi
 	jz	.invalid
 
-	mov	esi, VM_DATA_OFFSET_OPCODE_HANDLER_LOCATION
-	call	vm_data_field_get
-
 	; TODO: if the host has specified the opcode handler push rdi, rcx, rax and call it
-	mov	rsi, rax
 	pop	rax
-	call	rsi
+	call	[opcode_handler]
 
 	jmp	.done
 
 .invalid:
-	mov	esi, VM_DATA_OFFSET_OPCODE_INVALID_HANDLER_LOCATION
-	call	vm_data_field_get
-
-	; TODO: if the host has specified the opcode invalid handler push rax and call it
-	mov	rsi, rax
 	pop	rax
-	call	rsi
+	call	[opcode_handler_invalid]
 	
 .done:
 	ret

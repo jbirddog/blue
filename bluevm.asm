@@ -9,8 +9,9 @@ instruction_pointer rq 1
 return_stack rq 1
 return_stack_here rq 1
 return_stack_size rq 1
-
 opcode_map rq 1
+opcode_handler rq 1
+opcode_handler_invalid rq 1
 
 segment readable executable
 
@@ -40,7 +41,7 @@ vm_data_init:
 	; Location of instruction pointer - migrated
 	stosq
 
-	; Location of the input buffer and size
+	; Location of the input buffer and size (removed)
 	stosq
 	xor	eax, eax
 	stosq
@@ -92,6 +93,9 @@ vm_data_init2:
 	
 	lea	rsi, [rdi + OPCODE_MAP_OFFSET]
 	mov	[opcode_map], rsi
+	
+	mov	[opcode_handler], OPCODE_HANDLER_INTERPRET
+	mov	[opcode_handler_invalid], OPCODE_HANDLER_INVALID
 
 	ret
 
@@ -104,10 +108,7 @@ read_boot_code:
 	test	eax, eax
 	cmovz	edi, eax
 	jz	exit
-	
-	mov	edi, VM_DATA_OFFSET_INPUT_BUFFER_SIZE
-	call	vm_data_field_set
-	
+		
 	ret
 
 entry $
