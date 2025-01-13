@@ -129,3 +129,4 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. Support opcodes written in bytecode
 1. Machine code needs to be able to call bytecode
 1. Write a bs0->blang (gnalb) decompiler by overwriting opcode map and opcode handler
+1. dq fields that point to memory regions, migrate fields away from vmdata

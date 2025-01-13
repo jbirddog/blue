@@ -4,6 +4,10 @@ segment readable writable
 
 mem dq 0
 
+return_stack rq 0
+return_stack_here rq 0
+return_stack_size rq 0
+
 segment readable executable
 
 include "defs.inc"
@@ -17,6 +21,7 @@ mem_alloc:
 	call	mmap_rwx
 
 	mov	[mem], rax
+	
 	ret
 
 vm_data_init:
@@ -75,6 +80,16 @@ vm_data_init:
 
 	ret
 
+vm_data_init2:
+	mov	rdi, [mem]
+	
+	mov	rsi, [rdi + RETURN_STACK_OFFSET]
+	mov	[return_stack], rsi
+	mov	[return_stack_here], rsi
+	mov	[return_stack_size], RETURN_STACK_SIZE
+
+	ret
+
 read_boot_code:
 	mov	rsi, [mem]
 	add	rsi, INPUT_BUFFER_OFFSET
@@ -93,6 +108,7 @@ read_boot_code:
 entry $
 	call	mem_alloc
 	call	vm_data_init
+	call	vm_data_init2
 	call	opcode_map_init
 	call	read_boot_code
 	call	outer_interpreter
