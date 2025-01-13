@@ -1,4 +1,25 @@
 
+macro stack_push which {
+; expects value to push in rax
+which##_push:
+	; TODO: bounds check
+	mov	rdi, [which##_here]
+	mov	[rdi], rax
+	add	[which##_here], CELL_SIZE
+
+	ret
+}
+
+macro stack_pop which {
+which##_pop:
+	; TODO: bounds check
+	mov	rsi, [which##_here]
+	mov	rax, [rsi - CELL_SIZE]
+	sub	[which##_here], CELL_SIZE
+
+	ret
+}
+
 data_stack_depth:
 	mov	rcx, [data_stack_here]
 	sub	rcx, [data_stack]
@@ -6,37 +27,8 @@ data_stack_depth:
 	
 	ret
 
-; expects value to push in rax
-data_stack_push:
-	; TODO: bounds check
-	mov	rdi, [data_stack_here]
-	mov	[rdi], rax
-	add	[data_stack_here], CELL_SIZE
+stack_push data_stack
+stack_pop data_stack
 
-	ret
-
-data_stack_pop:
-	; TODO: bounds check
-	mov	rsi, [data_stack_here]
-	mov	rax, [rsi - CELL_SIZE]
-	sub	[data_stack_here], CELL_SIZE
-
-	ret
-
-
-; expects value to push in rax
-return_stack_push:
-	; TODO: bounds check
-	mov	rdi, [return_stack_here]
-	mov	[rdi], rax
-	add	[return_stack_here], CELL_SIZE
-
-	ret
-
-return_stack_pop:
-	; TODO: bounds check
-	mov	rsi, [return_stack_here]
-	mov	rax, [rsi - CELL_SIZE]
-	sub	[return_stack_here], CELL_SIZE
-	
-	ret
+stack_push return_stack
+stack_pop return_stack

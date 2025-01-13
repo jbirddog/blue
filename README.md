@@ -21,9 +21,7 @@ The BlueVM requires a single allocation with the following layout in rwx memory:
 
 1. Input buffer (2048 bytes)
 1. Return stack (1024 bytes)
-1. Data stack (512 bytes)
-1. BlueVM data (256 bytes)
-1. Host data (256 bytes)
+1. Data stack (1024 bytes)
 1. Opcode Map (4096 bytes)
    1. BlueVM Opcode Map: 0x00 - 0x7F (2048 bytes)
    1. Extended Opcode Map: 0x80 - 0xFF (2048 bytes)
@@ -31,31 +29,8 @@ The BlueVM requires a single allocation with the following layout in rwx memory:
 
 ## Boot
 
-When the BlueVM starts it will perform the allocation mentioned above and set the following 8 byte values in the
-BlueVM Data portion of the beginning of the code buffer:
-
-1. BlueVM state
-1. Instruction pointer
-1. Location of the input buffer
-1. Input buffer size in bytes
-1. Location of the return stack
-1. Location of the return stack's here
-1. Return stack size in bytes
-1. Location of the data stack
-1. Location of the data stack's here
-1. Data stack size in bytes
-1. Location of the opcode map
-1. Location of the code buffer
-1. Location of the code buffer's here
-1. Code buffer size in bytes
-1. Location of opcode handler
-1. Location of invalid opcode handler
-
-These values act as hooks into the BlueVM and can be changed by the host at any step.
-
-BlueVM will then set entries in the BlueVM opcode map and read 2048 bytes from stdin into the input buffer. This
-initial read will serve as the bootstrap for the host and is interpreted. Once the input buffer is exhausted the
-BlueVM exists using the stack depth as the status code.
+BlueVM will set entries in the BlueVM opcode map and read 2048 bytes from stdin into the input buffer. This
+initial read will serve as the bootstrap for the host and is interpreted until the host halts execution.
 
 ## Execution
 
@@ -112,6 +87,7 @@ All opcodes are represented in hexdecimal and subject to change.
 | 0F | execute | ( a -- ? ) | Execute bytecode located at address |
 | 10 | ret | ( -- ) | Pops value from return stack and sets the instruction pointer |
 | 11 | call | ( a -- ? ) | Call machine code at address |
+| 12 | b, | ( b -- ) | Write byte value to, and increment, here |
 
 ## Tools/Examples
 
@@ -129,9 +105,5 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. Support opcodes written in bytecode
 1. Machine code needs to be able to call bytecode
 1. Write a bs0->blang (gnalb) decompiler by overwriting opcode map and opcode handler
-1. dq fields that point to memory regions, migrate fields away from vmdata
-1. Once migrated:
-   1. Remove BlueVM data and host data regions, grow data stack back to 1024 bytes
-   1. Remove vm_data_get/set
 1. Bring back stack push/pop2
 1. Bring back stack bounds checking
