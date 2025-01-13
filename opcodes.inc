@@ -111,17 +111,17 @@ op_here:
 	ret
 
 op_execute:
-	mov	rax, [instruction_pointer]
+	mov	rax, [ptr_to.ip]
 	call	return_stack_push
 
 	call	data_stack_pop
-	mov	[instruction_pointer], rax
+	mov	[ptr_to.ip], rax
 
 	ret
 
 op_ret:
 	call	return_stack_pop
-	mov	[instruction_pointer], rax
+	mov	[ptr_to.ip], rax
 	
 	ret
 
@@ -217,12 +217,12 @@ opcode_compile:
 	call	vm_data_field_get
 	mov	rdi, rax
 
-	mov	rsi, [instruction_pointer]
+	mov	rsi, [ptr_to.ip]
 	dec	rsi
 
 	rep	movsb
 
-	mov	[instruction_pointer], rsi
+	mov	[ptr_to.ip], rsi
 
 	mov	rax, rdi
 	mov	edi, r8d
