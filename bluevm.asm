@@ -35,9 +35,7 @@ vm_data_init:
 	xor	eax, eax
 	stosq
 
-	; Location of instruction pointer
-	mov	rax, rsi
-	add	rax, INPUT_BUFFER_OFFSET
+	; Location of instruction pointer - migrated
 	stosq
 
 	; Location of the input buffer and size
