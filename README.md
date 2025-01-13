@@ -133,3 +133,5 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. Once migrated:
    1. Remove BlueVM data and host data regions, grow data stack back to 1024 bytes
    1. Remove vm_data_get/set
+1. Bring back stack push/pop2
+1. Bring back stack bounds checking

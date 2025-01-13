@@ -17,7 +17,10 @@ op_litb:
 	ret
 
 op_eq:
-	call	data_stack_pop2
+	call	data_stack_pop
+	push	rax
+	call	data_stack_pop
+	pop	rcx
 
 	xor	edi, edi
 	xor	esi, esi
@@ -53,9 +56,15 @@ op_not:
 	ret
 
 op_swap:
-	call	data_stack_pop2
-	xchg	rcx, rax
-	call	data_stack_push2
+	call	data_stack_pop
+	mov	rcx, rax
+	call	data_stack_pop
+	push	rax
+	
+	mov	rax, rcx
+	call	data_stack_push
+	pop	rax
+	call	data_stack_push
 	
 	ret
 
@@ -76,14 +85,22 @@ op_start:
 	ret
 
 op_sub:
-	call	data_stack_pop2
+	call	data_stack_pop
+	push	rax
+	call	data_stack_pop
+	pop	rcx
+	
 	sub	rax, rcx
 	call	data_stack_push
 
 	ret
 
 op_add:
-	call	data_stack_pop2
+	call	data_stack_pop
+	push	rax
+	call	data_stack_pop
+	pop	rcx
+	
 	add	rax, rcx
 	call	data_stack_push
 
