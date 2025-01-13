@@ -12,6 +12,9 @@ return_stack_size rq 1
 opcode_map rq 1
 opcode_handler rq 1
 opcode_handler_invalid rq 1
+code_buffer rq 1
+code_buffer_here rq 1
+code_buffer_size rq 1
 
 segment readable executable
 
@@ -97,6 +100,11 @@ vm_data_init2:
 	
 	mov	[opcode_handler], OPCODE_HANDLER_INTERPRET
 	mov	[opcode_handler_invalid], OPCODE_HANDLER_INVALID
+	
+	lea	rsi, [rdi + CODE_BUFFER_OFFSET]
+	mov	[code_buffer], rsi
+	mov	[code_buffer_here], rsi
+	mov	[code_buffer_size], CODE_BUFFER_SIZE
 
 	ret
 
