@@ -10,6 +10,8 @@ return_stack rq 1
 return_stack_here rq 1
 return_stack_size rq 1
 
+opcode_map rq 1
+
 segment readable executable
 
 include "defs.inc"
@@ -57,9 +59,8 @@ vm_data_init:
 	mov	eax, DATA_STACK_SIZE
 	stosq
 
-	; Location of the opcode map
-	mov	rax, rsi
-	add	rax, OPCODE_MAP_OFFSET
+	; Location of the opcode map - migrated
+	xor	eax, eax
 	stosq
 
 	; Location of code buffer, here and size
@@ -88,6 +89,9 @@ vm_data_init2:
 	mov	[return_stack], rsi
 	mov	[return_stack_here], rsi
 	mov	[return_stack_size], RETURN_STACK_SIZE
+	
+	lea	rsi, [rdi + OPCODE_MAP_OFFSET]
+	mov	[opcode_map], rsi
 
 	ret
 

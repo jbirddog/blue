@@ -156,7 +156,7 @@ macro op lbl, size, flags {
 	dd 0
 }
 
-opcode_map:
+_opcode_map:
 	op	op_halt, 1, 0
 	op	op_depth, 1, 0
 	op	op_litb, 2, 0
@@ -176,14 +176,13 @@ opcode_map:
 	op	op_ret, 1, 0
 	op	op_call, 1, 0
 	op	op_b_comma, 1, 0
-assert ($ - opcode_map) <= (0x7F shl 4)
-opcode_map_qwords = ($ - opcode_map) shr 3
+assert ($ - _opcode_map) <= (0x7F shl 4)
+_opcode_map_qwords = ($ - _opcode_map) shr 3
 
 opcode_map_init:
-	mov	rdi, [mem]
-	add	rdi, OPCODE_MAP_OFFSET
-	mov	rsi, opcode_map
-	mov	ecx, opcode_map_qwords
+	mov	rdi, [opcode_map]
+	mov	rsi, _opcode_map
+	mov	ecx, _opcode_map_qwords
 
 	rep	movsq
 	
