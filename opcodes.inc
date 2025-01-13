@@ -156,6 +156,7 @@ op_b_set_inc:
 
 	ret
 
+; TODO: replace with bytecode
 op_b_comma:
 	call	data_stack_pop
 	mov	rdi, [code_buffer_here]	
@@ -163,8 +164,14 @@ op_b_comma:
 	mov	[code_buffer_here], rdi
 	
 	ret
+
+op_here_set:
+	call	data_stack_pop
+	mov	[code_buffer_here], rax
+
+	ret
 	
-macro op lbl, size, flags {
+macro opN lbl, size, flags {
 	dq lbl
 	db flags, size
 	dw 0
@@ -172,27 +179,29 @@ macro op lbl, size, flags {
 }
 
 _opcode_map:
-	op	op_halt, 1, 0
-	op	op_depth, 1, 0
-	op	op_litb, 2, 0
-	op	op_eq, 1, 0
-	op	op_assert, 1, 0
-	op	op_drop, 1, 0
-	op	op_not, 1, 0
-	op	op_swap, 1, 0
-	op	op_interpret, 1, OPCODE_ENTRY_FLAG_IMMEDIATE
-	op	op_compile, 1, 0
-	op	op_start, 1, 0
-	op	op_sub, 1, 0
-	op	op_add, 1, 0
-	op	op_byte_at, 1, 0
-	op	op_here, 1, 0
-	op	op_execute, 1, 0
-	op	op_ret, 1, 0
-	op	op_call, 1, 0
-	op	op_b_set_inc, 1, 0
-	op	op_b_comma, 1, 0
+	opN	op_halt, 1, 0
+	opN	op_depth, 1, 0
+	opN	op_litb, 2, 0
+	opN	op_eq, 1, 0
+	opN	op_assert, 1, 0
+	opN	op_drop, 1, 0
+	opN	op_not, 1, 0
+	opN	op_swap, 1, 0
+	opN	op_interpret, 1, OPCODE_ENTRY_FLAG_IMMEDIATE
+	opN	op_compile, 1, 0
+	opN	op_start, 1, 0
+	opN	op_sub, 1, 0
+	opN	op_add, 1, 0
+	opN	op_byte_at, 1, 0
+	opN	op_here, 1, 0
+	opN	op_execute, 1, 0
+	opN	op_ret, 1, 0
+	opN	op_call, 1, 0
+	opN	op_b_set_inc, 1, 0
+	opN	op_b_comma, 1, 0
+	opN	op_here_set, 1, 0
 assert ($ - _opcode_map) <= (0x7F shl 4)
+assert ($ - _opcode_map) <= 512
 _opcode_map_qwords = ($ - _opcode_map) shr 3
 
 opcode_map_init:
@@ -206,13 +215,13 @@ opcode_map_init:
 
 ; expects opcode in rax
 opcode_map_entry:
-	mov	rsi, [mem]
-	add	rsi, OPCODE_MAP_OFFSET
+	mov	rsi, [opcode_map]
 	shl	eax, 4
 	add	rsi, rax
 
-	mov	rdi, [rsi]
 	mov	rcx, [rsi + 8]
+	; TODO: if inlined, don't deref rsi
+	mov	rdi, [rsi]
 
 	ret
 	

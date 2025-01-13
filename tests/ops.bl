@@ -88,6 +88,9 @@ here litb C3 b, call
 # fin
 #
 
+# set code buffer back to start
+start here! start here = assert
+
 # check stack is prestine and halt
 depth litb 00 = assert
 halt
