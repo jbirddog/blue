@@ -5,7 +5,7 @@ segment readable writable
 mem rq 1
 
 instruction_pointer rq 1
-
+input_buffer rq 1
 return_stack rq 1
 return_stack_here rq 1
 return_stack_size rq 1
@@ -41,7 +41,7 @@ vm_data_init:
 	; Location of instruction pointer - migrated
 	stosq
 
-	; Location of the input buffer and size (removed)
+	; Location of the input buffer and (size - removed)
 	stosq
 	xor	eax, eax
 	stosq
@@ -82,9 +82,10 @@ vm_data_init:
 
 vm_data_init2:
 	mov	rdi, [mem]
-
+	
 	lea	rsi, [rdi + INPUT_BUFFER_OFFSET]
 	mov	[instruction_pointer], rsi
+	mov	[input_buffer], rsi
 	
 	lea	rsi, [rdi + RETURN_STACK_OFFSET]
 	mov	[return_stack], rsi
@@ -100,8 +101,7 @@ vm_data_init2:
 	ret
 
 read_boot_code:
-	mov	rsi, [mem]
-	add	rsi, INPUT_BUFFER_OFFSET
+	mov	rsi, [input_buffer]
 	mov	edx, INPUT_BUFFER_SIZE
 	call	read
 

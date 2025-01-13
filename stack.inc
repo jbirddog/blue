@@ -128,21 +128,6 @@ data_stack_push2:
 
 	ret
 
-; expects start of entries in rsi, count in rcx
-data_stack_pushN:
-	mov	rdi, [mem]
-	add	rdi, VM_DATA_OFFSET + VM_DATA_OFFSET_DATA_STACK_HERE_LOCATION
-	push	rdi
-	mov	rdi, [rdi]
-
-	rep movsq
-
-	mov	rsi, rdi
-	pop	rdi
-	mov	[rdi], rsi
-
-	ret
-
 
 ; expects value to push in rax
 return_stack_push:
