@@ -128,6 +128,30 @@ op_ret:
 	call	vm_data_field_set
 	
 	ret
+
+op_call:
+	call	data_stack_pop
+	call	rax
+
+	ret
+
+op_b_comma:
+	call	data_stack_pop
+	push	rax
+
+	mov	esi, VM_DATA_OFFSET_CODE_BUFFER_HERE_LOCATION
+	call	vm_data_field_get
+
+	mov	rdi, rsi
+	pop	rax
+	
+	stosb
+
+	mov	rax, rdi
+	mov	edi, VM_DATA_OFFSET_CODE_BUFFER_HERE_LOCATION
+	call	vm_data_field_set
+	
+	ret
 	
 macro op lbl, size, flags {
 	dq lbl
@@ -154,6 +178,8 @@ opcode_map:
 	op	op_here, 1, 0
 	op	op_execute, 1, 0
 	op	op_ret, 1, 0
+	op	op_call, 1, 0
+	op	op_b_comma, 1, 0
 assert ($ - opcode_map) <= (0x7F shl 4)
 opcode_map_qwords = ($ - opcode_map) shr 3
 

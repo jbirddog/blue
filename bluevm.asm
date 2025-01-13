@@ -96,3 +96,19 @@ entry $
 	call	opcode_map_init
 	call	read_boot_code
 	call	outer_interpreter
+
+
+	;mov eax, 0xC3
+	;call data_stack_push
+	;call op_b_comma
+
+	;mov esi, VM_DATA_OFFSET_CODE_BUFFER_HERE_LOCATION
+	;call vm_data_field_get
+	;dec rax
+
+	;call rax
+
+	;mov edi, 111
+	;jmp exit
+	
+	

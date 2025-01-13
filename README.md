@@ -111,6 +111,7 @@ All opcodes are represented in hexdecimal and subject to change.
 | 0E | here ( -- a ) | Push location of code buffer's here |
 | 0F | execute ( a -- ? ) | Execute bytecode located at address |
 | 10 | ret ( -- ) | Restores previous instruction pointer |
+| 11 | call ( a -- ? ) Call machine code at address |
 
 ## Tools/Examples
 
@@ -122,13 +123,10 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ## TODOs
 
-1. Consider taking a bvm file that contains the full memory mapping. State can be dumped/restored this way
 1. Print error messages to disambiguate exit status
-1. See about improving data_stack_push/pop
-1. See about improving vm_data_field_get/set
 1. Move compile/interpret etc logic to interpreter.inc
-1. Support opcodes written in bytecode
-1. Write a bs0->blang decompiler by overwriting opcode map and opcode handler
 1. Dockerize and get a CI job that runs ./build.sh
+1. Support opcodes written in bytecode
 1. Bytecode needs to be able to call machine code
 1. Machine code needs to be able to call bytecode
+1. Write a bs0->blang (gnalb) decompiler by overwriting opcode map and opcode handler

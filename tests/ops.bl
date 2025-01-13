@@ -54,13 +54,25 @@ here start - litb 03 = assert
 here litb 01 - b@ litb FF = assert
 
 #
-# test calling compiled code
+# test calling compiled bytecode
 #
 
 here ] here start - ret [ execute
 
 depth litb 01 = assert
 litb 07 = assert
+
+# test writing bytes to the code buffer
+litb C3 b,
+here litb 01 - b@
+litb C3 = assert
+
+#
+# test calling compiled machine code
+#
+
+litb C3 b,
+here litb 01 - call
 
 #
 # fin

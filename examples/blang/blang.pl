@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-my @kw = qw(
+my @kw = split " ", q(
   halt
   depth
   litb
@@ -21,6 +21,8 @@ my @kw = qw(
   here
   execute
   ret
+  call
+  b,
 );
 
 my %op = map { $kw[$_] => sprintf("%02X", $_) } 0..$#kw;
