@@ -148,23 +148,15 @@ data_stack_pushN:
 return_stack_push:
 	; TODO: bounds check
 	mov	rdi, [return_stack_here]
-	; TODO: segfault when using this version
-	;mov	[rdi], rax
+	mov	[rdi], rax
 	add	[return_stack_here], CELL_SIZE
-
-	mov	edi, VM_DATA_OFFSET_RETURN_STACK_LOCATION
-	call	stack_push
 
 	ret
 
 return_stack_pop:
 	; TODO: bounds check
 	mov	rsi, [return_stack_here]
-	; TODO: segfault when using this version
-	;mov	rax, [rsi - CELL_SIZE]
+	mov	rax, [rsi - CELL_SIZE]
 	sub	[return_stack_here], CELL_SIZE
-	
-	mov	esi, VM_DATA_OFFSET_RETURN_STACK_LOCATION
-	call	stack_pop
 	
 	ret

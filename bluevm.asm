@@ -4,9 +4,9 @@ segment readable writable
 
 mem dq 0
 
-return_stack rq 0
-return_stack_here rq 0
-return_stack_size rq 0
+return_stack dq 0
+return_stack_here dq 0
+return_stack_size dq 0
 
 segment readable executable
 
@@ -83,7 +83,7 @@ vm_data_init:
 vm_data_init2:
 	mov	rdi, [mem]
 	
-	mov	rsi, [rdi + RETURN_STACK_OFFSET]
+	lea	rsi, [rdi + RETURN_STACK_OFFSET]
 	mov	[return_stack], rsi
 	mov	[return_stack_here], rsi
 	mov	[return_stack_size], RETURN_STACK_SIZE
