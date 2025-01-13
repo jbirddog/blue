@@ -4,8 +4,7 @@ segment readable writable
 
 mem rq 1
 
-ptr_to:
-.ip rq 1
+instruction_pointer rq 1
 
 return_stack rq 1
 return_stack_here rq 1
@@ -83,7 +82,7 @@ vm_data_init2:
 	mov	rdi, [mem]
 
 	lea	rsi, [rdi + INPUT_BUFFER_OFFSET]
-	mov	[ptr_to.ip], rsi
+	mov	[instruction_pointer], rsi
 	
 	lea	rsi, [rdi + RETURN_STACK_OFFSET]
 	mov	[return_stack], rsi

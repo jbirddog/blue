@@ -1,9 +1,9 @@
 
 read_byte:
-	mov	rsi, [ptr_to.ip]
+	mov	rsi, [instruction_pointer]
 	xor	eax, eax
 	lodsb
-	mov	[ptr_to.ip], rsi
+	mov	[instruction_pointer], rsi
 
 	ret
 
