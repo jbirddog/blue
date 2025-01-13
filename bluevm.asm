@@ -36,21 +36,6 @@ mem_alloc:
 	ret
 
 vm_data_init:
-	mov	rsi, [mem]
-	mov	rdi, rsi
-	add	rdi, VM_DATA_OFFSET + VM_DATA_OFFSET_DATA_STACK_LOCATION
-
-	; Location of data stack, here and size
-	mov	rax, rsi
-	add	rax, DATA_STACK_OFFSET
-	stosq
-	stosq
-	mov	eax, DATA_STACK_SIZE
-	stosq
-
-	ret
-
-vm_data_init2:
 	mov	rdi, [mem]
 	
 	lea	rsi, [rdi + INPUT_BUFFER_OFFSET]
@@ -94,7 +79,6 @@ read_boot_code:
 entry $
 	call	mem_alloc
 	call	vm_data_init
-	call	vm_data_init2
 	call	opcode_map_init
 	call	read_boot_code
 	call	outer_interpreter
