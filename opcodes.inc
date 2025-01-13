@@ -142,7 +142,7 @@ op_b_comma:
 	mov	esi, VM_DATA_OFFSET_CODE_BUFFER_HERE_LOCATION
 	call	vm_data_field_get
 
-	mov	rdi, rsi
+	mov	rdi, rax
 	pop	rax
 	
 	stosb
