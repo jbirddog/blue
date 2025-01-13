@@ -127,6 +127,5 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. Move compile/interpret etc logic to interpreter.inc
 1. Dockerize and get a CI job that runs ./build.sh
 1. Support opcodes written in bytecode
-1. Bytecode needs to be able to call machine code
 1. Machine code needs to be able to call bytecode
 1. Write a bs0->blang (gnalb) decompiler by overwriting opcode map and opcode handler
