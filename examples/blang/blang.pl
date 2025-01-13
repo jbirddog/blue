@@ -22,6 +22,7 @@ my @kw = split " ", q(
   execute
   ret
   call
+  b!+
   b,
 );
 

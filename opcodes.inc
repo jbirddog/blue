@@ -142,6 +142,20 @@ op_call:
 
 	ret
 
+op_b_set_inc:
+	call	data_stack_pop
+	push	rax
+	call	data_stack_pop
+	mov	rdi, rax
+	pop	rax
+
+	stosb
+	
+	mov	rax, rdi
+	call	data_stack_push
+
+	ret
+
 op_b_comma:
 	call	data_stack_pop
 	mov	rdi, [code_buffer_here]	
@@ -176,6 +190,7 @@ _opcode_map:
 	op	op_execute, 1, 0
 	op	op_ret, 1, 0
 	op	op_call, 1, 0
+	op	op_b_set_inc, 1, 0
 	op	op_b_comma, 1, 0
 assert ($ - _opcode_map) <= (0x7F shl 4)
 _opcode_map_qwords = ($ - _opcode_map) shr 3

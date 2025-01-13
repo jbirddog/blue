@@ -62,7 +62,14 @@ here ] here start - ret [ execute
 depth litb 01 = assert
 litb 07 = assert
 
-# test writing byte to the code buffer
+# test b!+
+here
+
+here 01 b!+
+
+litb 01 - = assert
+
+# test b,
 here
 
 litb C3 b,
