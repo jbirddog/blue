@@ -2,6 +2,7 @@
 op_halt:
 	xor	edi, edi
 	jmp	exit
+assert ($ - op_halt) <= CELL_SIZE
 
 op_depth:
 	call	data_stack_depth
@@ -47,6 +48,7 @@ op_drop:
 	call	data_stack_pop
 	
 	ret
+assert ($ - op_drop) <= CELL_SIZE
 
 op_not:
 	call	data_stack_pop
@@ -141,6 +143,7 @@ op_call:
 	call	rax
 
 	ret
+assert ($ - op_call) <= CELL_SIZE
 
 op_b_set_inc:
 	call	data_stack_pop
@@ -176,6 +179,9 @@ macro opN lbl, size, flags {
 	db flags, size
 	dw 0
 	dd 0
+}
+
+macro opNI lbl, size, flags {
 }
 
 _opcode_map:
@@ -219,9 +225,11 @@ opcode_map_entry:
 	shl	eax, 4
 	add	rsi, rax
 
+	mov	rdi, rsi
 	mov	rcx, [rsi + 8]
-	; TODO: if inlined, don't deref rsi
-	mov	rdi, [rsi]
+	
+	test	cl, OPCODE_ENTRY_FLAG_INLINED
+	cmovz	rdi, [rdi]
 
 	ret
 	
