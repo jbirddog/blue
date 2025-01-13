@@ -2,11 +2,13 @@ format elf64 executable 3
 
 segment readable writable
 
-mem dq 0
+mem rq 1
 
-return_stack dq 0
-return_stack_here dq 0
-return_stack_size dq 0
+instruction_pointer rq 1
+
+return_stack rq 1
+return_stack_here rq 1
+return_stack_size rq 1
 
 segment readable executable
 
@@ -29,7 +31,7 @@ vm_data_init:
 	mov	rdi, rsi
 	add	rdi, VM_DATA_OFFSET
 
-	; BlueVM state
+	; BlueVM state - migrated by removing until used
 	xor	eax, eax
 	stosq
 
@@ -43,12 +45,10 @@ vm_data_init:
 	xor	eax, eax
 	stosq
 	
-	; Location of return stack, here and size
-	mov	rax, rsi
-	add	rax, RETURN_STACK_OFFSET
+	; Location of return stack, here and size - migrated
+	xor	eax, eax
 	stosq
 	stosq
-	mov	eax, RETURN_STACK_SIZE
 	stosq
 
 	; Location of data stack, here and size
@@ -82,6 +82,9 @@ vm_data_init:
 
 vm_data_init2:
 	mov	rdi, [mem]
+
+	lea	rsi, [rdi + INPUT_BUFFER_OFFSET]
+	mov	[instruction_pointer], rsi
 	
 	lea	rsi, [rdi + RETURN_STACK_OFFSET]
 	mov	[return_stack], rsi

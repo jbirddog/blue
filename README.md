@@ -130,3 +130,6 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. Machine code needs to be able to call bytecode
 1. Write a bs0->blang (gnalb) decompiler by overwriting opcode map and opcode handler
 1. dq fields that point to memory regions, migrate fields away from vmdata
+1. Once migrated:
+   1. Remove BlueVM data and host data regions, grow data stack back to 1024 bytes
+   1. Remove vm_data_get/set
