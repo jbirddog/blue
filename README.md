@@ -116,6 +116,7 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. Move compile/interpret etc logic to interpreter.inc
 1. Dockerize and get a CI job that runs ./build.sh
 1. Opcodes can't have inline machine code with call/jmp since offsets are wrong after copy to mem
+   1. Don't copy to mem, check mem and if 0 check internal if in bounds
 1. Write a bs0->blang (gnalb) decompiler by overwriting opcode map and opcode handler
 1. Bring back stack push/pop2
 1. Bring back stack bounds checking

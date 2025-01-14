@@ -1,6 +1,7 @@
 op_halt:
 	xor	edi, edi
 	jmp	exit
+assert ($ - op_halt) <= 14
 
 op_depth:
 	call	data_stack_depth
@@ -8,12 +9,14 @@ op_depth:
 	call	data_stack_push
 	
 	ret
+assert ($ - op_depth) <= 14
 
 op_litb:
 	call	read_byte
 	call	data_stack_push
 	
 	ret
+assert ($ - op_litb) <= 14
 
 op_eq:
 	call	data_stack_pop
@@ -46,6 +49,7 @@ op_drop:
 	call	data_stack_pop
 	
 	ret
+assert ($ - op_drop) <= 14
 
 op_not:
 	call	data_stack_pop
@@ -53,6 +57,7 @@ op_not:
 	call	data_stack_push
 	
 	ret
+assert ($ - op_not) <= 14
 
 op_swap:
 	call	data_stack_pop
@@ -71,17 +76,20 @@ op_compile:
 	mov	[opcode_handler], OPCODE_HANDLER_COMPILE
 
 	ret
+assert ($ - op_compile) <= 14
 
 op_interpret:
 	mov	[opcode_handler], OPCODE_HANDLER_INTERPRET
 
 	ret
+assert ($ - op_interpret) <= 14
 
 op_start:
 	mov	rax, [code_buffer]
 	call	data_stack_push
 	
 	ret
+assert ($ - op_start) <= 14
 
 op_sub:
 	call	data_stack_pop
@@ -111,6 +119,7 @@ op_at:
 	call	data_stack_push
 
 	ret
+assert ($ - op_at) <= 14
 
 op_b_at:
 	call	data_stack_pop
@@ -126,6 +135,7 @@ op_here:
 	call	data_stack_push
 
 	ret
+assert ($ - op_here) <= 14
 	
 op_execute:
 	mov	rax, [instruction_pointer]
@@ -141,12 +151,14 @@ op_ret:
 	mov	[instruction_pointer], rax
 	
 	ret
+assert ($ - op_ret) <= 14
 
 op_call:
 	call	data_stack_pop
 	call	rax
 
 	ret
+assert ($ - op_call) <= 14
 
 _set_pre:
 	call	data_stack_pop
@@ -168,25 +180,28 @@ op_b_set_inc:
 	stosb
 
 	jmp	_set_post
+assert ($ - op_b_set_inc) <= 14
 
 op_d_set_inc:
 	call 	_set_pre
 	stosd
 
 	jmp	_set_post
+assert ($ - op_d_set_inc) <= 14
 
 op_set_inc:
 	call 	_set_pre
 	stosq
 
 	jmp	_set_post
+assert ($ - op_set_inc) <= 14
 
 op_set_here:
 	call	data_stack_pop
 	mov	[code_buffer_here], rax
 
 	ret
-
+assert ($ - op_set_here) <= 14
 
 macro opN lbl, size, flags {
 latest_op = lbl
