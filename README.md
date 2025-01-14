@@ -67,31 +67,36 @@ the code buffer and advances the code buffer's here.
 
 ## Opcodes
 
-All opcodes are represented in hexdecimal and subject to change.
+Opcodes start at 00 and subject to change.
 
 | Opcode | Name | Stack Effect | Description |
 |----|----|----|----|
-| 00 | halt | ( -- ) | Halt execution of the BlueVM |
-| 01 | depth | ( -- n ) | Push depth of the data stack |
-| 02 | litb | ( -- n ) | Push next byte from the input buffer |
-| 03 | = | ( a b -- t/f ) | Check top two items for equality and push result |
-| 04 | assert | ( t/f -- ) | Exits with 255 status code if top of stack is false (tmp) |
-| 05 | drop | ( x -- ) | Drops top of the data stack |
-| 06 | not | ( x -- 'x ) | Bitwise not top of the data stack |
-| 07 | swap | ( a b -- b a ) | Swap top two values on the data stack |
-| 08 | [ | ( -- ) | Set the opcode handler to interpret |
-| 09 | ] | ( -- ) | Set the opcode handler to compile |
-| 0A | start | ( -- a ) | Push the code buffer location |
-| 0B | - | ( a b -- n ) | Push a - b |
-| 0C | + | ( a b -- n ) | Push a + b |
-| 0D | b@ | ( a -- b ) | Push byte value found at addr |
-| 0E | here | ( -- a ) | Push location of code buffer's here |
-| 0F | execute | ( a -- ? ) | Execute bytecode located at address |
-| 10 | ret | ( -- ) | Pops value from return stack and sets the instruction pointer |
-| 11 | call | ( a -- ? ) | Call machine code at address |
-| 12 | b!+ | ( a b -- a' ) | Write byte value to, increment and push addr |
-| 13 | here! | ( a -- ) | Sets the location of code buffer's here |
-| 14 | b, | ( b -- ) | Write byte value to, and increment, here |
+| XX | halt | ( -- ) | Halt execution of the BlueVM |
+| XX | depth | ( -- n ) | Push depth of the data stack |
+| XX | litb | ( -- n ) | Push next byte from the input buffer |
+| XX | = | ( a b -- t/f ) | Check top two items for equality and push result |
+| XX | assert | ( t/f -- ) | Exits with 255 status code if top of stack is false (tmp) |
+| XX | drop | ( x -- ) | Drops top of the data stack |
+| XX | not | ( x -- 'x ) | Bitwise not top of the data stack |
+| XX | swap | ( a b -- b a ) | Swap top two values on the data stack |
+| XX | [ | ( -- ) | Set the opcode handler to interpret |
+| XX | ] | ( -- ) | Set the opcode handler to compile |
+| XX | start | ( -- a ) | Push the code buffer location |
+| XX | - | ( a b -- n ) | Push a - b |
+| XX | + | ( a b -- n ) | Push a + b |
+| XX | b@ | ( a -- b ) | Push byte value found at addr |
+| XX | here | ( -- a ) | Push location of code buffer's here |
+| XX | execute | ( a -- ? ) | Execute bytecode located at address |
+| XX | ret | ( -- ) | Pops value from return stack and sets the instruction pointer |
+| XX | call | ( a -- ? ) | Call machine code at address |
+| XX | b!+ | ( a b -- a' ) | Write byte value to, increment and push addr |
+| XX | here! | ( a -- ) | Sets the location of code buffer's here |
+| XX | b, | ( b -- ) | Write byte value to, and increment, here |
+| XX | !+ | ( a q -- a' ) | Write qword value to, increment and push addr |
+| XX | , | ( q -- ) | Write qword value to, and increment, here |
+| XX | d!+ | ( a d -- a' ) | Write dword value to, increment and push addr |
+| XX | d, | ( d -- ) | Write dword value to, and increment, here |
+| XX | @ | ( d -- ) | Push qword value found at addr |
 
 ## Tools/Examples
 
@@ -109,13 +114,14 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. In opcode map entry move addr/code field right after flags/size for more inline bytes
 1. Opcodes can't have inline machine code with call/jmp since offsets are wrong after copy to mem
 1. Machine code needs to be able to call bytecode
-   1. Need opcodes to supply addrs to call (data/return stack push/pop, handle op code, etc)
-   1. Put addres at start of code buffer so no literal addrs in bs0 files
+   1. Need to supply addrs to call (data/return stack push/pop, handle op code, etc)
+   1. Put addresses behind code buffer so no literal addrs in bs0 files
    1. Add test for calling + from machine code
 1. Write a bs0->blang (gnalb) decompiler by overwriting opcode map and opcode handler
 1. Bring back stack push/pop2
 1. Bring back stack bounds checking
 1. Add dup
+1. Add bytecode opcodes for litb, etc
 1. Extend blang op array to include more info of each opcode, use for tooling
-1. Add build script that uses ops from blang to generate files (consts, macros, md table, etc)
+1. Add build script that uses ops from blang to generate files md table
 1. After tooling, start to re-arrange opcodes

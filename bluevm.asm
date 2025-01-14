@@ -85,5 +85,16 @@ entry $
 	call	vm_data_init
 	call	opcode_map_init
 	call	read_boot_code
+
 	call	outer_interpreter
 
+	;;;;;;;;;	
+	times 64 db 0
+	;mov rdi, qword opcode_handler_call	
+	
+	mov rdi, [code_buffer]
+	sub rdi, 64
+	mov rdi, [rdi]
+	xor eax, eax
+	call rdi
+	

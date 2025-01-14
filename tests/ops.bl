@@ -69,6 +69,20 @@ here 01 b!+
 
 litb 01 - = assert
 
+# test d!+
+here
+
+here 01 d!+
+
+litb 04 - = assert
+
+# test !+
+here
+
+here 01 !+
+
+litb 08 - = assert
+
 # test b,
 here
 
@@ -78,11 +92,54 @@ litb C3 = assert
 
 here litb 01 - = assert
 
+# test d,
+here
+
+litb C3 d,
+here litb 04 - b@
+litb C3 = assert
+
+here litb 04 - = assert
+
+# test ,
+here
+
+litb C3 ,
+here litb 08 - b@
+litb C3 = assert
+
+here litb 08 - = assert
+
 #
 # test calling compiled machine code
 #
 
+# call address that immediately returns
 here litb C3 b, call
+
+# push two numbers, compile and call machine code that calls the + opcode
+litb 03 litb 05
+
+here
+
+# xor eax, eax
+# mov al, _+ opcode_
+litb 31 b, litb C0 b,
+litb B0 b, ] + [
+
+# movabs rdi, _addr of opcode call_
+litb 48 b, litb BF b,
+start litb 64 - @ ,
+
+# call rdi
+#litb FF b, litb D7 b,
+
+# ret
+litb C3 b,
+
+call
+
+drop drop
 
 #
 # fin

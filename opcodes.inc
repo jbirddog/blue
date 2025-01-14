@@ -105,7 +105,14 @@ op_add:
 
 	ret
 
-op_byte_at:
+op_at:
+	call	data_stack_pop
+	mov	rax, [rax]
+	call	data_stack_push
+
+	ret
+
+op_b_at:
 	call	data_stack_pop
 	mov	rsi, rax
 	xor	eax, eax
@@ -141,21 +148,40 @@ op_call:
 
 	ret
 
-op_b_set_inc:
+_set_pre:
 	call	data_stack_pop
 	push	rax
 	call	data_stack_pop
 	mov	rdi, rax
 	pop	rax
 
-	stosb
-	
+	ret
+
+_set_post:
 	mov	rax, rdi
 	call	data_stack_push
 
 	ret
 
-op_here_set:
+op_b_set_inc:
+	call 	_set_pre
+	stosb
+
+	jmp	_set_post
+
+op_d_set_inc:
+	call 	_set_pre
+	stosd
+
+	jmp	_set_post
+
+op_set_inc:
+	call 	_set_pre
+	stosq
+
+	jmp	_set_post
+
+op_set_here:
 	call	data_stack_pop
 	mov	[code_buffer_here], rax
 
@@ -201,17 +227,32 @@ _opcode_map:
 	opN	op_start, 1, 0
 	opN	op_sub, 1, 0
 	opN	op_add, 1, 0
-	opN	op_byte_at, 1, 0
+	opN	op_b_at, 1, 0
 	opN	op_here, 1, 0
 	opN	op_execute, 1, 0
 	opN	op_ret, 1, 0
 	opN	op_call, 1, 0
 	opN	op_b_set_inc, 1, 0
-	opN	op_here_set, 1, 0
+	opN	op_set_here, 1, 0
 	
 	opBI	op_b_comma, 1, 0
-		db op_here_code, op_swap_code, op_b_set_inc_code, op_here_set_code, op_ret_code
+		db op_here_code, op_swap_code, op_b_set_inc_code, op_set_here_code, op_ret_code
 	end_op
+
+	opN	op_set_inc, 1, 0
+	
+	opBI	op_comma, 1, 0
+		db op_here_code, op_swap_code, op_set_inc_code, op_set_here_code, op_ret_code
+	end_op
+	
+	opN	op_d_set_inc, 1, 0
+	
+	opBI	op_d_comma, 1, 0
+		db op_here_code, op_swap_code, op_d_set_inc_code, op_set_here_code, op_ret_code
+	end_op
+	
+	opN	op_at, 1, 0
+	
 	
 assert (($ - _opcode_map) and 0x07) = 0
 assert ($ - _opcode_map) <= (0x7F shl 4)
