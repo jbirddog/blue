@@ -1,26 +1,6 @@
 
 ; 1574
 
-;op_halt:
-;	xor	edi, edi
-;	jmp	exit
-;assert ($ - op_halt) <= 14
-
-op_depth:
-	call	data_stack_depth
-	mov	eax, ecx
-	call	data_stack_push
-	
-	ret
-assert ($ - op_depth) <= 14
-
-op_litb:
-	call	read_byte
-	call	data_stack_push
-	
-	ret
-assert ($ - op_litb) <= 14
-
 op_eq:
 	call	data_stack_pop
 	push	rax
@@ -241,13 +221,28 @@ macro end_op {
 }
 
 _opcode_map:
-	opNI	op_halt, 1, 0
-		xor	edi, edi
-		jmp	exit
-	end_op
+
+opNI	op_halt, 1, 0
+	xor	edi, edi
+	jmp	exit
+end_op
 	
-	opN	op_depth, 1, 0
-	opN	op_litb, 2, 0
+opNI	op_depth, 1, 0
+	call	data_stack_depth
+	mov	eax, ecx
+	call	data_stack_push
+	
+	ret
+end_op
+
+opNI	op_litb, 2, 0
+	call	read_byte
+	call	data_stack_push
+	
+	ret
+end_op
+	
+	
 	opN	op_eq, 1, 0
 	opN	op_assert, 1, 0
 	opN	op_drop, 1, 0
@@ -266,21 +261,21 @@ _opcode_map:
 	opN	op_b_set_inc, 1, 0
 	opN	op_set_here, 1, 0
 	
-	opBI	op_b_comma, 1, 0
-		db op_here_code, op_swap_code, op_b_set_inc_code, op_set_here_code, op_ret_code
-	end_op
+opBI	op_b_comma, 1, 0
+	db op_here_code, op_swap_code, op_b_set_inc_code, op_set_here_code, op_ret_code
+end_op
 
 	opN	op_set_inc, 1, 0
 	
-	opBI	op_comma, 1, 0
-		db op_here_code, op_swap_code, op_set_inc_code, op_set_here_code, op_ret_code
-	end_op
-	
-	opN	op_d_set_inc, 1, 0
-	
-	opBI	op_d_comma, 1, 0
-		db op_here_code, op_swap_code, op_d_set_inc_code, op_set_here_code, op_ret_code
-	end_op
+opBI	op_comma, 1, 0
+	db op_here_code, op_swap_code, op_set_inc_code, op_set_here_code, op_ret_code
+end_op
+
+opN	op_d_set_inc, 1, 0
+
+opBI	op_d_comma, 1, 0
+	db op_here_code, op_swap_code, op_d_set_inc_code, op_set_here_code, op_ret_code
+end_op
 	
 	opN	op_at, 1, 0
 	
