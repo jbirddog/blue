@@ -1,8 +1,6 @@
-
 op_halt:
 	xor	edi, edi
 	jmp	exit
-assert ($ - op_halt) <= CELL_SIZE
 
 op_depth:
 	call	data_stack_depth
@@ -184,10 +182,26 @@ macro opN lbl, size, flags {
 }
 
 macro opNI lbl, size, flags {
+	db flags or OPCODE_ENTRY_FLAG_INLINED, size
+	dw 0
+	dd 0
+lbl:
+}
+
+macro end lbl {
+	assert ($ - lbl) <= CELL_SIZE
+	times (CELL_SIZE - ($ - lbl)) db 0
+	assert ($ - lbl) = CELL_SIZE
 }
 
 _opcode_map:
 	opN	op_halt, 1, 0
+
+	;opNI	op_halt2, 1, 0
+	;	xor	edi, edi
+	;	jmp	exit	
+	;end	op_halt2	
+	
 	opN	op_depth, 1, 0
 	opN	op_litb, 2, 0
 	opN	op_eq, 1, 0
@@ -233,6 +247,11 @@ opcode_map_entry:
 	test	cl, OPCODE_ENTRY_FLAG_INLINED
 	cmovz	rdi, [rdi]
 
+	;mov rdx, op_halt
+	;cmp rdi, rdx
+	;jne exit
+
+	
 	ret
 	
 opcode_interpret:
