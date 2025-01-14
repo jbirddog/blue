@@ -49,6 +49,8 @@ op_drop:
 	
 	ret
 assert ($ - op_drop) <= CELL_SIZE
+times (CELL_SIZE - ($ - op_drop)) db 0
+assert ($ - op_drop) = CELL_SIZE
 
 op_not:
 	call	data_stack_pop
