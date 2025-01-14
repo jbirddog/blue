@@ -1,7 +1,10 @@
-op_halt:
-	xor	edi, edi
-	jmp	exit
-assert ($ - op_halt) <= 14
+
+; 1574
+
+;op_halt:
+;	xor	edi, edi
+;	jmp	exit
+;assert ($ - op_halt) <= 14
 
 op_depth:
 	call	data_stack_depth
@@ -203,21 +206,32 @@ op_set_here:
 	ret
 assert ($ - op_set_here) <= 14
 
-macro opN lbl, size, flags {
+macro begin_op lbl, size, flags {
 latest_op = lbl
-lbl##_code = ($ - _opcode_map) shr 4
+latest_op_code = ($ - _opcode_map) shr 4
+lbl##_code = latest_op_code
 	db flags, size
+}
+
+macro opN lbl, size, flags {
+__opN_##lbl:
+	begin_op lbl, size, flags
+
 	dq lbl
 	dw 0
 	dd 0
+	
+	assert ($ - __opN_##lbl) = (CELL_SIZE * 2)
+}
+
+macro opNI lbl, size, flags {
+lbl:
+	begin_op lbl, size, flags or OPCODE_ENTRY_FLAG_INLINED
 }
 
 macro opBI lbl, size, flags {
-latest_op = lbl
-lbl##_code = ($ - _opcode_map) shr 4
 lbl:
-	db flags or OPCODE_ENTRY_FLAG_BYTECODE or OPCODE_ENTRY_FLAG_INLINED
-	db size
+	begin_op lbl, size, flags or OPCODE_ENTRY_FLAG_BYTECODE or OPCODE_ENTRY_FLAG_INLINED
 }
 
 macro end_op {
@@ -227,7 +241,11 @@ macro end_op {
 }
 
 _opcode_map:
-	opN	op_halt, 1, 0
+	opNI	op_halt, 1, 0
+		xor	edi, edi
+		jmp	exit
+	end_op
+	
 	opN	op_depth, 1, 0
 	opN	op_litb, 2, 0
 	opN	op_eq, 1, 0
@@ -272,6 +290,7 @@ assert ($ - _opcode_map) <= (0x7F shl 4)
 _opcode_map_qwords = ($ - _opcode_map) shr 3
 
 opcode_map_init:
+	ret
 	mov	rdi, [opcode_map]
 	mov	rsi, _opcode_map
 	mov	ecx, _opcode_map_qwords
@@ -282,11 +301,24 @@ opcode_map_init:
 
 ; expects opcode in rax
 opcode_map_entry:
-	mov	rsi, [opcode_map]
+	mov	edx, eax
 	shl	eax, 4
+	
+	mov	rsi, [opcode_map]
 	add	rsi, rax
-
 	mov	rcx, [rsi]
+	
+	test	rcx, rcx
+	jnz	.continue
+
+	cmp	edx, latest_op_code
+	jg	.continue
+
+	mov	rsi, _opcode_map
+	add	rsi, rax
+	mov	rcx, [rsi]
+
+.continue:
 	lea	rdi, [rsi + 2]
 	
 	test	cl, OPCODE_ENTRY_FLAG_INLINED
