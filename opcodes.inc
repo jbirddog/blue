@@ -46,9 +46,6 @@ op_drop:
 	call	data_stack_pop
 	
 	ret
-assert ($ - op_drop) <= CELL_SIZE
-times (CELL_SIZE - ($ - op_drop)) db 0
-assert ($ - op_drop) = CELL_SIZE
 
 op_not:
 	call	data_stack_pop
@@ -143,7 +140,6 @@ op_call:
 	call	rax
 
 	ret
-assert ($ - op_call) <= CELL_SIZE
 
 op_b_set_inc:
 	call	data_stack_pop
@@ -181,27 +177,8 @@ macro opN lbl, size, flags {
 	dq lbl
 }
 
-macro opNI lbl, size, flags {
-	db flags or OPCODE_ENTRY_FLAG_INLINED, size
-	dw 0
-	dd 0
-lbl:
-}
-
-macro end lbl {
-	assert ($ - lbl) <= CELL_SIZE
-	times (CELL_SIZE - ($ - lbl)) db 0
-	assert ($ - lbl) = CELL_SIZE
-}
-
 _opcode_map:
 	opN	op_halt, 1, 0
-
-	;opNI	op_halt2, 1, 0
-	;	xor	edi, edi
-	;	jmp	exit	
-	;end	op_halt2	
-	
 	opN	op_depth, 1, 0
 	opN	op_litb, 2, 0
 	opN	op_eq, 1, 0
@@ -222,8 +199,8 @@ _opcode_map:
 	opN	op_b_set_inc, 1, 0
 	opN	op_b_comma, 1, 0
 	opN	op_here_set, 1, 0
+assert (($ - _opcode_map) and 0x07) = 0
 assert ($ - _opcode_map) <= (0x7F shl 4)
-assert ($ - _opcode_map) <= 512
 _opcode_map_qwords = ($ - _opcode_map) shr 3
 
 opcode_map_init:
@@ -246,16 +223,11 @@ opcode_map_entry:
 	
 	test	cl, OPCODE_ENTRY_FLAG_INLINED
 	cmovz	rdi, [rdi]
-
-	;mov rdx, op_halt
-	;cmp rdi, rdx
-	;jne exit
-
 	
 	ret
 	
 opcode_interpret:
-	; TODO: if the opcode is defined by the host, run it
+	; TODO: if the opcode is bytecode, execute it
 	call	rdi
 
 	ret
@@ -276,6 +248,7 @@ opcode_compile:
 	ret
 
 ; expects opcode in rax, address in rdi and flags in rcx
+; TODO: clean up this indirection
 opcode_handler_interpret:
 	jmp	opcode_interpret
 	
@@ -299,13 +272,14 @@ opcode_handler_call:
 	test	rdi, rdi
 	jz	.invalid
 
-	; TODO: if the host has specified the opcode handler push rdi, rcx, rax and call it
+	; TODO: if the host set the opcode handler data_stack_push rdi, rcx, rax and call it
 	pop	rax
 	call	[opcode_handler]
 
 	jmp	.done
 
 .invalid:
+	; TODO: if the host set the opcode invalid handler data_stack_push rax and call it
 	pop	rax
 	call	[opcode_handler_invalid]
 	

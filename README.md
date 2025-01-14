@@ -105,13 +105,12 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. Move compile/interpret etc logic to interpreter.inc
 1. Dockerize and get a CI job that runs ./build.sh
 1. Support opcodes written in bytecode
-1. Support opcode with inline code instead of addrs
-1. Find native opcodes that fit in 8 bytes and inline code
+1. Support opcode with inline bytecode instead of addrs
+1. Build b, off of b!+ as inlined bytecode op ( b -- ) here swap b!+ here! ret
 1. Machine code needs to be able to call bytecode
 1. Write a bs0->blang (gnalb) decompiler by overwriting opcode map and opcode handler
 1. Bring back stack push/pop2
 1. Bring back stack bounds checking
-1. Build b, off of b!+ as inlined bytecode op ( b -- ) here swap b!+ here! ret
 1. Add dup
 1. Extend blang op array to include more info of each opcode, use for tooling
 1. Add build script that uses ops from blang to generate files (consts, macros, md table, etc)
