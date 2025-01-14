@@ -13,11 +13,11 @@ data_stack rq 1
 data_stack_here rq 1
 data_stack_size rq 1
 opcode_map rq 1
-opcode_handler rq 1
-opcode_handler_invalid rq 1
 code_buffer rq 1
 code_buffer_here rq 1
 code_buffer_size rq 1
+opcode_handler rq 1
+opcode_handler_invalid rq 1
 
 segment readable executable
 
@@ -54,14 +54,18 @@ vm_data_init:
 	
 	lea	rsi, [rdi + OPCODE_MAP_OFFSET]
 	mov	[opcode_map], rsi
-	
-	mov	[opcode_handler], OPCODE_HANDLER_INTERPRET
-	mov	[opcode_handler_invalid], OPCODE_HANDLER_INVALID
+
+	lea	rsi, [rdi + VM_ADDRS_OFFSET]
+	mov	rax, opcode_handler_call
+	mov	[rsi], rax
 	
 	lea	rsi, [rdi + CODE_BUFFER_OFFSET]
 	mov	[code_buffer], rsi
 	mov	[code_buffer_here], rsi
 	mov	[code_buffer_size], CODE_BUFFER_SIZE
+	
+	mov	[opcode_handler], OPCODE_HANDLER_INTERPRET
+	mov	[opcode_handler_invalid], OPCODE_HANDLER_INVALID
 
 	ret
 
@@ -82,5 +86,4 @@ entry $
 	call	opcode_map_init
 	call	read_boot_code
 	call	outer_interpreter
-	
-	
+

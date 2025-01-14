@@ -25,7 +25,9 @@ The BlueVM requires a single allocation with the following layout in rwx memory:
 1. Opcode Map (4096 bytes)
    1. BlueVM Opcode Map: 0x00 - 0x7F (2048 bytes)
    1. Extended Opcode Map: 0x80 - 0xFF (2048 bytes)
-1. Code Buffer (4096 bytes)
+1. Runtime Buffer (4096 bytes)
+   1. BlueVM addresses (64 bytes)
+   1. Code Buffer (4032 bytes)
 
 ## Boot
 
@@ -50,11 +52,11 @@ interpreter requires that the host termintes execution properly. One way to do t
 
 Each entry in the opcode map is 16 bytes.
 
-1. Code address (8 bytes)
 1. Header (8 bytes)
    1. Flags (1 byte)
    1. Size (1 byte)
    1. Reserved (6 bytes)
+1. Code (inline or address) (8 bytes)
 
 ## Opcode Handler
 
@@ -107,6 +109,9 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. In opcode map entry move addr/code field right after flags/size for more inline bytes
 1. Opcodes can't have inline machine code with call/jmp since offsets are wrong after copy to mem
 1. Machine code needs to be able to call bytecode
+   1. Need opcodes to supply addrs to call (data/return stack push/pop, handle op code, etc)
+   1. Put addres at start of code buffer so no literal addrs in bs0 files
+   1. Add test for calling + from machine code
 1. Write a bs0->blang (gnalb) decompiler by overwriting opcode map and opcode handler
 1. Bring back stack push/pop2
 1. Bring back stack bounds checking
