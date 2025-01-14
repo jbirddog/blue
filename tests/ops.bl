@@ -129,17 +129,17 @@ litb B0 b, ] + [
 
 # movabs rdi, _addr of opcode call_
 litb 48 b, litb BF b,
-start litb 64 - @ ,
+start litb 40 - @ ,
 
 # call rdi
-#litb FF b, litb D7 b,
+litb FF b, litb D7 b,
 
 # ret
 litb C3 b,
 
 call
 
-drop drop
+litb 08 = assert
 
 #
 # fin

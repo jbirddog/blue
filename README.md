@@ -113,10 +113,6 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. Dockerize and get a CI job that runs ./build.sh
 1. In opcode map entry move addr/code field right after flags/size for more inline bytes
 1. Opcodes can't have inline machine code with call/jmp since offsets are wrong after copy to mem
-1. Machine code needs to be able to call bytecode
-   1. Need to supply addrs to call (data/return stack push/pop, handle op code, etc)
-   1. Put addresses behind code buffer so no literal addrs in bs0 files
-   1. Add test for calling + from machine code
 1. Write a bs0->blang (gnalb) decompiler by overwriting opcode map and opcode handler
 1. Bring back stack push/pop2
 1. Bring back stack bounds checking
