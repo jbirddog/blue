@@ -119,7 +119,7 @@ op_here:
 	call	data_stack_push
 
 	ret
-
+	
 op_execute:
 	mov	rax, [instruction_pointer]
 	call	return_stack_push
@@ -155,26 +155,36 @@ op_b_set_inc:
 
 	ret
 
-; TODO: replace with bytecode
-op_b_comma:
-	call	data_stack_pop
-	mov	rdi, [code_buffer_here]	
-	stosb
-	mov	[code_buffer_here], rdi
-	
-	ret
-
 op_here_set:
 	call	data_stack_pop
 	mov	[code_buffer_here], rax
 
 	ret
-	
+
+
 macro opN lbl, size, flags {
+latest_op = lbl
+lbl##_code = ($ - _opcode_map) shr 4
 	db flags, size
 	dw 0
 	dd 0
 	dq lbl
+}
+
+macro opBI lbl, size, flags {
+latest_op = lbl
+lbl##_code = ($ - _opcode_map) shr 4
+lbl:
+	db flags or OPCODE_ENTRY_FLAG_BYTECODE or OPCODE_ENTRY_FLAG_INLINED
+	db size
+	dw 0
+	dd 0
+}
+
+macro end_op {
+	assert ($ - latest_op) <= (CELL_SIZE * 2)
+	times ((CELL_SIZE * 2) - ($ - latest_op)) db 0
+	assert ($ - latest_op) = (CELL_SIZE * 2)
 }
 
 _opcode_map:
@@ -197,8 +207,12 @@ _opcode_map:
 	opN	op_ret, 1, 0
 	opN	op_call, 1, 0
 	opN	op_b_set_inc, 1, 0
-	opN	op_b_comma, 1, 0
 	opN	op_here_set, 1, 0
+	
+	opBI	op_b_comma, 1, 0
+		db op_here_code, op_swap_code, op_b_set_inc_code, op_here_set_code, op_ret_code
+	end_op
+	
 assert (($ - _opcode_map) and 0x07) = 0
 assert ($ - _opcode_map) <= (0x7F shl 4)
 _opcode_map_qwords = ($ - _opcode_map) shr 3
@@ -227,8 +241,17 @@ opcode_map_entry:
 	ret
 	
 opcode_interpret:
-	; TODO: if the opcode is bytecode, execute it
+	test	cl, OPCODE_ENTRY_FLAG_BYTECODE
+	jnz	.bytecode
+
 	call	rdi
+
+	ret
+
+.bytecode:
+	mov	rax, rdi
+	call	data_stack_push
+	call	op_execute
 
 	ret
 

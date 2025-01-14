@@ -88,8 +88,8 @@ All opcodes are represented in hexdecimal and subject to change.
 | 10 | ret | ( -- ) | Pops value from return stack and sets the instruction pointer |
 | 11 | call | ( a -- ? ) | Call machine code at address |
 | 12 | b!+ | ( a b -- a' ) | Write byte value to, increment and push addr |
-| 13 | b, | ( b -- ) | Write byte value to, and increment, here |
-| 14 | here! | ( a -- ) | Sets the location of code buffer's here |
+| 13 | here! | ( a -- ) | Sets the location of code buffer's here |
+| 14 | b, | ( b -- ) | Write byte value to, and increment, here |
 
 ## Tools/Examples
 
@@ -104,9 +104,8 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. Print error messages to disambiguate exit status
 1. Move compile/interpret etc logic to interpreter.inc
 1. Dockerize and get a CI job that runs ./build.sh
-1. Support opcodes written in bytecode
-1. Support opcode with inline bytecode instead of addrs
-1. Build b, off of b!+ as inlined bytecode op ( b -- ) here swap b!+ here! ret
+1. In opcode map entry move addr/code field right after flags/size for more inline bytes
+1. Opcodes can't have inline machine code with call/jmp since offsets are wrong after copy to mem
 1. Machine code needs to be able to call bytecode
 1. Write a bs0->blang (gnalb) decompiler by overwriting opcode map and opcode handler
 1. Bring back stack push/pop2
