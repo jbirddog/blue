@@ -177,10 +177,10 @@ op_here_set:
 	ret
 	
 macro opN lbl, size, flags {
-	dq lbl
 	db flags, size
 	dw 0
 	dd 0
+	dq lbl
 }
 
 macro opNI lbl, size, flags {
@@ -227,8 +227,8 @@ opcode_map_entry:
 	shl	eax, 4
 	add	rsi, rax
 
-	mov	rdi, rsi
-	mov	rcx, [rsi + 8]
+	mov	rcx, [rsi]
+	lea	rdi, [rsi + 8]
 	
 	test	cl, OPCODE_ENTRY_FLAG_INLINED
 	cmovz	rdi, [rdi]
