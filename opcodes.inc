@@ -192,9 +192,9 @@ macro opN lbl, size, flags {
 latest_op = lbl
 lbl##_code = ($ - _opcode_map) shr 4
 	db flags, size
+	dq lbl
 	dw 0
 	dd 0
-	dq lbl
 }
 
 macro opBI lbl, size, flags {
@@ -203,8 +203,6 @@ lbl##_code = ($ - _opcode_map) shr 4
 lbl:
 	db flags or OPCODE_ENTRY_FLAG_BYTECODE or OPCODE_ENTRY_FLAG_INLINED
 	db size
-	dw 0
-	dd 0
 }
 
 macro end_op {
@@ -274,7 +272,7 @@ opcode_map_entry:
 	add	rsi, rax
 
 	mov	rcx, [rsi]
-	lea	rdi, [rsi + 8]
+	lea	rdi, [rsi + 2]
 	
 	test	cl, OPCODE_ENTRY_FLAG_INLINED
 	cmovz	rdi, [rdi]

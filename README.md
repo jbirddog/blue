@@ -52,11 +52,15 @@ interpreter requires that the host termintes execution properly. One way to do t
 
 Each entry in the opcode map is 16 bytes.
 
-1. Header (8 bytes)
-   1. Flags (1 byte)
-   1. Size (1 byte)
-   1. Reserved (6 bytes)
-1. Code (inline or address) (8 bytes)
+1. Flags (1 byte)
+   1. Immediate
+   1. Inlined code
+   1. Bytecode
+   1. 5 bits reserved
+1. Size (1 byte)
+1. Code (14 bytes)
+   1. Either 8 bytes for addr and 6 empty
+   1. Or 14 bytes available for byte or machine code
 
 ## Opcode Handler
 
@@ -111,7 +115,6 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. Print error messages to disambiguate exit status
 1. Move compile/interpret etc logic to interpreter.inc
 1. Dockerize and get a CI job that runs ./build.sh
-1. In opcode map entry move addr/code field right after flags/size for more inline bytes
 1. Opcodes can't have inline machine code with call/jmp since offsets are wrong after copy to mem
 1. Write a bs0->blang (gnalb) decompiler by overwriting opcode map and opcode handler
 1. Bring back stack push/pop2
