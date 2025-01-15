@@ -30,6 +30,7 @@ my @kw = split " ", q(
   d!+
   d,
   @
+  dup
 );
 
 my %op = map { $kw[$_] => sprintf("%02X", $_) } 0..$#kw;

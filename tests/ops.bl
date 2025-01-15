@@ -31,6 +31,9 @@ litb 09 litb 07 - litb 02 = assert
 # +
 litb 07 litb 02 + litb 09 = assert
 
+# dup
+here dup = assert
+
 #
 # test opcode handlers
 #

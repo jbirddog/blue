@@ -118,13 +118,11 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. Write a bs0->blang (gnalb) decompiler by overwriting opcode map and opcode handler
 1. Migrate ops to stack push/pop2
 1. Bring back stack bounds checking
-1. Add dup
 1. Add bytecode opcodes for litb, etc
 1. Make assert a bytecode op
    1. Add ip, ip! opcodes
    1. Add if-else opcode ( t/f ta fa -- ? )
 1. Extend blang op array to include more info of each opcode, use for tooling
-1. Add build script that uses ops from blang to generate files md table
 1. Start to re-arrange opcodes
 1. Have [ >r here and the opcode handler, set to compile
 1. Have ] add ret opcode, r> the opcode handler, restore it, r> the addr

@@ -251,6 +251,14 @@ opNI	op_at, 1, 0
 	ret
 end_op	
 
+opNI	op_dup, 1, 0
+	call	data_stack_pop
+	mov	rcx, rax
+	call	data_stack_push2
+
+	ret
+end_op
+
 assert (($ - _opcode_map) and 0x07) = 0
 assert ($ - _opcode_map) <= (0x7F shl 4)
 _opcode_map_qwords = ($ - _opcode_map) shr 3
