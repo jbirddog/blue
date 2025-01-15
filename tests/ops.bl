@@ -120,7 +120,7 @@ here litb 08 - = assert
 #
 
 # call address that immediately returns
-here litb C3 b, call
+here litb C3 b, mccall
 
 # push two numbers, compile and call machine code that calls the + opcode
 litb 03 litb 05
@@ -142,7 +142,7 @@ litb FF b, litb D7 b,
 # ret
 litb C3 b,
 
-call
+mccall
 
 litb 08 = assert
 

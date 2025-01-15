@@ -3,7 +3,7 @@
 Minimalistic 64 bit Forth-like virtual machine for hackers. The BlueVM aims to:
 
 1. Have a simplistic and hackable codebase
-1. Support execution of any previously compiled bytecode
+1. Support execution of any previously compiled machine or bytecode
 1. Provide a minimal set of opcodes that can be extended by the host
 1. Serve as the basis for minimalistic handcrafted applications
 1. Allow the host full control
@@ -78,7 +78,7 @@ Opcodes start at 00 and subject to change.
 | Opcode | Name | Stack Effect | Description |
 |----|----|----|----|
 | XX | exit | ( b -- ) | Exit with status from top of stack |
-| XX | call | ( a -- ? ) | Call machine code at address |
+| XX | mccall | ( a -- ? ) | Call machine code at address |
 | XX | execute | ( a -- ? ) | Execute bytecode located at address |
 | XX | if-else | ( t/f ta fa -- ? ) | Execute fa or ta based on tf |
 | XX | >r | ( a -- ) | Move top of data stack to return stack |
@@ -129,21 +129,21 @@ Along with the code for BlueVM this repository also contains some tools and exam
 ### Before merge
 
 1. Rename execute to call
-1. Rename call to mccall
-1. Add call-if use to build call and if-else
+1. Add true false opcodes
+1. Add if use to build call
 1. Make assert a host (tests) defined bytecode op
-1. Bring back stack bounds checking
 
 ### After merge
 
+1. Migrate ops to stack push/pop2
+1. Bring back stack bounds checking
+1. To allow nesting have [ ] return stack push/pop the opcode handler
 1. Print error messages to disambiguate exit status
 1. Move compile/interpret etc logic to interpreter.inc
 1. Dockerize and get a CI job that runs ./build.sh
 1. Write a bs0->blang (gnalb) decompiler by overwriting opcode map and opcode handler
-1. Migrate ops to stack push/pop2
 1. Add bytecode opcodes for litb, etc
-1. To allow nesting have [ ] return stack push/pop the opcode handler
-1. Make non leaf opcodes bytecode only ( [ ] if-else )
+1. Make non leaf opcodes bytecode only ( [ ] )
 1. The interpret/compile code needs to be cleaned up
 1. Add ip, ip! opcodes
-
+1. Add if-else as bytecode op

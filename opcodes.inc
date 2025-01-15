@@ -157,7 +157,7 @@ opNI	op_exit, 1, 0
 	jmp	exit
 end_op
 
-opNI	op_call, 1, 0
+opNI	op_mccall, 1, 0
 	call	data_stack_pop
 	call	rax
 
