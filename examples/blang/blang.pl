@@ -15,9 +15,14 @@ my @kw = split " ", q(
   start
   here
   here!
+  b@
   @
+  b!+
+  d!+
   !+
   ,
+
+  
   
   depth
   litb
@@ -28,10 +33,7 @@ my @kw = split " ", q(
   swap
   -
   +
-  b@
-  b!+
   b,
-  d!+
   d,
   dup
 );

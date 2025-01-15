@@ -192,6 +192,8 @@ opNI	op_set_here, 1, 0
 
 	ret
 end_op
+
+opN	op_b_at, 1, 0
 	
 opNI	op_at, 1, 0
 	call	data_stack_pop
@@ -200,6 +202,21 @@ opNI	op_at, 1, 0
 
 	ret
 end_op	
+
+opNI	op_b_set_inc, 1, 0
+	call 	_set_pre
+	stosb
+
+	jmp	_set_post
+end_op
+
+opNI	op_d_set_inc, 1, 0
+	call 	_set_pre
+	stosd
+
+	jmp	_set_post
+end_op
+	
 
 opNI	op_set_inc, 1, 0
 	call 	_set_pre
@@ -257,24 +274,9 @@ end_op
 
 opN	op_sub, 1, 0
 opN	op_add, 1, 0
-opN	op_b_at, 1, 0
 
-opNI	op_b_set_inc, 1, 0
-	call 	_set_pre
-	stosb
-
-	jmp	_set_post
-end_op
-	
 opBI	op_b_comma, 1, 0
 	db op_here_code, op_swap_code, op_b_set_inc_code, op_set_here_code, op_ret_code
-end_op
-
-opNI	op_d_set_inc, 1, 0
-	call 	_set_pre
-	stosd
-
-	jmp	_set_post
 end_op
 
 opBI	op_d_comma, 1, 0
