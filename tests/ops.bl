@@ -125,7 +125,7 @@ here
 # xor eax, eax
 # mov al, _+ opcode_
 litb 31 b, litb C0 b,
-litb B0 b, [ + ]
+litb B0 b, litb + b,
 
 # movabs rdi, _addr of opcode call_
 litb 48 b, litb BF b,
