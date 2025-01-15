@@ -1,4 +1,22 @@
 
+op_if_else:
+	call	data_stack_pop2
+	push	rcx
+	push	rax
+	call	data_stack_pop
+
+	pop	rdx
+	pop	rcx
+	
+	test	rax, rax
+	cmovnz	rax, rcx
+	cmovz	rax, rdx
+
+	call data_stack_push
+	call op_execute
+
+	ret
+
 op_eq:
 	call	data_stack_pop2
 	mov	rdx, rax
@@ -147,6 +165,7 @@ opNI	op_call, 1, 0
 end_op
 
 opN	op_execute, 1, 0
+opN	op_if_else, 1, 0
 
 opNI	op_to_r, 1, 0
 	call	data_stack_pop

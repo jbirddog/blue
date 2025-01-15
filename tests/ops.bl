@@ -147,6 +147,15 @@ call
 litb 08 = assert
 
 #
+# control flow
+#
+
+start start = [ litb 01 ] [ litb 7F exit ] if-else
+start dup litb 0A + = [ litb F7 exit ] [ litb 03 ] if-else
+
++ litb 04 = [ ] [ litb FF exit ] if-else
+
+#
 # fin
 #
 
