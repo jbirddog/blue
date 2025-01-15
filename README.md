@@ -83,8 +83,8 @@ Opcodes start at 00 and subject to change.
 | XX | drop | ( x -- ) | Drops top of the data stack |
 | XX | not | ( x -- 'x ) | Bitwise not top of the data stack |
 | XX | swap | ( a b -- b a ) | Swap top two values on the data stack |
-| XX | [ | ( -- ) | Set the opcode handler to interpret |
-| XX | ] | ( -- ) | Set the opcode handler to compile |
+| XX | [ | ( -- ) | Set the opcode handler to compile |
+| XX | ] | ( -- ) | Set the opcode handler to interpret |
 | XX | start | ( -- a ) | Push the code buffer location |
 | XX | - | ( a b -- n ) | Push a - b |
 | XX | + | ( a b -- n ) | Push a + b |
@@ -127,4 +127,6 @@ Along with the code for BlueVM this repository also contains some tools and exam
    1. Add then opcode
 1. Extend blang op array to include more info of each opcode, use for tooling
 1. Add build script that uses ops from blang to generate files md table
-1. After tooling, start to re-arrange opcodes
+1. Start to re-arrange opcodes
+1. Have [ >r here and the opcode handler, set to compile
+1. Have ] r> the opcode handler, restore it, r> the addr

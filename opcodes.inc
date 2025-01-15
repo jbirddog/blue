@@ -158,13 +158,13 @@ opNI	op_swap, 1, 0
 	ret
 end_op
 
-opNI	op_interpret, 1, OPCODE_ENTRY_FLAG_IMMEDIATE
-	mov	[opcode_handler], OPCODE_HANDLER_INTERPRET
+opNI	op_compile, 1, 0
+	mov	[opcode_handler], OPCODE_HANDLER_COMPILE
 	ret
 end_op
 
-opNI	op_compile, 1, 0
-	mov	[opcode_handler], OPCODE_HANDLER_COMPILE
+opNI	op_interpret, 1, OPCODE_ENTRY_FLAG_IMMEDIATE
+	mov	[opcode_handler], OPCODE_HANDLER_INTERPRET
 	ret
 end_op
 

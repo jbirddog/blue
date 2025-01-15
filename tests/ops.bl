@@ -36,16 +36,16 @@ litb 07 litb 02 + litb 09 = assert
 #
 
 # set opcode handler to compile, back to interpret
-] [
+[ ]
 
 # compile does not interpret non immediate opcodes
-] halt [
+[ halt ]
 
 # check code buffer here is one byte from the start
 here start - litb 01 = assert
 
 # compile multi byte opcodes
-] litb FF [
+[ litb FF ]
 
 # check code buffer here is three bytes from the start
 here start - litb 03 = assert
@@ -57,7 +57,7 @@ here litb 01 - b@ litb FF = assert
 # test calling compiled bytecode
 #
 
-here ] here start - ret [ execute
+here [ here start - ret ] execute
 
 depth litb 01 = assert
 litb 07 = assert
@@ -125,7 +125,7 @@ here
 # xor eax, eax
 # mov al, _+ opcode_
 litb 31 b, litb C0 b,
-litb B0 b, ] + [
+litb B0 b, [ + ]
 
 # movabs rdi, _addr of opcode call_
 litb 48 b, litb BF b,
