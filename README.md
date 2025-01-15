@@ -101,6 +101,9 @@ Opcodes start at 00 and subject to change.
 | XX | d!+ | ( a d -- a' ) | Write dword value to, increment and push addr |
 | XX | d, | ( d -- ) | Write dword value to, and increment, here |
 | XX | @ | ( d -- ) | Push qword value found at addr |
+| XX | dup | ( a -- a a ) | Duplicate top of stack |
+| XX | >r | ( a -- ) | Move top of data stack to return stack |
+| XX | r> | ( -- a ) | Move top of return stacl to data stack |
 
 ## Tools/Examples
 
@@ -122,7 +125,6 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. Make assert a bytecode op
    1. Add ip, ip! opcodes
    1. Add if-else opcode ( t/f ta fa -- ? )
-1. Extend blang op array to include more info of each opcode, use for tooling
 1. Start to re-arrange opcodes
-1. Have [ >r here and the opcode handler, set to compile
-1. Have ] add ret opcode, r> the opcode handler, restore it, r> the addr
+1. Have ] add ret opcode
+1. To allow nesting have [ ] push/pop the opcode handler to return stack

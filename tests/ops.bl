@@ -34,21 +34,24 @@ litb 07 litb 02 + litb 09 = assert
 # dup
 here dup = assert
 
+# >r and r>
+here >r r> here = assert
+
 #
-# test opcode handlers
+# test compiling bytecode
 #
 
 # set opcode handler to compile, back to interpret
-[ ]
+[ ] drop
 
 # compile does not interpret non immediate opcodes
-[ exit ]
+[ exit ] drop
 
 # check code buffer here is one byte from the start
 here start - litb 01 = assert
 
 # compile multi byte opcodes
-[ litb FF ]
+[ litb FF ] drop
 
 # check code buffer here is three bytes from the start
 here start - litb 03 = assert
@@ -60,7 +63,7 @@ here litb 01 - b@ litb FF = assert
 # test calling compiled bytecode
 #
 
-here [ here start - ret ] execute
+[ here start - ret ] execute
 
 depth litb 01 = assert
 litb 07 = assert

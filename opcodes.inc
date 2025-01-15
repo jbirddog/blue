@@ -53,6 +53,19 @@ op_b_at:
 	call	data_stack_push
 
 	ret
+
+op_compile:
+	call	op_here.impl
+	call	op_to_r.impl
+	mov	[opcode_handler], OPCODE_HANDLER_COMPILE
+	
+	ret
+
+op_interpret:
+	call	op_from_r.impl
+	mov	[opcode_handler], OPCODE_HANDLER_INTERPRET
+	
+	ret
 	
 op_execute:
 	mov	rax, [instruction_pointer]
@@ -99,6 +112,7 @@ __opN_##lbl:
 macro opNI lbl, size, flags {
 lbl:
 	begin_op lbl, size, flags or OPCODE_ENTRY_FLAG_INLINED
+.impl:
 }
 
 macro opBI lbl, size, flags {
@@ -159,15 +173,8 @@ opNI	op_swap, 1, 0
 	ret
 end_op
 
-opNI	op_compile, 1, 0
-	mov	[opcode_handler], OPCODE_HANDLER_COMPILE
-	ret
-end_op
-
-opNI	op_interpret, 1, OPCODE_ENTRY_FLAG_IMMEDIATE
-	mov	[opcode_handler], OPCODE_HANDLER_INTERPRET
-	ret
-end_op
+opN	op_compile, 1, 0
+opN	op_interpret, 1, OPCODE_ENTRY_FLAG_IMMEDIATE
 
 opNI	op_start, 1, 0
 	mov	rax, [code_buffer]
@@ -255,6 +262,20 @@ opNI	op_dup, 1, 0
 	call	data_stack_pop
 	mov	rcx, rax
 	call	data_stack_push2
+
+	ret
+end_op
+
+opNI	op_to_r, 1, 0
+	call	data_stack_pop
+	call	return_stack_push
+
+	ret
+end_op
+
+opNI	op_from_r, 1, 0
+	call	return_stack_pop
+	call	data_stack_push
 
 	ret
 end_op
