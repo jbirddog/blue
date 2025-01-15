@@ -116,7 +116,7 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. Move compile/interpret etc logic to interpreter.inc
 1. Dockerize and get a CI job that runs ./build.sh
 1. Write a bs0->blang (gnalb) decompiler by overwriting opcode map and opcode handler
-1. Bring back stack push/pop2
+1. Migrate ops to stack push/pop2
 1. Bring back stack bounds checking
 1. Add dup
 1. Add bytecode opcodes for litb, etc

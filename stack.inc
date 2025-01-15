@@ -30,7 +30,17 @@ data_stack_depth:
 stack_push data_stack
 stack_pop data_stack
 
+data_stack_push2:
+	; TODO: bounds check
+	mov	rdi, [data_stack_here]
+	mov	[rdi], rcx
+	mov	[rdi + CELL_SIZE], rax
+	add	[data_stack_here], (CELL_SIZE * 2)
+
+	ret
+
 data_stack_pop2:
+	; TODO: bounds check
 	mov	rsi, [data_stack_here]
 	lea	rax, [rsi - CELL_SIZE]
 	mov	rax, [rax]
