@@ -225,6 +225,14 @@ opNI	op_set_inc, 1, 0
 	jmp	_set_post
 end_op
 
+opBI	op_b_comma, 1, 0
+	db op_here_code, op_swap_code, op_b_set_inc_code, op_set_here_code, op_ret_code
+end_op
+
+opBI	op_d_comma, 1, 0
+	db op_here_code, op_swap_code, op_d_set_inc_code, op_set_here_code, op_ret_code
+end_op
+
 opBI	op_comma, 1, 0
 	db op_here_code, op_swap_code, op_set_inc_code, op_set_here_code, op_ret_code
 end_op
@@ -274,14 +282,6 @@ end_op
 
 opN	op_sub, 1, 0
 opN	op_add, 1, 0
-
-opBI	op_b_comma, 1, 0
-	db op_here_code, op_swap_code, op_b_set_inc_code, op_set_here_code, op_ret_code
-end_op
-
-opBI	op_d_comma, 1, 0
-	db op_here_code, op_swap_code, op_d_set_inc_code, op_set_here_code, op_ret_code
-end_op
 
 opNI	op_dup, 1, 0
 	call	data_stack_pop

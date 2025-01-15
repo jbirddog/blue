@@ -20,6 +20,8 @@ my @kw = split " ", q(
   b!+
   d!+
   !+
+  b,
+  d,
   ,
 
   
@@ -33,8 +35,6 @@ my @kw = split " ", q(
   swap
   -
   +
-  b,
-  d,
   dup
 );
 

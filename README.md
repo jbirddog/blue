@@ -93,6 +93,8 @@ Opcodes start at 00 and subject to change.
 | XX | b!+ | ( a b -- a' ) | Write byte value to, increment and push addr |
 | XX | d!+ | ( a d -- a' ) | Write dword value to, increment and push addr |
 | XX | !+ | ( a q -- a' ) | Write qword value to, increment and push addr |
+| XX | b, | ( b -- ) | Write byte value to, and increment, here |
+| XX | d, | ( d -- ) | Write dword value to, and increment, here |
 | XX | , | ( q -- ) | Write qword value to, and increment, here |
 
 ### Stack operations
@@ -108,8 +110,6 @@ Opcodes start at 00 and subject to change.
 | XX | swap | ( a b -- b a ) | Swap top two values on the data stack |
 | XX | - | ( a b -- n ) | Push a - b |
 | XX | + | ( a b -- n ) | Push a + b |
-| XX | b, | ( b -- ) | Write byte value to, and increment, here |
-| XX | d, | ( d -- ) | Write dword value to, and increment, here |
 | XX | dup | ( a -- a a ) | Duplicate top of stack |
 
 ## Tools/Examples
