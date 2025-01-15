@@ -125,18 +125,22 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ## TODOs
 
+### Before merge
+
+1. Bring back stack bounds checking
+1. Add ip, ip! opcodes
+1. Add if-else opcode ( t/f ta fa -- ? )
+1. Make assert a host (tests) defined bytecode op
+
+### After merge
+
 1. Print error messages to disambiguate exit status
 1. Move compile/interpret etc logic to interpreter.inc
 1. Dockerize and get a CI job that runs ./build.sh
 1. Write a bs0->blang (gnalb) decompiler by overwriting opcode map and opcode handler
 1. Migrate ops to stack push/pop2
-1. Bring back stack bounds checking
-1. Add ip, ip! opcodes
-1. Add if-else opcode ( t/f ta fa -- ? )
 1. Add bytecode opcodes for litb, etc
-1. Make assert a host (tests) defined bytecode op
 1. To allow nesting have [ ] return stack push/pop the opcode handler
-1. Consider dropping the vm opcodes from the opcode map, only used for extended ops
-   1. Or make non leaf opcodes bytecode only ( [ ] )
+1. Make non leaf opcodes bytecode only ( [ ] )
 1. The interpret/compile code needs to be cleaned up
    
