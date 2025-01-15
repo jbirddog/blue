@@ -128,6 +128,9 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ### Before merge
 
+1. Rename execute to call
+1. Rename call to mccall
+1. Add call-if use to build call and if-else
 1. Make assert a host (tests) defined bytecode op
 1. Bring back stack bounds checking
 
