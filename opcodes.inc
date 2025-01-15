@@ -64,14 +64,6 @@ op_add:
 
 	ret
 
-op_at:
-	call	data_stack_pop
-	mov	rax, [rax]
-	call	data_stack_push
-
-	ret
-assert ($ - op_at) <= 14
-
 op_b_at:
 	call	data_stack_pop
 	mov	rsi, rax
@@ -80,13 +72,6 @@ op_b_at:
 	call	data_stack_push
 
 	ret
-
-op_here:
-	mov	rax, [code_buffer_here]
-	call	data_stack_push
-
-	ret
-assert ($ - op_here) <= 14
 	
 op_execute:
 	mov	rax, [instruction_pointer]
@@ -96,20 +81,6 @@ op_execute:
 	mov	[instruction_pointer], rax
 
 	ret
-
-op_ret:
-	call	return_stack_pop
-	mov	[instruction_pointer], rax
-	
-	ret
-assert ($ - op_ret) <= 14
-
-op_call:
-	call	data_stack_pop
-	call	rax
-
-	ret
-assert ($ - op_call) <= 14
 
 _set_pre:
 	call	data_stack_pop
@@ -125,13 +96,6 @@ _set_post:
 	call	data_stack_push
 
 	ret
-
-op_b_set_inc:
-	call 	_set_pre
-	stosb
-
-	jmp	_set_post
-assert ($ - op_b_set_inc) <= 14
 
 op_d_set_inc:
 	call 	_set_pre
@@ -245,22 +209,47 @@ opNI	op_start, 1, 0
 	ret
 end_op
 
+opN	op_sub, 1, 0
+opN	op_add, 1, 0
+opN	op_b_at, 1, 0
 	
-	opN	op_sub, 1, 0
-	opN	op_add, 1, 0
-	opN	op_b_at, 1, 0
-	opN	op_here, 1, 0
-	opN	op_execute, 1, 0
-	opN	op_ret, 1, 0
-	opN	op_call, 1, 0
-	opN	op_b_set_inc, 1, 0
-	opN	op_set_here, 1, 0
+opNI	op_here, 1, 0
+	mov	rax, [code_buffer_here]
+	call	data_stack_push
+
+	ret
+end_op
+
+opN	op_execute, 1, 0
+
+opNI	op_ret, 1, 0
+	call	return_stack_pop
+	mov	[instruction_pointer], rax
+	
+	ret
+end_op
+
+opNI	op_call, 1, 0
+	call	data_stack_pop
+	call	rax
+
+	ret
+end_op
+
+opNI	op_b_set_inc, 1, 0
+	call 	_set_pre
+	stosb
+
+	jmp	_set_post
+end_op
+
+opN	op_set_here, 1, 0
 	
 opBI	op_b_comma, 1, 0
 	db op_here_code, op_swap_code, op_b_set_inc_code, op_set_here_code, op_ret_code
 end_op
 
-	opN	op_set_inc, 1, 0
+opN	op_set_inc, 1, 0
 	
 opBI	op_comma, 1, 0
 	db op_here_code, op_swap_code, op_set_inc_code, op_set_here_code, op_ret_code
@@ -272,8 +261,13 @@ opBI	op_d_comma, 1, 0
 	db op_here_code, op_swap_code, op_d_set_inc_code, op_set_here_code, op_ret_code
 end_op
 	
-	opN	op_at, 1, 0
-	
+opNI	op_at, 1, 0
+	call	data_stack_pop
+	mov	rax, [rax]
+	call	data_stack_push
+
+	ret
+end_op	
 	
 assert (($ - _opcode_map) and 0x07) = 0
 assert ($ - _opcode_map) <= (0x7F shl 4)
