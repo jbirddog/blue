@@ -88,6 +88,9 @@ Opcodes start at 00 and subject to change.
 | XX | start | ( -- a ) | Push the code buffer location |
 | XX | here | ( -- a ) | Push location of code buffer's here |
 | XX | here! | ( a -- ) | Sets the location of code buffer's here |
+| XX | @ | ( a -- ) | Push qword value found at addr |
+| XX | !+ | ( a q -- a' ) | Write qword value to, increment and push addr |
+| XX | , | ( q -- ) | Write qword value to, and increment, here |
 
 ### Stack operations
 
@@ -105,11 +108,8 @@ Opcodes start at 00 and subject to change.
 | XX | b@ | ( a -- b ) | Push byte value found at addr |
 | XX | b!+ | ( a b -- a' ) | Write byte value to, increment and push addr |
 | XX | b, | ( b -- ) | Write byte value to, and increment, here |
-| XX | !+ | ( a q -- a' ) | Write qword value to, increment and push addr |
-| XX | , | ( q -- ) | Write qword value to, and increment, here |
 | XX | d!+ | ( a d -- a' ) | Write dword value to, increment and push addr |
 | XX | d, | ( d -- ) | Write dword value to, and increment, here |
-| XX | @ | ( d -- ) | Push qword value found at addr |
 | XX | dup | ( a -- a a ) | Duplicate top of stack |
 
 ## Tools/Examples
