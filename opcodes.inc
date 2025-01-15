@@ -244,10 +244,6 @@ opNI	op_litb, 2, 0
 	ret
 end_op
 
-;
-;
-;
-
 opNI	op_depth, 1, 0
 	call	data_stack_depth
 	mov	eax, ecx
@@ -277,9 +273,6 @@ opNI	op_swap, 1, 0
 	ret
 end_op
 
-opN	op_eq, 1, 0
-opN	op_assert, 1, 0
-
 opNI	op_not, 1, 0
 	call	data_stack_pop
 	not	rax
@@ -288,12 +281,15 @@ opNI	op_not, 1, 0
 	ret
 end_op
 
-opN	op_sub, 1, 0
+opN	op_eq, 1, 0
 opN	op_add, 1, 0
+opN	op_sub, 1, 0
+
+opN	op_assert, 1, 0
+
 
 assert (($ - _opcode_map) and 0x07) = 0
 assert ($ - _opcode_map) <= (0x7F shl 4)
-_opcode_map_qwords = ($ - _opcode_map) shr 3
 
 
 ; expects opcode in rax

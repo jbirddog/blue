@@ -17,11 +17,9 @@ my @kw = split " ", q(
   litb
 
   depth dup drop swap
-  =
+  not = + -
+  
   assert
-  not
-  -
-  +
 );
 
 my %op = map { $kw[$_] => sprintf("%02X", $_) } 0..$#kw;

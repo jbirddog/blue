@@ -103,14 +103,17 @@ Opcodes start at 00 and subject to change.
 | Opcode | Name | Stack Effect | Description |
 |----|----|----|----|
 | XX | depth | ( -- n ) | Push depth of the data stack |
-| XX | = | ( a b -- t/f ) | Check top two items for equality and push result |
-| XX | assert | ( t/f -- ) | Exits with 255 status code if top of stack is false (tmp) |
 | XX | drop | ( x -- ) | Drops top of the data stack |
-| XX | not | ( x -- 'x ) | Bitwise not top of the data stack |
-| XX | swap | ( a b -- b a ) | Swap top two values on the data stack |
-| XX | - | ( a b -- n ) | Push a - b |
-| XX | + | ( a b -- n ) | Push a + b |
 | XX | dup | ( a -- a a ) | Duplicate top of stack |
+| XX | swap | ( a b -- b a ) | Swap top two values on the data stack |
+| XX | not | ( x -- 'x ) | Bitwise not top of the data stack |
+| XX | = | ( a b -- t/f ) | Check top two items for equality and push result |
+| XX | + | ( a b -- n ) | Push a + b |
+| XX | - | ( a b -- n ) | Push a - b |
+
+### Chopping block
+
+| XX | assert | ( t/f -- ) | Exits with 255 status code if top of stack is false (tmp) |
 
 ## Tools/Examples
 
@@ -131,7 +134,6 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. Add ip, ip! opcodes
 1. Add if-else opcode ( t/f ta fa -- ? )
 1. Add bytecode opcodes for litb, etc
-1. Finish re-ordering opcodes
 1. Make assert a host (tests) defined bytecode op
 1. To allow nesting have [ ] return stack push/pop the opcode handler
 1. Consider dropping the vm opcodes from the opcode map, only used for extended ops
