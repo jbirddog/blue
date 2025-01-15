@@ -6,6 +6,16 @@ use warnings;
 my @kw = split " ", q(
   exit
   call
+  execute
+  >r
+  r>
+  ret
+  [
+  ]
+  start
+  here
+  here!
+  
   depth
   litb
   =
@@ -13,17 +23,10 @@ my @kw = split " ", q(
   drop
   not
   swap
-  [
-  ]
-  start
   -
   +
   b@
-  here
-  execute
-  ret
   b!+
-  here!
   b,
   !+
   ,
@@ -31,8 +34,6 @@ my @kw = split " ", q(
   d,
   @
   dup
-  >r
-  r>
 );
 
 my %op = map { $kw[$_] => sprintf("%02X", $_) } 0..$#kw;

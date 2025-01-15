@@ -73,9 +73,26 @@ the code buffer and advances the code buffer's here.
 
 Opcodes start at 00 and subject to change.
 
+### Core
+
 | Opcode | Name | Stack Effect | Description |
 |----|----|----|----|
 | XX | exit | ( b -- ) | Exit with status from top of stack |
+| XX | call | ( a -- ? ) | Call machine code at address |
+| XX | execute | ( a -- ? ) | Execute bytecode located at address |
+| XX | >r | ( a -- ) | Move top of data stack to return stack |
+| XX | r> | ( -- a ) | Move top of return stacl to data stack |
+| XX | ret | ( -- ) | Pops value from return stack and sets the instruction pointer |
+| XX | [ | ( -- ) | Begin compiling bytecode |
+| XX | ] | ( -- a ) | Append ret and end compilation, push addr where compilation started |
+| XX | start | ( -- a ) | Push the code buffer location |
+| XX | here | ( -- a ) | Push location of code buffer's here |
+| XX | here! | ( a -- ) | Sets the location of code buffer's here |
+
+### Stack operations
+
+| Opcode | Name | Stack Effect | Description |
+|----|----|----|----|
 | XX | depth | ( -- n ) | Push depth of the data stack |
 | XX | litb | ( -- n ) | Push next byte from the input buffer |
 | XX | = | ( a b -- t/f ) | Check top two items for equality and push result |
@@ -83,18 +100,10 @@ Opcodes start at 00 and subject to change.
 | XX | drop | ( x -- ) | Drops top of the data stack |
 | XX | not | ( x -- 'x ) | Bitwise not top of the data stack |
 | XX | swap | ( a b -- b a ) | Swap top two values on the data stack |
-| XX | [ | ( -- ) | Begin compiling bytecode |
-| XX | ] | ( -- a ) | Append ret and end compilation, push addr where compilation started |
-| XX | start | ( -- a ) | Push the code buffer location |
 | XX | - | ( a b -- n ) | Push a - b |
 | XX | + | ( a b -- n ) | Push a + b |
 | XX | b@ | ( a -- b ) | Push byte value found at addr |
-| XX | here | ( -- a ) | Push location of code buffer's here |
-| XX | execute | ( a -- ? ) | Execute bytecode located at address |
-| XX | ret | ( -- ) | Pops value from return stack and sets the instruction pointer |
-| XX | call | ( a -- ? ) | Call machine code at address |
 | XX | b!+ | ( a b -- a' ) | Write byte value to, increment and push addr |
-| XX | here! | ( a -- ) | Sets the location of code buffer's here |
 | XX | b, | ( b -- ) | Write byte value to, and increment, here |
 | XX | !+ | ( a q -- a' ) | Write qword value to, increment and push addr |
 | XX | , | ( q -- ) | Write qword value to, and increment, here |
@@ -102,8 +111,6 @@ Opcodes start at 00 and subject to change.
 | XX | d, | ( d -- ) | Write dword value to, and increment, here |
 | XX | @ | ( d -- ) | Push qword value found at addr |
 | XX | dup | ( a -- a a ) | Duplicate top of stack |
-| XX | >r | ( a -- ) | Move top of data stack to return stack |
-| XX | r> | ( -- a ) | Move top of return stacl to data stack |
 
 ## Tools/Examples
 
@@ -121,9 +128,11 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. Write a bs0->blang (gnalb) decompiler by overwriting opcode map and opcode handler
 1. Migrate ops to stack push/pop2
 1. Bring back stack bounds checking
+1. Add ip, ip! opcodes
+1. Add if-else opcode ( t/f ta fa -- ? )
 1. Add bytecode opcodes for litb, etc
+1. Finish re-ordering opcodes
 1. Make assert a host (tests) defined bytecode op
-   1. Add ip, ip! opcodes
-   1. Add if-else opcode ( t/f ta fa -- ? )
-1. Start to re-arrange opcodes
 1. To allow nesting have [ ] return stack push/pop the opcode handler
+1. Consider dropping the vm opcodes from the opcode map, only used for extended ops
+   1. Or make non leaf opcodes bytecode only

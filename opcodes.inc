@@ -146,6 +146,57 @@ opNI	op_call, 1, 0
 	ret
 end_op
 
+opN	op_execute, 1, 0
+
+opNI	op_to_r, 1, 0
+	call	data_stack_pop
+	call	return_stack_push
+
+	ret
+end_op
+
+opNI	op_from_r, 1, 0
+	call	return_stack_pop
+	call	data_stack_push
+
+	ret
+end_op
+
+opNI	op_ret, 1, 0
+	call	return_stack_pop
+	mov	[instruction_pointer], rax
+	
+	ret
+end_op
+
+opN	op_compile, 1, 0
+opN	op_interpret, 1, OPCODE_ENTRY_FLAG_IMMEDIATE
+
+opNI	op_start, 1, 0
+	mov	rax, [code_buffer]
+	call	data_stack_push
+	
+	ret
+end_op
+	
+opNI	op_here, 1, 0
+	mov	rax, [code_buffer_here]
+	call	data_stack_push
+
+	ret
+end_op
+
+opNI	op_set_here, 1, 0
+	call	data_stack_pop
+	mov	[code_buffer_here], rax
+
+	ret
+end_op
+
+;
+;
+;
+
 opNI	op_depth, 1, 0
 	call	data_stack_depth
 	mov	eax, ecx
@@ -185,48 +236,15 @@ opNI	op_swap, 1, 0
 	ret
 end_op
 
-opN	op_compile, 1, 0
-opN	op_interpret, 1, OPCODE_ENTRY_FLAG_IMMEDIATE
-
-opNI	op_start, 1, 0
-	mov	rax, [code_buffer]
-	call	data_stack_push
-	
-	ret
-end_op
-
 opN	op_sub, 1, 0
 opN	op_add, 1, 0
 opN	op_b_at, 1, 0
-	
-opNI	op_here, 1, 0
-	mov	rax, [code_buffer_here]
-	call	data_stack_push
-
-	ret
-end_op
-
-opN	op_execute, 1, 0
-
-opNI	op_ret, 1, 0
-	call	return_stack_pop
-	mov	[instruction_pointer], rax
-	
-	ret
-end_op
 
 opNI	op_b_set_inc, 1, 0
 	call 	_set_pre
 	stosb
 
 	jmp	_set_post
-end_op
-
-opNI	op_set_here, 1, 0
-	call	data_stack_pop
-	mov	[code_buffer_here], rax
-
-	ret
 end_op
 	
 opBI	op_b_comma, 1, 0
@@ -267,20 +285,6 @@ opNI	op_dup, 1, 0
 	call	data_stack_pop
 	mov	rcx, rax
 	call	data_stack_push2
-
-	ret
-end_op
-
-opNI	op_to_r, 1, 0
-	call	data_stack_pop
-	call	return_stack_push
-
-	ret
-end_op
-
-opNI	op_from_r, 1, 0
-	call	return_stack_pop
-	call	data_stack_push
 
 	ret
 end_op
