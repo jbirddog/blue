@@ -5,29 +5,20 @@ use warnings;
 
 my @kw = split " ", q(
   exit
-  call
-  execute
-  >r
-  r>
+  call execute
+  >r r>
   ret
-  [
-  ]
+  [ ]
   start
-  here
-  here!
-  b@
-  @
-  b!+
-  d!+
-  !+
-  b,
-  d,
-  ,
+  here here!
+  b@ @
+  b!+ d!+ !+
+  b, d, ,
+  litb
 
   
   
   depth
-  litb
   =
   assert
   drop

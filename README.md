@@ -96,13 +96,13 @@ Opcodes start at 00 and subject to change.
 | XX | b, | ( b -- ) | Write byte value to, and increment, here |
 | XX | d, | ( d -- ) | Write dword value to, and increment, here |
 | XX | , | ( q -- ) | Write qword value to, and increment, here |
+| XX | litb | ( -- n ) | Push next byte from, and increment, instruction pointer |
 
 ### Stack operations
 
 | Opcode | Name | Stack Effect | Description |
 |----|----|----|----|
 | XX | depth | ( -- n ) | Push depth of the data stack |
-| XX | litb | ( -- n ) | Push next byte from the input buffer |
 | XX | = | ( a b -- t/f ) | Check top two items for equality and push result |
 | XX | assert | ( t/f -- ) | Exits with 255 status code if top of stack is false (tmp) |
 | XX | drop | ( x -- ) | Drops top of the data stack |

@@ -237,6 +237,13 @@ opBI	op_comma, 1, 0
 	db op_here_code, op_swap_code, op_set_inc_code, op_set_here_code, op_ret_code
 end_op
 
+opNI	op_litb, 2, 0
+	call	read_byte
+	call	data_stack_push
+	
+	ret
+end_op
+
 ;
 ;
 ;
@@ -244,13 +251,6 @@ end_op
 opNI	op_depth, 1, 0
 	call	data_stack_depth
 	mov	eax, ecx
-	call	data_stack_push
-	
-	ret
-end_op
-
-opNI	op_litb, 2, 0
-	call	read_byte
 	call	data_stack_push
 	
 	ret
