@@ -1,0 +1,4 @@
+litb 00 exit
+
+# this shouldn't run
+litb FF depth assert = 

@@ -32,7 +32,7 @@ The BlueVM requires a single allocation with the following layout in rwx memory:
 ## Boot
 
 BlueVM will set entries in the BlueVM opcode map and read 2048 bytes from stdin into the input buffer. This
-initial read will serve as the bootstrap for the host and is interpreted until the host halts execution.
+initial read will serve as the bootstrap for the host and is interpreted until the host stops execution.
 
 ## Execution
 
@@ -46,7 +46,7 @@ it begins the outer interpreter:
 1. Goto 1
 
 Because of this "late binding" approach, the host can change the values that the BlueVM uses to execute. The outer
-interpreter requires that the host termintes execution properly. One way to do this is with the `halt` opcode.
+interpreter requires that the host termintes execution properly. One way to do this is with the `exit` opcode.
 
 ## Opcode Map Structure
 
@@ -75,7 +75,7 @@ Opcodes start at 00 and subject to change.
 
 | Opcode | Name | Stack Effect | Description |
 |----|----|----|----|
-| XX | halt | ( -- ) | Halt execution of the BlueVM |
+| XX | exit | ( b -- ) | Exit with status from top of stack |
 | XX | depth | ( -- n ) | Push depth of the data stack |
 | XX | litb | ( -- n ) | Push next byte from the input buffer |
 | XX | = | ( a b -- t/f ) | Check top two items for equality and push result |
@@ -122,7 +122,6 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. Add bytecode opcodes for litb, etc
 1. Make assert a bytecode op
    1. Add ip, ip! opcodes
-   1. Add exit opcode
    1. Add if-else opcode ( t/f ta fa -- ? )
 1. Extend blang op array to include more info of each opcode, use for tooling
 1. Add build script that uses ops from blang to generate files md table

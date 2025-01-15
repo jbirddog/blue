@@ -39,7 +39,7 @@ litb 07 litb 02 + litb 09 = assert
 [ ]
 
 # compile does not interpret non immediate opcodes
-[ halt ]
+[ exit ]
 
 # check code buffer here is one byte from the start
 here start - litb 01 = assert
@@ -148,9 +148,5 @@ litb 08 = assert
 # set code buffer back to start
 start here! start here = assert
 
-# check stack is prestine and halt
-depth litb 00 = assert
-halt
-
-# this shouldn't run
-litb FF depth assert = 
+# exit cleanly if stack is prestine
+depth exit

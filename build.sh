@@ -17,13 +17,13 @@ fasm bluevm.asm bin/bluevm
 
 echo "* Building bs0 files"
 
-./examples/blang/blang.pl < tests/halt.bl > obj/test_halt.bs0
+./examples/blang/blang.pl < tests/exit.bl > obj/test_exit.bs0
 ./examples/blang/blang.pl < tests/ops.bl > obj/test_ops.bs0
 
 echo "* Running bs0 test cases"
 
-echo "** Test Halt"
-./bin/bluevm < obj/test_halt.bs0
+echo "** Test Exit"
+./bin/bluevm < obj/test_exit.bs0
 
 echo "** Test Ops"
 ./bin/bluevm < obj/test_ops.bs0

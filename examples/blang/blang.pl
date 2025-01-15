@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 my @kw = split " ", q(
-  halt
+  exit
   depth
   litb
   =

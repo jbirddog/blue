@@ -114,11 +114,12 @@ macro end_op {
 
 _opcode_map:
 
-opNI	op_halt, 1, 0
-	xor	edi, edi
+opNI	op_exit, 1, 0
+	call	data_stack_pop
+	mov	edi, eax
 	jmp	exit
 end_op
-	
+
 opNI	op_depth, 1, 0
 	call	data_stack_depth
 	mov	eax, ecx
@@ -249,7 +250,6 @@ opNI	op_at, 1, 0
 
 	ret
 end_op	
-	
 
 assert (($ - _opcode_map) and 0x07) = 0
 assert ($ - _opcode_map) <= (0x7F shl 4)
