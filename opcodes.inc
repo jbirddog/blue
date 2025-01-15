@@ -1,6 +1,7 @@
 
 ; 1574
 
+; TODO: simplify
 op_eq:
 	call	data_stack_pop
 	push	rax
@@ -28,20 +29,6 @@ op_assert:
 	
 	ret
 
-op_drop:
-	call	data_stack_pop
-	
-	ret
-assert ($ - op_drop) <= 14
-
-op_not:
-	call	data_stack_pop
-	not	rax
-	call	data_stack_push
-	
-	ret
-assert ($ - op_not) <= 14
-
 op_swap:
 	call	data_stack_pop
 	mov	rcx, rax
@@ -54,25 +41,6 @@ op_swap:
 	call	data_stack_push
 	
 	ret
-
-op_compile:
-	mov	[opcode_handler], OPCODE_HANDLER_COMPILE
-
-	ret
-assert ($ - op_compile) <= 14
-
-op_interpret:
-	mov	[opcode_handler], OPCODE_HANDLER_INTERPRET
-
-	ret
-assert ($ - op_interpret) <= 14
-
-op_start:
-	mov	rax, [code_buffer]
-	call	data_stack_push
-	
-	ret
-assert ($ - op_start) <= 14
 
 op_sub:
 	call	data_stack_pop
@@ -241,16 +209,43 @@ opNI	op_litb, 2, 0
 	
 	ret
 end_op
+
+opN	op_eq, 1, 0
+opN	op_assert, 1, 0
+
+opNI	op_drop, 1, 0
+	call	data_stack_pop
+	ret
+end_op
+
+opNI	op_not, 1, 0
+	call	data_stack_pop
+	not	rax
+	call	data_stack_push
 	
+	ret
+end_op
+
+opN	op_swap, 1, 0
+
+opNI	op_interpret, 1, OPCODE_ENTRY_FLAG_IMMEDIATE
+	mov	[opcode_handler], OPCODE_HANDLER_INTERPRET
+	ret
+end_op
+
+opNI	op_compile, 1, 0
+	mov	[opcode_handler], OPCODE_HANDLER_COMPILE
+	ret
+end_op
+
+opNI	op_start, 1, 0
+	mov	rax, [code_buffer]
+	call	data_stack_push
 	
-	opN	op_eq, 1, 0
-	opN	op_assert, 1, 0
-	opN	op_drop, 1, 0
-	opN	op_not, 1, 0
-	opN	op_swap, 1, 0
-	opN	op_interpret, 1, OPCODE_ENTRY_FLAG_IMMEDIATE
-	opN	op_compile, 1, 0
-	opN	op_start, 1, 0
+	ret
+end_op
+
+	
 	opN	op_sub, 1, 0
 	opN	op_add, 1, 0
 	opN	op_b_at, 1, 0
