@@ -30,5 +30,15 @@ data_stack_depth:
 stack_push data_stack
 stack_pop data_stack
 
+data_stack_pop2:
+	mov	rsi, [data_stack_here]
+	lea	rax, [rsi - CELL_SIZE]
+	mov	rax, [rax]
+	lea	rcx, [rsi - (CELL_SIZE * 2)]
+	mov	rcx, [rcx]
+	sub	[data_stack_here], (CELL_SIZE * 2)
+	
+	ret
+
 stack_push return_stack
 stack_pop return_stack

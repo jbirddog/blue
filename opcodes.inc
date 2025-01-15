@@ -1,23 +1,19 @@
 
-; TODO: simplify
 op_eq:
-	call	data_stack_pop
-	push	rax
-	call	data_stack_pop
-	pop	rcx
+	call	data_stack_pop2
+	mov	rdx, rax
+	xor	eax, eax
 
-	xor	edi, edi
-	xor	esi, esi
-	not	rsi
-	cmp	rcx, rax
-	cmove	rax, rsi
-	cmovne	rax, rdi
+	cmp	rdx, rcx
+	jne	.push
+	not	rax
 
+.push:
 	call	data_stack_push
-	
+
 	ret
 
-; TODO: replace with bytecode in extended opcode
+; TODO: replace with bytecode in host
 op_assert:
 	call	data_stack_pop
 	mov	edi, eax
@@ -28,18 +24,13 @@ op_assert:
 	ret
 
 op_swap:
-	call	data_stack_pop
-	mov	rcx, rax
-	call	data_stack_pop
-	push	rax
-	
+	call	data_stack_pop2
+	call	data_stack_push
 	mov	rax, rcx
 	call	data_stack_push
-	pop	rax
-	call	data_stack_push
-	
-	ret
 
+	ret
+	
 op_sub:
 	call	data_stack_pop
 	push	rax

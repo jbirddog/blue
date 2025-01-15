@@ -120,6 +120,11 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. Bring back stack bounds checking
 1. Add dup
 1. Add bytecode opcodes for litb, etc
+1. Make assert a bytecode op
+   1. Add ip, ip! opcodes
+   1. Add exit opcode
+   1. Add if opcode
+   1. Add then opcode
 1. Extend blang op array to include more info of each opcode, use for tooling
 1. Add build script that uses ops from blang to generate files md table
 1. After tooling, start to re-arrange opcodes
