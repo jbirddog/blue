@@ -62,8 +62,13 @@ op_compile:
 	ret
 
 op_interpret:
-	call	op_from_r.impl
+	mov	rdi, [code_buffer_here]
+	mov	al, op_ret_code
+	stosb
+	mov	[code_buffer_here], rdi
+
 	mov	[opcode_handler], OPCODE_HANDLER_INTERPRET
+	call	op_from_r.impl
 	
 	ret
 	

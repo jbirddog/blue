@@ -41,32 +41,32 @@ here >r r> here = assert
 # test compiling bytecode
 #
 
-# set opcode handler to compile, back to interpret
-[ ] drop
+# when done compiling bytecode a ret is added and the address where the compile began is pushed
+[ ] b@ litb ret = assert
 
 # compile does not interpret non immediate opcodes
 [ exit ] drop
 
-# check code buffer here is one byte from the start
-here start - litb 01 = assert
+# check code buffer here is three bytes from the start (ret exit ret)
+here start - litb 03 = assert
 
 # compile multi byte opcodes
 [ litb FF ] drop
 
-# check code buffer here is three bytes from the start
-here start - litb 03 = assert
+# check code buffer here is six bytes (ret exit ret litb FF ret) from the start
+here start - litb 06 = assert
 
 # compile writes expected byte
-here litb 01 - b@ litb FF = assert
+here litb 02 - b@ litb FF = assert
 
 #
 # test calling compiled bytecode
 #
 
-[ here start - ret ] execute
+[ here start - ] execute
 
 depth litb 01 = assert
-litb 07 = assert
+litb 0A = assert
 
 # test b!+
 here

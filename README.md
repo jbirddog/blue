@@ -126,5 +126,4 @@ Along with the code for BlueVM this repository also contains some tools and exam
    1. Add ip, ip! opcodes
    1. Add if-else opcode ( t/f ta fa -- ? )
 1. Start to re-arrange opcodes
-1. Have ] add ret opcode
 1. To allow nesting have [ ] push/pop the opcode handler to return stack
