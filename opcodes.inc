@@ -139,6 +139,13 @@ opNI	op_exit, 1, 0
 	jmp	exit
 end_op
 
+opNI	op_call, 1, 0
+	call	data_stack_pop
+	call	rax
+
+	ret
+end_op
+
 opNI	op_depth, 1, 0
 	call	data_stack_depth
 	mov	eax, ecx
@@ -205,13 +212,6 @@ opNI	op_ret, 1, 0
 	call	return_stack_pop
 	mov	[instruction_pointer], rax
 	
-	ret
-end_op
-
-opNI	op_call, 1, 0
-	call	data_stack_pop
-	call	rax
-
 	ret
 end_op
 

@@ -2,7 +2,6 @@
 #
 # test initial vm state
 #
-
 # stack depth is 0
 depth litb 00 = assert
 
@@ -71,21 +70,21 @@ litb 0A = assert
 # test b!+
 here
 
-here 01 b!+
+here litb 01 b!+
 
 litb 01 - = assert
 
 # test d!+
 here
 
-here 01 d!+
+here litb 01 d!+
 
 litb 04 - = assert
 
 # test !+
 here
 
-here 01 !+
+here litb 01 !+
 
 litb 08 - = assert
 

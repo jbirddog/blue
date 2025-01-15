@@ -83,8 +83,8 @@ Opcodes start at 00 and subject to change.
 | XX | drop | ( x -- ) | Drops top of the data stack |
 | XX | not | ( x -- 'x ) | Bitwise not top of the data stack |
 | XX | swap | ( a b -- b a ) | Swap top two values on the data stack |
-| XX | [ | ( -- ) | Set the opcode handler to compile |
-| XX | ] | ( -- ) | Set the opcode handler to interpret |
+| XX | [ | ( -- ) | Begin compiling bytecode |
+| XX | ] | ( -- a ) | Append ret and end compilation, push addr where compilation started |
 | XX | start | ( -- a ) | Push the code buffer location |
 | XX | - | ( a b -- n ) | Push a - b |
 | XX | + | ( a b -- n ) | Push a + b |
@@ -122,8 +122,8 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. Migrate ops to stack push/pop2
 1. Bring back stack bounds checking
 1. Add bytecode opcodes for litb, etc
-1. Make assert a bytecode op
+1. Make assert a host (tests) defined bytecode op
    1. Add ip, ip! opcodes
    1. Add if-else opcode ( t/f ta fa -- ? )
 1. Start to re-arrange opcodes
-1. To allow nesting have [ ] push/pop the opcode handler to return stack
+1. To allow nesting have [ ] return stack push/pop the opcode handler

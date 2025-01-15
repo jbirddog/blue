@@ -5,6 +5,7 @@ use warnings;
 
 my @kw = split " ", q(
   exit
+  call
   depth
   litb
   =
@@ -21,7 +22,6 @@ my @kw = split " ", q(
   here
   execute
   ret
-  call
   b!+
   here!
   b,
