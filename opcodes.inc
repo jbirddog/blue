@@ -256,19 +256,16 @@ opNI	op_depth, 1, 0
 	ret
 end_op
 
-opN	op_eq, 1, 0
-opN	op_assert, 1, 0
-
-opNI	op_drop, 1, 0
+opNI	op_dup, 1, 0
 	call	data_stack_pop
+	mov	rcx, rax
+	call	data_stack_push2
+
 	ret
 end_op
 
-opNI	op_not, 1, 0
+opNI	op_drop, 1, 0
 	call	data_stack_pop
-	not	rax
-	call	data_stack_push
-	
 	ret
 end_op
 
@@ -280,16 +277,19 @@ opNI	op_swap, 1, 0
 	ret
 end_op
 
-opN	op_sub, 1, 0
-opN	op_add, 1, 0
+opN	op_eq, 1, 0
+opN	op_assert, 1, 0
 
-opNI	op_dup, 1, 0
+opNI	op_not, 1, 0
 	call	data_stack_pop
-	mov	rcx, rax
-	call	data_stack_push2
-
+	not	rax
+	call	data_stack_push
+	
 	ret
 end_op
+
+opN	op_sub, 1, 0
+opN	op_add, 1, 0
 
 assert (($ - _opcode_map) and 0x07) = 0
 assert ($ - _opcode_map) <= (0x7F shl 4)

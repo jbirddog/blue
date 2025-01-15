@@ -136,3 +136,5 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. To allow nesting have [ ] return stack push/pop the opcode handler
 1. Consider dropping the vm opcodes from the opcode map, only used for extended ops
    1. Or make non leaf opcodes bytecode only ( [ ] )
+1. The interpret/compile code needs to be cleaned up
+   
