@@ -83,6 +83,5 @@ read_boot_code:
 entry $
 	call	mem_alloc
 	call	vm_data_init
-	call	opcode_map_init
 	call	read_boot_code	
 	call	outer_interpreter

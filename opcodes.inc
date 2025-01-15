@@ -1,6 +1,4 @@
 
-; 1574
-
 ; TODO: simplify
 op_eq:
 	call	data_stack_pop
@@ -96,27 +94,6 @@ _set_post:
 	call	data_stack_push
 
 	ret
-
-op_d_set_inc:
-	call 	_set_pre
-	stosd
-
-	jmp	_set_post
-assert ($ - op_d_set_inc) <= 14
-
-op_set_inc:
-	call 	_set_pre
-	stosq
-
-	jmp	_set_post
-assert ($ - op_set_inc) <= 14
-
-op_set_here:
-	call	data_stack_pop
-	mov	[code_buffer_here], rax
-
-	ret
-assert ($ - op_set_here) <= 14
 
 macro begin_op lbl, size, flags {
 latest_op = lbl
@@ -243,19 +220,34 @@ opNI	op_b_set_inc, 1, 0
 	jmp	_set_post
 end_op
 
-opN	op_set_here, 1, 0
+opNI	op_set_here, 1, 0
+	call	data_stack_pop
+	mov	[code_buffer_here], rax
+
+	ret
+end_op
 	
 opBI	op_b_comma, 1, 0
 	db op_here_code, op_swap_code, op_b_set_inc_code, op_set_here_code, op_ret_code
 end_op
 
-opN	op_set_inc, 1, 0
-	
+opNI	op_set_inc, 1, 0
+	call 	_set_pre
+	stosq
+
+	jmp	_set_post
+end_op
+
 opBI	op_comma, 1, 0
 	db op_here_code, op_swap_code, op_set_inc_code, op_set_here_code, op_ret_code
 end_op
 
-opN	op_d_set_inc, 1, 0
+opNI	op_d_set_inc, 1, 0
+	call 	_set_pre
+	stosd
+
+	jmp	_set_post
+end_op
 
 opBI	op_d_comma, 1, 0
 	db op_here_code, op_swap_code, op_d_set_inc_code, op_set_here_code, op_ret_code
@@ -269,19 +261,11 @@ opNI	op_at, 1, 0
 	ret
 end_op	
 	
+
 assert (($ - _opcode_map) and 0x07) = 0
 assert ($ - _opcode_map) <= (0x7F shl 4)
 _opcode_map_qwords = ($ - _opcode_map) shr 3
 
-opcode_map_init:
-	ret
-	mov	rdi, [opcode_map]
-	mov	rsi, _opcode_map
-	mov	ecx, _opcode_map_qwords
-
-	rep	movsq
-	
-	ret
 
 ; expects opcode in rax
 opcode_map_entry:
