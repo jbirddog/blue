@@ -1,58 +1,76 @@
 
 #
-# test initial vm state
+# assert custom opcode FF
 #
-# stack depth is 0
-depth litb 00 = assert
 
-# code buffer here is same as its start
-start here = assert
+litb FF entry
+
+# set flags and size
+litb 06 b!+
+litb 01 b!+
+
+# write bytecode
+litb not b!+
+litb [ b!+
+litb litb b!+
+litb FF b!+
+litb exit b!+
+litb ] b!+
+litb if b!+
+litb ret b!+
+
+drop
+
+# stack depth is 0
+depth litb 00 = FF
 
 #
 # t/f
 #
 
-true not false = assert
-false not true = assert
-true false = not assert
+true not false = FF
+false not true = FF
+true false = not FF
 
 #
 # test data stack ops
 #
 
 # stack depth is 1 after pushing a value
-litb 10 depth litb 01 = assert
+litb 10 depth litb 01 = FF
 
 # stack depth is 0 after dropping the value
-drop depth litb 00 = assert
+drop depth litb 00 = FF
 
 # not
-depth litb 02 = not assert
+depth litb 02 = not FF
 
 # swap
-litb 02 litb 01 swap depth = assert drop
+litb 02 litb 01 swap depth = FF drop
 
 # -
-litb 09 litb 07 - litb 02 = assert
+litb 09 litb 07 - litb 02 = FF
 
 # +
-litb 07 litb 02 + litb 09 = assert
+litb 07 litb 02 + litb 09 = FF
 
 # dup
-here dup = assert
+here dup = FF
 
 # >r and r>
-here >r r> here = assert
+here >r r> here = FF
 
 #
 # test compiling bytecode
 #
 
 # when done compiling bytecode a ret is added and the address where the compile began is pushed
-[ ] b@ litb ret = assert
+[ ] b@ litb ret = FF
 
 # compile does not interpret non immediate opcodes
 [ exit ] drop
+
+litb 05 exit
 
 # check code buffer here is three bytes from the start (ret exit ret)
 here start - litb 03 = assert
@@ -162,28 +180,6 @@ start start = [ litb 01 ] if
 start dup litb 0A + = not [ litb 03 ] if
 
 + litb 04 = not [ litb FF exit ] if
-
-#
-# custom opcode - inline bytecode 
-#
-
-litb 80 entry
-
-# set flags and size
-litb 06 b!+
-litb 01 b!+
-
-# write bytecode
-litb swap b!+
-litb - b!+
-litb ret b!+
-
-drop
-
-# call custom opcode
-litb 03 litb 09 80
-
-litb 06 = assert
 
 #
 # fin

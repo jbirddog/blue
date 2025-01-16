@@ -17,8 +17,11 @@ litb FF b!+
 litb exit b!+
 litb ] b!+
 litb if b!+
+litb ret b!+
 
 drop
 
 # call custom opcode
-litb 03 litb 03 = FF
+depth litb 00 = FF
+true true = FF
+true false = not FF
