@@ -186,7 +186,8 @@ start dup litb 0A + = not [ litb 03 ] if
 
 + litb 04 = not [ litb FF exit ] if
 
-ip drop
+# jump over litb 07 exit
+ip litb 07 + ip! litb 07 exit
 
 #
 # fin
