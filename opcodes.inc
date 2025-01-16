@@ -318,8 +318,6 @@ opN	op_eq, 1, 0
 opN	op_add, 1, 0
 opN	op_sub, 1, 0
 
-opN	op_assert, 1, 0
-
 
 assert (($ - _opcode_map) and 0x07) = 0
 assert ($ - _opcode_map) <= (0x7F shl 4)

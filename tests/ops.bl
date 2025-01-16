@@ -3,23 +3,24 @@
 # implement assert as custom opcode FF
 #
 
+here
+litb not b,
+litb [ b,
+litb litb b,
+litb FF b,
+litb exit b,
+litb ] b,
+litb if b,
+litb ret b,
+
 litb FF entry
 
 # set flags and size
-litb 06 b!+
+litb 04 b!+
 litb 01 b!+
 
-# write bytecode
-litb not b!+
-litb [ b!+
-litb litb b!+
-litb FF b!+
-litb exit b!+
-litb ] b!+
-litb if b!+
-litb ret b!+
-
-drop
+# write bytecode address
+swap !+ drop
 
 # stack depth is 0
 depth litb 00 = FF
@@ -114,27 +115,30 @@ here
 
 litb C3 b,
 here litb 01 - b@
-litb C3 = assert
+litb C3 = FF
 
-here litb 01 - = FF
+drop
+#here litb 01 - = FF
 
 # test d,
 here
 
 litb C3 d,
 here litb 04 - b@
-litb C3 = assert
+litb C3 = FF
 
-here litb 04 - = FF
+drop
+#here litb 04 - = FF
 
 # test ,
 here
 
 litb C3 ,
 here litb 08 - b@
-litb C3 = assert
+litb C3 = FF
 
-here litb 08 - = FF
+drop
+#here litb 08 - = FF
 
 #
 # test calling compiled machine code

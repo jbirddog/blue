@@ -115,12 +115,6 @@ Opcodes start at 00 and subject to change.
 | XX | + | ( a b -- n ) | Push a + b |
 | XX | - | ( a b -- n ) | Push a - b |
 
-### Chopping block
-
-| Opcode | Name | Stack Effect | Description |
-|----|----|----|----|
-| XX | assert | ( t/f -- ) | Exits with 255 status code if top of stack is false (tmp) |
-
 ## Tools/Examples
 
 Along with the code for BlueVM this repository also contains some tools and examples that can be used as reference:
@@ -131,12 +125,15 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ## TODOs
 
+1. Allow nesting [ ]
+   1. Update assert custom ops in tests
 1. Migrate ops to stack push/pop2
 1. Bring back stack bounds checking
-1. Make assert a host (tests) defined bytecode op
-1. Add more ops to make defining a custom op less verbose
-   1. op[ ]op?
-1. To allow nesting have [ ] return stack push/pop the opcode handler
+1. Add more ops to make defining a custom op less verbose/brittle
+   1. opN[ ]op
+   1. opNI[ ]op
+   1. opB[ ]op
+   1. opBI[ ]op
 1. Print error messages to disambiguate exit status
 1. Move compile/interpret etc logic to interpreter.inc
 1. Dockerize and get a CI job that runs ./build.sh
@@ -146,3 +143,4 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. The interpret/compile code needs to be cleaned up
 1. Add ip, ip! opcodes
 1. Add if-else as bytecode op
+1. Rename op_compile/op_interpret to op_compile_begin, op_compile_end
