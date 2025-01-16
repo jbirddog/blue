@@ -1,20 +1,28 @@
 
-op_if_else:
-	call	data_stack_pop2
-	push	rcx
-	push	rax
+_call:
+	mov	rax, [instruction_pointer]
+	call	return_stack_push
+
 	call	data_stack_pop
+	mov	[instruction_pointer], rax
 
-	pop	rdx
-	pop	rcx
+	ret
+
+_call2:
+	xchg	[instruction_pointer], rax
+	call	return_stack_push
+
+	ret
+
+
+op_if:
+	call	data_stack_pop2
+	test	rcx, rcx
+	jz	.done
 	
-	test	rax, rax
-	cmovnz	rax, rcx
-	cmovz	rax, rdx
+	call	_call2
 
-	call data_stack_push
-	call op_execute
-
+.done:
 	ret
 
 op_eq:
@@ -90,15 +98,6 @@ op_interpret:
 	
 	ret
 	
-op_execute:
-	mov	rax, [instruction_pointer]
-	call	return_stack_push
-
-	call	data_stack_pop
-	mov	[instruction_pointer], rax
-
-	ret
-
 _set_pre:
 	call	data_stack_pop
 	push	rax
@@ -157,6 +156,20 @@ opNI	op_exit, 1, 0
 	jmp	exit
 end_op
 
+opNI	op_true, 1, 0
+	xor	eax, eax
+	not	rax
+	call	data_stack_push
+
+	ret
+end_op
+
+opBI	op_false, 1, 0
+	db op_true_code, op_not_code, op_ret_code
+end_op
+
+opN	op_if, 1, 0
+
 opNI	op_mccall, 1, 0
 	call	data_stack_pop
 	call	rax
@@ -164,8 +177,7 @@ opNI	op_mccall, 1, 0
 	ret
 end_op
 
-opN	op_execute, 1, 0
-opN	op_if_else, 1, 0
+opN	_call, 1, 0
 
 opNI	op_to_r, 1, 0
 	call	data_stack_pop
@@ -349,7 +361,7 @@ opcode_interpret:
 .bytecode:
 	mov	rax, rdi
 	call	data_stack_push
-	call	op_execute
+	call	_call
 
 	ret
 

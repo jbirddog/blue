@@ -78,9 +78,10 @@ Opcodes start at 00 and subject to change.
 | Opcode | Name | Stack Effect | Description |
 |----|----|----|----|
 | XX | exit | ( b -- ) | Exit with status from top of stack |
+| XX | true | ( -- t ) | Push true value |
+| XX | false | ( -- f ) | Push false value |
 | XX | mccall | ( a -- ? ) | Call machine code at address |
-| XX | execute | ( a -- ? ) | Execute bytecode located at address |
-| XX | if-else | ( t/f ta fa -- ? ) | Execute fa or ta based on tf |
+| XX | call | ( a -- ? ) | Call bytecode located at address |
 | XX | >r | ( a -- ) | Move top of data stack to return stack |
 | XX | r> | ( -- a ) | Move top of return stacl to data stack |
 | XX | ret | ( -- ) | Pops value from return stack and sets the instruction pointer |
@@ -128,8 +129,6 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ### Before merge
 
-1. Rename execute to call
-1. Add true false opcodes
 1. Add if use to build call
 1. Make assert a host (tests) defined bytecode op
 

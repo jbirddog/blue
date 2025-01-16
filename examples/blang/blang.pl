@@ -5,8 +5,9 @@ use warnings;
 
 my @kw = split " ", q(
   exit
-  mccall execute
-  if-else
+  true false
+  if
+  mccall call
   >r r>
   ret
   [ ]
