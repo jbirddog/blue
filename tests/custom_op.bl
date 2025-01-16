@@ -1,6 +1,6 @@
 
 #
-# implement assert as custom opcode - inline bytecode
+# implement assert as custom opcode FF - inline bytecode
 #
 
 litb FF entry

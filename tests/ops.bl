@@ -1,49 +1,71 @@
 
+#
+# implement assert as custom opcode FF
+#
+
+litb FF entry
+
+# set flags and size
+litb 06 b!+
+litb 01 b!+
+
+# write bytecode
+litb not b!+
+litb [ b!+
+litb litb b!+
+litb FF b!+
+litb exit b!+
+litb ] b!+
+litb if b!+
+litb ret b!+
+
+drop
+
 # stack depth is 0
-depth litb 00 = assert
+depth litb 00 = FF
 
 #
 # t/f
 #
 
-true not false = assert
-false not true = assert
-true false = not assert
+true not false = FF
+false not true = FF
+true false = not FF
 
 #
 # test data stack ops
 #
 
 # stack depth is 1 after pushing a value
-litb 10 depth litb 01 = assert
+litb 10 depth litb 01 = FF
 
 # stack depth is 0 after dropping the value
-drop depth litb 00 = assert
+drop depth litb 00 = FF
 
 # not
-depth litb 02 = not assert
+depth litb 02 = not FF
 
 # swap
-litb 02 litb 01 swap depth = assert drop
+litb 02 litb 01 swap depth = FF drop
 
 # -
-litb 09 litb 07 - litb 02 = assert
+litb 09 litb 07 - litb 02 = FF
 
 # +
-litb 07 litb 02 + litb 09 = assert
+litb 07 litb 02 + litb 09 = FF
 
 # dup
-here dup = assert
+here dup = FF
 
 # >r and r>
-here >r r> here = assert
+here >r r> here = FF
 
 #
 # test compiling bytecode
 #
 
 # when done compiling bytecode a ret is added and the address where the compile began is pushed
-[ ] b@ litb ret = assert
+[ ] b@ litb ret = FF
 
 # compile does not interpret non immediate opcodes
 [ exit ] drop
@@ -52,10 +74,10 @@ here >r r> here = assert
 [ litb FF ] drop
 
 # compile writes expected byte
-here litb 02 - b@ litb FF = assert
+here litb 02 - b@ litb FF = FF
 
 # compile writes the expected number of bytes (3 + 1 for ret)
-[ here start - ] here swap - litb 04 = assert
+[ here start - ] here swap - litb 04 = FF
 
 #
 # test calling compiled bytecode
@@ -63,29 +85,29 @@ here litb 02 - b@ litb FF = assert
 
 litb 05 litb 02 [ - ] call
 
-depth litb 01 = assert
-litb 03 = assert
+depth litb 01 = FF
+litb 03 = FF
 
 # test b!+
 here
 
 here litb 01 b!+
 
-litb 01 - = assert
+litb 01 - = FF
 
 # test d!+
 here
 
 here litb 01 d!+
 
-litb 04 - = assert
+litb 04 - = FF
 
 # test !+
 here
 
 here litb 01 !+
 
-litb 08 - = assert
+litb 08 - = FF
 
 # test b,
 here
@@ -94,7 +116,7 @@ litb C3 b,
 here litb 01 - b@
 litb C3 = assert
 
-here litb 01 - = assert
+here litb 01 - = FF
 
 # test d,
 here
@@ -103,7 +125,7 @@ litb C3 d,
 here litb 04 - b@
 litb C3 = assert
 
-here litb 04 - = assert
+here litb 04 - = FF
 
 # test ,
 here
@@ -112,7 +134,7 @@ litb C3 ,
 here litb 08 - b@
 litb C3 = assert
 
-here litb 08 - = assert
+here litb 08 - = FF
 
 #
 # test calling compiled machine code
@@ -143,7 +165,7 @@ litb C3 b,
 
 mccall
 
-litb 08 = assert
+litb 08 = FF
 
 #
 # control flow
@@ -159,7 +181,7 @@ start dup litb 0A + = not [ litb 03 ] if
 #
 
 # set code buffer back to start
-start here! start here = assert
+start here! start here = FF
 
 # exit cleanly if stack is prestine
 depth exit
