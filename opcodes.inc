@@ -97,7 +97,15 @@ op_compile_end:
 
 	call	return_stack_pop
 	mov	[opcode_handler], rax
+
+	cmp	rax, OPCODE_HANDLER_INTERPRET
+	je	.outer
 	
+.nested:
+	; pop addr from return stack and compile in a lit addr
+	ret
+
+.outer:
 	call	op_from_r.impl
 	
 	ret
