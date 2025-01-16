@@ -125,8 +125,13 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ## TODOs
 
+1. Add ip, ip! opcodes
+1. Add lit
 1. Allow nesting [ ]
-   1. Update assert custom ops in tests
+   1. [ needs to write a lit _ ip! that ] fills in
+      1. May want a litb _ jmp to save bytes later
+   1. When nested, inner [ ] should not be compiled on each call to the outer
+   1. Update assert custom op in tests
 1. Migrate ops to stack push/pop2
 1. Bring back stack bounds checking
 1. Add more ops to make defining a custom op less verbose/brittle
@@ -141,6 +146,5 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. Add bytecode opcodes for litb, etc
 1. Make non leaf opcodes bytecode only ( [ ] )
 1. The interpret/compile code needs to be cleaned up
-1. Add ip, ip! opcodes
 1. Add if-else as bytecode op
 1. Rename op_compile/op_interpret to op_compile_begin, op_compile_end

@@ -201,7 +201,7 @@ opNI	op_ret, 1, 0
 	ret
 end_op
 
-opN	op_compile, 1, 0
+opN	op_compile, 1, OPCODE_ENTRY_FLAG_IMMEDIATE
 opN	op_interpret, 1, OPCODE_ENTRY_FLAG_IMMEDIATE
 opN	op_entry, 1, 0
 
