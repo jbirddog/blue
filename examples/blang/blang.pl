@@ -11,6 +11,7 @@ my @kw = split " ", q(
   >r r>
   ret
   [ ]
+  ip ip!
   entry
   start
   here here!
@@ -18,6 +19,7 @@ my @kw = split " ", q(
   b!+ d!+ !+
   b, d, ,
   litb
+  lit
 
   depth dup drop swap
   not = + -

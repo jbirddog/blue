@@ -88,6 +88,8 @@ Opcodes start at 00 and subject to change.
 | XX | ret | ( -- ) | Pops value from return stack and sets the instruction pointer |
 | XX | [ | ( -- ) | Begin compiling bytecode |
 | XX | ] | ( -- a ) | Append ret and end compilation, push addr where compilation started |
+| XX | ip | ( -- a ) | Push location of the instruction pointer |
+| XX | ip! | ( a -- ) | Sets the location of the instruction pointer |
 | XX | entry | ( b -- a ) | Push addr of the entry for opcode |
 | XX | start | ( -- a ) | Push the code buffer location |
 | XX | here | ( -- a ) | Push location of code buffer's here |
@@ -100,7 +102,8 @@ Opcodes start at 00 and subject to change.
 | XX | b, | ( b -- ) | Write byte value to, and increment, here |
 | XX | d, | ( d -- ) | Write dword value to, and increment, here |
 | XX | , | ( q -- ) | Write qword value to, and increment, here |
-| XX | litb | ( -- n ) | Push next byte from, and increment, instruction pointer |
+| XX | litb | ( -- b ) | Push next byte from, and increment, instruction pointer |
+| XX | lit | ( -- q ) | Push next byte from, and increment, instruction pointer |
 
 ### Stack operations
 
@@ -125,11 +128,10 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ## TODOs
 
-1. Add ip, ip! opcodes
-1. Add lit
 1. Allow nesting [ ]
-   1. [ needs to write a lit _ ip! that ] fills in
-      1. May want a litb _ jmp to save bytes later
+   1. [ needs to write a lit _ ip! that ] fills in (jmps to litb for addr of compile unit)
+      1. May want a litb _ jf/jb to save bytes later (will limit compiles to 255 bytes)
+   1. ] can't just put the addr for call on the data stack, needs to litb it if nested
    1. When nested, inner [ ] should not be compiled on each call to the outer
    1. Update assert custom op in tests
 1. Migrate ops to stack push/pop2

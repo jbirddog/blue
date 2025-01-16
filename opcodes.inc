@@ -79,20 +79,25 @@ op_b_at:
 
 	ret
 
-op_compile:
+op_compile_begin:
 	call	op_here.impl
 	call	op_to_r.impl
-	mov	[opcode_handler], OPCODE_HANDLER_COMPILE
+
+	mov	rax, OPCODE_HANDLER_COMPILE
+	xchg	[opcode_handler], rax
+	call	return_stack_push
 	
 	ret
 
-op_interpret:
+op_compile_end:
 	mov	rdi, [code_buffer_here]
 	mov	al, op_ret_code
 	stosb
 	mov	[code_buffer_here], rdi
 
-	mov	[opcode_handler], OPCODE_HANDLER_INTERPRET
+	call	return_stack_pop
+	mov	[opcode_handler], rax
+	
 	call	op_from_r.impl
 	
 	ret
@@ -108,6 +113,16 @@ _set_pre:
 
 _set_post:
 	mov	rax, rdi
+	call	data_stack_push
+
+	ret
+
+op_lit:
+	mov	rsi, [instruction_pointer]
+	xor	eax, eax
+	lodsq
+	mov	[instruction_pointer], rsi
+
 	call	data_stack_push
 
 	ret
@@ -201,8 +216,23 @@ opNI	op_ret, 1, 0
 	ret
 end_op
 
-opN	op_compile, 1, OPCODE_ENTRY_FLAG_IMMEDIATE
-opN	op_interpret, 1, OPCODE_ENTRY_FLAG_IMMEDIATE
+opN	op_compile_begin, 1, OPCODE_ENTRY_FLAG_IMMEDIATE
+opN	op_compile_end, 1, OPCODE_ENTRY_FLAG_IMMEDIATE
+
+opNI	op_ip, 1, 0
+	mov	rax, [instruction_pointer]
+	call	data_stack_push
+
+	ret
+end_op
+
+opNI	op_set_ip, 1, 0
+	call	data_stack_pop
+	mov	[instruction_pointer], rax
+
+	ret
+end_op
+
 opN	op_entry, 1, 0
 
 opNI	op_start, 1, 0
@@ -276,6 +306,12 @@ opNI	op_litb, 2, 0
 	
 	ret
 end_op
+
+opN	op_lit, 9, 0
+
+;
+; stack ops
+;
 
 opNI	op_depth, 1, 0
 	call	data_stack_depth

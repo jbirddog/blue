@@ -34,6 +34,12 @@ false not true = FF
 true false = not FF
 
 #
+# lit
+#
+
+lit 01 00 00 00 00 00 00 00 litb 01 = FF
+
+#
 # test data stack ops
 #
 
@@ -179,6 +185,8 @@ start start = [ litb 01 ] if
 start dup litb 0A + = not [ litb 03 ] if
 
 + litb 04 = not [ litb FF exit ] if
+
+ip drop
 
 #
 # fin
