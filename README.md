@@ -80,6 +80,7 @@ Opcodes start at 00 and subject to change.
 | XX | exit | ( b -- ) | Exit with status from top of stack |
 | XX | true | ( -- t ) | Push true value |
 | XX | false | ( -- f ) | Push false value |
+| XX | if | ( t/f a -- ? ) | Call addr if t/f is true |
 | XX | mccall | ( a -- ? ) | Call machine code at address |
 | XX | call | ( a -- ? ) | Call bytecode located at address |
 | XX | >r | ( a -- ) | Move top of data stack to return stack |
@@ -129,12 +130,6 @@ Along with the code for BlueVM this repository also contains some tools and exam
 | blang | Quick and dirty compiler for a textual representation of the BlueVM bytecode | examples/blang |
 
 ## TODOs
-
-### Before merge
-
-1. Decision on dropping vm opcode map in mem, change to scratch area (move addrs from code buffer?)
-
-### After merge
 
 1. Migrate ops to stack push/pop2
 1. Bring back stack bounds checking
