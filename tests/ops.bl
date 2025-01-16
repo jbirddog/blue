@@ -1,76 +1,54 @@
 
-#
-# assert custom opcode FF
-#
-
-litb FF entry
-
-# set flags and size
-litb 06 b!+
-litb 01 b!+
-
-# write bytecode
-litb not b!+
-litb [ b!+
-litb litb b!+
-litb FF b!+
-litb exit b!+
-litb ] b!+
-litb if b!+
-litb ret b!+
-
-drop
-
 # stack depth is 0
-depth litb 00 = FF
+depth litb 00 = assert
 
 #
 # t/f
 #
 
-true not false = FF
-false not true = FF
-true false = not FF
+true not false = assert
+false not true = assert
+true false = not assert
 
 #
 # test data stack ops
 #
 
 # stack depth is 1 after pushing a value
-litb 10 depth litb 01 = FF
+litb 10 depth litb 01 = assert
 
 # stack depth is 0 after dropping the value
-drop depth litb 00 = FF
+drop depth litb 00 = assert
 
 # not
-depth litb 02 = not FF
+depth litb 02 = not assert
 
 # swap
-litb 02 litb 01 swap depth = FF drop
+litb 02 litb 01 swap depth = assert drop
 
 # -
-litb 09 litb 07 - litb 02 = FF
+litb 09 litb 07 - litb 02 = assert
 
 # +
-litb 07 litb 02 + litb 09 = FF
+litb 07 litb 02 + litb 09 = assert
 
 # dup
-here dup = FF
+here dup = assert
 
 # >r and r>
-here >r r> here = FF
+here >r r> here = assert
 
 #
 # test compiling bytecode
 #
 
 # when done compiling bytecode a ret is added and the address where the compile began is pushed
-[ ] b@ litb ret = FF
+[ ] b@ litb ret = assert
+
+here start - litb 01 = assert
 
 # compile does not interpret non immediate opcodes
 [ exit ] drop
-
-litb 05 exit
 
 # check code buffer here is three bytes from the start (ret exit ret)
 here start - litb 03 = assert

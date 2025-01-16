@@ -22,6 +22,7 @@ litb ret b!+
 drop
 
 # call custom opcode
-depth litb 00 = FF
 true true = FF
 true false = not FF
+
+depth exit
