@@ -11,6 +11,7 @@ my @kw = split " ", q(
   >r r>
   ret
   [ ]
+  entry
   start
   here here!
   b@ @

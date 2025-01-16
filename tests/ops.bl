@@ -164,6 +164,28 @@ start dup litb 0A + = not [ litb 03 ] if
 + litb 04 = not [ litb FF exit ] if
 
 #
+# custom opcode
+#
+
+litb 80 entry
+
+# set flags and size
+litb 06 b!+
+litb 01 b!+
+
+# write bytecode
+litb swap b!+
+litb - b!+
+litb ret b!+
+
+drop
+
+# call custom opcode
+litb 03 litb 09 80
+
+litb 06 = assert
+
+#
 # fin
 #
 

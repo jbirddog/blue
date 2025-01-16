@@ -87,14 +87,15 @@ Opcodes start at 00 and subject to change.
 | XX | ret | ( -- ) | Pops value from return stack and sets the instruction pointer |
 | XX | [ | ( -- ) | Begin compiling bytecode |
 | XX | ] | ( -- a ) | Append ret and end compilation, push addr where compilation started |
+| XX | entry | ( b -- a ) | Push addr of the entry for opcode |
 | XX | start | ( -- a ) | Push the code buffer location |
 | XX | here | ( -- a ) | Push location of code buffer's here |
 | XX | here! | ( a -- ) | Sets the location of code buffer's here |
 | XX | b@ | ( a -- b ) | Push byte value found at addr |
 | XX | @ | ( a -- ) | Push qword value found at addr |
-| XX | b!+ | ( a b -- a' ) | Write byte value to, increment and push addr |
-| XX | d!+ | ( a d -- a' ) | Write dword value to, increment and push addr |
-| XX | !+ | ( a q -- a' ) | Write qword value to, increment and push addr |
+| XX | b!+ | ( a b -- 'a ) | Write byte value to, increment and push addr |
+| XX | d!+ | ( a d -- 'a ) | Write dword value to, increment and push addr |
+| XX | !+ | ( a q -- 'a ) | Write qword value to, increment and push addr |
 | XX | b, | ( b -- ) | Write byte value to, and increment, here |
 | XX | d, | ( d -- ) | Write dword value to, and increment, here |
 | XX | , | ( q -- ) | Write qword value to, and increment, here |
@@ -115,6 +116,8 @@ Opcodes start at 00 and subject to change.
 
 ### Chopping block
 
+| Opcode | Name | Stack Effect | Description |
+|----|----|----|----|
 | XX | assert | ( t/f -- ) | Exits with 255 status code if top of stack is false (tmp) |
 
 ## Tools/Examples
@@ -129,13 +132,15 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ### Before merge
 
-1. Add if use to build call
-1. Make assert a host (tests) defined bytecode op
+1. Decision on dropping vm opcode map in mem, change to scratch area (move addrs from code buffer?)
 
 ### After merge
 
 1. Migrate ops to stack push/pop2
 1. Bring back stack bounds checking
+1. Make assert a host (tests) defined bytecode op
+1. Add more ops to make defining a custom op less verbose
+   1. op[ ]op?
 1. To allow nesting have [ ] return stack push/pop the opcode handler
 1. Print error messages to disambiguate exit status
 1. Move compile/interpret etc logic to interpreter.inc

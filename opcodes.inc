@@ -1,14 +1,5 @@
 
 _call:
-	mov	rax, [instruction_pointer]
-	call	return_stack_push
-
-	call	data_stack_pop
-	mov	[instruction_pointer], rax
-
-	ret
-
-_call2:
 	xchg	[instruction_pointer], rax
 	call	return_stack_push
 
@@ -20,11 +11,19 @@ op_if:
 	test	rcx, rcx
 	jz	.done
 	
-	call	_call2
+	call	_call
 
 .done:
 	ret
 
+op_entry:
+	call	data_stack_pop
+	shl	eax, 4
+	add	rax, [opcode_map]
+	call	data_stack_push
+
+	ret
+	
 op_eq:
 	call	data_stack_pop2
 	mov	rdx, rax
@@ -177,7 +176,9 @@ opNI	op_mccall, 1, 0
 	ret
 end_op
 
-opN	_call, 1, 0
+opBI	op_call, 1, 0
+	db op_true_code, op_swap_code, op_if_code, op_ret_code
+end_op
 
 opNI	op_to_r, 1, 0
 	call	data_stack_pop
@@ -202,6 +203,7 @@ end_op
 
 opN	op_compile, 1, 0
 opN	op_interpret, 1, OPCODE_ENTRY_FLAG_IMMEDIATE
+opN	op_entry, 1, 0
 
 opNI	op_start, 1, 0
 	mov	rax, [code_buffer]
@@ -360,7 +362,6 @@ opcode_interpret:
 
 .bytecode:
 	mov	rax, rdi
-	call	data_stack_push
 	call	_call
 
 	ret
