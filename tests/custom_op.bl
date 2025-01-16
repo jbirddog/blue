@@ -1,0 +1,24 @@
+
+#
+# implement assert as custom opcode - inline bytecode
+#
+
+litb FF entry
+
+# set flags and size
+litb 06 b!+
+litb 01 b!+
+
+# write bytecode
+litb not b!+
+litb [ b!+
+litb litb b!+
+litb FF b!+
+litb exit b!+
+litb ] b!+
+litb if b!+
+
+drop
+
+# call custom opcode
+litb 03 litb 03 = FF
