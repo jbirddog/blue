@@ -1,11 +1,17 @@
 
+bounds_check:
+	; TODO: bounds check
+	ret
+
 macro stack_push which {
 ; expects value to push in rax
 which##_push:
-	; TODO: bounds check
+	mov	ecx, CELL_SIZE
+	call	bounds_check
+	
 	mov	rdi, [which##_here]
 	mov	[rdi], rax
-	add	[which##_here], CELL_SIZE
+	add	[which##_here], rcx
 
 	ret
 }

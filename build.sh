@@ -10,7 +10,6 @@ trap 'error_handler $LINENO $?' ERR
 
 mkdir -p bin
 mkdir -p obj
-rm ./bin/* ./obj/*
 
 echo "* Building BlueVM x86_64/linux"
 
