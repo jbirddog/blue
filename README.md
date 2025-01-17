@@ -126,20 +126,20 @@ Along with the code for BlueVM this repository also contains some tools and exam
 |----|----|----|
 | blang | Quick and dirty compiler for a textual representation of the BlueVM bytecode | examples/blang |
 
+### Idea for more tools/examples
+
+1. Write a bs0->blang (gnalb) decompiler by overwriting opcode map and opcode handler
+
 ## TODOs
 
+1. If really needs to be if-else
 1. See about re-arranging >r order in op_compile_begin to simplify it and op_compile_end
-1. Migrate ops to stack push/pop2
 1. Bring back stack bounds checking
 1. Add more ops to make defining a custom op less verbose/brittle
    1. opN[ ]op
    1. opNI[ ]op
    1. opB[ ]op
    1. opBI[ ]op
-1. Move compile/interpret etc logic to interpreter.inc
-   1. The interpret/compile code needs to be cleaned up
 1. Dockerize and get a CI job that runs ./build.sh
-1. Write a bs0->blang (gnalb) decompiler by overwriting opcode map and opcode handler
 1. Add bytecode opcodes for litb, etc
-1. Add if-else as bytecode op
 1. Print error messages to disambiguate exit status

@@ -39,21 +39,15 @@ op_eq:
 	ret
 	
 op_sub:
-	call	data_stack_pop
-	push	rax
-	call	data_stack_pop
-	pop	rcx
-	
+	call	data_stack_pop2
+	xchg	rax, rcx	
 	sub	rax, rcx
 	call	data_stack_push
 
 	ret
 
 op_add:
-	call	data_stack_pop
-	push	rax
-	call	data_stack_pop
-	pop	rcx
+	call	data_stack_pop2
 	
 	add	rax, rcx
 	call	data_stack_push
@@ -128,11 +122,8 @@ op_compile_end:
 	ret
 	
 _set_pre:
-	call	data_stack_pop
-	push	rax
-	call	data_stack_pop
-	mov	rdi, rax
-	pop	rax
+	call	data_stack_pop2
+	mov	rdi, rcx
 
 	ret
 
