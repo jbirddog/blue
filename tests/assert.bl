@@ -1,0 +1,20 @@
+
+#
+# implement assert as custom opcode FF
+#
+
+litb FF entry
+
+# set flags and size
+litb 04 b!+
+litb 01 b!+
+
+# compile and write bytecode address into the opcode entry
+[ [ ] [ litb FF exit ] if-else ] !+ drop
+
+# call custom opcode
+true true = FF
+false false = FF
+true false = not FF
+
+depth exit

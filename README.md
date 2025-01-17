@@ -1,92 +1,141 @@
-# Blue Compiler
+# BlueVM
 
-_Please note: the compiler is currently undergoing a complete rewrite. Earlier versions can be found in the bak* directories._
+Minimalistic 64 bit virtual machine inspired by Forth and Factor. The BlueVM aims to:
 
-More details will be added as the new version of the compiler is fleshed out.
+1. Have a reasonably small, simplistic and hackable codebase
+1. Support execution of any previously compiled machine or bytecode
+1. Provide a minimal set of opcodes that can be extended by the host
+1. Serve as the basis for minimalistic handcrafted applications
+1. Allow the host full control
+1. Bring some fun back into the world
 
-## v3
+By convention BlueVM bytecode files have a `bs0` (BlueVM Stage 0) extension.
 
-Extremely minimal version of a 64bit forth-like compiler that aims to:
+## Building
 
-1. Be completely stand alone (nostdlib)
-1. Works on byte code (no textual parsing)
-1. Supports compile time execution of any previously defined code
-1. Supports multiple os/architectures/executable formats
-1. Quickly be bootstrapped to higher level languages
+To build the BlueVM, tools and examples run ./build.sh
 
-### Requirements to run ./build.sh
+## Memory Layout
 
-version numbers are not exact requirements, just what i am using at time of writing
+The BlueVM requires a single allocation with the following layout in rwx memory:
 
-1. linux 6.12.7_1 x86_64
-1. fasm 1.73.30
-1. xxd 2024-09-15
-1. grep 3.11
-1. cmp 3.10
+1. Input buffer (2048 bytes)
+1. Return stack (1024 bytes)
+1. Data stack (1024 bytes)
+1. Opcode Map (4096 bytes)
+   1. BlueVM Opcode Map: 0x00 - 0x7F (2048 bytes)
+   1. Extended Opcode Map: 0x80 - 0xFF (2048 bytes)
+1. Runtime Buffer (4096 bytes)
+   1. BlueVM addresses (64 bytes)
+   1. Code Buffer (4032 bytes)
 
-### Byte code
+## Boot
 
-vm works on byte code, multi-byte values are assumed to be little-endian. op codes are subject to change.
+BlueVM will set entries in the BlueVM opcode map and read 2048 bytes from stdin into the input buffer. This
+initial read will serve as the bootstrap for the host and is interpreted until the host stops execution.
 
-| Op Code | Reads | Stack Effect | Description |
+## Execution
+
+BlueVM follows a simple byte oriented execution strategy. Using the values from the BlueVM data portion of memory
+it begins the outer interpreter:
+
+1. Read byte from and increment instruction pointer
+1. Locate the opcode entry in the opcode map
+   1. If code address is 0 push the opcode on the data stack and call invalid opcode handler
+1. Push the code address and flags on the data stack and call the opcode handler
+1. Goto 1
+
+Because of this "late binding" approach, the host can change the values that the BlueVM uses to execute. The outer
+interpreter requires that the host termintes execution properly. One way to do this is with the `exit` opcode.
+
+## Opcode Map Structure
+
+Each entry in the opcode map is 16 bytes.
+
+1. Flags (1 byte)
+1. Size (1 byte)
+1. Code (14 bytes)
+   1. Either 8 bytes for addr and 6 empty
+   1. Or 14 bytes available for byte or machine code
+
+## Opcode Handler
+
+Once an opcode entry is located in the opcode map the opcode handler is called. The BlueVM has two opcode handlers,
+interpret (default) and compile. The interpret handler calls the code address specified in the opcode entry. The
+compile handler finds the opcode length in the opcode entry and copies that many bytes, including the opcode, into
+the code buffer and advances the code buffer's here.
+
+## Opcodes
+
+Opcodes start at 00 and subject to change.
+
+### Core
+
+| Opcode | Name | Stack Effect | Description |
 |----|----|----|----|
-| 00 | byte | ( -- b ) | read byte from input, push on the data stack |
-| 01 | word | ( -- w ) | read word from input, push on the data stack |
-| 02 | dword | ( -- d ) | read dword from input, push on the data stack |
-| 03 | qword | ( -- q ) | read qword from input, push on the data stack |
-| 04 | | ( -- a ) | push addr of code buffer's here on the data stack |
-| 05 | | ( a -- ) | set addr of code buffer's here |
-| 06 | | ( a b -- a' ) | write byte to addr, push new addr on the data stack |
-| 07 | | ( a w -- a' ) | write word to addr, push new addr on the data stack |
-| 08 | | ( a d -- a' ) | write dword to addr, push new addr on the data stack |
-| 09 | | ( a q -- a' ) | write qword to addr, push new addr on the data stack |
-| 0A | | ( -- a ) | push addr of code buffer start on the data stack |
-| 0B | | ( n1 n2 -- n ) | n1 - n2, push result on the data stack |
-| 0C | | ( n1 n2 -- n ) | n1 + n2, push result on the data stack |
-| 0D | | ( x -- ) | drop top of the data stack |
-| 0E | | ( a b -- b a ) | swap the top two items of the data stack |
+| XX | exit | ( b -- ) | Exit with status from top of stack |
+| XX | true | ( -- t ) | Push true value |
+| XX | false | ( -- f ) | Push false value |
+| XX | if-else | ( t/f ta fa -- ? ) | Call ta if t/f is true else call fa |
+| XX | mccall | ( a -- ? ) | Call machine code at address |
+| XX | call | ( a -- ? ) | Call bytecode located at address |
+| XX | >r | ( a -- ) | Move top of data stack to return stack |
+| XX | r> | ( -- a ) | Move top of return stacl to data stack |
+| XX | ret | ( -- ) | Pops value from return stack and sets the instruction pointer |
+| XX | [ | ( -- ) | Begin compiling bytecode |
+| XX | ] | ( -- a ) | Append ret and end compilation, push addr where compilation started |
+| XX | ip | ( -- a ) | Push location of the instruction pointer |
+| XX | ip! | ( a -- ) | Sets the location of the instruction pointer |
+| XX | entry | ( b -- a ) | Push addr of the entry for opcode |
+| XX | start | ( -- a ) | Push the code buffer location |
+| XX | here | ( -- a ) | Push location of code buffer's here |
+| XX | here! | ( a -- ) | Sets the location of code buffer's here |
+| XX | b@ | ( a -- b ) | Push byte value found at addr |
+| XX | @ | ( a -- ) | Push qword value found at addr |
+| XX | b!+ | ( a b -- 'a ) | Write byte value to, increment and push addr |
+| XX | d!+ | ( a d -- 'a ) | Write dword value to, increment and push addr |
+| XX | !+ | ( a q -- 'a ) | Write qword value to, increment and push addr |
+| XX | b, | ( b -- ) | Write byte value to, and increment, here |
+| XX | d, | ( d -- ) | Write dword value to, and increment, here |
+| XX | , | ( q -- ) | Write qword value to, and increment, here |
+| XX | litb | ( -- b ) | Push next byte from, and increment, instruction pointer |
+| XX | lit | ( -- q ) | Push next byte from, and increment, instruction pointer |
 
-### Stages
+### Stack operations
 
-_Stage 0_
+| Opcode | Name | Stack Effect | Description |
+|----|----|----|----|
+| XX | depth | ( -- n ) | Push depth of the data stack |
+| XX | drop | ( x -- ) | Drops top of the data stack |
+| XX | dup | ( a -- a a ) | Duplicate top of stack |
+| XX | swap | ( a b -- b a ) | Swap top two values on the data stack |
+| XX | not | ( x -- 'x ) | Bitwise not top of the data stack |
+| XX | = | ( a b -- t/f ) | Check top two items for equality and push result |
+| XX | + | ( a b -- n ) | Push a + b |
+| XX | - | ( a b -- n ) | Push a - b |
 
-A binary file ending in `bs0` is a stage 0 file that contains a run of bytes that are executed by the blue
-compiler.
+## Tools/Examples
 
-_Stage 1_
+Along with the code for BlueVM this repository also contains some tools and examples that can be used as reference:
 
-A textual file ending in `bs1` that allows minimal formatting/commenting. Line comments start with `#`. A stage 1
-file is lowered to a stage 0 file by stripping comments and running it through `xxd`.
+| Name | Descripton | Location |
+|----|----|----|
+| blang | Quick and dirty compiler for a textual representation of the BlueVM bytecode | examples/blang |
 
-### TODOs:
+### Idea for more tools/examples
 
-1. mmap stdin into input buffer like s120.asm
-1. provide syscalls in x86_64/linux/syscall.bs1
-1. instead of dumping the whole code buffer, have app write output giving start/end
-1. calculate string location/length in hello world example
-1. add code_buffer_start that can be different from code_buffer
-1. elf pre/post needs to be combined and moved to compiled words that can be called by the app
-1. add = op
-1. add over op
-1. add op to enter compile mode
-1. add op to enter interpret mode
-1. add op to call bytecode at location
-1. add assert op (in block)
-1. add tuck (swap over in block)
-1. add stack over/underflow error checks
-1. add code buffer over/underflow error checks
-1. add opcode overflow error check
-1. need a bs1/bs0 test case file to test blue
+1. Write a bs0->blang (gnalb) decompiler by overwriting opcode map/handler
 
-### s120
+## TODOs
 
-This will be a program written in bs1 that converts bs1 files to bs0 files. It will replace the current use of
-grep/xxd in build.sh. It will still be built initially with grep/xxd, then it will rebuild itself.
-
-The program will be minimalist and require valid input else invalid output. Simplicity of this implementation
-is more important than performance. Likely once a higher level language is implemented it will re-implement
-s120 with more nice things.
-
-Needs:
-
-1. Port s120.asm to bs1
+1. See about re-arranging >r order in op_compile_begin to simplify it and op_compile_end
+1. Bring back stack bounds checking
+1. Add more ops to make defining a custom op less verbose/brittle
+   1. opN[ ]op
+   1. opNI[ ]op
+   1. opB[ ]op
+   1. opBI[ ]op
+1. Dockerize and get a CI job that runs ./build.sh
+1. Add bytecode op if/if-not
+1. Add bytecode opcodes for litb, etc
+1. Print error messages to disambiguate exit status

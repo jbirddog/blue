@@ -2,39 +2,43 @@
 
 set -e
 
+error_handler() {
+  echo "Error on line $1, exit status: $2"
+}
+
+trap 'error_handler $LINENO $?' ERR
+
 mkdir -p bin
 mkdir -p obj
+rm ./bin/* ./obj/*
 
-echo "* Building Blue x86_64/linux"
+echo "* Building BlueVM x86_64/linux"
 
-fasm blue.asm bin/blue
+fasm bluevm.asm bin/bluevm
 
-echo "* Building s120 x86_64/linux"
+echo "* Building bs0 files"
 
-fasm s120.asm bin/s120
+./examples/blang/blang.pl < tests/exit.bl > obj/test_exit.bs0
+./examples/blang/blang.pl < tests/ifelse.bl > obj/test_ifelse.bs0
+./examples/blang/blang.pl < tests/bc.bl > obj/test_bc.bs0
+./examples/blang/blang.pl < tests/assert.bl > obj/test_assert.bs0
+./examples/blang/blang.pl < tests/ops.bl > obj/test_ops.bs0
 
-echo "* Creating bs1 files"
+echo "* Running bs0 test cases"
 
-cat \
-  elf/pre.bs1 \
-  examples/x86_64/linux/hello_world.bs1 \
-  elf/post.bs1 > obj/hello_world.bs1
+echo "** Test Exit"
+./bin/bluevm < obj/test_exit.bs0
 
-echo "* Confirming s120 output"
+echo "** Test If Else"
+./bin/bluevm < obj/test_ifelse.bs0
 
-grep -v "#" test_data/000.bs1 | xxd -p -r > obj/000_xxd.bs0
-./bin/s120 < test_data/000.bs1 > obj/000.bs0
+echo "** Test Compiling and Calling Bytecode"
+./bin/bluevm < obj/test_bc.bs0
 
-cmp obj/000_xxd.bs0 obj/000.bs0
+echo "** Test Custom Opcode - Assert"
+./bin/bluevm < obj/test_assert.bs0
 
-grep -v "#" obj/hello_world.bs1 | xxd -p -r > obj/hello_world_xxd.bs0
-./bin/s120 < obj/hello_world.bs1 > obj/hello_world.bs0
+echo "** Test Ops"
+./bin/bluevm < obj/test_ops.bs0
 
-cmp obj/hello_world_xxd.bs0 obj/hello_world.bs0
-
-echo "* Building example hello_world"
-
-./bin/blue < obj/hello_world.bs0 > bin/hello_world
-chmod +x bin/hello_world
-
-./bin/hello_world
+echo "* Done"
