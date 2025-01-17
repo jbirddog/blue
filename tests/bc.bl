@@ -1,0 +1,10 @@
+
+#
+# test compiling and calling bytecode
+#
+
+[ ] call
+
+#[ ] b@ litb ret = not [ litb 01 exit ] if
+
+depth exit

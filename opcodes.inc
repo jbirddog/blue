@@ -80,11 +80,25 @@ op_b_at:
 	ret
 
 op_compile_begin:
-	call	op_here.impl
-	call	op_to_r.impl
+	; TODO: only need to do this if nested
+	mov	rdi, [code_buffer_here]
+	mov	al, op_lit_code
+	stosb
+	push	rdi
+	xor	eax, eax
+	stosq
+	mov	al, op_set_ip_code
+	stosb
+	mov	[code_buffer_here], rdi
+
+	mov	rax, [code_buffer_here]
+	call	return_stack_push
 
 	mov	rax, OPCODE_HANDLER_COMPILE
 	xchg	[opcode_handler], rax
+	call	return_stack_push
+
+	pop	rax
 	call	return_stack_push
 	
 	ret
@@ -95,6 +109,10 @@ op_compile_end:
 	stosb
 	mov	[code_buffer_here], rdi
 
+	; patch the addr for ip! that was compiled in before the compilation
+	call	return_stack_pop
+	mov	[rax], rdi
+
 	call	return_stack_pop
 	mov	[opcode_handler], rax
 
@@ -102,6 +120,8 @@ op_compile_end:
 	je	.outer
 	
 .nested:
+mov edi, 99
+jmp exit
 	; pop addr from return stack and compile in a lit addr
 	ret
 
@@ -395,6 +415,7 @@ opcode_map_entry:
 	ret
 	
 opcode_interpret:
+	; TODO: mov rax, rdi / cmovz rdi, _call / call rdi
 	test	cl, OPCODE_ENTRY_FLAG_BYTECODE
 	jnz	.bytecode
 

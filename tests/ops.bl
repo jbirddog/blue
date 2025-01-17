@@ -3,15 +3,17 @@
 # implement assert as custom opcode FF
 #
 
-here
-litb not b,
-litb [ b,
-litb litb b,
-litb FF b,
-litb exit b,
-litb ] b,
-litb if b,
-litb ret b,
+#here
+#litb not b,
+#litb [ b,
+#litb litb b,
+#litb FF b,
+#litb exit b,
+#litb ] b,
+#litb if b,
+#litb ret b,
+
+[ drop ]
 
 litb FF entry
 
