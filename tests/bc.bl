@@ -18,6 +18,7 @@ drop
 litb 01 litb 02 [ + ] call
 litb 03 = not [ litb 05 exit ] if
 
-#[ [ ] call ] call
+litb 04 litb 05 [ [ + ] call ] call
+litb 09 = not [ litb 06 exit ] if
 
 depth exit

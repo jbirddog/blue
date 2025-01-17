@@ -120,9 +120,16 @@ op_compile_end:
 	je	.outer
 	
 .nested:
-mov edi, 99
-jmp exit
-	; pop addr from return stack and compile in a lit addr
+	call	return_stack_pop
+	push	rax
+	
+	mov	rdi, [code_buffer_here]
+	mov	al, op_lit_code
+	stosb
+	pop	rax
+	stosq
+	mov	[code_buffer_here], rdi
+	
 	ret
 
 .outer:

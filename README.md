@@ -129,9 +129,6 @@ Along with the code for BlueVM this repository also contains some tools and exam
 ## TODOs
 
 1. Allow nesting [ ]
-   1. [ needs to write a lit _ ip! that ] fills in (jmps to litb for addr of compile unit)
-      1. May want a litb _ jf/jb to save bytes later (will limit compiles to 255 bytes)
-   1. ] can't just put the addr for call on the data stack, needs to litb it if nested
    1. When nested, inner [ ] should not be compiled on each call to the outer
    1. Update assert custom op in tests
 1. Migrate ops to stack push/pop2
