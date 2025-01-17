@@ -128,6 +128,7 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ## TODOs
 
+1. See about re-arranging >r order in op_compile_begin to simplify it and op_compile_end
 1. Migrate ops to stack push/pop2
 1. Bring back stack bounds checking
 1. Add more ops to make defining a custom op less verbose/brittle

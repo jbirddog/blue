@@ -37,16 +37,6 @@ op_eq:
 	call	data_stack_push
 
 	ret
-
-; TODO: replace with bytecode in host
-op_assert:
-	call	data_stack_pop
-	mov	edi, eax
-	not	edi
-	test	edi, edi
-	jnz	exit
-	
-	ret
 	
 op_sub:
 	call	data_stack_pop
