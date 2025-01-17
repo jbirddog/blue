@@ -10,7 +10,7 @@ litb 04 b!+
 litb 01 b!+
 
 # compile and write bytecode address into the opcode entry
-[ not [ litb FF exit ] if ] !+ drop
+[ [ ] [ litb FF exit ] if-else ] !+ drop
 
 # stack depth is 0
 depth litb 00 = FF
@@ -136,10 +136,10 @@ litb 08 = FF
 # control flow
 #
 
-start start = [ litb 01 ] if
-start dup litb 0A + = not [ litb 03 ] if
+start start = [ litb 01 ] [ ] if-else
+start dup litb 0A + = [ ] [ litb 03 ] if-else
 
-+ litb 04 = not [ litb FF exit ] if
++ litb 04 = [ ] [ litb FF exit ] if-else
 
 # jump over litb 07 exit
 ip litb 07 + ip! litb 07 exit

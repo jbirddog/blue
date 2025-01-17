@@ -10,7 +10,7 @@ litb 04 b!+
 litb 01 b!+
 
 # compile and write bytecode address into the opcode entry
-[ not [ litb FF exit ] if ] !+ drop
+[ [ ] [ litb FF exit ] if-else ] !+ drop
 
 # call custom opcode
 true true = FF

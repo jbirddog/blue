@@ -1,6 +1,6 @@
 # BlueVM
 
-Minimalistic 64 bit Forth-like virtual machine for hackers. The BlueVM aims to:
+Minimalistic 64 bit virtual machine inspired by Forth and Factor. The BlueVM aims to:
 
 1. Have a reasonably small, simplistic and hackable codebase
 1. Support execution of any previously compiled machine or bytecode
@@ -80,7 +80,7 @@ Opcodes start at 00 and subject to change.
 | XX | exit | ( b -- ) | Exit with status from top of stack |
 | XX | true | ( -- t ) | Push true value |
 | XX | false | ( -- f ) | Push false value |
-| XX | if | ( t/f a -- ? ) | Call addr if t/f is true |
+| XX | if-else | ( t/f ta fa -- ? ) | Call ta if t/f is true else call fa |
 | XX | mccall | ( a -- ? ) | Call machine code at address |
 | XX | call | ( a -- ? ) | Call bytecode located at address |
 | XX | >r | ( a -- ) | Move top of data stack to return stack |
@@ -128,11 +128,10 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ### Idea for more tools/examples
 
-1. Write a bs0->blang (gnalb) decompiler by overwriting opcode map and opcode handler
+1. Write a bs0->blang (gnalb) decompiler by overwriting opcode map/handler
 
 ## TODOs
 
-1. If really needs to be if-else
 1. See about re-arranging >r order in op_compile_begin to simplify it and op_compile_end
 1. Bring back stack bounds checking
 1. Add more ops to make defining a custom op less verbose/brittle
@@ -141,5 +140,6 @@ Along with the code for BlueVM this repository also contains some tools and exam
    1. opB[ ]op
    1. opBI[ ]op
 1. Dockerize and get a CI job that runs ./build.sh
+1. Add bytecode op if/if-not
 1. Add bytecode opcodes for litb, etc
 1. Print error messages to disambiguate exit status

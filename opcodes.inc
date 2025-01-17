@@ -5,15 +5,17 @@ _call:
 
 	ret
 
-
-op_if:
+op_if_else:
 	call	data_stack_pop2
-	test	rcx, rcx
-	jz	.done
+	mov	rdx, rax
+	call	data_stack_pop
+	
+	test	rax, rax
+	cmovz	rax, rdx
+	cmovnz	rax, rcx
 	
 	call	_call
 
-.done:
 	ret
 
 op_entry:
@@ -198,7 +200,7 @@ opBI	op_false, 1, 0
 	db op_true_code, op_not_code, op_ret_code
 end_op
 
-opN	op_if, 1, 0
+opN	op_if_else, 1, 0
 
 opNI	op_mccall, 1, 0
 	call	data_stack_pop
@@ -207,8 +209,11 @@ opNI	op_mccall, 1, 0
 	ret
 end_op
 
-opBI	op_call, 1, 0
-	db op_true_code, op_swap_code, op_if_code, op_ret_code
+opNI	op_call, 1, 0
+	call	data_stack_pop
+	call	_call
+
+	ret
 end_op
 
 opNI	op_to_r, 1, 0
