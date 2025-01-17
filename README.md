@@ -53,10 +53,6 @@ interpreter requires that the host termintes execution properly. One way to do t
 Each entry in the opcode map is 16 bytes.
 
 1. Flags (1 byte)
-   1. Immediate
-   1. Inlined code
-   1. Bytecode
-   1. 5 bits reserved
 1. Size (1 byte)
 1. Code (14 bytes)
    1. Either 8 bytes for addr and 6 empty
