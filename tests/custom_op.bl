@@ -1,19 +1,7 @@
 
 #
-# implement assert as custom opcode FF - inline bytecode
+# implement assert as custom opcode FF
 #
-
-#here
-#litb not b,
-#litb [ b,
-#litb litb b,
-#litb FF b,
-#litb exit b,
-#litb ] b,
-#litb if b,
-#litb ret b,
-
-[ drop ]
 
 litb FF entry
 
@@ -21,11 +9,12 @@ litb FF entry
 litb 04 b!+
 litb 01 b!+
 
-# write bytecode address
-swap !+ drop
+# compile and write bytecode address into the opcode entry
+[ not [ litb FF exit ] if ] !+ drop
 
 # call custom opcode
 true true = FF
+false false = FF
 true false = not FF
 
 depth exit

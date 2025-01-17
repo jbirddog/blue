@@ -3,37 +3,17 @@
 # implement assert as custom opcode FF
 #
 
-#here
-#litb not b,
-#litb [ b,
-#litb litb b,
-#litb FF b,
-#litb exit b,
-#litb ] b,
-#litb if b,
-#litb ret b,
-
-[ drop ]
-
 litb FF entry
 
 # set flags and size
 litb 04 b!+
 litb 01 b!+
 
-# write bytecode address
-swap !+ drop
+# compile and write bytecode address into the opcode entry
+[ not [ litb FF exit ] if ] !+ drop
 
 # stack depth is 0
 depth litb 00 = FF
-
-#
-# t/f
-#
-
-true not false = FF
-false not true = FF
-true false = not FF
 
 #
 # lit

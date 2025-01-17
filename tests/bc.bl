@@ -9,11 +9,16 @@ drop
 [ ] b@ litb ret = not [ litb 02 exit ] if
 
 [ ] call
+[ [ ] call ] call
+[ [ [ ] call ] call ] call
+[ [ [ [ ] call ] call ] call ] call
+[ [ [ [ [ ] call ] call ] call ] call ] call
+[ [ [ [ [ [ ] call ] call ] call ] call ] call ] call
 
 [ ]
 dup litb 01 - b@ litb ip! = not [ litb 03 exit ] if
 dup litb 0A - b@ litb lit = not [ litb 04 exit ] if
-drop
+[ drop ] call
 
 litb 01 litb 02 [ + ] call
 litb 03 = not [ litb 05 exit ] if
@@ -21,7 +26,7 @@ litb 03 = not [ litb 05 exit ] if
 litb 04 litb 05 [ [ [ + ] call ] call ] call
 litb 09 = not [ litb 06 exit ] if
 
-litb 01 [ litb 03 = [ litb 07 exit ] if ] call
+litb 01 [ litb 03 = [ [ litb 07 exit ] if ] call ] call
 
 [ ] here swap call here = not [ litb 08 exit ] if
 
