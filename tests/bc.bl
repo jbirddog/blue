@@ -3,8 +3,21 @@
 # test compiling and calling bytecode
 #
 
+[ ] depth litb 01 = not [ litb 01 exit ] if
+drop
+
+[ ] b@ litb ret = not [ litb 02 exit ] if
+
 [ ] call
 
-#[ ] b@ litb ret = not [ litb 01 exit ] if
+[ ]
+dup litb 01 - b@ litb ip! = not [ litb 03 exit ] if
+dup litb 0A - b@ litb lit = not [ litb 04 exit ] if
+drop
+
+litb 01 litb 02 [ + ] call
+litb 03 = not [ litb 05 exit ] if
+
+#[ [ ] call ] call
 
 depth exit

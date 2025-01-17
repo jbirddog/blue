@@ -69,33 +69,6 @@ here dup = FF
 # >r and r>
 here >r r> here = FF
 
-#
-# test compiling bytecode
-#
-
-# when done compiling bytecode a ret is added and the address where the compile began is pushed
-[ ] b@ litb ret = FF
-
-# compile does not interpret non immediate opcodes
-[ exit ] drop
-
-# compile multi byte opcodes
-[ litb FF ] drop
-
-# compile writes expected byte
-here litb 02 - b@ litb FF = FF
-
-# compile writes the expected number of bytes (3 + 1 for ret)
-[ here start - ] here swap - litb 04 = FF
-
-#
-# test calling compiled bytecode
-#
-
-litb 05 litb 02 [ - ] call
-
-depth litb 01 = FF
-litb 03 = FF
 
 # test b!+
 here
