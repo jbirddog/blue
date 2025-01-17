@@ -2,7 +2,7 @@
 
 Minimalistic 64 bit Forth-like virtual machine for hackers. The BlueVM aims to:
 
-1. Have a simplistic and hackable codebase
+1. Have a reasonably small, simplistic and hackable codebase
 1. Support execution of any previously compiled machine or bytecode
 1. Provide a minimal set of opcodes that can be extended by the host
 1. Serve as the basis for minimalistic handcrafted applications
