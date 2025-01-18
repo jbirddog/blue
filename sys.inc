@@ -2,7 +2,6 @@
 ; expects status in edi
 exit:
 	mov	eax, 60
-	syscall
 
 syscall_or_die:
 	syscall
@@ -39,19 +38,4 @@ read:
 	call	syscall_or_die
 	
 	ret
-
-
-
-
-;dbg:
-;	xor	edi, edi
-;	inc	edi
-;	mov	eax, edi
-;	mov	rsi, .msg
-;	mov	edx, .len
-;	syscall
-;	ret
-;.msg:
-;	db "Here", 10
-;.len = ($ - .msg)
 
