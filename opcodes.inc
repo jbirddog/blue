@@ -48,14 +48,6 @@ op_sub:
 
 	ret
 
-op_add:
-	call	data_stack_pop2
-	
-	add	rax, rcx
-	call	data_stack_push
-
-	ret
-
 op_b_at:
 	call	data_stack_pop
 	mov	rsi, rax
@@ -372,7 +364,15 @@ opNI	op_not, 1, 0
 end_op
 
 opN	op_eq, 1, 0
-opN	op_add, 1, 0
+
+opNI	op_add, 1, 0
+	call	data_stack_pop2
+	add	rax, rcx
+	call	data_stack_push
+
+	ret
+end_op
+
 opN	op_sub, 1, 0
 
 
