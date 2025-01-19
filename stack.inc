@@ -1,24 +1,16 @@
 
-bounds_check:
-	; TODO: bounds check
-	ret
-
 macro stack_push which {
 ; expects value to push in rax
 which##_push:
-	mov	ecx, CELL_SIZE
-	call	bounds_check
-	
 	mov	rdi, [which##_here]
 	mov	[rdi], rax
-	add	[which##_here], rcx
+	add	[which##_here], CELL_SIZE
 
 	ret
 }
 
 macro stack_pop which {
 which##_pop:
-	; TODO: bounds check
 	mov	rsi, [which##_here]
 	mov	rax, [rsi - CELL_SIZE]
 	sub	[which##_here], CELL_SIZE
@@ -37,7 +29,6 @@ stack_push data_stack
 stack_pop data_stack
 
 data_stack_push2:
-	; TODO: bounds check
 	mov	rdi, [data_stack_here]
 	mov	[rdi], rcx
 	mov	[rdi + CELL_SIZE], rax
@@ -46,7 +37,6 @@ data_stack_push2:
 	ret
 
 data_stack_pop2:
-	; TODO: bounds check
 	mov	rsi, [data_stack_here]
 	lea	rax, [rsi - CELL_SIZE]
 	mov	rax, [rax]
