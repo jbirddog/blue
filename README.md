@@ -99,7 +99,7 @@ Opcodes start at 00 and subject to change.
 | XX | d, | ( d -- ) | Write dword value to, and increment, here |
 | XX | , | ( q -- ) | Write qword value to, and increment, here |
 | XX | litb | ( -- b ) | Push next byte from, and increment, instruction pointer |
-| XX | lit | ( -- q ) | Push next byte from, and increment, instruction pointer |
+| XX | lit | ( -- q ) | Push next qword from, and increment, instruction pointer |
 
 ### Stack operations
 
@@ -128,9 +128,18 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ## TODOs
 
-1. The next round of simpl/min - ification:
+1. v5 - further simpl/minification:
    1. Remove initial allocation and just use rq
-   1. Reorder rq's so that a binary file can be concat'd to the binary to produce the full executable
+   1. Likely can hold pointers in registers instead of memory
+      1. rsi is instruction pointer
+      1. rdi is code buffer here
+   1. Move opN(I) opcodes to lower numbers so bytecode ops can be concat'd
+   1. Remove all syscalls except exit
+   1. Move to bytecode:
+      1. true
+   1. Reorder rq's so that a binary file can be concat'd to produce the full executable
+      1. Opcode map (opN(I) included in binary)
+      1. Rest can be optional bs0 file
 1. See about re-arranging >r order in op_compile_begin to simplify it and op_compile_end
 1. Add more ops to make defining a custom op less verbose/brittle
    1. opN[ ]op
