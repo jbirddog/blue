@@ -128,6 +128,24 @@ _set_post:
 
 	ret
 
+op_litw:
+	mov	rsi, [instruction_pointer]
+	lodsw
+	mov	[instruction_pointer], rsi
+
+	call	data_stack_push
+
+	ret
+
+op_litd:
+	mov	rsi, [instruction_pointer]
+	lodsd
+	mov	[instruction_pointer], rsi
+
+	call	data_stack_push
+
+	ret
+
 op_lit:
 	mov	rsi, [instruction_pointer]
 	lodsq
@@ -286,6 +304,13 @@ opNI	op_b_set_inc, 1, 0
 	jmp	_set_post
 end_op
 
+opNI	op_w_set_inc, 1, 0
+	call 	_set_pre
+	stosw
+
+	jmp	_set_post
+end_op
+
 opNI	op_d_set_inc, 1, 0
 	call 	_set_pre
 	stosd
@@ -305,6 +330,10 @@ opBI	op_b_comma, 1, 0
 	db op_here_code, op_swap_code, op_b_set_inc_code, op_set_here_code, op_ret_code
 end_op
 
+opBI	op_w_comma, 1, 0
+	db op_here_code, op_swap_code, op_w_set_inc_code, op_set_here_code, op_ret_code
+end_op
+
 opBI	op_d_comma, 1, 0
 	db op_here_code, op_swap_code, op_d_set_inc_code, op_set_here_code, op_ret_code
 end_op
@@ -320,6 +349,8 @@ opNI	op_litb, 2, 0
 	ret
 end_op
 
+opN	op_litw, 9, 0
+opN	op_litd, 9, 0
 opN	op_lit, 9, 0
 
 ;

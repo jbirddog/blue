@@ -16,10 +16,9 @@ my @kw = split " ", q(
   start
   here here!
   b@ @
-  b!+ d!+ !+
-  b, d, ,
-  litb
-  lit
+  b!+ w!+ d!+ !+
+  b, w, d, ,
+  litb litw litd lit
 
   depth dup drop swap
   not = + -
