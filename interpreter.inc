@@ -35,11 +35,11 @@ _opcode_handler_invalid:
 	jmp	exit
 
 ; expects opcode in rax
-opcode_map_entry:
+opcode_tbl_entry:
 	mov	edx, eax
 	shl	eax, 4
 	
-	mov	rsi, opcode_map
+	mov	rsi, opcode_tbl
 	add	rsi, rax
 	mov	rcx, [rsi]
 	lea	rdi, [rsi + 2]
@@ -52,7 +52,7 @@ opcode_map_entry:
 ; expects opcode in rax
 opcode_handler_call:
 	push	rax
-	call	opcode_map_entry
+	call	opcode_tbl_entry
 
 	test	rdi, rdi
 	jz	.invalid

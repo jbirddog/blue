@@ -21,7 +21,7 @@ op_if_else:
 op_entry:
 	call	data_stack_pop
 	shl	eax, 4
-	add	rax, opcode_map
+	add	rax, opcode_tbl
 	call	data_stack_push
 
 	ret
@@ -139,7 +139,7 @@ op_lit:
 
 macro begin_op lbl, size, flags {
 latest_op = lbl
-latest_op_code = ($ - opcode_map) shr 4
+latest_op_code = ($ - opcode_tbl) shr 4
 lbl##_code = latest_op_code
 	db flags, size
 }
@@ -172,7 +172,7 @@ macro end_op {
 	assert ($ - latest_op) = (CELL_SIZE * 2)
 }
 
-opcode_map:
+opcode_tbl:
 
 opNI	op_exit, 1, 0
 	call	data_stack_pop
@@ -376,7 +376,7 @@ end_op
 opN	op_sub, 1, 0
 
 
-assert (($ - opcode_map) and 0x07) = 0
-assert ($ - opcode_map) <= (0x7F shl 4)
-assert ($ - opcode_map) <= OPCODE_MAP_SIZE
+assert (($ - opcode_tbl) and 0x07) = 0
+assert ($ - opcode_tbl) <= (0x7F shl 4)
+assert ($ - opcode_tbl) <= OPCODE_TBL_SIZE
 

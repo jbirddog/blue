@@ -3,10 +3,10 @@ format elf64 executable 3
 
 CELL_SIZE = 8
 
+OPCODE_TBL_SIZE = 4096
 INPUT_BUFFER_SIZE = 2048
 RETURN_STACK_SIZE = 1024
 DATA_STACK_SIZE = 1024
-OPCODE_MAP_SIZE = 4096
 VM_ADDRS_SIZE = 64
 CODE_BUFFER_SIZE = (4096 - VM_ADDRS_SIZE)
 
@@ -76,7 +76,7 @@ entry $
 	call	interpreter
 
 include "opcodes.inc"
-rb (OPCODE_MAP_SIZE - ($ - opcode_map))
+rb (OPCODE_TBL_SIZE - ($ - opcode_tbl))
 
 instruction_pointer rq 1
 opcode_handler rq 1
