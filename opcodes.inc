@@ -249,7 +249,7 @@ end_op
 opN	op_entry, 1, 0
 
 opNI	op_start, 1, 0
-	mov	rax, [code_buffer]
+	mov	rax, code_buffer
 	call	data_stack_push
 	
 	ret

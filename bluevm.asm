@@ -20,14 +20,13 @@ mem_alloc_init:
 
 	mov	[mem], rax
 
-	lea	rsi, [rax + VM_ADDRS_OFFSET]
-	mov	rcx, opcode_handler_call
-	mov	[rsi], rcx
+	;lea	rsi, [rax + VM_ADDRS_OFFSET]
+	;mov	rcx, opcode_handler_call
+	;mov	[rsi], rcx
 	
-	lea	rsi, [rax + CODE_BUFFER_OFFSET]
-	mov	[code_buffer], rsi
-	mov	[code_buffer_here], rsi
-	mov	[code_buffer_size], CODE_BUFFER_SIZE
+	;lea	rsi, [rax + CODE_BUFFER_OFFSET]
+	;mov	[code_buffer], rsi
+	;mov	[code_buffer_here], rsi
 
 	ret
 
@@ -37,6 +36,10 @@ init:
 	mov	[return_stack_size], RETURN_STACK_SIZE
 	mov	[data_stack_here], data_stack
 	mov	[data_stack_size], DATA_STACK_SIZE
+
+	mov	[vm_addr_opcode_handler_call], opcode_handler_call
+	mov	[code_buffer_here], code_buffer + VM_ADDRS_SIZE
+	mov	[code_buffer_size], CODE_BUFFER_SIZE
 	
 	mov	[opcode_handler], OPCODE_HANDLER_INTERPRET
 	mov	[opcode_handler_invalid], OPCODE_HANDLER_INVALID
@@ -72,10 +75,15 @@ data_stack_here rq 1
 data_stack_size rq 1
 opcode_map rb OPCODE_MAP_SIZE
 
-mem rq 1
-
-code_buffer rq 1
+vm_addrs:
+vm_addr_opcode_handler_call rq 1
+times (VM_ADDRS_SIZE - ($ - vm_addrs)) rb 1
+code_buffer rb (CODE_BUFFER_SIZE - VM_ADDRS_SIZE)
 code_buffer_here rq 1
 code_buffer_size rq 1
+
+
+mem rq 1
+
 opcode_handler rq 1
 opcode_handler_invalid rq 1
