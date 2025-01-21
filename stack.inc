@@ -14,9 +14,9 @@ data_stack_pop:
 
 ; expects stack in rdx
 stack_pop:
-	mov	rsi, [rdx]
-	mov	rax, [rsi - CELL_SIZE]
 	sub	qword [rdx], CELL_SIZE
+	mov	rdx, [rdx]
+	mov	rax, [rdx]
 
 	ret
 
