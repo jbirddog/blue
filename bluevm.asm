@@ -1,14 +1,30 @@
 
 format elf64 executable 3
 
-DATA_STACK_SIZE = 1024
+CELL_SIZE = 8
+
 INPUT_BUFFER_SIZE = 2048
-OPCODE_MAP_SIZE = 4096
 RETURN_STACK_SIZE = 1024
+DATA_STACK_SIZE = 1024
+OPCODE_MAP_SIZE = 4096
+VM_ADDRS_SIZE = 64
+CODE_BUFFER_SIZE = (4096 - VM_ADDRS_SIZE)
+
+OPCODE_HANDLER_COMPILE = opcode_handler_compile
+OPCODE_HANDLER_INTERPRET = opcode_handler_interpret
+OPCODE_HANDLER_INVALID = _opcode_handler_invalid
+
+OPCODE_ENTRY_FLAG_IMMEDIATE = 1 shl 0
+OPCODE_ENTRY_FLAG_INLINED = 1 shl 1
+OPCODE_ENTRY_FLAG_BYTECODE = 1 shl 2
+
+;ERR_DATA_STACK_UNDERFLOW = 105
+;ERR_DATA_STACK_OVERFLOW = 106
+;ERR_RETURN_STACK_UNDERFLOW = 107
+;ERR_RETURN_STACK_OVERFLOW = 108
 
 segment readable writable executable
 
-include "defs.inc"
 include "stack.inc"
 include "opcodes.inc"
 include "interpreter.inc"
