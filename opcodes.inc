@@ -70,7 +70,7 @@ op_compile_begin:
 	stosb
 	mov	[code_buffer_here], rdi
 
-	mov	rax, [code_buffer_here]
+	mov	rax, rdi
 	call	return_stack_push
 
 	mov	rax, OPCODE_HANDLER_COMPILE
@@ -130,7 +130,6 @@ _set_post:
 
 op_lit:
 	mov	rsi, [instruction_pointer]
-	xor	eax, eax
 	lodsq
 	mov	[instruction_pointer], rsi
 
