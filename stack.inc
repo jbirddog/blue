@@ -1,50 +1,54 @@
+data_stack_push:
+	mov	rdx, data_stack_here
 
-macro stack_push which {
-; expects value to push in rax
-which##_push:
-	mov	rdi, [which##_here]
-	mov	[rdi], rax
-	add	[which##_here], CELL_SIZE
+; expects stack in rdx, value to push in rax
+stack_push:
+	mov	rdi, [rdx]
+	stosq
+	add	qword [rdx], CELL_SIZE
+	
+	ret
+
+data_stack_pop:
+	mov	rdx, data_stack_here
+
+; expects stack in rdx
+stack_pop:
+	sub	qword [rdx], CELL_SIZE
+	mov	rdx, [rdx]
+	mov	rax, [rdx]
 
 	ret
-}
-
-macro stack_pop which {
-which##_pop:
-	mov	rsi, [which##_here]
-	mov	rax, [rsi - CELL_SIZE]
-	sub	[which##_here], CELL_SIZE
-
-	ret
-}
 
 data_stack_depth:
 	mov	rcx, [data_stack_here]
-	sub	rcx, [data_stack]
+	sub	rcx, data_stack
 	shr	ecx, 3
 	
 	ret
 
-stack_push data_stack
-stack_pop data_stack
-
 data_stack_push2:
-	mov	rdi, [data_stack_here]
+	mov	rdx, data_stack_here
+	mov	rdi, [rdx]
 	mov	[rdi], rcx
 	mov	[rdi + CELL_SIZE], rax
-	add	[data_stack_here], (CELL_SIZE * 2)
+	add	qword [rdx], (CELL_SIZE * 2)
 
 	ret
 
 data_stack_pop2:
-	mov	rsi, [data_stack_here]
-	lea	rax, [rsi - CELL_SIZE]
-	mov	rax, [rax]
-	lea	rcx, [rsi - (CELL_SIZE * 2)]
-	mov	rcx, [rcx]
-	sub	[data_stack_here], (CELL_SIZE * 2)
+	mov	rdx, data_stack_here
+	mov	rsi, [rdx]
+	mov	rax, [rsi - CELL_SIZE]
+	mov	rcx, [rsi - (CELL_SIZE * 2)]
+	sub	qword [rdx], (CELL_SIZE * 2)
 	
 	ret
 
-stack_push return_stack
-stack_pop return_stack
+return_stack_push:
+	mov	rdx, return_stack_here
+	jmp	stack_push
+
+return_stack_pop:
+	mov	rdx, return_stack_here
+	jmp	stack_pop

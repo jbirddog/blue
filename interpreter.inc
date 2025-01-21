@@ -35,9 +35,24 @@ _opcode_handler_invalid:
 	jmp	exit
 
 ; expects opcode in rax
+opcode_tbl_entry:
+	mov	edx, eax
+	shl	eax, 4
+	
+	mov	rsi, opcode_tbl
+	add	rsi, rax
+	mov	rcx, [rsi]
+	lea	rdi, [rsi + 2]
+	
+	test	cl, OPCODE_ENTRY_FLAG_INLINED
+	cmovz	rdi, [rdi]
+	
+	ret
+
+; expects opcode in rax
 opcode_handler_call:
 	push	rax
-	call	opcode_map_entry
+	call	opcode_tbl_entry
 
 	test	rdi, rdi
 	jz	.invalid
@@ -64,8 +79,8 @@ read_byte:
 
 	ret
 
-outer_interpreter:
+interpreter:
 	call	read_byte
 	call	opcode_handler_call
 	
-	jmp	outer_interpreter
+	jmp	interpreter

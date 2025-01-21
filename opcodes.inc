@@ -7,8 +7,9 @@ _call:
 
 op_if_else:
 	call	data_stack_pop2
-	mov	rdx, rax
+	push	rax
 	call	data_stack_pop
+	pop	rdx
 	
 	test	rax, rax
 	cmovz	rax, rdx
@@ -21,7 +22,7 @@ op_if_else:
 op_entry:
 	call	data_stack_pop
 	shl	eax, 4
-	add	rax, [opcode_map]
+	add	rax, opcode_tbl
 	call	data_stack_push
 
 	ret
@@ -69,7 +70,7 @@ op_compile_begin:
 	stosb
 	mov	[code_buffer_here], rdi
 
-	mov	rax, [code_buffer_here]
+	mov	rax, rdi
 	call	return_stack_push
 
 	mov	rax, OPCODE_HANDLER_COMPILE
@@ -129,7 +130,6 @@ _set_post:
 
 op_lit:
 	mov	rsi, [instruction_pointer]
-	xor	eax, eax
 	lodsq
 	mov	[instruction_pointer], rsi
 
@@ -139,7 +139,7 @@ op_lit:
 
 macro begin_op lbl, size, flags {
 latest_op = lbl
-latest_op_code = ($ - _opcode_map) shr 4
+latest_op_code = ($ - opcode_tbl) shr 4
 lbl##_code = latest_op_code
 	db flags, size
 }
@@ -172,7 +172,7 @@ macro end_op {
 	assert ($ - latest_op) = (CELL_SIZE * 2)
 }
 
-_opcode_map:
+opcode_tbl:
 
 opNI	op_exit, 1, 0
 	call	data_stack_pop
@@ -249,7 +249,7 @@ end_op
 opN	op_entry, 1, 0
 
 opNI	op_start, 1, 0
-	mov	rax, [code_buffer]
+	mov	rax, code_buffer
 	call	data_stack_push
 	
 	ret
@@ -376,34 +376,7 @@ end_op
 opN	op_sub, 1, 0
 
 
-assert (($ - _opcode_map) and 0x07) = 0
-assert ($ - _opcode_map) <= (0x7F shl 4)
-
-
-; expects opcode in rax
-opcode_map_entry:
-	mov	edx, eax
-	shl	eax, 4
-	
-	mov	rsi, [opcode_map]
-	add	rsi, rax
-	mov	rcx, [rsi]
-	
-	test	rcx, rcx
-	jnz	.continue
-
-	cmp	edx, latest_op_code
-	jg	.continue
-
-	mov	rsi, _opcode_map
-	add	rsi, rax
-	mov	rcx, [rsi]
-
-.continue:
-	lea	rdi, [rsi + 2]
-	
-	test	cl, OPCODE_ENTRY_FLAG_INLINED
-	cmovz	rdi, [rdi]
-	
-	ret
+assert (($ - opcode_tbl) and 0x07) = 0
+assert ($ - opcode_tbl) <= (0x7F shl 4)
+assert ($ - opcode_tbl) <= OPCODE_TBL_SIZE
 

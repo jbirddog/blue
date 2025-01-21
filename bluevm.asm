@@ -1,73 +1,68 @@
+
 format elf64 executable 3
 
-segment readable writable
+CELL_SIZE = 8
 
-mem rq 1
+OPCODE_TBL_SIZE = 4096
+INPUT_BUFFER_SIZE = 2048
+RETURN_STACK_SIZE = 1024
+DATA_STACK_SIZE = 1024
+VM_ADDRS_SIZE = 64
+CODE_BUFFER_SIZE = (4096 - VM_ADDRS_SIZE)
 
-instruction_pointer rq 1
-input_buffer rq 1
-return_stack rq 1
-return_stack_here rq 1
-return_stack_size rq 1
-data_stack rq 1
-data_stack_here rq 1
-data_stack_size rq 1
-opcode_map rq 1
-code_buffer rq 1
-code_buffer_here rq 1
-code_buffer_size rq 1
-opcode_handler rq 1
-opcode_handler_invalid rq 1
+OPCODE_HANDLER_COMPILE = opcode_handler_compile
+OPCODE_HANDLER_INTERPRET = opcode_handler_interpret
+OPCODE_HANDLER_INVALID = _opcode_handler_invalid
 
-segment readable executable
+OPCODE_ENTRY_FLAG_IMMEDIATE = 1 shl 0
+OPCODE_ENTRY_FLAG_INLINED = 1 shl 1
+OPCODE_ENTRY_FLAG_BYTECODE = 1 shl 2
 
-include "defs.inc"
+;ERR_DATA_STACK_UNDERFLOW = 105
+;ERR_DATA_STACK_OVERFLOW = 106
+;ERR_RETURN_STACK_UNDERFLOW = 107
+;ERR_RETURN_STACK_OVERFLOW = 108
+
+segment readable writable executable
+
 include "stack.inc"
-include "opcodes.inc"
 include "interpreter.inc"
-include "sys.inc"
 
-mem_alloc_init:
-	mov	esi, MEM_SIZE
-	call	mmap_rwx
+; expects status in edi
+exit:
+	mov	eax, 60
 
-	mov	[mem], rax
+syscall_or_die:
+	syscall
 	
-	lea	rsi, [rax + INPUT_BUFFER_OFFSET]
-	mov	[instruction_pointer], rsi
-	mov	[input_buffer], rsi
-	
-	lea	rsi, [rax + RETURN_STACK_OFFSET]
-	mov	[return_stack], rsi
-	mov	[return_stack_here], rsi
-	mov	[return_stack_size], RETURN_STACK_SIZE
-	
-	lea	rsi, [rax + DATA_STACK_OFFSET]
-	mov	[data_stack], rsi
-	mov	[data_stack_here], rsi
-	mov	[data_stack_size], DATA_STACK_SIZE
-	
-	lea	rsi, [rax + OPCODE_MAP_OFFSET]
-	mov	[opcode_map], rsi
-
-	lea	rsi, [rax + VM_ADDRS_OFFSET]
-	mov	rcx, opcode_handler_call
-	mov	[rsi], rcx
-	
-	lea	rsi, [rax + CODE_BUFFER_OFFSET]
-	mov	[code_buffer], rsi
-	mov	[code_buffer_here], rsi
-	mov	[code_buffer_size], CODE_BUFFER_SIZE
-	
-	mov	[opcode_handler], OPCODE_HANDLER_INTERPRET
-	mov	[opcode_handler_invalid], OPCODE_HANDLER_INVALID
+	test	rax, rax
+	cmovs	edi, eax
+	js	exit
 
 	ret
 
+init:
+	mov	[instruction_pointer], input_buffer
+	mov	[opcode_handler], OPCODE_HANDLER_INTERPRET
+	mov	[opcode_handler_invalid], OPCODE_HANDLER_INVALID
+	
+	mov	[return_stack_here], return_stack
+	mov	[return_stack_size], RETURN_STACK_SIZE
+	mov	[data_stack_here], data_stack
+	mov	[data_stack_size], DATA_STACK_SIZE
+
+	mov	[vm_addr_opcode_handler_call], opcode_handler_call
+	mov	[code_buffer_here], code_buffer + VM_ADDRS_SIZE
+	mov	[code_buffer_size], CODE_BUFFER_SIZE
+	
+	ret
+	
 read_boot_code:
-	mov	rsi, [input_buffer]
+	mov	rsi, input_buffer
 	mov	edx, INPUT_BUFFER_SIZE
-	call	read
+	xor	edi, edi
+	xor	eax, eax
+	call	syscall_or_die
 
 	test	eax, eax
 	cmovz	edi, eax
@@ -76,6 +71,31 @@ read_boot_code:
 	ret
 
 entry $
-	call	mem_alloc_init
+	call	init
 	call	read_boot_code	
-	call	outer_interpreter
+	call	interpreter
+
+include "opcodes.inc"
+rb (OPCODE_TBL_SIZE - ($ - opcode_tbl))
+
+instruction_pointer rq 1
+opcode_handler rq 1
+opcode_handler_invalid rq 1
+
+input_buffer rb INPUT_BUFFER_SIZE
+
+return_stack rb RETURN_STACK_SIZE
+return_stack_here rq 1
+return_stack_size rq 1
+
+data_stack rb DATA_STACK_SIZE
+data_stack_here rq 1
+data_stack_size rq 1
+
+vm_addrs:
+vm_addr_opcode_handler_call rq 1
+times (VM_ADDRS_SIZE - ($ - vm_addrs)) rb 1
+
+code_buffer rb (CODE_BUFFER_SIZE - VM_ADDRS_SIZE)
+code_buffer_here rq 1
+code_buffer_size rq 1
