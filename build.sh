@@ -22,6 +22,7 @@ echo "* Building bs0 files"
 ./examples/blang/blang.pl < tests/bc.bl > obj/test_bc.bs0
 ./examples/blang/blang.pl < tests/assert.bl > obj/test_assert.bs0
 ./examples/blang/blang.pl < tests/ops.bl > obj/test_ops.bs0
+./examples/blang/blang.pl < examples/blang/hello_world.bl > obj/hello_world.bs0
 
 echo "* Running bs0 test cases"
 
@@ -39,5 +40,8 @@ echo "** Test Custom Opcode - Assert"
 
 echo "** Test Ops"
 ./bin/bluevm < obj/test_ops.bs0
+
+echo "** Example - Hello World"
+./bin/bluevm < obj/hello_world.bs0
 
 echo "* Done"

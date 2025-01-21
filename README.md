@@ -17,14 +17,14 @@ To build the BlueVM, tools and examples run ./build.sh
 
 ## Memory Layout
 
-The BlueVM requires a single allocation with the following layout in rwx memory:
+The BlueVM has the following layout in rwx memory:
 
-1. Input buffer (2048 bytes)
-1. Return stack (1024 bytes)
-1. Data stack (1024 bytes)
 1. Opcode Map (4096 bytes)
    1. BlueVM Opcode Map: 0x00 - 0x7F (2048 bytes)
    1. Extended Opcode Map: 0x80 - 0xFF (2048 bytes)
+1. Input buffer (2048 bytes)
+1. Return stack (1024 bytes)
+1. Data stack (1024 bytes)
 1. Runtime Buffer (4096 bytes)
    1. BlueVM addresses (64 bytes)
    1. Code Buffer (4032 bytes)
@@ -124,6 +124,7 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ### Idea for more tools/examples
 
+1. Hello world
 1. Write a bs0->blang (gnalb) decompiler by overwriting opcode map/handler
 
 ## TODOs
