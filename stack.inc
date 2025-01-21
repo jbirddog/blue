@@ -20,7 +20,7 @@ which##_pop:
 
 data_stack_depth:
 	mov	rcx, [data_stack_here]
-	sub	rcx, [data_stack]
+	sub	rcx, data_stack
 	shr	ecx, 3
 	
 	ret

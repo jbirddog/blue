@@ -21,7 +21,7 @@ op_if_else:
 op_entry:
 	call	data_stack_pop
 	shl	eax, 4
-	add	rax, [opcode_map]
+	add	rax, opcode_map
 	call	data_stack_push
 
 	ret
@@ -385,7 +385,7 @@ opcode_map_entry:
 	mov	edx, eax
 	shl	eax, 4
 	
-	mov	rsi, [opcode_map]
+	mov	rsi, opcode_map
 	add	rsi, rax
 	mov	rcx, [rsi]
 	

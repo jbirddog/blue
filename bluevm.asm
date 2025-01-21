@@ -1,7 +1,9 @@
 
 format elf64 executable 3
 
+DATA_STACK_SIZE = 1024
 INPUT_BUFFER_SIZE = 2048
+OPCODE_MAP_SIZE = 4096
 RETURN_STACK_SIZE = 1024
 
 segment readable writable executable
@@ -17,19 +19,6 @@ mem_alloc_init:
 	call	mmap_rwx
 
 	mov	[mem], rax
-	
-	;lea	rsi, [rax + RETURN_STACK_OFFSET]
-	;mov	[return_stack], rsi
-	;mov	[return_stack_here], rsi
-	;mov	[return_stack_size], RETURN_STACK_SIZE
-	
-	lea	rsi, [rax + DATA_STACK_OFFSET]
-	mov	[data_stack], rsi
-	mov	[data_stack_here], rsi
-	mov	[data_stack_size], DATA_STACK_SIZE
-	
-	lea	rsi, [rax + OPCODE_MAP_OFFSET]
-	mov	[opcode_map], rsi
 
 	lea	rsi, [rax + VM_ADDRS_OFFSET]
 	mov	rcx, opcode_handler_call
@@ -46,6 +35,8 @@ init:
 	mov	[instruction_pointer], input_buffer
 	mov	[return_stack_here], return_stack
 	mov	[return_stack_size], RETURN_STACK_SIZE
+	mov	[data_stack_here], data_stack
+	mov	[data_stack_size], DATA_STACK_SIZE
 	
 	mov	[opcode_handler], OPCODE_HANDLER_INTERPRET
 	mov	[opcode_handler_invalid], OPCODE_HANDLER_INVALID
@@ -76,13 +67,13 @@ input_buffer rb INPUT_BUFFER_SIZE
 return_stack rb RETURN_STACK_SIZE
 return_stack_here rq 1
 return_stack_size rq 1
+data_stack rb DATA_STACK_SIZE
+data_stack_here rq 1
+data_stack_size rq 1
+opcode_map rb OPCODE_MAP_SIZE
 
 mem rq 1
 
-data_stack rq 1
-data_stack_here rq 1
-data_stack_size rq 1
-opcode_map rq 1
 code_buffer rq 1
 code_buffer_here rq 1
 code_buffer_size rq 1

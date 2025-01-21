@@ -129,6 +129,7 @@ Along with the code for BlueVM this repository also contains some tools and exam
 ## TODOs
 
 1. Remove initial allocation and just use rq's
+1. Move opcode map rb above instruction_pointer so it can have _opmap inlined
 1. See about re-arranging >r order in op_compile_begin to simplify it and op_compile_end
 1. Add more ops to make defining a custom op less verbose/brittle
    1. opN[ ]op
