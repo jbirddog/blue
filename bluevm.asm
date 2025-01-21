@@ -94,7 +94,7 @@ data_stack_size rq 1
 
 vm_addrs:
 vm_addr_opcode_handler_call rq 1
-times (VM_ADDRS_SIZE - ($ - vm_addrs)) rb 1
+rb (VM_ADDRS_SIZE - ($ - vm_addrs))
 
 code_buffer rb (CODE_BUFFER_SIZE - VM_ADDRS_SIZE)
 code_buffer_here rq 1
