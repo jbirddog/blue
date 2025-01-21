@@ -1,14 +1,16 @@
 
-macro stack_push which {
-; expects value to push in rax
-which##_push:
-	mov	rdi, [which##_here]
-	mov	[rdi], rax
-	add	[which##_here], CELL_SIZE
-
+; expects stack in rdx, value to push in rax
+stack_push:
+	mov	rdi, [rdx]
+	stosq
+	add	qword [rdx], CELL_SIZE
+	
 	ret
-}
 
+; expects stack in rdx
+stack_pop:
+
+	
 macro stack_pop which {
 which##_pop:
 	mov	rsi, [which##_here]
@@ -25,7 +27,10 @@ data_stack_depth:
 	
 	ret
 
-stack_push data_stack
+data_stack_push:
+	mov	rdx, data_stack_here
+	jmp	stack_push
+
 stack_pop data_stack
 
 data_stack_push2:
@@ -46,5 +51,8 @@ data_stack_pop2:
 	
 	ret
 
-stack_push return_stack
+return_stack_push:
+	mov	rdx, return_stack_here
+	jmp	stack_push
+
 stack_pop return_stack
