@@ -28,20 +28,20 @@ data_stack_depth:
 	ret
 
 data_stack_push2:
-	mov	rdi, [data_stack_here]
+	mov	rdx, data_stack_here
+	mov	rdi, [rdx]
 	mov	[rdi], rcx
 	mov	[rdi + CELL_SIZE], rax
-	add	[data_stack_here], (CELL_SIZE * 2)
+	add	qword [rdx], (CELL_SIZE * 2)
 
 	ret
 
 data_stack_pop2:
-	mov	rsi, [data_stack_here]
-	lea	rax, [rsi - CELL_SIZE]
-	mov	rax, [rax]
-	lea	rcx, [rsi - (CELL_SIZE * 2)]
-	mov	rcx, [rcx]
-	sub	[data_stack_here], (CELL_SIZE * 2)
+	mov	rdx, data_stack_here
+	mov	rsi, [rdx]
+	mov	rax, [rsi - CELL_SIZE]
+	mov	rcx, [rsi - (CELL_SIZE * 2)]
+	sub	qword [rdx], (CELL_SIZE * 2)
 	
 	ret
 
