@@ -26,7 +26,6 @@ OPCODE_ENTRY_FLAG_BYTECODE = 1 shl 2
 segment readable writable executable
 
 include "stack.inc"
-include "opcodes.inc"
 include "interpreter.inc"
 
 ; expects status in edi
@@ -74,10 +73,10 @@ read_boot_code:
 entry $
 	call	init
 	call	read_boot_code	
-	call	outer_interpreter
+	call	interpreter
 
-
-opcode_map rb OPCODE_MAP_SIZE
+include "opcodes.inc"
+rb (OPCODE_MAP_SIZE - ($ - opcode_map))
 
 instruction_pointer rq 1
 opcode_handler rq 1

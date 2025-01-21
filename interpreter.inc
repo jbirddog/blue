@@ -42,18 +42,6 @@ opcode_map_entry:
 	mov	rsi, opcode_map
 	add	rsi, rax
 	mov	rcx, [rsi]
-	
-	test	rcx, rcx
-	jnz	.continue
-
-	cmp	edx, latest_op_code
-	jg	.continue
-
-	mov	rsi, _opcode_map
-	add	rsi, rax
-	mov	rcx, [rsi]
-
-.continue:
 	lea	rdi, [rsi + 2]
 	
 	test	cl, OPCODE_ENTRY_FLAG_INLINED
@@ -91,8 +79,8 @@ read_byte:
 
 	ret
 
-outer_interpreter:
+interpreter:
 	call	read_byte
 	call	opcode_handler_call
 	
-	jmp	outer_interpreter
+	jmp	interpreter

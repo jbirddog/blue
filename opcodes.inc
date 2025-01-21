@@ -139,7 +139,7 @@ op_lit:
 
 macro begin_op lbl, size, flags {
 latest_op = lbl
-latest_op_code = ($ - _opcode_map) shr 4
+latest_op_code = ($ - opcode_map) shr 4
 lbl##_code = latest_op_code
 	db flags, size
 }
@@ -172,7 +172,7 @@ macro end_op {
 	assert ($ - latest_op) = (CELL_SIZE * 2)
 }
 
-_opcode_map:
+opcode_map:
 
 opNI	op_exit, 1, 0
 	call	data_stack_pop
@@ -376,6 +376,7 @@ end_op
 opN	op_sub, 1, 0
 
 
-assert (($ - _opcode_map) and 0x07) = 0
-assert ($ - _opcode_map) <= (0x7F shl 4)
+assert (($ - opcode_map) and 0x07) = 0
+assert ($ - opcode_map) <= (0x7F shl 4)
+assert ($ - opcode_map) <= OPCODE_MAP_SIZE
 
