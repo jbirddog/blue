@@ -379,31 +379,3 @@ opN	op_sub, 1, 0
 assert (($ - _opcode_map) and 0x07) = 0
 assert ($ - _opcode_map) <= (0x7F shl 4)
 
-
-; expects opcode in rax
-opcode_map_entry:
-	mov	edx, eax
-	shl	eax, 4
-	
-	mov	rsi, opcode_map
-	add	rsi, rax
-	mov	rcx, [rsi]
-	
-	test	rcx, rcx
-	jnz	.continue
-
-	cmp	edx, latest_op_code
-	jg	.continue
-
-	mov	rsi, _opcode_map
-	add	rsi, rax
-	mov	rcx, [rsi]
-
-.continue:
-	lea	rdi, [rsi + 2]
-	
-	test	cl, OPCODE_ENTRY_FLAG_INLINED
-	cmovz	rdi, [rdi]
-	
-	ret
-

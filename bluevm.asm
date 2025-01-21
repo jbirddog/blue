@@ -77,6 +77,8 @@ entry $
 	call	outer_interpreter
 
 
+opcode_map rb OPCODE_MAP_SIZE
+
 instruction_pointer rq 1
 opcode_handler rq 1
 opcode_handler_invalid rq 1
@@ -90,8 +92,6 @@ return_stack_size rq 1
 data_stack rb DATA_STACK_SIZE
 data_stack_here rq 1
 data_stack_size rq 1
-
-opcode_map rb OPCODE_MAP_SIZE
 
 vm_addrs:
 vm_addr_opcode_handler_call rq 1
