@@ -93,13 +93,17 @@ Opcodes start at 00 and subject to change.
 | XX | b@ | ( a -- b ) | Push byte value found at addr |
 | XX | @ | ( a -- ) | Push qword value found at addr |
 | XX | b!+ | ( a b -- 'a ) | Write byte value to, increment and push addr |
+| XX | w!+ | ( a w -- 'a ) | Write word value to, increment and push addr |
 | XX | d!+ | ( a d -- 'a ) | Write dword value to, increment and push addr |
 | XX | !+ | ( a q -- 'a ) | Write qword value to, increment and push addr |
 | XX | b, | ( b -- ) | Write byte value to, and increment, here |
+| XX | w, | ( w -- ) | Write word value to, and increment, here |
 | XX | d, | ( d -- ) | Write dword value to, and increment, here |
 | XX | , | ( q -- ) | Write qword value to, and increment, here |
 | XX | litb | ( -- b ) | Push next byte from, and increment, instruction pointer |
-| XX | lit | ( -- q ) | Push next byte from, and increment, instruction pointer |
+| XX | litw | ( -- w ) | Push next word from, and increment, instruction pointer |
+| XX | litd | ( -- d ) | Push next dword from, and increment, instruction pointer |
+| XX | lit | ( -- q ) | Push next qword from, and increment, instruction pointer |
 
 ### Stack operations
 
@@ -128,8 +132,6 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ## TODOs
 
-1. Add opcodes from hello world example
-1. Remove call machine code from test/ops, hello world does it
 1. See about re-arranging >r order in op_compile_begin to simplify it and op_compile_end
 1. Add more ops to make defining a custom op less verbose/brittle
    1. opN[ ]op
