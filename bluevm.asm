@@ -2,10 +2,11 @@ format elf64 executable 3
 
 segment readable writable
 
+instruction_pointer rq 1
+input_buffer rb 2048
+
 mem rq 1
 
-instruction_pointer rq 1
-input_buffer rq 1
 return_stack rq 1
 return_stack_here rq 1
 return_stack_size rq 1
@@ -32,10 +33,16 @@ mem_alloc_init:
 	call	mmap_rwx
 
 	mov	[mem], rax
+
+	;
+	;
+
+	;
+	;
 	
-	lea	rsi, [rax + INPUT_BUFFER_OFFSET]
-	mov	[instruction_pointer], rsi
-	mov	[input_buffer], rsi
+	;lea	rsi, [rax + INPUT_BUFFER_OFFSET]
+	;mov	[instruction_pointer], rsi
+	;mov	[input_buffer], rsi
 	
 	lea	rsi, [rax + RETURN_STACK_OFFSET]
 	mov	[return_stack], rsi
@@ -64,8 +71,13 @@ mem_alloc_init:
 
 	ret
 
+init:
+	mov	[instruction_pointer], input_buffer
+	
+	ret
+	
 read_boot_code:
-	mov	rsi, [input_buffer]
+	mov	rsi, input_buffer
 	mov	edx, INPUT_BUFFER_SIZE
 	call	read
 
@@ -77,5 +89,7 @@ read_boot_code:
 
 entry $
 	call	mem_alloc_init
+
+	call	init
 	call	read_boot_code	
 	call	outer_interpreter
