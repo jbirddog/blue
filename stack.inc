@@ -1,3 +1,5 @@
+data_stack_push:
+	mov	rdx, data_stack_here
 
 ; expects stack in rdx, value to push in rax
 stack_push:
@@ -7,18 +9,16 @@ stack_push:
 	
 	ret
 
+data_stack_pop:
+	mov	rdx, data_stack_here
+
 ; expects stack in rdx
 stack_pop:
-
-	
-macro stack_pop which {
-which##_pop:
-	mov	rsi, [which##_here]
+	mov	rsi, [rdx]
 	mov	rax, [rsi - CELL_SIZE]
-	sub	[which##_here], CELL_SIZE
+	sub	qword [rdx], CELL_SIZE
 
 	ret
-}
 
 data_stack_depth:
 	mov	rcx, [data_stack_here]
@@ -26,12 +26,6 @@ data_stack_depth:
 	shr	ecx, 3
 	
 	ret
-
-data_stack_push:
-	mov	rdx, data_stack_here
-	jmp	stack_push
-
-stack_pop data_stack
 
 data_stack_push2:
 	mov	rdi, [data_stack_here]
@@ -55,4 +49,6 @@ return_stack_push:
 	mov	rdx, return_stack_here
 	jmp	stack_push
 
-stack_pop return_stack
+return_stack_pop:
+	mov	rdx, return_stack_here
+	jmp	stack_pop

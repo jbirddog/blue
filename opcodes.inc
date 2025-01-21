@@ -7,8 +7,9 @@ _call:
 
 op_if_else:
 	call	data_stack_pop2
-	mov	rdx, rax
+	push	rax
 	call	data_stack_pop
+	pop	rdx
 	
 	test	rax, rax
 	cmovz	rax, rdx
