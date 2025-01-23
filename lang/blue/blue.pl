@@ -25,7 +25,42 @@ my @kw = split " ", q(
 );
 
 my %op = map { $kw[$_] => sprintf("%02X", $_) } 0..$#kw;
-my $prog = join " ", grep { /^[^#]/ } <STDIN>;
+
+=pod
+=cut
+
+use constant COMPILE => 0;
+use constant INTERPRET => 1;
+
+my $mode = INTERPRET;
+my %dict = (
+  ":" => {
+    handler => sub { die "ok?" },
+  },
+);
+
+my $prog = <STDIN>;
+
+$prog = q/
+: bye (( -- ))
+  BF b, 05 d,
+  B8 b, 3C d,
+  0F b, 05 b,
+  C3 b,
+;
+
+bye
+/;
+
+my @tokens = split " ", $prog;
+my @bytes = map { $dict{$_}{'handler'}(); } @tokens;
+
+print @bytes;
+
+
+
+
+
 
 =pod
 : syscall (( num eax -- res eax )) 0F b, 05 b, ;
@@ -37,24 +72,18 @@ bye
 
 =pod
   litb E8 b,
-  here start - litb 04 - d,
-=cut
+  start here - litb 04 + d,
 
 my @tokens = split " ", q(
-  litb B8 b, litd 3C 00 00 00 d,
+  litb BF b, litb 05 d,
+  litb B8 b, litb 3C d,
   litb 0F b, litb 05 b,
   litb C3 b,
   
-  litb BF b, litd 07 00 00 00 d,
-  litb E8 b,
-  start here - litb 04 + d,
-  litb C3 b,
-  
-  here litb 0B - mccall
+  here litb 0D - mccall
 
   depth depth exit
 );
 
-my @bytes = map { chr hex($op{$_} || $_) } @tokens;
-
-print @bytes;
+{ chr hex($op{$_} || $_) }
+=cut
