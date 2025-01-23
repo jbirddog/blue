@@ -23,6 +23,7 @@ echo "* Building bs0 files"
 ./examples/blang/blang.pl < tests/assert.bl > obj/test_assert.bs0
 ./examples/blang/blang.pl < tests/ops.bl > obj/test_ops.bs0
 ./examples/blang/blang.pl < examples/blang/hello_world.bl > obj/hello_world.bs0
+./lang/blue/blue.pl < lang/blue/examples/exit.blue > obj/blue_exit.bs0
 
 echo "* Running bs0 test cases"
 
@@ -43,5 +44,8 @@ echo "** Test Ops"
 
 echo "** Example - Hello World"
 ./bin/bluevm < obj/hello_world.bs0
+
+echo "** Example - Exit"
+./bin/bluevm < obj/blue_exit.bs0
 
 echo "* Done"
