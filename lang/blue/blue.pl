@@ -29,16 +29,6 @@ my %op = map { $kw[$_] => sprintf("%02X", $_) } 0..$#kw;
 =pod
 =cut
 
-use constant COMPILE => 0;
-use constant INTERPRET => 1;
-
-my $mode = INTERPRET;
-my %dict = (
-  ":" => {
-    handler => sub { die "ok?" },
-  },
-);
-
 my $prog = <STDIN>;
 
 $prog = q/
@@ -52,8 +42,44 @@ $prog = q/
 bye
 /;
 
-my @tokens = split " ", $prog;
-my @bytes = map { $dict{$_}{'handler'}(); } @tokens;
+my $compiling = 0;
+
+my %dict = (
+  ":" => {
+    handler => sub { die "ok?" },
+  },
+);
+
+
+sub next_token {
+  (my $token, $prog) = split " ", $prog, 2;
+
+  return $token;
+};
+
+sub compile_number {
+  my $token = shift @_;
+
+  die "number: $token";
+}
+
+sub compile_token {
+  my $token = shift @_;
+  my $entry = $dict{$token};
+
+  if (!$entry) { return compile_number($token); }
+
+  return [];
+};
+
+my @bytes = [];
+
+do {
+  my $token = next_token();
+  my @compiled = compile_token $token;
+
+  push @bytes, @compiled;
+} while $prog;
 
 print @bytes;
 
