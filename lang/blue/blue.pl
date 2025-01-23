@@ -26,7 +26,35 @@ my @kw = split " ", q(
 
 my %op = map { $kw[$_] => sprintf("%02X", $_) } 0..$#kw;
 my $prog = join " ", grep { /^[^#]/ } <STDIN>;
-my @tokens = qw/depth exit/;
+
+=pod
+: syscall (( num eax -- res eax )) 0F b, 05 b, ;
+: exit (( status edi -- noret )) 60 syscall ;
+: bye (( -- )) 0 exit ;
+
+bye
+=cut
+
+=pod
+  litb E8 b,
+  here start - litb 04 - d,
+=cut
+
+my @tokens = split " ", q(
+  litb B8 b, litd 3C 00 00 00 d,
+  litb 0F b, litb 05 b,
+  litb C3 b,
+  
+  litb BF b, litd 07 00 00 00 d,
+  litb E8 b,
+  start here - litb 04 + d,
+  litb C3 b,
+  
+  here litb 0B - mccall
+
+  depth depth exit
+);
+
 my @bytes = map { chr hex($op{$_} || $_) } @tokens;
 
 print @bytes;
