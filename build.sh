@@ -46,6 +46,8 @@ echo "** Example - Hello World"
 ./bin/bluevm < obj/hello_world.bs0
 
 echo "** Example - Exit"
+
+xxd obj/blue_exit.bs0
 ./bin/bluevm < obj/blue_exit.bs0
 
 echo "* Done"

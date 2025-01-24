@@ -42,10 +42,13 @@ $prog = q/
 bye
 /;
 
+$prog = 'BF';
+
 $SIG{__WARN__} = sub { die @_ };
 
 my $compiling = 0;
 my $here = 0;
+my $latest = 0;
 
 sub next_token {
   (my $token, $prog) = split " ", $prog, 2;
@@ -62,34 +65,86 @@ sub compile_number {
 }
 
 sub call_word {
-  my $here = shift @_;
-
+  my $where = $here;
+  
   return sub {
-    return $here;
+    die if $compiling;
+
+    my @bytes = (
+      $op{'start'}, $op{'litb'}, chr($where), $op{'+'},
+      $op{'mccall'}
+    );
+    
+    return \@bytes;
   };
 }
 
-sub word_colon {
-  my $word = next_token();
-};
+sub todo { }
 
 my %dict = (
-  ":" => {
-    handler => \&word_colon,
+  ':' => {
+    handler => \&colon,
+  },
+  '(('=> {
+    handler => \&todo,
+  },
+  '--' => {
+    handler => \&todo,
+  },
+  '))' => {
+    handler => \&todo,
+  },
+  ';' => {
+    handler => \&semi,
+  },
+  'b,'=> {
+    handler => comma(1),
+  },
+  'd,'=> {
+    handler => comma(4),
   },
 );
 
-my @bytes = [];
+sub colon {
+  my $word = next_token();
+
+  $dict{$word} = {
+    handler => call_word(),
+  };
+
+  $compiling = 1;
+  $latest = $here;
+}
+
+sub semi {
+  $compiling = 0;
+}
+
+sub comma {
+  my $size = shift @_;
+
+  return sub {
+    my @bytes = ($op{$_[0]});
+    
+    $here += $size;
+
+    return \@bytes;
+  };
+}
+
+my @code_buffer;
 
 do {
   my $token = next_token();
   my $handler = $dict{$token}{'handler'};
-  my @compiled = $handler ? $handler->() : compile_number($token);
+  my @compiled = $handler ? $handler->($token) : compile_number($token);
 
-  push @bytes, @compiled;
 } while $prog;
 
-print @bytes;
+push @code_buffer, $op{'depth'};
+push @code_buffer, $op{'exit'};
+
+print @code_buffer;
 
 
 
