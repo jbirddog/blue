@@ -29,3 +29,5 @@ bye
 1. No ret needed for noret on ;
 1. jmp to noret words
 1. Refactor compiling a number (right now always litb)
+1. Move build stuff into own build.sh, call from main after vm tests
+

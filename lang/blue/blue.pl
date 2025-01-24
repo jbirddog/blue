@@ -160,7 +160,7 @@ while (1) {
   $handler ? $handler->($token) : compile_number($token);
 };
 
-push @code_buffer, ($op{'here'}, $op{'start'}, $op{'-'}, $op{'exit'});
+push @code_buffer, ($op{'depth'}, $op{'exit'});
 
 print @code_buffer;
 
