@@ -18,6 +18,7 @@ bye
 1. Top level calls are vm `mccall`s
 1. Calls within compiled words are handled by asm `call`s
 1. The frontend needs to have a bootstrap bs0 (use blang/refactor ops to .pm file to generate for now)
+   1. Can be start of code_buffer array
 1. Can the dictionary live soley in the frontend? How would code buffer addrs be resolved?
    1. Frontend will always know how many bytes are in the code buffer at any given time?
    1. Frontend bootstrap bs0 can have custom opcode to mccall an offset + start

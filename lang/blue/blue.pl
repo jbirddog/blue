@@ -62,7 +62,7 @@ sub compile_number {
   push @code_buffer, ($op{'litb'}, $number);
 }
 
-sub interpret_word {
+sub interpret_word_ref {
   my $where = shift @_;
 
   push @code_buffer, (
@@ -71,7 +71,7 @@ sub interpret_word {
   );
 }
 
-sub compile_word {
+sub compile_word_ref {
   my $where = shift @_;
   
   #litb E8 b,
@@ -90,11 +90,11 @@ sub compile_word {
   comma(4)->('d,');
 }
 
-sub call_word {
+sub word_ref {
   my $where = $here;
   
   return sub {
-    $compiling ? compile_word($where) : interpret_word($where);
+    $compiling ? compile_word_ref($where) : interpret_word_ref($where);
   };
 }
 
@@ -128,7 +128,7 @@ sub colon {
   my $word = next_token();
 
   $dict{$word} = {
-    handler => call_word(),
+    handler => word_ref(),
   };
 
   $compiling = 1;
