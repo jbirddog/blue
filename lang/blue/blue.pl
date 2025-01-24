@@ -37,21 +37,19 @@ my %op = map { $kw[$_] => chr $_ } 0..$#kw;
 my $prog = <STDIN>;
 
 $prog = q/
-: ghjk (( -- )) 
-  BF b, 02 d,
-  B8 b, 3C d,
-  0F b, 05 b,
-;
-
-: exit (( -- )) 
+: bye
   BF b, 03 d,
   B8 b, 3C d,
   0F b, 05 b,
 ;
 
-: bye (( -- )) 00 exit ;
+: bye2
+  BF b, 05 d,
+  B8 b, 3C d,
+  0F b, 05 b,
+;
 
-bye
+bye2
 /;
 
 my @code_buffer;
@@ -72,30 +70,32 @@ sub compile_number {
   push @code_buffer, ($op{'litb'}, $number);
 }
 
+sub interpret_word {
+  my $where = shift @_;
+
+  push @code_buffer, (
+    $op{'start'}, $op{'litb'}, chr($where), $op{'+'},
+    $op{'mccall'}
+  );
+}
+
+sub compile_word {
+  #litb E8 b,
+  compile_number 'E8';
+  comma(1)->('b,');
+      
+  #start here - litb 04 + d,
+  push @code_buffer, ($op{'start'}, $op{'here'}, $op{'-'});
+  compile_number '04';
+  push @code_buffer, $op{'+'};
+  comma(4)->('d,');
+}
+
 sub call_word {
   my $where = $here;
-
-  sub compile {
-    #litb E8 b,
-    compile_number 'E8';
-    comma(1)->('b,');
-      
-    #start here - litb 04 + d,
-    push @code_buffer, ($op{'start'}, $op{'here'}, $op{'-'});
-    compile_number '04';
-    push @code_buffer, $op{'+'};
-    comma(4)->('d,');
-  }
-
-  sub interpret {
-    push @code_buffer, (
-      $op{'start'}, $op{'litb'}, chr($where), $op{'+'},
-      $op{'mccall'}
-    );
-  }
   
   return sub {
-    $compiling ? compile() : interpret();
+    $compiling ? compile_word() : interpret_word($where);
   };
 }
 
@@ -152,7 +152,7 @@ sub comma {
   };
 }
 
-while(1) {
+while (1) {
   my $token = next_token();
   last if not $token;
   
@@ -160,7 +160,7 @@ while(1) {
   $handler ? $handler->($token) : compile_number($token);
 };
 
-push @code_buffer, ($op{'depth'}, $op{'exit'});
+push @code_buffer, ($op{'here'}, $op{'start'}, $op{'-'}, $op{'exit'});
 
 print @code_buffer;
 
