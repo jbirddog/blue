@@ -33,24 +33,16 @@ my @kw = split " ", q(
 =cut
 
 my %op = map { $kw[$_] => chr $_ } 0..$#kw;
+my $prog = join " ", <STDIN>;
 
-my $prog = <STDIN>;
+=pod
+: syscall (( num eax -- res eax )) 0F b, 05 b, ;
+: exit (( status edi -- noret )) 60 syscall ;
+: bye (( -- )) 0 exit ;
 
-$prog = q/
-: bye
-  BF b, 03 d,
-  B8 b, 3C d,
-  0F b, 05 b,
-;
+bye
+=cut
 
-: bye2
-  BF b, 05 d,
-  B8 b, 3C d,
-  0F b, 05 b,
-;
-
-bye2
-/;
 
 my @code_buffer;
 my $compiling = 0;
@@ -152,6 +144,9 @@ sub comma {
   };
 }
 
+=pod
+=cut
+
 while (1) {
   my $token = next_token();
   last if not $token;
@@ -169,13 +164,6 @@ print @code_buffer;
 
 
 
-=pod
-: syscall (( num eax -- res eax )) 0F b, 05 b, ;
-: exit (( status edi -- noret )) 60 syscall ;
-: bye (( -- )) 0 exit ;
-
-bye
-=cut
 
 =pod
   litb E8 b,

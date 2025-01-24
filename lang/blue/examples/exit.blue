@@ -1,6 +1,13 @@
+: bye
+  BF b, 03 d,
+  B8 b, 3C d,
+  0F b, 05 b,
+;
 
-: syscall (( num eax -- res eax )) 0F b, 05 b, ;
-: exit (( status edi -- noret )) 60 syscall ;
-: bye (( -- )) 0 exit ;
+: bye2
+  BF b, 05 d,
+  B8 b, 3C d,
+  0F b, 05 b,
+;
 
-bye
+bye2
