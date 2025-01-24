@@ -1,10 +1,21 @@
 
-: exit
-  BF b, 05 d,
-  B8 b, 3C d,
+: syscall
   0F b, 05 b,
 ;
 
-: bye exit ;
+: exit
+  B8 b, 3C d,
+  syscall
+;
+
+: bye (( -- noret ))
+  BF b, 03 d,
+  exit
+;
+
+: fail (( -- noret ))
+  BF b, 05 d,
+  exit
+;
 
 bye

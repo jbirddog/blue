@@ -38,7 +38,7 @@ my $prog = join " ", <STDIN>;
 =pod
 : syscall (( num eax -- res eax )) 0F b, 05 b, ;
 : exit (( status edi -- noret )) 60 syscall ;
-: bye (( -- )) 0 exit ;
+: bye (( -- noret )) 0 exit ;
 
 bye
 =cut
@@ -74,11 +74,9 @@ sub interpret_word_ref {
 sub compile_word_ref {
   my $where = shift @_;
   
-  #litb E8 b,
   compile_number 'E8';
   comma(1)->('b,');
   
-  #$where $here - litb 04 - d,
   push @code_buffer, (
     $op{'litb'}, chr($where),
     $op{'litb'}, chr($here),
@@ -108,6 +106,9 @@ my %dict = (
     handler => \&todo,
   },
   '--' => {
+    handler => \&todo,
+  },
+  'noret' => {
     handler => \&todo,
   },
   '))' => {
