@@ -42,14 +42,10 @@ $prog = q/
 bye
 /;
 
+$SIG{__WARN__} = sub { die @_ };
+
 my $compiling = 0;
-
-my %dict = (
-  ":" => {
-    handler => sub { die "ok?" },
-  },
-);
-
+my $here = 0;
 
 sub next_token {
   (my $token, $prog) = split " ", $prog, 2;
@@ -59,24 +55,36 @@ sub next_token {
 
 sub compile_number {
   my $token = shift @_;
+  my $number = hex($token);
+  my @bytes = ($op{'litb'}, chr($number));
 
-  die "number: $token";
+  return \@bytes;
 }
 
-sub compile_token {
-  my $token = shift @_;
-  my $entry = $dict{$token};
+sub call_word {
+  my $here = shift @_;
 
-  if (!$entry) { return compile_number($token); }
+  return sub {
+    return $here;
+  };
+}
 
-  return [];
+sub word_colon {
+  my $word = next_token();
 };
+
+my %dict = (
+  ":" => {
+    handler => \&word_colon,
+  },
+);
 
 my @bytes = [];
 
 do {
   my $token = next_token();
-  my @compiled = compile_token $token;
+  my $handler = $dict{$token}{'handler'};
+  my @compiled = $handler ? $handler->() : compile_number($token);
 
   push @bytes, @compiled;
 } while $prog;
