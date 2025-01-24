@@ -18,11 +18,6 @@ OPCODE_ENTRY_FLAG_IMMEDIATE = 1 shl 0
 OPCODE_ENTRY_FLAG_INLINED = 1 shl 1
 OPCODE_ENTRY_FLAG_BYTECODE = 1 shl 2
 
-;ERR_DATA_STACK_UNDERFLOW = 105
-;ERR_DATA_STACK_OVERFLOW = 106
-;ERR_RETURN_STACK_UNDERFLOW = 107
-;ERR_RETURN_STACK_OVERFLOW = 108
-
 segment readable writable executable
 
 include "stack.inc"
@@ -52,7 +47,7 @@ init:
 	mov	[data_stack_size], DATA_STACK_SIZE
 
 	mov	[vm_addr_opcode_handler_call], opcode_handler_call
-	mov	[code_buffer_here], code_buffer + VM_ADDRS_SIZE
+	mov	[code_buffer_here], code_buffer
 	mov	[code_buffer_size], CODE_BUFFER_SIZE
 	
 	ret

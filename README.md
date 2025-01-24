@@ -142,3 +142,4 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. Add bytecode op if/if-not
 1. Add bytecode opcodes for litb, etc
 1. Print error messages to disambiguate exit status
+1. Move blang into lang like blue
