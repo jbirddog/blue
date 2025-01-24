@@ -94,11 +94,11 @@ sub flow_in {
   my $in = $dict{$word}{'in'};
 
   foreach (@$in) {
-    if ($_ eq "edi") {
-      compile_number 'BF';
-      comma(1)->('b,');
-      comma(4)->('d,');
-    }
+    my $number = $_ eq "eax" ? "B8" : "BF";
+    
+    compile_number $number;
+    comma(1)->('b,');
+    comma(4)->('d,');
   }
 }
 

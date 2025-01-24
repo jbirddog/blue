@@ -4,14 +4,11 @@
 
 ```
 : syscall (( num eax -- res eax )) 0F b, 05 b, ;
-: exit (( status edi -- noret )) 60 syscall ;
+: exit (( status edi -- noret )) 3C syscall ;
 : bye (( -- noret )) 0 exit ;
 
 bye
 ```
-
-1. Need flow in while compiling word bodies
-
 
 ## After First Miletone
 
@@ -19,6 +16,8 @@ bye
 1. Consider (( reg edi status -- )) to simplify double_paren
    1. Actually just need (( and )) to set the current dictionary?
    1. (( edi status -- ))
+1. Better number/base support
+1. Need to track machine code length of words, inline if smaller
 1. Flow in for compiling words needs to be implemented vs prototyped
 1. Need flow out while compiling word bodies
 1. Need flow in while interpreting words
