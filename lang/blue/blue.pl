@@ -3,6 +3,11 @@
 use strict;
 use warnings;
 
+$SIG{__WARN__} = sub { die @_ };
+
+=pod
+=cut
+
 my @kw = split " ", q(
   exit
   true false
@@ -24,10 +29,10 @@ my @kw = split " ", q(
   not = + -
 );
 
-my %op = map { $kw[$_] => sprintf("%02X", $_) } 0..$#kw;
-
 =pod
 =cut
+
+my %op = map { $kw[$_] => chr $_ } 0..$#kw;
 
 my $prog = <STDIN>;
 
@@ -36,16 +41,12 @@ $prog = q/
   BF b, 05 d,
   B8 b, 3C d,
   0F b, 05 b,
-  C3 b,
 ;
 
 bye
 /;
 
-$prog = 'BF';
-
-$SIG{__WARN__} = sub { die @_ };
-
+my @code_buffer;
 my $compiling = 0;
 my $here = 0;
 my $latest = 0;
@@ -58,10 +59,9 @@ sub next_token {
 
 sub compile_number {
   my $token = shift @_;
-  my $number = hex($token);
-  my @bytes = ($op{'litb'}, chr($number));
-
-  return \@bytes;
+  my $number = chr(hex($token));
+  
+  push @code_buffer, ($op{'litb'}, $number);
 }
 
 sub call_word {
@@ -70,12 +70,10 @@ sub call_word {
   return sub {
     die if $compiling;
 
-    my @bytes = (
+    push @code_buffer, (
       $op{'start'}, $op{'litb'}, chr($where), $op{'+'},
       $op{'mccall'}
     );
-    
-    return \@bytes;
   };
 }
 
@@ -117,6 +115,9 @@ sub colon {
 }
 
 sub semi {
+  compile_number 'C3';
+  comma(1)->('b,');
+  
   $compiling = 0;
 }
 
@@ -124,25 +125,20 @@ sub comma {
   my $size = shift @_;
 
   return sub {
-    my @bytes = ($op{$_[0]});
-    
     $here += $size;
-
-    return \@bytes;
+    push @code_buffer, $op{$_[0]};
   };
 }
 
-my @code_buffer;
-
-do {
+while(1) {
   my $token = next_token();
+  last if not $token;
+  
   my $handler = $dict{$token}{'handler'};
-  my @compiled = $handler ? $handler->($token) : compile_number($token);
+  $handler ? $handler->($token) : compile_number($token);
+};
 
-} while $prog;
-
-push @code_buffer, $op{'depth'};
-push @code_buffer, $op{'exit'};
+push @code_buffer, ($op{'depth'}, $op{'exit'});
 
 print @code_buffer;
 

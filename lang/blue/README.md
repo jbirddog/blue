@@ -28,3 +28,4 @@ bye
 1. Remove need for bye to have a stack effact, infer instead
 1. No ret needed for noret on ;
 1. jmp to noret words
+1. Refactor compiling a number (right now always litb)
