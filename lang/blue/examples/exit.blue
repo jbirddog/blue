@@ -3,12 +3,13 @@
   0F b, 05 b,
 ;
 
-: exit
+: exit (( status edi -- noret ))
   B8 b, 3C d,
   syscall
 ;
 
 : bye (( -- noret ))
+  00
   BF b, 03 d,
   exit
 ;

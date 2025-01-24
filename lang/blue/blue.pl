@@ -47,7 +47,7 @@ bye
 my @code_buffer;
 my $compiling = 0;
 my $here = 0;
-my $latest = 0;
+my $latest = '';
 
 sub next_token {
   (my $token, $prog) = split " ", $prog, 2;
@@ -96,23 +96,12 @@ sub word_ref {
   };
 }
 
-sub todo { }
-
 my %dict = (
   ':' => {
     handler => \&colon,
   },
   '(('=> {
-    handler => \&todo,
-  },
-  '--' => {
-    handler => \&todo,
-  },
-  'noret' => {
-    handler => \&todo,
-  },
-  '))' => {
-    handler => \&todo,
+    handler => \&double_lparen,
   },
   ';' => {
     handler => \&semi,
@@ -133,7 +122,30 @@ sub colon {
   };
 
   $compiling = 1;
-  $latest = $here;
+  $latest = $word;
+}
+
+sub double_lparen {
+  my @in;
+  my @out;
+  my $which = \@in;
+  
+  while (1) {
+    my $token = next_token();
+    last if $token eq "))";
+    next if $token eq "noret";
+
+    my $reg = next_token();
+    push @$which, $reg;
+
+    if ($token eq "--") {
+      $which = \@out;
+      next;
+    }
+  }
+
+  $dict{$latest}{'in'} = @in;
+  $dict{$latest}{'out'} = @out;
 }
 
 sub semi {
