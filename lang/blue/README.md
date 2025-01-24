@@ -15,7 +15,11 @@ bye
 
 ## After First Miletone
 
+1. Still perl?
 1. Consider (( reg edi status -- )) to simplify double_paren
+   1. Actually just need (( and )) to set the current dictionary?
+   1. (( edi status -- ))
+1. Flow in for compiling words needs to be implemented vs prototyped
 1. Need flow out while compiling word bodies
 1. Need flow in while interpreting words
 1. Need flow out while interpreting words

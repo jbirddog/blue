@@ -8,15 +8,7 @@
   syscall
 ;
 
-: bye (( -- noret ))
-  00
-  BF b, 03 d,
-  exit
-;
-
-: fail (( -- noret ))
-  BF b, 05 d,
-  exit
-;
+: bye (( -- noret )) 00 exit ;
+: fail (( -- noret )) 05 exit ;
 
 bye

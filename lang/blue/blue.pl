@@ -47,54 +47,7 @@ bye
 my @code_buffer;
 my $compiling = 0;
 my $here = 0;
-my $latest = '';
-
-sub next_token {
-  (my $token, $prog) = split " ", $prog, 2;
-
-  return $token;
-};
-
-sub compile_number {
-  my $token = shift @_;
-  my $number = chr(hex($token));
-  
-  push @code_buffer, ($op{'litb'}, $number);
-}
-
-sub interpret_word_ref {
-  my $where = shift @_;
-
-  push @code_buffer, (
-    $op{'start'}, $op{'litb'}, chr($where), $op{'+'},
-    $op{'mccall'}
-  );
-}
-
-sub compile_word_ref {
-  my $where = shift @_;
-  
-  compile_number 'E8';
-  comma(1)->('b,');
-  
-  push @code_buffer, (
-    $op{'litb'}, chr($where),
-    $op{'litb'}, chr($here),
-    $op{'-'},
-    $op{'litb'}, chr(4),
-    $op{'-'},
-  );
-  
-  comma(4)->('d,');
-}
-
-sub word_ref {
-  my $where = $here;
-  
-  return sub {
-    $compiling ? compile_word_ref($where) : interpret_word_ref($where);
-  };
-}
+my $latest_word = '';
 
 my %dict = (
   ':' => {
@@ -114,6 +67,70 @@ my %dict = (
   },
 );
 
+sub next_token {
+  (my $token, $prog) = split " ", $prog, 2;
+
+  return $token;
+};
+
+sub compile_number {
+  my $token = shift @_;
+  my $number = chr(hex($token));
+  
+  push @code_buffer, ($op{'litb'}, $number);
+}
+
+sub interpret_word_ref {
+  (my $word, my $where) = @_;
+
+  push @code_buffer, (
+    $op{'start'}, $op{'litb'}, chr($where), $op{'+'},
+    $op{'mccall'}
+  );
+}
+
+sub flow_in {
+  my $word = shift @_;
+  my $in = $dict{$word}{'in'};
+
+  foreach (@$in) {
+    if ($_ eq "edi") {
+      compile_number 'BF';
+      comma(1)->('b,');
+      comma(4)->('d,');
+    }
+  }
+}
+
+sub compile_word_ref {
+  (my $word, my $where) = @_;
+
+  flow_in $word;
+  
+  compile_number 'E8';
+  comma(1)->('b,');
+  
+  push @code_buffer, (
+    $op{'litb'}, chr($where),
+    $op{'litb'}, chr($here),
+    $op{'-'},
+    $op{'litb'}, chr(4),
+    $op{'-'},
+  );
+  
+  comma(4)->('d,');
+}
+
+sub word_ref {
+  my $where = $here;
+  
+  return sub {
+    my $word = shift @_;
+    
+    $compiling ? compile_word_ref($word, $where) : interpret_word_ref($word, $where);
+  };
+}
+
 sub colon {
   my $word = next_token();
 
@@ -122,7 +139,7 @@ sub colon {
   };
 
   $compiling = 1;
-  $latest = $word;
+  $latest_word = $word;
 }
 
 sub double_lparen {
@@ -135,17 +152,17 @@ sub double_lparen {
     last if $token eq "))";
     next if $token eq "noret";
 
-    my $reg = next_token();
-    push @$which, $reg;
-
     if ($token eq "--") {
       $which = \@out;
       next;
     }
+
+    my $reg = next_token();
+    push @$which, $reg;
   }
 
-  $dict{$latest}{'in'} = @in;
-  $dict{$latest}{'out'} = @out;
+  $dict{$latest_word}{'in'} = \@in;
+  $dict{$latest_word}{'out'} = \@out;
 }
 
 sub semi {
