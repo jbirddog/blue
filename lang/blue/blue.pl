@@ -37,11 +37,19 @@ my %op = map { $kw[$_] => chr $_ } 0..$#kw;
 my $prog = <STDIN>;
 
 $prog = q/
-: bye (( -- ))
-  BF b, 05 d,
+: ghjk (( -- )) 
+  BF b, 02 d,
   B8 b, 3C d,
   0F b, 05 b,
 ;
+
+: exit (( -- )) 
+  BF b, 03 d,
+  B8 b, 3C d,
+  0F b, 05 b,
+;
+
+: bye (( -- )) 00 exit ;
 
 bye
 /;
@@ -66,14 +74,28 @@ sub compile_number {
 
 sub call_word {
   my $where = $here;
-  
-  return sub {
-    die if $compiling;
 
+  sub compile {
+    #litb E8 b,
+    compile_number 'E8';
+    comma(1)->('b,');
+      
+    #start here - litb 04 + d,
+    push @code_buffer, ($op{'start'}, $op{'here'}, $op{'-'});
+    compile_number '04';
+    push @code_buffer, $op{'+'};
+    comma(4)->('d,');
+  }
+
+  sub interpret {
     push @code_buffer, (
       $op{'start'}, $op{'litb'}, chr($where), $op{'+'},
       $op{'mccall'}
     );
+  }
+  
+  return sub {
+    $compiling ? compile() : interpret();
   };
 }
 
