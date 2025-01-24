@@ -165,27 +165,3 @@ while (1) {
 push @code_buffer, ($op{'depth'}, $op{'exit'});
 
 print @code_buffer;
-
-
-
-
-
-
-
-=pod
-  litb E8 b,
-  start here - litb 04 + d,
-
-my @tokens = split " ", q(
-  litb BF b, litb 05 d,
-  litb B8 b, litb 3C d,
-  litb 0F b, litb 05 b,
-  litb C3 b,
-  
-  here litb 0D - mccall
-
-  depth depth exit
-);
-
-{ chr hex($op{$_} || $_) }
-=cut
