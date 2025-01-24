@@ -1,13 +1,9 @@
-: bye
+: exit
   BF b, 03 d,
   B8 b, 3C d,
   0F b, 05 b,
 ;
 
-: bye2
-  BF b, 05 d,
-  B8 b, 3C d,
-  0F b, 05 b,
-;
+: bye exit ;
 
-bye2
+bye

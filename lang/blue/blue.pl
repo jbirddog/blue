@@ -72,14 +72,21 @@ sub interpret_word {
 }
 
 sub compile_word {
+  my $where = shift @_;
+  
   #litb E8 b,
   compile_number 'E8';
   comma(1)->('b,');
-      
-  #start here - litb 04 + d,
-  push @code_buffer, ($op{'start'}, $op{'here'}, $op{'-'});
-  compile_number '04';
-  push @code_buffer, $op{'+'};
+  
+  #$where $here - litb 04 - d,
+  push @code_buffer, (
+    $op{'litb'}, chr($where),
+    $op{'litb'}, chr($here),
+    $op{'-'},
+    $op{'litb'}, chr(4),
+    $op{'-'},
+  );
+  
   comma(4)->('d,');
 }
 
@@ -87,7 +94,7 @@ sub call_word {
   my $where = $here;
   
   return sub {
-    $compiling ? compile_word() : interpret_word($where);
+    $compiling ? compile_word($where) : interpret_word($where);
   };
 }
 
