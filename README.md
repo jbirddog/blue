@@ -124,7 +124,7 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 | Name | Descripton | Location |
 |----|----|----|
-| blang | Quick and dirty compiler for a textual representation of the BlueVM bytecode | examples/blang |
+| blang | Quick and dirty compiler for a textual representation of the BlueVM bytecode | lang/blang |
 
 ### Idea for more tools/examples
 

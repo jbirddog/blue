@@ -1,0 +1,45 @@
+
+#
+# Sample Hello World rendered at compile time
+#
+
+here dup
+
+# Hello, w
+lit 48 65 6C 6C 6F 2C 20 57 ,
+
+# orld!\n
+litd 6F 72 6C 64 d,
+litw 21 0A w,
+
+# string len
+here swap -
+
+# compile in machine code to make the write system call
+here
+
+# xor eax, eax
+# inc eax
+# mov edi, eax
+litw 31 C0 w,
+litw FF C0 w,
+litw 89 C7 w,
+
+# mov edx, _string len_
+swap
+litb BA b, d,
+
+# movabs rsi, _addr of string_
+swap
+litw 48 BE w, ,
+
+# syscall
+litw 0F 05 w,
+
+# ret
+litb C3 b,
+
+# call the compiled machine code
+mccall
+
+depth exit
