@@ -1,4 +1,5 @@
 import sys
+from collections import namedtuple
 
 sys.path.append("..")
 
@@ -12,14 +13,27 @@ milestone = """
 bye
 """
 
+MaybeLitNum = namedtuple("MaybeLitNum", ["val"])
+BlueVMOp = namedtuple("BlueVMOp", ["op"])
+
 class ParserCtx:
     def __init__(self, prog):
         self.prog = prog
+        self.nodes = []
 
 def next_token(ctx):
     parts = ctx.prog.split(maxsplit=1)
     ctx.prog = parts[1] if len(parts) == 2 else None
     return parts[0]
+
+def parse(ctx):
+    while ctx.prog:
+        token = next_token(ctx)
+
+        if token in op_byte:
+            ctx.nodes.append(BlueVMOp(token))
+        else:
+            ctx.nodes.append(MaybeLitNum(token))
 
 def compile_number(n):
     b = bytes.fromhex(n)
@@ -30,18 +44,13 @@ if __name__ == "__main__":
     prog = sys.stdin.read()
     parser_ctx = ParserCtx(prog)
     output = []
-    
-    while parser_ctx.prog:
-        token = next_token(parser_ctx)
 
-        if token in op_byte:
-            output.append(op_byte[token])
-        else:
-            output.extend(compile_number(token))
+    parse(parser_ctx)
     
     output.extend([
-        op_byte["here"], op_byte["litb"], bytes([12]), op_byte["-"], op_byte["mccall"],
+        #op_byte["here"], op_byte["litb"], bytes([12]), op_byte["-"], op_byte["mccall"],
 
+        op_byte["depth"],
         op_byte["depth"],
         op_byte["exit"],
     ])
