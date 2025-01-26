@@ -12,32 +12,41 @@ milestone = """
 bye
 """
 
-prog = sys.stdin.read()
+class ParserCtx:
+    def __init__(self, prog):
+        self.prog = prog
+
 output = []
 
 
-def next_token():
-    parts = prog.split(maxsplit=1)
-    return parts if len(parts) == 2 else [parts[0], ""]
+def next_token(ctx):
+    parts = ctx.prog.split(maxsplit=1)
+    l = len(parts)
+    ctx.prog = parts[1] if l == 2 else None
+    return parts[0]
 
 def compile_number(n):
-    b = [bytes([b]) for b in bytes.fromhex(n)]
+    b = bytes.fromhex(n)
     op = lit_by_len[len(b)]
-    return [op_byte[op]] + b
+    return [op_byte[op], b]
 
-while prog:
-    token, prog = next_token()
-
-    if token in op_byte:
-        output.append(op_byte[token])
-    else:
-        output.extend(compile_number(token))
+if __name__ == "__main__":
+    prog = sys.stdin.read()
+    parser_ctx = ParserCtx(prog)
     
-output.extend([
-    op_byte["here"], op_byte["litb"], bytes([12]), op_byte["-"], op_byte["mccall"],
-    
-    op_byte["depth"],
-    op_byte["exit"],
-])
+    while parser_ctx.prog:
+        token = next_token(parser_ctx)
 
-sys.stdout.buffer.write(b"".join(output))
+        if token in op_byte:
+            output.append(op_byte[token])
+        else:
+            output.extend(compile_number(token))
+    
+    output.extend([
+        op_byte["here"], op_byte["litb"], bytes([12]), op_byte["-"], op_byte["mccall"],
+
+        op_byte["depth"],
+        op_byte["exit"],
+    ])
+
+    sys.stdout.buffer.write(b"".join(output))
