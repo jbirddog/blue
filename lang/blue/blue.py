@@ -1,6 +1,6 @@
 import sys
 
-sys.path.insert(0, "..")
+sys.path.append("..")
 
 from bluevm import lit_by_len, op_byte
 
@@ -16,13 +16,9 @@ class ParserCtx:
     def __init__(self, prog):
         self.prog = prog
 
-output = []
-
-
 def next_token(ctx):
     parts = ctx.prog.split(maxsplit=1)
-    l = len(parts)
-    ctx.prog = parts[1] if l == 2 else None
+    ctx.prog = parts[1] if len(parts) == 2 else None
     return parts[0]
 
 def compile_number(n):
@@ -33,6 +29,7 @@ def compile_number(n):
 if __name__ == "__main__":
     prog = sys.stdin.read()
     parser_ctx = ParserCtx(prog)
+    output = []
     
     while parser_ctx.prog:
         token = next_token(parser_ctx)
