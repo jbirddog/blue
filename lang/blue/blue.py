@@ -1,5 +1,6 @@
 import sys
 from collections import namedtuple
+from dataclasses import dataclass, field
 
 sys.path.append("..")
 
@@ -13,13 +14,17 @@ milestone = """
 bye
 """
 
+#
+# parse
+#
+
 MaybeLitNum = namedtuple("MaybeLitNum", ["val"])
 BlueVMOp = namedtuple("BlueVMOp", ["op"])
 
+@dataclass
 class ParserCtx:
-    def __init__(self, prog):
-        self.prog = prog
-        self.nodes = []
+    prog: str
+    nodes: list = field(default_factory=list)
 
 def next_token(ctx):
     parts = ctx.prog.split(maxsplit=1)
@@ -35,6 +40,12 @@ def parse(ctx):
         else:
             ctx.nodes.append(MaybeLitNum(token))
 
+#
+# lower
+#
+
+
+            
 def compile_number(n):
     b = bytes.fromhex(n)
     op = lit_by_len[len(b)]
