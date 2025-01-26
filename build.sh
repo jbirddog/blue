@@ -17,13 +17,16 @@ fasm bluevm.asm bin/bluevm
 
 echo "* Building bs0 files"
 
-python ./lang/blang/blang.py < tests/exit.bl > obj/test_exit.bs0
-python ./lang/blang/blang.py < tests/init.bl > obj/test_init.bs0
-python ./lang/blang/blang.py < tests/ifelse.bl > obj/test_ifelse.bs0
-python ./lang/blang/blang.py < tests/bc.bl > obj/test_bc.bs0
-python ./lang/blang/blang.py < tests/assert.bl > obj/test_assert.bs0
-python ./lang/blang/blang.py < tests/ops.bl > obj/test_ops.bs0
-python ./lang/blang/blang.py < ./lang/blang/examples/hello_world.bl > obj/hello_world.bs0
+pushd lang/blang
+python blang.py < ../../tests/exit.bl > ../../obj/test_exit.bs0
+python blang.py < ../../tests/init.bl > ../../obj/test_init.bs0
+python blang.py < ../../tests/ifelse.bl > ../../obj/test_ifelse.bs0
+python blang.py < ../../tests/bc.bl > ../../obj/test_bc.bs0
+python blang.py < ../../tests/assert.bl > ../../obj/test_assert.bs0
+python blang.py < ../../tests/ops.bl > ../../obj/test_ops.bs0
+python blang.py < examples/hello_world.bl > ../../obj/hello_world.bs0
+popd
+
 ./lang/blue/blue.pl < lang/blue/examples/exit.blue > obj/blue_exit.bs0
 
 echo "* Running bs0 test cases"
