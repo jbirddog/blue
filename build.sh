@@ -27,7 +27,10 @@ python blang.py < ../../tests/ops.bl > ../../obj/test_ops.bs0
 python blang.py < examples/hello_world.bl > ../../obj/hello_world.bs0
 popd
 
-./lang/blue/blue.pl < lang/blue/examples/exit.blue > obj/blue_exit.bs0
+pushd lang/blue
+./blue.pl < examples/exit.blue > ../../obj/blue_exit_pl.bs0
+python blue.py < examples/exit.blue > ../../obj/blue_exit.bs0
+popd
 
 echo "* Running bs0 test cases"
 
@@ -51,6 +54,10 @@ echo "** Test Ops"
 
 echo "** Example - Hello World"
 ./bin/bluevm < obj/hello_world.bs0
+
+#xxd obj/blue_exit_pl.bs0
+#echo "----"
+#xxd obj/blue_exit.bs0
 
 echo "** Blue Example - Exit"
 ./bin/bluevm < obj/blue_exit.bs0
