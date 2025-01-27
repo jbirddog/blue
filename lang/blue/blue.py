@@ -103,6 +103,18 @@ def lower(nodes):
                 raise Exception(f"Unsupported node: {node}") 
     return lowered
 
+def as_lowered(it):
+    def l(x):
+        match x:
+            case str():
+                return BlueVMOp(x)
+            case int():
+                return LitInt(x)
+            case _:
+                raise Exception(f"Unsupported type: {x}") 
+    return [l(x) for x in it]
+    
+
 #
 # compile
 #
@@ -121,6 +133,12 @@ def compile(lowered):
                 raise Exception(f"Unsupported node: {node}")
     return b"".join(output)
 
+def preamble(ctx):
+    return []
+
+def postamble(ctx):
+    return as_lowered(["depth", "exit"])
+    
 
 if __name__ == "__main__":
     prog = sys.stdin.read()
@@ -128,16 +146,7 @@ if __name__ == "__main__":
 
     parse(parser_ctx)
     lowered = lower(parser_ctx.nodes)
-
-    lowered.extend([
-        #BlueVMOp("here"),
-        #LitInt(12),
-        #BlueVMOp("-"),
-        #BlueVMOp("mccall"),
-        
-        BlueVMOp("depth"),
-        BlueVMOp("exit"),
-    ])
+    unit = preamble(parser_ctx) + lowered + postamble(parser_ctx)
 
     output = compile(lowered)
     
