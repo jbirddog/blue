@@ -104,11 +104,6 @@ Opcodes start at 00 and subject to change.
 | XX | litw | ( -- w ) | Push next word from, and increment, instruction pointer |
 | XX | litd | ( -- d ) | Push next dword from, and increment, instruction pointer |
 | XX | lit | ( -- q ) | Push next qword from, and increment, instruction pointer |
-
-### Stack operations
-
-| Opcode | Name | Stack Effect | Description |
-|----|----|----|----|
 | XX | depth | ( -- n ) | Push depth of the data stack |
 | XX | drop | ( x -- ) | Drops top of the data stack |
 | XX | dup | ( a -- a a ) | Duplicate top of stack |
@@ -117,6 +112,8 @@ Opcodes start at 00 and subject to change.
 | XX | = | ( a b -- t/f ) | Check top two items for equality and push result |
 | XX | + | ( a b -- n ) | Push a + b |
 | XX | - | ( a b -- n ) | Push a - b |
+| XX | shl | ( x n -- 'x ) | Push x shl n |
+| XX | shr | ( x n -- 'x ) | Push x shr n |
 
 ## Tools/Examples
 

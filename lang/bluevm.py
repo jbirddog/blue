@@ -18,6 +18,7 @@ kw = """
 
     depth dup drop swap
     not = + -
+    shl shr
 """.split()
 
 op_byte = {e: bytes([i]) for i, e in enumerate(kw)}

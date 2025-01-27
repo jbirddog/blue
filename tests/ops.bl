@@ -44,6 +44,10 @@ litb 09 litb 07 - litb 02 = FF
 # +
 litb 07 litb 02 + litb 09 = FF
 
+# shl/shr
+litb 01 litb 03 shl litb 08 = FF
+litb 08 litb 03 shr litb 01 = FF
+
 # dup
 here dup = FF
 

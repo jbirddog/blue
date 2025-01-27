@@ -11,6 +11,9 @@ litb 06 b!+
 litb 01 b!+
 
 # inline bytecode
+litb litb b!+
+litb 03 b!+
+litb shl b!+
 litb start b!+
 litb + b!+
 litb here b!+
@@ -27,6 +30,9 @@ litb 06 b!+
 litb 01 b!+
 
 # inline bytecode
+litb litb b!+
+litb 03 b!+
+litb shl b!+
 litb start b!+
 litb + b!+
 litb @ b!+

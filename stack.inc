@@ -45,6 +45,11 @@ data_stack_pop2:
 	
 	ret
 
+data_stack_pop2a:
+	call	data_stack_pop2
+	xchg	rax, rcx
+	ret
+
 return_stack_push:
 	mov	rdx, return_stack_here
 	jmp	stack_push
