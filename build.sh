@@ -29,7 +29,6 @@ python blang.py < examples/hello_world.bl > ../../obj/hello_world.bs0
 popd
 
 pushd lang/blue
-./blue.pl < examples/exit.blue > ../../obj/blue_exit_pl.bs0
 python blue.py < examples/exit.blue > ../../obj/blue_exit.bs0
 popd
 
@@ -56,7 +55,7 @@ echo "** Test Ops"
 echo "** Test Blue Prototype"
 ./bin/bluevm < obj/test_blue_proto.bs0
 
-echo "** Blue - Hello World"
+echo "** Example - Hello World"
 ./bin/bluevm < obj/hello_world.bs0
 
 #xxd obj/blue_exit_pl.bs0

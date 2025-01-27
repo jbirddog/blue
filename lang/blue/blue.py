@@ -10,8 +10,8 @@ from bluevm import lit_by_len, op_byte
 # custom opcodes
 #
 
-op_byte["blue:wa!"] = 0x81
-op_byte["blue:wa"] = 0x82
+op_byte["blue:word_addr!"] = b"\x81"
+op_byte["blue:word_addr"] = b"\x82"
 
 #
 # parse
@@ -22,7 +22,7 @@ CallWord = namedtuple("CallWord", ["word", "idx"])
 LitInt = namedtuple("LitInt", ["val"])
 
 TopLevel = namedtuple("TopLevel", ["nodes"])
-WordDecl = namedtuple("WordDecl", ["nodes"])
+WordDecl = namedtuple("WordDecl", ["idx", "nodes"])
 
 @dataclass
 class ParserCtx:
@@ -37,8 +37,9 @@ class ParserCtx:
 
 def colon(ctx):
     name = next_token(ctx)
-    word = WordDecl([])
-    ctx.word_idx[name] = len(ctx.words)
+    idx = len(ctx.words)
+    word = WordDecl(idx, [])
+    ctx.word_idx[name] = idx
     ctx.words.append(word)
     ctx.latest = word
     ctx.nodes.append(word)
@@ -55,14 +56,18 @@ def semi(ctx):
     ctx.nodes.append(TopLevel([]))
     ctx.compiling = False
 
+def pound(ctx):
+    next_token(ctx, "\n")
+
 kw = {
     ":": colon,
     "((": double_lparen,
     ";": semi,
+    "#": pound,
 }
     
-def next_token(ctx):
-    parts = ctx.prog.split(maxsplit=1)
+def next_token(ctx, sep=None):
+    parts = ctx.prog.split(sep, maxsplit=1)
     ctx.prog = parts[1] if len(parts) == 2 else None
     return parts[0]
 
@@ -92,7 +97,7 @@ def lower_node(node, lowered):
         case BlueVMOp(_) | LitInt(_):
             lowered.append(node)
         case CallWord(word, idx):
-            lowered.extend([LitInt(idx), BlueVMOp("start"), BlueVMOp("+"), BlueVMOp("mccall")])
+            lowered.extend([LitInt(idx), BlueVMOp("blue:word_addr"), BlueVMOp("mccall")])
         case _:
             raise Exception(f"Unsupported node: {node}")
 
@@ -103,17 +108,13 @@ def lower(nodes):
             case TopLevel(nodes):
                 for node in nodes:
                     lower_node(node, lowered)
-            case WordDecl(nodes):
+            case WordDecl(idx, nodes):
+                lowered.extend([LitInt(idx), BlueVMOp("blue:word_addr!")])
                 for node in nodes:
                     lower_node(node, lowered)
             case _:
                 raise Exception(f"Unsupported node: {node}") 
     return lowered
-
-def lower_str(prog):
-    parser_ctx = ParserCtx(prog)
-    parse(parser_ctx)
-    return lower(parser_ctx.nodes)
 
 #
 # compile
@@ -137,17 +138,56 @@ def compile(lowered):
 # 
 #
 
-
 def preamble(ctx):
-    return []
+    return [
+        # Custom opcode 80 - get pointer to addr for word N
+        LitInt(0x80), BlueVMOp("entry"),
+        LitInt(0x06), BlueVMOp("b!+"),
+        LitInt(0x01), BlueVMOp("b!+"),
+        # inline bytecode
+        BlueVMOp("litb"), BlueVMOp("litb"), BlueVMOp("b!+"),
+        BlueVMOp("litb"), LitInt(0x03), BlueVMOp("b!+"),
+        BlueVMOp("litb"), BlueVMOp("shl"), BlueVMOp("b!+"),
+        BlueVMOp("litb"), BlueVMOp("start"), BlueVMOp("b!+"),
+        BlueVMOp("litb"), BlueVMOp("+"), BlueVMOp("b!+"),
+        BlueVMOp("litb"), BlueVMOp("ret"), BlueVMOp("b!+"),
+        BlueVMOp("drop"),
+
+        # Custom opcode 81 - set addr for word N
+        LitInt(0x81), BlueVMOp("entry"),
+        LitInt(0x06), BlueVMOp("b!+"),
+        LitInt(0x01), BlueVMOp("b!+"),
+        # inline bytecode
+        BlueVMOp("litb"), LitInt(0x80), BlueVMOp("b!+"),
+        BlueVMOp("litb"), BlueVMOp("here"), BlueVMOp("b!+"),
+        BlueVMOp("litb"), BlueVMOp("!+"), BlueVMOp("b!+"),
+        BlueVMOp("litb"), BlueVMOp("drop"), BlueVMOp("b!+"),
+        BlueVMOp("litb"), BlueVMOp("ret"), BlueVMOp("b!+"),
+        BlueVMOp("drop"),
+
+        # Custom opcode 82 - get addr for word N
+        LitInt(0x81), BlueVMOp("entry"),
+        LitInt(0x06), BlueVMOp("b!+"),
+        LitInt(0x01), BlueVMOp("b!+"),
+        # inline bytecode
+        BlueVMOp("litb"), LitInt(0x80), BlueVMOp("b!+"),
+        BlueVMOp("litb"), BlueVMOp("@"), BlueVMOp("b!+"),
+        BlueVMOp("litb"), BlueVMOp("ret"), BlueVMOp("b!+"),
+        BlueVMOp("drop"),
+
+        # alloc space for N word addrs
+        BlueVMOp("here"), LitInt(len(ctx.words)),
+        LitInt(0x03), BlueVMOp("shl"),
+        BlueVMOp("+"), BlueVMOp("here!"),
+    ]
 
 if __name__ == "__main__":
     prog = sys.stdin.read()
     parser_ctx = ParserCtx(prog)
 
     parse(parser_ctx)
-    lowered = lower_str(prog)
-    unit = preamble(parser_ctx) + lowered + lower_str("depth exit")
+    lowered = lower(parser_ctx.nodes)
+    unit = preamble(parser_ctx) + lowered + [BlueVMOp("depth"), BlueVMOp("exit")]
 
     output = compile(lowered)
     
