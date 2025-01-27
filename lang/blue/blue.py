@@ -133,7 +133,30 @@ def compile(lowered):
                 raise Exception(f"Unsupported node: {node}")
     return b"".join(output)
 
+#
+# 
+#
+    
 def preamble(ctx):
+    set_word_addr_op = 0x80
+    get_word_addr_op = 0x81
+    
+    custom_ops = as_lowered([
+        "litb", set_word_addr_op, "entry",
+        "litb", 0x04, "b!+",
+        "litb", 0x01, "b!+",
+        # TODO: shl 3
+        # TODO: !
+        "[", "start", "+", "here", "!+", "drop", "]", "!+", "drop"
+
+        "litb", get_word_addr_op, "entry",
+        "litb", 0x04, "b!+",
+        "litb", 0x01, "b!+",
+        # TODO: shl 3
+        # TODO: !
+        "[", "start", "+", "@", "]", "!+", "drop"
+    ])
+    
     return []
 
 def postamble(ctx):
