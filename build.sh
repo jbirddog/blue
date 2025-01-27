@@ -24,6 +24,7 @@ python blang.py < ../../tests/ifelse.bl > ../../obj/test_ifelse.bs0
 python blang.py < ../../tests/bc.bl > ../../obj/test_bc.bs0
 python blang.py < ../../tests/assert.bl > ../../obj/test_assert.bs0
 python blang.py < ../../tests/ops.bl > ../../obj/test_ops.bs0
+python blang.py < ../../tests/blue_proto.bl > ../../obj/test_blue_proto.bs0
 python blang.py < examples/hello_world.bl > ../../obj/hello_world.bs0
 popd
 
@@ -52,7 +53,10 @@ echo "** Test Custom Opcode - Assert"
 echo "** Test Ops"
 ./bin/bluevm < obj/test_ops.bs0
 
-echo "** Example - Hello World"
+echo "** Test Blue Prototype"
+./bin/bluevm < obj/test_blue_proto.bs0
+
+echo "** Blue - Hello World"
 ./bin/bluevm < obj/hello_world.bs0
 
 #xxd obj/blue_exit_pl.bs0

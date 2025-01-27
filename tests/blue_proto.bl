@@ -1,0 +1,51 @@
+
+#
+# prototype for how the Blue Language compiles down to BlueVM bytecode
+#
+
+# custom opcode 80 - set address of word N
+litb 80 entry
+
+# set flags and size
+litb 06 b!+
+litb 01 b!+
+
+# inline bytecode
+litb start b!+
+litb + b!+
+litb here b!+
+litb !+ b!+
+litb drop b!+
+litb ret b!+
+drop
+
+# custom opcode 81 - get address of word N
+litb 81 entry
+
+# set flags and size
+litb 06 b!+
+litb 01 b!+
+
+# inline bytecode
+litb start b!+
+litb + b!+
+litb @ b!+
+litb ret b!+
+drop
+
+
+# frontend knows how many words it has and allocates that many qwords at the start of the code buffer
+here litb 08 + here!
+
+# front end marks the here for each word in its allocated space using custom opcode 80
+litb 00 80
+
+# front end compiles the word body
+litb BF b, litb 05 d,
+litb B8 b, litb 3C d,
+litb 0F b, litb 05 b,
+
+# top level calls use the stored addr directly via custom opcode 81
+litb 00 81 mccall
+
+depth exit

@@ -140,7 +140,8 @@ def compile(lowered):
 def preamble(ctx):
     set_word_addr_op = 0x80
     get_word_addr_op = 0x81
-    
+
+    # TODO: make these literal bytecode ops
     custom_ops = as_lowered([
         "litb", set_word_addr_op, "entry",
         "litb", 0x04, "b!+",
