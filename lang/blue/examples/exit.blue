@@ -1,7 +1,8 @@
 
 : bye (( -- ))
-  BF b, 07 d,
+  BF b, 03 d,
   B8 b, 3C d,
   0F b, 05 b,
 ;
 
+bye

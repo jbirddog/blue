@@ -10,16 +10,18 @@ from bluevm import lit_by_len, op_byte
 # parse
 #
 
-LitInt = namedtuple("LitInt", ["val"])
 BlueVMOp = namedtuple("BlueVMOp", ["op"])
+CallWord = namedtuple("CallWord", ["word", "idx"])
+LitInt = namedtuple("LitInt", ["val"])
 
-WordDecl = namedtuple("WordDecl", ["nodes"])
 TopLevel = namedtuple("TopLevel", ["nodes"])
+WordDecl = namedtuple("WordDecl", ["nodes"])
 
 @dataclass
 class ParserCtx:
     prog: str
     base: int = 16
+    compiling: bool = False
     latest: WordDecl = None
     words: list = field(default_factory=list)
     word_idx: dict = field(default_factory=dict)
@@ -33,6 +35,7 @@ def colon(ctx):
     ctx.words.append(word)
     ctx.latest = word
     ctx.nodes.append(word)
+    ctx.compiling = True
 
 def double_lparen(ctx):
     while ctx.prog:
@@ -43,6 +46,7 @@ def double_lparen(ctx):
 def semi(ctx):
     ctx.latest.nodes.extend([LitInt(0xC3), BlueVMOp("b,")])
     ctx.nodes.append(TopLevel([]))
+    ctx.compiling = False
 
 kw = {
     ":": colon,
@@ -62,8 +66,10 @@ def parse(ctx):
         token = next_token(ctx)
         nodes = ctx.nodes[-1].nodes
 
-        # TODO: if token in ctx.words
-        if token in kw:
+        if token in ctx.word_idx:
+            idx = ctx.word_idx[token]
+            nodes.append(CallWord(ctx.words[idx], idx))
+        elif token in kw:
             kw[token](ctx)
         elif token in op_byte:
             nodes.append(BlueVMOp(token))
@@ -78,6 +84,8 @@ def lower_node(node, lowered):
     match node:
         case BlueVMOp(_) | LitInt(_):
             lowered.append(node)
+        case CallWord(word, idx):
+            lowered.extend([LitInt(idx), BlueVMOp("start"), BlueVMOp("+"), BlueVMOp("mccall")])
         case _:
             raise Exception(f"Unsupported node: {node}")
 
