@@ -34,31 +34,18 @@ popd
 
 echo "* Running bs0 test cases"
 
-echo "** Test Exit"
 ./bin/bluevm < obj/test_exit.bs0
-
-echo "** Test Init"
 ./bin/bluevm < obj/test_init.bs0
-
-echo "** Test If Else"
 ./bin/bluevm < obj/test_ifelse.bs0
-
-echo "** Test Compiling and Calling Bytecode"
 ./bin/bluevm < obj/test_bc.bs0
-
-echo "** Test Custom Opcode - Assert"
 ./bin/bluevm < obj/test_assert.bs0
-
-echo "** Test Ops"
 ./bin/bluevm < obj/test_ops.bs0
-
-echo "** Test Blue Prototype"
 ./bin/bluevm < obj/test_blue_proto.bs0
 
 echo "** Example - Hello World"
 ./bin/bluevm < obj/hello_world.bs0
 
-#xxd obj/blue_exit_pl.bs0
+#xxd obj/test_blue_proto.bs0
 #echo "----"
 #xxd obj/blue_exit.bs0
 

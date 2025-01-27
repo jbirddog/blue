@@ -138,7 +138,7 @@ def compile(lowered):
 # 
 #
 
-def preamble(ctx):
+def bluevm_setup(ctx):
     return [
         # Custom opcode 80 - get pointer to addr for word N
         LitInt(0x80), BlueVMOp("entry"),
@@ -146,7 +146,7 @@ def preamble(ctx):
         LitInt(0x01), BlueVMOp("b!+"),
         # inline bytecode
         BlueVMOp("litb"), BlueVMOp("litb"), BlueVMOp("b!+"),
-        BlueVMOp("litb"), LitInt(0x03), BlueVMOp("b!+"),
+        LitInt(0x03), BlueVMOp("b!+"),
         BlueVMOp("litb"), BlueVMOp("shl"), BlueVMOp("b!+"),
         BlueVMOp("litb"), BlueVMOp("start"), BlueVMOp("b!+"),
         BlueVMOp("litb"), BlueVMOp("+"), BlueVMOp("b!+"),
@@ -158,7 +158,7 @@ def preamble(ctx):
         LitInt(0x06), BlueVMOp("b!+"),
         LitInt(0x01), BlueVMOp("b!+"),
         # inline bytecode
-        BlueVMOp("litb"), LitInt(0x80), BlueVMOp("b!+"),
+        LitInt(0x80), BlueVMOp("b!+"),
         BlueVMOp("litb"), BlueVMOp("here"), BlueVMOp("b!+"),
         BlueVMOp("litb"), BlueVMOp("!+"), BlueVMOp("b!+"),
         BlueVMOp("litb"), BlueVMOp("drop"), BlueVMOp("b!+"),
@@ -166,20 +166,23 @@ def preamble(ctx):
         BlueVMOp("drop"),
 
         # Custom opcode 82 - get addr for word N
-        LitInt(0x81), BlueVMOp("entry"),
+        LitInt(0x82), BlueVMOp("entry"),
         LitInt(0x06), BlueVMOp("b!+"),
         LitInt(0x01), BlueVMOp("b!+"),
         # inline bytecode
-        BlueVMOp("litb"), LitInt(0x80), BlueVMOp("b!+"),
+        LitInt(0x80), BlueVMOp("b!+"),
         BlueVMOp("litb"), BlueVMOp("@"), BlueVMOp("b!+"),
         BlueVMOp("litb"), BlueVMOp("ret"), BlueVMOp("b!+"),
         BlueVMOp("drop"),
 
         # alloc space for N word addrs
-        BlueVMOp("here"), LitInt(len(ctx.words)),
-        LitInt(0x03), BlueVMOp("shl"),
-        BlueVMOp("+"), BlueVMOp("here!"),
+        BlueVMOp("here"),
+        LitInt(len(ctx.words)), LitInt(0x03), BlueVMOp("shl"), BlueVMOp("+"),
+        BlueVMOp("here!"),
     ]
+
+def bluevm_teardown():
+    return [BlueVMOp("depth"), BlueVMOp("exit")]
 
 if __name__ == "__main__":
     prog = sys.stdin.read()
@@ -187,8 +190,8 @@ if __name__ == "__main__":
 
     parse(parser_ctx)
     lowered = lower(parser_ctx.nodes)
-    unit = preamble(parser_ctx) + lowered + [BlueVMOp("depth"), BlueVMOp("exit")]
+    unit = bluevm_setup(parser_ctx) + lowered + bluevm_teardown()
 
-    output = compile(lowered)
+    output = compile(unit)
     
     sys.stdout.buffer.write(output)

@@ -1,5 +1,11 @@
 
 : bye (( -- ))
+  BF b, 00 d,
+  B8 b, 3C d,
+  0F b, 05 b,
+;
+
+: fail (( -- ))
   BF b, 05 d,
   B8 b, 3C d,
   0F b, 05 b,
