@@ -46,25 +46,27 @@ def parse(ctx):
 # lower
 #
 
-def lower_node(node):
+LitBytes = namedtuple("LitBytes", ["val"])
+
+def lower_node(node, lowered):
     match node:
         case BlueVMOp(op):
-            return [op_byte[op]]
+            lowered.append(node)
         case LitInt(val):
             b = bytes([val])
             op = lit_by_len[len(b)]
-            return [op_byte[op], b]
-    
-    raise Exception(f"Unsupported nodes: {node}")
+            lowered.extend([BlueVMOp(op), LitBytes(b)])
+        case _:
+            raise Exception(f"Unsupported nodes: {node}")
 
 def lower(nodes):
     lowered = []
     for node in nodes:
         match node:
-            case TopLevel(tl_nodes):
-                xss = [lower_node(n) for n in tl_nodes]
-                ex = [x for xs in [lower_node(n) for n in tl_nodes] for x in xs]
-                assert False, ex
+            case TopLevel(nodes):
+                for node in nodes:
+                    lower_node(node, lowered)
+                assert False, lowered
             case _:
                 raise Exception(f"Unsupported node: {node}") 
     return lowered
