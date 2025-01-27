@@ -18,8 +18,8 @@ op_byte["blue:word_addr"] = b"\x82"
 #
 
 BlueVMOp = namedtuple("BlueVMOp", ["op"])
-CallWord = namedtuple("CallWord", ["word", "idx"])
 LitInt = namedtuple("LitInt", ["val"])
+WordRef = namedtuple("WordRef", ["word", "idx", "compile"])
 
 TopLevel = namedtuple("TopLevel", ["nodes"])
 WordDecl = namedtuple("WordDecl", ["idx", "nodes"])
@@ -80,7 +80,7 @@ def parse(ctx):
 
         if token in ctx.word_idx:
             idx = ctx.word_idx[token]
-            nodes.append(CallWord(ctx.words[idx], idx))
+            nodes.append(WordRef(ctx.words[idx], idx, ctx.compiling))
         elif token in kw:
             kw[token](ctx)
         elif token in op_byte:
@@ -96,8 +96,10 @@ def lower_node(node, lowered):
     match node:
         case BlueVMOp(_) | LitInt(_):
             lowered.append(node)
-        case CallWord(word, idx):
+        case WordRef(word, idx, compile=False):
             lowered.extend([LitInt(idx), BlueVMOp("blue:word_addr"), BlueVMOp("mccall")])
+        case WordRef(word, idx, compile=True):
+            raise Exception(f"Unsupported compilation of WordRef")
         case _:
             raise Exception(f"Unsupported node: {node}")
 
