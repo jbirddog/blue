@@ -46,16 +46,12 @@ def parse(ctx):
 # lower
 #
 
-LitBytes = namedtuple("LitBytes", ["val"])
-
 def lower_node(node, lowered):
     match node:
         case BlueVMOp(op):
             lowered.append(node)
         case LitInt(val):
-            b = bytes([val])
-            op = lit_by_len[len(b)]
-            lowered.extend([BlueVMOp(op), LitBytes(b)])
+            lowered.append(node)
         case _:
             raise Exception(f"Unsupported nodes: {node}")
 
@@ -66,7 +62,6 @@ def lower(nodes):
             case TopLevel(nodes):
                 for node in nodes:
                     lower_node(node, lowered)
-                assert False, lowered
             case _:
                 raise Exception(f"Unsupported node: {node}") 
     return lowered
@@ -76,27 +71,37 @@ def lower(nodes):
 #
 
 def compile(lowered):
-    pass
+    output = []
+    for l in lowered:
+        match l:
+            case BlueVMOp(op):
+                output.append(op_byte[op])
+            case LitInt(val):
+                b = bytes([val])
+                op = lit_by_len[len(b)]
+                output.extend([op_byte[op], b])
+            case _:
+                raise Exception(f"Unsupported nodes: {node}")
+    return b"".join(output)
 
-def compile_number(n):
-    b = bytes.fromhex(n)
-    op = lit_by_len[len(b)]
-    return [op_byte[op], b]
 
 if __name__ == "__main__":
     prog = sys.stdin.read()
     parser_ctx = ParserCtx(prog)
-    output = []
 
     parse(parser_ctx)
     lowered = lower(parser_ctx.nodes)
-    
-    output.extend([
-        #op_byte["here"], op_byte["litb"], bytes([12]), op_byte["-"], op_byte["mccall"],
 
-        op_byte["depth"],
-        op_byte["depth"],
-        op_byte["exit"],
+    lowered.extend([
+        #BlueVMOp("here"),
+        #LitInt(12),
+        #BlueVMOp("-"),
+        #BlueVMOp("mccall"),
+        
+        BlueVMOp("depth"),
+        BlueVMOp("exit"),
     ])
 
-    sys.stdout.buffer.write(b"".join(output))
+    output = compile(lowered)
+    
+    sys.stdout.buffer.write(output)
