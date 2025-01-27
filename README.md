@@ -131,6 +131,7 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 1. Rename entry
 1. Add ! flavors
+   1. Use in Blue opcodes
 1. See about re-arranging >r order in op_compile_begin to simplify it and op_compile_end
 1. Add more ops to make defining a custom op less verbose/brittle
    1. opN[ ]op

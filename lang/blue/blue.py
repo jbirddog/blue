@@ -7,6 +7,13 @@ sys.path.append("..")
 from bluevm import lit_by_len, op_byte
 
 #
+# custom opcodes
+#
+
+op_byte["blue:wa!"] = 0x81
+op_byte["blue:wa"] = 0x82
+
+#
 # parse
 #
 
@@ -103,17 +110,10 @@ def lower(nodes):
                 raise Exception(f"Unsupported node: {node}") 
     return lowered
 
-def as_lowered(it):
-    def l(x):
-        match x:
-            case str():
-                return BlueVMOp(x)
-            case int():
-                return LitInt(x)
-            case _:
-                raise Exception(f"Unsupported type: {x}") 
-    return [l(x) for x in it]
-    
+def lower_str(prog):
+    parser_ctx = ParserCtx(prog)
+    parse(parser_ctx)
+    return lower(parser_ctx.nodes)
 
 #
 # compile
@@ -136,41 +136,18 @@ def compile(lowered):
 #
 # 
 #
-    
+
+
 def preamble(ctx):
-    set_word_addr_op = 0x80
-    get_word_addr_op = 0x81
-
-    # TODO: make these literal bytecode ops
-    custom_ops = as_lowered([
-        "litb", set_word_addr_op, "entry",
-        "litb", 0x04, "b!+",
-        "litb", 0x01, "b!+",
-        # TODO: shl 3
-        # TODO: !
-        "[", "start", "+", "here", "!+", "drop", "]", "!+", "drop"
-
-        "litb", get_word_addr_op, "entry",
-        "litb", 0x04, "b!+",
-        "litb", 0x01, "b!+",
-        # TODO: shl 3
-        # TODO: !
-        "[", "start", "+", "@", "]", "!+", "drop"
-    ])
-    
     return []
-
-def postamble(ctx):
-    return as_lowered(["depth", "exit"])
-    
 
 if __name__ == "__main__":
     prog = sys.stdin.read()
     parser_ctx = ParserCtx(prog)
 
     parse(parser_ctx)
-    lowered = lower(parser_ctx.nodes)
-    unit = preamble(parser_ctx) + lowered + postamble(parser_ctx)
+    lowered = lower_str(prog)
+    unit = preamble(parser_ctx) + lowered + lower_str("depth exit")
 
     output = compile(lowered)
     
