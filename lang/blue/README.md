@@ -26,3 +26,32 @@ bye
 1. jmp to noret words
 1. Move build stuff into own build.sh, call from main after vm tests
 
+## Effect Handling
+
+### Problem summary
+
+1. The Blue language uses stack effect declarations to:
+   1. Compile data flow in/out of registers when calling words
+   1. TODO: validate the stack at compile time
+1. The BlueVM controls the data stack
+1. In Blue, even when compiling a word, BlueVM words run at compile time
+1. Given `: word (( x eax y edi -- z rsi )) dup FF rot word2 swap word3 drop + - word4 = .... ;
+   1. How can the Blue language keep its stack effects in sync?
+
+### ??
+
+1. In the Blue frontend each word has a list of effects - ins/outs
+1. Those effects need to map to the stack so the proper mov can be compiled
+
+### Ideas
+
+1. WordDecl and TopLevel have effects
+   1. ins/outs are parsed, effects are known/infered
+   1. Needed for validation/inference
+   1. Inference - maybe BlueVM ops are no different than infering another word?
+   1. Custom ops can register their effects
+   1. Would require a runtime for parsing stack effects
+      1. Useful for docs also
+   1. Algo will be trick with if-else/etc
+      1. Maybe force all branches to have the same effect?
+
