@@ -40,14 +40,6 @@ op_eq:
 	call	data_stack_push
 
 	ret
-	
-op_sub:
-	call	data_stack_pop2
-	xchg	rax, rcx	
-	sub	rax, rcx
-	call	data_stack_push
-
-	ret
 
 op_b_at:
 	call	data_stack_pop
@@ -379,8 +371,7 @@ opNI	op_drop, 1, 0
 end_op
 
 opNI	op_swap, 1, 0
-	call	data_stack_pop2
-	xchg	rax, rcx
+	call	data_stack_pop2a
 	call	data_stack_push2
 
 	ret
@@ -404,7 +395,29 @@ opNI	op_add, 1, 0
 	ret
 end_op
 
-opN	op_sub, 1, 0
+opNI	op_sub, 1, 0
+	call	data_stack_pop2a
+	sub	rax, rcx
+	call	data_stack_push
+
+	ret
+end_op
+
+opNI	op_shl, 1, 0
+	call	data_stack_pop2a
+	shl	rax, cl
+	call	data_stack_push
+
+	ret
+end_op
+
+opNI	op_shr, 1, 0
+	call	data_stack_pop2a
+	shr	rax, cl
+	call	data_stack_push
+
+	ret
+end_op
 
 
 assert (($ - opcode_tbl) and 0x07) = 0
