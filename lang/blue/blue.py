@@ -12,6 +12,8 @@ from bluevm import lit_by_len, op_byte
 
 op_byte["blue:word_addr!"] = b"\x81"
 op_byte["blue:word_addr"] = b"\x82"
+op_byte["blue:interpret_word"] = b"\x83"
+op_byte["blue:compile_word"] = b"\x85"
 
 #
 # parse
@@ -97,9 +99,9 @@ def lower_node(node, lowered):
         case BlueVMOp(_) | LitInt(_):
             lowered.append(node)
         case WordRef(word, idx, compile=False):
-            lowered.extend([LitInt(idx), BlueVMOp("blue:word_addr"), BlueVMOp("mccall")])
+            lowered.extend([LitInt(idx), BlueVMOp("blue:interpret_word")])
         case WordRef(word, idx, compile=True):
-            raise Exception(f"Unsupported compilation of WordRef")
+            lowered.extend([LitInt(idx), BlueVMOp("blue:compile_word")])
         case _:
             raise Exception(f"Unsupported node: {node}")
 
@@ -177,6 +179,43 @@ def bluevm_setup(ctx):
         BlueVMOp("litb"), BlueVMOp("ret"), BlueVMOp("b!+"),
         BlueVMOp("drop"),
 
+        # Custom opcode 83 - interpret word N
+        LitInt(0x83), BlueVMOp("entry"),
+        LitInt(0x06), BlueVMOp("b!+"),
+        LitInt(0x01), BlueVMOp("b!+"),
+        # inline bytecode
+        LitInt(0x82), BlueVMOp("b!+"),
+        BlueVMOp("litb"), BlueVMOp("mccall"), BlueVMOp("b!+"),
+        BlueVMOp("litb"), BlueVMOp("ret"), BlueVMOp("b!+"),
+        BlueVMOp("drop"),
+
+        # Custom opcode 84 - call distance from word N
+        LitInt(0x84), BlueVMOp("entry"),
+        LitInt(0x06), BlueVMOp("b!+"),
+        LitInt(0x01), BlueVMOp("b!+"),
+        # inline bytecode
+        LitInt(0x82), BlueVMOp("b!+"),
+        BlueVMOp("litb"), BlueVMOp("here"), BlueVMOp("b!+"),
+        BlueVMOp("litb"), BlueVMOp("-"), BlueVMOp("b!+"),
+        BlueVMOp("litb"), BlueVMOp("litb"), BlueVMOp("b!+"),
+        LitInt(0x04), BlueVMOp("b!+"),
+        BlueVMOp("litb"), BlueVMOp("-"), BlueVMOp("b!+"),
+        BlueVMOp("litb"), BlueVMOp("ret"), BlueVMOp("b!+"),
+        BlueVMOp("drop"),
+
+        # Custom opcode 85 - compile word N
+        LitInt(0x85), BlueVMOp("entry"),
+        LitInt(0x06), BlueVMOp("b!+"),
+        LitInt(0x01), BlueVMOp("b!+"),
+        # inline bytecode
+        BlueVMOp("litb"), BlueVMOp("litb"), BlueVMOp("b!+"),
+        LitInt(0xE8), BlueVMOp("b!+"),
+        BlueVMOp("litb"), BlueVMOp("b,"), BlueVMOp("b!+"),
+        LitInt(0x84), BlueVMOp("b!+"),
+        BlueVMOp("litb"), BlueVMOp("d,"), BlueVMOp("b!+"),        
+        BlueVMOp("litb"), BlueVMOp("ret"), BlueVMOp("b!+"),
+        BlueVMOp("drop"),
+        
         # alloc space for N word addrs
         BlueVMOp("here"),
         LitInt(len(ctx.words)), LitInt(0x03), BlueVMOp("shl"), BlueVMOp("+"),

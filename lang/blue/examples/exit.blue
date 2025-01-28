@@ -1,17 +1,19 @@
 
 : syscall (( -- )) 0F b, 05 b, ;
 
+: exit (( -- ))
+  B8 b, 3C d,
+  syscall
+;
+
 : bye (( -- ))
   BF b, 00 d,
-  B8 b, 3C d,
-  0F b, 05 b,
+  exit
 ;
 
 : fail (( -- ))
-  BF b, 05 d,
-  B8 b, 3C d,
-  0F b, 05 b,
-  # syscall
+  BF b, 03 d,
+  exit
 ;
 
 fail
