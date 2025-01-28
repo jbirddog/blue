@@ -3,6 +3,4 @@
 : exit (( status edi -- noret )) 3C syscall ;
 : bye (( -- noret )) 00 exit ;
 
-: fail (( -- )) 03 exit ;
-
-fail
+bye
