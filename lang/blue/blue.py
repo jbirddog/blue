@@ -24,7 +24,7 @@ LitInt = namedtuple("LitInt", ["val"])
 WordRef = namedtuple("WordRef", ["word", "idx", "compile"])
 
 TopLevel = namedtuple("TopLevel", ["nodes"])
-WordDecl = namedtuple("WordDecl", ["idx", "nodes"])
+WordDecl = namedtuple("WordDecl", ["idx", "ins", "outs", "nodes"])
 
 @dataclass
 class ParserCtx:
@@ -40,7 +40,7 @@ class ParserCtx:
 def colon(ctx):
     name = next_token(ctx)
     idx = len(ctx.words)
-    word = WordDecl(idx, [])
+    word = WordDecl(idx, [], [], [])
     ctx.word_idx[name] = idx
     ctx.words.append(word)
     ctx.latest = word
@@ -48,24 +48,33 @@ def colon(ctx):
     ctx.compiling = True
 
 def double_lparen(ctx):
+    effects = ctx.latest.ins
     while ctx.prog:
         token = next_token(ctx)
         if token == "))":
             break
+        if token == "--":
+            effects = ctx.latest.outs
+            continue
+        if token == "noret":
+            continue
+
+        effect = next_token(ctx)
+        effects.append(effect)
+
+def fslash(ctx):
+    next_token(ctx, "\n")
 
 def semi(ctx):
     ctx.latest.nodes.extend([LitInt(0xC3), BlueVMOp("b,")])
     ctx.nodes.append(TopLevel([]))
     ctx.compiling = False
 
-def pound(ctx):
-    next_token(ctx, "\n")
-
 kw = {
     ":": colon,
     "((": double_lparen,
+    "\\": fslash,
     ";": semi,
-    "#": pound,
 }
     
 def next_token(ctx, sep=None):
@@ -91,6 +100,15 @@ def parse(ctx):
             nodes.append(LitInt(int(token, ctx.base)))
 
 #
+# flow
+#
+
+def flow_in(word, lowered):
+    for effect in reversed(word.ins):
+        reg_code = 0xB8 if effect == "eax" else 0xBF
+        lowered.extend([LitInt(reg_code), BlueVMOp("b,"), BlueVMOp("d,")])
+            
+#
 # lower
 #
 
@@ -101,6 +119,7 @@ def lower_node(node, lowered):
         case WordRef(word, idx, compile=False):
             lowered.extend([LitInt(idx), BlueVMOp("blue:interpret_word")])
         case WordRef(word, idx, compile=True):
+            flow_in(word, lowered)
             lowered.extend([LitInt(idx), BlueVMOp("blue:compile_word")])
         case _:
             raise Exception(f"Unsupported node: {node}")
@@ -112,7 +131,7 @@ def lower(nodes):
             case TopLevel(nodes):
                 for node in nodes:
                     lower_node(node, lowered)
-            case WordDecl(idx, nodes):
+            case WordDecl(idx, ins, outs, nodes):
                 lowered.extend([LitInt(idx), BlueVMOp("blue:word_addr!")])
                 for node in nodes:
                     lower_node(node, lowered)
@@ -208,6 +227,7 @@ def bluevm_setup(ctx):
         LitInt(0x06), BlueVMOp("b!+"),
         LitInt(0x01), BlueVMOp("b!+"),
         # inline bytecode
+        # when called will compile machine code for `call rel32`
         BlueVMOp("litb"), BlueVMOp("litb"), BlueVMOp("b!+"),
         LitInt(0xE8), BlueVMOp("b!+"),
         BlueVMOp("litb"), BlueVMOp("b,"), BlueVMOp("b!+"),

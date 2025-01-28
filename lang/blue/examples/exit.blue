@@ -1,20 +1,8 @@
 
-: syscall (( -- )) 0F b, 05 b, ;
+: syscall (( num eax -- res eax )) 0F b, 05 b, ;
+: exit (( status edi -- noret )) 3C syscall ;
+: bye (( -- noret )) 00 exit ;
 
-: exit (( -- ))
-  B8 b, 3C d,
-  syscall
-;
-
-: bye (( -- ))
-  BF b, 00 d,
-  exit
-;
-
-: fail (( -- ))
-  BF b, 03 d,
-  exit
-;
+: fail (( -- )) 03 exit ;
 
 fail
-bye

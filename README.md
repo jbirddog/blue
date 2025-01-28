@@ -121,7 +121,8 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 | Name | Descripton | Location |
 |----|----|----|
-| blang | Quick and dirty compiler for a textual representation of the BlueVM bytecode | lang/blang |
+| blang | Quick and dirty frontend for a textual representation of the BlueVM bytecode | lang/blang |
+| blue | Frontend for a language with a Forth-like syntax where you are the assembler and linker | lang/blue |
 
 ### Idea for more tools/examples
 
