@@ -44,3 +44,5 @@
    1. Algo will be tricky with if-else/etc
       1. Maybe force all branches to have the same effect?
 1, Flow in/out will pop/push from this compile time shadow stack
+1. Stack effect words are only frontend?
+   1. Seems like 2 3 + exit would still know to flow in a number
