@@ -1,21 +1,10 @@
 # Blue Language
 
-## First Milestone
-
-```
-: syscall (( num eax -- res eax )) 0F b, 05 b, ;
-: exit (( status edi -- noret )) 3C syscall ;
-: bye (( -- noret )) 0 exit ;
-
-bye
-```
-
-## After First Miletone
+## TODOs
 
 1. bluevm.py needs to contain effects for each op, else same problem as v1 with native ops
-1. Consider (( reg edi status -- )) to simplify double_paren
-   1. Actually just need (( and )) to set the current dictionary?
-   1. (( edi status -- ))
+1. Consider (( edi status -- )) to simplify double_paren
+   1. Actually just need (( and )) to set the current dictionary (and maybe stack)?
 1. Need to track machine code length of words, inline if smaller
 1. Flow in for compiling words needs to be implemented vs prototyped
 1. Need flow out while compiling word bodies
@@ -52,6 +41,6 @@ bye
    1. Custom ops can register their effects
    1. Would require a runtime for parsing stack effects
       1. Useful for docs also
-   1. Algo will be trick with if-else/etc
+   1. Algo will be tricky with if-else/etc
       1. Maybe force all branches to have the same effect?
-
+1, Flow in/out will pop/push from this compile time shadow stack

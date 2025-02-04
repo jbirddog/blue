@@ -59,8 +59,8 @@ def double_lparen(ctx):
         if token == "noret":
             continue
 
-        effect = next_token(ctx)
-        effects.append(effect)
+        effect_desc = next_token(ctx)
+        effects.append(token)
 
 def fslash(ctx):
     next_token(ctx, "\n")
