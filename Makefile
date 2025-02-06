@@ -2,12 +2,18 @@ USER_ID ?= $(shell id -u)
 GROUP_ID ?= $(shell id -g)
 ME ?= $(USER_ID):$(GROUP_ID)
 
-all: img compile
+RUN ?= docker run --rm -u $(ME) -v .:/app blue
+RUN_IT ?= docker run --rm -u $(ME) -v .:/app -it blue
+
+all: img run
 
 img:
 	docker build -t blue .
 
-compile:
-	docker run --rm -u $(ME) -v .:/app blue gcc v5.c
+run:
+	$(RUN) go run .
 
-.PHONY: img compile
+sh:
+	$(RUN_IT) /bin/sh
+
+.PHONY: img run sh
