@@ -18,35 +18,34 @@ int main(int argc, char **argv) {
 
 	printf("tos: %ld, depth: %ld\n", *(tos - 1), tos - &data_stack[0]);
 
-	// push rax
-	// push rcx
-	*here++ = 0x50;
-	*here++ = 0x51;
-
-	// mov eax, *(--tos)
-	*here++ = 0xB8;
-	memcpy(here, --tos, sizeof(uint32_t));
-	here += sizeof(uint32_t);
+	// jit the interpretation of `4 5 add` where add has a stack effect (( eax a ecx b -- eax res ))
 	
 	// mov ecx, *(--tos)
 	*here++ = 0xB9;
 	memcpy(here, --tos, sizeof(uint32_t));
 	here += sizeof(uint32_t);
 
+	// mov eax, *(--tos)
+	*here++ = 0xB8;
+	memcpy(here, --tos, sizeof(uint32_t));
+	here += sizeof(uint32_t);
+
 	// add eax, ecx
 	*here++ = 0x01;
 	*here++ = 0xC8;
-	
-	// pop rcx
-	// pop rax
-	*here++ = 0x59;
-	*here++ = 0x58;
 
+	// stosq since result of add is in rax and tos is in rdi
+	*here++ = 0x48;
+	*here++ = 0xAB;
+	
 	// ret
 	*here++ = 0xC3;
 
 	// call machine code
-	((void (*)())code_buf)(); 
+	((void (*)())code_buf)(tos);
+
+	// add number of output effects stosq'd to tos
+	++tos;
 	
 	printf("tos: %ld, depth: %ld\n", *(tos - 1), tos - &data_stack[0]);
 	
