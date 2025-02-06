@@ -1,4 +1,1 @@
-bin
-obj
-a.out
-scratch*
+.cache
