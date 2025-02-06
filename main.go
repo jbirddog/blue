@@ -57,13 +57,13 @@ func main() {
 	here++
 	code_buffer[here] = 0xC8
 	here++
-	
+
 	// stosq
 	code_buffer[here] = 0x48
 	here++
 	code_buffer[here] = 0xAB
 	here++
-	
+
 	// ret
 	code_buffer[here] = 0xC3
 	here++
@@ -77,6 +77,6 @@ func main() {
 	)
 
 	tos++
-	
+
 	fmt.Println("blue: ", tos, data_stack[0], len(code_buffer))
 }
