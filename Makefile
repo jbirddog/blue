@@ -16,4 +16,7 @@ run:
 sh:
 	$(RUN_IT) /bin/sh
 
-.PHONY: img run sh
+scratch:
+	fasm scratch.asm
+
+.PHONY: img run sh scratch

@@ -16,7 +16,7 @@ func main() {
 	defer syscall.Munmap(rwx_mem)
 
 	Compile(rwx_mem, []WordDecl{
-		// : syscall (( eax num -- eax res )) 0F b, 05 b, ;
+		// : syscall (( eax num -- eax res )) 0F b, 05 b, trust ;
 		WordDecl{
 			Ins: []RegisterFlow{ RegisterFlow{ Idx: 0, Size: 4 }, },
 			Outs: []RegisterFlow{ RegisterFlow{ Idx: 0, Size: 4 }, },
@@ -25,6 +25,7 @@ func main() {
 				BComma{},
 				PushNumber { Val: 0x05, Size: 1 },
 				BComma{},
+				Trust{},
 			},
 		},
 		// : exit (( edi status -- noret )) 3C syscall ;

@@ -16,7 +16,7 @@ import "C"
 
 /*
 
-: syscall (( eax num -- eax res )) 0F b, 05 b, ;
+: syscall (( eax num -- eax res )) 0F b, 05 b, trust ;
 : exit (( edi status -- noret )) 3C syscall ;
 : bye (( -- noret )) 00 exit ;
 
@@ -32,27 +32,18 @@ const (
 	NoRet
 )
 
-type NumberFlow struct {
-	Val uint64
-	Size int
-}
-
-type RegisterFlow struct {
-	Idx int
-	Size int
-}
-
 type Command interface {
 	Execute()
 }
 
-type BComma struct {
-}
+type BComma struct {}
 
 type PushNumber struct {
 	Val uint64
 	Size int
 }
+
+type Trust struct {}
 
 type WordDecl struct {
 	Flags Flag
@@ -99,8 +90,11 @@ func Compile(rwx_mem []byte, decls []WordDecl) {
 	fmt.Println("after: ", dataStack.I, dataStack.Elems[0], len(codeBuf.Mem))
 }
 
+func (c BComma) Execute() {
+}
+
 func (c PushNumber) Execute() {
 }
 
-func (c BComma) Execute() {
+func (c Trust) Execute() {
 }
