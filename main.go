@@ -41,12 +41,10 @@ func main() {
 	codeBuf.AppendUint32(uint32(dataStack.Pop()))
 
 	// add eax, ecx
-	codeBuf.Append(0x01)
-	codeBuf.Append(0xC8)
+	codeBuf.Append(0x01, 0xC8)
 
 	// stosq
-	codeBuf.Append(0x48)
-	codeBuf.Append(0xAB)
+	codeBuf.Append(0x48, 0xAB)
 
 	// ret
 	codeBuf.Append(0xC3)
