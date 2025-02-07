@@ -15,6 +15,7 @@ void interpret(uint64_t *data_stack, uint8_t *code) {
 */
 import "C"
 
+
 func main() {
 	// TODO: move to sys_linux.go
 	rwx_mem, err := syscall.Mmap(-1, 0, 4096,
@@ -40,14 +41,14 @@ func main() {
 	codeBuf.Append(0xB8)
 	codeBuf.AppendUint32(uint32(dataStack.Pop()))
 
-	// add eax, ecx
-	codeBuf.Append(0x01, 0xC8)
-
-	// stosq
-	codeBuf.Append(0x48, 0xAB)
-
-	// ret
-	codeBuf.Append(0xC3)
+	codeBuf.Append(
+		// add eax, ecx
+		0x01, 0xC8,
+		// stosq
+		0x48, 0xAB,
+		// ret
+		0xC3,
+	)
 
 	fmt.Println("before: ", dataStack.I, dataStack.Elems[0], len(codeBuf.Mem))
 
