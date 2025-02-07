@@ -27,6 +27,9 @@ func main() {
 	Compile(ctx, []CompilationBlock{
 		CommandList{
 			Commands: []Command{
+				&Lit{Val: 0xC3, Size: 1},
+				&Comma{Size: 1},
+				/*
 				&Lit{Val: 0xB0, Size: 1},
 				&Comma{Size: 1},
 				&Lit{Val: 0x3C, Size: 1},
@@ -41,6 +44,7 @@ func main() {
 				&Comma{Size: 1},
 				&Lit{Val: 0x05, Size: 1},
 				&Comma{Size: 1},
+				*/
 			},
 		},
 	})

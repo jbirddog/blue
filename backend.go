@@ -1,5 +1,7 @@
 package main
 
+import "unsafe"
+
 /*
 
 #include <stdint.h>
@@ -64,10 +66,27 @@ func Compile(ctx *CompileCtx, blocks []CompilationBlock) {
 	}
 }
 
+func interpret(ctx *CompileCtx, where int) {
+	//var shadowStack [16]uint64
+	shadowStack := make([]uint64, 16)
+	
+	C.interpret(
+		(*C.uint64_t)(&shadowStack[0]),
+		(*C.uint8_t)(unsafe.Pointer(ctx.CodeBuf.PtrTo(where))),
+	)
+}
+
 func (c CommandList) Compile(ctx *CompileCtx) {
+	mark := ctx.CodeBuf.I
+	
 	for _, command := range c.Commands {
 		command.Execute(ctx)
 	}
+
+	ctx.CodeBuf.Append(0xC3)
+
+	interpret(ctx, mark)
+	ctx.CodeBuf.I = mark
 }
 
 

@@ -13,10 +13,13 @@ img:
 run:
 	$(RUN) go run .
 
+fmt:
+	$(RUN) go fmt
+
 sh:
 	$(RUN_IT) /bin/sh
 
 scratch:
 	fasm scratch.asm
 
-.PHONY: img run sh scratch
+.PHONY: img run fmt sh scratch
