@@ -42,14 +42,23 @@ type RegisterFlow struct {
 	Size int
 }
 
-type Instruction interface {
+type Command interface {
+	Execute()
+}
+
+type BComma struct {
+}
+
+type PushNumber struct {
+	Val uint64
+	Size int
 }
 
 type WordDecl struct {
 	Flags Flag
 	Ins []RegisterFlow
 	Outs []RegisterFlow
-	Instrs []Instruction
+	Commands []Command
 }
 
 func Compile(rwx_mem []byte, decls []WordDecl) {
@@ -88,4 +97,10 @@ func Compile(rwx_mem []byte, decls []WordDecl) {
 	dataStack.I += 1
 
 	fmt.Println("after: ", dataStack.I, dataStack.Elems[0], len(codeBuf.Mem))
+}
+
+func (c PushNumber) Execute() {
+}
+
+func (c BComma) Execute() {
 }

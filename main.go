@@ -20,7 +20,16 @@ func main() {
 		WordDecl{
 			Ins: []RegisterFlow{ RegisterFlow{ Idx: 0, Size: 4 }, },
 			Outs: []RegisterFlow{ RegisterFlow{ Idx: 0, Size: 4 }, },
+			Commands: []Command{
+				PushNumber { Val: 0x0F, Size: 1 },
+				BComma{},
+				PushNumber { Val: 0x05, Size: 1 },
+				BComma{},
+			},
 		},
+		// : exit (( edi status -- noret )) 3C syscall ;
+		// : bye (( -- noret )) 00 exit ;
+		// bye
 	})
 	
 	fmt.Println("Done in main")
