@@ -14,12 +14,17 @@ func main() {
 	}
 	defer syscall.Munmap(rwx_mem)
 
+	ctx := &CompileCtx{
+		CodeBuf:       &CodeBuf{Mem: rwx_mem},
+		DataFlowStack: NewDataFlowStack(16),
+	}
+	
 	/*
 		0:  b0 3c                   mov    al,0x3c
 		2:  40 b7 0b                mov    dil,0xb
 		5:  0f 05                   syscall
 	*/
-	Compile(rwx_mem, []CompilationBlock{
+	Compile(ctx, []CompilationBlock{
 		CommandList{
 			Commands: []Command{
 				&Lit{Val: 0xB0, Size: 1},

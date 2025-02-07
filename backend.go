@@ -51,15 +51,12 @@ type WordDecl struct {
 }
 */
 
-func Compile(rwx_mem []byte, blocks []CompilationBlock) {
-	codeBuf := &CodeBuf{Mem: rwx_mem}
-	dataFlowStack := NewDataFlowStack(16)
+type CompileCtx struct {
+	CodeBuf       *CodeBuf
+	DataFlowStack *DataFlowStack
+}
 
-	_ = &CommandCtx{
-		CodeBuf:       codeBuf,
-		DataFlowStack: dataFlowStack,
-	}
-
+func Compile(ctx *CompileCtx, blocks []CompilationBlock) {
 	for _, b := range blocks {
 		switch block := b.(type) {
 		case CommandList:
