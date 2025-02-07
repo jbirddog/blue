@@ -1,8 +1,5 @@
 package main
 
-import "fmt"
-import "unsafe"
-
 /*
 
 #include <stdint.h>
@@ -24,37 +21,34 @@ bye
 
 */
 
-type Flag uint
+type WordFlag uint
 
 const (
-	Anon Flag = 1 << iota
+	Anon WordFlag = 1 << iota
 	Immed
 	NoRet
 )
 
-type Command interface {
-	Execute()
-}
-
-type BComma struct {}
-
-type PushNumber struct {
-	Val uint64
-	Size int
-}
-
-type Trust struct {}
-
 type WordDecl struct {
-	Flags Flag
-	Ins []RegisterFlow
-	Outs []RegisterFlow
+	Flags WordFlag
+	Ins []*RegisterFlow
+	Outs []*RegisterFlow
 	Commands []Command
 }
 
 func Compile(rwx_mem []byte, decls []WordDecl) {
-	codeBuf := NewCodeBuf(rwx_mem)
+	ctx := CommandCtx{
+		CodeBuf: NewCodeBuf(rwx_mem),
+		DataFlowStack: NewDataFlowStack(16),
+	}
 
+	for _, decl := range decls {
+		for _, command := range decl.Commands {
+			command.Execute(&ctx)
+		}
+	}
+
+	/*
 	dataStack := NewStack(16)
 	dataStack.Push(4)
 	dataStack.Push(5)
@@ -88,13 +82,5 @@ func Compile(rwx_mem []byte, decls []WordDecl) {
 	dataStack.I += 1
 
 	fmt.Println("after: ", dataStack.I, dataStack.Elems[0], len(codeBuf.Mem))
-}
-
-func (c BComma) Execute() {
-}
-
-func (c PushNumber) Execute() {
-}
-
-func (c Trust) Execute() {
+	*/
 }
