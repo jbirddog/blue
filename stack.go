@@ -2,11 +2,11 @@ package main
 
 type Stack struct {
 	Elems []uint64
-	I int
+	I     int
 }
 
 func NewStack(len int) *Stack {
-	return &Stack {
+	return &Stack{
 		Elems: make([]uint64, len),
 	}
 }
@@ -24,4 +24,3 @@ func (s *Stack) Pop() uint64 {
 func (s *Stack) Top() *uint64 {
 	return &s.Elems[s.I]
 }
-

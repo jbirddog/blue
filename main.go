@@ -27,7 +27,7 @@ func main() {
 
 	codeBuf := NewCodeBuf(rwx_mem)
 	defer syscall.Munmap(codeBuf.Mem)
-	
+
 	dataStack := NewStack(16)
 	dataStack.Push(4)
 	dataStack.Push(5)

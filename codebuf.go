@@ -4,8 +4,8 @@ import "encoding/binary"
 
 type CodeBuf struct {
 	Mem []byte
-	i int
-	tmp  []byte
+	i   int
+	tmp []byte
 }
 
 func NewCodeBuf(rwx_mem []byte) *CodeBuf {
@@ -24,4 +24,3 @@ func (c *CodeBuf) AppendUint32(val uint32) {
 	binary.LittleEndian.PutUint32(c.tmp, val)
 	c.Append(c.tmp[:4]...)
 }
-
