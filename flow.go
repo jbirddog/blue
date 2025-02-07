@@ -4,12 +4,12 @@ type DataFlow interface {
 }
 
 type LitFlow struct {
-	Val uint64
+	Val  uint64
 	Size int
 }
 
 type RegisterFlow struct {
-	Idx int
+	Idx  int
 	Size int
 }
 
@@ -22,7 +22,7 @@ type DataFlowStack struct {
 }
 
 func NewDataFlowStack(len int) *DataFlowStack {
-	return &DataFlowStack { Elems: make([]DataFlow, len) }
+	return &DataFlowStack{Elems: make([]DataFlow, len)}
 }
 
 func (s *DataFlowStack) Push(val DataFlow) {

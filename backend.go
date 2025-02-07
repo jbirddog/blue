@@ -13,6 +13,14 @@ import "C"
 
 /*
 
+# Milestone 1:
+
+0B b, 3C b,
+40 b, B7 b, 0B b,
+oF b, 05 b,
+
+# Milestone 2:
+
 : syscall (( eax num -- eax res )) 0F b, 05 b, trust ;
 : exit (( edi status -- noret )) 3C syscall ;
 : bye (( -- noret )) 00 exit ;
@@ -21,11 +29,18 @@ bye
 
 */
 
+type CompilationBlock interface{}
+
+type CommandList struct {
+	Outs     []*RegisterFlow
+	Commands []Command
+}
+
+/*
 type WordFlag uint
 
 const (
-	Transient WordFlag = 1 << iota
-	NoRet
+	NoRet WordFlag = 1 << iota
 )
 
 type WordDecl struct {
@@ -34,32 +49,37 @@ type WordDecl struct {
 	Outs []*RegisterFlow
 	Commands []Command
 }
+*/
 
-type Word struct {
-	Start int
-	End int
-}
-
-func Compile(rwx_mem []byte, decls []WordDecl) {
-	codeBuf := &CodeBuf{ Mem: rwx_mem }
+func Compile(rwx_mem []byte, blocks []CompilationBlock) {
+	codeBuf := &CodeBuf{Mem: rwx_mem}
 	dataFlowStack := NewDataFlowStack(16)
-	
-	cmdCtx := &CommandCtx{
-		CodeBuf: codeBuf,
+
+	_ = &CommandCtx{
+		CodeBuf:       codeBuf,
 		DataFlowStack: dataFlowStack,
 	}
 
-	for _, decl := range decls {
-		word := &Word{ Start: codeBuf.I, End: codeBuf.I }
-		
-		for _, command := range decl.Commands {
-			command.Execute(cmdCtx)
+	for _, b := range blocks {
+		switch block := b.(type) {
+		case CommandList:
+			block.Compile()
+		default:
+			panic("Unexpected block type")
 		}
 
-		word.End = codeBuf.I
+		/*
+			for _, command := range decl.Commands {
+				command.Execute(cmdCtx)
+			}
+		*/
 	}
+}
 
-	/*
+func (c *CommandList) Compile() {
+}
+
+/*
 	dataStack := NewStack(16)
 	dataStack.Push(4)
 	dataStack.Push(5)
@@ -93,5 +113,4 @@ func Compile(rwx_mem []byte, decls []WordDecl) {
 	dataStack.I += 1
 
 	fmt.Println("after: ", dataStack.I, dataStack.Elems[0], len(codeBuf.Mem))
-	*/
-}
+*/

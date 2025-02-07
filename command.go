@@ -3,7 +3,7 @@ package main
 import "encoding/binary"
 
 type CommandCtx struct {
-	CodeBuf *CodeBuf
+	CodeBuf       *CodeBuf
 	DataFlowStack *DataFlowStack
 }
 
@@ -16,7 +16,7 @@ type Comma struct {
 }
 
 type Lit struct {
-	Val uint64
+	Val  uint64
 	Size int
 }
 
