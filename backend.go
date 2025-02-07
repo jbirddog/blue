@@ -29,7 +29,14 @@ bye
 
 */
 
-type CompilationBlock interface{}
+type CompileCtx struct {
+	CodeBuf       *CodeBuf
+	DataFlowStack *DataFlowStack
+}
+
+type CompilationBlock interface{
+	Compile(ctx *CompileCtx)
+}
 
 type CommandList struct {
 	Outs     []*RegisterFlow
@@ -51,30 +58,18 @@ type WordDecl struct {
 }
 */
 
-type CompileCtx struct {
-	CodeBuf       *CodeBuf
-	DataFlowStack *DataFlowStack
-}
-
 func Compile(ctx *CompileCtx, blocks []CompilationBlock) {
-	for _, b := range blocks {
-		switch block := b.(type) {
-		case CommandList:
-			block.Compile()
-		default:
-			panic("Unexpected block type")
-		}
-
-		/*
-			for _, command := range decl.Commands {
-				command.Execute(cmdCtx)
-			}
-		*/
+	for _, block := range blocks {
+		block.Compile(ctx)
 	}
 }
 
-func (c *CommandList) Compile() {
+func (c CommandList) Compile(ctx *CompileCtx) {
+	for _, command := range c.Commands {
+		command.Execute(ctx)
+	}
 }
+
 
 /*
 	dataStack := NewStack(16)

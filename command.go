@@ -2,13 +2,8 @@ package main
 
 import "encoding/binary"
 
-type CommandCtx struct {
-	CodeBuf       *CodeBuf
-	DataFlowStack *DataFlowStack
-}
-
 type Command interface {
-	Execute(*CommandCtx)
+	Execute(*CompileCtx)
 }
 
 type Comma struct {
@@ -20,12 +15,12 @@ type Lit struct {
 	Size int
 }
 
-func (c *Comma) Execute(ctx *CommandCtx) {
+func (c *Comma) Execute(ctx *CompileCtx) {
 	lit := ctx.DataFlowStack.Pop().(LitFlow)
 	binary.LittleEndian.PutUint64(ctx.CodeBuf.Here(), lit.Val)
 	ctx.CodeBuf.I += lit.Size
 }
 
-func (c *Lit) Execute(ctx *CommandCtx) {
+func (c *Lit) Execute(ctx *CompileCtx) {
 	ctx.DataFlowStack.Push(LitFlow(*c))
 }
