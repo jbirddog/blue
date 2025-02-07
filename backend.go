@@ -24,8 +24,7 @@ bye
 type WordFlag uint
 
 const (
-	Anon WordFlag = 1 << iota
-	Immed
+	Transient WordFlag = 1 << iota
 	NoRet
 )
 
@@ -36,16 +35,28 @@ type WordDecl struct {
 	Commands []Command
 }
 
+type Word struct {
+	Start int
+	End int
+}
+
 func Compile(rwx_mem []byte, decls []WordDecl) {
-	ctx := CommandCtx{
-		CodeBuf: &CodeBuf{ Mem: rwx_mem },
-		DataFlowStack: NewDataFlowStack(16),
+	codeBuf := &CodeBuf{ Mem: rwx_mem }
+	dataFlowStack := NewDataFlowStack(16)
+	
+	cmdCtx := &CommandCtx{
+		CodeBuf: codeBuf,
+		DataFlowStack: dataFlowStack,
 	}
 
 	for _, decl := range decls {
+		word := &Word{ Start: codeBuf.I, End: codeBuf.I }
+		
 		for _, command := range decl.Commands {
-			command.Execute(&ctx)
+			command.Execute(cmdCtx)
 		}
+
+		word.End = codeBuf.I
 	}
 
 	/*

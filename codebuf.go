@@ -5,12 +5,6 @@ type CodeBuf struct {
 	I   int
 }
 
-func NewCodeBuf(rwx_mem []byte) *CodeBuf {
-	return &CodeBuf{
-		Mem: rwx_mem,
-	}
-}
-
 func (c *CodeBuf) Here() []byte {
 	return c.Mem[c.I:]
 }

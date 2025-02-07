@@ -22,7 +22,7 @@ func main() {
 	*/
 	Compile(rwx_mem, []WordDecl{
 		WordDecl{
-			Flags: Anon|Immed,
+			Flags: Transient,
 			Commands: []Command{
 				&Lit { Val: 0xB0, Size: 1 },
 				&Comma{ Size: 1 },
