@@ -38,7 +38,7 @@ type WordDecl struct {
 
 func Compile(rwx_mem []byte, decls []WordDecl) {
 	ctx := CommandCtx{
-		CodeBuf: NewCodeBuf(rwx_mem),
+		CodeBuf: &CodeBuf{ Mem: rwx_mem },
 		DataFlowStack: NewDataFlowStack(16),
 	}
 
