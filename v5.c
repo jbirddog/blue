@@ -13,16 +13,14 @@ typedef struct {
 } data_stack_elem;
 
 typedef struct {
-	data_stack_elem elems[DATA_STACK_SIZE];
-	data_stack_elem *tos;
-} data_stack;
-
-typedef struct {
 	struct {
 		uint8_t *mem;
 		uint8_t *here;
 	} code_buf;
-	data_stack *data_stack;
+	struct {
+		data_stack_elem elems[DATA_STACK_SIZE];
+		data_stack_elem *tos;
+	} data_stack;
 	uint64_t shadow_stack[DATA_STACK_SIZE];
 } blue_ctx;
 
@@ -38,19 +36,17 @@ typedef struct {
 	size_t commands_len;
 } compilation_block;
 
-static blue_ctx ctx = {0};
-
 #define data_stack_push(ctx, var, body) \
 	do { \
-		data_stack_elem *var = ctx->data_stack->tos; \
+		data_stack_elem *var = ctx->data_stack.tos; \
 		body \
-		++ctx->data_stack->tos; \
+		++ctx->data_stack.tos; \
 	} while (0)
 
 #define data_stack_pop(ctx, var, body) \
 	do { \
-		--ctx->data_stack->tos; \
-		data_stack_elem *var = ctx->data_stack->tos; \
+		--ctx->data_stack.tos; \
+		data_stack_elem *var = ctx->data_stack.tos; \
 		body \
 	} while (0)
 
@@ -120,6 +116,12 @@ void compile(compilation_block *blocks, size_t blocks_len, blue_ctx *ctx) {
 	}
 }
 
+//
+//
+//
+
+static blue_ctx ctx = {0};
+
 
 int main(int argc, char **argv) {
 	// TODO: move to linux/sys.{c,h}
@@ -128,17 +130,10 @@ int main(int argc, char **argv) {
 		PROT_READ | PROT_WRITE | PROT_EXEC,
 		MAP_PRIVATE | MAP_ANONYMOUS,
 		-1, 0);
-	
-	//code_buf cb = { .mem = rwx_mem, .here = rwx_mem };
-	
-	data_stack ds = {0};
-	ds.tos = &ds.elems[0];
-	
-	//blue_ctx ctx = { .code_buf = &cb, .data_stack = &ds };
 
 	ctx.code_buf.mem = rwx_mem;
 	ctx.code_buf.here = rwx_mem;
-	ctx.data_stack = &ds;
+	ctx.data_stack.tos = &ctx.data_stack.elems[0];
 	
 	command m1_cmds[] = {
 		{ .type = CMD_LIT, .size = 1, .val = 0xB0 },
