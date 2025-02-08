@@ -18,9 +18,9 @@ static compilation_block compilation_blocks[MAX_COMPILATION_BLOCKS];
 static uint64_t shadow_stack[MAX_DATA_STACK_ELEMS];
 
 static const char src[] = ""
-"B0 b, 3C b, "
-"40 b, B7 b, 0B b, "
-"0F b, 05 b, "
+"0xB0 b, 0x3C b, "
+"0x40 b, 0xB7 b, 0x0B b, "
+"0x0F b, 0x05 b, "
 "";
 
 #define assign_array_to_list(l, s, sz) \
