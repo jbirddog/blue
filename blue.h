@@ -1,3 +1,6 @@
+#include <assert.h>
+#include <stddef.h>
+#include <stdint.h>
 
 #define blue_list(t) \
 	struct { \

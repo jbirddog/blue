@@ -7,7 +7,8 @@ rule cc
 rule link
   command = cc -o $out $in
 
-build ${bd}/v5.o: cc v5.c
+build ${bd}/main.o: cc main.c
+build ${bd}/frontend.o: cc frontend.c
 build ${bd}/backend.o: cc backend.c
 
-build ${bd}/blue: link ${bd}/v5.o ${bd}/backend.o
+build ${bd}/blue: link ${bd}/main.o ${bd}/frontend.o ${bd}/backend.o
