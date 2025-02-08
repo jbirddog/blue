@@ -40,7 +40,7 @@
 		body \
 	} while (0)
 
-#define blue_list_last(list, var) auto var = (assert(list.here > list.start), *(list.here - 1));
+#define blue_list_last(list) (assert(list.here > list.start), list.here - 1)
 
 typedef struct {
 	enum { ELEM_LIT, } type;
@@ -140,6 +140,11 @@ void compile(blue_ctx *ctx) {
 //
 
 void parse(const char *src, blue_ctx *ctx) {
+	blue_list_push(ctx->blocks, b, {
+		b->type = BLK_CMDLIST;
+		b->commands.start = ctx->commands.here;
+	});
+	
 	// xor eax, eax
 	// xor edi, edi
 	blue_list_push(ctx->commands, c, { c->type = CMD_LIT; c->size = 1; c->val = 0x31; });
@@ -171,12 +176,8 @@ void parse(const char *src, blue_ctx *ctx) {
 	blue_list_push(ctx->commands, c, { c->type = CMD_LIT; c->size = 1; c->val = 0x05; });
 	blue_list_push(ctx->commands, c, { c->type = CMD_COMMA; c->size = 1; });
 
-	blue_list_push(ctx->blocks, b, {
-		b->type = BLK_CMDLIST;
-		b->commands.start = ctx->commands.start;
-		b->commands.end = ctx->commands.end;
-		b->commands.here = ctx->commands.here;
-	});
+	auto b = blue_list_last(ctx->blocks);
+	b->commands.here = b->commands.end = ctx->commands.here;
 }
 
 //
