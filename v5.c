@@ -12,12 +12,28 @@
 // blue.h
 //
 
-#define blue_list(t, size) \
+#define blue_list(t) \
 	struct { \
 		t *start; \
 		t *end; \
 		t *here; \
-	} 
+	}
+
+#define blue_list_push(list, var, body) \
+	do { \
+		assert(list.here < list.end); \
+		auto var = list.here; \
+		body \
+		++list.here; \
+	} while (0)
+
+#define blue_list_pop(list, var, body) \
+	do { \
+		assert(list.here > list.start); \
+		--list.here; \
+		auto var = list.here; \
+		body \
+	} while (0)
 
 typedef struct {
 	enum { ELEM_LIT, } type;
@@ -42,23 +58,11 @@ typedef struct {
 		uint8_t *mem;
 		uint8_t *here;
 	} code_buf;
-	blue_list(data_stack_elem, MAX_DATA_STACK_ELEMS) data_stack;
+	blue_list(data_stack_elem) data_stack;
 	uint64_t shadow_stack[MAX_DATA_STACK_ELEMS];
+	blue_list(command) commands;
+	blue_list(compilation_block) blocks;
 } blue_ctx;
-
-#define data_stack_push(ctx, var, body) \
-	do { \
-		auto var = ctx->data_stack.here; \
-		body \
-		++ctx->data_stack.here; \
-	} while (0)
-
-#define data_stack_pop(ctx, var, body) \
-	do { \
-		--ctx->data_stack.here; \
-		auto var = ctx->data_stack.here; \
-		body \
-	} while (0)
 
 //
 // backend.c
@@ -74,7 +78,7 @@ void interpret(uint8_t *entry, blue_ctx *ctx) {
 void compile_cmd_comma(command *c, blue_ctx *ctx) {
 	assert(c->type == CMD_COMMA);
 	
-	data_stack_pop(ctx, elem, {
+	blue_list_pop(ctx->data_stack, elem, {
 		assert(elem->type == ELEM_LIT);
 
 		memcpy(ctx->code_buf.here, &elem->val, c->size);
@@ -85,7 +89,7 @@ void compile_cmd_comma(command *c, blue_ctx *ctx) {
 void compile_cmd_lit(command *c, blue_ctx *ctx) {
 	assert(c->type == CMD_LIT);
 
-	data_stack_push(ctx, elem, {
+	blue_list_push(ctx->data_stack, elem, {
 		elem->type = ELEM_LIT;
 		elem->size = c->size;
 		elem->val = c->val;
@@ -142,7 +146,8 @@ void parse(const char *src, blue_ctx *ctx) {
 
 static blue_ctx ctx;
 static data_stack_elem data_stack_elems[MAX_DATA_STACK_ELEMS];
-//static compilation_block blocks[MAX_COMPILATION_BLOCKS];
+static command commands[MAX_COMMANDS];
+static compilation_block compilation_blocks[MAX_COMPILATION_BLOCKS];
 
 static const char src[] = ""
 "B0 b, 3C b, "
@@ -150,13 +155,18 @@ static const char src[] = ""
 "0F b, 05 b, "
 "";
 
+#define assign_to_list(l, s, sz) \
+	l.start = &s[0]; \
+	l.end = l.start + sz; \
+	l.here = l.start;
+
 static void init_ctx(uint8_t *rwx_mem) {
 	ctx.code_buf.mem = rwx_mem;
 	ctx.code_buf.here = rwx_mem;
-	
-	ctx.data_stack.start = &data_stack_elems[0];
-	ctx.data_stack.end = &data_stack_elems[MAX_DATA_STACK_ELEMS - 1];
-	ctx.data_stack.here = ctx.data_stack.start;
+
+	assign_to_list(ctx.data_stack, data_stack_elems, MAX_DATA_STACK_ELEMS);
+	assign_to_list(ctx.commands, commands, MAX_COMMANDS);
+	assign_to_list(ctx.blocks, compilation_blocks, MAX_COMPILATION_BLOCKS);
 }
 
 int main(int argc, char **argv) {
