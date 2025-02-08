@@ -4,7 +4,7 @@
 #include <string.h>
 #include <sys/mman.h>
 
-#define MAX_COMMANDS 16
+#define MAX_COMMANDS 256
 #define MAX_COMPILATION_BLOCKS 16
 #define MAX_DATA_STACK_ELEMS 16
 
@@ -121,13 +121,11 @@ void compile_cmdlist(compilation_block *b, blue_ctx *ctx) {
 	ctx->code_buf.here = entry;
 }
 
-void compile(compilation_block *blocks, size_t blocks_len, blue_ctx *ctx) {
-	for (int i = 0; i < blocks_len; ++i) {
-		compilation_block b = blocks[i];
-		
-		switch (b.type) {
+void compile(blue_ctx *ctx) {
+	for (auto b = ctx->blocks.start; b < ctx->blocks.here; ++b) {
+		switch (b->type) {
 		case BLK_CMDLIST:
-			compile_cmdlist(&b, ctx);
+			compile_cmdlist(b, ctx);
 			break;
 		}
 	}
@@ -138,6 +136,42 @@ void compile(compilation_block *blocks, size_t blocks_len, blue_ctx *ctx) {
 //
 
 void parse(const char *src, blue_ctx *ctx) {
+	// xor eax, eax
+	// xor edi, edi
+	blue_list_push(ctx->commands, c, { c->type = CMD_LIT; c->size = 1; c->val = 0x31; });
+	blue_list_push(ctx->commands, c, { c->type = CMD_COMMA; c->size = 1; });
+	blue_list_push(ctx->commands, c, { c->type = CMD_LIT; c->size = 1; c->val = 0xC0; });
+	blue_list_push(ctx->commands, c, { c->type = CMD_COMMA; c->size = 1; });
+	blue_list_push(ctx->commands, c, { c->type = CMD_LIT; c->size = 1; c->val = 0x31; });
+	blue_list_push(ctx->commands, c, { c->type = CMD_COMMA; c->size = 1; });
+	blue_list_push(ctx->commands, c, { c->type = CMD_LIT; c->size = 1; c->val = 0xFF; });
+	blue_list_push(ctx->commands, c, { c->type = CMD_COMMA; c->size = 1; });
+	
+	// mov al, 60
+	blue_list_push(ctx->commands, c, { c->type = CMD_LIT; c->size = 1; c->val = 0xB0; });
+	blue_list_push(ctx->commands, c, { c->type = CMD_COMMA; c->size = 1; });
+	blue_list_push(ctx->commands, c, { c->type = CMD_LIT; c->size = 1; c->val = 0x3C; });
+	blue_list_push(ctx->commands, c, { c->type = CMD_COMMA; c->size = 1; });
+
+	// mov dil, 11
+	blue_list_push(ctx->commands, c, { c->type = CMD_LIT; c->size = 1; c->val = 0x40; });
+	blue_list_push(ctx->commands, c, { c->type = CMD_COMMA; c->size = 1; });
+	blue_list_push(ctx->commands, c, { c->type = CMD_LIT; c->size = 1; c->val = 0xB7; });
+	blue_list_push(ctx->commands, c, { c->type = CMD_COMMA; c->size = 1; });
+	blue_list_push(ctx->commands, c, { c->type = CMD_LIT; c->size = 1; c->val = 0x0B; });
+	blue_list_push(ctx->commands, c, { c->type = CMD_COMMA; c->size = 1; });
+	
+	// syscall
+	blue_list_push(ctx->commands, c, { c->type = CMD_LIT; c->size = 1; c->val = 0x0F; });
+	blue_list_push(ctx->commands, c, { c->type = CMD_COMMA; c->size = 1; });
+	blue_list_push(ctx->commands, c, { c->type = CMD_LIT; c->size = 1; c->val = 0x05; });
+	blue_list_push(ctx->commands, c, { c->type = CMD_COMMA; c->size = 1; });
+
+	blue_list_push(ctx->blocks, b, {
+		b->type = BLK_CMDLIST;
+		b->commands = ctx->commands.start;
+		b->commands_len = ctx->commands.here - ctx->commands.start;
+	});
 }
 
 //
@@ -179,47 +213,7 @@ int main(int argc, char **argv) {
 
 	init_ctx(rwx_mem);
 	parse(src, &ctx);
-		
-	command m1_cmds[] = {
-		// xor eax, eax
-		// xor edi, edi
-		{ .type = CMD_LIT, .size = 1, .val = 0x31 },
-		{ .type = CMD_COMMA, .size = 1 },
-		{ .type = CMD_LIT, .size = 1, .val = 0xC0 },
-		{ .type = CMD_COMMA, .size = 1 },
-		{ .type = CMD_LIT, .size = 1, .val = 0x31 },
-		{ .type = CMD_COMMA, .size = 1 },
-		{ .type = CMD_LIT, .size = 1, .val = 0xFF },
-		{ .type = CMD_COMMA, .size = 1 },
-
-		// mov al, 60
-		{ .type = CMD_LIT, .size = 1, .val = 0xB0 },
-		{ .type = CMD_COMMA, .size = 1 },
-		{ .type = CMD_LIT, .size = 1, .val = 0x3C },
-		{ .type = CMD_COMMA, .size = 1 },
-
-		// mov dil, 11
-		{ .type = CMD_LIT, .size = 1, .val = 0x40 },
-		{ .type = CMD_COMMA, .size = 1 },
-		{ .type = CMD_LIT, .size = 1, .val = 0xB7 },
-		{ .type = CMD_COMMA, .size = 1 },
-		{ .type = CMD_LIT, .size = 1, .val = 0x0B },
-		{ .type = CMD_COMMA, .size = 1 },		
-
-		// syscall
-		{ .type = CMD_LIT, .size = 1, .val = 0x0F },
-		{ .type = CMD_COMMA, .size = 1 },
-		{ .type = CMD_LIT, .size = 1, .val = 0x05 },
-		{ .type = CMD_COMMA, .size = 1 },
-	};
-	size_t m1_cmds_len = sizeof(m1_cmds) / sizeof(m1_cmds[0]);
-
-	compilation_block milestone1[] = {
-		{ .type = BLK_CMDLIST, .commands = &m1_cmds[0], .commands_len = m1_cmds_len },
-	};
-	size_t milestone1_len = sizeof(milestone1) / sizeof(milestone1[0]);
-	
-	compile(&milestone1[0], milestone1_len, &ctx);
+	compile(&ctx);
 	
 	munmap(rwx_mem, mem_size);
 
