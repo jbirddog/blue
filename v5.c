@@ -1,7 +1,8 @@
-#include <sys/mman.h>
+#include <assert.h>
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
+#include <sys/mman.h>
 
 #define DATA_STACK_SIZE 16
 
@@ -12,7 +13,7 @@ typedef struct {
 
 typedef struct {
 	enum { ELEM_LIT, } type;
-	int size;
+	size_t size;
 	uint64_t val;
 } data_stack_elem;
 
@@ -24,13 +25,55 @@ typedef struct {
 typedef struct {
 	code_buf *code_buf;
 	data_stack *data_stack;
+	uint64_t shadow_stack[DATA_STACK_SIZE];
 } blue_ctx;
 
 typedef struct {
 	enum { CMD_LIT, CMD_COMMA, } type;
-	int size;
+	size_t size;
 	uint64_t val;
 } command;
+
+typedef struct {
+	enum { BLK_CMDLIST, } type;
+	command *commands;
+	size_t commands_len;
+} compilation_block;
+
+
+void compile_cmdlist(compilation_block *b, blue_ctx *ctx) {
+	int mark = ctx->code_buf->i;
+
+	for (int i = 0; i < b->commands_len; ++i) {
+		command c = b->commands[i];
+
+		switch (c.type) {
+		case CMD_LIT:
+			break;
+		case CMD_COMMA:
+			break;
+		}
+	}
+	
+	ctx->code_buf->i = mark;
+}
+
+void compile(compilation_block *blocks, size_t blocks_len, blue_ctx *ctx) {
+	for (int i = 0; i < blocks_len; ++i) {
+		compilation_block b = blocks[i];
+		
+		switch (b.type) {
+		case BLK_CMDLIST:
+			compile_cmdlist(&b, ctx);
+			break;
+		}
+	}
+}
+
+void interpret(int where, blue_ctx *ctx) {
+	// ((void (*)())code_buf)(tos);
+}
+
 
 int main(int argc, char **argv) {
 	// TODO: move to linux/sys.{c,h}
@@ -44,7 +87,7 @@ int main(int argc, char **argv) {
 	data_stack ds = {0};
 	blue_ctx ctx = { .code_buf = &cb, .data_stack = &ds };
 
-	command milestone1[] = {
+	command m1_cmds[] = {
 		{ .type = CMD_LIT, .size = 1, .val = 0xB0 },
 		{ .type = CMD_COMMA, .size = 1 },
 		{ .type = CMD_LIT, .size = 1, .val = 0x3C },
@@ -60,9 +103,18 @@ int main(int argc, char **argv) {
 		{ .type = CMD_LIT, .size = 1, .val = 0x05 },
 		{ .type = CMD_COMMA, .size = 1 },
 	};
-	size_t milestone1_len = sizeof(milestone1) / sizeof(milestone1[0]);
+	size_t m1_cmds_len = sizeof(m1_cmds) / sizeof(m1_cmds[0]);
 
+	compilation_block milestone1[] = {
+		{ .type = BLK_CMDLIST, .commands = &m1_cmds[0], .commands_len = m1_cmds_len },
+	};
+	size_t milestone1_len = sizeof(milestone1) / sizeof(milestone1[0]);
+	
+	compile(&milestone1[0], milestone1_len, &ctx);
+	
 	munmap(rwx_mem, mem_size);
+
+	printf("Done from main\n");
 	
 	return 0;
 }
