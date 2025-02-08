@@ -40,6 +40,8 @@
 		body \
 	} while (0)
 
+#define blue_list_last(list, var) auto var = (assert(list.here > list.start), *(list.here - 1));
+
 typedef struct {
 	enum { ELEM_LIT, } type;
 	size_t size;
