@@ -7,11 +7,6 @@
 #define DATA_STACK_SIZE 16
 
 typedef struct {
-	uint8_t *mem;
-	uint8_t *here;
-} code_buf;
-
-typedef struct {
 	enum { ELEM_LIT, } type;
 	size_t size;
 	uint64_t val;
@@ -23,7 +18,10 @@ typedef struct {
 } data_stack;
 
 typedef struct {
-	code_buf *code_buf;
+	struct {
+		uint8_t *mem;
+		uint8_t *here;
+	} code_buf;
 	data_stack *data_stack;
 	uint64_t shadow_stack[DATA_STACK_SIZE];
 } blue_ctx;
@@ -40,6 +38,7 @@ typedef struct {
 	size_t commands_len;
 } compilation_block;
 
+static blue_ctx ctx = {0};
 
 #define data_stack_push(ctx, var, body) \
 	do { \
@@ -69,8 +68,8 @@ void compile_cmd_comma(command *c, blue_ctx *ctx) {
 	data_stack_pop(ctx, elem, {
 		assert(elem->type == ELEM_LIT);
 
-		memcpy(ctx->code_buf->here, &elem->val, c->size);
-		ctx->code_buf->here += elem->size;
+		memcpy(ctx->code_buf.here, &elem->val, c->size);
+		ctx->code_buf.here += elem->size;
 	});
 }
 
@@ -87,7 +86,7 @@ void compile_cmd_lit(command *c, blue_ctx *ctx) {
 void compile_cmdlist(compilation_block *b, blue_ctx *ctx) {
 	assert(b->type == BLK_CMDLIST);
 	
-	uint8_t *entry = ctx->code_buf->here;
+	uint8_t *entry = ctx->code_buf.here;
 
 	for (int i = 0; i < b->commands_len; ++i) {
 		command c = b->commands[i];
@@ -102,11 +101,11 @@ void compile_cmdlist(compilation_block *b, blue_ctx *ctx) {
 		}
 	}
 	
-	*ctx->code_buf->here++ = 0xC3;
+	*ctx->code_buf.here++ = 0xC3;
 
 	interpret(entry, ctx);
 	
-	ctx->code_buf->here = entry;
+	ctx->code_buf.here = entry;
 }
 
 void compile(compilation_block *blocks, size_t blocks_len, blue_ctx *ctx) {
@@ -130,13 +129,17 @@ int main(int argc, char **argv) {
 		MAP_PRIVATE | MAP_ANONYMOUS,
 		-1, 0);
 	
-	code_buf cb = { .mem = rwx_mem, .here = rwx_mem };
+	//code_buf cb = { .mem = rwx_mem, .here = rwx_mem };
 	
 	data_stack ds = {0};
 	ds.tos = &ds.elems[0];
 	
-	blue_ctx ctx = { .code_buf = &cb, .data_stack = &ds };
+	//blue_ctx ctx = { .code_buf = &cb, .data_stack = &ds };
 
+	ctx.code_buf.mem = rwx_mem;
+	ctx.code_buf.here = rwx_mem;
+	ctx.data_stack = &ds;
+	
 	command m1_cmds[] = {
 		{ .type = CMD_LIT, .size = 1, .val = 0xB0 },
 		{ .type = CMD_COMMA, .size = 1 },
