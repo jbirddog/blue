@@ -14,7 +14,6 @@
 
 #define blue_list(t, size) \
 	struct { \
-		t elems[size]; \
 		t *start; \
 		t *end; \
 		t *here; \
@@ -142,6 +141,7 @@ void parse(const char *src, blue_ctx *ctx) {
 //
 
 static blue_ctx ctx;
+static data_stack_elem data_stack_elems[MAX_DATA_STACK_ELEMS];
 //static compilation_block blocks[MAX_COMPILATION_BLOCKS];
 
 static const char src[] = ""
@@ -154,8 +154,8 @@ static void init_ctx(uint8_t *rwx_mem) {
 	ctx.code_buf.mem = rwx_mem;
 	ctx.code_buf.here = rwx_mem;
 	
-	ctx.data_stack.start = &ctx.data_stack.elems[0];
-	ctx.data_stack.end = &ctx.data_stack.elems[MAX_DATA_STACK_ELEMS - 1];
+	ctx.data_stack.start = &data_stack_elems[0];
+	ctx.data_stack.end = &data_stack_elems[MAX_DATA_STACK_ELEMS - 1];
 	ctx.data_stack.here = ctx.data_stack.start;
 }
 
