@@ -1,6 +1,6 @@
 #include <assert.h>
-#include <stdio.h>
 #include <stdint.h>
+#include <stdio.h>
 #include <string.h>
 #include <sys/mman.h>
 
@@ -41,32 +41,46 @@ typedef struct {
 } compilation_block;
 
 
-void interpret(uint8_t *where, blue_ctx *ctx) {
+void interpret(uint8_t *entry, blue_ctx *ctx) {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpedantic"
-	((void (*)())where)(&ctx->shadow_stack[0]);
+	((void (*)())entry)(&ctx->shadow_stack[0]);
 #pragma GCC diagnostic pop
 }
+
+#define data_stack_push(ctx, var, body) \
+	do { \
+		data_stack_elem *var = ctx->data_stack->tos; \
+		body \
+		++ctx->data_stack->tos; \
+	} while (0)
+
+#define data_stack_pop(ctx, var, body) \
+	do { \
+		--ctx->data_stack->tos; \
+		data_stack_elem *var = ctx->data_stack->tos; \
+		body \
+	} while (0)
 
 void compile_cmd_comma(command *c, blue_ctx *ctx) {
 	assert(c->type == CMD_COMMA);
 	
-	--ctx->data_stack->tos;
-	data_stack_elem *tos = ctx->data_stack->tos;
-	assert(tos->type == ELEM_LIT);
+	data_stack_pop(ctx, elem, {
+		assert(elem->type == ELEM_LIT);
 
-	memcpy(ctx->code_buf->here, &tos->val, c->size);
-	ctx->code_buf->here += tos->size;
+		memcpy(ctx->code_buf->here, &elem->val, c->size);
+		ctx->code_buf->here += elem->size;
+	});
 }
 
 void compile_cmd_lit(command *c, blue_ctx *ctx) {
 	assert(c->type == CMD_LIT);
-	
-	data_stack_elem *tos = ctx->data_stack->tos;
-	tos->type = ELEM_LIT;
-	tos->size = c->size;
-	tos->val = c->val;
-	++ctx->data_stack->tos;
+
+	data_stack_push(ctx, elem, {
+		elem->type = ELEM_LIT;
+		elem->size = c->size;
+		elem->val = c->val;
+	});
 }
 
 void compile_cmdlist(compilation_block *b, blue_ctx *ctx) {
@@ -123,8 +137,6 @@ int main(int argc, char **argv) {
 	blue_ctx ctx = { .code_buf = &cb, .data_stack = &ds };
 
 	command m1_cmds[] = {
-		//{ .type = CMD_LIT, .size = 1, .val = 0xC3 },
-		//{ .type = CMD_COMMA, .size = 1 },
 		{ .type = CMD_LIT, .size = 1, .val = 0xB0 },
 		{ .type = CMD_COMMA, .size = 1 },
 		{ .type = CMD_LIT, .size = 1, .val = 0x3C },
