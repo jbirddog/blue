@@ -4,7 +4,7 @@
 #include <string.h>
 #include <sys/mman.h>
 
-#define MAX_COMMANDS 256
+#define MAX_COMMANDS 32
 #define MAX_COMPILATION_BLOCKS 16
 #define MAX_DATA_STACK_ELEMS 16
 
@@ -54,8 +54,7 @@ typedef struct {
 
 typedef struct {
 	enum { BLK_CMDLIST, } type;
-	command *commands;
-	size_t commands_len;
+	blue_list(command) commands;
 } compilation_block;
 
 typedef struct {
@@ -106,18 +105,16 @@ void compile_cmdlist(compilation_block *b, blue_ctx *ctx) {
 	
 	uint8_t *entry = ctx->code_buf.here;
 
-	for (int i = 0; i < b->commands_len; ++i) {
-		command c = b->commands[i];
-
-		switch (c.type) {
+	blue_list_each(b->commands, c, {
+		switch (c->type) {
 		case CMD_COMMA:
-			compile_cmd_comma(&c, ctx);
+			compile_cmd_comma(c, ctx);
 			break;
 		case CMD_LIT:
-			compile_cmd_lit(&c, ctx);
+			compile_cmd_lit(c, ctx);
 			break;
 		}
-	}
+	});
 	
 	*ctx->code_buf.here++ = 0xC3;
 
@@ -174,8 +171,9 @@ void parse(const char *src, blue_ctx *ctx) {
 
 	blue_list_push(ctx->blocks, b, {
 		b->type = BLK_CMDLIST;
-		b->commands = ctx->commands.start;
-		b->commands_len = ctx->commands.here - ctx->commands.start;
+		b->commands.start = ctx->commands.start;
+		b->commands.end = ctx->commands.end;
+		b->commands.here = ctx->commands.here;
 	});
 }
 
@@ -222,7 +220,7 @@ int main(int argc, char **argv) {
 	
 	munmap(rwx_mem, mem_size);
 
-	printf("Done from main\n");
+	printf("Return from main\n");
 	
 	return 0;
 }
