@@ -10,11 +10,8 @@ all: img run
 img:
 	docker build -t blue .
 
-run:
-	$(RUN) go run .
-
-fmt:
-	$(RUN) go fmt
+build:
+	$(RUN) cc -Wall -Wpedantic -std=c11 v5.c
 
 sh:
 	$(RUN_IT) /bin/bash
@@ -22,4 +19,4 @@ sh:
 scratch:
 	fasm scratch.asm
 
-.PHONY: img run fmt sh scratch
+.PHONY: img build sh scratch
