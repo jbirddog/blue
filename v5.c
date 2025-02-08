@@ -9,70 +9,7 @@
 #define MAX_COMPILATION_BLOCKS 16
 #define MAX_DATA_STACK_ELEMS 16
 
-//
-// backend.c
-//
-
-void interpret(uint8_t *entry, blue_ctx *ctx) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wpedantic"
-	((void (*)(uint64_t *))entry)(ctx->shadow_stack.start);
-#pragma GCC diagnostic pop
-}
-
-void compile_cmd_comma(command *c, blue_ctx *ctx) {
-	assert(c->type == CMD_COMMA);
-	
-	blue_list_pop(ctx->data_stack, elem, {
-		assert(elem->type == ELEM_LIT);
-
-		memcpy(ctx->code_buf.here, &elem->val, c->size);
-		ctx->code_buf.here += elem->size;
-	});
-}
-
-void compile_cmd_lit(command *c, blue_ctx *ctx) {
-	assert(c->type == CMD_LIT);
-
-	blue_list_push(ctx->data_stack, elem, {
-		elem->type = ELEM_LIT;
-		elem->size = c->size;
-		elem->val = c->val;
-	});
-}
-
-void compile_cmdlist(compilation_block *b, blue_ctx *ctx) {
-	assert(b->type == BLK_CMDLIST);
-	
-	uint8_t *entry = ctx->code_buf.here;
-
-	blue_list_each(b->commands, c, {
-		switch (c->type) {
-		case CMD_COMMA:
-			compile_cmd_comma(c, ctx);
-			break;
-		case CMD_LIT:
-			compile_cmd_lit(c, ctx);
-			break;
-		}
-	});
-	
-	*ctx->code_buf.here++ = 0xC3;
-
-	interpret(entry, ctx);
-	
-	ctx->code_buf.here = entry;
-}
-
-void compile(blue_ctx *ctx) {
-	blue_list_each(ctx->blocks, b, {
-		switch (b->type) {
-		case BLK_CMDLIST:
-			compile_cmdlist(b, ctx);
-			break;
-		}
-	});
-}
+void compile(blue_ctx *ctx);
 
 //
 // frontend.c

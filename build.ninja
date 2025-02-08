@@ -8,5 +8,6 @@ rule link
   command = cc -o $out $in
 
 build ${bd}/v5.o: cc v5.c
+build ${bd}/backend.o: cc backend.c
 
-build ${bd}/blue: link ${bd}/v5.o
+build ${bd}/blue: link ${bd}/v5.o ${bd}/backend.o
