@@ -49,7 +49,7 @@ typedef struct {
 
 #define data_stack_push(ctx, var, body) \
 	do { \
-		data_stack_elem *var = ctx->data_stack.here; \
+		auto var = ctx->data_stack.here; \
 		body \
 		++ctx->data_stack.here; \
 	} while (0)
@@ -57,7 +57,7 @@ typedef struct {
 #define data_stack_pop(ctx, var, body) \
 	do { \
 		--ctx->data_stack.here; \
-		data_stack_elem *var = ctx->data_stack.here; \
+		auto var = ctx->data_stack.here; \
 		body \
 	} while (0)
 
@@ -68,8 +68,10 @@ typedef struct {
 void interpret(uint8_t *entry, blue_ctx *ctx) {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpedantic"
-	((void (*)())entry)(&ctx->shadow_stack[0]);
+	((void (*)(uint64_t *))entry)(&ctx->shadow_stack[0]);
 #pragma GCC diagnostic pop
+
+	printf("ss0: %ld\n", ctx->shadow_stack[0]);
 }
 
 void compile_cmd_comma(command *c, blue_ctx *ctx) {
@@ -166,16 +168,32 @@ int main(int argc, char **argv) {
 	init_ctx(rwx_mem);
 		
 	command m1_cmds[] = {
+		// xor eax, eax
+		// xor edi, edi
+		{ .type = CMD_LIT, .size = 1, .val = 0x31 },
+		{ .type = CMD_COMMA, .size = 1 },
+		{ .type = CMD_LIT, .size = 1, .val = 0xC0 },
+		{ .type = CMD_COMMA, .size = 1 },
+		{ .type = CMD_LIT, .size = 1, .val = 0x31 },
+		{ .type = CMD_COMMA, .size = 1 },
+		{ .type = CMD_LIT, .size = 1, .val = 0xFF },
+		{ .type = CMD_COMMA, .size = 1 },
+
+		// mov al, 60
 		{ .type = CMD_LIT, .size = 1, .val = 0xB0 },
 		{ .type = CMD_COMMA, .size = 1 },
 		{ .type = CMD_LIT, .size = 1, .val = 0x3C },
 		{ .type = CMD_COMMA, .size = 1 },
+
+		// mov dil, 11
 		{ .type = CMD_LIT, .size = 1, .val = 0x40 },
 		{ .type = CMD_COMMA, .size = 1 },
 		{ .type = CMD_LIT, .size = 1, .val = 0xB7 },
 		{ .type = CMD_COMMA, .size = 1 },
 		{ .type = CMD_LIT, .size = 1, .val = 0x0B },
-		{ .type = CMD_COMMA, .size = 1 },
+		{ .type = CMD_COMMA, .size = 1 },		
+
+		// syscall
 		{ .type = CMD_LIT, .size = 1, .val = 0x0F },
 		{ .type = CMD_COMMA, .size = 1 },
 		{ .type = CMD_LIT, .size = 1, .val = 0x05 },

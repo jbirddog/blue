@@ -13,7 +13,7 @@ img:
 	docker build -t blue .
 
 build:
-	$(RUN) cc -Wall -Wpedantic -std=c11 v5.c
+	$(RUN) cc -Wall -Wpedantic -std=gnu23 v5.c
 
 run: build
 	$(RUN) $(BLUE)
