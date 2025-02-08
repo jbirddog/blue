@@ -41,13 +41,6 @@ typedef struct {
 } compilation_block;
 
 
-void interpret(uint8_t *entry, blue_ctx *ctx) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wpedantic"
-	((void (*)())entry)(&ctx->shadow_stack[0]);
-#pragma GCC diagnostic pop
-}
-
 #define data_stack_push(ctx, var, body) \
 	do { \
 		data_stack_elem *var = ctx->data_stack->tos; \
@@ -61,6 +54,14 @@ void interpret(uint8_t *entry, blue_ctx *ctx) {
 		data_stack_elem *var = ctx->data_stack->tos; \
 		body \
 	} while (0)
+
+
+void interpret(uint8_t *entry, blue_ctx *ctx) {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
+	((void (*)())entry)(&ctx->shadow_stack[0]);
+#pragma GCC diagnostic pop
+}
 
 void compile_cmd_comma(command *c, blue_ctx *ctx) {
 	assert(c->type == CMD_COMMA);
@@ -168,57 +169,3 @@ int main(int argc, char **argv) {
 	return 0;
 }
 
-
-
-
-
-
-
-	/*
-	uint8_t *here = code_buf;
-
-	*tos++ = 4;
-	*tos++ = 5;
-
-	printf("tos: %ld, depth: %ld\n", *(tos - 1), tos - &data_stack[0]);
-
-	*here++ = 0xB0;
-	*here++ = 0x3C;
-	*here++ = 0x40;
-	*here++ = 0xB7;
-	*here++ = 0x0B;
-	*here++ = 0x0F;
-	*here++ = 0x05;
-	
-	
-	// jit the interpretation of `4 5 add` where add has a stack effect (( eax a ecx b -- eax res ))
-	
-	// mov ecx, *(--tos)
-	*here++ = 0xB9;
-	memcpy(here, --tos, sizeof(uint32_t));
-	here += sizeof(uint32_t);
-
-	// mov eax, *(--tos)
-	*here++ = 0xB8;
-	memcpy(here, --tos, sizeof(uint32_t));
-	here += sizeof(uint32_t);
-
-	// add eax, ecx
-	*here++ = 0x01;
-	*here++ = 0xC8;
-
-	// stosq since result of add is in rax and tos is in rdi
-	*here++ = 0x48;
-	*here++ = 0xAB;
-	
-	// ret
-	*here++ = 0xC3;
-
-	// call machine code
-	((void (*)())code_buf)(tos);
-
-	// add number of output effects stosq'd to tos
-	++tos;
-	
-	printf("tos: %ld, depth: %ld\n", *(tos - 1), tos - &data_stack[0]);
-	*/
