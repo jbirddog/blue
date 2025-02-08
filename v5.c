@@ -19,6 +19,11 @@
 		t *here; \
 	}
 
+#define blue_list_each(list, var, body) \
+	do { \
+		for (auto var = list.start; var < list.here; ++var) body \
+	} while (0)
+	
 #define blue_list_push(list, var, body) \
 	do { \
 		assert(list.here < list.end); \
@@ -122,13 +127,13 @@ void compile_cmdlist(compilation_block *b, blue_ctx *ctx) {
 }
 
 void compile(blue_ctx *ctx) {
-	for (auto b = ctx->blocks.start; b < ctx->blocks.here; ++b) {
+	blue_list_each(ctx->blocks, b, {
 		switch (b->type) {
 		case BLK_CMDLIST:
 			compile_cmdlist(b, ctx);
 			break;
 		}
-	}
+	});
 }
 
 //
