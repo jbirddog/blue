@@ -19,7 +19,7 @@ typedef struct {
 
 typedef struct {
 	data_stack_elem elems[DATA_STACK_SIZE];
-	int i;
+	data_stack_elem *tos;
 } data_stack;
 
 typedef struct {
@@ -41,7 +41,19 @@ typedef struct {
 } compilation_block;
 
 
+void compile_cmd_lit(command *c, blue_ctx *ctx) {
+	assert(c->type == CMD_LIT);
+	
+	data_stack_elem *tos = ctx->data_stack->tos;
+	tos->type = ELEM_LIT;
+	tos->size = c->size;
+	tos->val = c->val;
+	++ctx->data_stack->tos;
+}
+
 void compile_cmdlist(compilation_block *b, blue_ctx *ctx) {
+	assert(b->type == BLK_CMDLIST);
+	
 	int mark = ctx->code_buf->i;
 
 	for (int i = 0; i < b->commands_len; ++i) {
@@ -49,6 +61,7 @@ void compile_cmdlist(compilation_block *b, blue_ctx *ctx) {
 
 		switch (c.type) {
 		case CMD_LIT:
+			compile_cmd_lit(&c, ctx);
 			break;
 		case CMD_COMMA:
 			break;
@@ -84,7 +97,10 @@ int main(int argc, char **argv) {
 		-1, 0);
 	
 	code_buf cb = { .mem = rwx_mem };
+	
 	data_stack ds = {0};
+	ds.tos = &ds.elems[0];
+	
 	blue_ctx ctx = { .code_buf = &cb, .data_stack = &ds };
 
 	command m1_cmds[] = {
