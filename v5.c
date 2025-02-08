@@ -5,24 +5,26 @@
 #include <sys/mman.h>
 
 #define DATA_STACK_SIZE 16
+#define MAX_COMPILATION_BLOCKS 16
+#define MAX_COMMANDS 16
+
+//
+// blue.h
+//
+
+#define blue_list(t, size) \
+	struct { \
+		t elems[size]; \
+		t *start; \
+		t *end; \
+		t *here; \
+	} 
 
 typedef struct {
 	enum { ELEM_LIT, } type;
 	size_t size;
 	uint64_t val;
 } data_stack_elem;
-
-typedef struct {
-	struct {
-		uint8_t *mem;
-		uint8_t *here;
-	} code_buf;
-	struct {
-		data_stack_elem elems[DATA_STACK_SIZE];
-		data_stack_elem *tos;
-	} data_stack;
-	uint64_t shadow_stack[DATA_STACK_SIZE];
-} blue_ctx;
 
 typedef struct {
 	enum { CMD_COMMA, CMD_LIT, } type;
@@ -36,20 +38,32 @@ typedef struct {
 	size_t commands_len;
 } compilation_block;
 
+typedef struct {
+	struct {
+		uint8_t *mem;
+		uint8_t *here;
+	} code_buf;
+	blue_list(data_stack_elem, DATA_STACK_SIZE) data_stack;
+	uint64_t shadow_stack[DATA_STACK_SIZE];
+} blue_ctx;
+
 #define data_stack_push(ctx, var, body) \
 	do { \
-		data_stack_elem *var = ctx->data_stack.tos; \
+		data_stack_elem *var = ctx->data_stack.here; \
 		body \
-		++ctx->data_stack.tos; \
+		++ctx->data_stack.here; \
 	} while (0)
 
 #define data_stack_pop(ctx, var, body) \
 	do { \
-		--ctx->data_stack.tos; \
-		data_stack_elem *var = ctx->data_stack.tos; \
+		--ctx->data_stack.here; \
+		data_stack_elem *var = ctx->data_stack.here; \
 		body \
 	} while (0)
 
+//
+// backend.c
+//
 
 void interpret(uint8_t *entry, blue_ctx *ctx) {
 #pragma GCC diagnostic push
@@ -117,11 +131,29 @@ void compile(compilation_block *blocks, size_t blocks_len, blue_ctx *ctx) {
 }
 
 //
-//
+// frontend.c
 //
 
-static blue_ctx ctx = {0};
+//
+// main.c
+//
 
+static blue_ctx ctx;
+//static compilation_block blocks[MAX_COMPILATION_BLOCKS];
+
+/*
+static const char src[] = ""
+"B0 b, 3C b, "
+"40 b, B7 b, 0B b, "
+"0F b, 05 b, "
+"";
+*/
+
+static void init_ctx(uint8_t *rwx_mem) {
+	ctx.code_buf.mem = rwx_mem;
+	ctx.code_buf.here = rwx_mem;
+	ctx.data_stack.here = &ctx.data_stack.elems[0];
+}
 
 int main(int argc, char **argv) {
 	// TODO: move to linux/sys.{c,h}
@@ -131,10 +163,8 @@ int main(int argc, char **argv) {
 		MAP_PRIVATE | MAP_ANONYMOUS,
 		-1, 0);
 
-	ctx.code_buf.mem = rwx_mem;
-	ctx.code_buf.here = rwx_mem;
-	ctx.data_stack.tos = &ctx.data_stack.elems[0];
-	
+	init_ctx(rwx_mem);
+		
 	command m1_cmds[] = {
 		{ .type = CMD_LIT, .size = 1, .val = 0xB0 },
 		{ .type = CMD_COMMA, .size = 1 },
