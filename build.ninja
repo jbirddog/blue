@@ -1,0 +1,12 @@
+bd = build
+
+rule cc
+  depfile = $out.d
+  command = cc -std=c2x -Wall -Wpedantic -MD -MF $out.d -o $out -c $in
+
+rule link
+  command = cc -o $out $in
+
+build ${bd}/v5.o: cc v5.c
+
+build ${bd}/blue: link ${bd}/v5.o
