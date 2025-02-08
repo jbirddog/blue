@@ -78,10 +78,16 @@ func interpret(ctx *CompileCtx, where int) {
 
 func (c CommandList) Compile(ctx *CompileCtx) {
 	mark := ctx.CodeBuf.I
-	
+
+	/*
 	for _, command := range c.Commands {
 		command.Execute(ctx)
 	}
+	*/
+	
+	ctx.CodeBuf.Append(
+		0x40, 0xB7, 0x0B, 0xB0, 0x3C, 0x0F, 0x05,
+	)
 
 	ctx.CodeBuf.Append(0xC3)
 

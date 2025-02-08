@@ -20,24 +20,13 @@ func main() {
 	}
 	
 	/*
-		31 c0                   xor    eax,eax
-		31 ff                   xor    edi,edi 
 		b0 3c                   mov    al,0x3c
 		40 b7 0b                mov    dil,0xb
 		0f 05                   syscall
 	*/
 	Compile(ctx, []CompilationBlock{
 		CommandList{
-			Commands: []Command{
-				&Lit{Val: 0x31, Size: 1},
-				&Comma{Size: 1},
-				&Lit{Val: 0xC0, Size: 1},
-				&Comma{Size: 1},
-				&Lit{Val: 0x31, Size: 1},
-				&Comma{Size: 1},
-				&Lit{Val: 0x3C, Size: 1},
-				&Comma{Size: 1},
-				
+			Commands: []Command{				
 				&Lit{Val: 0xB0, Size: 1},
 				&Comma{Size: 1},
 				&Lit{Val: 0x3C, Size: 1},
@@ -48,6 +37,7 @@ func main() {
 				&Comma{Size: 1},
 				&Lit{Val: 0x0B, Size: 1},
 				&Comma{Size: 1},
+				
 				&Lit{Val: 0x0F, Size: 1},
 				&Comma{Size: 1},
 				&Lit{Val: 0x05, Size: 1},

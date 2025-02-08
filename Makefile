@@ -17,7 +17,7 @@ fmt:
 	$(RUN) go fmt
 
 sh:
-	$(RUN_IT) /bin/sh
+	$(RUN_IT) /bin/bash
 
 scratch:
 	fasm scratch.asm
