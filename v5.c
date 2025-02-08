@@ -8,7 +8,7 @@
 
 typedef struct {
 	uint8_t *mem;
-	int i;
+	uint8_t *here;
 } code_buf;
 
 typedef struct {
@@ -29,7 +29,7 @@ typedef struct {
 } blue_ctx;
 
 typedef struct {
-	enum { CMD_LIT, CMD_COMMA, } type;
+	enum { CMD_COMMA, CMD_LIT, } type;
 	size_t size;
 	uint64_t val;
 } command;
@@ -40,6 +40,24 @@ typedef struct {
 	size_t commands_len;
 } compilation_block;
 
+
+void interpret(uint8_t *where, blue_ctx *ctx) {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
+	((void (*)())where)(&ctx->shadow_stack[0]);
+#pragma GCC diagnostic pop
+}
+
+void compile_cmd_comma(command *c, blue_ctx *ctx) {
+	assert(c->type == CMD_COMMA);
+	
+	--ctx->data_stack->tos;
+	data_stack_elem *tos = ctx->data_stack->tos;
+	assert(tos->type == ELEM_LIT);
+
+	memcpy(ctx->code_buf->here, &tos->val, c->size);
+	ctx->code_buf->here += tos->size;
+}
 
 void compile_cmd_lit(command *c, blue_ctx *ctx) {
 	assert(c->type == CMD_LIT);
@@ -54,21 +72,26 @@ void compile_cmd_lit(command *c, blue_ctx *ctx) {
 void compile_cmdlist(compilation_block *b, blue_ctx *ctx) {
 	assert(b->type == BLK_CMDLIST);
 	
-	int mark = ctx->code_buf->i;
+	uint8_t *entry = ctx->code_buf->here;
 
 	for (int i = 0; i < b->commands_len; ++i) {
 		command c = b->commands[i];
 
 		switch (c.type) {
+		case CMD_COMMA:
+			compile_cmd_comma(&c, ctx);
+			break;
 		case CMD_LIT:
 			compile_cmd_lit(&c, ctx);
-			break;
-		case CMD_COMMA:
 			break;
 		}
 	}
 	
-	ctx->code_buf->i = mark;
+	*ctx->code_buf->here++ = 0xC3;
+
+	interpret(entry, ctx);
+	
+	ctx->code_buf->here = entry;
 }
 
 void compile(compilation_block *blocks, size_t blocks_len, blue_ctx *ctx) {
@@ -83,10 +106,6 @@ void compile(compilation_block *blocks, size_t blocks_len, blue_ctx *ctx) {
 	}
 }
 
-void interpret(int where, blue_ctx *ctx) {
-	// ((void (*)())code_buf)(tos);
-}
-
 
 int main(int argc, char **argv) {
 	// TODO: move to linux/sys.{c,h}
@@ -96,7 +115,7 @@ int main(int argc, char **argv) {
 		MAP_PRIVATE | MAP_ANONYMOUS,
 		-1, 0);
 	
-	code_buf cb = { .mem = rwx_mem };
+	code_buf cb = { .mem = rwx_mem, .here = rwx_mem };
 	
 	data_stack ds = {0};
 	ds.tos = &ds.elems[0];
@@ -104,6 +123,8 @@ int main(int argc, char **argv) {
 	blue_ctx ctx = { .code_buf = &cb, .data_stack = &ds };
 
 	command m1_cmds[] = {
+		//{ .type = CMD_LIT, .size = 1, .val = 0xC3 },
+		//{ .type = CMD_COMMA, .size = 1 },
 		{ .type = CMD_LIT, .size = 1, .val = 0xB0 },
 		{ .type = CMD_COMMA, .size = 1 },
 		{ .type = CMD_LIT, .size = 1, .val = 0x3C },
