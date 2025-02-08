@@ -5,7 +5,8 @@ ME ?= $(USER_ID):$(GROUP_ID)
 RUN ?= docker run --rm -u $(ME) -v .:/app blue
 RUN_IT ?= docker run --rm -u $(ME) -v .:/app -it blue
 
-BLUE ?= ./a.out
+BLUE ?= build/blue
+NINJA ?= ninja
 
 all: img run
 
@@ -13,7 +14,7 @@ img:
 	docker build -t blue .
 
 build:
-	$(RUN) cc -Wall -Wpedantic -std=gnu23 v5.c
+	$(RUN) $(NINJA)
 
 run: build
 	$(RUN) $(BLUE)

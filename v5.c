@@ -3,72 +3,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <sys/mman.h>
+#include "blue.h"
 
 #define MAX_COMMANDS 32
 #define MAX_COMPILATION_BLOCKS 16
 #define MAX_DATA_STACK_ELEMS 16
-
-//
-// blue.h
-//
-
-#define blue_list(t) \
-	struct { \
-		t *start; \
-		t *end; \
-		t *here; \
-	}
-
-#define blue_list_each(list, var, body) \
-	do { \
-		for (auto var = list.start; var < list.here; ++var) body \
-	} while (0)
-	
-#define blue_list_push(list, var, body) \
-	do { \
-		assert(list.here < list.end); \
-		auto var = list.here; \
-		body \
-		++list.here; \
-	} while (0)
-
-#define blue_list_pop(list, var, body) \
-	do { \
-		assert(list.here > list.start); \
-		--list.here; \
-		auto var = list.here; \
-		body \
-	} while (0)
-
-#define blue_list_last(list) (assert(list.here > list.start), list.here - 1)
-
-typedef struct {
-	enum { ELEM_LIT, } type;
-	size_t size;
-	uint64_t val;
-} data_stack_elem;
-
-typedef struct {
-	enum { CMD_COMMA, CMD_LIT, } type;
-	size_t size;
-	uint64_t val;
-} command;
-
-typedef struct {
-	enum { BLK_CMDLIST, } type;
-	blue_list(command) commands;
-} compilation_block;
-
-typedef struct {
-	struct {
-		uint8_t *mem;
-		uint8_t *here;
-	} code_buf;
-	blue_list(data_stack_elem) data_stack;
-	uint64_t shadow_stack[MAX_DATA_STACK_ELEMS];
-	blue_list(command) commands;
-	blue_list(compilation_block) blocks;
-} blue_ctx;
 
 //
 // backend.c
@@ -77,7 +16,7 @@ typedef struct {
 void interpret(uint8_t *entry, blue_ctx *ctx) {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpedantic"
-	((void (*)(uint64_t *))entry)(&ctx->shadow_stack[0]);
+	((void (*)(uint64_t *))entry)(ctx->shadow_stack.start);
 #pragma GCC diagnostic pop
 }
 
@@ -177,7 +116,8 @@ void parse(const char *src, blue_ctx *ctx) {
 	blue_list_push(ctx->commands, c, { c->type = CMD_COMMA; c->size = 1; });
 
 	auto b = blue_list_last(ctx->blocks);
-	b->commands.here = b->commands.end = ctx->commands.here;
+	b->commands.here = ctx->commands.here;
+	b->commands.end = ctx->commands.here;
 }
 
 //
@@ -188,6 +128,7 @@ static blue_ctx ctx;
 static data_stack_elem data_stack_elems[MAX_DATA_STACK_ELEMS];
 static command commands[MAX_COMMANDS];
 static compilation_block compilation_blocks[MAX_COMPILATION_BLOCKS];
+static uint64_t shadow_stack[MAX_DATA_STACK_ELEMS];
 
 static const char src[] = ""
 "B0 b, 3C b, "
@@ -207,6 +148,7 @@ static void init_ctx(uint8_t *rwx_mem) {
 	assign_to_list(ctx.data_stack, data_stack_elems, MAX_DATA_STACK_ELEMS);
 	assign_to_list(ctx.commands, commands, MAX_COMMANDS);
 	assign_to_list(ctx.blocks, compilation_blocks, MAX_COMPILATION_BLOCKS);
+	assign_to_list(ctx.shadow_stack, shadow_stack, MAX_DATA_STACK_ELEMS);
 }
 
 int main(int argc, char **argv) {
