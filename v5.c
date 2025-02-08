@@ -4,9 +4,9 @@
 #include <string.h>
 #include <sys/mman.h>
 
-#define DATA_STACK_SIZE 16
-#define MAX_COMPILATION_BLOCKS 16
 #define MAX_COMMANDS 16
+#define MAX_COMPILATION_BLOCKS 16
+#define MAX_DATA_STACK_ELEMS 16
 
 //
 // blue.h
@@ -43,8 +43,8 @@ typedef struct {
 		uint8_t *mem;
 		uint8_t *here;
 	} code_buf;
-	blue_list(data_stack_elem, DATA_STACK_SIZE) data_stack;
-	uint64_t shadow_stack[DATA_STACK_SIZE];
+	blue_list(data_stack_elem, MAX_DATA_STACK_ELEMS) data_stack;
+	uint64_t shadow_stack[MAX_DATA_STACK_ELEMS];
 } blue_ctx;
 
 #define data_stack_push(ctx, var, body) \
@@ -70,8 +70,6 @@ void interpret(uint8_t *entry, blue_ctx *ctx) {
 #pragma GCC diagnostic ignored "-Wpedantic"
 	((void (*)(uint64_t *))entry)(&ctx->shadow_stack[0]);
 #pragma GCC diagnostic pop
-
-	printf("ss0: %ld\n", ctx->shadow_stack[0]);
 }
 
 void compile_cmd_comma(command *c, blue_ctx *ctx) {
@@ -136,6 +134,9 @@ void compile(compilation_block *blocks, size_t blocks_len, blue_ctx *ctx) {
 // frontend.c
 //
 
+void parse(const char *src, blue_ctx *ctx) {
+}
+
 //
 // main.c
 //
@@ -143,18 +144,19 @@ void compile(compilation_block *blocks, size_t blocks_len, blue_ctx *ctx) {
 static blue_ctx ctx;
 //static compilation_block blocks[MAX_COMPILATION_BLOCKS];
 
-/*
 static const char src[] = ""
 "B0 b, 3C b, "
 "40 b, B7 b, 0B b, "
 "0F b, 05 b, "
 "";
-*/
 
 static void init_ctx(uint8_t *rwx_mem) {
 	ctx.code_buf.mem = rwx_mem;
 	ctx.code_buf.here = rwx_mem;
-	ctx.data_stack.here = &ctx.data_stack.elems[0];
+	
+	ctx.data_stack.start = &ctx.data_stack.elems[0];
+	ctx.data_stack.end = &ctx.data_stack.elems[MAX_DATA_STACK_ELEMS - 1];
+	ctx.data_stack.here = ctx.data_stack.start;
 }
 
 int main(int argc, char **argv) {
@@ -166,6 +168,7 @@ int main(int argc, char **argv) {
 		-1, 0);
 
 	init_ctx(rwx_mem);
+	parse(src, &ctx);
 		
 	command m1_cmds[] = {
 		// xor eax, eax
