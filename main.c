@@ -5,7 +5,7 @@
 #include "blue.h"
 
 void compile(blue_ctx *ctx);
-void parse_str(const char *src, blue_ctx *ctx);
+void parse(blue_ctx *ctx);
 
 #define CODE_BUFFER_SIZE 4096
 #define INPUT_BUFFER_SIZE 4096
@@ -14,30 +14,24 @@ void parse_str(const char *src, blue_ctx *ctx);
 #define MAX_COMPILATION_BLOCKS 16
 #define MAX_DATA_STACK_ELEMS 16
 
-static blue_ctx ctx;
+static char input_buffer[INPUT_BUFFER_SIZE];
 static data_stack_elem data_stack[MAX_DATA_STACK_ELEMS];
 static uint64_t shadow_stack[MAX_DATA_STACK_ELEMS];
 static command commands[MAX_COMMANDS];
 static compilation_block compilation_blocks[MAX_COMPILATION_BLOCKS];
+static blue_ctx ctx;
 
-static const char src[] = ""
-"0x31 b, 0xC0 b, "
-"0x31 b, 0xFF b, "
-"0xB0 b, 0x3C b, "
-"0x40 b, 0xB7 b, 0x0B b, "
-"0x0F b, 0x05 b, "
-"";
+#define assign_ptr(dest, src, size) \
+	dest.start = src; \
+	dest.here = dest.start; \
+	dest.end = dest.start + size;
 
-#define assign_array(dest, src, size) \
-	dest.start = &src[0]; \
-	dest.end = dest.start + size; \
-	dest.here = dest.start;
+#define assign_array(dest, src, size) assign_ptr(dest, &src[0], size)
+
 
 static void init_ctx(uint8_t *rwx_mem) {
-	ctx.code_buf.start = rwx_mem;
-	ctx.code_buf.here = rwx_mem;
-	ctx.code_buf.end = rwx_mem + CODE_BUFFER_SIZE;
-
+	assign_array(ctx.input_buf, input_buffer, INPUT_BUFFER_SIZE);
+	assign_ptr(ctx.code_buf, rwx_mem, CODE_BUFFER_SIZE);
 	assign_array(ctx.data_stack, data_stack, MAX_DATA_STACK_ELEMS);
 	assign_array(ctx.shadow_stack, shadow_stack, MAX_DATA_STACK_ELEMS);
 	assign_array(ctx.commands, commands, MAX_COMMANDS);
@@ -51,7 +45,18 @@ int main(int argc, char **argv) {
 		-1, 0);
 
 	init_ctx(rwx_mem);
-	parse_str(src, &ctx);
+
+	static const char src[] = ""
+"0x31 b, 0xC0 b, "
+"0x31 b, 0xFF b, "
+"0xB0 b, 0x3C b, "
+"0x40 b, 0xB7 b, 0x0B b, "
+"0x0F b, 0x05 b, "
+"";
+
+	ctx.input_buf.end = strcpy(ctx.input_buf.here, src);
+	
+	parse(&ctx);
 	compile(&ctx);
 	
 	munmap(rwx_mem, CODE_BUFFER_SIZE);

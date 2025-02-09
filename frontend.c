@@ -8,6 +8,8 @@ void parse(blue_ctx *ctx) {
 		b->commands.start = ctx->commands.here;
 	});
 
+	fprintf(stderr, "%s\n", ctx->input_buf.start);
+
 	// xor eax, eax
 	// xor edi, edi
 	blue_list_append(ctx->commands, c, { c->type = CMD_LIT; c->size = 1; c->val = 0x31; });
@@ -42,8 +44,4 @@ void parse(blue_ctx *ctx) {
 	auto b = blue_list_last(ctx->blocks);
 	b->commands.here = ctx->commands.here;
 	b->commands.end = ctx->commands.here;
-}
-
-void parse_str(char *src, blue_ctx *ctx) {
-	parse(ctx);
 }

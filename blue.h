@@ -80,6 +80,7 @@ typedef struct {
 } compilation_block;
 
 typedef struct {
+	blue_buf(char) input_buf;
 	blue_buf(uint8_t) code_buf;
 	blue_stack(data_stack_elem) data_stack;
 	blue_stack(uint64_t) shadow_stack;
