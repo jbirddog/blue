@@ -86,18 +86,22 @@ typedef struct {
 	blue_list(command) commands;
 } compilation_block;
 
+typedef struct blue_ctx blue_ctx;
+
 typedef struct {
 	char *word;
 	size_t word_len;
-	void (*handler)(char *tok, size_t tok_len, void *ctx);
+	compilation_block *block;
+	void (*handler)(blue_ctx *ctx);
 } dict_entry;
 
-typedef struct {
+struct blue_ctx {
 	char *input_buf;
 	blue_buf(uint8_t) code_buf;
 	blue_stack(data_stack_elem) data_stack;
 	blue_stack(uint64_t) shadow_stack;
 	blue_list(dict_entry) dict;
+	dict_entry *user_dict;
 	blue_list(command) commands;
 	blue_list(compilation_block) blocks;
-} blue_ctx;
+};

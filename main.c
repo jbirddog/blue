@@ -6,7 +6,7 @@
 
 void compile(blue_ctx *ctx);
 
-void init_dict(blue_ctx *ctx);
+void dict_init(blue_ctx *ctx);
 void parse(blue_ctx *ctx);
 
 #define CODE_BUFFER_SIZE 4096
@@ -61,7 +61,7 @@ int main(int argc, char **argv) {
 "";
 	ctx.input_buf = src;
 
-	init_dict(&ctx);
+	dict_init(&ctx);
 	parse(&ctx);
 	compile(&ctx);
 	

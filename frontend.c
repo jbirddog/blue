@@ -44,6 +44,14 @@ static dict_entry *find(char *tok, size_t tok_len, blue_ctx *ctx) {
 	return NULL;
 }
 
+static void seal_last_block(blue_ctx *ctx) {
+	assert(blue_list_len(ctx->blocks) > 0);
+	
+	auto b = blue_list_last(ctx->blocks);
+	b->commands.here = ctx->commands.here;
+	b->commands.end = ctx->commands.here;
+}
+
 void parse(blue_ctx *ctx) {
 	blue_list_append(ctx->blocks, b, {
 		b->type = BLK_CMDLIST;
@@ -62,7 +70,7 @@ void parse(blue_ctx *ctx) {
 		auto entry = find(tok, tok_len, ctx);
 
 		if (entry) {
-			entry->handler(tok, tok_len, ctx);
+			entry->handler(ctx);
 			continue;
 		}
 		
@@ -79,9 +87,7 @@ void parse(blue_ctx *ctx) {
 		return;
 	}
 
-	auto b = blue_list_last(ctx->blocks);
-	b->commands.here = ctx->commands.here;
-	b->commands.end = ctx->commands.here;
+	seal_last_block(ctx);
 }
 
 //
@@ -89,15 +95,28 @@ void parse(blue_ctx *ctx) {
 //
 
 static char *word_b_comma = "b,";
+static char *word_colon = ":";
 
-static void b_comma(char *tok, size_t tok_len, void *ctx) {
+static void b_comma(blue_ctx *ctx) {
 	blue_list_append(((blue_ctx *)ctx)->commands, c, { c->type = CMD_COMMA; c->size = 1; });
 }
 
-void init_dict(blue_ctx *ctx) {
+static void colon(blue_ctx *ctx) {
+	assert(false);
+}
+
+void dict_init(blue_ctx *ctx) {
 	blue_list_append(ctx->dict, entry, {
 		entry->word = word_b_comma;
 		entry->word_len = strlen(word_b_comma);
 		entry->handler = b_comma;
 	});
+	
+	blue_list_append(ctx->dict, entry, {
+		entry->word = word_colon;
+		entry->word_len = strlen(word_colon);
+		entry->handler = colon;
+	});
+
+	ctx->user_dict = ctx->dict.here;
 }
