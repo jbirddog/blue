@@ -84,7 +84,7 @@ typedef struct {
 typedef struct {
 	char *word;
 	size_t word_len;
-	blue_list(command) commands;
+	void (*handler)(char *tok, size_t tok_len, void *ctx);
 } dict_entry;
 
 typedef struct {

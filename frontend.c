@@ -7,7 +7,7 @@
 #include <string.h>
 #include "blue.h"
 
-static char *b_comma = "b,";
+static char *word_b_comma = "b,";
 
 static void append_lit_cmd(uint64_t lit, blue_ctx *ctx) {
 	size_t size = 1;
@@ -52,9 +52,10 @@ void parse(blue_ctx *ctx) {
 
 		auto tok_len = tok_end - tok;
 
-		// TODO: check dictionary
+		// TODO: actually find in dictionary
 		if (tok_len == 2 && strncmp(tok, "b,", tok_len) == 0) {
-			blue_list_append(ctx->commands, c, { c->type = CMD_COMMA; c->size = 1; });
+			auto entry = blue_list_last(ctx->dict);
+			entry->handler(tok, tok_len, ctx);
 			continue;
 		}
 		
@@ -67,7 +68,7 @@ void parse(blue_ctx *ctx) {
 	}
 
 	if (*ctx->input_buf != '\0') {
-		fprintf(stderr, "invalid input: %d\n", iters);
+		fprintf(stderr, "invalid input: %d, %s\n", iters, ctx->input_buf);
 		return;
 	}
 
@@ -76,21 +77,14 @@ void parse(blue_ctx *ctx) {
 	b->commands.end = ctx->commands.here;
 }
 
+static void b_comma(char *tok, size_t tok_len, void *ctx) {
+	blue_list_append(((blue_ctx *)ctx)->commands, c, { c->type = CMD_COMMA; c->size = 1; });
+}
+
 void init_dict(blue_ctx *ctx) {
 	blue_list_append(ctx->dict, entry, {
-		entry->word = b_comma;
-		entry->word_len = strlen(b_comma);
-		entry->commands.start = ctx->commands.here;
-		entry->commands.here = ctx->commands.here;
-		entry->commands.end = ctx->commands.end;
-
-		blue_list_append(entry->commands, cmd, {
-			cmd->type = CMD_COMMA;
-			cmd->size = 1;
-		});
-
-		entry->commands.end = entry->commands.here;
+		entry->word = word_b_comma;
+		entry->word_len = strlen(word_b_comma);
+		entry->handler = b_comma;
 	});
-
-	ctx->commands.start = ctx->commands.here;
 }
