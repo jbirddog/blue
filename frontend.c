@@ -7,6 +7,8 @@
 #include <string.h>
 #include "blue.h"
 
+static char *b_comma = "b,";
+
 static void append_lit_cmd(uint64_t lit, blue_ctx *ctx) {
 	size_t size = 1;
 
@@ -72,4 +74,23 @@ void parse(blue_ctx *ctx) {
 	auto b = blue_list_last(ctx->blocks);
 	b->commands.here = ctx->commands.here;
 	b->commands.end = ctx->commands.here;
+}
+
+void init_dict(blue_ctx *ctx) {
+	blue_list_append(ctx->dict, entry, {
+		entry->word = b_comma;
+		entry->word_len = strlen(b_comma);
+		entry->commands.start = ctx->commands.here;
+		entry->commands.here = ctx->commands.here;
+		entry->commands.end = ctx->commands.end;
+
+		blue_list_append(entry->commands, cmd, {
+			cmd->type = CMD_COMMA;
+			cmd->size = 1;
+		});
+
+		entry->commands.end = entry->commands.here;
+	});
+
+	ctx->commands.start = ctx->commands.here;
 }

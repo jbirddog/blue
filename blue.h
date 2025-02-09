@@ -3,6 +3,8 @@
 #include <stdint.h>
 #include <string.h>
 
+#define MAX_WORD_SIZE 64
+
 #define blue_list(t) \
 	struct { \
 		t *start; \
@@ -80,10 +82,17 @@ typedef struct {
 } compilation_block;
 
 typedef struct {
+	char *word;
+	size_t word_len;
+	blue_list(command) commands;
+} dict_entry;
+
+typedef struct {
 	char *input_buf;
 	blue_buf(uint8_t) code_buf;
 	blue_stack(data_stack_elem) data_stack;
 	blue_stack(uint64_t) shadow_stack;
+	blue_list(dict_entry) dict;
 	blue_list(command) commands;
 	blue_list(compilation_block) blocks;
 } blue_ctx;

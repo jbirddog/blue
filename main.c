@@ -5,6 +5,8 @@
 #include "blue.h"
 
 void compile(blue_ctx *ctx);
+
+void init_dict(blue_ctx *ctx);
 void parse(blue_ctx *ctx);
 
 #define CODE_BUFFER_SIZE 4096
@@ -13,10 +15,12 @@ void parse(blue_ctx *ctx);
 #define MAX_COMMANDS 32
 #define MAX_COMPILATION_BLOCKS 16
 #define MAX_DATA_STACK_ELEMS 16
+#define MAX_DICT_ENTRIES 16
 
 static char input_buf[INPUT_BUFFER_SIZE];
 static data_stack_elem data_stack[MAX_DATA_STACK_ELEMS];
 static uint64_t shadow_stack[MAX_DATA_STACK_ELEMS];
+static dict_entry dict[MAX_DICT_ENTRIES];
 static command commands[MAX_COMMANDS];
 static compilation_block compilation_blocks[MAX_COMPILATION_BLOCKS];
 static blue_ctx ctx;
@@ -35,6 +39,7 @@ static void init_ctx(uint8_t *rwx_mem) {
 	assign_ptr(ctx.code_buf, rwx_mem, CODE_BUFFER_SIZE);
 	assign_array(ctx.data_stack, data_stack, MAX_DATA_STACK_ELEMS);
 	assign_array(ctx.shadow_stack, shadow_stack, MAX_DATA_STACK_ELEMS);
+	assign_array(ctx.dict, dict, MAX_DICT_ENTRIES);
 	assign_array(ctx.commands, commands, MAX_COMMANDS);
 	assign_array(ctx.blocks, compilation_blocks, MAX_COMPILATION_BLOCKS);
 }
@@ -55,7 +60,8 @@ int main(int argc, char **argv) {
 "0x0F b, 0x05 b,"
 "";
 	ctx.input_buf = src;
-	
+
+	init_dict(&ctx);
 	parse(&ctx);
 	compile(&ctx);
 	
