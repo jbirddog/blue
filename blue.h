@@ -18,6 +18,11 @@
 	do { \
 		for (auto var = list.start; var < list.here; ++var) body \
 	} while (0)
+
+#define blue_list_each_rev(list, var, body) \
+	do { \
+		for (auto var = list.here; var >= list.start; --var) body \
+	} while (0)
 	
 #define blue_list_append(list, var, body) \
 	do { \

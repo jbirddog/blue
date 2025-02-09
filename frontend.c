@@ -35,10 +35,11 @@ static char *next_tok(char **tok_end, blue_ctx *ctx) {
 }
 
 static dict_entry *find(char *tok, size_t tok_len, blue_ctx *ctx) {
-	// TODO: actually find in dictionary
-	if (tok_len == 2 && strncmp(tok, "b,", tok_len) == 0) {
-		return blue_list_last(ctx->dict);
-	}
+	blue_list_each_rev(ctx->dict, entry, {
+		if (tok_len == entry->word_len && strncmp(tok, entry->word, tok_len) == 0) {
+			return entry;
+		}
+	});
 
 	return NULL;
 }
@@ -51,7 +52,7 @@ void parse(blue_ctx *ctx) {
 
 	char *tok;
 	char *tok_end;
-	int iters = 0;
+	auto iters = 0;
 
 	while (*(tok = next_tok(&tok_end, ctx)) != '\0') {
 		++iters;
