@@ -7,8 +7,6 @@
 #include <string.h>
 #include "blue.h"
 
-static char *word_b_comma = "b,";
-
 static void append_lit_cmd(uint64_t lit, blue_ctx *ctx) {
 	size_t size = 1;
 
@@ -36,6 +34,15 @@ static char *next_tok(char **tok_end, blue_ctx *ctx) {
 	return tok;
 }
 
+static dict_entry *find(char *tok, size_t tok_len, blue_ctx *ctx) {
+	// TODO: actually find in dictionary
+	if (tok_len == 2 && strncmp(tok, "b,", tok_len) == 0) {
+		return blue_list_last(ctx->dict);
+	}
+
+	return NULL;
+}
+
 void parse(blue_ctx *ctx) {
 	blue_list_append(ctx->blocks, b, {
 		b->type = BLK_CMDLIST;
@@ -51,10 +58,9 @@ void parse(blue_ctx *ctx) {
 		assert(iters < 100);
 
 		auto tok_len = tok_end - tok;
+		auto entry = find(tok, tok_len, ctx);
 
-		// TODO: actually find in dictionary
-		if (tok_len == 2 && strncmp(tok, "b,", tok_len) == 0) {
-			auto entry = blue_list_last(ctx->dict);
+		if (entry) {
 			entry->handler(tok, tok_len, ctx);
 			continue;
 		}
@@ -76,6 +82,12 @@ void parse(blue_ctx *ctx) {
 	b->commands.here = ctx->commands.here;
 	b->commands.end = ctx->commands.here;
 }
+
+//
+// dict
+//
+
+static char *word_b_comma = "b,";
 
 static void b_comma(char *tok, size_t tok_len, void *ctx) {
 	blue_list_append(((blue_ctx *)ctx)->commands, c, { c->type = CMD_COMMA; c->size = 1; });
