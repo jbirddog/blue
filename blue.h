@@ -87,13 +87,14 @@ typedef struct {
 } compilation_block;
 
 typedef struct blue_ctx blue_ctx;
+typedef struct dict_entry dict_entry;
 
-typedef struct {
+struct dict_entry {
 	char *word;
 	size_t word_len;
 	compilation_block *block;
-	void (*handler)(blue_ctx *ctx);
-} dict_entry;
+	void (*handler)(dict_entry *entry, blue_ctx *ctx);
+};
 
 struct blue_ctx {
 	char *input_buf;

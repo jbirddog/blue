@@ -70,7 +70,7 @@ void parse(blue_ctx *ctx) {
 		auto entry = find(tok, tok_len, ctx);
 
 		if (entry) {
-			entry->handler(ctx);
+			entry->handler(entry, ctx);
 			continue;
 		}
 		
@@ -97,11 +97,11 @@ void parse(blue_ctx *ctx) {
 static char *word_b_comma = "b,";
 static char *word_colon = ":";
 
-static void b_comma(blue_ctx *ctx) {
-	blue_list_append(((blue_ctx *)ctx)->commands, c, { c->type = CMD_COMMA; c->size = 1; });
+static void b_comma(dict_entry *entry, blue_ctx *ctx) {
+	blue_list_append(ctx->commands, c, { c->type = CMD_COMMA; c->size = 1; });
 }
 
-static void colon(blue_ctx *ctx) {
+static void colon(dict_entry *entry, blue_ctx *ctx) {
 	assert(false);
 }
 
