@@ -16,8 +16,7 @@ static void compile_cmd_comma(command *c, blue_ctx *ctx) {
 	blue_list_pop(ctx->data_stack, elem, {
 		assert(elem->type == ELEM_LIT);
 
-		memcpy(ctx->code_buf.here, &elem->val, c->size);
-		ctx->code_buf.here += elem->size;
+		blue_buf_append(ctx->code_buf, &elem->val, c->size);
 	});
 }
 

@@ -7,6 +7,9 @@
 void compile(blue_ctx *ctx);
 void parse(const char *src, blue_ctx *ctx);
 
+#define CODE_BUFFER_SIZE 4096
+#define INPUT_BUFFER_SIZE 4096
+
 #define MAX_COMMANDS 32
 #define MAX_COMPILATION_BLOCKS 16
 #define MAX_DATA_STACK_ELEMS 16
@@ -18,6 +21,8 @@ static compilation_block compilation_blocks[MAX_COMPILATION_BLOCKS];
 static uint64_t shadow_stack[MAX_DATA_STACK_ELEMS];
 
 static const char src[] = ""
+"0x31 b, 0xC0 b, "
+"0x31 b, 0xFF b, "
 "0xB0 b, 0x3C b, "
 "0x40 b, 0xB7 b, 0x0B b, "
 "0x0F b, 0x05 b, "
@@ -29,8 +34,9 @@ static const char src[] = ""
 	l.here = l.start;
 
 static void init_ctx(uint8_t *rwx_mem) {
-	ctx.code_buf.mem = rwx_mem;
+	ctx.code_buf.start = rwx_mem;
 	ctx.code_buf.here = rwx_mem;
+	ctx.code_buf.end = rwx_mem + CODE_BUFFER_SIZE;
 
 	assign_array_to_list(ctx.data_stack, data_stack_elems, MAX_DATA_STACK_ELEMS);
 	assign_array_to_list(ctx.commands, commands, MAX_COMMANDS);
@@ -39,8 +45,7 @@ static void init_ctx(uint8_t *rwx_mem) {
 }
 
 int main(int argc, char **argv) {
-	const size_t mem_size = 4096;
-	uint8_t *rwx_mem = mmap(NULL, mem_size,
+	uint8_t *rwx_mem = mmap(NULL, CODE_BUFFER_SIZE,
 		PROT_READ | PROT_WRITE | PROT_EXEC,
 		MAP_PRIVATE | MAP_ANONYMOUS,
 		-1, 0);
@@ -49,7 +54,7 @@ int main(int argc, char **argv) {
 	parse(src, &ctx);
 	compile(&ctx);
 	
-	munmap(rwx_mem, mem_size);
+	munmap(rwx_mem, CODE_BUFFER_SIZE);
 
 	printf("Return from main\n");
 	

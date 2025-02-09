@@ -1,6 +1,7 @@
 #include <assert.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <string.h>
 
 #define blue_list(t) \
 	struct { \
@@ -32,6 +33,15 @@
 
 #define blue_list_last(list) (assert(list.here > list.start), list.here - 1)
 
+#define blue_buf blue_list
+
+#define blue_buf_append(buf, src, size) \
+	do { \
+		assert(buf.here + size < buf.end); \
+		memcpy(buf.here, src, size); \
+		buf.here += size; \
+	} while (0)
+
 typedef struct {
 	enum { ELEM_LIT, } type;
 	size_t size;
@@ -50,10 +60,7 @@ typedef struct {
 } compilation_block;
 
 typedef struct {
-	struct {
-		uint8_t *mem;
-		uint8_t *here;
-	} code_buf;
+	blue_buf(uint8_t) code_buf;
 	blue_list(data_stack_elem) data_stack;
 	blue_list(uint64_t) shadow_stack;
 	blue_list(command) commands;
