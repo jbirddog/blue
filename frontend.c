@@ -17,26 +17,37 @@ static void append_lit_cmd(uint64_t lit, blue_ctx *ctx) {
 	blue_list_append(ctx->commands, c, { c->type = CMD_LIT; c->size = size; c->val = lit; });
 }
 
+static char *peek_tok(char *s, char **tok_end) {
+	while (*s != '\0' && isspace(*s)) ++s;
+
+	auto tok = s;
+	while (*s != '\0' && !isspace(*s)) ++s;
+
+	*tok_end = s;
+
+	return tok;
+}
+
+static char *next_tok(char **tok_end, blue_ctx *ctx) {
+	auto tok = peek_tok(ctx->input_buf, tok_end);
+	ctx->input_buf = *tok_end;
+	return tok;
+}
+
 void parse(blue_ctx *ctx) {
 	blue_list_append(ctx->blocks, b, {
 		b->type = BLK_CMDLIST;
 		b->commands.start = ctx->commands.here;
 	});
 
-	auto s = ctx->input_buf;
+	char *tok;
+	char *tok_end;
 	int iters = 0;
 
-	while (*s != '\0') {
+	while (*(tok = next_tok(&tok_end, ctx)) != '\0') {
 		++iters;
-		assert(iters < 100000);
+		assert(iters < 100);
 
-		while (isspace(*s)) ++s;
-		if (*s == '\0') break;
-
-		auto tok = s;
-		while (*s != '\0' && !isspace(*s)) ++s;
-
-		auto tok_end = s;
 		auto tok_len = tok_end - tok;
 
 		// TODO: check dictionary
@@ -53,7 +64,7 @@ void parse(blue_ctx *ctx) {
 		append_lit_cmd(num, ctx);
 	}
 
-	if (*s != '\0') {
+	if (*ctx->input_buf != '\0') {
 		fprintf(stderr, "invalid input: %d\n", iters);
 		return;
 	}
