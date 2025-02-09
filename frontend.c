@@ -1,5 +1,7 @@
 #include <ctype.h>
 #include <stdio.h>
+#include <stdint.h>
+#include <stdlib.h>
 #include <string.h>
 #include "blue.h"
 
@@ -9,14 +11,27 @@ void parse(blue_ctx *ctx) {
 		b->commands.start = ctx->commands.here;
 	});
 
-	/*
-	char tok[64] = {0};
-	
-	while (ctx->input_buf.here < ctx->input_buf.end) {
-		while (isspace(*ctx->input_buf.here)) ++ctx->input_buf.here;
+	auto s = ctx->input_buf;
+
+	while (*s != '\0') {
+		while (isspace(*s)) ++s;
+		if (*s == '\0') break;
+
+		auto tok = s;
+		while (*s != '\0' && !isspace(*s)) ++s;
+
+		auto tok_end = s;
+		auto tok_len = tok_end - tok;
+
+		// TODO: check dictionary
+		char *num_end;
+		uint64_t num = strtoll(tok, &num_end, 0);
+
+		if (num_end != tok_end) break;
+		
+		fprintf(stderr, "num: %ld, tok: '%s' %ld\n", num, tok, tok_len);
 		break;
 	}
-	*/
 
 	// xor eax, eax
 	// xor edi, edi
