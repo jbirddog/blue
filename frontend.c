@@ -1,3 +1,4 @@
+#include <assert.h>
 #include <ctype.h>
 #include <limits.h>
 #include <stdio.h>
@@ -23,8 +24,12 @@ void parse(blue_ctx *ctx) {
 	});
 
 	auto s = ctx->input_buf;
+	int iters = 0;
 
 	while (*s != '\0') {
+		++iters;
+		assert(iters < 100000);
+
 		while (isspace(*s)) ++s;
 		if (*s == '\0') break;
 
@@ -35,48 +40,23 @@ void parse(blue_ctx *ctx) {
 		auto tok_len = tok_end - tok;
 
 		// TODO: check dictionary
+		if (tok_len == 2 && strncmp(tok, "b,", tok_len) == 0) {
+			blue_list_append(ctx->commands, c, { c->type = CMD_COMMA; c->size = 1; });
+			continue;
+		}
+		
 		char *num_end;
 		uint64_t num = strtoll(tok, &num_end, 0);
 
-		// TODO: die
 		if (num_end != tok_end) break;
 
 		append_lit_cmd(num, ctx);
-		
-		fprintf(stderr, "num: %ld, tok: '%s' %ld\n", num, s, tok_len);
-		break;
 	}
 
-	// xor eax, eax
-	// xor edi, edi
-	blue_list_append(ctx->commands, c, { c->type = CMD_LIT; c->size = 1; c->val = 0x31; });
-	blue_list_append(ctx->commands, c, { c->type = CMD_COMMA; c->size = 1; });
-	blue_list_append(ctx->commands, c, { c->type = CMD_LIT; c->size = 1; c->val = 0xC0; });
-	blue_list_append(ctx->commands, c, { c->type = CMD_COMMA; c->size = 1; });
-	blue_list_append(ctx->commands, c, { c->type = CMD_LIT; c->size = 1; c->val = 0x31; });
-	blue_list_append(ctx->commands, c, { c->type = CMD_COMMA; c->size = 1; });
-	blue_list_append(ctx->commands, c, { c->type = CMD_LIT; c->size = 1; c->val = 0xFF; });
-	blue_list_append(ctx->commands, c, { c->type = CMD_COMMA; c->size = 1; });
-	
-	// mov al, 60
-	blue_list_append(ctx->commands, c, { c->type = CMD_LIT; c->size = 1; c->val = 0xB0; });
-	blue_list_append(ctx->commands, c, { c->type = CMD_COMMA; c->size = 1; });
-	blue_list_append(ctx->commands, c, { c->type = CMD_LIT; c->size = 1; c->val = 0x3C; });
-	blue_list_append(ctx->commands, c, { c->type = CMD_COMMA; c->size = 1; });
-
-	// mov dil, 11
-	blue_list_append(ctx->commands, c, { c->type = CMD_LIT; c->size = 1; c->val = 0x40; });
-	blue_list_append(ctx->commands, c, { c->type = CMD_COMMA; c->size = 1; });
-	blue_list_append(ctx->commands, c, { c->type = CMD_LIT; c->size = 1; c->val = 0xB7; });
-	blue_list_append(ctx->commands, c, { c->type = CMD_COMMA; c->size = 1; });
-	blue_list_append(ctx->commands, c, { c->type = CMD_LIT; c->size = 1; c->val = 0x0B; });
-	blue_list_append(ctx->commands, c, { c->type = CMD_COMMA; c->size = 1; });
-	
-	// syscall
-	blue_list_append(ctx->commands, c, { c->type = CMD_LIT; c->size = 1; c->val = 0x0F; });
-	blue_list_append(ctx->commands, c, { c->type = CMD_COMMA; c->size = 1; });
-	blue_list_append(ctx->commands, c, { c->type = CMD_LIT; c->size = 1; c->val = 0x05; });
-	blue_list_append(ctx->commands, c, { c->type = CMD_COMMA; c->size = 1; });
+	if (*s != '\0') {
+		fprintf(stderr, "invalid input: %d\n", iters);
+		return;
+	}
 
 	auto b = blue_list_last(ctx->blocks);
 	b->commands.here = ctx->commands.here;
