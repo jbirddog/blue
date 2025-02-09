@@ -13,7 +13,7 @@ static void interpret(uint8_t *entry, blue_ctx *ctx) {
 static void compile_cmd_comma(command *c, blue_ctx *ctx) {
 	assert(c->type == CMD_COMMA);
 	
-	blue_list_pop(ctx->data_stack, elem, {
+	blue_stack_pop(ctx->data_stack, elem, {
 		assert(elem->type == ELEM_LIT);
 
 		blue_buf_append(ctx->code_buf, &elem->val, c->size);
@@ -23,7 +23,7 @@ static void compile_cmd_comma(command *c, blue_ctx *ctx) {
 static void compile_cmd_lit(command *c, blue_ctx *ctx) {
 	assert(c->type == CMD_LIT);
 
-	blue_list_push(ctx->data_stack, elem, {
+	blue_stack_push(ctx->data_stack, elem, {
 		elem->type = ELEM_LIT;
 		elem->size = c->size;
 		elem->val = c->val;

@@ -30,21 +30,21 @@ static const char src[] = ""
 "0x0F b, 0x05 b, "
 "";
 
-#define assign_array_to_list(l, s, sz) \
-	l.start = &s[0]; \
-	l.end = l.start + sz; \
-	l.here = l.start;
+#define assign_array(dest, src, size) \
+	dest.start = &src[0]; \
+	dest.end = dest.start + size; \
+	dest.here = dest.start;
 
 static void init_ctx(uint8_t *rwx_mem) {
 	ctx.code_buf.start = rwx_mem;
 	ctx.code_buf.here = rwx_mem;
 	ctx.code_buf.end = rwx_mem + CODE_BUFFER_SIZE;
 
-	assign_array_to_list(ctx.data_stack, data_stack, MAX_DATA_STACK_ELEMS);
-	assign_array_to_list(ctx.parse_stack, parse_stack, MAX_PARSE_STACK_ELEMS);
-	assign_array_to_list(ctx.shadow_stack, shadow_stack, MAX_DATA_STACK_ELEMS);
-	assign_array_to_list(ctx.commands, commands, MAX_COMMANDS);
-	assign_array_to_list(ctx.blocks, compilation_blocks, MAX_COMPILATION_BLOCKS);
+	assign_array(ctx.data_stack, data_stack, MAX_DATA_STACK_ELEMS);
+	assign_array(ctx.parse_stack, parse_stack, MAX_PARSE_STACK_ELEMS);
+	assign_array(ctx.shadow_stack, shadow_stack, MAX_DATA_STACK_ELEMS);
+	assign_array(ctx.commands, commands, MAX_COMMANDS);
+	assign_array(ctx.blocks, compilation_blocks, MAX_COMPILATION_BLOCKS);
 }
 
 int main(int argc, char **argv) {
