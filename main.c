@@ -5,7 +5,7 @@
 #include "blue.h"
 
 void compile(blue_ctx *ctx);
-void parse(const char *src, blue_ctx *ctx);
+void parse_str(const char *src, blue_ctx *ctx);
 
 #define CODE_BUFFER_SIZE 4096
 #define INPUT_BUFFER_SIZE 4096
@@ -13,12 +13,14 @@ void parse(const char *src, blue_ctx *ctx);
 #define MAX_COMMANDS 32
 #define MAX_COMPILATION_BLOCKS 16
 #define MAX_DATA_STACK_ELEMS 16
+#define MAX_PARSE_STACK_ELEMS 16
 
 static blue_ctx ctx;
-static data_stack_elem data_stack_elems[MAX_DATA_STACK_ELEMS];
+static data_stack_elem data_stack[MAX_DATA_STACK_ELEMS];
+static parse_stack_elem parse_stack[MAX_PARSE_STACK_ELEMS];
+static uint64_t shadow_stack[MAX_DATA_STACK_ELEMS];
 static command commands[MAX_COMMANDS];
 static compilation_block compilation_blocks[MAX_COMPILATION_BLOCKS];
-static uint64_t shadow_stack[MAX_DATA_STACK_ELEMS];
 
 static const char src[] = ""
 "0x31 b, 0xC0 b, "
@@ -38,10 +40,11 @@ static void init_ctx(uint8_t *rwx_mem) {
 	ctx.code_buf.here = rwx_mem;
 	ctx.code_buf.end = rwx_mem + CODE_BUFFER_SIZE;
 
-	assign_array_to_list(ctx.data_stack, data_stack_elems, MAX_DATA_STACK_ELEMS);
+	assign_array_to_list(ctx.data_stack, data_stack, MAX_DATA_STACK_ELEMS);
+	assign_array_to_list(ctx.parse_stack, parse_stack, MAX_PARSE_STACK_ELEMS);
+	assign_array_to_list(ctx.shadow_stack, shadow_stack, MAX_DATA_STACK_ELEMS);
 	assign_array_to_list(ctx.commands, commands, MAX_COMMANDS);
 	assign_array_to_list(ctx.blocks, compilation_blocks, MAX_COMPILATION_BLOCKS);
-	assign_array_to_list(ctx.shadow_stack, shadow_stack, MAX_DATA_STACK_ELEMS);
 }
 
 int main(int argc, char **argv) {
@@ -51,7 +54,7 @@ int main(int argc, char **argv) {
 		-1, 0);
 
 	init_ctx(rwx_mem);
-	parse(src, &ctx);
+	parse_str(src, &ctx);
 	compile(&ctx);
 	
 	munmap(rwx_mem, CODE_BUFFER_SIZE);

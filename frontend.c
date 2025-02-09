@@ -1,6 +1,7 @@
+#include <string.h>
 #include "blue.h"
 
-void parse(const char *src, blue_ctx *ctx) {
+void parse(blue_ctx *ctx) {
 	blue_list_push(ctx->blocks, b, {
 		b->type = BLK_CMDLIST;
 		b->commands.start = ctx->commands.here;
@@ -40,4 +41,14 @@ void parse(const char *src, blue_ctx *ctx) {
 	auto b = blue_list_last(ctx->blocks);
 	b->commands.here = ctx->commands.here;
 	b->commands.end = ctx->commands.here;
+}
+
+void parse_str(const char *src, blue_ctx *ctx) {
+	blue_list_push(ctx->parse_stack, p, {
+		p->start = src;
+		p->here = src;
+		p->end = src + strlen(src);
+	});
+	
+	parse(ctx);
 }

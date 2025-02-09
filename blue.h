@@ -48,6 +48,8 @@ typedef struct {
 	uint64_t val;
 } data_stack_elem;
 
+typedef blue_buf(char) parse_stack_elem;
+
 typedef struct {
 	enum { CMD_COMMA, CMD_LIT, } type;
 	size_t size;
@@ -62,6 +64,7 @@ typedef struct {
 typedef struct {
 	blue_buf(uint8_t) code_buf;
 	blue_list(data_stack_elem) data_stack;
+	blue_list(parse_stack_elem) parse_stack;
 	blue_list(uint64_t) shadow_stack;
 	blue_list(command) commands;
 	blue_list(compilation_block) blocks;
