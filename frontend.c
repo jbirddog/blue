@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <string.h>
 #include "blue.h"
 
@@ -43,12 +44,6 @@ void parse(blue_ctx *ctx) {
 	b->commands.end = ctx->commands.here;
 }
 
-void parse_str(const char *src, blue_ctx *ctx) {
-	blue_stack_push(ctx->parse_stack, p, {
-		p->start = src;
-		p->here = src;
-		p->end = src + strlen(src);
-	});
-	
+void parse_str(char *src, blue_ctx *ctx) {
 	parse(ctx);
 }

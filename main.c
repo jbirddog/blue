@@ -13,11 +13,9 @@ void parse_str(const char *src, blue_ctx *ctx);
 #define MAX_COMMANDS 32
 #define MAX_COMPILATION_BLOCKS 16
 #define MAX_DATA_STACK_ELEMS 16
-#define MAX_PARSE_STACK_ELEMS 16
 
 static blue_ctx ctx;
 static data_stack_elem data_stack[MAX_DATA_STACK_ELEMS];
-static parse_stack_elem parse_stack[MAX_PARSE_STACK_ELEMS];
 static uint64_t shadow_stack[MAX_DATA_STACK_ELEMS];
 static command commands[MAX_COMMANDS];
 static compilation_block compilation_blocks[MAX_COMPILATION_BLOCKS];
@@ -41,7 +39,6 @@ static void init_ctx(uint8_t *rwx_mem) {
 	ctx.code_buf.end = rwx_mem + CODE_BUFFER_SIZE;
 
 	assign_array(ctx.data_stack, data_stack, MAX_DATA_STACK_ELEMS);
-	assign_array(ctx.parse_stack, parse_stack, MAX_PARSE_STACK_ELEMS);
 	assign_array(ctx.shadow_stack, shadow_stack, MAX_DATA_STACK_ELEMS);
 	assign_array(ctx.commands, commands, MAX_COMMANDS);
 	assign_array(ctx.blocks, compilation_blocks, MAX_COMPILATION_BLOCKS);
