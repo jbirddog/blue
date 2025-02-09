@@ -1,3 +1,4 @@
+#include <ctype.h>
 #include <stdio.h>
 #include <string.h>
 #include "blue.h"
@@ -8,7 +9,14 @@ void parse(blue_ctx *ctx) {
 		b->commands.start = ctx->commands.here;
 	});
 
-	fprintf(stderr, "%s\n", ctx->input_buf.start);
+	/*
+	char tok[64] = {0};
+	
+	while (ctx->input_buf.here < ctx->input_buf.end) {
+		while (isspace(*ctx->input_buf.here)) ++ctx->input_buf.here;
+		break;
+	}
+	*/
 
 	// xor eax, eax
 	// xor edi, edi

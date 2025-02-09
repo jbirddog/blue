@@ -14,7 +14,7 @@ void parse(blue_ctx *ctx);
 #define MAX_COMPILATION_BLOCKS 16
 #define MAX_DATA_STACK_ELEMS 16
 
-static char input_buffer[INPUT_BUFFER_SIZE];
+static char input_buf[INPUT_BUFFER_SIZE];
 static data_stack_elem data_stack[MAX_DATA_STACK_ELEMS];
 static uint64_t shadow_stack[MAX_DATA_STACK_ELEMS];
 static command commands[MAX_COMMANDS];
@@ -30,7 +30,8 @@ static blue_ctx ctx;
 
 
 static void init_ctx(uint8_t *rwx_mem) {
-	assign_array(ctx.input_buf, input_buffer, INPUT_BUFFER_SIZE);
+	ctx.input_buf = input_buf;
+	
 	assign_ptr(ctx.code_buf, rwx_mem, CODE_BUFFER_SIZE);
 	assign_array(ctx.data_stack, data_stack, MAX_DATA_STACK_ELEMS);
 	assign_array(ctx.shadow_stack, shadow_stack, MAX_DATA_STACK_ELEMS);
@@ -46,15 +47,14 @@ int main(int argc, char **argv) {
 
 	init_ctx(rwx_mem);
 
-	static const char src[] = ""
+	static char src[] = ""
 "0x31 b, 0xC0 b, "
 "0x31 b, 0xFF b, "
 "0xB0 b, 0x3C b, "
 "0x40 b, 0xB7 b, 0x0B b, "
 "0x0F b, 0x05 b, "
 "";
-
-	ctx.input_buf.end = strcpy(ctx.input_buf.here, src);
+	ctx.input_buf = src;
 	
 	parse(&ctx);
 	compile(&ctx);
