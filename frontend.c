@@ -83,7 +83,8 @@ void parse(blue_ctx *ctx) {
 	}
 
 	if (*ctx->input_buf != '\0') {
-		fprintf(stderr, "invalid input: %d, %s\n", iters, ctx->input_buf);
+		int len = tok_end - tok;
+		fprintf(stderr, "Unknown word #%d: %.*s\n", iters, len, tok);
 		return;
 	}
 
@@ -102,7 +103,17 @@ static void b_comma(dict_entry *entry, blue_ctx *ctx) {
 }
 
 static void colon(dict_entry *entry, blue_ctx *ctx) {
-	assert(false);
+	char *tok_end;
+	auto tok = next_tok(&tok_end, ctx);
+	auto tok_len = tok_end - tok;
+	
+	seal_last_block(ctx);
+	
+	blue_list_append(ctx->dict, entry, {
+		entry->word = word_b_comma;
+		entry->word_len = strlen(word_b_comma);
+		entry->handler = b_comma;
+	});
 }
 
 void dict_init(blue_ctx *ctx) {
