@@ -46,22 +46,8 @@ static void compile_cmd_call(command *c, blue_ctx *ctx) {
 
 static void compile_cmd_comma(command *c, blue_ctx *ctx) {
 	assert(c->type == CMD_COMMA);
-	
-	blue_stack_pop(ctx->data_stack, elem, {
-		assert(elem->type == ELEM_LIT);
 
-		blue_buf_append(ctx->code_buf, &elem->val, c->size);
-	});
-}
-
-static void compile_cmd_lit(command *c, blue_ctx *ctx) {
-	assert(c->type == CMD_LIT);
-
-	blue_stack_push(ctx->data_stack, elem, {
-		elem->type = ELEM_LIT;
-		elem->size = c->size;
-		elem->val = c->val;
-	});
+	blue_buf_append(ctx->code_buf, &c->val, c->size);
 }
 
 static void compile_commands(compilation_block *b, blue_ctx *ctx) {
@@ -72,9 +58,6 @@ static void compile_commands(compilation_block *b, blue_ctx *ctx) {
 			break;
 		case CMD_COMMA:
 			compile_cmd_comma(c, ctx);
-			break;
-		case CMD_LIT:
-			compile_cmd_lit(c, ctx);
 			break;
 		case CMD_RET:
 			compile_ret(ctx);

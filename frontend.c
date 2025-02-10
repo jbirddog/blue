@@ -7,14 +7,18 @@
 #include <string.h>
 #include "blue.h"
 
-static void append_lit_cmd(uint64_t lit, blue_ctx *ctx) {
+static void push_lit(uint64_t val, blue_ctx *ctx) {
 	size_t size = 1;
 
-	if (lit > UINT_MAX) size = 8;
-	else if (lit > USHRT_MAX) size = 4;
-	else if (lit > UCHAR_MAX) size = 2;
+	if (val > UINT_MAX) size = 8;
+	else if (val > USHRT_MAX) size = 4;
+	else if (val > UCHAR_MAX) size = 2;
 	
-	blue_list_append(ctx->commands, c, { c->type = CMD_LIT; c->size = size; c->val = lit; });
+	blue_stack_push(ctx->data_stack, elem, {
+		elem->type = ELEM_LIT;
+		elem->size = size;
+		elem->val = val;
+	});
 }
 
 static char *peek_tok(char *s, char **tok_end) {
@@ -79,7 +83,7 @@ void parse(blue_ctx *ctx) {
 
 		if (num_end != tok_end) break;
 
-		append_lit_cmd(num, ctx);
+		push_lit(num, ctx);
 	}
 
 	if (*ctx->input_buf != '\0') {
@@ -113,7 +117,15 @@ static void call(dict_entry *entry, blue_ctx *ctx) {
 }
 
 static void b_comma(dict_entry *entry, blue_ctx *ctx) {
-	blue_list_append(ctx->commands, c, { c->type = CMD_COMMA; c->size = 1; });
+	blue_stack_pop(ctx->data_stack, elem, {
+		assert(elem->type == ELEM_LIT);
+
+		blue_list_append(ctx->commands, c, {
+			c->type = CMD_COMMA;
+			c->size = 1;
+			c->val = elem->val;
+		});
+	});
 }
 
 static void colon(dict_entry *entry, blue_ctx *ctx) {
