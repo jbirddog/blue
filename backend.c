@@ -10,6 +10,12 @@ static void interpret(uint8_t *entry, blue_ctx *ctx) {
 #pragma GCC diagnostic pop
 }
 
+static void compile_cmd_call(command *c, blue_ctx *ctx) {
+	assert(c->type == CMD_CALL);
+
+	assert(false);
+}
+
 static void compile_cmd_comma(command *c, blue_ctx *ctx) {
 	assert(c->type == CMD_COMMA);
 	
@@ -33,6 +39,9 @@ static void compile_cmd_lit(command *c, blue_ctx *ctx) {
 static void compile_commands(compilation_block *b, blue_ctx *ctx) {
 	blue_list_each(b->commands, c, {
 		switch (c->type) {
+		case CMD_CALL:
+			compile_cmd_call(c, ctx);
+			break;
 		case CMD_COMMA:
 			compile_cmd_comma(c, ctx);
 			break;
@@ -62,9 +71,10 @@ static void compile_cmdlist(compilation_block *b, blue_ctx *ctx) {
 static void compile_word_decl(compilation_block *b, blue_ctx *ctx) {
 	assert(b->type == BLK_WORD_DECL);
 
-	blue_list_append(ctx->code_locs, l, {
-		*l = ctx->code_buf.here;
-	}); 
+	blue_list_append(ctx->code_locs, loc, {
+		*loc = ctx->code_buf.here;
+	});
+	
 	compile_commands(b, ctx);
 }
 

@@ -82,7 +82,7 @@ typedef struct {
 } data_stack_elem;
 
 typedef struct {
-	enum { CMD_COMMA, CMD_LIT, CMD_RET } type;
+	enum { CMD_CALL, CMD_COMMA, CMD_LIT, CMD_RET } type;
 	size_t size;
 	uint64_t val;
 } command;

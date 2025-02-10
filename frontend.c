@@ -103,8 +103,13 @@ static void b_comma(dict_entry *entry, blue_ctx *ctx) {
 	blue_list_append(ctx->commands, c, { c->type = CMD_COMMA; c->size = 1; });
 }
 
-static void call_user_word(dict_entry *entry, blue_ctx *ctx) {
-	assert(false);
+static void call(dict_entry *entry, blue_ctx *ctx) {
+	assert(entry >= ctx->user_dict);
+	
+	blue_list_append(ctx->commands, c, {
+		c->type = CMD_CALL;
+		c->val = entry - ctx->user_dict;
+	});
 }
 
 static void colon(dict_entry *entry, blue_ctx *ctx) {
@@ -125,13 +130,12 @@ static void colon(dict_entry *entry, blue_ctx *ctx) {
 		entry->word = tok;
 		entry->word_len = tok_len;
 		entry->block = block;
-		entry->handler = call_user_word;
+		entry->handler = call;
 	});
 }
 
 static void semi(dict_entry *entry, blue_ctx *ctx) {
 	blue_list_append(ctx->commands, c, { c->type = CMD_RET; });
-	
 	seal_last_block(ctx);
 	
 	blue_list_append(ctx->blocks, b, {
