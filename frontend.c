@@ -102,17 +102,29 @@ static void b_comma(dict_entry *entry, blue_ctx *ctx) {
 	blue_list_append(ctx->commands, c, { c->type = CMD_COMMA; c->size = 1; });
 }
 
+static void call_user_word(dict_entry *entry, blue_ctx *ctx) {
+	assert(false);
+}
+
 static void colon(dict_entry *entry, blue_ctx *ctx) {
+	seal_last_block(ctx);
+	
+	blue_list_append(ctx->blocks, b, {
+		b->type = BLK_WORD_DECL;
+		b->commands.start = ctx->commands.here;
+	});
+
+	auto block = blue_list_last(ctx->blocks);
+	
 	char *tok_end;
 	auto tok = next_tok(&tok_end, ctx);
 	auto tok_len = tok_end - tok;
 	
-	seal_last_block(ctx);
-	
 	blue_list_append(ctx->dict, entry, {
 		entry->word = tok;
 		entry->word_len = tok_len;
-		entry->handler = b_comma;
+		entry->block = block;
+		entry->handler = call_user_word;
 	});
 }
 
