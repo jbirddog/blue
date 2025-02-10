@@ -110,8 +110,8 @@ static void colon(dict_entry *entry, blue_ctx *ctx) {
 	seal_last_block(ctx);
 	
 	blue_list_append(ctx->dict, entry, {
-		entry->word = word_b_comma;
-		entry->word_len = strlen(word_b_comma);
+		entry->word = tok;
+		entry->word_len = tok_len;
 		entry->handler = b_comma;
 	});
 }

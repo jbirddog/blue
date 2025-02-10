@@ -82,7 +82,7 @@ typedef struct {
 } command;
 
 typedef struct {
-	enum { BLK_CMDLIST, } type;
+	enum { BLK_CMDLIST, BLK_WORD_DECL } type;
 	blue_list(command) commands;
 } compilation_block;
 

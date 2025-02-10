@@ -30,11 +30,7 @@ static void compile_cmd_lit(command *c, blue_ctx *ctx) {
 	});
 }
 
-static void compile_cmdlist(compilation_block *b, blue_ctx *ctx) {
-	assert(b->type == BLK_CMDLIST);
-	
-	uint8_t *entry = ctx->code_buf.here;
-
+static void compile_commands(compilation_block *b, blue_ctx *ctx) {
 	blue_list_each(b->commands, c, {
 		switch (c->type) {
 		case CMD_COMMA:
@@ -45,6 +41,14 @@ static void compile_cmdlist(compilation_block *b, blue_ctx *ctx) {
 			break;
 		}
 	});
+}
+
+static void compile_cmdlist(compilation_block *b, blue_ctx *ctx) {
+	assert(b->type == BLK_CMDLIST);
+	
+	uint8_t *entry = ctx->code_buf.here;
+
+	compile_commands(b, ctx);
 	
 	*ctx->code_buf.here++ = 0xC3;
 
@@ -53,11 +57,20 @@ static void compile_cmdlist(compilation_block *b, blue_ctx *ctx) {
 	ctx->code_buf.here = entry;
 }
 
+static void compile_word_decl(compilation_block *b, blue_ctx *ctx) {
+	assert(b->type == BLK_WORD_DECL);
+
+	compile_commands(b, ctx);
+}
+
 void compile(blue_ctx *ctx) {
 	blue_list_each(ctx->blocks, b, {
 		switch (b->type) {
 		case BLK_CMDLIST:
 			compile_cmdlist(b, ctx);
+			break;
+		case BLK_WORD_DECL:
+			compile_word_decl(b, ctx);
 			break;
 		}
 	});
