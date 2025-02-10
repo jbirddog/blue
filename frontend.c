@@ -38,6 +38,11 @@ static char *next_tok(char **tok_end, blue_ctx *ctx) {
 	return tok;
 }
 
+static void eat_tok(blue_ctx *ctx) {
+	char *tok_end;
+	next_tok(&tok_end, ctx);
+}
+
 static dict_entry *find(char *tok, size_t tok_len, blue_ctx *ctx) {
 	blue_list_each_rev(ctx->dict, entry, {
 		if (tok_len == entry->word_len && strncmp(tok, entry->word, tok_len) == 0) {
@@ -106,6 +111,8 @@ static char *word_dlparen = "((";
 static char *word_drparen = "))";
 static char *word_semi = ";";
 
+static char *word_eax = "eax";
+static char *word_edi = "edi";
 
 static void call(dict_entry *entry, blue_ctx *ctx) {
 	assert(entry >= ctx->user_dict);
@@ -169,6 +176,14 @@ static void semi(dict_entry *entry, blue_ctx *ctx) {
 	});
 }
 
+static void eax(dict_entry *entry, blue_ctx *ctx) {
+	eat_tok(ctx);
+}
+
+static void edi(dict_entry *entry, blue_ctx *ctx) {
+	eat_tok(ctx);
+}
+
 void dict_init(blue_ctx *ctx) {
 	blue_list_append(ctx->dict, entry, {
 		entry->word = word_b_comma;
@@ -204,6 +219,18 @@ void dict_init(blue_ctx *ctx) {
 		entry->word = word_drparen;
 		entry->word_len = strlen(word_drparen);
 		entry->handler = drparen;
+	});
+	
+	blue_list_append(ctx->dict, entry, {
+		entry->word = word_eax;
+		entry->word_len = strlen(word_eax);
+		entry->handler = eax;
+	});
+	
+	blue_list_append(ctx->dict, entry, {
+		entry->word = word_edi;
+		entry->word_len = strlen(word_edi);
+		entry->handler = edi;
 	});
 
 	ctx->user_dict = ctx->dict.here;
