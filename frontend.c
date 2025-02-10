@@ -97,6 +97,7 @@ void parse(blue_ctx *ctx) {
 
 static char *word_b_comma = "b,";
 static char *word_colon = ":";
+static char *word_semi = ";";
 
 static void b_comma(dict_entry *entry, blue_ctx *ctx) {
 	blue_list_append(ctx->commands, c, { c->type = CMD_COMMA; c->size = 1; });
@@ -128,6 +129,15 @@ static void colon(dict_entry *entry, blue_ctx *ctx) {
 	});
 }
 
+static void semi(dict_entry *entry, blue_ctx *ctx) {
+	seal_last_block(ctx);
+	
+	blue_list_append(ctx->blocks, b, {
+		b->type = BLK_CMDLIST;
+		b->commands.start = ctx->commands.here;
+	});
+}
+
 void dict_init(blue_ctx *ctx) {
 	blue_list_append(ctx->dict, entry, {
 		entry->word = word_b_comma;
@@ -139,6 +149,12 @@ void dict_init(blue_ctx *ctx) {
 		entry->word = word_colon;
 		entry->word_len = strlen(word_colon);
 		entry->handler = colon;
+	});
+	
+	blue_list_append(ctx->dict, entry, {
+		entry->word = word_semi;
+		entry->word_len = strlen(word_semi);
+		entry->handler = semi;
 	});
 
 	ctx->user_dict = ctx->dict.here;
