@@ -39,6 +39,9 @@ static void compile_commands(compilation_block *b, blue_ctx *ctx) {
 		case CMD_LIT:
 			compile_cmd_lit(c, ctx);
 			break;
+		case CMD_RET:
+			*ctx->code_buf.here++ = 0xC3;
+			break;
 		}
 	});
 }

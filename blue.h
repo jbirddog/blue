@@ -76,7 +76,7 @@ typedef struct {
 } data_stack_elem;
 
 typedef struct {
-	enum { CMD_COMMA, CMD_LIT, } type;
+	enum { CMD_COMMA, CMD_LIT, CMD_RET } type;
 	size_t size;
 	uint64_t val;
 } command;
@@ -105,4 +105,5 @@ struct blue_ctx {
 	dict_entry *user_dict;
 	blue_list(command) commands;
 	blue_list(compilation_block) blocks;
+	blue_list(uint32_t) code_locs;
 };

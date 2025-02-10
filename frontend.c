@@ -130,6 +130,8 @@ static void colon(dict_entry *entry, blue_ctx *ctx) {
 }
 
 static void semi(dict_entry *entry, blue_ctx *ctx) {
+	blue_list_append(ctx->commands, c, { c->type = CMD_RET; });
+	
 	seal_last_block(ctx);
 	
 	blue_list_append(ctx->blocks, b, {
