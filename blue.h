@@ -104,6 +104,7 @@ struct dict_entry {
 };
 
 struct blue_ctx {
+	enum { PARSE_BODY, PARSE_EFFECTS_IN, PARSE_EFFECTS_OUT } parse_type;
 	char *input_buf;
 	blue_buf(uint8_t) code_buf;
 	blue_stack(data_stack_elem) data_stack;

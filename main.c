@@ -63,7 +63,7 @@ int main(int argc, char **argv) {
 "0x31 b, 0xFF b, "
 "0xB0 b, 0x3C b, "
 "0x40 b, 0xB7 b, 0x0B b, "
-"exit "
+"bye "
 "";
 	ctx.input_buf = src;
 

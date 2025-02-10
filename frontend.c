@@ -69,12 +69,8 @@ void parse(blue_ctx *ctx) {
 
 	char *tok;
 	char *tok_end;
-	auto iters = 0;
 
 	while (*(tok = next_tok(&tok_end, ctx)) != '\0') {
-		++iters;
-		assert(iters < 100);
-
 		auto tok_len = tok_end - tok;
 		auto entry = find(tok, tok_len, ctx);
 
@@ -82,6 +78,8 @@ void parse(blue_ctx *ctx) {
 			entry->handler(entry, ctx);
 			continue;
 		}
+
+		if (ctx->parse_type != PARSE_BODY) break;
 		
 		char *num_end;
 		uint64_t num = strtoll(tok, &num_end, 0);
@@ -93,7 +91,7 @@ void parse(blue_ctx *ctx) {
 
 	if (*ctx->input_buf != '\0') {
 		int len = tok_end - tok;
-		fprintf(stderr, "Unknown word #%d: %.*s\n", iters, len, tok);
+		fprintf(stderr, "Unknown word: %.*s\n", len, tok);
 		return;
 	}
 
@@ -158,12 +156,15 @@ static void colon(dict_entry *entry, blue_ctx *ctx) {
 }
 
 static void ddash(dict_entry *entry, blue_ctx *ctx) {
+	ctx->parse_type = PARSE_EFFECTS_OUT;
 }
 
 static void dlparen(dict_entry *entry, blue_ctx *ctx) {
+	ctx->parse_type = PARSE_EFFECTS_IN;
 }
 
 static void drparen(dict_entry *entry, blue_ctx *ctx) {
+	ctx->parse_type = PARSE_BODY;
 }
 
 static void semi(dict_entry *entry, blue_ctx *ctx) {
