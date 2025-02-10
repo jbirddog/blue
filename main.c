@@ -23,6 +23,7 @@ static uint64_t shadow_stack[MAX_DATA_STACK_ELEMS];
 static dict_entry dict[MAX_DICT_ENTRIES];
 static command commands[MAX_COMMANDS];
 static compilation_block compilation_blocks[MAX_COMPILATION_BLOCKS];
+static uint8_t *code_locs[MAX_DICT_ENTRIES];
 static blue_ctx ctx;
 
 #define assign_ptr(dest, src, size) \
@@ -42,6 +43,7 @@ static void init_ctx(uint8_t *rwx_mem) {
 	assign_array(ctx.dict, dict, MAX_DICT_ENTRIES);
 	assign_array(ctx.commands, commands, MAX_COMMANDS);
 	assign_array(ctx.blocks, compilation_blocks, MAX_COMPILATION_BLOCKS);
+	assign_array(ctx.code_locs, code_locs, MAX_DICT_ENTRIES);
 }
 
 int main(int argc, char **argv) {

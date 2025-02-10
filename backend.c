@@ -40,7 +40,7 @@ static void compile_commands(compilation_block *b, blue_ctx *ctx) {
 			compile_cmd_lit(c, ctx);
 			break;
 		case CMD_RET:
-			*ctx->code_buf.here++ = 0xC3;
+			blue_buf_append_val(ctx->code_buf, 0xC3);
 			break;
 		}
 	});
@@ -52,8 +52,7 @@ static void compile_cmdlist(compilation_block *b, blue_ctx *ctx) {
 	uint8_t *entry = ctx->code_buf.here;
 
 	compile_commands(b, ctx);
-	
-	*ctx->code_buf.here++ = 0xC3;
+	blue_buf_append_val(ctx->code_buf, 0xC3);
 
 	interpret(entry, ctx);
 	
@@ -63,6 +62,9 @@ static void compile_cmdlist(compilation_block *b, blue_ctx *ctx) {
 static void compile_word_decl(compilation_block *b, blue_ctx *ctx) {
 	assert(b->type == BLK_WORD_DECL);
 
+	blue_list_append(ctx->code_locs, l, {
+		*l = ctx->code_buf.here;
+	}); 
 	compile_commands(b, ctx);
 }
 

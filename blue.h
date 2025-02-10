@@ -48,6 +48,12 @@
 		buf.here += size; \
 	} while (0)
 
+#define blue_buf_append_val(buf, val) \
+	do { \
+		assert(buf.here < buf.end); \
+		*buf.here++ = val; \
+	} while (0)
+
 //
 // blue_stack
 //
@@ -105,5 +111,5 @@ struct blue_ctx {
 	dict_entry *user_dict;
 	blue_list(command) commands;
 	blue_list(compilation_block) blocks;
-	blue_list(uint32_t) code_locs;
+	blue_list(uint8_t *) code_locs;
 };
