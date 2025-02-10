@@ -97,11 +97,11 @@ void parse(blue_ctx *ctx) {
 
 static char *word_b_comma = "b,";
 static char *word_colon = ":";
+static char *word_ddash = "--";
+static char *word_dlparen = "((";
+static char *word_drparen = "))";
 static char *word_semi = ";";
 
-static void b_comma(dict_entry *entry, blue_ctx *ctx) {
-	blue_list_append(ctx->commands, c, { c->type = CMD_COMMA; c->size = 1; });
-}
 
 static void call(dict_entry *entry, blue_ctx *ctx) {
 	assert(entry >= ctx->user_dict);
@@ -110,6 +110,10 @@ static void call(dict_entry *entry, blue_ctx *ctx) {
 		c->type = CMD_CALL;
 		c->val = entry - ctx->user_dict;
 	});
+}
+
+static void b_comma(dict_entry *entry, blue_ctx *ctx) {
+	blue_list_append(ctx->commands, c, { c->type = CMD_COMMA; c->size = 1; });
 }
 
 static void colon(dict_entry *entry, blue_ctx *ctx) {
@@ -132,6 +136,15 @@ static void colon(dict_entry *entry, blue_ctx *ctx) {
 		entry->block = block;
 		entry->handler = call;
 	});
+}
+
+static void ddash(dict_entry *entry, blue_ctx *ctx) {
+}
+
+static void dlparen(dict_entry *entry, blue_ctx *ctx) {
+}
+
+static void drparen(dict_entry *entry, blue_ctx *ctx) {
 }
 
 static void semi(dict_entry *entry, blue_ctx *ctx) {
@@ -161,6 +174,24 @@ void dict_init(blue_ctx *ctx) {
 		entry->word = word_semi;
 		entry->word_len = strlen(word_semi);
 		entry->handler = semi;
+	});
+	
+	blue_list_append(ctx->dict, entry, {
+		entry->word = word_ddash;
+		entry->word_len = strlen(word_ddash);
+		entry->handler = ddash;
+	});
+	
+	blue_list_append(ctx->dict, entry, {
+		entry->word = word_dlparen;
+		entry->word_len = strlen(word_dlparen);
+		entry->handler = dlparen;
+	});
+	
+	blue_list_append(ctx->dict, entry, {
+		entry->word = word_drparen;
+		entry->word_len = strlen(word_drparen);
+		entry->handler = drparen;
 	});
 
 	ctx->user_dict = ctx->dict.here;

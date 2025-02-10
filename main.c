@@ -55,8 +55,8 @@ int main(int argc, char **argv) {
 	init_ctx(rwx_mem);
 
 	static char src[] = ""
-": syscall 0x0F b, 0x05 b, ; "
-": bye 60 syscall ; "
+": syscall (( -- )) 0x0F b, 0x05 b, ; "
+": bye (( -- )) 60 syscall ; "
 ""
 "0x31 b, 0xC0 b, "
 "0x31 b, 0xFF b, "
