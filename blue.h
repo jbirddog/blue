@@ -33,7 +33,7 @@
 	} while (0)
 
 #define blue_list_last(list) (assert(list.here > list.start), list.here - 1)
-#define blue_list_elem(list, i) (assert(i >= 0 && i < list.here - list.start), list.start - i)
+#define blue_list_elem(list, i) (assert(i >= 0 && i < list.here - list.start), list.start + i)
 
 //
 // blue_buf

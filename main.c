@@ -56,13 +56,13 @@ int main(int argc, char **argv) {
 
 	static char src[] = ""
 ": syscall 0x0F b, 0x05 b, ; "
+": bye 60 syscall ; "
 ""
 "0x31 b, 0xC0 b, "
 "0x31 b, 0xFF b, "
 "0xB0 b, 0x3C b, "
 "0x40 b, 0xB7 b, 0x0B b, "
-"syscall "
-"0x0F b, 0x05 b, "
+"bye "
 "";
 	ctx.input_buf = src;
 

@@ -13,7 +13,6 @@ static void compile_call(uint8_t *where, blue_ctx *ctx) {
 
 	int32_t diff = (intptr_t)where - (intptr_t)ctx->code_buf.here;
 	size_t diff_size = sizeof(diff);
-
 	diff -= diff_size;
 	
 	blue_buf_append(ctx->code_buf, &diff, sizeof(diff));
@@ -36,8 +35,10 @@ static void interpret(uint8_t *entry, blue_ctx *ctx) {
 
 static void compile_cmd_call(command *c, blue_ctx *ctx) {
 	assert(c->type == CMD_CALL);
-
+	
 	auto code_loc = blue_list_elem(ctx->code_locs, c->val);
+	assert(*code_loc);
+	assert(*code_loc >= ctx->code_buf.start);
 	assert(*code_loc < ctx->code_buf.here);
 
 	compile_call(*code_loc, ctx);
@@ -97,7 +98,7 @@ static void compile_cmdlist(compilation_block *b, blue_ctx *ctx) {
 
 static void compile_word_decl(compilation_block *b, blue_ctx *ctx) {
 	assert(b->type == BLK_WORD_DECL);
-
+	
 	blue_list_append(ctx->code_locs, loc, {
 		*loc = ctx->code_buf.here;
 	});
