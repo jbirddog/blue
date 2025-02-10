@@ -3,6 +3,22 @@
 #include <string.h>
 #include "blue.h"
 
+//
+// x8664 specific - move to own header with regs, etc
+//
+
+static void compile_call(uint8_t *here, uint8_t *where, blue_ctx *ctx) {
+	assert(false);
+}
+
+static void compile_ret(blue_ctx *ctx) {
+	blue_buf_append_val(ctx->code_buf, 0xC3);
+}
+
+//
+//
+//
+
 static void interpret(uint8_t *entry, blue_ctx *ctx) {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wpedantic"
@@ -13,7 +29,10 @@ static void interpret(uint8_t *entry, blue_ctx *ctx) {
 static void compile_cmd_call(command *c, blue_ctx *ctx) {
 	assert(c->type == CMD_CALL);
 
-	assert(false);
+	auto code_loc = blue_list_elem(ctx->code_locs, c->val);
+	assert(*code_loc < ctx->code_buf.here);
+
+	compile_call(ctx->code_buf.here, *code_loc, ctx);
 }
 
 static void compile_cmd_comma(command *c, blue_ctx *ctx) {
@@ -49,7 +68,7 @@ static void compile_commands(compilation_block *b, blue_ctx *ctx) {
 			compile_cmd_lit(c, ctx);
 			break;
 		case CMD_RET:
-			blue_buf_append_val(ctx->code_buf, 0xC3);
+			compile_ret(ctx);
 			break;
 		}
 	});
@@ -61,7 +80,7 @@ static void compile_cmdlist(compilation_block *b, blue_ctx *ctx) {
 	uint8_t *entry = ctx->code_buf.here;
 
 	compile_commands(b, ctx);
-	blue_buf_append_val(ctx->code_buf, 0xC3);
+	compile_ret(ctx);
 
 	interpret(entry, ctx);
 	

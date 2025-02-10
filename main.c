@@ -62,7 +62,7 @@ int main(int argc, char **argv) {
 "0xB0 b, 0x3C b, "
 "0x40 b, 0xB7 b, 0x0B b, "
 //"0x0F b, 0x05 b, "
-"syscall ";
+"syscall "
 "";
 	ctx.input_buf = src;
 
