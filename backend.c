@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <stdint.h>
+#include <stdio.h>
 #include <string.h>
 #include "blue.h"
 
@@ -7,8 +8,15 @@
 // x8664 specific - move to own header with regs, etc
 //
 
-static void compile_call(uint8_t *here, uint8_t *where, blue_ctx *ctx) {
-	assert(false);
+static void compile_call(uint8_t *where, blue_ctx *ctx) {
+	blue_buf_append_val(ctx->code_buf, 0xE8);
+
+	int32_t diff = (intptr_t)where - (intptr_t)ctx->code_buf.here;
+	size_t diff_size = sizeof(diff);
+
+	diff -= diff_size;
+	
+	blue_buf_append(ctx->code_buf, &diff, sizeof(diff));
 }
 
 static void compile_ret(blue_ctx *ctx) {
@@ -32,7 +40,7 @@ static void compile_cmd_call(command *c, blue_ctx *ctx) {
 	auto code_loc = blue_list_elem(ctx->code_locs, c->val);
 	assert(*code_loc < ctx->code_buf.here);
 
-	compile_call(ctx->code_buf.here, *code_loc, ctx);
+	compile_call(*code_loc, ctx);
 }
 
 static void compile_cmd_comma(command *c, blue_ctx *ctx) {
