@@ -111,6 +111,14 @@ static char *word_semi = ";";
 static void call(dict_entry *entry, blue_ctx *ctx) {
 	assert(entry >= ctx->user_dict);
 	
+	fprintf(stderr, "Call word: %.*s - ins: %ld, outs: %ld, %ld\n",
+		(int)entry->word_len,
+		entry->word,
+		blue_list_len(entry->ins),
+		blue_list_len(entry->outs),
+		blue_list_len(ctx->stack_effects)
+	);
+	
 	blue_list_append(ctx->commands, c, {
 		c->type = CMD_CALL;
 		c->val = entry - ctx->user_dict;
@@ -152,19 +160,42 @@ static void colon(dict_entry *entry, blue_ctx *ctx) {
 }
 
 static void ddash(dict_entry *entry, blue_ctx *ctx) {
-	blue_list_seal(entry->ins, ctx->stack_effects);
+	auto latest = blue_list_last(ctx->dict);
+	blue_list_seal(latest->ins, ctx->stack_effects);
 	
-	entry->outs.start = ctx->stack_effects.here;
+	fprintf(stderr, "-- ins: %ld/%ld\n",
+		blue_list_len(latest->ins),
+		blue_list_len(ctx->stack_effects)
+	);
+	
+	latest->outs.start = ctx->stack_effects.here;
+	latest->outs.here = ctx->stack_effects.here;
+	latest->outs.end = ctx->stack_effects.end;
 }
 
 static void dlparen(dict_entry *entry, blue_ctx *ctx) {
 	ctx->parse_type = PARSE_EFFECTS;
 
-	entry->ins.start = ctx->stack_effects.here;
+	auto latest = blue_list_last(ctx->dict);
+
+	latest->ins.start = ctx->stack_effects.here;
+	latest->ins.here = ctx->stack_effects.here;
+	latest->ins.end = ctx->stack_effects.end;
+	
+	fprintf(stderr, "(( ins: %ld/%ld\n",
+		blue_list_len(latest->ins),
+		blue_list_len(ctx->stack_effects)
+	);
 }
 
 static void drparen(dict_entry *entry, blue_ctx *ctx) {
-	blue_list_seal(entry->outs, ctx->stack_effects);
+	auto latest = blue_list_last(ctx->dict);
+	blue_list_seal(latest->outs, ctx->stack_effects);
+	
+	fprintf(stderr, ")) outs: %ld/%ld\n",
+		blue_list_len(latest->outs),
+		blue_list_len(ctx->stack_effects)
+	);
 
 	ctx->parse_type = PARSE_BODY;
 }
@@ -180,7 +211,7 @@ static void semi(dict_entry *entry, blue_ctx *ctx) {
 }
 
 //
-// x8664 specific - move to own header with regs, etc
+// x8664 specific - move to own header with backend code, etc
 //
 
 static char *word_eax = "eax";

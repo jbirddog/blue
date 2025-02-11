@@ -57,9 +57,13 @@ int main(int argc, char **argv) {
 
 	init_ctx(rwx_mem);
 
+/*
+": exit (( edi status -- )) 60 syscall ; "
+*/
+	
 	static char src[] = ""
 ": syscall (( eax num -- eax res )) 0x0F b, 0x05 b, ; "
-": exit (( edi status -- )) 60 syscall ; "
+": exit (( -- )) 60 syscall ; "
 ": bye (( -- )) 0 exit ; "
 ""
 "0x31 b, 0xC0 b, "
