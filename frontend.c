@@ -162,40 +162,20 @@ static void colon(dict_entry *entry, blue_ctx *ctx) {
 static void ddash(dict_entry *entry, blue_ctx *ctx) {
 	auto latest = blue_list_last(ctx->dict);
 	blue_list_seal(latest->ins, ctx->stack_effects);
-	
-	fprintf(stderr, "-- ins: %ld/%ld\n",
-		blue_list_len(latest->ins),
-		blue_list_len(ctx->stack_effects)
-	);
-	
-	latest->outs.start = ctx->stack_effects.here;
-	latest->outs.here = ctx->stack_effects.here;
-	latest->outs.end = ctx->stack_effects.end;
+
+	blue_list_from(latest->outs, ctx->stack_effects);
 }
 
 static void dlparen(dict_entry *entry, blue_ctx *ctx) {
 	ctx->parse_type = PARSE_EFFECTS;
 
 	auto latest = blue_list_last(ctx->dict);
-
-	latest->ins.start = ctx->stack_effects.here;
-	latest->ins.here = ctx->stack_effects.here;
-	latest->ins.end = ctx->stack_effects.end;
-	
-	fprintf(stderr, "(( ins: %ld/%ld\n",
-		blue_list_len(latest->ins),
-		blue_list_len(ctx->stack_effects)
-	);
+	blue_list_from(latest->ins, ctx->stack_effects);
 }
 
 static void drparen(dict_entry *entry, blue_ctx *ctx) {
 	auto latest = blue_list_last(ctx->dict);
 	blue_list_seal(latest->outs, ctx->stack_effects);
-	
-	fprintf(stderr, ")) outs: %ld/%ld\n",
-		blue_list_len(latest->outs),
-		blue_list_len(ctx->stack_effects)
-	);
 
 	ctx->parse_type = PARSE_BODY;
 }

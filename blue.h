@@ -12,6 +12,11 @@
 		t *here; \
 	}
 
+#define blue_list_from(dst, src) \
+	dst.start = src.here; \
+	dst.here = src.here; \
+	dst.end = src.end;
+
 #define blue_list_seal(list, src) \
 	list.here = src.here; \
 	list.end = src.here;
