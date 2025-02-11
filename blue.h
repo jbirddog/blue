@@ -12,6 +12,10 @@
 		t *here; \
 	}
 
+#define blue_list_seal(list, src) \
+	list.here = src.here; \
+	list.end = src.here;
+	
 #define blue_list_len(list) (list.here - list.start)
 
 #define blue_list_each(list, var, body) \
@@ -77,10 +81,16 @@
 //
 
 typedef struct {
-	enum { ELEM_LIT, } type;
+	enum { ELEM_LIT, ELEM_REG } type;
 	size_t size;
 	uint64_t val;
 } data_stack_elem;
+
+typedef struct {
+	enum { EFFECT_REG } type;
+	size_t size;
+	uint8_t val;
+} stack_effect_elem;
 
 typedef struct {
 	enum { CMD_CALL, CMD_COMMA, CMD_RET } type;
@@ -99,16 +109,19 @@ typedef struct dict_entry dict_entry;
 struct dict_entry {
 	char *word;
 	size_t word_len;
+	blue_list(stack_effect_elem) ins;
+	blue_list(stack_effect_elem) outs;
 	compilation_block *block;
 	void (*handler)(dict_entry *entry, blue_ctx *ctx);
 };
 
 struct blue_ctx {
-	enum { PARSE_BODY, PARSE_EFFECTS_IN, PARSE_EFFECTS_OUT } parse_type;
+	enum { PARSE_BODY, PARSE_EFFECTS } parse_type;
 	char *input_buf;
 	blue_buf(uint8_t) code_buf;
 	blue_stack(data_stack_elem) data_stack;
 	blue_stack(uint64_t) shadow_stack;
+	blue_list(stack_effect_elem) stack_effects;
 	blue_list(dict_entry) dict;
 	dict_entry *user_dict;
 	blue_list(command) commands;

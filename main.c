@@ -16,10 +16,12 @@ void parse(blue_ctx *ctx);
 #define MAX_COMPILATION_BLOCKS 16
 #define MAX_DATA_STACK_ELEMS 16
 #define MAX_DICT_ENTRIES 16
+#define MAX_STACK_EFFECTS (MAX_DICT_ENTRIES << 2)
 
 static char input_buf[INPUT_BUFFER_SIZE];
 static data_stack_elem data_stack[MAX_DATA_STACK_ELEMS];
 static uint64_t shadow_stack[MAX_DATA_STACK_ELEMS];
+static stack_effect_elem stack_effects[MAX_STACK_EFFECTS];
 static dict_entry dict[MAX_DICT_ENTRIES];
 static command commands[MAX_COMMANDS];
 static compilation_block compilation_blocks[MAX_COMPILATION_BLOCKS];
@@ -40,6 +42,7 @@ static void init_ctx(uint8_t *rwx_mem) {
 	assign_ptr(ctx.code_buf, rwx_mem, CODE_BUFFER_SIZE);
 	assign_array(ctx.data_stack, data_stack, MAX_DATA_STACK_ELEMS);
 	assign_array(ctx.shadow_stack, shadow_stack, MAX_DATA_STACK_ELEMS);
+	assign_array(ctx.stack_effects, stack_effects, MAX_STACK_EFFECTS);
 	assign_array(ctx.dict, dict, MAX_DICT_ENTRIES);
 	assign_array(ctx.commands, commands, MAX_COMMANDS);
 	assign_array(ctx.blocks, compilation_blocks, MAX_COMPILATION_BLOCKS);

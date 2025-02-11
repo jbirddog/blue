@@ -57,8 +57,7 @@ static void seal_last_block(blue_ctx *ctx) {
 	assert(blue_list_len(ctx->blocks) > 0);
 	
 	auto b = blue_list_last(ctx->blocks);
-	b->commands.here = ctx->commands.here;
-	b->commands.end = ctx->commands.here;
+	blue_list_seal(b->commands, ctx->commands);
 }
 
 void parse(blue_ctx *ctx) {
@@ -109,9 +108,6 @@ static char *word_dlparen = "((";
 static char *word_drparen = "))";
 static char *word_semi = ";";
 
-static char *word_eax = "eax";
-static char *word_edi = "edi";
-
 static void call(dict_entry *entry, blue_ctx *ctx) {
 	assert(entry >= ctx->user_dict);
 	
@@ -156,14 +152,20 @@ static void colon(dict_entry *entry, blue_ctx *ctx) {
 }
 
 static void ddash(dict_entry *entry, blue_ctx *ctx) {
-	ctx->parse_type = PARSE_EFFECTS_OUT;
+	blue_list_seal(entry->ins, ctx->stack_effects);
+	
+	entry->outs.start = ctx->stack_effects.here;
 }
 
 static void dlparen(dict_entry *entry, blue_ctx *ctx) {
-	ctx->parse_type = PARSE_EFFECTS_IN;
+	ctx->parse_type = PARSE_EFFECTS;
+
+	entry->ins.start = ctx->stack_effects.here;
 }
 
 static void drparen(dict_entry *entry, blue_ctx *ctx) {
+	blue_list_seal(entry->outs, ctx->stack_effects);
+
 	ctx->parse_type = PARSE_BODY;
 }
 
@@ -177,13 +179,34 @@ static void semi(dict_entry *entry, blue_ctx *ctx) {
 	});
 }
 
+//
+// x8664 specific - move to own header with regs, etc
+//
+
+static char *word_eax = "eax";
+static char *word_edi = "edi";
+
+static void append_effect_reg(size_t size, uint8_t val, blue_ctx *ctx) {	
+	blue_list_append(ctx->stack_effects, e, {
+		e->type = EFFECT_REG;
+		e->size = size;
+		e->val = val;
+	});
+}
+
 static void eax(dict_entry *entry, blue_ctx *ctx) {
 	eat_tok(ctx);
+	append_effect_reg(4, 0, ctx);
 }
 
 static void edi(dict_entry *entry, blue_ctx *ctx) {
 	eat_tok(ctx);
+	append_effect_reg(7, 0, ctx);
 }
+
+//
+//
+//
 
 void dict_init(blue_ctx *ctx) {
 	blue_list_append(ctx->dict, entry, {
