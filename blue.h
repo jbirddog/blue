@@ -38,6 +38,7 @@
 	} while (0)
 
 #define blue_list_append(list) (assert(list.here < list.end), list.here++)
+#define blue_list_pop(list) (assert(list.here > list.start), --list.here)
 #define blue_list_last(list) (assert(list.here > list.start), list.here - 1)
 #define blue_list_elem(list, i) (assert(i >= 0 && i < list.here - list.start), list.start + i)
 
@@ -69,14 +70,7 @@
 #define blue_stack_depth blue_list_len
 #define blue_stack_peek blue_list_last
 #define blue_stack_push blue_list_append
-
-#define blue_stack_pop(list, var, body) \
-	do { \
-		assert(list.here > list.start); \
-		--list.here; \
-		auto var = list.here; \
-		body \
-	} while (0)
+#define blue_stack_pop blue_list_pop
 
 //
 // types

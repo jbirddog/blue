@@ -123,14 +123,13 @@ static void call(dict_entry *entry, blue_ctx *ctx) {
 }
 
 static void b_comma(dict_entry *entry, blue_ctx *ctx) {
-	blue_stack_pop(ctx->data_stack, elem, {
-		assert(elem->type == ELEM_LIT);
+	auto elem = blue_stack_pop(ctx->data_stack);
+	assert(elem->type == ELEM_LIT);
 
-		auto cmd = blue_list_append(ctx->commands);
-		cmd->type = CMD_COMMA;
-		cmd->size = 1;
-		cmd->val = elem->val;
-	});
+	auto cmd = blue_list_append(ctx->commands);
+	cmd->type = CMD_COMMA;
+	cmd->size = 1;
+	cmd->val = elem->val;
 }
 
 static void colon(dict_entry *entry, blue_ctx *ctx) {
