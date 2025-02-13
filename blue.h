@@ -3,8 +3,6 @@
 #include <stdint.h>
 #include <string.h>
 
-#define MAX_WORD_SIZE 64
-
 #define blue_list(t) \
 	struct { \
 		t *start; \
@@ -34,7 +32,7 @@
 
 #define blue_list_each_rev(list, var, body) \
 	do { \
-		for (auto var = list.here; var >= list.start; --var) body \
+		for (auto var = list.here - 1; var >= list.start; --var) body \
 	} while (0)
 
 #define blue_list_append(list) (assert(list.here < list.end), list.here++)
@@ -85,13 +83,14 @@ typedef struct {
 typedef struct {
 	enum { EFFECT_REG } type;
 	size_t size;
-	uint8_t val;
+	uint64_t val;
 } stack_effect_elem;
 
 typedef struct {
-	enum { CMD_CALL, CMD_COMMA, CMD_RET } type;
+	enum { CMD_CALL, CMD_COMMA, CMD_FLOW_LIT, CMD_RET } type;
 	size_t size;
 	uint64_t val;
+	void *data;
 } command;
 
 typedef struct {

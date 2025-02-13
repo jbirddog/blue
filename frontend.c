@@ -95,6 +95,22 @@ void parse(blue_ctx *ctx) {
 	seal_last_block(ctx);
 }
 
+static void flow_in(dict_entry *entry, blue_ctx *ctx) {
+	blue_list_each_rev(entry->ins, in, {
+		assert(in->type == EFFECT_REG);
+
+		fprintf(stderr, "here: %.*s\n", (int)entry->word_len, entry->word);
+		auto elem = blue_stack_pop(ctx->data_stack);
+		assert(elem->type == ELEM_LIT);
+		
+		auto cmd = blue_list_append(ctx->commands);
+		cmd->type = CMD_FLOW_LIT;
+	});
+}
+
+static void flow_out(dict_entry *entry, blue_ctx *ctx) {
+}
+
 //
 // dict
 //
@@ -116,10 +132,14 @@ static void call(dict_entry *entry, blue_ctx *ctx) {
 		blue_list_len(entry->outs),
 		blue_list_len(ctx->stack_effects)
 	);
+
+	flow_in(entry, ctx);
 	
 	auto cmd = blue_list_append(ctx->commands);
 	cmd->type = CMD_CALL;
 	cmd->val = entry - ctx->user_dict;
+
+	flow_out(entry, ctx);
 }
 
 static void b_comma(dict_entry *entry, blue_ctx *ctx) {
