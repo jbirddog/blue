@@ -126,14 +126,6 @@ static char *word_semi = ";";
 
 static void call(dict_entry *entry, blue_ctx *ctx) {
 	assert(entry >= ctx->user_dict);
-	
-	fprintf(stderr, "Call word: %.*s - ins: %ld, outs: %ld, %ld\n",
-		(int)entry->word_len,
-		entry->word,
-		blue_list_len(entry->ins),
-		blue_list_len(entry->outs),
-		blue_list_len(ctx->stack_effects)
-	);
 
 	flow_in(entry, ctx);
 	
