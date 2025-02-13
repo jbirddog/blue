@@ -1,5 +1,5 @@
 : syscall (( eax num -- eax res )) 0x0F b, 0x05 b, ;
-: exit (( edi status -- )) 60 syscall ;
-: bye (( -- )) 0 exit ;
+: exit (( edi status -- noret )) 60 syscall ;
+: bye (( -- noret )) 0 exit ;
 
 bye

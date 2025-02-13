@@ -123,6 +123,7 @@ static char *word_ddash = "--";
 static char *word_dlparen = "((";
 static char *word_drparen = "))";
 static char *word_semi = ";";
+static char *word_noret = "noret";
 
 static void call(dict_entry *entry, blue_ctx *ctx) {
 	assert(entry >= ctx->user_dict);
@@ -195,6 +196,10 @@ static void semi(dict_entry *entry, blue_ctx *ctx) {
 	block->commands.start = ctx->commands.here;
 }
 
+static void noret(dict_entry *entry, blue_ctx *ctx) {
+	blue_list_last(ctx->dict)->flags |= ENTRY_NORET;
+}
+
 //
 // x8664 specific - move to own header with backend code, etc
 //
@@ -230,7 +235,7 @@ static void edi(dict_entry *entry, blue_ctx *ctx) {
 		entry->word_len = strlen(word_##which); \
 		entry->handler = which; \
 		blue_list_from(entry->ins, ctx->stack_effects); \
-		blue_list_append(entry->ins)->type = EFFECT_TAKE_LIT; \
+		blue_list_append(entry->ins)->type = EFFECT_POP_LIT; \
 		blue_list_seal(entry->ins, ctx->stack_effects); \
 	} while (0)
 
@@ -246,6 +251,7 @@ void dict_init(blue_ctx *ctx) {
 	add_entry(colon);
 	add_entry(dlparen);
 	add_entry(ddash);
+	add_entry(noret);
 	add_entry(drparen);
 	add_entry(semi);
 

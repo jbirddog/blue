@@ -81,7 +81,7 @@ typedef struct {
 } data_stack_elem;
 
 typedef struct {
-	enum { EFFECT_REG, EFFECT_TAKE_LIT } type;
+	enum { EFFECT_REG, EFFECT_POP_LIT } type;
 	size_t size;
 	uint64_t val;
 } stack_effect_elem;
@@ -101,9 +101,14 @@ typedef struct {
 typedef struct blue_ctx blue_ctx;
 typedef struct dict_entry dict_entry;
 
+typedef enum {
+	ENTRY_NORET = 1 << 0,
+} dict_entry_flags;
+
 struct dict_entry {
 	char *word;
 	size_t word_len;
+	uint8_t flags;
 	blue_list(stack_effect_elem) ins;
 	blue_list(stack_effect_elem) outs;
 	compilation_block *block;
