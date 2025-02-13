@@ -52,15 +52,15 @@ static void compile_cmd_comma(command *c, blue_ctx *ctx) {
 
 static void compile_cmd_flow_lit(command *c, blue_ctx *ctx) {
 	assert(c->type == CMD_FLOW_LIT);
-	assert(c->size <= 4);
 
 	auto dest = (stack_effect_elem *)c->data;
 	assert(dest->type == EFFECT_REG);
+	assert(dest->size == 4);
 	
-	uint8_t mov = 0xB8 | ((uint8_t)dest->val);
+	uint8_t mov = 0xB8 | (uint8_t)dest->val;
 	
 	blue_buf_append(ctx->code_buf, &mov, 1);
-	blue_buf_append(ctx->code_buf, &c->val, 4);
+	blue_buf_append(ctx->code_buf, &c->val, dest->size);
 }
 
 static void compile_commands(compilation_block *b, blue_ctx *ctx) {
