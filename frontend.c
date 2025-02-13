@@ -223,48 +223,36 @@ static void edi(dict_entry *entry, blue_ctx *ctx) {
 //
 //
 
+#define add_entry1(which) \
+	do { \
+		auto entry = blue_list_append(ctx->dict); \
+		entry->word = word_##which; \
+		entry->word_len = strlen(word_##which); \
+		entry->handler = which; \
+		blue_list_from(entry->ins, ctx->stack_effects); \
+		blue_list_append(entry->ins)->type = EFFECT_TAKE_LIT; \
+		blue_list_seal(entry->ins, ctx->stack_effects); \
+	} while (0)
+
+#define add_entry(which) \
+	do { \
+		auto entry = blue_list_append(ctx->dict); \
+		entry->word = word_##which; \
+		entry->word_len = strlen(word_##which); \
+		entry->handler = which; \
+	} while (0)
+
 void dict_init(blue_ctx *ctx) {
-	dict_entry *entry;
-	
-	entry = blue_list_append(ctx->dict);
-	entry->word = word_b_comma;
-	entry->word_len = strlen(word_b_comma);
-	entry->handler = b_comma;
-	
-	entry = blue_list_append(ctx->dict);
-	entry->word = word_colon;
-	entry->word_len = strlen(word_colon);
-	entry->handler = colon;
-	
-	entry = blue_list_append(ctx->dict);
-	entry->word = word_semi;
-	entry->word_len = strlen(word_semi);
-	entry->handler = semi;
-	
-	entry = blue_list_append(ctx->dict);
-	entry->word = word_ddash;
-	entry->word_len = strlen(word_ddash);
-	entry->handler = ddash;
-	
-	entry = blue_list_append(ctx->dict);
-	entry->word = word_dlparen;
-	entry->word_len = strlen(word_dlparen);
-	entry->handler = dlparen;
-	
-	entry = blue_list_append(ctx->dict);
-	entry->word = word_drparen;
-	entry->word_len = strlen(word_drparen);
-	entry->handler = drparen;
-	
-	entry = blue_list_append(ctx->dict);
-	entry->word = word_eax;
-	entry->word_len = strlen(word_eax);
-	entry->handler = eax;
-	
-	entry = blue_list_append(ctx->dict);
-	entry->word = word_edi;
-	entry->word_len = strlen(word_edi);
-	entry->handler = edi;
+	add_entry(colon);
+	add_entry(dlparen);
+	add_entry(ddash);
+	add_entry(drparen);
+	add_entry(semi);
+
+	add_entry1(b_comma);
+
+	add_entry(eax);
+	add_entry(edi);
 
 	ctx->user_dict = ctx->dict.here;
 }

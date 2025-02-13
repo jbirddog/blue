@@ -81,7 +81,7 @@ typedef struct {
 } data_stack_elem;
 
 typedef struct {
-	enum { EFFECT_REG } type;
+	enum { EFFECT_REG, EFFECT_TAKE_LIT } type;
 	size_t size;
 	uint64_t val;
 } stack_effect_elem;
