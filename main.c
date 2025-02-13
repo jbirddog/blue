@@ -1,7 +1,10 @@
+#include <fcntl.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <sys/mman.h>
+#include <unistd.h>
 #include "blue.h"
 
 void compile(blue_ctx *ctx);
@@ -9,8 +12,8 @@ void compile(blue_ctx *ctx);
 void dict_init(blue_ctx *ctx);
 void parse(blue_ctx *ctx);
 
-#define CODE_BUFFER_SIZE 4096
-#define INPUT_BUFFER_SIZE 4096
+#define CODE_BUF_SIZE 4096
+#define INPUT_BUF_SIZE 4096
 
 #define MAX_COMMANDS 32
 #define MAX_COMPILATION_BLOCKS 16
@@ -18,7 +21,7 @@ void parse(blue_ctx *ctx);
 #define MAX_DICT_ENTRIES 16
 #define MAX_STACK_EFFECTS (MAX_DICT_ENTRIES << 2)
 
-static char input_buf[INPUT_BUFFER_SIZE];
+static char input_buf[INPUT_BUF_SIZE];
 static data_stack_elem data_stack[MAX_DATA_STACK_ELEMS];
 static uint64_t shadow_stack[MAX_DATA_STACK_ELEMS];
 static stack_effect_elem stack_effects[MAX_STACK_EFFECTS];
@@ -39,7 +42,7 @@ static blue_ctx ctx;
 static void init_ctx(uint8_t *rwx_mem) {
 	ctx.input_buf = input_buf;
 	
-	assign_ptr(ctx.code_buf, rwx_mem, CODE_BUFFER_SIZE);
+	assign_ptr(ctx.code_buf, rwx_mem, CODE_BUF_SIZE);
 	assign_array(ctx.data_stack, data_stack, MAX_DATA_STACK_ELEMS);
 	assign_array(ctx.shadow_stack, shadow_stack, MAX_DATA_STACK_ELEMS);
 	assign_array(ctx.stack_effects, stack_effects, MAX_STACK_EFFECTS);
@@ -49,28 +52,29 @@ static void init_ctx(uint8_t *rwx_mem) {
 	assign_array(ctx.code_locs, code_locs, MAX_DICT_ENTRIES);
 }
 
+static void read_input(char *file, blue_ctx *ctx) {
+	int fd = open(file, O_RDONLY);
+	if (fd < 0) exit(1);
+
+	ssize_t b = read(fd, ctx->input_buf, INPUT_BUF_SIZE);
+	if (b < 0) exit(1);
+
+	close(fd);
+}
+
 int main(int argc, char **argv) {
-	uint8_t *rwx_mem = mmap(NULL, CODE_BUFFER_SIZE,
+	uint8_t *rwx_mem = mmap(NULL, CODE_BUF_SIZE,
 		PROT_READ | PROT_WRITE | PROT_EXEC,
 		MAP_PRIVATE | MAP_ANONYMOUS,
 		-1, 0);
 
 	init_ctx(rwx_mem);
-	
-	static char src[] = ""
-": syscall (( eax num -- eax res )) 0x0F b, 0x05 b, ; "
-": exit (( edi status -- )) 60 syscall ; "
-": bye (( -- )) 0 exit ; "
-""
-"bye "
-"";
-	ctx.input_buf = src;
-
+	read_input(argv[1], &ctx);
 	dict_init(&ctx);
 	parse(&ctx);
 	compile(&ctx);
 	
-	munmap(rwx_mem, CODE_BUFFER_SIZE);
+	munmap(rwx_mem, CODE_BUF_SIZE);
 
 	printf("Return from main\n");
 	

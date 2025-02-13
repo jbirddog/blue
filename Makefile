@@ -17,7 +17,7 @@ build:
 	$(RUN) $(NINJA)
 
 run: build
-	$(RUN) $(BLUE)
+	$(RUN) $(BLUE) test/exit.blue
 
 sh:
 	$(RUN_IT) /bin/bash
