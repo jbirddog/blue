@@ -99,12 +99,14 @@ static void flow_in(dict_entry *entry, blue_ctx *ctx) {
 	blue_list_each_rev(entry->ins, in, {
 		assert(in->type == EFFECT_REG);
 
-		fprintf(stderr, "here: %.*s\n", (int)entry->word_len, entry->word);
 		auto elem = blue_stack_pop(ctx->data_stack);
 		assert(elem->type == ELEM_LIT);
 		
 		auto cmd = blue_list_append(ctx->commands);
 		cmd->type = CMD_FLOW_LIT;
+		cmd->size = elem->size;
+		cmd->val = elem->val;
+		cmd->data = in;
 	});
 }
 
@@ -208,7 +210,9 @@ static void semi(dict_entry *entry, blue_ctx *ctx) {
 static char *word_eax = "eax";
 static char *word_edi = "edi";
 
-static void append_effect_reg(size_t size, uint8_t val, blue_ctx *ctx) {	
+static void append_effect_reg(size_t size, uint64_t val, blue_ctx *ctx) {	
+	eat_tok(ctx);
+	
 	auto effect = blue_list_append(ctx->stack_effects);
 	effect->type = EFFECT_REG;
 	effect->size = size;
@@ -216,13 +220,11 @@ static void append_effect_reg(size_t size, uint8_t val, blue_ctx *ctx) {
 }
 
 static void eax(dict_entry *entry, blue_ctx *ctx) {
-	eat_tok(ctx);
 	append_effect_reg(4, 0, ctx);
 }
 
 static void edi(dict_entry *entry, blue_ctx *ctx) {
-	eat_tok(ctx);
-	append_effect_reg(7, 0, ctx);
+	append_effect_reg(4, 7, ctx);
 }
 
 //
