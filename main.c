@@ -62,10 +62,6 @@ int main(int argc, char **argv) {
 ": exit (( edi status -- )) 60 syscall ; "
 ": bye (( -- )) 0 exit ; "
 ""
-"0x31 b, 0xC0 b, "
-"0x31 b, 0xFF b, "
-"0xB0 b, 0x3C b, "
-"0x40 b, 0xB7 b, 0x0B b, "
 "bye "
 "";
 	ctx.input_buf = src;
