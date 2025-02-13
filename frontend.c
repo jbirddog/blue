@@ -14,11 +14,10 @@ static void push_lit(uint64_t val, blue_ctx *ctx) {
 	else if (val > USHRT_MAX) size = 4;
 	else if (val > UCHAR_MAX) size = 2;
 	
-	blue_stack_push(ctx->data_stack, elem, {
-		elem->type = ELEM_LIT;
-		elem->size = size;
-		elem->val = val;
-	});
+	auto elem = blue_stack_push(ctx->data_stack);
+	elem->type = ELEM_LIT;
+	elem->size = size;
+	elem->val = val;
 }
 
 static char *peek_tok(char *s, char **tok_end) {
@@ -61,10 +60,9 @@ static void seal_last_block(blue_ctx *ctx) {
 }
 
 void parse(blue_ctx *ctx) {
-	blue_list_append(ctx->blocks, b, {
-		b->type = BLK_CMDLIST;
-		b->commands.start = ctx->commands.here;
-	});
+	auto block = blue_list_append(ctx->blocks);
+	block->type = BLK_CMDLIST;
+	block->commands.start = ctx->commands.here;
 
 	char *tok;
 	char *tok_end;
@@ -119,44 +117,38 @@ static void call(dict_entry *entry, blue_ctx *ctx) {
 		blue_list_len(ctx->stack_effects)
 	);
 	
-	blue_list_append(ctx->commands, c, {
-		c->type = CMD_CALL;
-		c->val = entry - ctx->user_dict;
-	});
+	auto cmd = blue_list_append(ctx->commands);
+	cmd->type = CMD_CALL;
+	cmd->val = entry - ctx->user_dict;
 }
 
 static void b_comma(dict_entry *entry, blue_ctx *ctx) {
 	blue_stack_pop(ctx->data_stack, elem, {
 		assert(elem->type == ELEM_LIT);
 
-		blue_list_append(ctx->commands, c, {
-			c->type = CMD_COMMA;
-			c->size = 1;
-			c->val = elem->val;
-		});
+		auto cmd = blue_list_append(ctx->commands);
+		cmd->type = CMD_COMMA;
+		cmd->size = 1;
+		cmd->val = elem->val;
 	});
 }
 
 static void colon(dict_entry *entry, blue_ctx *ctx) {
 	seal_last_block(ctx);
 	
-	blue_list_append(ctx->blocks, b, {
-		b->type = BLK_WORD_DECL;
-		b->commands.start = ctx->commands.here;
-	});
-
-	auto block = blue_list_last(ctx->blocks);
+	auto block = blue_list_append(ctx->blocks);
+	block->type = BLK_WORD_DECL;
+	block->commands.start = ctx->commands.here;
 	
 	char *tok_end;
 	auto tok = next_tok(&tok_end, ctx);
 	auto tok_len = tok_end - tok;
-	
-	blue_list_append(ctx->dict, entry, {
-		entry->word = tok;
-		entry->word_len = tok_len;
-		entry->block = block;
-		entry->handler = call;
-	});
+
+	auto new_entry = blue_list_append(ctx->dict);
+	new_entry->word = tok;
+	new_entry->word_len = tok_len;
+	new_entry->block = block;
+	new_entry->handler = call;
 }
 
 static void ddash(dict_entry *entry, blue_ctx *ctx) {
@@ -181,13 +173,13 @@ static void drparen(dict_entry *entry, blue_ctx *ctx) {
 }
 
 static void semi(dict_entry *entry, blue_ctx *ctx) {
-	blue_list_append(ctx->commands, c, { c->type = CMD_RET; });
+	auto cmd = blue_list_append(ctx->commands);
+	cmd->type = CMD_RET;
 	seal_last_block(ctx);
 	
-	blue_list_append(ctx->blocks, b, {
-		b->type = BLK_CMDLIST;
-		b->commands.start = ctx->commands.here;
-	});
+	auto block = blue_list_append(ctx->blocks);
+	block->type = BLK_CMDLIST;
+	block->commands.start = ctx->commands.here;
 }
 
 //
@@ -198,11 +190,10 @@ static char *word_eax = "eax";
 static char *word_edi = "edi";
 
 static void append_effect_reg(size_t size, uint8_t val, blue_ctx *ctx) {	
-	blue_list_append(ctx->stack_effects, e, {
-		e->type = EFFECT_REG;
-		e->size = size;
-		e->val = val;
-	});
+	auto effect = blue_list_append(ctx->stack_effects);
+	effect->type = EFFECT_REG;
+	effect->size = size;
+	effect->val = val;
 }
 
 static void eax(dict_entry *entry, blue_ctx *ctx) {
@@ -220,53 +211,47 @@ static void edi(dict_entry *entry, blue_ctx *ctx) {
 //
 
 void dict_init(blue_ctx *ctx) {
-	blue_list_append(ctx->dict, entry, {
-		entry->word = word_b_comma;
-		entry->word_len = strlen(word_b_comma);
-		entry->handler = b_comma;
-	});
+	dict_entry *entry;
 	
-	blue_list_append(ctx->dict, entry, {
-		entry->word = word_colon;
-		entry->word_len = strlen(word_colon);
-		entry->handler = colon;
-	});
+	entry = blue_list_append(ctx->dict);
+	entry->word = word_b_comma;
+	entry->word_len = strlen(word_b_comma);
+	entry->handler = b_comma;
 	
-	blue_list_append(ctx->dict, entry, {
-		entry->word = word_semi;
-		entry->word_len = strlen(word_semi);
-		entry->handler = semi;
-	});
+	entry = blue_list_append(ctx->dict);
+	entry->word = word_colon;
+	entry->word_len = strlen(word_colon);
+	entry->handler = colon;
 	
-	blue_list_append(ctx->dict, entry, {
-		entry->word = word_ddash;
-		entry->word_len = strlen(word_ddash);
-		entry->handler = ddash;
-	});
+	entry = blue_list_append(ctx->dict);
+	entry->word = word_semi;
+	entry->word_len = strlen(word_semi);
+	entry->handler = semi;
 	
-	blue_list_append(ctx->dict, entry, {
-		entry->word = word_dlparen;
-		entry->word_len = strlen(word_dlparen);
-		entry->handler = dlparen;
-	});
+	entry = blue_list_append(ctx->dict);
+	entry->word = word_ddash;
+	entry->word_len = strlen(word_ddash);
+	entry->handler = ddash;
 	
-	blue_list_append(ctx->dict, entry, {
-		entry->word = word_drparen;
-		entry->word_len = strlen(word_drparen);
-		entry->handler = drparen;
-	});
+	entry = blue_list_append(ctx->dict);
+	entry->word = word_dlparen;
+	entry->word_len = strlen(word_dlparen);
+	entry->handler = dlparen;
 	
-	blue_list_append(ctx->dict, entry, {
-		entry->word = word_eax;
-		entry->word_len = strlen(word_eax);
-		entry->handler = eax;
-	});
+	entry = blue_list_append(ctx->dict);
+	entry->word = word_drparen;
+	entry->word_len = strlen(word_drparen);
+	entry->handler = drparen;
 	
-	blue_list_append(ctx->dict, entry, {
-		entry->word = word_edi;
-		entry->word_len = strlen(word_edi);
-		entry->handler = edi;
-	});
+	entry = blue_list_append(ctx->dict);
+	entry->word = word_eax;
+	entry->word_len = strlen(word_eax);
+	entry->handler = eax;
+	
+	entry = blue_list_append(ctx->dict);
+	entry->word = word_edi;
+	entry->word_len = strlen(word_edi);
+	entry->handler = edi;
 
 	ctx->user_dict = ctx->dict.here;
 }
