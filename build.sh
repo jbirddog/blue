@@ -13,7 +13,7 @@ mkdir -p obj
 
 echo "* Building BlueVM x86_64/linux"
 
-fasm bluevm.asm bin/bluevm
+time fasm bluevm.asm bin/bluevm
 
 echo "* Building bs0 files"
 
