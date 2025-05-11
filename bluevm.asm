@@ -1,5 +1,5 @@
 
-format elf64 executable 3
+format ELF64 executable 3
 
 CELL_SIZE = 8
 
@@ -24,7 +24,7 @@ OPCODE_ENTRY_FLAG_IMMEDIATE = 1 shl 0
 OPCODE_ENTRY_FLAG_INLINED = 1 shl 1
 OPCODE_ENTRY_FLAG_BYTECODE = 1 shl 2
 
-segment readable writable executable
+segment readable writeable executable
 
 include "stack.inc"
 include "interpreter.inc"
