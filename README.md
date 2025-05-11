@@ -25,10 +25,10 @@ The BlueVM has the following layout in rwx memory:
 1. Input buffer (2048 bytes)
 1. Return stack (512 bytes)
 1. Data stack (512 bytes)
-1. Padding (1024 bytes)
-1. Runtime Buffer (4096 bytes)
+1. Runtime Data (1024 bytes)
+   1. User defined (960 bytes)
    1. BlueVM addresses (64 bytes)
-   1. Code Buffer (4032 bytes)
+1. Code Buffer (4096 bytes)
 
 ## Boot
 
@@ -145,3 +145,6 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. Add bytecode opcodes for litb, etc
 1. Print error messages to disambiguate exit status
 1. Move to fasm2
+1. BlueVM as a fasmg target
+   1. Look at blang being done this way
+   1. Find the page that has all the links for the different fasmg scripts

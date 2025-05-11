@@ -7,9 +7,14 @@ OPCODE_TBL_SIZE = 4096
 INPUT_BUFFER_SIZE = 2048
 RETURN_STACK_SIZE = 512
 DATA_STACK_SIZE = 512
-PADDING_SIZE = 1024
+RUNTIME_DATA_SIZE = 1024
 VM_ADDRS_SIZE = 64
-CODE_BUFFER_SIZE = (4096 - VM_ADDRS_SIZE)
+USER_DATA_SIZE = RUNTIME_DATA_SIZE - VM_ADDRS_SIZE
+CODE_BUFFER_SIZE = 4096
+
+STACKS_SIZE = RETURN_STACK_SIZE + DATA_STACK_SIZE
+BUFFERS_SIZE = INPUT_BUFFER_SIZE + CODE_BUFFER_SIZE
+VM_MEM_SIZE = OPCODE_TBL_SIZE + BUFFERS_SIZE + STACKS_SIZE + RUNTIME_DATA_SIZE
 
 OPCODE_HANDLER_COMPILE = opcode_handler_compile
 OPCODE_HANDLER_INTERPRET = opcode_handler_interpret
@@ -74,26 +79,31 @@ entry $
 include "opcodes.inc"
 rb (OPCODE_TBL_SIZE - ($ - opcode_tbl))
 
-instruction_pointer rq 1
-opcode_handler rq 1
-opcode_handler_invalid rq 1
-
 input_buffer rb INPUT_BUFFER_SIZE
 
 return_stack rb RETURN_STACK_SIZE
-return_stack_here rq 1
-return_stack_size rq 1
-
 data_stack rb DATA_STACK_SIZE
-data_stack_here rq 1
-data_stack_size rq 1
 
-padding rb PADDING_SIZE
+user_data rb USER_DATA_SIZE
 
 vm_addrs:
 vm_addr_opcode_handler_call rq 1
 rb (VM_ADDRS_SIZE - ($ - vm_addrs))
 
-code_buffer rb (CODE_BUFFER_SIZE - VM_ADDRS_SIZE)
+code_buffer rb CODE_BUFFER_SIZE
+
+assert ($ - opcode_tbl) = VM_MEM_SIZE
+
+instruction_pointer rq 1
+
+opcode_handler rq 1
+opcode_handler_invalid rq 1
+
+return_stack_here rq 1
+return_stack_size rq 1
+
+data_stack_here rq 1
+data_stack_size rq 1
+
 code_buffer_here rq 1
 code_buffer_size rq 1
