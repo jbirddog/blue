@@ -11,9 +11,6 @@ trap 'error_handler $LINENO $?' ERR
 mkdir -p bin
 mkdir -p obj
 
-chmod +x fasm2/fasm2
-chmod +x fasm2/fasmg.x64
-
 echo "* Building BlueVM x86_64/linux"
 
 fasm2/fasm2 bluevm.asm bin/bluevm
