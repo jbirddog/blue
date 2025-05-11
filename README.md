@@ -145,5 +145,5 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. Add bytecode opcodes for litb, etc
 1. Print error messages to disambiguate exit status
 1. BlueVM as a fasmg target
-   1. Look at blang being done this way
+   1. Look at `blasm` being done this way
    1. Examples - https://board.flatassembler.net/topic.php?t=19389
