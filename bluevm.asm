@@ -76,10 +76,7 @@ entry $
 	call	read_boot_code	
 	call	interpreter
 
-;include "opcodes.inc"
-_call:
-	ret
-opcode_tbl:
+include "opcodes.inc"
 rb (OPCODE_TBL_SIZE - ($ - opcode_tbl))
 
 input_buffer rb INPUT_BUFFER_SIZE
