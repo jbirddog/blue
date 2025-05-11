@@ -5,8 +5,9 @@ CELL_SIZE = 8
 
 OPCODE_TBL_SIZE = 4096
 INPUT_BUFFER_SIZE = 2048
-RETURN_STACK_SIZE = 1024
-DATA_STACK_SIZE = 1024
+RETURN_STACK_SIZE = 512
+DATA_STACK_SIZE = 512
+PADDING_SIZE = 1024
 VM_ADDRS_SIZE = 64
 CODE_BUFFER_SIZE = (4096 - VM_ADDRS_SIZE)
 
@@ -86,6 +87,8 @@ return_stack_size rq 1
 data_stack rb DATA_STACK_SIZE
 data_stack_here rq 1
 data_stack_size rq 1
+
+padding rb PADDING_SIZE
 
 vm_addrs:
 vm_addr_opcode_handler_call rq 1
