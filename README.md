@@ -23,11 +23,12 @@ The BlueVM has the following layout in rwx memory:
    1. BlueVM Opcode Map: 0x00 - 0x7F (2048 bytes)
    1. Extended Opcode Map: 0x80 - 0xFF (2048 bytes)
 1. Input buffer (2048 bytes)
-1. Return stack (1024 bytes)
-1. Data stack (1024 bytes)
-1. Runtime Buffer (4096 bytes)
+1. Return stack (512 bytes)
+1. Data stack (512 bytes)
+1. Runtime Data (1024 bytes)
+   1. User data (960 bytes)
    1. BlueVM addresses (64 bytes)
-   1. Code Buffer (4032 bytes)
+1. Code Buffer (4096 bytes)
 
 ## Boot
 
@@ -143,4 +144,7 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. Add bytecode op if/if-not
 1. Add bytecode opcodes for litb, etc
 1. Print error messages to disambiguate exit status
-1. Move blang into lang like blue
+1. Move to fasm2
+1. BlueVM as a fasmg target
+   1. Look at blang being done this way
+   1. Examples - https://board.flatassembler.net/topic.php?t=19389
