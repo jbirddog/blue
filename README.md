@@ -92,10 +92,12 @@ Opcodes start at 00 and subject to change.
 | XX | here | ( -- a ) | Push location of code buffer's here |
 | XX | here! | ( a -- ) | Sets the location of code buffer's here |
 | XX | b@+ | ( a -- b a' ) | Push byte value found at addr, increment and push addr |
-| XX | d@+ | ( a -- w a' ) | Push word value found at addr, increment and push addr |
-| XX | w@+ | ( a -- d a' ) | Push dword value found at addr, increment and push addr |
+| XX | w@+ | ( a -- w a' ) | Push word value found at addr, increment and push addr |
+| XX | d@+ | ( a -- d a' ) | Push dword value found at addr, increment and push addr |
 | XX | @+ | ( a -- q a' ) | Push qword value found at addr, increment and push addr |
 | XX | b@ | ( a -- b ) | Push byte value found at addr |
+| XX | w@ | ( a -- b ) | Push word value found at addr |
+| XX | d@ | ( a -- b ) | Push dword value found at addr |
 | XX | @ | ( a -- q ) | Push qword value found at addr |
 | XX | b!+ | ( a b -- 'a ) | Write byte value to, increment and push addr |
 | XX | w!+ | ( a w -- 'a ) | Write word value to, increment and push addr |
