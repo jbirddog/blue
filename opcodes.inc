@@ -41,11 +41,16 @@ op_eq:
 
 	ret
 
-op_b_at:
+_at_inc_pre:
 	call	data_stack_pop
 	mov	rsi, rax
 	xor	eax, eax
-	lodsb
+
+	ret
+
+_at_inc_post:
+	call	data_stack_push
+	mov	rax, rsi
 	call	data_stack_push
 
 	ret
@@ -279,14 +284,48 @@ opNI	op_set_here, 1, 0
 	ret
 end_op
 
-opN	op_b_at, 1, 0
-	
-opNI	op_at, 1, 0
-	call	data_stack_pop
-	mov	rax, [rax]
-	call	data_stack_push
+opNI	op_b_at_inc, 1, 0
+	call	_at_inc_pre
+	lodsb
 
-	ret
+	jmp	_at_inc_post
+end_op
+
+opNI	op_w_at_inc, 1, 0
+	call	_at_inc_pre
+	lodsw
+
+	jmp	_at_inc_post
+end_op
+
+opNI	op_d_at_inc, 1, 0
+	call	_at_inc_pre
+	lodsd
+
+	jmp	_at_inc_post
+end_op
+
+opNI	op_at_inc, 1, 0
+	call	_at_inc_pre
+	lodsq
+
+	jmp	_at_inc_post
+end_op
+
+opBI	op_b_at, 1, 0
+	db op_b_at_inc_code, op_drop_code, op_ret_code
+end_op
+
+opBI	op_w_at, 1, 0
+	db op_w_at_inc_code, op_drop_code, op_ret_code
+end_op
+
+opBI	op_d_at, 1, 0
+	db op_d_at_inc_code, op_drop_code, op_ret_code
+end_op
+	
+opBI	op_at, 1, 0
+	db op_at_inc_code, op_drop_code, op_ret_code
 end_op	
 
 opNI	op_b_set_inc, 1, 0
