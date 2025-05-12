@@ -1,12 +1,18 @@
 
-calminstruction exit
-	arrange opcode, =db 0
-	assemble opcode
-end calminstruction
+iterate <opname, opsize>, \
+	exit, 1, \
+	true, 1, \
+	false, 1, \
 
-calminstruction litb b
+	calminstruction #opname
+		arrange opcode, =db (% - 1)
+		assemble opcode
+	end calminstruction
+end iterate
+
+calminstruction litb val
 	arrange opcode, =db 33
-	arrange val, =db b
+	arrange val, =db val
 	assemble opcode
 	assemble val
 end calminstruction
