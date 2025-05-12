@@ -125,31 +125,32 @@ _set_post:
 
 	ret
 
-op_litw:
-	mov	rsi, [instruction_pointer]
-	lodsw
-	mov	[instruction_pointer], rsi
+op_litb:
+	call	op_ip.impl
+	call	op_b_at_inc.impl
+	call	op_set_ip.impl
 
-	call	data_stack_push
+	ret
+
+op_litw:
+	call	op_ip.impl
+	call	op_w_at_inc.impl
+	call	op_set_ip.impl
 
 	ret
 
 op_litd:
-	mov	rsi, [instruction_pointer]
-	lodsd
-	mov	[instruction_pointer], rsi
-
-	call	data_stack_push
+	call	op_ip.impl
+	call	op_d_at_inc.impl
+	call	op_set_ip.impl
 
 	ret
 
 op_lit:
-	mov	rsi, [instruction_pointer]
-	lodsq
-	mov	[instruction_pointer], rsi
-
-	call	data_stack_push
-
+	call	op_ip.impl
+	call	op_at_inc.impl
+	call	op_set_ip.impl
+	
 	ret
 
 macro begin_op lbl, size, flags
@@ -373,15 +374,14 @@ opBI	op_comma, 1, 0
 	db op_here_code, op_swap_code, op_set_inc_code, op_set_here_code, op_ret_code
 end_op
 
-opNI	op_litb, 2, 0
-	call	read_byte
-	call	data_stack_push
-	
-	ret
-end_op
+opN	op_litb, 2, 0
 
-opN	op_litw, 9, 0
-opN	op_litd, 9, 0
+;opBI	op_litb, 2, 0
+;	db op_ip_code, op_b_at_inc_code, op_set_ip_code, op_ret_code
+;end_op
+
+opN	op_litw, 3, 0
+opN	op_litd, 5, 0
 opN	op_lit, 9, 0
 
 ;
