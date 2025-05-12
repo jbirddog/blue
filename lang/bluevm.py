@@ -11,7 +11,8 @@ kw = """
     entry
     start
     here here!
-    b@ @
+    b@+ w@+ d@+ @+
+    b@ w@ d@ @
     b!+ w!+ d!+ !+
     b, w, d, ,
     litb litw litd lit
