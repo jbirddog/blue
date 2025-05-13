@@ -16,10 +16,36 @@ iterate <opname, opsize>, \
 	start, 1, \
 	here, 1, \
 	sethere, 1, \
+	atincb, 1, \ 
+	atincw, 1, \ 
+	atincd, 1, \ 
+	atincq, 1, \ 
+	atb, 1, \ 
+	atw, 1, \ 
+	atd, 1, \ 
+	atq, 1, \ 
+	setincb, 1, \ 
+	setincw, 1, \ 
+	setincd, 1, \ 
+	setincq, 1, \ 
+	cb, 1, \ 
+	cw, 1, \ 
+	cd, 1, \ 
+	cq, 1, \ 
 	litb, 2, \
 	litw, 3, \
 	litd, 5, \
 	litq, 9, \
+	depth, 1, \
+	dup, 1, \
+	drop, 1, \
+	swap, 1, \
+	not, 1, \
+	eq, 1, \
+	add, 1, \
+	sub, 1, \
+	shl, 1, \
+	shr, 1, \
 
 	match =1, opsize
 		calminstruction #opname
@@ -27,8 +53,7 @@ iterate <opname, opsize>, \
 		end calminstruction
 	else
 		calminstruction #opname val
-			;emit 1, % - 1
-			emit 1, 33
+			emit 1, % - 1
 			emit (opsize - 1), val
 		end calminstruction
 	end match
