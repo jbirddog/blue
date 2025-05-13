@@ -33,6 +33,7 @@ python blue.py < examples/exit.blue > ../../obj/blue_exit.bs0
 popd
 
 ./lang/blasm/blasm lang/blasm/examples/exit.bla obj/blasm_exit.bs0
+./lang/blasm/blasm lang/blasm/examples/hello_world.bla obj/blasm_hello_world.bs0
 
 echo "* Running bs0 test cases"
 
@@ -46,6 +47,9 @@ echo "* Running bs0 test cases"
 
 echo "** Blang Example - Hello World"
 ./bin/bluevm < obj/hello_world.bs0
+
+echo "** Blasm Example - Hello World"
+./bin/bluevm < obj/blasm_hello_world.bs0
 
 echo "** Blue Example - Exit"
 ./bin/bluevm < obj/blue_exit.bs0

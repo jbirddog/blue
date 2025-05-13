@@ -8,6 +8,7 @@ iterate <opname, opsize>, \
 	call, 1, \
 	tor, 1, \
 	fromr, 1, \
+	ret, 1, \
 	compile, 1, \
 	interpret, 1, \
 	ip, 1, \
