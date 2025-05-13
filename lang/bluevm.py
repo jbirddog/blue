@@ -8,7 +8,7 @@ kw = """
     ret
     [ ]
     ip ip!
-    entry
+    op
     start
     here here!
     b@+ w@+ d@+ @+

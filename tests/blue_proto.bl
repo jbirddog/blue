@@ -5,7 +5,7 @@
 #
 
 # custom opcode 80 - calculate address used to get/set address of word N
-litb 80 entry
+litb 80 op
 
 # set flags and size
 litb 06 b!+
@@ -21,7 +21,7 @@ litb ret b!+
 drop
 
 # custom opcode 81 - set address of word N
-litb 81 entry
+litb 81 op
 
 # set flags and size
 litb 06 b!+
@@ -36,7 +36,7 @@ litb ret b!+
 drop
 
 # custom opcode 82 - get address of word N
-litb 82 entry
+litb 82 op
 
 # set flags and size
 litb 06 b!+

@@ -87,7 +87,7 @@ Opcodes start at 00 and subject to change.
 | XX | ] | ( -- a ) | Append ret and end compilation, push addr where compilation started |
 | XX | ip | ( -- a ) | Push location of the instruction pointer |
 | XX | ip! | ( a -- ) | Sets the location of the instruction pointer |
-| XX | entry | ( b -- a ) | Push addr of the entry for opcode |
+| XX | op | ( b -- a ) | Push addr of the code for opcode |
 | XX | start | ( -- a ) | Push the code buffer location |
 | XX | here | ( -- a ) | Push location of code buffer's here |
 | XX | here! | ( a -- ) | Sets the location of code buffer's here |
@@ -138,7 +138,6 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ## TODOs
 
-1. Rename entry
 1. Add ! flavors
    1. Use in Blue opcodes
 1. See about re-arranging >r order in op_compile_begin to simplify it and op_compile_end

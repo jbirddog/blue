@@ -3,13 +3,13 @@
 # implement assert as custom opcode FF
 #
 
-litb FF entry
+litb FF op
 
 # set flags and size
 litb 04 b!+
 litb 01 b!+
 
-# compile and write bytecode address into the opcode entry
+# compile and write bytecode address into the opcode table
 [ [ ] [ litb FF exit ] if-else ] !+ drop
 
 # call custom opcode

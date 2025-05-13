@@ -13,7 +13,7 @@ iterate <opname, opsize>, \
 	interpret, 1, \
 	ip, 1, \
 	setip, 1, \
-	entry, 1, \
+	op, 1, \
 	start, 1, \
 	here, 1, \
 	sethere, 1, \

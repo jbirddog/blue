@@ -164,7 +164,7 @@ def compile(lowered):
 def bluevm_setup(ctx):
     return [
         # Custom opcode 80 - get pointer to addr for word N
-        LitInt(0x80), BlueVMOp("entry"),
+        LitInt(0x80), BlueVMOp("op"),
         LitInt(0x06), BlueVMOp("b!+"),
         LitInt(0x01), BlueVMOp("b!+"),
         # inline bytecode
@@ -177,7 +177,7 @@ def bluevm_setup(ctx):
         BlueVMOp("drop"),
 
         # Custom opcode 81 - set addr for word N
-        LitInt(0x81), BlueVMOp("entry"),
+        LitInt(0x81), BlueVMOp("op"),
         LitInt(0x06), BlueVMOp("b!+"),
         LitInt(0x01), BlueVMOp("b!+"),
         # inline bytecode
@@ -189,7 +189,7 @@ def bluevm_setup(ctx):
         BlueVMOp("drop"),
 
         # Custom opcode 82 - get addr for word N
-        LitInt(0x82), BlueVMOp("entry"),
+        LitInt(0x82), BlueVMOp("op"),
         LitInt(0x06), BlueVMOp("b!+"),
         LitInt(0x01), BlueVMOp("b!+"),
         # inline bytecode
@@ -199,7 +199,7 @@ def bluevm_setup(ctx):
         BlueVMOp("drop"),
 
         # Custom opcode 83 - interpret word N
-        LitInt(0x83), BlueVMOp("entry"),
+        LitInt(0x83), BlueVMOp("op"),
         LitInt(0x06), BlueVMOp("b!+"),
         LitInt(0x01), BlueVMOp("b!+"),
         # inline bytecode
@@ -209,7 +209,7 @@ def bluevm_setup(ctx):
         BlueVMOp("drop"),
 
         # Custom opcode 84 - call distance from word N
-        LitInt(0x84), BlueVMOp("entry"),
+        LitInt(0x84), BlueVMOp("op"),
         LitInt(0x06), BlueVMOp("b!+"),
         LitInt(0x01), BlueVMOp("b!+"),
         # inline bytecode
@@ -223,7 +223,7 @@ def bluevm_setup(ctx):
         BlueVMOp("drop"),
 
         # Custom opcode 85 - compile word N
-        LitInt(0x85), BlueVMOp("entry"),
+        LitInt(0x85), BlueVMOp("op"),
         LitInt(0x06), BlueVMOp("b!+"),
         LitInt(0x01), BlueVMOp("b!+"),
         # inline bytecode
