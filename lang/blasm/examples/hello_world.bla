@@ -1,0 +1,60 @@
+;
+; sample Hello World rendered at compile time
+;
+
+here
+dup
+
+; Hello, w
+litq	0x57202C6F6C6C6548
+cq
+
+; orld!\n
+litd	0x646C726F
+cd
+litw	0x0A21
+cw
+
+; string len
+here
+swap
+sub
+
+; compile in machine code to make write system call
+here
+
+; xor eax, eax
+; inc eax
+; mov edi, eax
+litw	0xC031
+cw
+litw	0xC0FF
+cw
+litw	0xC789
+cw
+
+; mov edx, _string len_
+swap
+litb	0xBA
+cb
+cd
+
+; movabs rsi, _addr of string_
+swap
+litw	0xBE48
+cw
+cq
+
+; syscall
+litw	0x050F
+cw
+
+; ret
+litb	0xC3
+cb
+
+; call the compiled machine code
+mccall
+
+depth
+exit

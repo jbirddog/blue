@@ -32,6 +32,9 @@ pushd lang/blue
 python blue.py < examples/exit.blue > ../../obj/blue_exit.bs0
 popd
 
+./lang/blasm/blasm lang/blasm/examples/exit.bla obj/blasm_exit.bs0
+./lang/blasm/blasm lang/blasm/examples/hello_world.bla obj/blasm_hello_world.bs0
+
 echo "* Running bs0 test cases"
 
 ./bin/bluevm < obj/test_exit.bs0
@@ -42,14 +45,16 @@ echo "* Running bs0 test cases"
 ./bin/bluevm < obj/test_ops.bs0
 ./bin/bluevm < obj/test_blue_proto.bs0
 
-echo "** Example - Hello World"
+echo "** Blang Example - Hello World"
 ./bin/bluevm < obj/hello_world.bs0
 
-#xxd obj/test_blue_proto.bs0
-#echo "----"
-#xxd obj/blue_exit.bs0
+echo "** Blasm Example - Hello World"
+./bin/bluevm < obj/blasm_hello_world.bs0
 
 echo "** Blue Example - Exit"
 ./bin/bluevm < obj/blue_exit.bs0
+
+echo "** Blasm Example - Exit"
+./bin/bluevm < obj/blasm_exit.bs0
 
 echo "* Done"
