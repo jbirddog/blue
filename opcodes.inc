@@ -462,6 +462,5 @@ end_op
 
 
 assert (($ - opcode_tbl) and 0x07) = 0
-assert ($ - opcode_tbl) <= (0x7F shl 4)
-assert ($ - opcode_tbl) <= OPCODE_TBL_SIZE
+assert ($ - opcode_tbl) <= VM_OPCODE_TBL_SIZE
 
