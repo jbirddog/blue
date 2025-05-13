@@ -1,0 +1,6 @@
+litb 0x00
+exit
+
+; this shouldn't run
+litb 0xFF
+exit 

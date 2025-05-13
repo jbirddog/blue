@@ -15,26 +15,29 @@ echo "* Building BlueVM x86_64/linux"
 
 fasm2/fasm2 bluevm.asm bin/bluevm
 
+echo ""
 echo "* Building bs0 files"
 
-pushd lang/blang
-python blang.py < ../../tests/exit.bl > ../../obj/test_exit.bs0
-python blang.py < ../../tests/init.bl > ../../obj/test_init.bs0
+./lang/blasm/blasm tests/init.bla obj/test_init.bs0
+./lang/blasm/blasm tests/exit.bla obj/test_exit.bs0
+
+pushd lang/blang > /dev/null
 python blang.py < ../../tests/ifelse.bl > ../../obj/test_ifelse.bs0
 python blang.py < ../../tests/bc.bl > ../../obj/test_bc.bs0
 python blang.py < ../../tests/assert.bl > ../../obj/test_assert.bs0
 python blang.py < ../../tests/ops.bl > ../../obj/test_ops.bs0
 python blang.py < ../../tests/blue_proto.bl > ../../obj/test_blue_proto.bs0
 python blang.py < examples/hello_world.bl > ../../obj/hello_world.bs0
-popd
+popd > /dev/null
 
-pushd lang/blue
+pushd lang/blue > /dev/null
 python blue.py < examples/exit.blue > ../../obj/blue_exit.bs0
-popd
+popd > /dev/null
 
 ./lang/blasm/blasm lang/blasm/examples/exit.bla obj/blasm_exit.bs0
 ./lang/blasm/blasm lang/blasm/examples/hello_world.bla obj/blasm_hello_world.bs0
 
+echo ""
 echo "* Running bs0 test cases"
 
 ./bin/bluevm < obj/test_exit.bs0
@@ -57,4 +60,5 @@ echo "** Blue Example - Exit"
 echo "** Blasm Example - Exit"
 ./bin/bluevm < obj/blasm_exit.bs0
 
+echo ""
 echo "* Done"

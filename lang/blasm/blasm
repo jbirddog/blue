@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 DIR="$( dirname -- "$( readlink -f -- "$0"; )"; )"
 FASM_DIR="$DIR/../../fasm2"
-INCLUDE="$DIR;$FASM_DIR/include;$INCLUDE" "$FASM_DIR/fasmg.x64" -iInclude\ \'blasm.inc\' "$@"
+INCLUDE="$DIR;$FASM_DIR/include;$INCLUDE" "$FASM_DIR/fasmg.x64" -n -iInclude\ \'blasm.inc\' "$@"
