@@ -1,0 +1,210 @@
+
+;
+; test compiling and calling bytecode
+;
+
+compile
+endcompile
+depth
+litb 0x01
+eq
+compile
+endcompile
+compile
+	litb 0x01
+	exit
+endcompile
+ifelse
+drop
+
+compile
+endcompile
+atb
+litb ret.code
+eq
+compile
+endcompile
+compile
+	litb 0x02
+	exit
+endcompile
+ifelse
+
+compile
+endcompile
+call
+
+compile
+	compile
+	endcompile
+	call
+endcompile
+call
+
+compile
+	compile
+		compile
+		endcompile
+		call
+	endcompile
+	call
+endcompile
+call
+
+compile
+	compile
+		compile
+			compile
+			endcompile
+			call
+		endcompile
+		call
+	endcompile
+	call
+endcompile
+call
+
+compile
+	compile
+		compile
+			compile
+				compile
+				endcompile
+				call
+			endcompile
+			call
+		endcompile
+		call
+	endcompile
+	call
+endcompile
+call
+
+compile
+	compile
+		compile
+			compile
+				compile
+					compile
+					endcompile
+					call
+				endcompile
+				call
+			endcompile
+			call
+		endcompile
+		call
+	endcompile
+	call
+endcompile
+call
+
+compile
+endcompile
+dup
+litb 0x01
+sub
+atb
+litb setip.code
+eq
+compile
+endcompile
+compile
+	litb 0x03
+	exit
+endcompile
+ifelse
+dup
+litb 0x0A
+sub
+atb
+litb litq.code
+eq
+compile
+endcompile
+compile
+	litb 0x04
+	exit
+endcompile
+ifelse
+compile
+	drop
+endcompile
+call
+
+;litb 01 litb 02 compile + endcompile call
+
+litb 0x01
+litb 0x02
+compile
+	add
+endcompile
+call
+
+litb 0x03
+eq
+compile
+endcompile
+compile
+	litb 0x05
+	exit
+endcompile
+ifelse
+
+litb 0x04
+litb 0x05
+compile
+	compile
+		compile
+			add
+		endcompile
+		call
+	endcompile
+	call
+endcompile
+call
+
+litb 0x09
+eq
+compile
+endcompile
+compile
+	litb 0x06
+	exit
+endcompile
+ifelse
+
+litb 0x01
+compile
+	litb 0x03
+	eq
+	compile
+		compile
+			litb 0x07
+			exit
+		endcompile
+		compile
+		endcompile
+		ifelse
+	endcompile
+	call
+endcompile
+call
+
+compile
+endcompile
+here
+swap
+call
+here
+eq
+compile
+endcompile
+compile
+	litb 0x08
+	exit
+endcompile
+ifelse
+
+depth
+exit

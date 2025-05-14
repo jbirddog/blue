@@ -48,6 +48,8 @@ iterate <opname, opsize>, \
 	shl, 1, \
 	shr, 1, \
 
+	#opname.code = % - 1
+
 	match =1, opsize
 		calminstruction #opname
 			emit 1, % - 1
