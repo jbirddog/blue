@@ -1,0 +1,125 @@
+
+;
+; prototype for how the Blue Language compiles down to BlueVM bytecode
+; this may or may not be in sync with the current Blue impl, but the theory is the same
+;
+
+; custom opcode 80 - calculate address used to get/set address of word N
+litb	0x80
+op
+
+; set flags and size
+litb	0x06
+setincb
+litb	0x01
+setincb
+
+; inline bytecode
+litb	litb.code
+setincb
+litb	0x03
+setincb
+litb	shl.code
+setincb
+litb	start.code
+setincb
+litb	add.code
+setincb
+litb	ret.code
+setincb
+drop
+
+; custom opcode 81 - set address of word N
+litb	0x81
+op
+
+; set flags and size
+litb	0x06
+setincb
+litb	0x01
+setincb
+
+; inline bytecode
+litb	0x80
+setincb
+litb	here.code
+setincb
+litb	setincq.code
+setincb
+litb	drop.code
+setincb
+litb	ret.code
+setincb
+drop
+
+; custom opcode 82 - get address of word N
+litb	0x82
+op
+
+; set flags and size
+litb	0x06
+setincb
+litb	0x01
+setincb
+
+; inline bytecode
+litb	0x80
+setincb
+litb	atq.code
+setincb
+litb	ret.code
+setincb
+drop
+
+
+; frontend knows how many words it has and allocates that many qwords at the start of the code buffer
+here
+litb	0x02
+litb	0x03
+shl
+add
+sethere
+
+; frontend marks the here for each word in its allocated space using custom opcode 81
+litb	0x00
+callop	0x81
+
+; frontend compiles the word body
+litb	0xBF
+cb
+litb	0x05
+cd
+litb	0xB8
+cb
+litb	0x3C
+cd
+litb	0x0F
+cb
+litb	0x05
+cb
+
+; frontend marks the here for each word in its allocated space using custom opcode 81
+litb	0x01
+callop	0x81
+
+; frontend compiles the word body
+litb	0xBF
+cb
+litb	0x00
+cd
+litb	0xB8
+cb
+litb	0x3C
+cd
+litb	0x0F
+cb
+litb	0x05
+cb
+
+; top level calls use the stored addr directly via custom opcode 82
+litb	0x01
+callop	0x82
+mccall
+
+depth
+exit
