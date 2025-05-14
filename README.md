@@ -129,7 +129,6 @@ Along with the code for BlueVM this repository also contains some tools and exam
 | Name | Descripton | Location |
 |----|----|----|
 | blasm | Assembles BlueVM bytecode using `fasmg` | lang/blasm |
-| blue | Frontend for a language with a Forth-like syntax where you are the assembler and linker | lang/blue |
 
 ### Idea for more tools/examples
 
@@ -137,6 +136,7 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ## TODOs
 
+1. Bring back a simpiler version of the `blue` language
 1. Add ! flavors
    1. Use in Blue opcodes
 1. See about re-arranging >r order in op_compile_begin to simplify it and op_compile_end
