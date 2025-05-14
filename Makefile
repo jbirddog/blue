@@ -1,9 +1,13 @@
 FASM2 ?= fasm2/fasm2
 
-all: vm
+bin/bluevm: bluevm.asm | bin
+	$(FASM2) $^ $@
 
-vm:
-	$(FASM2) bluevm.asm bin/bluevm
+bin:
+	mkdir $@
+
+clean:
+	rm -rf bin
 
 .PHONY:
-	vm
+	clean

@@ -8,12 +8,11 @@ error_handler() {
 
 trap 'error_handler $LINENO $?' ERR
 
-mkdir -p bin
 mkdir -p obj
 
 echo "* Building BlueVM x86_64/linux"
 
-fasm2/fasm2 bluevm.asm bin/bluevm
+make
 
 echo ""
 echo "* Building bs0 files"
