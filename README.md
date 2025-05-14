@@ -128,8 +128,7 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 | Name | Descripton | Location |
 |----|----|----|
-| blang | Quick and dirty frontend for a textual representation of the BlueVM bytecode | lang/blang |
-| blasm | Implemented as a macro for fasmg to assemble BlueVM bytecode | lang/blasm |
+| blasm | Assembles BlueVM bytecode using `fasmg` | lang/blasm |
 | blue | Frontend for a language with a Forth-like syntax where you are the assembler and linker | lang/blue |
 
 ### Idea for more tools/examples

@@ -2,9 +2,32 @@ import sys
 from collections import namedtuple
 from dataclasses import dataclass, field
 
-sys.path.append("..")
+kw = """
+    exit
+    true false
+    if-else
+    mccall call
+    >r r>
+    ret
+    [ ]
+    ip ip!
+    op
+    start
+    here here!
+    b@+ w@+ d@+ @+
+    b@ w@ d@ @
+    b!+ w!+ d!+ !+
+    b, w, d, ,
+    litb litw litd lit
 
-from bluevm import lit_by_len, op_byte
+    depth dup drop swap
+    not = + -
+    shl shr
+""".split()
+
+op_byte = {e: bytes([i]) for i, e in enumerate(kw)}
+
+lit_by_len = { 1: "litb", 2: "litw", 4: "litd", 8: "lit", }
 
 #
 # custom opcodes
