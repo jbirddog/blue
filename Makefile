@@ -14,7 +14,7 @@ BLASM_EXAMPLE_OBJS = $(BLASM_EXAMPLES:lang/blasm/examples/%.bla=obj/blasm_%.bs0)
 all: vm test example
 
 vm: $(BLUEVM)
-test: $(TEST_OBJS) $(BLUEVM)
+test: $(TEST_OBJS)
 example: $(BLASM_EXAMPLE_OBJS)
 
 bin/%: %.asm | bin
@@ -35,4 +35,4 @@ clean:
 	rm -rf bin obj
 
 .PHONY:
-	clean
+	clean vm test example
