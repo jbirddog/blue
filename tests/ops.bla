@@ -1,0 +1,317 @@
+
+;
+; implement assert as custom opcode FF
+;
+
+litb	0xFF
+op
+
+; set flags and size
+litb	0x04
+setincb
+litb	0x01
+setincb
+
+; compile and write bytecode address into the opcode table
+compile
+	compile
+	endcompile
+	compile
+		litb	0xFF
+		exit
+	endcompile
+	ifelse
+endcompile
+setincq
+drop
+
+; stack depth is 0
+depth
+litb	0x00
+eq
+callop	0xFF
+
+
+;
+; lit
+;
+
+litq	0x0000000000000001
+litb	0x01
+eq
+callop	0xFF
+
+;
+; test data stack ops
+;
+
+; stack depth is 1 after pushing a value
+litb	0x10
+depth
+litb	0x01
+eq
+callop	0xFF
+
+; stack depth is 0 after dropping the value
+drop
+depth
+litb	0x00
+eq
+callop	0xFF
+
+; not
+depth
+litb	0x02
+eq
+not
+callop	0xFF
+
+; swap
+litb	0x02
+litb	0x01
+swap
+depth
+eq
+callop	0xFF
+drop
+
+; sub
+litb	0x09
+litb	0x07
+sub
+litb	0x02
+eq
+callop	0xFF
+
+; add
+litb	0x07
+litb	0x02
+add
+litb	0x09
+eq
+callop	0xFF
+
+; shl/shr
+litb	0x01
+litb	0x03
+shl
+litb	0x08
+eq
+callop	0xFF
+
+litb	0x08
+litb	0x03
+shr
+litb	0x01
+eq
+callop	0xFF
+
+; dup
+here
+dup
+eq
+callop	0xFF
+
+; tor and fromr
+here
+tor
+fromr
+here
+eq
+callop	0xFF
+
+
+; test setincb
+here
+
+here
+litb	0x01
+setincb
+
+litb	0x01
+sub
+eq
+callop	0xFF
+
+; test setincd
+here
+
+here
+litb	0x01
+setincd
+
+litb	0x04
+sub
+eq
+callop	0xFF
+
+; test setincq
+here
+
+here
+litb	0x01
+setincq
+
+litb	0x08
+sub
+eq
+callop	0xFF
+
+; test cb
+here
+
+litb	0xC3
+cb
+here
+litb	0x01
+sub
+atb
+litb	0xC3
+eq
+callop	0xFF
+
+drop
+
+; test cd
+here
+
+litb	0xC3
+cd
+here
+litb	0x04
+sub
+atb
+litb	0xC3
+eq
+callop	0xFF
+
+drop
+
+; test cq
+here
+
+litb	0xC3
+cq
+here
+litb	0x08
+sub
+atb
+litb	0xC3
+eq
+callop	0xFF
+
+drop
+
+;
+; test calling compiled machine code
+;
+
+; call address that immediately returns
+here
+litb	0xC3
+cb
+mccall
+
+; push two numbers, compile and call machine code that calls the add opcode
+litb	0x03
+litb	0x05
+
+here
+
+; xor eax, eax
+; mov al, _add opcode_
+litb	0x31
+cb
+litb	0xC0
+cb
+litb	0xB0
+cb
+litb	add.code
+cb
+
+; movabs rdi, _addr of opcode call_
+litb	0x48
+cb
+litb	0xBF
+cb
+start
+litb	0x40
+sub
+atq
+cq
+
+; call rdi
+litb	0xFF
+cb
+litb	0xD7
+cb
+
+; ret
+litb	0xC3
+cb
+
+mccall
+
+litb	0x08
+eq
+callop	0xFF
+
+;
+; control flow
+;
+
+start
+start
+eq
+compile
+	litb	0x01
+endcompile
+compile
+endcompile
+ifelse
+start
+dup
+litb	0x0A
+add
+eq
+compile
+endcompile
+compile
+	litb	0x03
+endcompile
+ifelse
+
+add
+litb	0x04
+eq
+compile
+endcompile
+compile
+	litb	0xFF
+	exit
+endcompile
+ifelse
+
+; jump over litb 07 exit
+ip
+litb	0x07
+add
+setip
+litb	0x07
+exit
+
+;
+; fin
+;
+
+; set code buffer back to start
+start
+sethere
+start
+here
+eq
+callop	0xFF
+
+; exit cleanly if stack is prestine
+depth
+exit
