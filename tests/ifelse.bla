@@ -1,0 +1,21 @@
+
+true
+compile
+endcompile
+compile
+	litb	0xFF
+	exit
+endcompile
+ifelse
+
+false
+compile
+	litb	0xFF
+	exit
+endcompile
+compile
+endcompile
+ifelse
+
+depth
+exit

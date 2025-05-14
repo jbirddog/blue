@@ -20,11 +20,11 @@ echo "* Building bs0 files"
 
 ./lang/blasm/blasm tests/init.bla obj/test_init.bs0
 ./lang/blasm/blasm tests/exit.bla obj/test_exit.bs0
+./lang/blasm/blasm tests/ifelse.bla obj/test_ifelse.bs0
+./lang/blasm/blasm tests/assert.bla obj/test_assert.bs0
 
 pushd lang/blang > /dev/null
-python blang.py < ../../tests/ifelse.bl > ../../obj/test_ifelse.bs0
 python blang.py < ../../tests/bc.bl > ../../obj/test_bc.bs0
-python blang.py < ../../tests/assert.bl > ../../obj/test_assert.bs0
 python blang.py < ../../tests/ops.bl > ../../obj/test_ops.bs0
 python blang.py < ../../tests/blue_proto.bl > ../../obj/test_blue_proto.bs0
 python blang.py < examples/hello_world.bl > ../../obj/hello_world.bs0

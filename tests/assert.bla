@@ -1,0 +1,46 @@
+
+;
+; implement assert as custom opcode FF
+;
+
+litb 0xFF
+op
+
+; set flags and size
+litb 0x04
+setincb
+litb	0x01
+setincb
+
+; compile and write bytecode address into the opcode table
+compile
+	compile
+	endcompile
+	compile
+		litb	0xFF
+		exit
+	endcompile
+	ifelse
+endcompile
+setincq
+drop
+
+; call custom opcode
+true
+true
+eq
+callop	0xFF
+
+false
+false
+eq
+callop	0xFF
+
+true
+false
+eq
+not
+callop	0xFF
+
+depth
+exit

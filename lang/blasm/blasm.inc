@@ -10,7 +10,7 @@ iterate <opname, opsize>, \
 	fromr, 1, \
 	ret, 1, \
 	compile, 1, \
-	interpret, 1, \
+	endcompile, 1, \
 	ip, 1, \
 	setip, 1, \
 	op, 1, \
@@ -59,3 +59,7 @@ iterate <opname, opsize>, \
 		end calminstruction
 	end match
 end iterate
+
+calminstruction callop op
+	emit 1, op
+end calminstruction
