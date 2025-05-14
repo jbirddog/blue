@@ -13,4 +13,4 @@ jobs:
     - name: checkout repo
       uses: actions/checkout@main
     - name: make
-      uses: make
+      run: make
