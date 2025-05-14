@@ -133,7 +133,7 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ### Idea for more tools/examples
 
-1. Write a bs0->blang (gnalb) decompiler by overwriting opcode map/handler
+1. Write a bs0->blasm (msalb) decompiler by overwriting opcode map/handler
 
 ## TODOs
 
@@ -145,7 +145,9 @@ Along with the code for BlueVM this repository also contains some tools and exam
    1. opNI[ ]op
    1. opB[ ]op
    1. opBI[ ]op
-1. Get a CI job that runs ./build.sh
+1. Get a CI job
+1. Move away from build.sh
+1. Grok more fasmg magic to improve blasm syntax
 1. Add bytecode op if/if-not
-1. Add bytecode opcodes for litb, etc
+1. Add opcodes for litb, etc
 1. Print error messages to disambiguate exit status
