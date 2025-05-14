@@ -1,5 +1,4 @@
 BLASM = lang/blasm/blasm
-BLASM_INC = $(BLASM).inc
 
 BLUEVM = bin/bluevm
 FASM2 = fasm2/fasm2
