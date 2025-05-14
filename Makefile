@@ -10,7 +10,12 @@ TEST_OBJS = $(TESTS:tests/%.bla=obj/test_%.bs0)
 BLASM_EXAMPLES = $(wildcard lang/blasm/examples/*.bla)
 BLASM_EXAMPLE_OBJS = $(BLASM_EXAMPLES:lang/blasm/examples/%.bla=obj/blasm_%.bs0)
 
-all: $(BLUEVM) $(TEST_OBJS) $(BLASM_EXAMPLE_OBJS)
+
+all: vm test example
+
+vm: $(BLUEVM)
+test: $(TEST_OBJS) $(BLUEVM)
+example: $(BLASM_EXAMPLE_OBJS)
 
 bin/%: %.asm | bin
 	$(FASM2) $^ $@
