@@ -145,8 +145,7 @@ Along with the code for BlueVM this repository also contains some tools and exam
    1. opNI[ ]op
    1. opB[ ]op
    1. opBI[ ]op
-1. Get a CI job
-1. Move away from build.sh
+1. Makefile needs to invalidate bs0 files when asm or inc files change
 1. Grok more fasmg magic to improve blasm syntax
 1. Add bytecode op if/if-not
 1. Add opcodes for litb, etc
