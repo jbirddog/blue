@@ -145,7 +145,6 @@ Along with the code for BlueVM this repository also contains some tools and exam
    1. opNI[ ]op
    1. opB[ ]op
    1. opBI[ ]op
-1. Get a CI job
 1. Move away from build.sh
 1. Grok more fasmg magic to improve blasm syntax
 1. Add bytecode op if/if-not
