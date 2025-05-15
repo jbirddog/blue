@@ -74,53 +74,9 @@ Opcodes start at 00 and subject to change.
 
 | Opcode | Name | Stack Effect | Description |
 |----|----|----|----|
-| XX | exit | ( b -- ) | Exit with status from top of stack |
-| XX | true | ( -- t ) | Push true value |
-| XX | false | ( -- f ) | Push false value |
-| XX | if-else | ( t/f ta fa -- ? ) | Call ta if t/f is true else call fa |
-| XX | mccall | ( a -- ? ) | Call machine code at address |
-| XX | call | ( a -- ? ) | Call bytecode located at address |
-| XX | >r | ( a -- ) | Move top of data stack to return stack |
-| XX | r> | ( -- a ) | Move top of return stacl to data stack |
-| XX | ret | ( -- ) | Pops value from return stack and sets the instruction pointer |
-| XX | [ | ( -- ) | Begin compiling bytecode |
-| XX | ] | ( -- a ) | Append ret and end compilation, push addr where compilation started |
-| XX | ip | ( -- a ) | Push location of the instruction pointer |
-| XX | ip! | ( a -- ) | Sets the location of the instruction pointer |
-| XX | op | ( b -- a ) | Push addr of the code for opcode |
-| XX | start | ( -- a ) | Push the code buffer location |
-| XX | here | ( -- a ) | Push location of code buffer's here |
-| XX | here! | ( a -- ) | Sets the location of code buffer's here |
-| XX | b@+ | ( a -- b a' ) | Push byte value found at addr, increment and push addr |
-| XX | w@+ | ( a -- w a' ) | Push word value found at addr, increment and push addr |
-| XX | d@+ | ( a -- d a' ) | Push dword value found at addr, increment and push addr |
-| XX | @+ | ( a -- q a' ) | Push qword value found at addr, increment and push addr |
-| XX | b@ | ( a -- b ) | Push byte value found at addr |
-| XX | w@ | ( a -- b ) | Push word value found at addr |
-| XX | d@ | ( a -- b ) | Push dword value found at addr |
-| XX | @ | ( a -- q ) | Push qword value found at addr |
-| XX | b!+ | ( a b -- 'a ) | Write byte value to, increment and push addr |
-| XX | w!+ | ( a w -- 'a ) | Write word value to, increment and push addr |
-| XX | d!+ | ( a d -- 'a ) | Write dword value to, increment and push addr |
-| XX | !+ | ( a q -- 'a ) | Write qword value to, increment and push addr |
-| XX | b, | ( b -- ) | Write byte value to, and increment, here |
-| XX | w, | ( w -- ) | Write word value to, and increment, here |
-| XX | d, | ( d -- ) | Write dword value to, and increment, here |
-| XX | , | ( q -- ) | Write qword value to, and increment, here |
-| XX | litb | ( -- b ) | Push next byte from, and increment, instruction pointer |
-| XX | litw | ( -- w ) | Push next word from, and increment, instruction pointer |
-| XX | litd | ( -- d ) | Push next dword from, and increment, instruction pointer |
-| XX | lit | ( -- q ) | Push next qword from, and increment, instruction pointer |
-| XX | depth | ( -- n ) | Push depth of the data stack |
-| XX | drop | ( x -- ) | Drops top of the data stack |
-| XX | dup | ( a -- a a ) | Duplicate top of stack |
-| XX | swap | ( a b -- b a ) | Swap top two values on the data stack |
-| XX | not | ( x -- 'x ) | Bitwise not top of the data stack |
-| XX | = | ( a b -- t/f ) | Check top two items for equality and push result |
-| XX | + | ( a b -- n ) | Push a + b |
-| XX | - | ( a b -- n ) | Push a - b |
-| XX | shl | ( x n -- 'x ) | Push x shl n |
-| XX | shr | ( x n -- 'x ) | Push x shr n |
+| 00 | exit | ( b -- ) | Exit with status from top of stack |
+| 01 | true | ( -- t ) | Push true value |
+| 02 | false | ( -- f ) | Push false value |
 
 ## Tools/Examples
 

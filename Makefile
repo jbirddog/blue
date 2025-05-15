@@ -10,7 +10,7 @@ BLASM_EXAMPLES = $(wildcard lang/blasm/examples/*.bla)
 BLASM_EXAMPLE_OBJS = $(BLASM_EXAMPLES:lang/blasm/examples/%.bla=obj/blasm_%.bs0)
 
 
-all: vm test example
+all: vm ops.md README.md test example
 
 vm: $(BLUEVM)
 test: $(TEST_OBJS)
@@ -31,7 +31,7 @@ bin obj:
 	mkdir $@
 
 clean:
-	rm -rf bin obj
+	rm -rf bin obj $(GEN_FILES)
 
 .PHONY: clean vm test example
 
