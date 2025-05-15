@@ -1,1 +1,3 @@
 exit	1	( b -- )	Exit with status from top of stack
+true	1	( -- t )	Push true value
+false	1	( -- f )	Push false value

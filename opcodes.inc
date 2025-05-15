@@ -180,7 +180,7 @@ opNI	op_exit, 1, 0	;	( b -- )	Exit with status from top of stack
 	jmp	exit
 end_op
 
-opNI	op_true, 1, 0
+opNI	op_true, 1, 0	;	( -- t )	Push true value
 	xor	eax, eax
 	not	rax
 	call	data_stack_push
@@ -188,7 +188,7 @@ opNI	op_true, 1, 0
 	ret
 end_op
 
-opBI	op_false, 1, 0
+opBI	op_false, 1, 0	;	( -- f )	Push false value
 	db op_true_code, op_not_code, op_ret_code
 end_op
 
