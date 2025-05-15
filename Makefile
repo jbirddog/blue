@@ -33,5 +33,6 @@ bin obj:
 clean:
 	rm -rf bin obj
 
-.PHONY:
-	clean vm test example
+.PHONY: clean vm test example
+
+include gen.mk
