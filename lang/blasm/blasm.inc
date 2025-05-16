@@ -8,6 +8,15 @@ iterate <opname, opsize>, \
 	call, 1, \
 	tor, 1, \
 	fromr, 1, \
+	ret, 1, \
+	comp, 1, \
+	endcomp, 1, \
+	ip, 1, \
+	setip, 1, \
+	entry, 1, \
+	start, 1, \
+	here, 1, \
+	sethere, 1, \
 
 	#opname.code = % - 1
 

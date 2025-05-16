@@ -55,7 +55,7 @@ _at_inc_post:
 
 	ret
 
-op_compile_begin:
+op_comp:
 	; TODO: only need to do this if nested
 	mov	rdi, [code_buffer_here]
 	mov	al, op_lit_code
@@ -63,7 +63,7 @@ op_compile_begin:
 	push	rdi
 	xor	eax, eax
 	stosq
-	mov	al, op_set_ip_code
+	mov	al, op_setip_code
 	stosb
 	mov	[code_buffer_here], rdi
 
@@ -79,7 +79,7 @@ op_compile_begin:
 	
 	ret
 
-op_compile_end:
+op_endcomp:
 	mov	rdi, [code_buffer_here]
 	mov	al, op_ret_code
 	stosb
@@ -222,47 +222,47 @@ opNI	op_fromr, 1, 0	;	( -- a )	Move top of return stacl to data stack
 	ret
 end_op
 
-opNI	op_ret, 1, 0
+opNI	op_ret, 1, 0	;	( -- )	Pops value from return stack and sets the instruction pointer
 	call	return_stack_pop
 	mov	[instruction_pointer], rax
 	
 	ret
 end_op
 
-opN	op_compile_begin, 1, OPCODE_ENTRY_FLAG_IMMEDIATE
-opN	op_compile_end, 1, OPCODE_ENTRY_FLAG_IMMEDIATE
+opN	op_comp, 1, OPCODE_ENTRY_FLAG_IMMEDIATE	;	( -- )	Begin compiling bytecode
+opN	op_endcomp, 1, OPCODE_ENTRY_FLAG_IMMEDIATE	;	( -- a )	Append ret and end compilation, push addr where compilation started
 
-opNI	op_ip, 1, 0
+opNI	op_ip, 1, 0	;	( -- a )	Push location of the instruction pointer
 	mov	rax, [instruction_pointer]
 	call	data_stack_push
 
 	ret
 end_op
 
-opNI	op_set_ip, 1, 0
+opNI	op_setip, 1, 0	;	( a -- )	Sets the location of the instruction pointer
 	call	data_stack_pop
 	mov	[instruction_pointer], rax
 
 	ret
 end_op
 
-opN	op_entry, 1, 0
+opN	op_entry, 1, 0	;	( b -- a )	Push addr of the code for opcode
 
-opNI	op_start, 1, 0
+opNI	op_start, 1, 0	;	( -- a )	Push addr of the code buffer's start
 	mov	rax, code_buffer
 	call	data_stack_push
 	
 	ret
 end_op
 	
-opNI	op_here, 1, 0
+opNI	op_here, 1, 0	;	( -- a )	Push addr of the code buffer's here
 	mov	rax, [code_buffer_here]
 	call	data_stack_push
 
 	ret
 end_op
 
-opNI	op_set_here, 1, 0
+opNI	op_sethere, 1, 0	;	( a -- )	Set addr of the code buffer's here
 	call	data_stack_pop
 	mov	[code_buffer_here], rax
 
@@ -343,19 +343,19 @@ opNI	op_set_inc, 1, 0
 end_op
 
 opBI	op_b_comma, 1, 0
-	db op_here_code, op_swap_code, op_b_set_inc_code, op_set_here_code, op_ret_code
+	db op_here_code, op_swap_code, op_b_set_inc_code, op_sethere_code, op_ret_code
 end_op
 
 opBI	op_w_comma, 1, 0
-	db op_here_code, op_swap_code, op_w_set_inc_code, op_set_here_code, op_ret_code
+	db op_here_code, op_swap_code, op_w_set_inc_code, op_sethere_code, op_ret_code
 end_op
 
 opBI	op_d_comma, 1, 0
-	db op_here_code, op_swap_code, op_d_set_inc_code, op_set_here_code, op_ret_code
+	db op_here_code, op_swap_code, op_d_set_inc_code, op_sethere_code, op_ret_code
 end_op
 
 opBI	op_comma, 1, 0
-	db op_here_code, op_swap_code, op_set_inc_code, op_set_here_code, op_ret_code
+	db op_here_code, op_swap_code, op_set_inc_code, op_sethere_code, op_ret_code
 end_op
 
 opNI	op_litb, 2, 0

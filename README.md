@@ -82,6 +82,15 @@ Opcodes start at 00 and subject to change.
 | 05 | call | ( a -- ? ) | Call bytecode located at address |
 | 06 | tor | ( a -- ) | Move top of data stack to return stack |
 | 07 | fromr | ( -- a ) | Move top of return stacl to data stack |
+| 08 | ret | ( -- ) | Pops value from return stack and sets the instruction pointer |
+| 09 | comp | ( -- ) | Begin compiling bytecode |
+| 0A | endcomp | ( -- a ) | Append ret and end compilation, push addr where compilation started |
+| 0B | ip | ( -- a ) | Push location of the instruction pointer |
+| 0C | setip | ( a -- ) | Sets the location of the instruction pointer |
+| 0D | entry | ( b -- a ) | Push addr of the code for opcode |
+| 0E | start | ( -- a ) | Push addr of the code buffer's start |
+| 0F | here | ( -- a ) | Push addr of the code buffer's here |
+| 10 | sethere | ( a -- ) | Set addr of the code buffer's here |
 
 ## Tools/Examples
 
