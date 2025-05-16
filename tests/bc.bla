@@ -132,8 +132,6 @@ comp
 endcomp
 call
 
-;litb 01 litb 02 comp + endcompile call
-
 litb 0x01
 litb 0x02
 comp

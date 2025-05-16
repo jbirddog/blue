@@ -12,7 +12,7 @@ setincb
 litb	0x01
 setincb
 
-; comp and write bytecode address into the opcode table
+; compile and write bytecode address into the opcode table
 comp
 	comp
 	endcomp
@@ -203,7 +203,7 @@ callop	0xFF
 drop
 
 ;
-; test calling compd machine code
+; test calling compiled machine code
 ;
 
 ; call address that immediately returns
@@ -212,7 +212,7 @@ litb	0xC3
 cb
 mccall
 
-; push two numbers, comp and call machine code that calls the add opcode
+; push two numbers, compile and call machine code that calls the add opcode
 litb	0x03
 litb	0x05
 

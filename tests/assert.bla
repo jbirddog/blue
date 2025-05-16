@@ -12,7 +12,7 @@ setincb
 litb	0x01
 setincb
 
-; comp and write bytecode address into the opcode table
+; compile and write bytecode address into the opcode table
 comp
 	comp
 	endcomp
