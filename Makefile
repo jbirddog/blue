@@ -31,7 +31,7 @@ obj/blasm_%.bs0: lang/blasm/examples/%.bla | obj
 bin obj:
 	mkdir $@
 
-ops.tbl: opcodes.inc
+ops.tbl: ops.inc
 	sed -rn "s/^op[NB]I?\top_([^,]+), ([0-9]), [^\t]+\t;\t(.*)/\1\t\2\t\3/p" $^ > $@
 
 lang/blasm/blasm.inc: ops.tbl lang/blasm/blasm.inc.tmpl lang/blasm/blasm.inc.sh
