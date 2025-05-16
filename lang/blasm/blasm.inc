@@ -36,7 +36,7 @@ iterate <opname, opsize>, \
 	litb, 2, \
 	litw, 3, \
 	litd, 5, \
-	lit, 9, \
+	litq, 9, \
 	depth, 1, \
 	dup, 1, \
 	drop, 1, \

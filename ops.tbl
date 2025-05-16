@@ -34,7 +34,7 @@ cq	1	( q -- )	Write qword value to and increment here
 litb	2	( -- b )	Push next byte from and increment instruction pointer
 litw	3	( -- w )	Push next word from and increment instruction pointer
 litd	5	( -- d )	Push next dword from and increment instruction pointer
-lit	9	( -- q )	Push next qword from and increment instruction pointer
+litq	9	( -- q )	Push next qword from and increment instruction pointer
 depth	1	( -- n )	Push depth of the data stack
 dup	1	( x -- )	Drops top of the data stack
 drop	1	( a -- a a )	Duplicate top of stack

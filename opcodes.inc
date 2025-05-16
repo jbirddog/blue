@@ -58,7 +58,7 @@ _atinc_post:
 op_comp:
 	; TODO: only need to do this if nested
 	mov	rdi, [code_buffer_here]
-	mov	al, op_lit_code
+	mov	al, op_litq_code
 	stosb
 	push	rdi
 	xor	eax, eax
@@ -100,7 +100,7 @@ op_endcomp:
 	push	rax
 	
 	mov	rdi, [code_buffer_here]
-	mov	al, op_lit_code
+	mov	al, op_litq_code
 	stosb
 	pop	rax
 	stosq
@@ -379,7 +379,7 @@ opNI	op_litd, 5, 0	;	( -- d )	Push next dword from and increment instruction poi
 	jmp	_post_lit
 end_op
 
-opNI	op_lit, 9, 0	;	( -- q )	Push next qword from and increment instruction pointer
+opNI	op_litq, 9, 0	;	( -- q )	Push next qword from and increment instruction pointer
 	call	_pre_lit
 	lodsq
 

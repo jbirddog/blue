@@ -110,7 +110,7 @@ Opcodes start at 00 and subject to change.
 | 0x21 | litb | ( -- b ) | Push next byte from and increment instruction pointer |
 | 0x22 | litw | ( -- w ) | Push next word from and increment instruction pointer |
 | 0x23 | litd | ( -- d ) | Push next dword from and increment instruction pointer |
-| 0x24 | lit | ( -- q ) | Push next qword from and increment instruction pointer |
+| 0x24 | litq | ( -- q ) | Push next qword from and increment instruction pointer |
 | 0x25 | depth | ( -- n ) | Push depth of the data stack |
 | 0x26 | dup | ( x -- ) | Drops top of the data stack |
 | 0x27 | drop | ( a -- a a ) | Duplicate top of stack |
