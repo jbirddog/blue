@@ -9,7 +9,7 @@ TEST_OBJS = $(TESTS:tests/%.bla=obj/test_%.bs0)
 BLASM_EXAMPLES = $(wildcard lang/blasm/examples/*.bla)
 BLASM_EXAMPLE_OBJS = $(BLASM_EXAMPLES:lang/blasm/examples/%.bla=obj/blasm_%.bs0)
 
-GEN_FILES = ops.tbl ops.md README.md lang/blasm/blasm.inc
+GEN_FILES = ops.tbl README.md lang/blasm/blasm.inc
 
 all: vm $(GEN_FILES) test example
 
@@ -30,13 +30,10 @@ bin obj:
 ops.tbl: opcodes.inc
 	sed -rn "s/^op[NB]I?\top_([^,]+), ([0-9]), [^\t]+\t;\t(.*)/\1\t\2\t\3/p" $^ > $@
 
-ops.md: ops.tbl
-	awk -v FS='\t' '{printf "| %02x | %s | %s | %s |\n", NR - 1, $$1, $$3, $$4}' ops.tbl > ops.md
-
-lang/blasm/blasm.inc: ops.tbl lang/blasm/blasm.inc.sh lang/blasm/blasm.inc.tmpl
+lang/blasm/blasm.inc: ops.tbl lang/blasm/blasm.inc.tmpl lang/blasm/blasm.inc.sh
 	./lang/blasm/blasm.inc.sh > ./lang/blasm/blasm.inc
 	
-README.md: README.md.tmpl README.sh ops.md
+README.md: ops.tbl README.md.tmpl README.sh
 	./README.sh > README.md
 
 .PHONY: clean vm test example
