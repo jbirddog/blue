@@ -15,3 +15,7 @@ entry	1	( b -- a )	Push addr of the code for opcode
 start	1	( -- a )	Push addr of the code buffer's start
 here	1	( -- a )	Push addr of the code buffer's here
 sethere	1	( a -- )	Set addr of the code buffer's here
+atincb	1	( a -- b a' )	Push byte value found at addr, increment and push addr
+atincw	1	( a -- w a' )	Push word value found at addr, increment and push addr
+atincd	1	( a -- d a' )	Push dword value found at addr, increment and push addr
+atincq	1	( a -- q a' )	Push qword value found at addr, increment and push addr

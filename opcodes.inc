@@ -41,14 +41,14 @@ op_eq:
 
 	ret
 
-_at_inc_pre:
+_atinc_pre:
 	call	data_stack_pop
 	mov	rsi, rax
 	xor	eax, eax
 
 	ret
 
-_at_inc_post:
+_atinc_post:
 	call	data_stack_push
 	mov	rax, rsi
 	call	data_stack_push
@@ -269,48 +269,48 @@ opNI	op_sethere, 1, 0	;	( a -- )	Set addr of the code buffer's here
 	ret
 end_op
 
-opNI	op_b_at_inc, 1, 0
-	call	_at_inc_pre
+opNI	op_atincb, 1, 0	;	( a -- b a' )	Push byte value found at addr, increment and push addr
+	call	_atinc_pre
 	lodsb
 
-	jmp	_at_inc_post
+	jmp	_atinc_post
 end_op
 
-opNI	op_w_at_inc, 1, 0
-	call	_at_inc_pre
+opNI	op_atincw, 1, 0	;	( a -- w a' )	Push word value found at addr, increment and push addr
+	call	_atinc_pre
 	lodsw
 
-	jmp	_at_inc_post
+	jmp	_atinc_post
 end_op
 
-opNI	op_d_at_inc, 1, 0
-	call	_at_inc_pre
+opNI	op_atincd, 1, 0	;	( a -- d a' )	Push dword value found at addr, increment and push addr
+	call	_atinc_pre
 	lodsd
 
-	jmp	_at_inc_post
+	jmp	_atinc_post
 end_op
 
-opNI	op_at_inc, 1, 0
-	call	_at_inc_pre
+opNI	op_atincq, 1, 0	;	( a -- q a' )	Push qword value found at addr, increment and push addr
+	call	_atinc_pre
 	lodsq
 
-	jmp	_at_inc_post
+	jmp	_atinc_post
 end_op
 
 opBI	op_b_at, 1, 0
-	db op_b_at_inc_code, op_drop_code, op_ret_code
+	db op_atincb_code, op_drop_code, op_ret_code
 end_op
 
 opBI	op_w_at, 1, 0
-	db op_w_at_inc_code, op_drop_code, op_ret_code
+	db op_atincw_code, op_drop_code, op_ret_code
 end_op
 
 opBI	op_d_at, 1, 0
-	db op_d_at_inc_code, op_drop_code, op_ret_code
+	db op_atincd_code, op_drop_code, op_ret_code
 end_op
 	
 opBI	op_at, 1, 0
-	db op_at_inc_code, op_drop_code, op_ret_code
+	db op_atincq_code, op_drop_code, op_ret_code
 end_op	
 
 opNI	op_b_set_inc, 1, 0

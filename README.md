@@ -74,23 +74,27 @@ Opcodes start at 00 and subject to change.
 
 | Opcode | Name | Stack Effect | Description |
 |----|----|----|----|
-| 00 | exit | ( b -- ) | Exit with status from top of stack |
-| 01 | true | ( -- t ) | Push true value |
-| 02 | false | ( -- f ) | Push false value |
-| 03 | ifelse | ( t/f ta fa -- ? ) | Call ta if t/f is true else call fa |
-| 04 | mccall | ( a -- ? ) | Call machine code at address |
-| 05 | call | ( a -- ? ) | Call bytecode located at address |
-| 06 | tor | ( a -- ) | Move top of data stack to return stack |
-| 07 | fromr | ( -- a ) | Move top of return stacl to data stack |
-| 08 | ret | ( -- ) | Pops value from return stack and sets the instruction pointer |
-| 09 | comp | ( -- ) | Begin compiling bytecode |
-| 0A | endcomp | ( -- a ) | Append ret and end compilation, push addr where compilation started |
-| 0B | ip | ( -- a ) | Push location of the instruction pointer |
-| 0C | setip | ( a -- ) | Sets the location of the instruction pointer |
-| 0D | entry | ( b -- a ) | Push addr of the code for opcode |
-| 0E | start | ( -- a ) | Push addr of the code buffer's start |
-| 0F | here | ( -- a ) | Push addr of the code buffer's here |
-| 10 | sethere | ( a -- ) | Set addr of the code buffer's here |
+| 0x00 | exit | ( b -- ) | Exit with status from top of stack |
+| 0x01 | true | ( -- t ) | Push true value |
+| 0x02 | false | ( -- f ) | Push false value |
+| 0x03 | ifelse | ( t/f ta fa -- ? ) | Call ta if t/f is true else call fa |
+| 0x04 | mccall | ( a -- ? ) | Call machine code at address |
+| 0x05 | call | ( a -- ? ) | Call bytecode located at address |
+| 0x06 | tor | ( a -- ) | Move top of data stack to return stack |
+| 0x07 | fromr | ( -- a ) | Move top of return stacl to data stack |
+| 0x08 | ret | ( -- ) | Pops value from return stack and sets the instruction pointer |
+| 0x09 | comp | ( -- ) | Begin compiling bytecode |
+| 0x0A | endcomp | ( -- a ) | Append ret and end compilation, push addr where compilation started |
+| 0x0B | ip | ( -- a ) | Push location of the instruction pointer |
+| 0x0C | setip | ( a -- ) | Sets the location of the instruction pointer |
+| 0x0D | entry | ( b -- a ) | Push addr of the code for opcode |
+| 0x0E | start | ( -- a ) | Push addr of the code buffer's start |
+| 0x0F | here | ( -- a ) | Push addr of the code buffer's here |
+| 0x10 | sethere | ( a -- ) | Set addr of the code buffer's here |
+| 0x11 | atincb | ( a -- b a' ) | Push byte value found at addr, increment and push addr |
+| 0x12 | atincw | ( a -- w a' ) | Push word value found at addr, increment and push addr |
+| 0x13 | atincd | ( a -- d a' ) | Push dword value found at addr, increment and push addr |
+| 0x14 | atincq | ( a -- q a' ) | Push qword value found at addr, increment and push addr |
 
 ## Tools/Examples
 

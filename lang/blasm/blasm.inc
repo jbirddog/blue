@@ -17,6 +17,10 @@ iterate <opname, opsize>, \
 	start, 1, \
 	here, 1, \
 	sethere, 1, \
+	atincb, 1, \
+	atincw, 1, \
+	atincd, 1, \
+	atincq, 1, \
 
 	#opname.code = % - 1
 
