@@ -297,37 +297,37 @@ opNI	op_atincq, 1, 0	;	( a -- q a' )	Push qword value found at addr, increment a
 	jmp	_atinc_post
 end_op
 
-opBI	op_b_at, 1, 0
+opBI	op_atb, 1, 0	;	( a -- b )	Push byte value found at addr
 	db op_atincb_code, op_drop_code, op_ret_code
 end_op
 
-opBI	op_w_at, 1, 0
+opBI	op_atw, 1, 0	;	( a -- d )	Push word value found at addr
 	db op_atincw_code, op_drop_code, op_ret_code
 end_op
 
-opBI	op_d_at, 1, 0
+opBI	op_atd, 1, 0	;	( a -- w )	Push dword value found at addr
 	db op_atincd_code, op_drop_code, op_ret_code
 end_op
 	
-opBI	op_at, 1, 0
+opBI	op_atq, 1, 0	;	( a -- q )	Push qword value found at addr
 	db op_atincq_code, op_drop_code, op_ret_code
 end_op	
 
-opNI	op_b_set_inc, 1, 0
+opNI	op_setincb, 1, 0	;	( a b -- 'a )	Write byte value to, increment and push addr
 	call 	_set_pre
 	stosb
 
 	jmp	_set_post
 end_op
 
-opNI	op_w_set_inc, 1, 0
+opNI	op_setincw, 1, 0	;	( a w -- 'a )	Write word value to, increment and push addr
 	call 	_set_pre
 	stosw
 
 	jmp	_set_post
 end_op
 
-opNI	op_d_set_inc, 1, 0
+opNI	op_setincd, 1, 0	;	( a d -- 'a )	Write dword value to, increment and push addr
 	call 	_set_pre
 	stosd
 
@@ -335,7 +335,7 @@ opNI	op_d_set_inc, 1, 0
 end_op
 	
 
-opNI	op_set_inc, 1, 0
+opNI	op_setincq, 1, 0	;	( a q -- 'a )	Write qword value to, increment and push addr
 	call 	_set_pre
 	stosq
 
@@ -343,19 +343,19 @@ opNI	op_set_inc, 1, 0
 end_op
 
 opBI	op_b_comma, 1, 0
-	db op_here_code, op_swap_code, op_b_set_inc_code, op_sethere_code, op_ret_code
+	db op_here_code, op_swap_code, op_setincb_code, op_sethere_code, op_ret_code
 end_op
 
 opBI	op_w_comma, 1, 0
-	db op_here_code, op_swap_code, op_w_set_inc_code, op_sethere_code, op_ret_code
+	db op_here_code, op_swap_code, op_setincw_code, op_sethere_code, op_ret_code
 end_op
 
 opBI	op_d_comma, 1, 0
-	db op_here_code, op_swap_code, op_d_set_inc_code, op_sethere_code, op_ret_code
+	db op_here_code, op_swap_code, op_setincd_code, op_sethere_code, op_ret_code
 end_op
 
 opBI	op_comma, 1, 0
-	db op_here_code, op_swap_code, op_set_inc_code, op_sethere_code, op_ret_code
+	db op_here_code, op_swap_code, op_setincq_code, op_sethere_code, op_ret_code
 end_op
 
 opNI	op_litb, 2, 0

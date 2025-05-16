@@ -95,6 +95,14 @@ Opcodes start at 00 and subject to change.
 | 0x12 | atincw | ( a -- w a' ) | Push word value found at addr, increment and push addr |
 | 0x13 | atincd | ( a -- d a' ) | Push dword value found at addr, increment and push addr |
 | 0x14 | atincq | ( a -- q a' ) | Push qword value found at addr, increment and push addr |
+| 0x15 | atb | ( a -- b ) | Push byte value found at addr |
+| 0x16 | atw | ( a -- d ) | Push word value found at addr |
+| 0x17 | atd | ( a -- w ) | Push dword value found at addr |
+| 0x18 | atq | ( a -- q ) | Push qword value found at addr |
+| 0x19 | setincb | ( a b -- 'a ) | Write byte value to, increment and push addr |
+| 0x1A | setincw | ( a w -- 'a ) | Write word value to, increment and push addr |
+| 0x1B | setincd | ( a d -- 'a ) | Write dword value to, increment and push addr |
+| 0x1C | setincq | ( a q -- 'a ) | Write qword value to, increment and push addr |
 
 ## Tools/Examples
 
