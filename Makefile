@@ -9,12 +9,9 @@ TEST_OBJS = $(TESTS:tests/%.bla=obj/test_%.bs0)
 BLASM_EXAMPLES = $(wildcard lang/blasm/examples/*.bla)
 BLASM_EXAMPLE_OBJS = $(BLASM_EXAMPLES:lang/blasm/examples/%.bla=obj/blasm_%.bs0)
 
+GEN_FILES = ops.tbl ops.md README.md lang/blasm/blasm.inc
 
-all: vm ops.md README.md test example
-
-vm: $(BLUEVM)
-test: $(TEST_OBJS)
-example: $(BLASM_EXAMPLE_OBJS)
+all: vm $(GEN_FILES) test example
 
 bin/%: %.asm | bin
 	$(FASM2) $^ $@
@@ -30,9 +27,24 @@ obj/blasm_%.bs0: lang/blasm/examples/%.bla | obj
 bin obj:
 	mkdir $@
 
-clean:
-	rm -rf bin obj $(GEN_FILES)
+ops.tbl: opcodes.inc
+	sed -rn "s/^op[NB]I?\top_([^,]+), ([0-9]), [^\t]+\t;\t(.*)/\1\t\2\t\3/p" $^ > $@
+
+ops.md: ops.tbl
+	awk -v FS='\t' '{printf "| %02x | %s | %s | %s |\n", NR - 1, $$1, $$3, $$4}' ops.tbl > ops.md
+
+lang/blasm/blasm.inc: ops.tbl lang/blasm/blasm.inc.sh lang/blasm/blasm.inc.tmpl
+	./lang/blasm/blasm.inc.sh > ./lang/blasm/blasm.inc
+	
+README.md: README.md.tmpl README.sh ops.md
+	./README.sh > README.md
 
 .PHONY: clean vm test example
 
-include gen.mk
+clean:
+	rm -rf bin obj $(GEN_FILES)
+
+vm: $(BLUEVM)
+test: $(TEST_OBJS)
+example: $(BLASM_EXAMPLE_OBJS)
+

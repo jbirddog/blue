@@ -3,50 +3,6 @@ iterate <opname, opsize>, \
 	exit, 1, \
 	true, 1, \
 	false, 1, \
-	ifelse, 1, \
-	mccall, 1, \
-	call, 1, \
-	tor, 1, \
-	fromr, 1, \
-	ret, 1, \
-	compile, 1, \
-	endcompile, 1, \
-	ip, 1, \
-	setip, 1, \
-	op, 1, \
-	start, 1, \
-	here, 1, \
-	sethere, 1, \
-	atincb, 1, \ 
-	atincw, 1, \ 
-	atincd, 1, \ 
-	atincq, 1, \ 
-	atb, 1, \ 
-	atw, 1, \ 
-	atd, 1, \ 
-	atq, 1, \ 
-	setincb, 1, \ 
-	setincw, 1, \ 
-	setincd, 1, \ 
-	setincq, 1, \ 
-	cb, 1, \ 
-	cw, 1, \ 
-	cd, 1, \ 
-	cq, 1, \ 
-	litb, 2, \
-	litw, 3, \
-	litd, 5, \
-	litq, 9, \
-	depth, 1, \
-	dup, 1, \
-	drop, 1, \
-	swap, 1, \
-	not, 1, \
-	eq, 1, \
-	add, 1, \
-	sub, 1, \
-	shl, 1, \
-	shr, 1, \
 
 	#opname.code = % - 1
 
