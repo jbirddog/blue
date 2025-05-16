@@ -3,6 +3,8 @@ BLASM = lang/blasm/blasm
 BLUEVM = bin/bluevm
 FASM2 = fasm2/fasm2
 
+INCS = $(wildcard *.inc)
+
 TESTS = $(wildcard tests/*.bla)
 TEST_OBJS = $(TESTS:tests/%.bla=obj/test_%.bs0)
 
@@ -12,6 +14,8 @@ BLASM_EXAMPLE_OBJS = $(BLASM_EXAMPLES:lang/blasm/examples/%.bla=obj/blasm_%.bs0)
 GEN_FILES = ops.tbl README.md lang/blasm/blasm.inc
 
 all: vm $(GEN_FILES) test example
+
+bluevm.asm: $(INCS)
 
 bin/%: %.asm | bin
 	$(FASM2) $^ $@

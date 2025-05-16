@@ -77,6 +77,11 @@ Opcodes start at 00 and subject to change.
 | 00 | exit | ( b -- ) | Exit with status from top of stack |
 | 01 | true | ( -- t ) | Push true value |
 | 02 | false | ( -- f ) | Push false value |
+| 03 | ifelse | ( t/f ta fa -- ? ) | Call ta if t/f is true else call fa |
+| 04 | mccall | ( a -- ? ) | Call machine code at address |
+| 05 | call | ( a -- ? ) | Call bytecode located at address |
+| 06 | tor | ( a -- ) | Move top of data stack to return stack |
+| 07 | fromr | ( -- a ) | Move top of return stacl to data stack |
 
 ## Tools/Examples
 

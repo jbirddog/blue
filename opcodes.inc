@@ -5,7 +5,7 @@ _call:
 
 	ret
 
-op_if_else:
+op_ifelse:
 	call	data_stack_pop2
 	push	rax
 	call	data_stack_pop
@@ -109,7 +109,7 @@ op_compile_end:
 	ret
 
 .outer:
-	call	op_from_r.impl
+	call	op_fromr.impl
 	
 	ret
 	
@@ -192,30 +192,30 @@ opBI	op_false, 1, 0	;	( -- f )	Push false value
 	db op_true_code, op_not_code, op_ret_code
 end_op
 
-opN	op_if_else, 1, 0
+opN	op_ifelse, 1, 0	;	( t/f ta fa -- ? )	Call ta if t/f is true else call fa
 
-opNI	op_mccall, 1, 0
+opNI	op_mccall, 1, 0	;	( a -- ? )	Call machine code at address
 	call	data_stack_pop
 	call	rax
 
 	ret
 end_op
 
-opNI	op_call, 1, 0
+opNI	op_call, 1, 0	;	( a -- ? )	Call bytecode located at address
 	call	data_stack_pop
 	call	_call
 
 	ret
 end_op
 
-opNI	op_to_r, 1, 0
+opNI	op_tor, 1, 0	;	( a -- )	Move top of data stack to return stack
 	call	data_stack_pop
 	call	return_stack_push
 
 	ret
 end_op
 
-opNI	op_from_r, 1, 0
+opNI	op_fromr, 1, 0	;	( -- a )	Move top of return stacl to data stack
 	call	return_stack_pop
 	call	data_stack_push
 

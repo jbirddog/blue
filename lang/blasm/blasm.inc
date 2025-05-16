@@ -3,6 +3,11 @@ iterate <opname, opsize>, \
 	exit, 1, \
 	true, 1, \
 	false, 1, \
+	ifelse, 1, \
+	mccall, 1, \
+	call, 1, \
+	tor, 1, \
+	fromr, 1, \
 
 	#opname.code = % - 1
 
