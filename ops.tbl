@@ -27,6 +27,10 @@ setincb	1	( a b -- 'a )	Write byte value to, increment and push addr
 setincw	1	( a w -- 'a )	Write word value to, increment and push addr
 setincd	1	( a d -- 'a )	Write dword value to, increment and push addr
 setincq	1	( a q -- 'a )	Write qword value to, increment and push addr
+setb	1	( a b -- )	Write byte value to addr
+setw	1	( a w -- )	Write word value to addr
+setd	1	( a d -- )	Write dword value to addr
+setq	1	( a q -- )	Write qword value to addr
 cb	1	( b -- )	Write byte value to and increment here
 cw	1	( w -- )	Write word value to and increment here
 cd	1	( d -- )	Write dword value to and increment here

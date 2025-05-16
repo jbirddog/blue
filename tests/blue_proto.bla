@@ -26,8 +26,7 @@ setincb
 litb	add.code
 setincb
 litb	ret.code
-setincb
-drop
+setb
 
 ; custom opcode 81 - set address of word N
 litb	0x81
@@ -49,8 +48,7 @@ setincb
 litb	drop.code
 setincb
 litb	ret.code
-setincb
-drop
+setb
 
 ; custom opcode 82 - get address of word N
 litb	0x82
@@ -68,8 +66,7 @@ setincb
 litb	atq.code
 setincb
 litb	ret.code
-setincb
-drop
+setb
 
 
 ; frontend knows how many words it has and allocates that many qwords at the start of the code buffer

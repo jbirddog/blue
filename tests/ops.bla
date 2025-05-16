@@ -22,8 +22,7 @@ comp
 	endcomp
 	ifelse
 endcomp
-setincq
-drop
+setq
 
 ; stack depth is 0
 depth

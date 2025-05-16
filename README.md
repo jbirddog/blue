@@ -103,24 +103,28 @@ Opcodes start at 00 and subject to change.
 | 0x1A | setincw | ( a w -- 'a ) | Write word value to, increment and push addr |
 | 0x1B | setincd | ( a d -- 'a ) | Write dword value to, increment and push addr |
 | 0x1C | setincq | ( a q -- 'a ) | Write qword value to, increment and push addr |
-| 0x1D | cb | ( b -- ) | Write byte value to and increment here |
-| 0x1E | cw | ( w -- ) | Write word value to and increment here |
-| 0x1F | cd | ( d -- ) | Write dword value to and increment here |
-| 0x20 | cq | ( q -- ) | Write qword value to and increment here |
-| 0x21 | litb | ( -- b ) | Push next byte from and increment instruction pointer |
-| 0x22 | litw | ( -- w ) | Push next word from and increment instruction pointer |
-| 0x23 | litd | ( -- d ) | Push next dword from and increment instruction pointer |
-| 0x24 | litq | ( -- q ) | Push next qword from and increment instruction pointer |
-| 0x25 | depth | ( -- n ) | Push depth of the data stack |
-| 0x26 | dup | ( x -- ) | Drops top of the data stack |
-| 0x27 | drop | ( a -- a a ) | Duplicate top of stack |
-| 0x28 | swap | ( a b -- b a ) | Swap top two values on the data stack |
-| 0x29 | not | ( x -- 'x ) | Bitwise not top of the data stack |
-| 0x2A | eq | ( a b -- t/f ) | Check top two items for equality and push result |
-| 0x2B | add | ( a b -- n ) | Push a + b |
-| 0x2C | sub | ( a b -- n ) | Push a - b |
-| 0x2D | shl | ( x n -- 'x ) | Push x shl n |
-| 0x2E | shr | ( x n -- 'x ) | Push x shr n |
+| 0x1D | setb | ( a b -- ) | Write byte value to addr |
+| 0x1E | setw | ( a w -- ) | Write word value to addr |
+| 0x1F | setd | ( a d -- ) | Write dword value to addr |
+| 0x20 | setq | ( a q -- ) | Write qword value to addr |
+| 0x21 | cb | ( b -- ) | Write byte value to and increment here |
+| 0x22 | cw | ( w -- ) | Write word value to and increment here |
+| 0x23 | cd | ( d -- ) | Write dword value to and increment here |
+| 0x24 | cq | ( q -- ) | Write qword value to and increment here |
+| 0x25 | litb | ( -- b ) | Push next byte from and increment instruction pointer |
+| 0x26 | litw | ( -- w ) | Push next word from and increment instruction pointer |
+| 0x27 | litd | ( -- d ) | Push next dword from and increment instruction pointer |
+| 0x28 | litq | ( -- q ) | Push next qword from and increment instruction pointer |
+| 0x29 | depth | ( -- n ) | Push depth of the data stack |
+| 0x2A | dup | ( x -- ) | Drops top of the data stack |
+| 0x2B | drop | ( a -- a a ) | Duplicate top of stack |
+| 0x2C | swap | ( a b -- b a ) | Swap top two values on the data stack |
+| 0x2D | not | ( x -- 'x ) | Bitwise not top of the data stack |
+| 0x2E | eq | ( a b -- t/f ) | Check top two items for equality and push result |
+| 0x2F | add | ( a b -- n ) | Push a + b |
+| 0x30 | sub | ( a b -- n ) | Push a - b |
+| 0x31 | shl | ( x n -- 'x ) | Push x shl n |
+| 0x32 | shr | ( x n -- 'x ) | Push x shr n |
 
 ## Tools/Examples
 
@@ -137,8 +141,6 @@ Along with the code for BlueVM this repository also contains some tools and exam
 ## TODOs
 
 1. Bring back a simpiler version of the `blue` language
-1. Add ! flavors
-   1. Use in Blue opcodes
 1. See about re-arranging >r order in op_compile_begin to simplify it and op_compile_end
 1. Add more ops to make defining a custom op less verbose/brittle
    1. opN[ ]op

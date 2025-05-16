@@ -22,8 +22,7 @@ comp
 	endcomp
 	ifelse
 endcomp
-setincq
-drop
+setq
 
 ; call custom opcode
 true

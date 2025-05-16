@@ -342,6 +342,22 @@ opNI	op_setincq, 1, 0	;	( a q -- 'a )	Write qword value to, increment and push a
 	jmp	_set_post
 end_op
 
+opBI	op_setb, 1, 0	;	( a b -- )	Write byte value to addr
+	db op_setincb_code, op_drop_code, op_ret_code
+end_op
+
+opBI	op_setw, 1, 0	;	( a w -- )	Write word value to addr
+	db op_setincw_code, op_drop_code, op_ret_code
+end_op
+
+opBI	op_setd, 1, 0	;	( a d -- )	Write dword value to addr
+	db op_setincd_code, op_drop_code, op_ret_code
+end_op
+
+opBI	op_setq, 1, 0	;	( a q -- )	Write qword value to addr
+	db op_setincq_code, op_drop_code, op_ret_code
+end_op
+
 opBI	op_cb, 1, 0	;	( b -- )	Write byte value to and increment here
 	db op_here_code, op_swap_code, op_setincb_code, op_sethere_code, op_ret_code
 end_op
