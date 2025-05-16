@@ -1,20 +1,20 @@
 
 true
-compile
-endcompile
-compile
+comp
+endcomp
+comp
 	litb	0xFF
 	exit
-endcompile
+endcomp
 ifelse
 
 false
-compile
+comp
 	litb	0xFF
 	exit
-endcompile
-compile
-endcompile
+endcomp
+comp
+endcomp
 ifelse
 
 depth

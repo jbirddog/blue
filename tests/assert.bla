@@ -13,15 +13,15 @@ litb	0x01
 setincb
 
 ; compile and write bytecode address into the opcode table
-compile
-	compile
-	endcompile
-	compile
+comp
+	comp
+	endcomp
+	comp
 		litb	0xFF
 		exit
-	endcompile
+	endcomp
 	ifelse
-endcompile
+endcomp
 setincq
 drop
 

@@ -3,116 +3,116 @@
 ; test compiling and calling bytecode
 ;
 
-compile
-endcompile
+comp
+endcomp
 depth
 litb 0x01
 eq
-compile
-endcompile
-compile
+comp
+endcomp
+comp
 	litb 0x01
 	exit
-endcompile
+endcomp
 ifelse
 drop
 
-compile
-endcompile
+comp
+endcomp
 atb
 litb ret.code
 eq
-compile
-endcompile
-compile
+comp
+endcomp
+comp
 	litb 0x02
 	exit
-endcompile
+endcomp
 ifelse
 
-compile
-endcompile
+comp
+endcomp
 call
 
-compile
-	compile
-	endcompile
+comp
+	comp
+	endcomp
 	call
-endcompile
+endcomp
 call
 
-compile
-	compile
-		compile
-		endcompile
+comp
+	comp
+		comp
+		endcomp
 		call
-	endcompile
+	endcomp
 	call
-endcompile
+endcomp
 call
 
-compile
-	compile
-		compile
-			compile
-			endcompile
+comp
+	comp
+		comp
+			comp
+			endcomp
 			call
-		endcompile
+		endcomp
 		call
-	endcompile
+	endcomp
 	call
-endcompile
+endcomp
 call
 
-compile
-	compile
-		compile
-			compile
-				compile
-				endcompile
+comp
+	comp
+		comp
+			comp
+				comp
+				endcomp
 				call
-			endcompile
+			endcomp
 			call
-		endcompile
+		endcomp
 		call
-	endcompile
+	endcomp
 	call
-endcompile
+endcomp
 call
 
-compile
-	compile
-		compile
-			compile
-				compile
-					compile
-					endcompile
+comp
+	comp
+		comp
+			comp
+				comp
+					comp
+					endcomp
 					call
-				endcompile
+				endcomp
 				call
-			endcompile
+			endcomp
 			call
-		endcompile
+		endcomp
 		call
-	endcompile
+	endcomp
 	call
-endcompile
+endcomp
 call
 
-compile
-endcompile
+comp
+endcomp
 dup
 litb 0x01
 sub
 atb
 litb setip.code
 eq
-compile
-endcompile
-compile
+comp
+endcomp
+comp
 	litb 0x03
 	exit
-endcompile
+endcomp
 ifelse
 dup
 litb 0x0A
@@ -120,90 +120,88 @@ sub
 atb
 litb litq.code
 eq
-compile
-endcompile
-compile
+comp
+endcomp
+comp
 	litb 0x04
 	exit
-endcompile
+endcomp
 ifelse
-compile
+comp
 	drop
-endcompile
+endcomp
 call
-
-;litb 01 litb 02 compile + endcompile call
 
 litb 0x01
 litb 0x02
-compile
+comp
 	add
-endcompile
+endcomp
 call
 
 litb 0x03
 eq
-compile
-endcompile
-compile
+comp
+endcomp
+comp
 	litb 0x05
 	exit
-endcompile
+endcomp
 ifelse
 
 litb 0x04
 litb 0x05
-compile
-	compile
-		compile
+comp
+	comp
+		comp
 			add
-		endcompile
+		endcomp
 		call
-	endcompile
+	endcomp
 	call
-endcompile
+endcomp
 call
 
 litb 0x09
 eq
-compile
-endcompile
-compile
+comp
+endcomp
+comp
 	litb 0x06
 	exit
-endcompile
+endcomp
 ifelse
 
 litb 0x01
-compile
+comp
 	litb 0x03
 	eq
-	compile
-		compile
+	comp
+		comp
 			litb 0x07
 			exit
-		endcompile
-		compile
-		endcompile
+		endcomp
+		comp
+		endcomp
 		ifelse
-	endcompile
+	endcomp
 	call
-endcompile
+endcomp
 call
 
-compile
-endcompile
+comp
+endcomp
 here
 swap
 call
 here
 eq
-compile
-endcompile
-compile
+comp
+endcomp
+comp
 	litb 0x08
 	exit
-endcompile
+endcomp
 ifelse
 
 depth

@@ -1,0 +1,47 @@
+exit	1	( b -- )	Exit with status from top of stack
+true	1	( -- t )	Push true value
+false	1	( -- f )	Push false value
+ifelse	1	( t/f ta fa -- ? )	Call ta if t/f is true else call fa
+mccall	1	( a -- ? )	Call machine code at address
+call	1	( a -- ? )	Call bytecode located at address
+tor	1	( a -- )	Move top of data stack to return stack
+fromr	1	( -- a )	Move top of return stacl to data stack
+ret	1	( -- )	Pops value from return stack and sets the instruction pointer
+comp	1	( -- )	Begin compiling bytecode
+endcomp	1	( -- a )	Append ret and end compilation, push addr where compilation started
+ip	1	( -- a )	Push location of the instruction pointer
+setip	1	( a -- )	Sets the location of the instruction pointer
+op	1	( b -- a )	Push addr of the code for opcode
+start	1	( -- a )	Push addr of the code buffer's start
+here	1	( -- a )	Push addr of the code buffer's here
+sethere	1	( a -- )	Set addr of the code buffer's here
+atincb	1	( a -- b a' )	Push byte value found at addr, increment and push addr
+atincw	1	( a -- w a' )	Push word value found at addr, increment and push addr
+atincd	1	( a -- d a' )	Push dword value found at addr, increment and push addr
+atincq	1	( a -- q a' )	Push qword value found at addr, increment and push addr
+atb	1	( a -- b )	Push byte value found at addr
+atw	1	( a -- d )	Push word value found at addr
+atd	1	( a -- w )	Push dword value found at addr
+atq	1	( a -- q )	Push qword value found at addr
+setincb	1	( a b -- 'a )	Write byte value to, increment and push addr
+setincw	1	( a w -- 'a )	Write word value to, increment and push addr
+setincd	1	( a d -- 'a )	Write dword value to, increment and push addr
+setincq	1	( a q -- 'a )	Write qword value to, increment and push addr
+cb	1	( b -- )	Write byte value to and increment here
+cw	1	( w -- )	Write word value to and increment here
+cd	1	( d -- )	Write dword value to and increment here
+cq	1	( q -- )	Write qword value to and increment here
+litb	2	( -- b )	Push next byte from and increment instruction pointer
+litw	3	( -- w )	Push next word from and increment instruction pointer
+litd	5	( -- d )	Push next dword from and increment instruction pointer
+litq	9	( -- q )	Push next qword from and increment instruction pointer
+depth	1	( -- n )	Push depth of the data stack
+dup	1	( x -- )	Drops top of the data stack
+drop	1	( a -- a a )	Duplicate top of stack
+swap	1	( a b -- b a )	Swap top two values on the data stack
+not	1	( x -- 'x )	Bitwise not top of the data stack
+eq	1	( a b -- t/f )	Check top two items for equality and push result
+add	1	( a b -- n )	Push a + b
+sub	1	( a b -- n )	Push a - b
+shl	1	( x n -- 'x )	Push x shl n
+shr	1	( x n -- 'x )	Push x shr n
