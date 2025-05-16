@@ -103,6 +103,14 @@ Opcodes start at 00 and subject to change.
 | 0x1A | setincw | ( a w -- 'a ) | Write word value to, increment and push addr |
 | 0x1B | setincd | ( a d -- 'a ) | Write dword value to, increment and push addr |
 | 0x1C | setincq | ( a q -- 'a ) | Write qword value to, increment and push addr |
+| 0x1D | cb | ( b -- ) | Write byte value to and increment here |
+| 0x1E | cw | ( w -- ) | Write word value to and increment here |
+| 0x1F | cd | ( d -- ) | Write dword value to and increment here |
+| 0x20 | cq | ( q -- ) | Write qword value to and increment here |
+| 0x21 | litb | ( -- b ) | Push next byte from and increment instruction pointer |
+| 0x22 | litw | ( -- w ) | Push next word from and increment instruction pointer |
+| 0x23 | litd | ( -- d ) | Push next dword from and increment instruction pointer |
+| 0x24 | lit | ( -- q ) | Push next qword from and increment instruction pointer |
 
 ## Tools/Examples
 

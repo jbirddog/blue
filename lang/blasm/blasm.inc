@@ -29,6 +29,14 @@ iterate <opname, opsize>, \
 	setincw, 1, \
 	setincd, 1, \
 	setincq, 1, \
+	cb, 1, \
+	cw, 1, \
+	cd, 1, \
+	cq, 1, \
+	litb, 2, \
+	litw, 3, \
+	litd, 5, \
+	lit, 9, \
 
 	#opname.code = % - 1
 

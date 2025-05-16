@@ -342,44 +342,44 @@ opNI	op_setincq, 1, 0	;	( a q -- 'a )	Write qword value to, increment and push a
 	jmp	_set_post
 end_op
 
-opBI	op_b_comma, 1, 0
+opBI	op_cb, 1, 0	;	( b -- )	Write byte value to and increment here
 	db op_here_code, op_swap_code, op_setincb_code, op_sethere_code, op_ret_code
 end_op
 
-opBI	op_w_comma, 1, 0
+opBI	op_cw, 1, 0	;	( w -- )	Write word value to and increment here
 	db op_here_code, op_swap_code, op_setincw_code, op_sethere_code, op_ret_code
 end_op
 
-opBI	op_d_comma, 1, 0
+opBI	op_cd, 1, 0	;	( d -- )	Write dword value to and increment here
 	db op_here_code, op_swap_code, op_setincd_code, op_sethere_code, op_ret_code
 end_op
 
-opBI	op_comma, 1, 0
+opBI	op_cq, 1, 0	;	( q -- )	Write qword value to and increment here
 	db op_here_code, op_swap_code, op_setincq_code, op_sethere_code, op_ret_code
 end_op
 
-opNI	op_litb, 2, 0
+opNI	op_litb, 2, 0	;	( -- b )	Push next byte from and increment instruction pointer
 	call	_pre_lit
 	lodsb
 
 	jmp	_post_lit
 end_op
 
-opNI	op_litw, 3, 0
+opNI	op_litw, 3, 0	;	( -- w )	Push next word from and increment instruction pointer
 	call	_pre_lit
 	lodsw
 
 	jmp	_post_lit
 end_op
 
-opNI	op_litd, 5, 0
+opNI	op_litd, 5, 0	;	( -- d )	Push next dword from and increment instruction pointer
 	call	_pre_lit
 	lodsd
 
 	jmp	_post_lit
 end_op
 
-opNI	op_lit, 9, 0
+opNI	op_lit, 9, 0	;	( -- q )	Push next qword from and increment instruction pointer
 	call	_pre_lit
 	lodsq
 
