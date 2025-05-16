@@ -13,7 +13,7 @@ iterate <opname, opsize>, \
 	endcomp, 1, \
 	ip, 1, \
 	setip, 1, \
-	entry, 1, \
+	op, 1, \
 	start, 1, \
 	here, 1, \
 	sethere, 1, \
@@ -37,6 +37,16 @@ iterate <opname, opsize>, \
 	litw, 3, \
 	litd, 5, \
 	lit, 9, \
+	depth, 1, \
+	dup, 1, \
+	drop, 1, \
+	swap, 1, \
+	not, 1, \
+	eq, 1, \
+	add, 1, \
+	sub, 1, \
+	shl, 1, \
+	shr, 1, \
 
 	#opname.code = % - 1
 

@@ -87,7 +87,7 @@ Opcodes start at 00 and subject to change.
 | 0x0A | endcomp | ( -- a ) | Append ret and end compilation, push addr where compilation started |
 | 0x0B | ip | ( -- a ) | Push location of the instruction pointer |
 | 0x0C | setip | ( a -- ) | Sets the location of the instruction pointer |
-| 0x0D | entry | ( b -- a ) | Push addr of the code for opcode |
+| 0x0D | op | ( b -- a ) | Push addr of the code for opcode |
 | 0x0E | start | ( -- a ) | Push addr of the code buffer's start |
 | 0x0F | here | ( -- a ) | Push addr of the code buffer's here |
 | 0x10 | sethere | ( a -- ) | Set addr of the code buffer's here |
@@ -111,6 +111,16 @@ Opcodes start at 00 and subject to change.
 | 0x22 | litw | ( -- w ) | Push next word from and increment instruction pointer |
 | 0x23 | litd | ( -- d ) | Push next dword from and increment instruction pointer |
 | 0x24 | lit | ( -- q ) | Push next qword from and increment instruction pointer |
+| 0x25 | depth | ( -- n ) | Push depth of the data stack |
+| 0x26 | dup | ( x -- ) | Drops top of the data stack |
+| 0x27 | drop | ( a -- a a ) | Duplicate top of stack |
+| 0x28 | swap | ( a b -- b a ) | Swap top two values on the data stack |
+| 0x29 | not | ( x -- 'x ) | Bitwise not top of the data stack |
+| 0x2A | eq | ( a b -- t/f ) | Check top two items for equality and push result |
+| 0x2B | add | ( a b -- n ) | Push a + b |
+| 0x2C | sub | ( a b -- n ) | Push a - b |
+| 0x2D | shl | ( x n -- 'x ) | Push x shl n |
+| 0x2E | shr | ( x n -- 'x ) | Push x shr n |
 
 ## Tools/Examples
 

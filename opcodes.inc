@@ -19,7 +19,7 @@ op_ifelse:
 
 	ret
 
-op_entry:
+op_op:
 	call	data_stack_pop
 	shl	eax, 4
 	add	rax, opcode_tbl
@@ -246,7 +246,7 @@ opNI	op_setip, 1, 0	;	( a -- )	Sets the location of the instruction pointer
 	ret
 end_op
 
-opN	op_entry, 1, 0	;	( b -- a )	Push addr of the code for opcode
+opN	op_op, 1, 0	;	( b -- a )	Push addr of the code for opcode
 
 opNI	op_start, 1, 0	;	( -- a )	Push addr of the code buffer's start
 	mov	rax, code_buffer
@@ -390,7 +390,7 @@ end_op
 ; stack ops
 ;
 
-opNI	op_depth, 1, 0
+opNI	op_depth, 1, 0	;	( -- n )	Push depth of the data stack
 	call	data_stack_depth
 	mov	eax, ecx
 	call	data_stack_push
@@ -398,7 +398,7 @@ opNI	op_depth, 1, 0
 	ret
 end_op
 
-opNI	op_dup, 1, 0
+opNI	op_dup, 1, 0	;	( x -- )	Drops top of the data stack
 	call	data_stack_pop
 	mov	rcx, rax
 	call	data_stack_push2
@@ -406,19 +406,19 @@ opNI	op_dup, 1, 0
 	ret
 end_op
 
-opNI	op_drop, 1, 0
+opNI	op_drop, 1, 0	;	( a -- a a )	Duplicate top of stack
 	call	data_stack_pop
 	ret
 end_op
 
-opNI	op_swap, 1, 0
+opNI	op_swap, 1, 0	;	( a b -- b a )	Swap top two values on the data stack
 	call	data_stack_pop2a
 	call	data_stack_push2
 
 	ret
 end_op
 
-opNI	op_not, 1, 0
+opNI	op_not, 1, 0	;	( x -- 'x )	Bitwise not top of the data stack
 	call	data_stack_pop
 	not	rax
 	call	data_stack_push
@@ -426,9 +426,9 @@ opNI	op_not, 1, 0
 	ret
 end_op
 
-opN	op_eq, 1, 0
+opN	op_eq, 1, 0	;	( a b -- t/f )	Check top two items for equality and push result
 
-opNI	op_add, 1, 0
+opNI	op_add, 1, 0	;	( a b -- n )	Push a + b
 	call	data_stack_pop2
 	add	rax, rcx
 	call	data_stack_push
@@ -436,7 +436,7 @@ opNI	op_add, 1, 0
 	ret
 end_op
 
-opNI	op_sub, 1, 0
+opNI	op_sub, 1, 0	;	( a b -- n )	Push a - b
 	call	data_stack_pop2a
 	sub	rax, rcx
 	call	data_stack_push
@@ -444,7 +444,7 @@ opNI	op_sub, 1, 0
 	ret
 end_op
 
-opNI	op_shl, 1, 0
+opNI	op_shl, 1, 0	;	( x n -- 'x )	Push x shl n
 	call	data_stack_pop2a
 	shl	rax, cl
 	call	data_stack_push
@@ -452,7 +452,7 @@ opNI	op_shl, 1, 0
 	ret
 end_op
 
-opNI	op_shr, 1, 0
+opNI	op_shr, 1, 0	;	( x n -- 'x )	Push x shr n
 	call	data_stack_pop2a
 	shr	rax, cl
 	call	data_stack_push
