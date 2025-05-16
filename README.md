@@ -13,7 +13,7 @@ By convention BlueVM bytecode files have a `bs0` (BlueVM Stage 0) extension.
 
 ## Building
 
-To build the BlueVM, tools and examples run ./build.sh
+To build the BlueVM, tools and examples run `make`.
 
 ## Memory Layout
 
