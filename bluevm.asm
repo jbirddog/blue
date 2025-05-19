@@ -2,13 +2,14 @@
 format ELF64 executable 3
 
 CELL_SIZE = 8
+VM_MAX_CODE_SIZE = 1024
 
+RETURN_STACK_SIZE = 512
+DATA_STACK_SIZE = 512
 VM_OPCODE_TBL_SIZE = 2048
 EXT_OPCODE_TBL_SIZE = 2048
 OPCODE_TBL_SIZE = VM_OPCODE_TBL_SIZE + EXT_OPCODE_TBL_SIZE
 INPUT_BUFFER_SIZE = 1024
-RETURN_STACK_SIZE = 512
-DATA_STACK_SIZE = 512
 CODE_BUFFER_SIZE = 4096
 
 STACKS_SIZE = RETURN_STACK_SIZE + DATA_STACK_SIZE
@@ -26,6 +27,7 @@ OPCODE_ENTRY_FLAG_BYTECODE = 1 shl 2
 segment readable writeable executable
 
 include "stack.inc"
+include "ops_macros.inc"
 include "interpreter.inc"
 
 ; expects status in edi
@@ -47,12 +49,8 @@ init:
 	mov	[opcode_handler_invalid], OPCODE_HANDLER_INVALID
 	
 	mov	[return_stack_here], return_stack
-	mov	[return_stack_size], RETURN_STACK_SIZE
 	mov	[data_stack_here], data_stack
-	mov	[data_stack_size], DATA_STACK_SIZE
-
 	mov	[code_buffer_here], code_buffer
-	mov	[code_buffer_size], CODE_BUFFER_SIZE
 	
 	ret
 	
@@ -75,6 +73,7 @@ entry $
 	call	interpreter
 
 include "ops.inc"
+assert ($ - opcode_tbl) <= VM_MAX_CODE_SIZE
 rb (OPCODE_TBL_SIZE - ($ - opcode_tbl))
 
 input_buffer rb INPUT_BUFFER_SIZE
@@ -92,10 +91,5 @@ opcode_handler rq 1
 opcode_handler_invalid rq 1
 
 return_stack_here rq 1
-return_stack_size rq 1
-
 data_stack_here rq 1
-data_stack_size rq 1
-
 code_buffer_here rq 1
-code_buffer_size rq 1
