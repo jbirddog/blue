@@ -34,8 +34,10 @@ BlueVM also reserves space for the following five blocks in rwx memory:
 6. Application Code Buffer
 6. Application Code Buffer
 
+BlueVM itself performs no allocations once it is loaded into memory.
+
 Due to the block structure of the binary, patching to change opcodes or the default value for the input buffer is
-straightfoward. BlueVM itself performs no allocations once it is loaded into memory.
+straightfoward.
 
 ## Boot
 
