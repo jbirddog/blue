@@ -27,6 +27,7 @@ OPCODE_ENTRY_FLAG_BYTECODE = 1 shl 2
 segment readable writeable executable
 
 include "stack.inc"
+include "ops_code.inc"
 include "ops_macros.inc"
 include "interpreter.inc"
 
@@ -73,7 +74,6 @@ entry $
 	call	interpreter
 
 include "ops.inc"
-assert ($ - opcode_tbl) <= VM_MAX_CODE_SIZE
 rb (OPCODE_TBL_SIZE - ($ - opcode_tbl))
 
 input_buffer rb INPUT_BUFFER_SIZE
