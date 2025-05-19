@@ -22,12 +22,9 @@ The BlueVM has the following layout in rwx memory:
 1. Opcode Map (4096 bytes)
    1. BlueVM Opcode Map: 0x00 - 0x7F (2048 bytes)
    1. Extended Opcode Map: 0x80 - 0xFF (2048 bytes)
-1. Input buffer (2048 bytes)
+1. Input buffer (1024 bytes)
 1. Return stack (512 bytes)
 1. Data stack (512 bytes)
-1. Runtime Data (1024 bytes)
-   1. User data (960 bytes)
-   1. BlueVM addresses (64 bytes)
 1. Code Buffer (4096 bytes)
 
 ## Boot
@@ -88,7 +85,7 @@ Opcodes start at 00 and subject to change.
 | 0x0B | ip | ( -- a ) | Push location of the instruction pointer |
 | 0x0C | setip | ( a -- ) | Set the location of the instruction pointer |
 | 0x0D | op | ( b -- a ) | Push addr of the code for opcode |
-| 0x0E | ophc | ( -- a ) | Push addr of the opcode call handler |
+| 0x0E | oph | ( -- a ) | Push addr of the opcode handler |
 | 0x0F | start | ( -- a ) | Push addr of the code buffer's start |
 | 0x10 | here | ( -- a ) | Push addr of the code buffer's here |
 | 0x11 | sethere | ( a -- ) | Set addr of the code buffer's here |
@@ -141,9 +138,6 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ## TODOs
 
-1. Remove runtime data
-   1. Add opcode to get/set `vm_addr_opcode_handler_call` - `ophc`
-1. Shrink input buffer to 1024 bytes
 1. Bring back a simpiler version of the `blue` language
 1. See about re-arranging >r order in op_compile_begin to simplify it and op_compile_end
 1. Add more ops to make defining a custom op less verbose/brittle

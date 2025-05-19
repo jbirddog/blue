@@ -248,7 +248,7 @@ end_op
 
 opN	op_op, 1, 0	;	( b -- a )	Push addr of the code for opcode
 
-opNI	op_ophc, 1, 0	;	( -- a )	Push addr of the opcode call handler
+opNI	op_oph, 1, 0	;	( -- a )	Push addr of the opcode handler
 	mov	rax, opcode_handler_call
 	call	data_stack_push
 	

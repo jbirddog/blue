@@ -14,7 +14,7 @@ iterate <opname, opsize>, \
 	ip, 1, \
 	setip, 1, \
 	op, 1, \
-	ophc, 1, \
+	oph, 1, \
 	start, 1, \
 	here, 1, \
 	sethere, 1, \
