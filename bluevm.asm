@@ -60,15 +60,20 @@ syscall_or_die:
 	
 read_boot_code:
 	mov	rsi, input_buffer
+	xor	eax, eax
+
+	cmp	[rsi], rax
+	jne	.done
+
 	mov	edx, INPUT_BUFFER_SIZE
 	xor	edi, edi
-	xor	eax, eax
 	call	syscall_or_die
 
 	test	eax, eax
 	cmovz	edi, eax
 	jz	exit
-		
+
+.done:
 	ret
 
 entry $
