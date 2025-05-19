@@ -38,9 +38,6 @@ BlueVM also reserves space for the following five blocks in rwx memory:
 
 BlueVM itself performs no allocations once it is loaded into memory.
 
-Due to the block structure of the binary, patching to change opcodes or the default value for the input buffer is
-straightfoward.
-
 ## Boot
 
 If the first 8 bytes of the input buffer are zero then 1024 bytes will be read from stdin into the input buffer.
@@ -169,4 +166,4 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. Grok more fasmg magic to improve blasm syntax
 1. Add bytecode op if/if-not
 1. Add opcodes for litb, etc
-1. Print error messages to disambiguate exit status
+1. Print error messages to disambiguate exit status_
