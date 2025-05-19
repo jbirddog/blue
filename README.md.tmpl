@@ -88,7 +88,9 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ## TODOs
 
+1. Only read from stdin if first 8 bytes of input buffer are 0
 1. Bring back a simpiler version of the `blue` language
+1. If bytes in block 0 are needed, move dq's before includes into dead space in the vm_op_tbl
 1. See about re-arranging >r order in op_compile_begin to simplify it and op_compile_end
 1. Add more ops to make defining a custom op less verbose/brittle
    1. opN[ ]op
