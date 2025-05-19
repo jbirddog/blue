@@ -86,45 +86,46 @@ Opcodes start at 00 and subject to change.
 | 0x09 | comp | ( -- ) | Begin compiling bytecode |
 | 0x0A | endcomp | ( -- a ) | Append ret and end compilation, push addr where compilation started |
 | 0x0B | ip | ( -- a ) | Push location of the instruction pointer |
-| 0x0C | setip | ( a -- ) | Sets the location of the instruction pointer |
+| 0x0C | setip | ( a -- ) | Set the location of the instruction pointer |
 | 0x0D | op | ( b -- a ) | Push addr of the code for opcode |
-| 0x0E | start | ( -- a ) | Push addr of the code buffer's start |
-| 0x0F | here | ( -- a ) | Push addr of the code buffer's here |
-| 0x10 | sethere | ( a -- ) | Set addr of the code buffer's here |
-| 0x11 | atincb | ( a -- b a' ) | Push byte value found at addr, increment and push addr |
-| 0x12 | atincw | ( a -- w a' ) | Push word value found at addr, increment and push addr |
-| 0x13 | atincd | ( a -- d a' ) | Push dword value found at addr, increment and push addr |
-| 0x14 | atincq | ( a -- q a' ) | Push qword value found at addr, increment and push addr |
-| 0x15 | atb | ( a -- b ) | Push byte value found at addr |
-| 0x16 | atw | ( a -- d ) | Push word value found at addr |
-| 0x17 | atd | ( a -- w ) | Push dword value found at addr |
-| 0x18 | atq | ( a -- q ) | Push qword value found at addr |
-| 0x19 | setincb | ( a b -- 'a ) | Write byte value to, increment and push addr |
-| 0x1A | setincw | ( a w -- 'a ) | Write word value to, increment and push addr |
-| 0x1B | setincd | ( a d -- 'a ) | Write dword value to, increment and push addr |
-| 0x1C | setincq | ( a q -- 'a ) | Write qword value to, increment and push addr |
-| 0x1D | setb | ( a b -- ) | Write byte value to addr |
-| 0x1E | setw | ( a w -- ) | Write word value to addr |
-| 0x1F | setd | ( a d -- ) | Write dword value to addr |
-| 0x20 | setq | ( a q -- ) | Write qword value to addr |
-| 0x21 | cb | ( b -- ) | Write byte value to and increment here |
-| 0x22 | cw | ( w -- ) | Write word value to and increment here |
-| 0x23 | cd | ( d -- ) | Write dword value to and increment here |
-| 0x24 | cq | ( q -- ) | Write qword value to and increment here |
-| 0x25 | litb | ( -- b ) | Push next byte from and increment instruction pointer |
-| 0x26 | litw | ( -- w ) | Push next word from and increment instruction pointer |
-| 0x27 | litd | ( -- d ) | Push next dword from and increment instruction pointer |
-| 0x28 | litq | ( -- q ) | Push next qword from and increment instruction pointer |
-| 0x29 | depth | ( -- n ) | Push depth of the data stack |
-| 0x2A | dup | ( x -- ) | Drops top of the data stack |
-| 0x2B | drop | ( a -- a a ) | Duplicate top of stack |
-| 0x2C | swap | ( a b -- b a ) | Swap top two values on the data stack |
-| 0x2D | not | ( x -- 'x ) | Bitwise not top of the data stack |
-| 0x2E | eq | ( a b -- t/f ) | Check top two items for equality and push result |
-| 0x2F | add | ( a b -- n ) | Push a + b |
-| 0x30 | sub | ( a b -- n ) | Push a - b |
-| 0x31 | shl | ( x n -- 'x ) | Push x shl n |
-| 0x32 | shr | ( x n -- 'x ) | Push x shr n |
+| 0x0E | ophc | ( -- a ) | Push addr of the opcode call handler |
+| 0x0F | start | ( -- a ) | Push addr of the code buffer's start |
+| 0x10 | here | ( -- a ) | Push addr of the code buffer's here |
+| 0x11 | sethere | ( a -- ) | Set addr of the code buffer's here |
+| 0x12 | atincb | ( a -- b a' ) | Push byte value found at addr, increment and push addr |
+| 0x13 | atincw | ( a -- w a' ) | Push word value found at addr, increment and push addr |
+| 0x14 | atincd | ( a -- d a' ) | Push dword value found at addr, increment and push addr |
+| 0x15 | atincq | ( a -- q a' ) | Push qword value found at addr, increment and push addr |
+| 0x16 | atb | ( a -- b ) | Push byte value found at addr |
+| 0x17 | atw | ( a -- d ) | Push word value found at addr |
+| 0x18 | atd | ( a -- w ) | Push dword value found at addr |
+| 0x19 | atq | ( a -- q ) | Push qword value found at addr |
+| 0x1A | setincb | ( a b -- 'a ) | Write byte value to, increment and push addr |
+| 0x1B | setincw | ( a w -- 'a ) | Write word value to, increment and push addr |
+| 0x1C | setincd | ( a d -- 'a ) | Write dword value to, increment and push addr |
+| 0x1D | setincq | ( a q -- 'a ) | Write qword value to, increment and push addr |
+| 0x1E | setb | ( a b -- ) | Write byte value to addr |
+| 0x1F | setw | ( a w -- ) | Write word value to addr |
+| 0x20 | setd | ( a d -- ) | Write dword value to addr |
+| 0x21 | setq | ( a q -- ) | Write qword value to addr |
+| 0x22 | cb | ( b -- ) | Write byte value to and increment here |
+| 0x23 | cw | ( w -- ) | Write word value to and increment here |
+| 0x24 | cd | ( d -- ) | Write dword value to and increment here |
+| 0x25 | cq | ( q -- ) | Write qword value to and increment here |
+| 0x26 | litb | ( -- b ) | Push next byte from and increment instruction pointer |
+| 0x27 | litw | ( -- w ) | Push next word from and increment instruction pointer |
+| 0x28 | litd | ( -- d ) | Push next dword from and increment instruction pointer |
+| 0x29 | litq | ( -- q ) | Push next qword from and increment instruction pointer |
+| 0x2A | depth | ( -- n ) | Push depth of the data stack |
+| 0x2B | dup | ( x -- ) | Drops top of the data stack |
+| 0x2C | drop | ( a -- a a ) | Duplicate top of stack |
+| 0x2D | swap | ( a b -- b a ) | Swap top two values on the data stack |
+| 0x2E | not | ( x -- 'x ) | Bitwise not top of the data stack |
+| 0x2F | eq | ( a b -- t/f ) | Check top two items for equality and push result |
+| 0x30 | add | ( a b -- n ) | Push a + b |
+| 0x31 | sub | ( a b -- n ) | Push a - b |
+| 0x32 | shl | ( x n -- 'x ) | Push x shl n |
+| 0x33 | shr | ( x n -- 'x ) | Push x shr n |
 
 ## Tools/Examples
 
@@ -140,6 +141,9 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ## TODOs
 
+1. Remove runtime data
+   1. Add opcode to get/set `vm_addr_opcode_handler_call` - `ophc`
+1. Shrink input buffer to 1024 bytes
 1. Bring back a simpiler version of the `blue` language
 1. See about re-arranging >r order in op_compile_begin to simplify it and op_compile_end
 1. Add more ops to make defining a custom op less verbose/brittle

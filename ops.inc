@@ -239,7 +239,7 @@ opNI	op_ip, 1, 0	;	( -- a )	Push location of the instruction pointer
 	ret
 end_op
 
-opNI	op_setip, 1, 0	;	( a -- )	Sets the location of the instruction pointer
+opNI	op_setip, 1, 0	;	( a -- )	Set the location of the instruction pointer
 	call	data_stack_pop
 	mov	[instruction_pointer], rax
 
@@ -247,6 +247,13 @@ opNI	op_setip, 1, 0	;	( a -- )	Sets the location of the instruction pointer
 end_op
 
 opN	op_op, 1, 0	;	( b -- a )	Push addr of the code for opcode
+
+opNI	op_ophc, 1, 0	;	( -- a )	Push addr of the opcode call handler
+	mov	rax, opcode_handler_call
+	call	data_stack_push
+	
+	ret
+end_op
 
 opNI	op_start, 1, 0	;	( -- a )	Push addr of the code buffer's start
 	mov	rax, code_buffer

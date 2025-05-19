@@ -9,14 +9,11 @@ OPCODE_TBL_SIZE = VM_OPCODE_TBL_SIZE + EXT_OPCODE_TBL_SIZE
 INPUT_BUFFER_SIZE = 2048
 RETURN_STACK_SIZE = 512
 DATA_STACK_SIZE = 512
-RUNTIME_DATA_SIZE = 1024
-VM_ADDRS_SIZE = 64
-USER_DATA_SIZE = RUNTIME_DATA_SIZE - VM_ADDRS_SIZE
 CODE_BUFFER_SIZE = 4096
 
 STACKS_SIZE = RETURN_STACK_SIZE + DATA_STACK_SIZE
 BUFFERS_SIZE = INPUT_BUFFER_SIZE + CODE_BUFFER_SIZE
-VM_MEM_SIZE = OPCODE_TBL_SIZE + BUFFERS_SIZE + STACKS_SIZE + RUNTIME_DATA_SIZE
+VM_MEM_SIZE = OPCODE_TBL_SIZE + BUFFERS_SIZE + STACKS_SIZE
 
 OPCODE_HANDLER_COMPILE = opcode_handler_compile
 OPCODE_HANDLER_INTERPRET = opcode_handler_interpret
@@ -54,7 +51,6 @@ init:
 	mov	[data_stack_here], data_stack
 	mov	[data_stack_size], DATA_STACK_SIZE
 
-	mov	[vm_addr_opcode_handler_call], opcode_handler_call
 	mov	[code_buffer_here], code_buffer
 	mov	[code_buffer_size], CODE_BUFFER_SIZE
 	
@@ -85,12 +81,6 @@ input_buffer rb INPUT_BUFFER_SIZE
 
 return_stack rb RETURN_STACK_SIZE
 data_stack rb DATA_STACK_SIZE
-
-user_data rb USER_DATA_SIZE
-
-vm_addrs:
-vm_addr_opcode_handler_call rq 1
-rb (VM_ADDRS_SIZE - ($ - vm_addrs))
 
 code_buffer rb CODE_BUFFER_SIZE
 

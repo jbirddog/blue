@@ -10,8 +10,9 @@ ret	1	( -- )	Pops value from return stack and sets the instruction pointer
 comp	1	( -- )	Begin compiling bytecode
 endcomp	1	( -- a )	Append ret and end compilation, push addr where compilation started
 ip	1	( -- a )	Push location of the instruction pointer
-setip	1	( a -- )	Sets the location of the instruction pointer
+setip	1	( a -- )	Set the location of the instruction pointer
 op	1	( b -- a )	Push addr of the code for opcode
+ophc	1	( -- a )	Push addr of the opcode call handler
 start	1	( -- a )	Push addr of the code buffer's start
 here	1	( -- a )	Push addr of the code buffer's here
 sethere	1	( a -- )	Set addr of the code buffer's here
