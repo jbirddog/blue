@@ -2,21 +2,24 @@
 format ELF64 executable 3
 
 CELL_SIZE = 8
+ELF_HEADERS_SIZE = 120
 
+VM_CODE_SIZE = 1024 - ELF_HEADERS_SIZE
+RETURN_STACK_SIZE = 512
+DATA_STACK_SIZE = 512
 VM_OPCODE_TBL_SIZE = 2048
 EXT_OPCODE_TBL_SIZE = 2048
 OPCODE_TBL_SIZE = VM_OPCODE_TBL_SIZE + EXT_OPCODE_TBL_SIZE
-INPUT_BUFFER_SIZE = 2048
-RETURN_STACK_SIZE = 512
-DATA_STACK_SIZE = 512
-RUNTIME_DATA_SIZE = 1024
-VM_ADDRS_SIZE = 64
-USER_DATA_SIZE = RUNTIME_DATA_SIZE - VM_ADDRS_SIZE
+INPUT_BUFFER_SIZE = 1024
 CODE_BUFFER_SIZE = 4096
 
-STACKS_SIZE = RETURN_STACK_SIZE + DATA_STACK_SIZE
-BUFFERS_SIZE = INPUT_BUFFER_SIZE + CODE_BUFFER_SIZE
-VM_MEM_SIZE = OPCODE_TBL_SIZE + BUFFERS_SIZE + STACKS_SIZE + RUNTIME_DATA_SIZE
+VM_MEM_SIZE = VM_CODE_SIZE + \
+	RETURN_STACK_SIZE + \
+	DATA_STACK_SIZE + \
+	OPCODE_TBL_SIZE + \
+	INPUT_BUFFER_SIZE + \
+	CODE_BUFFER_SIZE + \
+	0
 
 OPCODE_HANDLER_COMPILE = opcode_handler_compile
 OPCODE_HANDLER_INTERPRET = opcode_handler_interpret
@@ -28,7 +31,18 @@ OPCODE_ENTRY_FLAG_BYTECODE = 1 shl 2
 
 segment readable writeable executable
 
+instruction_pointer dq input_buffer
+
+opcode_handler dq OPCODE_HANDLER_INTERPRET
+opcode_handler_invalid dq OPCODE_HANDLER_INVALID
+
+return_stack_here dq return_stack
+data_stack_here dq data_stack
+code_buffer_here dq code_buffer
+
 include "stack.inc"
+include "ops_code.inc"
+include "ops_macros.inc"
 include "interpreter.inc"
 
 ; expects status in edi
@@ -43,69 +57,39 @@ syscall_or_die:
 	js	exit
 
 	ret
-
-init:
-	mov	[instruction_pointer], input_buffer
-	mov	[opcode_handler], OPCODE_HANDLER_INTERPRET
-	mov	[opcode_handler_invalid], OPCODE_HANDLER_INVALID
-	
-	mov	[return_stack_here], return_stack
-	mov	[return_stack_size], RETURN_STACK_SIZE
-	mov	[data_stack_here], data_stack
-	mov	[data_stack_size], DATA_STACK_SIZE
-
-	mov	[vm_addr_opcode_handler_call], opcode_handler_call
-	mov	[code_buffer_here], code_buffer
-	mov	[code_buffer_size], CODE_BUFFER_SIZE
-	
-	ret
 	
 read_boot_code:
 	mov	rsi, input_buffer
+	xor	eax, eax
+
+	cmp	[rsi], rax
+	jne	.done
+
 	mov	edx, INPUT_BUFFER_SIZE
 	xor	edi, edi
-	xor	eax, eax
 	call	syscall_or_die
 
 	test	eax, eax
 	cmovz	edi, eax
 	jz	exit
-		
+
+.done:
 	ret
 
 entry $
-	call	init
 	call	read_boot_code	
 	call	interpreter
 
-include "ops.inc"
-rb (OPCODE_TBL_SIZE - ($ - opcode_tbl))
+times (VM_CODE_SIZE - ($ - $$)) db 0
 
-input_buffer rb INPUT_BUFFER_SIZE
+opcode_tbl:
+include "ops_vm.inc"
+times (OPCODE_TBL_SIZE - ($ - opcode_tbl)) db 0
+
+input_buffer: times INPUT_BUFFER_SIZE db 0
 
 return_stack rb RETURN_STACK_SIZE
 data_stack rb DATA_STACK_SIZE
-
-user_data rb USER_DATA_SIZE
-
-vm_addrs:
-vm_addr_opcode_handler_call rq 1
-rb (VM_ADDRS_SIZE - ($ - vm_addrs))
-
 code_buffer rb CODE_BUFFER_SIZE
 
-assert ($ - opcode_tbl) = VM_MEM_SIZE
-
-instruction_pointer rq 1
-
-opcode_handler rq 1
-opcode_handler_invalid rq 1
-
-return_stack_here rq 1
-return_stack_size rq 1
-
-data_stack_here rq 1
-data_stack_size rq 1
-
-code_buffer_here rq 1
-code_buffer_size rq 1
+assert ($ - $$) = VM_MEM_SIZE

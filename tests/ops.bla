@@ -228,15 +228,12 @@ cb
 litb	add.code
 cb
 
-; movabs rdi, _addr of opcode call_
+; movabs rdi, _addr of opcode handler_
 litb	0x48
 cb
 litb	0xBF
 cb
-start
-litb	0x40
-sub
-atq
+oph
 cq
 
 ; call rdi

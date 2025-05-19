@@ -19,6 +19,9 @@ all: $(BLUEVM) $(GEN_FILES) $(TEST_OBJS) $(BLASM_EXAMPLE_OBJS)
 $(BLUEVM): bluevm.asm $(INCS) $(FASM2) | bin
 	$(FASM2) $< $@
 
+scratch: scratch.asm $(FASM2)
+	$(FASM2) $< $@
+
 $(BLASM): $(BLASM).inc
 	touch $@
 	
@@ -31,7 +34,7 @@ obj/blasm_%.bs0: lang/blasm/examples/%.bla $(TEST_DEPS) | obj
 bin obj:
 	mkdir $@
 
-ops.tbl: ops.inc
+ops.tbl: ops_vm.inc
 	sed -rn "s/^op[NB]I?\top_([^,]+), ([0-9]), [^\t]+\t;\t(.*)/\1\t\2\t\3/p" $^ > $@
 
 lang/blasm/blasm.inc: ops.tbl lang/blasm/blasm.inc.tmpl lang/blasm/blasm.inc.sh
