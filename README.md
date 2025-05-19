@@ -19,7 +19,7 @@ To build the BlueVM, tools and examples run `make`. Submodules need to be initia
 
 The BlueVM binary consists of six blocks (1024 bytes each) in rwx memory:
 
-0. Core VM machine code
+0. Core VM machine code (including ELF headers)
 0. BlueVM Opcodes 0x00 - 0x3F
 0. BlueVM Opcodes 0x40 - 0x7F
 0. Extended Opcodes 0x80 - 0xBF
@@ -147,17 +147,17 @@ Along with the code for BlueVM this repository also contains some tools and exam
 ### Idea for more tools/examples
 
 1. Write a bs0->blasm (msalb) decompiler by overwriting opcode map/handler
-1. Tool to patch a bluevm binary with custom ext ops and input buffer
+1. Tool to patch a bluevm binary with custom ext ops and/or input buffer
 
 ## TODOs
 
 1. Use blasm to generate extended op blocks
 1. Use blasm to generate input buffer block
-1. Only read from stdin if first 8 bytes of input buffer are 0
 1. Drop at{b,w,d,q} from core ops, add via extended ops to tests
 1. Drop set{b,w,d,q} from core ops, add via extended ops to tests
-1. Bring back a simpiler version of the `blue` language
+1. Expose argv/c via opcodes
 1. If bytes in block 0 are needed, move dq's before includes into dead space in the vm_op_tbl
+1. Bring back a simpiler version of the `blue` language
 1. See about re-arranging >r order in op_compile_begin to simplify it and op_compile_end
 1. Add more ops to make defining a custom op less verbose/brittle
    1. opN[ ]op
