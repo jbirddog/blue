@@ -73,7 +73,8 @@ entry $
 	call	read_boot_code	
 	call	interpreter
 
-include "ops.inc"
+opcode_tbl:
+include "ops_vm.inc"
 rb (OPCODE_TBL_SIZE - ($ - opcode_tbl))
 
 input_buffer rb INPUT_BUFFER_SIZE

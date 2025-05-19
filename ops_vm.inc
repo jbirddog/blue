@@ -1,6 +1,4 @@
 
-opcode_tbl:
-
 opNI	op_exit, 1, 0	;	( b -- )	Exit with status from top of stack
 	call	data_stack_pop
 	mov	edi, eax

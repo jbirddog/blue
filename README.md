@@ -138,7 +138,7 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ## TODOs
 
-1. Break ops.inc into ops_code.inc, ops_vm_tbl.inc
+1. Move rb stuff out of ops_vm.inc
 1. Bring back a simpiler version of the `blue` language
 1. See about re-arranging >r order in op_compile_begin to simplify it and op_compile_end
 1. Add more ops to make defining a custom op less verbose/brittle
