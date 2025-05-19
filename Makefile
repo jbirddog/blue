@@ -19,6 +19,9 @@ all: $(BLUEVM) $(GEN_FILES) $(TEST_OBJS) $(BLASM_EXAMPLE_OBJS)
 $(BLUEVM): bluevm.asm $(INCS) $(FASM2) | bin
 	$(FASM2) $< $@
 
+scratch: scratch.asm $(FASM2)
+	$(FASM2) $< $@
+
 $(BLASM): $(BLASM).inc
 	touch $@
 	

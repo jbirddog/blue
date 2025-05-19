@@ -2,7 +2,8 @@
 format ELF64 executable 3
 
 CELL_SIZE = 8
-VM_MAX_CODE_SIZE = 1024
+ELF_HEADERS_SIZE = 120
+VM_CODE_SIZE = 1024 - ELF_HEADERS_SIZE
 
 RETURN_STACK_SIZE = 512
 DATA_STACK_SIZE = 512
@@ -12,9 +13,12 @@ OPCODE_TBL_SIZE = VM_OPCODE_TBL_SIZE + EXT_OPCODE_TBL_SIZE
 INPUT_BUFFER_SIZE = 1024
 CODE_BUFFER_SIZE = 4096
 
-STACKS_SIZE = RETURN_STACK_SIZE + DATA_STACK_SIZE
-BUFFERS_SIZE = INPUT_BUFFER_SIZE + CODE_BUFFER_SIZE
-VM_MEM_SIZE = OPCODE_TBL_SIZE + BUFFERS_SIZE + STACKS_SIZE
+VM_BINARY_SIZE = VM_CODE_SIZE + \
+	RETURN_STACK_SIZE + \
+	DATA_STACK_SIZE + \
+	CODE_BUFFER_SIZE + \
+	OPCODE_TBL_SIZE + \
+	INPUT_BUFFER_SIZE
 
 OPCODE_HANDLER_COMPILE = opcode_handler_compile
 OPCODE_HANDLER_INTERPRET = opcode_handler_interpret
@@ -25,6 +29,15 @@ OPCODE_ENTRY_FLAG_INLINED = 1 shl 1
 OPCODE_ENTRY_FLAG_BYTECODE = 1 shl 2
 
 segment readable writeable executable
+
+instruction_pointer dq 0
+
+opcode_handler dq 0
+opcode_handler_invalid dq 0
+
+return_stack_here dq 0
+data_stack_here dq 0
+code_buffer_here dq 0
 
 include "stack.inc"
 include "ops_code.inc"
@@ -73,24 +86,16 @@ entry $
 	call	read_boot_code	
 	call	interpreter
 
+times (VM_CODE_SIZE - ($ - $$)) db 0
+
 opcode_tbl:
 include "ops_vm.inc"
-rb (OPCODE_TBL_SIZE - ($ - opcode_tbl))
+times (OPCODE_TBL_SIZE - ($ - opcode_tbl)) db 0
 
-input_buffer rb INPUT_BUFFER_SIZE
+input_buffer: times INPUT_BUFFER_SIZE db 0
 
 return_stack rb RETURN_STACK_SIZE
 data_stack rb DATA_STACK_SIZE
-
 code_buffer rb CODE_BUFFER_SIZE
 
-assert ($ - opcode_tbl) = VM_MEM_SIZE
-
-instruction_pointer rq 1
-
-opcode_handler rq 1
-opcode_handler_invalid rq 1
-
-return_stack_here rq 1
-data_stack_here rq 1
-code_buffer_here rq 1
+assert ($ - $$) = VM_BINARY_SIZE
