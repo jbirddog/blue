@@ -1,3 +1,5 @@
+_This file is generated from README.md.tmpl_
+
 # BlueVM
 
 Minimalistic 64 bit virtual machine inspired by Forth and Factor. The BlueVM aims to:
