@@ -173,6 +173,7 @@ Along with the code for BlueVM this repository also contains some tools and exam
 ## TODOs
 
 1. Add fasm2 dep in Makefile to git submodule init
+1. Rename ops.tbl to ops_vm.tbl
 1. Move bin/test_runner code to tools/btr
    1. Add custom block 5 with code to read tests from stdin
    1. Drop bin/hello_world

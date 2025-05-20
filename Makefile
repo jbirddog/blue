@@ -13,7 +13,7 @@ TEST_OPS = $(wildcard tests/ops/*.bla)
 TEST_OP_OBJS = $(TEST_OPS:tests/ops/%.bla=obj/test_ops_%.bs0)
 TESTS = $(wildcard tests/*.bla)
 TEST_OBJS = $(TESTS:tests/%.bla=obj/test_%.bs0)
-TEST_DEPS = $(FASMG) $(BLUEVM) $(BLASM)
+TEST_DEPS = $(FASMG) $(BLASM) $(TEST_RUNNER)
 TEST_RUNNER = bin/test_runner
 
 BLASM_EXAMPLES = $(wildcard lang/blasm/examples/*.bla)
@@ -65,9 +65,9 @@ bin/hello_world: $(BLUEVM_NOIB) obj/blasm_hello_world.bs0
 	cat $^ > $@ && chmod +x $@ && ./$@
 
 ops.tbl: ops_vm.inc
-	sed -rn "s/^op[NB]I?\top_([^,]+), ([0-9]), [^\t]+\t;\t(.*)/\1\t\2\t\3/p" $^ > $@
-
 tests/ops/low.tbl: tests/ops/low.bla
+
+ops.tbl tests/ops/low.tbl:
 	sed -rn "s/^op[NB]I?\top_([^,]+), ([0-9]), [^\t]+\t;\t(.*)/\1\t\2\t\3/p" $^ > $@
 
 lang/blasm/blasm.inc: ops.tbl lang/blasm/blasm.inc.tmpl lang/blasm/blasm.inc.sh
