@@ -164,10 +164,14 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. Write a bs0->blasm (msalb) decompiler by overwriting opcode map/handler
 1. Tool to patch a BlueVM binary with custom ext ops and/or input buffer
 
-## TODOs
+## Pre Merge
 
 1. Generate inc files for test custom ops
-1. Find clean way to give blasm an inc file for custom ops
+   1. include in test files
+1. Add asrteq, asrtne
+
+## TODOs
+
 1. Add fasm2 dep in Makefile to git submodule init
 1. Move bin/test_runner code to tools/btr
    1. Add custom block 5 with code to read tests from stdin

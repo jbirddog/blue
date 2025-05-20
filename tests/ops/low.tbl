@@ -1,0 +1,1 @@
+assert	1	( t/f -- )	Exit if top of stack is false
