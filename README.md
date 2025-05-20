@@ -38,6 +38,17 @@ BlueVM also reserves space for the following five blocks in rwx memory:
 
 BlueVM itself performs no allocations once it is loaded into memory.
 
+The block structure makes it very easy to patch or slice a BlueVM binary to create a custom standalone executable.
+As a quick example, assuming you have a `obj/hello_world.bs0` file compiled with `blasm` and a `bin/bluevm`:
+
+```
+$ head -c -1024 bin/bluevm > bin/bluevm_noib
+$ cat bin/bluevm_noib obj/hello_world.bs0 > bin/hello_world
+$ chmod +x bin/hello_world
+$ ./bin/hello_world
+Hello, World!
+```
+
 ## Boot
 
 If the first 8 bytes of the input buffer are zero then 1024 bytes will be read from stdin into the input buffer.
@@ -141,7 +152,7 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 | Name | Descripton | Location |
 |----|----|----|
-| blasm | Assembles BlueVM bytecode using `fasmg` | lang/blasm |
+| blasm | Assembles BlueVM bytecode block files using `fasmg` | lang/blasm |
 
 ### Idea for more tools/examples
 
@@ -151,8 +162,6 @@ Along with the code for BlueVM this repository also contains some tools and exam
 ## TODOs
 
 1. Use blasm to generate extended op blocks
-1. Use blasm to generate input buffer block
-1. Show example of patching the BlueVM binary to make custom executable
 1. Drop at{b,w,d,q} from core ops, add via extended ops to tests
 1. Drop set{b,w,d,q} from core ops, add via extended ops to tests
 1. Expose argv/c via opcodes
