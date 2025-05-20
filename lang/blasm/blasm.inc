@@ -1,3 +1,4 @@
+; Generated from blasm.inc.tmpl
 
 iterate <opname, opsize>, \
 	exit, 1, \
@@ -70,3 +71,7 @@ end iterate
 calminstruction callop op
 	emit 1, op
 end calminstruction
+
+postpone
+	db (1024 - $) dup 0
+end postpone

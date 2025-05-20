@@ -1,5 +1,6 @@
 BLASM = lang/blasm/blasm
 BLUEVM = bin/bluevm
+BLUEVM_NOIB = $(BLUEVM)_noib
 FASM2 = fasm2/fasm2
 FASMG = fasm2/fasmg.x64
 
@@ -13,14 +14,18 @@ BLASM_EXAMPLES = $(wildcard lang/blasm/examples/*.bla)
 BLASM_EXAMPLE_OBJS = $(BLASM_EXAMPLES:lang/blasm/examples/%.bla=obj/blasm_%.bs0)
 
 GEN_FILES = ops.tbl README.md lang/blasm/blasm.inc
+PATCHED_BINS = bin/hello_world
 
-all: $(BLUEVM) $(GEN_FILES) $(TEST_OBJS) $(BLASM_EXAMPLE_OBJS)
+all: $(BLUEVM) $(GEN_FILES) $(TEST_OBJS) $(BLASM_EXAMPLE_OBJS) $(PATCHED_BINS)
+
+bin obj:
+	mkdir $@
 
 $(BLUEVM): bluevm.asm $(INCS) $(FASM2) | bin
 	$(FASM2) $< $@
 
-scratch: scratch.asm $(FASM2)
-	$(FASM2) $< $@
+$(BLUEVM_NOIB): $(BLUEVM)
+	head -c -1024 $< > $@
 
 $(BLASM): $(BLASM).inc
 	touch $@
@@ -30,9 +35,12 @@ obj/test_%.bs0: tests/%.bla $(TEST_DEPS) | obj
 
 obj/blasm_%.bs0: lang/blasm/examples/%.bla $(TEST_DEPS) | obj
 	$(BLASM) -n $< $@ && $(BLUEVM) < $@
+	
+bin/hello_world: $(BLUEVM_NOIB) obj/blasm_hello_world.bs0
+	cat $^ > $@ && chmod +x $@ && ./$@
 
-bin obj:
-	mkdir $@
+scratch: scratch.asm $(FASM2)
+	$(FASM2) $< $@
 
 ops.tbl: ops_vm.inc
 	sed -rn "s/^op[NB]I?\top_([^,]+), ([0-9]), [^\t]+\t;\t(.*)/\1\t\2\t\3/p" $^ > $@
