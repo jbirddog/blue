@@ -1,8 +1,11 @@
 BLASM = lang/blasm/blasm
 BLUEVM = bin/bluevm
+BLUEVM_NOEXT = $(BLUEVM)_noext
 BLUEVM_NOIB = $(BLUEVM)_noib
 FASM2 = fasm2/fasm2
 FASMG = fasm2/fasmg.x64
+
+DD = dd status=none bs=1024
 
 INCS = $(wildcard *.inc)
 
@@ -17,9 +20,17 @@ BLASM_EXAMPLE_OBJS = $(BLASM_EXAMPLES:lang/blasm/examples/%.bla=obj/blasm_%.bs0)
 
 GEN_FILES = ops.tbl README.md lang/blasm/blasm.inc
 BLKS = obj/blk_5.bs0
+TEST_RUNNER = bin/test_runner
 PATCHED_BINS = bin/hello_world
 
-all: $(BLUEVM) $(GEN_FILES) $(BLKS) $(TEST_OP_OBJS) $(TEST_OBJS) $(BLASM_EXAMPLE_OBJS) $(PATCHED_BINS)
+all: $(BLUEVM) \
+	$(GEN_FILES) \
+	$(BLKS) \
+	$(TEST_OP_OBJS) \
+	$(TEST_RUNNER) \
+	$(TEST_OBJS) \
+	$(BLASM_EXAMPLE_OBJS) \
+	$(PATCHED_BINS)
 
 bin obj:
 	mkdir $@
@@ -27,17 +38,20 @@ bin obj:
 $(BLUEVM): bluevm.asm $(INCS) $(FASM2) | bin
 	$(FASM2) $< $@
 
+$(BLUEVM_NOEXT): $(BLUEVM)
+	$(DD) if=$(BLUEVM) of=$@ count=3
+
 $(BLUEVM_NOIB): $(BLUEVM)
-	head -c -1024 $< > $@
+	$(DD) if=$(BLUEVM) of=$@ count=5
 
 $(BLASM): $(BLASM).inc
 	touch $@
 
 obj/blk_%.bs0: $(BLUEVM) $(BLASM) | obj
-	dd if=$(BLUEVM) of=$@ bs=1024 skip=$* count=1
+	$(DD) if=$(BLUEVM) of=$@ skip=$* count=1
 	
 obj/test_ops_%.bs0: tests/ops/%.bla $(TEST_DEPS) | obj
-	$(BLASM) -n $< $@ && $(BLUEVM) < $@
+	$(BLASM) -n $< $@
 	
 obj/test_%.bs0: tests/%.bla $(TEST_DEPS) | obj
 	$(BLASM) -n $< $@ && $(BLUEVM) < $@
@@ -48,6 +62,9 @@ obj/blasm_%.bs0: lang/blasm/examples/%.bla $(TEST_DEPS) | obj
 bin/hello_world: $(BLUEVM_NOIB) obj/blasm_hello_world.bs0
 	cat $^ > $@ && chmod +x $@ && ./$@
 
+bin/test_runner: $(BLUEVM_NOEXT) obj/test_ops_low.bs0 obj/test_ops_high.bs0 obj/blk_5.bs0
+	cat $^ > $@ && chmod +x $@
+	
 scratch: scratch.asm $(FASM2)
 	$(FASM2) $< $@
 
