@@ -10,16 +10,17 @@ true
 eq
 asrt
 
+true
+true
+asrteq
+
 false
 false
-eq
-callop	0x80
+asrteq
 
 true
 false
-eq
-not
-callop	0x80
+asrtne
 
 depth
 exit

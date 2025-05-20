@@ -2,6 +2,8 @@
 
 iterate <opname, opsize>, \
 	asrt, 1, \
+	asrteq, 1, \
+	asrtne, 1, \
 
 	#opname.code = % - 1
 
