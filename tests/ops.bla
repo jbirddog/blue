@@ -38,7 +38,7 @@ callop	0xFF
 litq	0x0000000000000001
 litb	0x01
 eq
-callop	0xFF
+callop	0x80
 
 ;
 ; test data stack ops
@@ -49,21 +49,21 @@ litb	0x10
 depth
 litb	0x01
 eq
-callop	0xFF
+callop	0x80
 
 ; stack depth is 0 after dropping the value
 drop
 depth
 litb	0x00
 eq
-callop	0xFF
+callop	0x80
 
 ; not
 depth
 litb	0x02
 eq
 not
-callop	0xFF
+callop	0x80
 
 ; swap
 litb	0x02
@@ -71,7 +71,7 @@ litb	0x01
 swap
 depth
 eq
-callop	0xFF
+callop	0x80
 drop
 
 ; sub
@@ -80,7 +80,7 @@ litb	0x07
 sub
 litb	0x02
 eq
-callop	0xFF
+callop	0x80
 
 ; add
 litb	0x07
@@ -88,7 +88,7 @@ litb	0x02
 add
 litb	0x09
 eq
-callop	0xFF
+callop	0x80
 
 ; shl/shr
 litb	0x01
@@ -96,20 +96,20 @@ litb	0x03
 shl
 litb	0x08
 eq
-callop	0xFF
+callop	0x80
 
 litb	0x08
 litb	0x03
 shr
 litb	0x01
 eq
-callop	0xFF
+callop	0x80
 
 ; dup
 here
 dup
 eq
-callop	0xFF
+callop	0x80
 
 ; tor and fromr
 here
@@ -117,7 +117,7 @@ tor
 fromr
 here
 eq
-callop	0xFF
+callop	0x80
 
 
 ; test setincb
@@ -130,7 +130,7 @@ setincb
 litb	0x01
 sub
 eq
-callop	0xFF
+callop	0x80
 
 ; test setincd
 here
@@ -142,7 +142,7 @@ setincd
 litb	0x04
 sub
 eq
-callop	0xFF
+callop	0x80
 
 ; test setincq
 here
@@ -154,7 +154,7 @@ setincq
 litb	0x08
 sub
 eq
-callop	0xFF
+callop	0x80
 
 ; test cb
 here
@@ -167,7 +167,7 @@ sub
 atb
 litb	0xC3
 eq
-callop	0xFF
+callop	0x80
 
 drop
 
@@ -182,7 +182,7 @@ sub
 atb
 litb	0xC3
 eq
-callop	0xFF
+callop	0x80
 
 drop
 
@@ -197,7 +197,7 @@ sub
 atb
 litb	0xC3
 eq
-callop	0xFF
+callop	0x80
 
 drop
 
@@ -250,7 +250,7 @@ mccall
 
 litb	0x08
 eq
-callop	0xFF
+callop	0x80
 
 ;
 ; control flow
@@ -306,7 +306,7 @@ sethere
 start
 here
 eq
-callop	0xFF
+callop	0x80
 
 ; exit cleanly if stack is prestine
 depth
