@@ -6,17 +6,20 @@ FASMG = fasm2/fasmg.x64
 
 INCS = $(wildcard *.inc)
 
+TEST_OPS = $(wildcard tests/ops/*.bla)
+TEST_OP_OBJS = $(TEST_OPS:tests/ops/%.bla=obj/test_ops_%.bs0)
 TESTS = $(wildcard tests/*.bla)
 TEST_OBJS = $(TESTS:tests/%.bla=obj/test_%.bs0)
-TEST_DEPS = $(BLUEVM) $(BLASM) $(FASMG)
+TEST_DEPS = $(FASMG) $(BLUEVM) $(BLASM)
 
 BLASM_EXAMPLES = $(wildcard lang/blasm/examples/*.bla)
 BLASM_EXAMPLE_OBJS = $(BLASM_EXAMPLES:lang/blasm/examples/%.bla=obj/blasm_%.bs0)
 
 GEN_FILES = ops.tbl README.md lang/blasm/blasm.inc
+BLKS = obj/blk_5.bs0
 PATCHED_BINS = bin/hello_world
 
-all: $(BLUEVM) $(GEN_FILES) $(TEST_OBJS) $(BLASM_EXAMPLE_OBJS) $(PATCHED_BINS)
+all: $(BLUEVM) $(GEN_FILES) $(BLKS) $(TEST_OP_OBJS) $(TEST_OBJS) $(BLASM_EXAMPLE_OBJS) $(PATCHED_BINS)
 
 bin obj:
 	mkdir $@
@@ -29,6 +32,12 @@ $(BLUEVM_NOIB): $(BLUEVM)
 
 $(BLASM): $(BLASM).inc
 	touch $@
+
+obj/blk_%.bs0: $(BLUEVM) $(BLASM) | obj
+	dd if=$(BLUEVM) of=$@ bs=1024 skip=$* count=1
+	
+obj/test_ops_%.bs0: tests/ops/%.bla $(TEST_DEPS) | obj
+	$(BLASM) -n $< $@ && $(BLUEVM) < $@
 	
 obj/test_%.bs0: tests/%.bla $(TEST_DEPS) | obj
 	$(BLASM) -n $< $@ && $(BLUEVM) < $@

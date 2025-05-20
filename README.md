@@ -161,6 +161,7 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ## TODOs
 
+1. Add fasm2 dep in Makefile to git submodule init
 1. Use blasm to generate extended op blocks
 1. Drop at{b,w,d,q} from core ops, add via extended ops to tests
 1. Drop set{b,w,d,q} from core ops, add via extended ops to tests
