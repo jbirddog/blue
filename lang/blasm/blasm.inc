@@ -1,3 +1,4 @@
+; Generated from blasm.inc.tmpl
 
 iterate <opname, opsize>, \
 	exit, 1, \
