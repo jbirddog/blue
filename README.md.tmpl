@@ -26,7 +26,7 @@ The BlueVM binary consists of six blocks (1024 bytes each) in rwx memory:
 0. Extended Opcodes 0xC0 - 0xFF
 0. Input buffer
 
-BlueVM also reserves space for the following five blocks in rwx memory:
+BlueVM also reserves space for the following blocks in rwx memory:
 
 6. Return and Data stack
 6. Application Code Buffer
@@ -85,13 +85,18 @@ the code buffer and advances the code buffer's here.
 
 ## Opcodes
 
-Opcodes start at 00 and subject to change.
+Opcodes are subject to change.
 
-### Core
+### VM Low/High
 
 | Opcode | Name | Stack Effect | Description |
 |----|----|----|----|
 _OPCODE_TABLE_
+
+### Extended Low/High
+
+Host applications are free to implement their own opcodes. For an example see `bin/test_runner` and
+`tests/ops/{low,high}.bla`.
 
 ## Tools/Examples
 
