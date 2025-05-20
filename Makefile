@@ -1,5 +1,6 @@
 BLASM = lang/blasm/blasm
 BLUEVM = bin/bluevm
+BLUEVM_NOIB = $(BLUEVM)_noib
 FASM2 = fasm2/fasm2
 FASMG = fasm2/fasmg.x64
 
@@ -14,10 +15,16 @@ BLASM_EXAMPLE_OBJS = $(BLASM_EXAMPLES:lang/blasm/examples/%.bla=obj/blasm_%.bs0)
 
 GEN_FILES = ops.tbl README.md lang/blasm/blasm.inc
 
-all: $(BLUEVM) $(GEN_FILES) $(TEST_OBJS) $(BLASM_EXAMPLE_OBJS)
+all: $(BLUEVM) $(GEN_FILES) $(TEST_OBJS) $(BLASM_EXAMPLE_OBJS) bin/hello_world
 
 $(BLUEVM): bluevm.asm $(INCS) $(FASM2) | bin
 	$(FASM2) $< $@
+
+bin/noib: $(BLUEVM)
+	head -c -1024 $< > $@
+	
+bin/hello_world: bin/noib obj/blasm_hello_world.bs0
+	cat $^ > $@ && chmod +x $@ && ./$@
 
 scratch: scratch.asm $(FASM2)
 	$(FASM2) $< $@
