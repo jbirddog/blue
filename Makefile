@@ -45,7 +45,6 @@ $(BLUEVM_NOIB): $(BLUEVM)
 	$(DD) if=$(BLUEVM) of=$@ count=5
 
 $(BLASM): $(BLASM).inc
-	touch $@
 
 obj/blk_%.bs0: $(BLUEVM) $(BLASM) | obj
 	$(DD) if=$(BLUEVM) of=$@ skip=$* count=1
@@ -57,7 +56,7 @@ $(TEST_RUNNER): $(BLUEVM_NOEXT) obj/test_ops_low.bs0 obj/test_ops_high.bs0 obj/b
 	cat $^ > $@ && chmod +x $@
 	
 obj/test_%.bs0: tests/%.bla $(TEST_DEPS) | obj
-	$(BLASM) -n $< $@ && $(BLUEVM) < $@
+	$(BLASM) -n $< $@ && $(TEST_RUNNER) < $@
 
 obj/blasm_%.bs0: lang/blasm/examples/%.bla $(TEST_DEPS) | obj
 	$(BLASM) -n $< $@ && $(TEST_RUNNER) < $@

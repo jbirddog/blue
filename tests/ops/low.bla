@@ -1,1 +1,15 @@
 ; low ops used for testing
+
+opcode_tbl:
+.offset = 0x80
+
+opBI	op_assert, 1, 0	;	( t/f -- )	Exit if top of stack is false
+	comp
+	endcomp
+	comp
+		litb	0xFF
+		exit
+	endcomp
+	ifelse
+	ret
+end_op

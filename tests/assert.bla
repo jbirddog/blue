@@ -1,45 +1,23 @@
 
 ;
-; implement assert as custom opcode FF
+; test runner custom opcode 0x80
 ;
 
-litb 0xFF
-op
-
-; set flags and size
-litb 0x04
-setincb
-litb	0x01
-setincb
-
-; compile and write bytecode address into the opcode table
-comp
-	comp
-	endcomp
-	comp
-		litb	0xFF
-		exit
-	endcomp
-	ifelse
-endcomp
-setq
-
-; call custom opcode
 true
 true
 eq
-callop	0xFF
+callop	0x80
 
 false
 false
 eq
-callop	0xFF
+callop	0x80
 
 true
 false
 eq
 not
-callop	0xFF
+callop	0x80
 
 depth
 exit
