@@ -1,12 +1,14 @@
 
+include "ops.inc"
+
 ;
-; test runner custom opcode 0x80
+; test runner assert ops
 ;
 
 true
 true
 eq
-callop	0x80
+asrt
 
 false
 false

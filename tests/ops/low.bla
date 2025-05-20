@@ -3,7 +3,7 @@
 opcode_tbl:
 .offset = 0x80
 
-opBI	op_assert, 1, 0	;	( t/f -- )	Exit if top of stack is false
+opBI	op_asrt, 1, 0	;	( t/f -- )	Exit if top of stack is false
 	comp
 	endcomp
 	comp
