@@ -37,13 +37,13 @@ BlueVM also reserves space for the following five blocks in rwx memory:
 BlueVM itself performs no allocations once it is loaded into memory.
 
 The block structure makes it very easy to patch or slice a BlueVM binary to create a custom standalone executable.
-As a quick example, assuming you have a `obj/hello_world.bs0` file compiled with `blasm` and a `bin/bluevm`:
+As a quick example, assuming you have a `obj/blasm_hello_world.bs0` file compiled with `blasm` and a `bin/bluevm`:
 
 ```
-$ head -c -1024 bin/bluevm > bin/bluevm_noib
-$ cat bin/bluevm_noib obj/hello_world.bs0 > bin/hello_world
-$ chmod +x bin/hello_world
-$ ./bin/hello_world
+$ dd if=bin/bluevm of=bin/bluevm_noib bs=1024 count=5 status=none && \
+	cat bin/bluevm_noib obj/blasm_hello_world.bs0 > bin/hello_world && \
+	chmod +x bin/hello_world && \
+	./bin/hello_world
 Hello, World!
 ```
 
