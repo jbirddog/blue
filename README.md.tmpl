@@ -115,6 +115,10 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 1. Add fasm2 dep in Makefile to git submodule init
 1. Once bin/test_runner is functional can drop bin/hello_world
+1. Move bin/test_runner code to tools/btr
+   1. Add custom block 5 with code to read tests from stdin
+1. Generate inc files for test custom ops
+1. Find clean way to give blasm an inc file for custom ops
 1. Use blasm to generate extended op blocks
 1. Drop at{b,w,d,q} from core ops, add via extended ops to tests
 1. Drop set{b,w,d,q} from core ops, add via extended ops to tests

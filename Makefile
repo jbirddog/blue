@@ -14,13 +14,13 @@ TEST_OP_OBJS = $(TEST_OPS:tests/ops/%.bla=obj/test_ops_%.bs0)
 TESTS = $(wildcard tests/*.bla)
 TEST_OBJS = $(TESTS:tests/%.bla=obj/test_%.bs0)
 TEST_DEPS = $(FASMG) $(BLUEVM) $(BLASM)
+TEST_RUNNER = bin/test_runner
 
 BLASM_EXAMPLES = $(wildcard lang/blasm/examples/*.bla)
 BLASM_EXAMPLE_OBJS = $(BLASM_EXAMPLES:lang/blasm/examples/%.bla=obj/blasm_%.bs0)
 
 GEN_FILES = ops.tbl README.md lang/blasm/blasm.inc
 BLKS = obj/blk_5.bs0
-TEST_RUNNER = bin/test_runner
 PATCHED_BINS = bin/hello_world
 
 all: $(BLUEVM) \
@@ -52,21 +52,18 @@ obj/blk_%.bs0: $(BLUEVM) $(BLASM) | obj
 	
 obj/test_ops_%.bs0: tests/ops/%.bla $(TEST_DEPS) | obj
 	$(BLASM) -n $< $@
+
+$(TEST_RUNNER): $(BLUEVM_NOEXT) obj/test_ops_low.bs0 obj/test_ops_high.bs0 obj/blk_5.bs0
+	cat $^ > $@ && chmod +x $@
 	
 obj/test_%.bs0: tests/%.bla $(TEST_DEPS) | obj
 	$(BLASM) -n $< $@ && $(BLUEVM) < $@
 
 obj/blasm_%.bs0: lang/blasm/examples/%.bla $(TEST_DEPS) | obj
-	$(BLASM) -n $< $@ && $(BLUEVM) < $@
+	$(BLASM) -n $< $@ && $(TEST_RUNNER) < $@
 	
 bin/hello_world: $(BLUEVM_NOIB) obj/blasm_hello_world.bs0
 	cat $^ > $@ && chmod +x $@ && ./$@
-
-bin/test_runner: $(BLUEVM_NOEXT) obj/test_ops_low.bs0 obj/test_ops_high.bs0 obj/blk_5.bs0
-	cat $^ > $@ && chmod +x $@
-	
-scratch: scratch.asm $(FASM2)
-	$(FASM2) $< $@
 
 ops.tbl: ops_vm.inc
 	sed -rn "s/^op[NB]I?\top_([^,]+), ([0-9]), [^\t]+\t;\t(.*)/\1\t\2\t\3/p" $^ > $@
@@ -76,6 +73,9 @@ lang/blasm/blasm.inc: ops.tbl lang/blasm/blasm.inc.tmpl lang/blasm/blasm.inc.sh
 	
 README.md: ops.tbl README.md.tmpl README.sh
 	./README.sh > README.md
+	
+scratch: scratch.asm $(FASM2)
+	$(FASM2) $< $@
 
 .PHONY: clean
 
