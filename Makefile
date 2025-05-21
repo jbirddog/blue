@@ -23,6 +23,8 @@ GEN_FILES = ops_vm.tbl README.md lang/blasm/blasm.inc tests/ops/low.tbl tests/op
 BLKS = obj/blk_5.bs0
 PATCHED_BINS = bin/hello_world
 
+.PHONY: all
+
 all: $(BLUEVM) \
 	$(GEN_FILES) \
 	$(BLKS) \
