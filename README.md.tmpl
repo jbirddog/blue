@@ -115,11 +115,6 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 1. Rename tests to test
 1. Add fasm2 dep in Makefile to git submodule init
-1. Move bin/test_runner code to tools/btr
-   1. Add ext ops to track expected number of tests, current test, tests finished
-   1. Something like TAP output would be interesting
-   1. Add custom block 5 with code to read tests from stdin if needed
-   1. Drop bin/hello_world
 1. Drop at{b,w,d,q} from core ops, add via extended ops (high?) to tests
 1. Drop set{b,w,d,q} from core ops, add via extended ops (high?) to tests
 1. Expose argv/c via opcodes
