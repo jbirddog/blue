@@ -1,8 +1,11 @@
-GEN_FILES = ops_low.tbl ops_high.tbl
+OP_TBLS = ops_low.tbl ops_high.tbl
 
-all: $(GEN_FILES)
+.PHONY: all
+
+all: bth.inc
 
 ops_%.tbl: ops_%.bla
 	sed -rn "s/^op[NB]I?\top_([^,]+), ([0-9]), [^\t]+\t;\t(.*)/\1\t\2\t\3/p" $^ > $@
 
-.PHONY: all
+bth.inc: $(OP_TBLS) bth.inc.tmpl bth.inc.sh
+	./bth.inc.sh > bth.inc
