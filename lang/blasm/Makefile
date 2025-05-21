@@ -3,7 +3,6 @@ BASE_DIR = ../..
 include $(BASE_DIR)/common.mk
 
 BLASM_INC = $(BLASM).inc
-README = README.md
 
 EXAMPLES = $(wildcard examples/*.bla)
 EXAMPLE_OBJS = $(EXAMPLES:examples/%.bla=obj/example_%.bs0)

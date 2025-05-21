@@ -5,8 +5,6 @@ INCS = $(wildcard *.inc)
 TESTS = $(wildcard test/*.bla)
 TEST_OBJS = $(TESTS:test/%.bla=obj/test_%.bs0)
 
-README = README.md
-
 GEN_FILES = $(BLUEVM_OPS_TBL) $(README)
 
 LANGS = lang/blasm
