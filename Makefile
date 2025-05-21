@@ -18,7 +18,7 @@ all: $(BLUEVM) \
 	$(TOOLS) \
 	$(TEST_OBJS)
 
-clean: $(TOOLS)
+clean: $(LANGS) $(TOOLS)
 	rm -rf bin obj $(GEN_FILES)
 
 bin obj:
