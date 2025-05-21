@@ -3,6 +3,7 @@ BASE_DIR ?= .
 
 BLASM = $(BASE_DIR)/lang/blasm/blasm
 BLUEVM = $(BASE_DIR)/bin/bluevm
+BTH = $(BASE_DIR)/tools/bth/bin/bth
 FASM2 = $(BASE_DIR)/fasm2/fasm2
 FASMG = $(BASE_DIR)/fasm2/fasmg.x64
 

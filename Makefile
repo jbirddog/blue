@@ -9,7 +9,6 @@ TEST_OP_OBJS = $(TEST_OPS:tests/ops/%.bla=obj/test_ops_%.bs0)
 TESTS = $(wildcard tests/*.bla)
 TEST_OBJS = $(TESTS:tests/%.bla=obj/test_%.bs0)
 TEST_DEPS = $(FASMG) $(BLUEVM) $(BLASM)
-TEST_RUNNER = bin/test_runner
 
 BLASM_EXAMPLES = $(wildcard lang/blasm/examples/*.bla)
 BLASM_EXAMPLE_OBJS = $(BLASM_EXAMPLES:lang/blasm/examples/%.bla=obj/blasm_%.bs0)
@@ -27,7 +26,6 @@ all: $(BLUEVM) \
 	$(BLKS) \
 	$(TOOLS) \
 	$(TEST_OP_OBJS) \
-	$(TEST_RUNNER) \
 	$(TEST_OBJS) \
 	$(BLASM_EXAMPLE_OBJS) \
 	$(PATCHED_BINS)
@@ -40,9 +38,6 @@ bin obj:
 
 $(BLUEVM): bluevm.asm $(INCS) $(FASM2) | bin
 	$(FASM2) $< $@
-
-$(BLUEVM_NOEXT): $(BLUEVM)
-	$(DD) if=$(BLUEVM) of=$@ count=3
 
 $(BLUEVM_NOIB): $(BLUEVM)
 	$(DD) if=$(BLUEVM) of=$@ count=5
@@ -57,15 +52,12 @@ obj/blk_%.bs0: $(BLUEVM) $(BLASM) | obj
 	
 obj/test_ops_%.bs0: tests/ops/%.bla $(TEST_DEPS) | obj
 	$(BLASM) -n $< $@
-
-$(TEST_RUNNER): $(BLUEVM_NOEXT) obj/test_ops_low.bs0 obj/test_ops_high.bs0 obj/blk_5.bs0
-	cat $^ > $@ && chmod +x $@
 	
 obj/test_%.bs0: tests/%.bla $(TEST_DEPS) | obj
-	$(BLASM) -n $< $@ && $(TEST_RUNNER) < $@
+	$(BLASM) -n $< $@ && $(BTH) < $@
 
 obj/blasm_%.bs0: lang/blasm/examples/%.bla $(TEST_DEPS) | obj
-	$(BLASM) -n $< $@ && $(TEST_RUNNER) < $@
+	$(BLASM) -n $< $@ && $(BTH) < $@
 	
 bin/hello_world: $(BLUEVM_NOIB) obj/blasm_hello_world.bs0
 	cat $^ > $@ && chmod +x $@ && ./$@
