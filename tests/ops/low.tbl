@@ -1,3 +1,0 @@
-asrt	1	( t/f -- )	Assert top of stack is true
-asrteq	1	( a b -- )	Assert a and b are eq
-asrtne	1	( a b -- )	Assert a and b are not eq
