@@ -159,26 +159,22 @@ Along with the code for BlueVM this repository also contains some tools and exam
 |----|----|----|
 | blasm | Assembles BlueVM bytecode block files using `fasmg` | lang/blasm |
 
-### Idea for more tools/examples
+### Ideas for more tools/examples
 
 1. Write a bs0->blasm (msalb) decompiler by overwriting opcode map/handler
 1. Tool to patch a BlueVM binary with custom ext ops and/or input buffer
-
-## Pre Merge
-
-1. Generate inc files for test custom ops
-   1. include in test files
-1. Add asrteq, asrtne
 
 ## TODOs
 
 1. Add fasm2 dep in Makefile to git submodule init
 1. Rename ops.tbl to ops_vm.tbl
 1. Move bin/test_runner code to tools/btr
-   1. Add custom block 5 with code to read tests from stdin
+   1. Add ext ops to track expected number of tests, current test, tests finished
+   1. Something like TAP output would be interesting
+   1. Add custom block 5 with code to read tests from stdin if needed
    1. Drop bin/hello_world
-1. Drop at{b,w,d,q} from core ops, add via extended ops to tests
-1. Drop set{b,w,d,q} from core ops, add via extended ops to tests
+1. Drop at{b,w,d,q} from core ops, add via extended ops (high?) to tests
+1. Drop set{b,w,d,q} from core ops, add via extended ops (high?) to tests
 1. Expose argv/c via opcodes
 1. If bytes in block 0 are needed, move dq's before includes into dead space in the vm_op_tbl
 1. Bring back a simpiler version of the `blue` language
