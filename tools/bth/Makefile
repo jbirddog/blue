@@ -16,9 +16,9 @@ TEST_OBJS = $(TESTS:test/%.bla=obj/test_%.bs0)
 
 GEN_FILES = $(BTH_INC) $(OP_TBLS) $(README)
 
-.PHONY: all clean
+.PHONY: all clean test
 
-all: $(BTH) $(GEN_FILES) $(TEST_OBJS)
+all: $(BTH) $(GEN_FILES) $(TEST_OBJS) test
 
 clean:
 	rm -rf bin obj $(GEN_FILES)
@@ -45,7 +45,10 @@ $(BTH): $(BLUEVM_NOEXT) $(OP_OBJS) obj/blk_5.bs0 | bin
 	cat $^ > $@ && chmod +x $@
 
 obj/test_%.bs0: test/%.bla $(BTH) | obj
-	$(BLASM) -n $< $@ && $(BTH) < $@
+	$(BLASM) -n $< $@
 
+test:
+	$(PROVE) obj/test_*
+	
 $(README): $(README).sh $(README).tmpl ops_low.tbl
 	./$< > $@

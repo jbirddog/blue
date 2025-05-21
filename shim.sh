@@ -1,6 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-./tools/bth/bin/bth < $1
+DIR="$( dirname -- "$( readlink -f -- "$0"; )"; )"
+
+"$DIR/tools/bth/bin/bth" < $1
 
 echo "1..1"
 echo "ok 1"
