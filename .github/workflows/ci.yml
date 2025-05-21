@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [ "main" ]
   push:
-    branches: [ "main" ]
+    branches: [ "main", "tap" ]
 
 jobs:
   build:
@@ -16,3 +16,5 @@ jobs:
         submodules: recursive
     - name: make
       run: make
+    - name: prove
+      run: prove lang
