@@ -1,13 +1,19 @@
 
-include "ops.inc"
+include "bth.inc"
 
 ;
-; test runner assert ops
+; test assert ops
 ;
 
 true
 true
 eq
+asrt
+
+true
+false
+eq
+not
 asrt
 
 true

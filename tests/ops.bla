@@ -1,5 +1,5 @@
 
-include "ops.inc"
+include "../tools/bth/bth.inc"
 
 ;
 ; implement assert as custom opcode 0xFF
