@@ -1,12 +1,4 @@
-
-BLASM = lang/blasm/blasm
-BLUEVM = bin/bluevm
-BLUEVM_NOEXT = $(BLUEVM)_noext
-BLUEVM_NOIB = $(BLUEVM)_noib
-FASM2 = fasm2/fasm2
-FASMG = fasm2/fasmg.x64
-
-DD = dd status=none bs=1024
+include common.mk
 
 INCS = $(wildcard *.inc)
 
@@ -80,7 +72,7 @@ ops_vm.tbl: ops_vm.inc
 tests/ops/low.tbl: tests/ops/low.bla
 
 ops_vm.tbl tests/ops/low.tbl:
-	sed -rn "s/^op[NB]I?\top_([^,]+), ([0-9]), [^\t]+\t;\t(.*)/\1\t\2\t\3/p" $< > $@
+	$(SED_TBL) $< > $@
 
 tests/ops.inc: tests/ops/low.tbl tests/ops.inc.tmpl tests/ops.inc.sh
 	./tests/ops.inc.sh > ./tests/ops.inc

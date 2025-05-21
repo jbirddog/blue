@@ -1,6 +1,6 @@
-BLASM = ../../lang/blasm/blasm
-BLUEVM = ../../bin/bluevm
-SED_TBL = sed -rn "s/^op[NB]I?\top_([^,]+), ([0-9]), [^\t]+\t;\t(.*)/\1\t\2\t\3/p"
+BASE_DIR = ../..
+
+include $(BASE_DIR)/common.mk
 
 BTH_INC = bth.inc
 OPS = ops_low.bla ops_high.bla
