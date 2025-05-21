@@ -1,5 +1,7 @@
 include common.mk
 
+BLUEVM_NOIB = $(BLUEVM)_noib
+
 INCS = $(wildcard *.inc)
 
 TEST_OPS = $(wildcard tests/ops/*.bla)
