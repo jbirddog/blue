@@ -13,5 +13,3 @@ BLUEVM_OPS_TBL = $(BASE_DIR)/ops_vm.tbl
 DD = dd status=none bs=1024
 
 SED_TBL = sed -rn "s/^op[NB]I?\top_([^,]+), ([0-9]), [^\t]+\t;\t(.*)/\1\t\2\t\3/p"
-
-TEST_DEPS = $(FASMG) $(BLUEVM) $(BLASM)

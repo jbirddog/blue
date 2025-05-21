@@ -6,7 +6,7 @@ BLASM_INC = $(BLASM).inc
 README = README.md
 
 EXAMPLES = $(wildcard examples/*.bla)
-EXAMPLE_OBJS = $(BLASM_EXAMPLES:examples/%.bla=obj/example_%.bs0)
+EXAMPLE_OBJS = $(EXAMPLES:examples/%.bla=obj/example_%.bs0)
 
 GEN_FILES = $(BLASM_INC) $(README)
 
@@ -20,9 +20,9 @@ clean:
 obj:
 	mkdir $@
 
-$(BLASM): $(BLASM).inc
+$(BLASM): $(BLASM).inc $(FASMG) 
 
-obj/example_%.bs0: examples/%.bla $(TEST_DEPS) | obj
+obj/example_%.bs0: examples/%.bla $(BLASM) $(BLUEVM) | obj
 	$(BLASM) -n $< $@ && $(BLUEVM) < $@
 
 $(BLASM_INC): $(BLASM_INC).sh $(BLASM_INC).tmpl $(BLUEVM_OPS_TBL)

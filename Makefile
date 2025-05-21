@@ -18,8 +18,7 @@ all: $(BLUEVM) \
 	$(GEN_FILES) \
 	$(LANGS) \
 	$(TOOLS) \
-	$(TEST_OBJS) \
-	$(BLASM_EXAMPLE_OBJS)
+	$(TEST_OBJS)
 
 clean: $(TOOLS)
 	rm -rf bin obj $(GEN_FILES)
@@ -30,14 +29,14 @@ bin obj:
 $(BLUEVM): bluevm.asm $(INCS) $(FASM2) | bin
 	$(FASM2) $< $@
 
+$(BLUEVM_OPS_TBL): $(BLUEVM_OPS_INC)
+	$(SED_TBL) $< > $@
+
 $(LANGS) $(TOOLS):
 	$(MAKE) -C $@ $(MAKECMDGOALS) || exit
 
-obj/test_%.bs0: test/%.bla $(TEST_DEPS) | obj
+obj/test_%.bs0: test/%.bla $(BLASM) $(BTH) | obj
 	$(BLASM) -n $< $@ && $(BTH) < $@
-
-$(BLUEVM_OPS_TBL): $(BLUEVM_OPS_INC)
-	$(SED_TBL) $< > $@
 	
 $(README): $(README).sh $(README).tmpl $(BLUEVM_OPS_TBL)
 	./$< > $@
