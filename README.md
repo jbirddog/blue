@@ -28,7 +28,7 @@ The BlueVM binary consists of six blocks (1024 bytes each) in rwx memory:
 0. Extended Opcodes 0xC0 - 0xFF
 0. Input buffer
 
-BlueVM also reserves space for the following five blocks in rwx memory:
+BlueVM also reserves space for the following blocks in rwx memory:
 
 6. Return and Data stack
 6. Application Code Buffer
@@ -39,13 +39,13 @@ BlueVM also reserves space for the following five blocks in rwx memory:
 BlueVM itself performs no allocations once it is loaded into memory.
 
 The block structure makes it very easy to patch or slice a BlueVM binary to create a custom standalone executable.
-As a quick example, assuming you have a `obj/hello_world.bs0` file compiled with `blasm` and a `bin/bluevm`:
+As a quick example, assuming you have a `obj/blasm_hello_world.bs0` file compiled with `blasm` and a `bin/bluevm`:
 
 ```
-$ head -c -1024 bin/bluevm > bin/bluevm_noib
-$ cat bin/bluevm_noib obj/hello_world.bs0 > bin/hello_world
-$ chmod +x bin/hello_world
-$ ./bin/hello_world
+$ dd if=bin/bluevm of=bin/bluevm_noib bs=1024 count=5 status=none && \
+	cat bin/bluevm_noib obj/blasm_hello_world.bs0 > bin/hello_world && \
+	chmod +x bin/hello_world && \
+	./bin/hello_world
 Hello, World!
 ```
 
@@ -87,9 +87,9 @@ the code buffer and advances the code buffer's here.
 
 ## Opcodes
 
-Opcodes start at 00 and subject to change.
+Opcodes are subject to change.
 
-### Core
+### VM Low/High
 
 | Opcode | Name | Stack Effect | Description |
 |----|----|----|----|
@@ -146,6 +146,11 @@ Opcodes start at 00 and subject to change.
 | 0x32 | shl | ( x n -- 'x ) | Push x shl n |
 | 0x33 | shr | ( x n -- 'x ) | Push x shr n |
 
+### Extended Low/High
+
+Host applications are free to implement their own opcodes. For an example see `bin/test_runner` and
+`tests/ops/{low,high}.bla`.
+
 ## Tools/Examples
 
 Along with the code for BlueVM this repository also contains some tools and examples that can be used as reference:
@@ -154,25 +159,26 @@ Along with the code for BlueVM this repository also contains some tools and exam
 |----|----|----|
 | blasm | Assembles BlueVM bytecode block files using `fasmg` | lang/blasm |
 
-### Idea for more tools/examples
+### Ideas for more tools/examples
 
 1. Write a bs0->blasm (msalb) decompiler by overwriting opcode map/handler
 1. Tool to patch a BlueVM binary with custom ext ops and/or input buffer
 
 ## TODOs
 
-1. Use blasm to generate extended op blocks
-1. Drop at{b,w,d,q} from core ops, add via extended ops to tests
-1. Drop set{b,w,d,q} from core ops, add via extended ops to tests
+1. Add fasm2 dep in Makefile to git submodule init
+1. Rename ops.tbl to ops_vm.tbl
+1. Move bin/test_runner code to tools/btr
+   1. Add ext ops to track expected number of tests, current test, tests finished
+   1. Something like TAP output would be interesting
+   1. Add custom block 5 with code to read tests from stdin if needed
+   1. Drop bin/hello_world
+1. Drop at{b,w,d,q} from core ops, add via extended ops (high?) to tests
+1. Drop set{b,w,d,q} from core ops, add via extended ops (high?) to tests
 1. Expose argv/c via opcodes
 1. If bytes in block 0 are needed, move dq's before includes into dead space in the vm_op_tbl
 1. Bring back a simpiler version of the `blue` language
 1. See about re-arranging >r order in op_compile_begin to simplify it and op_compile_end
-1. Add more ops to make defining a custom op less verbose/brittle
-   1. opN[ ]op
-   1. opNI[ ]op
-   1. opB[ ]op
-   1. opBI[ ]op
 1. Grok more fasmg magic to improve blasm syntax
 1. Add bytecode op if/if-not
 1. Add opcodes for litb, etc
