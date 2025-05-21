@@ -11,8 +11,6 @@ OPS = ops_low.bla ops_high.bla
 OP_OBJS = $(OPS:%.bla=obj/%.bs0)
 OP_TBLS = $(OPS:%.bla=%.tbl)
 
-README = README.md
-
 TESTS = $(wildcard test/*.bla)
 TEST_OBJS = $(TESTS:test/%.bla=obj/test_%.bs0)
 

@@ -11,7 +11,8 @@ Minimalistic 64 bit virtual machine inspired by Forth and Factor. The BlueVM aim
 1. Allow the host full control
 1. Bring some fun back into the world
 
-By convention BlueVM bytecode files have a `bs0` (BlueVM Stage 0) extension.
+BlueVM bytecode is stored in block sized (1024 byte) files that, by convention, have a `.bs0` (BlueVM Stage 0)
+extension.
 
 ## Building
 
@@ -39,11 +40,11 @@ BlueVM also reserves space for the following blocks in rwx memory:
 BlueVM itself performs no allocations once it is loaded into memory.
 
 The block structure makes it very easy to patch or slice a BlueVM binary to create a custom standalone executable.
-As a quick example, assuming you have a `obj/blasm_hello_world.bs0` file compiled with `blasm` and a `bin/bluevm`:
+As a quick example, assuming you have a `obj/hello_world.bs0` file compiled with `blasm` and a `bin/bluevm`:
 
 ```
 $ dd if=bin/bluevm of=bin/bluevm_noib bs=1024 count=5 status=none && \
-	cat bin/bluevm_noib obj/blasm_hello_world.bs0 > bin/hello_world && \
+	cat bin/bluevm_noib obj/hello_world.bs0 > bin/hello_world && \
 	chmod +x bin/hello_world && \
 	./bin/hello_world
 Hello, World!
@@ -148,8 +149,8 @@ Opcodes are subject to change.
 
 ### Extended Low/High
 
-Host applications are free to implement their own opcodes. For an example see `bin/test_runner` and
-`tests/ops/{low,high}.bla`.
+Host applications are free to implement their own opcodes which can be spliced into a BlueVM binary. For an example
+see `tools/bth`.
 
 ## Tools/Examples
 
@@ -158,6 +159,7 @@ Along with the code for BlueVM this repository also contains some tools and exam
 | Name | Descripton | Location |
 |----|----|----|
 | blasm | Assembles BlueVM bytecode block files using `fasmg` | lang/blasm |
+| bth | Patched version of the BlueVM with extended opcodes to facilitate testing. | tools/bth |
 
 ### Ideas for more tools/examples
 
@@ -166,8 +168,6 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ## TODOs
 
-1. Rename tests to test
-1. Move blasm stuff out of make file like bth
 1. Add fasm2 dep in Makefile to git submodule init
 1. Drop at{b,w,d,q} from core ops, add via extended ops (high?) to tests
 1. Drop set{b,w,d,q} from core ops, add via extended ops (high?) to tests

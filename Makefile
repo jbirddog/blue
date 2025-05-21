@@ -2,28 +2,23 @@ include common.mk
 
 INCS = $(wildcard *.inc)
 
-TESTS = $(wildcard tests/*.bla)
-TEST_OBJS = $(TESTS:tests/%.bla=obj/test_%.bs0)
-TEST_DEPS = $(FASMG) $(BLUEVM) $(BLASM)
+TESTS = $(wildcard test/*.bla)
+TEST_OBJS = $(TESTS:test/%.bla=obj/test_%.bs0)
 
-BLASM_EXAMPLES = $(wildcard lang/blasm/examples/*.bla)
-BLASM_EXAMPLE_OBJS = $(BLASM_EXAMPLES:lang/blasm/examples/%.bla=obj/blasm_%.bs0)
+GEN_FILES = $(BLUEVM_OPS_TBL) $(README)
 
-README = README.md
-
-GEN_FILES = ops_vm.tbl $(README) lang/blasm/blasm.inc
-
+LANGS = lang/blasm
 TOOLS = tools/bth
 
-.PHONY: all clean $(TOOLS)
+.PHONY: all clean $(LANGS) $(TOOLS)
 
 all: $(BLUEVM) \
 	$(GEN_FILES) \
+	$(LANGS) \
 	$(TOOLS) \
-	$(TEST_OBJS) \
-	$(BLASM_EXAMPLE_OBJS)
+	$(TEST_OBJS)
 
-clean: $(TOOLS)
+clean: $(LANGS) $(TOOLS)
 	rm -rf bin obj $(GEN_FILES)
 
 bin obj:
@@ -32,24 +27,16 @@ bin obj:
 $(BLUEVM): bluevm.asm $(INCS) $(FASM2) | bin
 	$(FASM2) $< $@
 
-$(BLASM): $(BLASM).inc
-
-$(TOOLS):
-	$(MAKE) -C $@ $(MAKECMDGOALS) || exit
-		
-obj/test_%.bs0: tests/%.bla $(TEST_DEPS) | obj
-	$(BLASM) -n $< $@ && $(BTH) < $@
-
-obj/blasm_%.bs0: lang/blasm/examples/%.bla $(TEST_DEPS) | obj
-	$(BLASM) -n $< $@ && $(BTH) < $@
-
-ops_vm.tbl: ops_vm.inc
+$(BLUEVM_OPS_TBL): $(BLUEVM_OPS_INC)
 	$(SED_TBL) $< > $@
 
-lang/blasm/blasm.inc: lang/blasm/blasm.inc.sh lang/blasm/blasm.inc.tmpl ops_vm.tbl
-	./$< > $@
+$(LANGS) $(TOOLS):
+	$(MAKE) -C $@ $(MAKECMDGOALS) || exit
+
+obj/test_%.bs0: test/%.bla $(BLASM) $(BTH) | obj
+	$(BLASM) -n $< $@ && $(BTH) < $@
 	
-$(README): $(README).sh $(README).tmpl ops_vm.tbl
+$(README): $(README).sh $(README).tmpl $(BLUEVM_OPS_TBL)
 	./$< > $@
 	
 scratch: scratch.asm $(FASM2)
