@@ -2,8 +2,8 @@ include common.mk
 
 INCS = $(wildcard *.inc)
 
-TESTS = $(wildcard tests/*.bla)
-TEST_OBJS = $(TESTS:tests/%.bla=obj/test_%.bs0)
+TESTS = $(wildcard test/*.bla)
+TEST_OBJS = $(TESTS:test/%.bla=obj/test_%.bs0)
 TEST_DEPS = $(FASMG) $(BLUEVM) $(BLASM)
 
 BLASM_EXAMPLES = $(wildcard lang/blasm/examples/*.bla)
@@ -36,8 +36,8 @@ $(BLASM): $(BLASM).inc
 
 $(TOOLS):
 	$(MAKE) -C $@ $(MAKECMDGOALS) || exit
-		
-obj/test_%.bs0: tests/%.bla $(TEST_DEPS) | obj
+
+obj/test_%.bs0: test/%.bla $(TEST_DEPS) | obj
 	$(BLASM) -n $< $@ && $(BTH) < $@
 
 obj/blasm_%.bs0: lang/blasm/examples/%.bla $(TEST_DEPS) | obj
