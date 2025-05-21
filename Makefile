@@ -30,9 +30,6 @@ bin obj:
 $(BLUEVM): bluevm.asm $(INCS) $(FASM2) | bin
 	$(FASM2) $< $@
 
-$(BLUEVM_NOIB): $(BLUEVM)
-	$(DD) if=$(BLUEVM) of=$@ count=5
-
 $(BLASM): $(BLASM).inc
 
 $(TOOLS):
