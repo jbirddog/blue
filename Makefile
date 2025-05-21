@@ -24,16 +24,22 @@ GEN_FILES = ops_vm.tbl README.md lang/blasm/blasm.inc tests/ops/low.tbl tests/op
 BLKS = obj/blk_5.bs0
 PATCHED_BINS = bin/hello_world
 
-.PHONY: all
+TOOLS = tools/bth
+
+.PHONY: all clean $(TOOLS)
 
 all: $(BLUEVM) \
 	$(GEN_FILES) \
 	$(BLKS) \
+	$(TOOLS) \
 	$(TEST_OP_OBJS) \
 	$(TEST_RUNNER) \
 	$(TEST_OBJS) \
 	$(BLASM_EXAMPLE_OBJS) \
 	$(PATCHED_BINS)
+
+clean: $(TOOLS)
+	rm -rf bin obj $(GEN_FILES)
 
 bin obj:
 	mkdir $@
@@ -48,6 +54,9 @@ $(BLUEVM_NOIB): $(BLUEVM)
 	$(DD) if=$(BLUEVM) of=$@ count=5
 
 $(BLASM): $(BLASM).inc
+
+$(TOOLS):
+	$(MAKE) -C $@ $(MAKECMDGOALS) || exit
 
 obj/blk_%.bs0: $(BLUEVM) $(BLASM) | obj
 	$(DD) if=$(BLUEVM) of=$@ skip=$* count=1
@@ -71,7 +80,7 @@ ops_vm.tbl: ops_vm.inc
 tests/ops/low.tbl: tests/ops/low.bla
 
 ops_vm.tbl tests/ops/low.tbl:
-	sed -rn "s/^op[NB]I?\top_([^,]+), ([0-9]), [^\t]+\t;\t(.*)/\1\t\2\t\3/p" $^ > $@
+	sed -rn "s/^op[NB]I?\top_([^,]+), ([0-9]), [^\t]+\t;\t(.*)/\1\t\2\t\3/p" $< > $@
 
 tests/ops.inc: tests/ops/low.tbl tests/ops.inc.tmpl tests/ops.inc.sh
 	./tests/ops.inc.sh > ./tests/ops.inc
@@ -84,8 +93,3 @@ README.md: ops_vm.tbl README.md.tmpl README.sh
 	
 scratch: scratch.asm $(FASM2)
 	$(FASM2) $< $@
-
-.PHONY: clean
-
-clean:
-	rm -rf bin obj $(GEN_FILES)
