@@ -1,3 +1,4 @@
+
 BLASM = lang/blasm/blasm
 BLUEVM = bin/bluevm
 BLUEVM_NOEXT = $(BLUEVM)_noext
