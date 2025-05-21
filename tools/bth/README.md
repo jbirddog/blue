@@ -2,7 +2,7 @@ _This file is generated from README.md.tmpl_
 
 # BlueVM Test Harness
 
-Minimalistic test harness for BlueVM bytecode.
+Patched version of the BlueVM with extended opcodes to facilitate testing.
 
 ## Building
 
@@ -10,7 +10,7 @@ To build `bth` run `make` after `make` has been run in the root of the repo.
 
 ## Opcodes
 
-Opcodes are subject to change.
+Opcodes are subject to change and can be used in `.bla` files by including `bth.inc`.
 
 | Opcode | Name | Stack Effect | Description |
 |----|----|----|----|
