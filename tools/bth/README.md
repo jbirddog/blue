@@ -19,18 +19,18 @@ Opcodes are subject to change and can be used in `.bla` files by including `bth.
 | 0x82 | thrM | ( -- a ) | Push addr of TAP output's here modification point |
 | 0x83 | setthr | ( a -- ) | Set addr of TAP output's here |
 | 0x84 | endl | ( a -- ) | End line of output and set TAP output's here |
-| 0x85 | test | ( w -- ) | Initialize a test suite |
-| 0x86 | plan | ( w -- ) | Plan w tests where w is two ascii characters such as '03' |
-| 0x87 | wokA | ( a -- ) | Write ok line to addr |
-| 0x88 | ok | ( -- ) | Write ok line to TAP output's here |
-| 0x89 | notok | ( -- ) | Write not ok line to TAP output's here |
-| 0x8A | okif | ( t/f -- ) | Ok if top of stack is true |
-| 0x8B | okeq | ( a b -- ) | Ok if a and b are eq |
-| 0x8C | okne | ( a b -- ) | Ok if a and b are not eq |
-| 0x8D | wprep | ( -- ) | Preps the write system call |
-| 0x8E | wlen | ( -- ) | Buffer length for the write system call |
-| 0x8F | waddr | ( -- ) | Addr of the buffer for the write system call |
-| 0x90 | sysret | ( -- ) | System call and return for mccall |
+| 0x85 | wokA | ( a -- ) | Write ok line to addr |
+| 0x86 | wprep | ( -- ) | Preps the write system call |
+| 0x87 | wlen | ( -- ) | Buffer length for the write system call |
+| 0x88 | waddr | ( -- ) | Addr of the buffer for the write system call |
+| 0x89 | sysret | ( -- ) | System call and return for mccall |
+| 0x8A | test | ( w -- ) | Initialize a test suite |
+| 0x8B | plan | ( w -- ) | Plan w tests where w is two ascii characters such as '03' |
+| 0x8C | ok | ( -- ) | Write ok line to TAP output's here |
+| 0x8D | notok | ( -- ) | Write not ok line to TAP output's here |
+| 0x8E | okif | ( t/f -- ) | Ok if top of stack is true |
+| 0x8F | okeq | ( a b -- ) | Ok if a and b are eq |
+| 0x90 | okne | ( a b -- ) | Ok if a and b are not eq |
 | 0x91 | done | ( -- ) | Writes TAP output to stdout and exits with depth as status |
 
 ## TODOs

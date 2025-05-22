@@ -3,7 +3,7 @@ include "../tools/bth/bth.inc"
 
 test
 
-litw '01'
+litw '14'
 plan
 
 ;
@@ -30,19 +30,21 @@ atb
 litb ret.code
 eq
 comp
+	ok
 endcomp
 comp
-	litb 0x02
-	exit
+	notok
 endcomp
 ifelse
 
 comp
+	ok
 endcomp
 call
 
 comp
 	comp
+		ok
 	endcomp
 	call
 endcomp
@@ -51,6 +53,7 @@ call
 comp
 	comp
 		comp
+			ok
 		endcomp
 		call
 	endcomp
@@ -62,6 +65,7 @@ comp
 	comp
 		comp
 			comp
+				ok
 			endcomp
 			call
 		endcomp
@@ -76,6 +80,7 @@ comp
 		comp
 			comp
 				comp
+					ok
 				endcomp
 				call
 			endcomp
@@ -93,6 +98,7 @@ comp
 			comp
 				comp
 					comp
+						ok
 					endcomp
 					call
 				endcomp
@@ -115,10 +121,10 @@ atb
 litb setip.code
 eq
 comp
+	ok
 endcomp
 comp
-	litb 0x03
-	exit
+	notok
 endcomp
 ifelse
 dup
@@ -128,10 +134,10 @@ atb
 litb litq.code
 eq
 comp
+	ok
 endcomp
 comp
-	litb 0x04
-	exit
+	notok
 endcomp
 ifelse
 comp
@@ -149,10 +155,10 @@ call
 litb 0x03
 eq
 comp
+	ok
 endcomp
 comp
-	litb 0x05
-	exit
+	notok
 endcomp
 ifelse
 
@@ -172,10 +178,10 @@ call
 litb 0x09
 eq
 comp
+	ok
 endcomp
 comp
-	litb 0x06
-	exit
+	notok
 endcomp
 ifelse
 
@@ -185,10 +191,10 @@ comp
 	eq
 	comp
 		comp
-			litb 0x07
-			exit
+			notok
 		endcomp
 		comp
+			ok
 		endcomp
 		ifelse
 	endcomp
@@ -204,10 +210,10 @@ call
 here
 eq
 comp
+	ok
 endcomp
 comp
-	litb 0x08
-	exit
+	notok
 endcomp
 ifelse
 

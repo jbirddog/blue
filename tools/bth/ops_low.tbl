@@ -3,16 +3,16 @@ thr	1	( -- a )	Push addr of TAP output's here
 thrM	1	( -- a )	Push addr of TAP output's here modification point
 setthr	1	( a -- )	Set addr of TAP output's here
 endl	1	( a -- )	End line of output and set TAP output's here
+wokA	1	( a -- )	Write ok line to addr
+wprep	1	( -- )	Preps the write system call
+wlen	1	( -- )	Buffer length for the write system call
+waddr	1	( -- )	Addr of the buffer for the write system call
+sysret	1	( -- )	System call and return for mccall
 test	1	( w -- )	Initialize a test suite
 plan	1	( w -- )	Plan w tests where w is two ascii characters such as '03'
-wokA	1	( a -- )	Write ok line to addr
 ok	1	( -- )	Write ok line to TAP output's here
 notok	1	( -- )	Write not ok line to TAP output's here
 okif	1	( t/f -- )	Ok if top of stack is true
 okeq	1	( a b -- )	Ok if a and b are eq
 okne	1	( a b -- )	Ok if a and b are not eq
-wprep	1	( -- )	Preps the write system call
-wlen	1	( -- )	Buffer length for the write system call
-waddr	1	( -- )	Addr of the buffer for the write system call
-sysret	1	( -- )	System call and return for mccall
 done	1	( -- )	Writes TAP output to stdout and exits with depth as status

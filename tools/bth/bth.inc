@@ -6,18 +6,18 @@ iterate <opname, opsize>, \
 	thrM, 1, \
 	setthr, 1, \
 	endl, 1, \
+	wokA, 1, \
+	wprep, 1, \
+	wlen, 1, \
+	waddr, 1, \
+	sysret, 1, \
 	test, 1, \
 	plan, 1, \
-	wokA, 1, \
 	ok, 1, \
 	notok, 1, \
 	okif, 1, \
 	okeq, 1, \
 	okne, 1, \
-	wprep, 1, \
-	wlen, 1, \
-	waddr, 1, \
-	sysret, 1, \
 	done, 1, \
 
 	#opname.code = % - 1
