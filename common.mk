@@ -17,4 +17,4 @@ SED_TBL = sed -rn "s/^op[NB]I?\top_([^,]+), ([0-9]), [^\t]+\t;\t(.*)/\1\t\2\t\3/
 README = README.md
 
 SHIM = $(BASE_DIR)/shim.sh
-PROVE = prove -e $(SHIM) --ext bs0 --verbose
+PROVE = prove -e $(SHIM) --ext bs0
