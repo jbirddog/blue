@@ -14,15 +14,17 @@ Opcodes are subject to change and can be used in `.bla` files by including `bth.
 
 | Opcode | Name | Stack Effect | Description |
 |----|----|----|----|
-| 0x80 | tst | ( -- q ) | Push addr of TAP output's start |
-| 0x81 | thr | ( -- q ) | Push addr of TAP output's here |
-| 0x82 | thrM | ( -- q ) | Push addr of TAP output's here modification point |
-| 0x83 | setthr | ( q -- ) | Set addr of TAP output's here |
-| 0x84 | plan | ( w -- ) | Plan w tests where w is two ascii characters such as '03' |
-| 0x85 | done | ( -- ) | Writes TAP output to stdout and exits with depth as status |
-| 0x86 | asrt | ( t/f -- ) | Assert top of stack is true |
-| 0x87 | asrteq | ( a b -- ) | Assert a and b are eq |
-| 0x88 | asrtne | ( a b -- ) | Assert a and b are not eq |
+| 0x80 | tst | ( -- a ) | Push addr of TAP output's start |
+| 0x81 | thr | ( -- a ) | Push addr of TAP output's here |
+| 0x82 | thrM | ( -- a ) | Push addr of TAP output's here modification point |
+| 0x83 | setthr | ( a -- ) | Set addr of TAP output's here |
+| 0x84 | test | ( w -- ) | Initialize a test suite |
+| 0x85 | preplan | ( -- a ) | Write the static 1.. part of the plan and push TAP output's here |
+| 0x86 | plan | ( w -- ) | Plan w tests where w is two ascii characters such as '03' |
+| 0x87 | done | ( -- ) | Writes TAP output to stdout and exits with depth as status |
+| 0x88 | asrt | ( t/f -- ) | Assert top of stack is true |
+| 0x89 | asrteq | ( a b -- ) | Assert a and b are eq |
+| 0x8A | asrtne | ( a b -- ) | Assert a and b are not eq |
 
 ## TODOs
 

@@ -118,6 +118,8 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. Add fasm2 dep in Makefile to git submodule init
 1. Drop at{b,w,d,q} from core ops, add via extended ops (high?) to tests
 1. Drop set{b,w,d,q} from core ops, add via extended ops (high?) to tests
+   1. Hold, see how TAP in bth is working
+   1. Stack effect of setincq, etc might be better swapped
 1. Expose argv/c via opcodes
 1. If bytes in block 0 are needed, move dq's before includes into dead space in the vm_op_tbl
 1. Bring back a simpiler version of the `blue` language

@@ -1,6 +1,8 @@
 
 include "bth.inc"
 
+test
+
 litw '01'
 plan
 

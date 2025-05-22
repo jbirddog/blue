@@ -5,6 +5,8 @@ iterate <opname, opsize>, \
 	thr, 1, \
 	thrM, 1, \
 	setthr, 1, \
+	test, 1, \
+	preplan, 1, \
 	plan, 1, \
 	done, 1, \
 	asrt, 1, \

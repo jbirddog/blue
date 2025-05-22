@@ -1,20 +1,20 @@
-; low ops used for testing
+; low ops used for testing and producing TAP output
 
 opcode_tbl:
 .offset = 0x80
 
-opBI	op_tst, 1, 0	;	( -- q )	Push addr of TAP output's start
+opBI	op_tst, 1, 0	;	( -- a )	Push addr of TAP output's start
 	litb	0xC0
 	op
 	ret
 end_op
 
-opBI	op_thr, 1, 0	;	( -- q )	Push addr of TAP output's here
+opBI	op_thr, 1, 0	;	( -- a )	Push addr of TAP output's here
 	litq	0x00
 	ret
 end_op
 
-opBI	op_thrM, 1, 0	;	( -- q )	Push addr of TAP output's here modification point
+opBI	op_thrM, 1, 0	;	( -- a )	Push addr of TAP output's here modification point
 	litq	op_thr_code
 	op
 	litb	0x03
@@ -22,26 +22,42 @@ opBI	op_thrM, 1, 0	;	( -- q )	Push addr of TAP output's here modification point
 	ret
 end_op
 
-opBI	op_setthr, 1, 0	;	( q -- )	Set addr of TAP output's here
-	callop	op_thrM
+opBI	op_setthr, 1, 0	;	( a -- )	Set addr of TAP output's here
+	callop	op_thrM_code
 	swap
 	setq
 	ret
 end_op
 
-opBI	op_plan, 1, 0	;	( w -- )	Plan w tests where w is two ascii characters such as '03'
+opBI	op_test, 1, 0	;	( w -- )	Initialize a test suite
+	callop	op_tst_code
+	callop	op_setthr_code
+	ret
+end_op
+
+opBI	op_preplan, 1, 0	;	( -- a )	Write the static 1.. part of the plan and push TAP output's here
+	callop	op_thr_code
 	litw	'1.'
-	cw
+	setincw
 	litb	'.'
-	cb
-	cw
+	setincb
+	ret
+end_op
+
+opBI	op_plan, 1, 0	;	( w -- )	Plan w tests where w is two ascii characters such as '03'
+	callop	op_preplan_code
+	swap
+	setincw
 	litb	10
-	cb
+	setincb
+	callop	op_setthr_code
 	ret
 end_op
 
 opBI	op_done, 1, 0	;	( -- )	Writes TAP output to stdout and exits with depth as status
-	depth
+	callop	op_thr_code
+	callop	op_tst_code
+	sub
 	exit
 end_op
 
