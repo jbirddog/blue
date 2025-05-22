@@ -1,0 +1,56 @@
+
+include "../tools/bth/bth.inc"
+
+test
+
+litw	'02'
+plan
+
+; call address that immediately returns
+here
+litb	0xC3
+cb
+mccall
+ok
+
+; push two numbers, compile and call machine code that calls the add opcode
+litb	0x03
+litb	0x05
+
+here
+
+; xor eax, eax
+; mov al, _add opcode_
+litb	0x31
+cb
+litb	0xC0
+cb
+litb	0xB0
+cb
+litb	add.code
+cb
+
+; movabs rdi, _addr of opcode handler_
+litb	0x48
+cb
+litb	0xBF
+cb
+oph
+cq
+
+; call rdi
+litb	0xFF
+cb
+litb	0xD7
+cb
+
+; ret
+litb	0xC3
+cb
+
+mccall
+
+litb	0x08
+okeq
+
+done

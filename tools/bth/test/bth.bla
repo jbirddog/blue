@@ -3,7 +3,7 @@ include "bth.inc"
 
 test
 
-litw '05'
+litw	'06'
 plan
 
 ;
@@ -29,5 +29,8 @@ okeq
 true
 false
 okne
+
+litb	0x00
+ok0
 
 done

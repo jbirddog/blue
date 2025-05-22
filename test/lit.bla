@@ -1,0 +1,25 @@
+
+include "../tools/bth/bth.inc"
+
+test
+
+litw	'04'
+plan
+
+litq	0x0000000000000001
+litb	0x01
+okeq
+
+litq	0x0000000000000001
+litw	0x0001
+okeq
+
+litq	0x0000000000000001
+litd	0x00000001
+okeq
+
+litq	0x0000000000000001
+litq	0x0000000000000001
+okeq
+
+done

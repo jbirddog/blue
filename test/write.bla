@@ -1,0 +1,84 @@
+
+include "../tools/bth/bth.inc"
+
+test
+
+litw	'06'
+plan
+
+; test setincb
+here
+
+here
+litb	0x01
+setincb
+
+litb	0x01
+sub
+okeq
+
+; test setincd
+here
+
+here
+litb	0x01
+setincd
+
+litb	0x04
+sub
+okeq
+
+; test setincq
+here
+
+here
+litb	0x01
+setincq
+
+litb	0x08
+sub
+okeq
+
+; test cb
+here
+
+litb	0xC3
+cb
+here
+litb	0x01
+sub
+atb
+litb	0xC3
+okeq
+
+drop
+
+; test cd
+here
+
+litb	0xC3
+cd
+here
+litb	0x04
+sub
+atb
+litb	0xC3
+okeq
+
+drop
+
+; test cq
+here
+
+litb	0xC3
+cq
+here
+litb	0x08
+sub
+atb
+litb	0xC3
+okeq
+
+drop
+
+done

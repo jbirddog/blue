@@ -1,0 +1,40 @@
+
+include "../tools/bth/bth.inc"
+
+test
+
+litw	'01'
+plan
+
+;
+; implement assert as extended opcode 0xFF at runtime
+;
+
+litb	0xFF
+op
+
+; set flags and size
+litb	0x04
+setincb
+litb	0x01
+setincb
+
+; compile and write bytecode address into the opcode table
+comp
+	comp
+		ok
+	endcomp
+	comp
+		notok
+	endcomp
+	ifelse
+endcomp
+setq
+
+; call ext opcode to check that stack depth is 0
+depth
+litb	0x00
+eq
+callop	0xFF
+
+done
