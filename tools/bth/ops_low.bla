@@ -142,6 +142,13 @@ opBI	op_okne, 1, 0	;	( a b -- )	Ok if a and b are not eq
 	ret
 end_op
 
+opBI	op_ok0, 1, 0	;	( n -- )	Ok top of stack is 0
+	litb	0x00
+	eq
+	callop	op_okif_code
+	ret
+end_op
+
 opBI	op_done, 1, 0	;	( -- )	Writes TAP output to stdout and exits with depth as status
 	here
 	callop	op_wprep_code

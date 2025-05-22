@@ -31,7 +31,8 @@ Opcodes are subject to change and can be used in `.bla` files by including `bth.
 | 0x8E | okif | ( t/f -- ) | Ok if top of stack is true |
 | 0x8F | okeq | ( a b -- ) | Ok if a and b are eq |
 | 0x90 | okne | ( a b -- ) | Ok if a and b are not eq |
-| 0x91 | done | ( -- ) | Writes TAP output to stdout and exits with depth as status |
+| 0x91 | ok0 | ( n -- ) | Ok top of stack is 0 |
+| 0x92 | done | ( -- ) | Writes TAP output to stdout and exits with depth as status |
 
 ## TODOs
 

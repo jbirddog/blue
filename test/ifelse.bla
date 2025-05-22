@@ -3,7 +3,7 @@ include "../tools/bth/bth.inc"
 
 test
 
-litw '02'
+litw	'02'
 plan
 
 true
