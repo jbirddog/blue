@@ -30,7 +30,7 @@ Opcodes are subject to change and can be used in `.bla` files by including `bth.
 | 0x8D | wprep | ( -- ) | Preps the write system call |
 | 0x8E | wlen | ( -- ) | Buffer length for the write system call |
 | 0x8F | waddr | ( -- ) | Addr of the buffer for the write system call |
-| 0x90 | wsys | ( -- ) | System call |
+| 0x90 | sysret | ( -- ) | System call and return for mccall |
 | 0x91 | done | ( -- ) | Writes TAP output to stdout and exits with depth as status |
 
 ## TODOs

@@ -17,7 +17,7 @@ iterate <opname, opsize>, \
 	wprep, 1, \
 	wlen, 1, \
 	waddr, 1, \
-	wsys, 1, \
+	sysret, 1, \
 	done, 1, \
 
 	#opname.code = % - 1

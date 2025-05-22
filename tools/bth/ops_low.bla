@@ -132,7 +132,7 @@ opBI	op_waddr, 1, 0	;	( -- )	Addr of the buffer for the write system call
 	ret
 end_op
 
-opBI	op_wsys, 1, 0	;	( -- )	System call
+opBI	op_sysret, 1, 0	;	( -- )	System call and return for mccall
 	; syscall
 	litw	0x050F
 	cw
@@ -147,7 +147,7 @@ opBI	op_done, 1, 0	;	( -- )	Writes TAP output to stdout and exits with depth as 
 	callop	op_wprep_code
 	callop	op_wlen_code
 	callop	op_waddr_code
-	callop	op_wsys_code
+	callop	op_sysret_code
 	mccall
 	depth
 	exit
