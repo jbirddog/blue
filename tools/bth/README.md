@@ -35,6 +35,5 @@ Opcodes are subject to change and can be used in `.bla` files by including `bth.
 
 ## TODOs
 
-1. Replace need for shim.sh to produce TAP output
 1. Output plan from `done` without need to call `plan`
 1. Print "TAP version 14" when testing begins
