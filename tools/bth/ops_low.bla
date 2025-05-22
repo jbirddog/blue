@@ -3,6 +3,50 @@
 opcode_tbl:
 .offset = 0x80
 
+opBI	op_tst, 1, 0	;	( -- q )	Push addr of TAP output's start
+	litb	0xC0
+	op
+	ret
+end_op
+
+opBI	op_thr, 1, 0	;	( -- q )	Push addr of TAP output's here
+	litq	0x00
+	ret
+end_op
+
+opBI	op_thrM, 1, 0	;	( -- q )	Push addr of TAP output's here modification point
+	litq	op_thr_code
+	op
+	litb	0x03
+	add
+	ret
+end_op
+
+opBI	op_setthr, 1, 0	;	( q -- )	Set addr of TAP output's here
+	callop	op_thrM
+	swap
+	setq
+	ret
+end_op
+
+opBI	op_plan, 1, 0	;	( w -- )	Plan w tests where w is two ascii characters such as '03'
+	litw	'1.'
+	cw
+	litb	'.'
+	cb
+	cw
+	litb	10
+	cb
+	ret
+end_op
+
+opBI	op_done, 1, 0	;	( -- )	Writes TAP output to stdout and exits with depth as status
+	depth
+	exit
+end_op
+
+;;;
+
 opBI	op_asrt, 1, 0	;	( t/f -- )	Assert top of stack is true
 	comp
 	endcomp

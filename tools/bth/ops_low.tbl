@@ -1,3 +1,9 @@
+tst	1	( -- q )	Push addr of TAP output's start
+thr	1	( -- q )	Push addr of TAP output's here
+thrM	1	( -- q )	Push addr of TAP output's here modification point
+setthr	1	( q -- )	Set addr of TAP output's here
+plan	1	( w -- )	Plan w tests where w is two ascii characters such as '03'
+done	1	( -- )	Writes TAP output to stdout and exits with depth as status
 asrt	1	( t/f -- )	Assert top of stack is true
 asrteq	1	( a b -- )	Assert a and b are eq
 asrtne	1	( a b -- )	Assert a and b are not eq

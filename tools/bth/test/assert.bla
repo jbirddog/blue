@@ -1,6 +1,9 @@
 
 include "bth.inc"
 
+litw '01'
+plan
+
 ;
 ; test assert ops
 ;
@@ -28,5 +31,4 @@ true
 false
 asrtne
 
-depth
-exit
+done

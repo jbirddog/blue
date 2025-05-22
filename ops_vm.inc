@@ -71,7 +71,7 @@ opNI	op_setip, 1, 0	;	( a -- )	Set the location of the instruction pointer
 	ret
 end_op
 
-opN	op_op, 1, 0	;	( b -- a )	Push addr of the code for opcode
+opN	op_op, 1, 0	;	( b -- a )	Push addr of the offset into the op table for the opcode
 
 opNI	op_oph, 1, 0	;	( -- a )	Push addr of the opcode handler
 	mov	rax, opcode_handler_call

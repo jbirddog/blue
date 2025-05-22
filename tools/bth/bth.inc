@@ -1,6 +1,12 @@
 ; Generated from bth.inc.tmpl
 
 iterate <opname, opsize>, \
+	tst, 1, \
+	thr, 1, \
+	thrM, 1, \
+	setthr, 1, \
+	plan, 1, \
+	done, 1, \
 	asrt, 1, \
 	asrteq, 1, \
 	asrtne, 1, \
