@@ -13,6 +13,7 @@ ip	1	( -- a )	Push location of the instruction pointer
 setip	1	( a -- )	Set the location of the instruction pointer
 op	1	( b -- a )	Push addr of the offset into the op table for the opcode
 oph	1	( -- a )	Push addr of the opcode handler
+setvarq	1	( q b -- )	Set litq value of var op
 start	1	( -- a )	Push addr of the code buffer's start
 here	1	( -- a )	Push addr of the code buffer's here
 sethere	1	( a -- )	Set addr of the code buffer's here

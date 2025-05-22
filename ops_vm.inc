@@ -80,6 +80,10 @@ opNI	op_oph, 1, 0	;	( -- a )	Push addr of the opcode handler
 	ret
 end_op
 
+opBI	op_setvarq, 1, 0	;	( q b -- )	Set litq value of var op
+	db op_op_code, op_litb_code, 0x03, op_add_code, op_swap_code, op_setq_code, op_ret_code
+end_op
+
 opNI	op_start, 1, 0	;	( -- a )	Push addr of the code buffer's start
 	mov	rax, code_buffer
 	call	data_stack_push
