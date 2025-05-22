@@ -82,50 +82,6 @@ okeq
 drop
 
 ;
-; control flow
-;
-
-start
-start
-eq
-comp
-	litb	0x01
-endcomp
-comp
-endcomp
-ifelse
-start
-dup
-litb	0x0A
-add
-eq
-comp
-endcomp
-comp
-	litb	0x03
-endcomp
-ifelse
-
-add
-litb	0x04
-eq
-comp
-endcomp
-comp
-	litb	0xFF
-	exit
-endcomp
-ifelse
-
-; jump over litb 07 exit
-ip
-litb	0x07
-add
-setip
-litb	0x07
-exit
-
-;
 ; fin
 ;
 

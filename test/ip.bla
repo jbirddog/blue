@@ -1,0 +1,18 @@
+
+include "../tools/bth/bth.inc"
+
+test
+
+litw	'01'
+plan
+
+; jump over litb 07 exit
+ip
+litb	0x07
+add
+setip
+litb	0x07
+exit
+ok
+
+done
