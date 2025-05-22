@@ -27,7 +27,11 @@ Opcodes are subject to change and can be used in `.bla` files by including `bth.
 | 0x8A | ok | ( t/f -- ) | Ok if top of stack is true |
 | 0x8B | okeq | ( a b -- ) | Ok if a and b are eq |
 | 0x8C | okne | ( a b -- ) | Ok if a and b are not eq |
-| 0x8D | done | ( -- ) | Writes TAP output to stdout and exits with depth as status |
+| 0x8D | wprep | ( -- ) | Preps the write system call |
+| 0x8E | wlen | ( -- ) | Buffer length for the write system call |
+| 0x8F | waddr | ( -- ) | Addr of the buffer for the write system call |
+| 0x90 | wsys | ( -- ) | System call |
+| 0x91 | done | ( -- ) | Writes TAP output to stdout and exits with depth as status |
 
 ## TODOs
 

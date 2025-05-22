@@ -14,6 +14,10 @@ iterate <opname, opsize>, \
 	ok, 1, \
 	okeq, 1, \
 	okne, 1, \
+	wprep, 1, \
+	wlen, 1, \
+	waddr, 1, \
+	wsys, 1, \
 	done, 1, \
 
 	#opname.code = % - 1

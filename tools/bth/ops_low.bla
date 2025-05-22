@@ -99,9 +99,56 @@ opBI	op_okne, 1, 0	;	( a b -- )	Ok if a and b are not eq
 	ret
 end_op
 
-opBI	op_done, 1, 0	;	( -- )	Writes TAP output to stdout and exits with depth as status
+opBI	op_wprep, 1, 0	;	( -- )	Preps the write system call
+	; xor eax, eax
+	; inc eax
+	; mov edi, eax
+	litw	0xC031
+	cw
+	litw	0xC0FF
+	cw
+	litw	0xC789
+	cw
+	ret
+end_op
+
+opBI	op_wlen, 1, 0	;	( -- )	Buffer length for the write system call
+	; mov edx, _buffer len_
+	litb	0xBA
+	cb
 	callop	op_thr_code
 	callop	op_tst_code
 	sub
+	cd
+	ret
+end_op
+
+opBI	op_waddr, 1, 0	;	( -- )	Addr of the buffer for the write system call
+	; movabs rsi, _addr of string_
+	litw	0xBE48
+	cw
+	callop	op_tst_code
+	cq
+	ret
+end_op
+
+opBI	op_wsys, 1, 0	;	( -- )	System call
+	; syscall
+	litw	0x050F
+	cw
+	; ret
+	litb	0xC3
+	cb
+	ret
+end_op
+
+opBI	op_done, 1, 0	;	( -- )	Writes TAP output to stdout and exits with depth as status
+	here
+	callop	op_wprep_code
+	callop	op_wlen_code
+	callop	op_waddr_code
+	callop	op_wsys_code
+	mccall
+	depth
 	exit
 end_op
