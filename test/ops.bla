@@ -3,7 +3,7 @@ include "../tools/bth/bth.inc"
 
 test
 
-litw	'07'
+litw	'06'
 plan
 
 ; test setincb
@@ -80,16 +80,5 @@ litb	0xC3
 okeq
 
 drop
-
-;
-; fin
-;
-
-; set code buffer back to start
-start
-sethere
-start
-here
-okeq
 
 done

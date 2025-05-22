@@ -3,8 +3,12 @@ include "../tools/bth/bth.inc"
 
 test
 
-litw	'10'
+litw	'11'
 plan
+
+; stack has 0 depth at start
+depth
+ok0
 
 ; stack depth is 1 after pushing a value
 litb	0x10
