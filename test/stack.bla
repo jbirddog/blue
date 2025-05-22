@@ -1,0 +1,74 @@
+
+include "../tools/bth/bth.inc"
+
+test
+
+litw	'10'
+plan
+
+; stack depth is 1 after pushing a value
+litb	0x10
+depth
+litb	0x01
+okeq
+
+; stack depth is 0 after dropping the value
+drop
+depth
+ok0
+
+; swap
+litb	0x02
+litb	0x01
+swap
+depth
+okeq
+drop
+
+; not/eq
+true
+false
+not
+eq
+okif
+
+; sub
+litb	0x09
+litb	0x07
+sub
+litb	0x02
+okeq
+
+; add
+litb	0x07
+litb	0x02
+add
+litb	0x09
+okeq
+
+; shl/shr
+litb	0x01
+litb	0x03
+shl
+litb	0x08
+okeq
+
+litb	0x08
+litb	0x03
+shr
+litb	0x01
+okeq
+
+; dup
+here
+dup
+okeq
+
+; tor and fromr
+here
+tor
+fromr
+here
+okeq
+
+done
