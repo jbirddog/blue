@@ -38,7 +38,7 @@ obj/test_%.bs0: test/%.bla $(BLASM) | obj
 	$(BLASM) -n $< $@
 
 test: $(TOOLS)
-	$(PROVE) obj/test_bc.bs0
+	$(PROVE) obj/test_*
 	
 $(README): $(README).sh $(README).tmpl $(BLUEVM_OPS_TBL)
 	./$< > $@
