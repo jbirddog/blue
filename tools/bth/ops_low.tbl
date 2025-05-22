@@ -2,10 +2,13 @@ tst	1	( -- a )	Push addr of TAP output's start
 thr	1	( -- a )	Push addr of TAP output's here
 thrM	1	( -- a )	Push addr of TAP output's here modification point
 setthr	1	( a -- )	Set addr of TAP output's here
+endl	1	( a -- )	End line of output and set TAP output's here
 test	1	( w -- )	Initialize a test suite
-preplan	1	( -- a )	Write the static 1.. part of the plan and push TAP output's here
 plan	1	( w -- )	Plan w tests where w is two ascii characters such as '03'
+wokA	1	( a -- )	Write ok line to addr
+wok	1	( -- )	Write ok line to TAP output's here
+notok	1	( -- )	Write not ok line to TAP output's here
+ok	1	( t/f -- )	Ok if top of stack is true
+okeq	1	( a b -- )	Ok if a and b are eq
+okne	1	( a b -- )	Ok if a and b are not eq
 done	1	( -- )	Writes TAP output to stdout and exits with depth as status
-asrt	1	( t/f -- )	Assert top of stack is true
-asrteq	1	( a b -- )	Assert a and b are eq
-asrtne	1	( a b -- )	Assert a and b are not eq

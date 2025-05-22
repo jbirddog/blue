@@ -3,34 +3,34 @@ include "bth.inc"
 
 test
 
-litw '01'
+litw '05'
 plan
 
 ;
-; test assert ops
+; test ok ops and TAP output
 ;
 
 true
 true
 eq
-asrt
+ok
 
 true
 false
 eq
 not
-asrt
+ok
 
 true
 true
-asrteq
+okeq
 
 false
 false
-asrteq
+okeq
 
 true
 false
-asrtne
+okne
 
 done

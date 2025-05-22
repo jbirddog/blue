@@ -18,13 +18,16 @@ Opcodes are subject to change and can be used in `.bla` files by including `bth.
 | 0x81 | thr | ( -- a ) | Push addr of TAP output's here |
 | 0x82 | thrM | ( -- a ) | Push addr of TAP output's here modification point |
 | 0x83 | setthr | ( a -- ) | Set addr of TAP output's here |
-| 0x84 | test | ( w -- ) | Initialize a test suite |
-| 0x85 | preplan | ( -- a ) | Write the static 1.. part of the plan and push TAP output's here |
+| 0x84 | endl | ( a -- ) | End line of output and set TAP output's here |
+| 0x85 | test | ( w -- ) | Initialize a test suite |
 | 0x86 | plan | ( w -- ) | Plan w tests where w is two ascii characters such as '03' |
-| 0x87 | done | ( -- ) | Writes TAP output to stdout and exits with depth as status |
-| 0x88 | asrt | ( t/f -- ) | Assert top of stack is true |
-| 0x89 | asrteq | ( a b -- ) | Assert a and b are eq |
-| 0x8A | asrtne | ( a b -- ) | Assert a and b are not eq |
+| 0x87 | wokA | ( a -- ) | Write ok line to addr |
+| 0x88 | wok | ( -- ) | Write ok line to TAP output's here |
+| 0x89 | notok | ( -- ) | Write not ok line to TAP output's here |
+| 0x8A | ok | ( t/f -- ) | Ok if top of stack is true |
+| 0x8B | okeq | ( a b -- ) | Ok if a and b are eq |
+| 0x8C | okne | ( a b -- ) | Ok if a and b are not eq |
+| 0x8D | done | ( -- ) | Writes TAP output to stdout and exits with depth as status |
 
 ## TODOs
 

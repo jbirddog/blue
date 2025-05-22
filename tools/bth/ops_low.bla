@@ -29,28 +29,73 @@ opBI	op_setthr, 1, 0	;	( a -- )	Set addr of TAP output's here
 	ret
 end_op
 
+opBI	op_endl, 1, 0	;	( a -- )	End line of output and set TAP output's here
+	litb	10
+	setincb
+	callop	op_setthr_code
+	ret
+end_op
+
 opBI	op_test, 1, 0	;	( w -- )	Initialize a test suite
 	callop	op_tst_code
 	callop	op_setthr_code
 	ret
 end_op
 
-opBI	op_preplan, 1, 0	;	( -- a )	Write the static 1.. part of the plan and push TAP output's here
+opBI	op_plan, 1, 0	;	( w -- )	Plan w tests where w is two ascii characters such as '03'
 	callop	op_thr_code
 	litw	'1.'
 	setincw
 	litb	'.'
 	setincb
+	swap
+	setincw
+	callop	op_endl_code
 	ret
 end_op
 
-opBI	op_plan, 1, 0	;	( w -- )	Plan w tests where w is two ascii characters such as '03'
-	callop	op_preplan_code
-	swap
+opBI	op_wokA, 1, 0	;	( a -- )	Write ok line to addr
+	litw	'ok'
 	setincw
-	litb	10
-	setincb
-	callop	op_setthr_code
+	callop	op_endl_code
+	ret
+end_op
+
+opBI	op_wok, 1, 0	;	( -- )	Write ok line to TAP output's here
+	callop	op_thr_code
+	callop	op_wokA_code
+	ret
+end_op
+
+opBI	op_notok, 1, 0	;	( -- )	Write not ok line to TAP output's here
+	callop	op_thr_code
+	litd	'not '
+	setincd
+	callop	op_wokA_code
+	ret
+end_op
+
+opBI	op_ok, 1, 0	;	( t/f -- )	Ok if top of stack is true
+	comp
+		callop	op_wok_code
+	endcomp
+	comp
+		callop	op_notok_code
+	endcomp
+	ifelse
+	ret
+end_op
+
+opBI	op_okeq, 1, 0	;	( a b -- )	Ok if a and b are eq
+	eq
+	callop	op_ok_code
+	ret
+end_op
+
+opBI	op_okne, 1, 0	;	( a b -- )	Ok if a and b are not eq
+	eq
+	not
+	callop	op_ok_code
 	ret
 end_op
 
@@ -59,30 +104,4 @@ opBI	op_done, 1, 0	;	( -- )	Writes TAP output to stdout and exits with depth as 
 	callop	op_tst_code
 	sub
 	exit
-end_op
-
-;;;
-
-opBI	op_asrt, 1, 0	;	( t/f -- )	Assert top of stack is true
-	comp
-	endcomp
-	comp
-		litb	0xFF
-		exit
-	endcomp
-	ifelse
-	ret
-end_op
-
-opBI	op_asrteq, 1, 0	;	( a b -- )	Assert a and b are eq
-	eq
-	callop	op_asrt_code
-	ret
-end_op
-
-opBI	op_asrtne, 1, 0	;	( a b -- )	Assert a and b are not eq
-	eq
-	not
-	callop	op_asrt_code
-	ret
 end_op
