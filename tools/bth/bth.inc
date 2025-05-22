@@ -9,9 +9,9 @@ iterate <opname, opsize>, \
 	test, 1, \
 	plan, 1, \
 	wokA, 1, \
-	wok, 1, \
-	notok, 1, \
 	ok, 1, \
+	notok, 1, \
+	okif, 1, \
 	okeq, 1, \
 	okne, 1, \
 	wprep, 1, \

@@ -6,9 +6,9 @@ endl	1	( a -- )	End line of output and set TAP output's here
 test	1	( w -- )	Initialize a test suite
 plan	1	( w -- )	Plan w tests where w is two ascii characters such as '03'
 wokA	1	( a -- )	Write ok line to addr
-wok	1	( -- )	Write ok line to TAP output's here
+ok	1	( -- )	Write ok line to TAP output's here
 notok	1	( -- )	Write not ok line to TAP output's here
-ok	1	( t/f -- )	Ok if top of stack is true
+okif	1	( t/f -- )	Ok if top of stack is true
 okeq	1	( a b -- )	Ok if a and b are eq
 okne	1	( a b -- )	Ok if a and b are not eq
 wprep	1	( -- )	Preps the write system call

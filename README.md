@@ -107,7 +107,7 @@ Opcodes are subject to change.
 | 0x0A | endcomp | ( -- a ) | Append ret and end compilation, push addr where compilation started |
 | 0x0B | ip | ( -- a ) | Push location of the instruction pointer |
 | 0x0C | setip | ( a -- ) | Set the location of the instruction pointer |
-| 0x0D | op | ( b -- a ) | Push addr of the code for opcode |
+| 0x0D | op | ( b -- a ) | Push addr of the offset into the op table for the opcode |
 | 0x0E | oph | ( -- a ) | Push addr of the opcode handler |
 | 0x0F | start | ( -- a ) | Push addr of the code buffer's start |
 | 0x10 | here | ( -- a ) | Push addr of the code buffer's here |
@@ -169,8 +169,12 @@ Along with the code for BlueVM this repository also contains some tools and exam
 ## TODOs
 
 1. Add fasm2 dep in Makefile to git submodule init
+1. Add op that if op is used as var, sets its lit{b,w,d,q}
+   1. See setthr in bth ops_low.bla
 1. Drop at{b,w,d,q} from core ops, add via extended ops (high?) to tests
 1. Drop set{b,w,d,q} from core ops, add via extended ops (high?) to tests
+   1. Hold, see how TAP in bth is working
+   1. Stack effect of setincq, etc might be better swapped
 1. Expose argv/c via opcodes
 1. If bytes in block 0 are needed, move dq's before includes into dead space in the vm_op_tbl
 1. Bring back a simpiler version of the `blue` language

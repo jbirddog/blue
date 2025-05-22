@@ -10,16 +10,13 @@ plan
 ; test ok ops and TAP output
 ;
 
-true
-true
-eq
 ok
 
 true
 false
 eq
 not
-ok
+okif
 
 true
 true

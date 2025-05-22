@@ -22,9 +22,9 @@ Opcodes are subject to change and can be used in `.bla` files by including `bth.
 | 0x85 | test | ( w -- ) | Initialize a test suite |
 | 0x86 | plan | ( w -- ) | Plan w tests where w is two ascii characters such as '03' |
 | 0x87 | wokA | ( a -- ) | Write ok line to addr |
-| 0x88 | wok | ( -- ) | Write ok line to TAP output's here |
+| 0x88 | ok | ( -- ) | Write ok line to TAP output's here |
 | 0x89 | notok | ( -- ) | Write not ok line to TAP output's here |
-| 0x8A | ok | ( t/f -- ) | Ok if top of stack is true |
+| 0x8A | okif | ( t/f -- ) | Ok if top of stack is true |
 | 0x8B | okeq | ( a b -- ) | Ok if a and b are eq |
 | 0x8C | okne | ( a b -- ) | Ok if a and b are not eq |
 | 0x8D | wprep | ( -- ) | Preps the write system call |

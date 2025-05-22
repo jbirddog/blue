@@ -1,4 +1,11 @@
 
+include "../tools/bth/bth.inc"
+
+test
+
+litw '01'
+plan
+
 ;
 ; test compiling and calling bytecode
 ;
@@ -9,10 +16,10 @@ depth
 litb 0x01
 eq
 comp
+	ok
 endcomp
 comp
-	litb 0x01
-	exit
+	notok
 endcomp
 ifelse
 drop
@@ -204,5 +211,4 @@ comp
 endcomp
 ifelse
 
-depth
-exit
+done

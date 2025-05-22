@@ -61,7 +61,7 @@ opBI	op_wokA, 1, 0	;	( a -- )	Write ok line to addr
 	ret
 end_op
 
-opBI	op_wok, 1, 0	;	( -- )	Write ok line to TAP output's here
+opBI	op_ok, 1, 0	;	( -- )	Write ok line to TAP output's here
 	callop	op_thr_code
 	callop	op_wokA_code
 	ret
@@ -75,9 +75,9 @@ opBI	op_notok, 1, 0	;	( -- )	Write not ok line to TAP output's here
 	ret
 end_op
 
-opBI	op_ok, 1, 0	;	( t/f -- )	Ok if top of stack is true
+opBI	op_okif, 1, 0	;	( t/f -- )	Ok if top of stack is true
 	comp
-		callop	op_wok_code
+		callop	op_ok_code
 	endcomp
 	comp
 		callop	op_notok_code
@@ -88,14 +88,14 @@ end_op
 
 opBI	op_okeq, 1, 0	;	( a b -- )	Ok if a and b are eq
 	eq
-	callop	op_ok_code
+	callop	op_okif_code
 	ret
 end_op
 
 opBI	op_okne, 1, 0	;	( a b -- )	Ok if a and b are not eq
 	eq
 	not
-	callop	op_ok_code
+	callop	op_okif_code
 	ret
 end_op
 
