@@ -1,6 +1,11 @@
 
 include "../tools/bth/bth.inc"
 
+test
+
+litw '19'
+plan
+
 ;
 ; implement assert as custom opcode 0xFF
 ;
@@ -39,7 +44,7 @@ callop	0xFF
 
 litq	0x0000000000000001
 litb	0x01
-asrteq
+okeq
 
 ;
 ; test data stack ops
@@ -49,25 +54,25 @@ asrteq
 litb	0x10
 depth
 litb	0x01
-asrteq
+okeq
 
 ; stack depth is 0 after dropping the value
 drop
 depth
 litb	0x00
-asrteq
+okeq
 
 ; not
 depth
 litb	0x02
-asrtne
+okne
 
 ; swap
 litb	0x02
 litb	0x01
 swap
 depth
-asrteq
+okeq
 drop
 
 ; sub
@@ -75,39 +80,39 @@ litb	0x09
 litb	0x07
 sub
 litb	0x02
-asrteq
+okeq
 
 ; add
 litb	0x07
 litb	0x02
 add
 litb	0x09
-asrteq
+okeq
 
 ; shl/shr
 litb	0x01
 litb	0x03
 shl
 litb	0x08
-asrteq
+okeq
 
 litb	0x08
 litb	0x03
 shr
 litb	0x01
-asrteq
+okeq
 
 ; dup
 here
 dup
-asrteq
+okeq
 
 ; tor and fromr
 here
 tor
 fromr
 here
-asrteq
+okeq
 
 
 ; test setincb
@@ -119,7 +124,7 @@ setincb
 
 litb	0x01
 sub
-asrteq
+okeq
 
 ; test setincd
 here
@@ -130,7 +135,7 @@ setincd
 
 litb	0x04
 sub
-asrteq
+okeq
 
 ; test setincq
 here
@@ -141,7 +146,7 @@ setincq
 
 litb	0x08
 sub
-asrteq
+okeq
 
 ; test cb
 here
@@ -153,7 +158,7 @@ litb	0x01
 sub
 atb
 litb	0xC3
-asrteq
+okeq
 
 drop
 
@@ -167,7 +172,7 @@ litb	0x04
 sub
 atb
 litb	0xC3
-asrteq
+okeq
 
 drop
 
@@ -181,7 +186,7 @@ litb	0x08
 sub
 atb
 litb	0xC3
-asrteq
+okeq
 
 drop
 
@@ -233,7 +238,7 @@ cb
 mccall
 
 litb	0x08
-asrteq
+okeq
 
 ;
 ; control flow
@@ -288,8 +293,6 @@ start
 sethere
 start
 here
-asrteq
+okeq
 
-; exit cleanly if stack is prestine
-depth
-exit
+done

@@ -1,21 +1,27 @@
 
+include "../tools/bth/bth.inc"
+
+test
+
+litw '02'
+plan
+
 true
 comp
+	ok
 endcomp
 comp
-	litb	0xFF
-	exit
+	notok
 endcomp
 ifelse
 
 false
 comp
-	litb	0xFF
-	exit
+	notok
 endcomp
 comp
+	ok
 endcomp
 ifelse
 
-depth
-exit
+done

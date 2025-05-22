@@ -1,28 +1,154 @@
-; low ops used for testing
+; low ops used for testing and producing TAP output
 
 opcode_tbl:
 .offset = 0x80
 
-opBI	op_asrt, 1, 0	;	( t/f -- )	Assert top of stack is true
+opBI	op_tst, 1, 0	;	( -- a )	Push addr of TAP output's start
+	litb	0xC0
+	op
+	ret
+end_op
+
+opBI	op_thr, 1, 0	;	( -- a )	Push addr of TAP output's here
+	litq	0x00
+	ret
+end_op
+
+opBI	op_thrM, 1, 0	;	( -- a )	Push addr of TAP output's here modification point
+	litq	op_thr_code
+	op
+	litb	0x03
+	add
+	ret
+end_op
+
+opBI	op_setthr, 1, 0	;	( a -- )	Set addr of TAP output's here
+	callop	op_thrM_code
+	swap
+	setq
+	ret
+end_op
+
+opBI	op_endl, 1, 0	;	( a -- )	End line of output and set TAP output's here
+	litb	10
+	setincb
+	callop	op_setthr_code
+	ret
+end_op
+
+opBI	op_wokA, 1, 0	;	( a -- )	Write ok line to addr
+	litw	'ok'
+	setincw
+	callop	op_endl_code
+	ret
+end_op
+
+opBI	op_wprep, 1, 0	;	( -- )	Preps the write system call
+	; xor eax, eax
+	; inc eax
+	; mov edi, eax
+	litw	0xC031
+	cw
+	litw	0xC0FF
+	cw
+	litw	0xC789
+	cw
+	ret
+end_op
+
+opBI	op_wlen, 1, 0	;	( -- )	Buffer length for the write system call
+	; mov edx, _buffer len_
+	litb	0xBA
+	cb
+	callop	op_thr_code
+	callop	op_tst_code
+	sub
+	cd
+	ret
+end_op
+
+opBI	op_waddr, 1, 0	;	( -- )	Addr of the buffer for the write system call
+	; movabs rsi, _addr of string_
+	litw	0xBE48
+	cw
+	callop	op_tst_code
+	cq
+	ret
+end_op
+
+opBI	op_sysret, 1, 0	;	( -- )	System call and return for mccall
+	; syscall
+	litw	0x050F
+	cw
+	; ret
+	litb	0xC3
+	cb
+	ret
+end_op
+
+opBI	op_test, 1, 0	;	( w -- )	Initialize a test suite
+	callop	op_tst_code
+	callop	op_setthr_code
+	ret
+end_op
+
+opBI	op_plan, 1, 0	;	( w -- )	Plan w tests where w is two ascii characters such as '03'
+	callop	op_thr_code
+	litw	'1.'
+	setincw
+	litb	'.'
+	setincb
+	swap
+	setincw
+	callop	op_endl_code
+	ret
+end_op
+
+opBI	op_ok, 1, 0	;	( -- )	Write ok line to TAP output's here
+	callop	op_thr_code
+	callop	op_wokA_code
+	ret
+end_op
+
+opBI	op_notok, 1, 0	;	( -- )	Write not ok line to TAP output's here
+	callop	op_thr_code
+	litd	'not '
+	setincd
+	callop	op_wokA_code
+	ret
+end_op
+
+opBI	op_okif, 1, 0	;	( t/f -- )	Ok if top of stack is true
 	comp
+		callop	op_ok_code
 	endcomp
 	comp
-		litb	0xFF
-		exit
+		callop	op_notok_code
 	endcomp
 	ifelse
 	ret
 end_op
 
-opBI	op_asrteq, 1, 0	;	( a b -- )	Assert a and b are eq
+opBI	op_okeq, 1, 0	;	( a b -- )	Ok if a and b are eq
 	eq
-	callop	op_asrt_code
+	callop	op_okif_code
 	ret
 end_op
 
-opBI	op_asrtne, 1, 0	;	( a b -- )	Assert a and b are not eq
+opBI	op_okne, 1, 0	;	( a b -- )	Ok if a and b are not eq
 	eq
 	not
-	callop	op_asrt_code
+	callop	op_okif_code
 	ret
+end_op
+
+opBI	op_done, 1, 0	;	( -- )	Writes TAP output to stdout and exits with depth as status
+	here
+	callop	op_wprep_code
+	callop	op_wlen_code
+	callop	op_waddr_code
+	callop	op_sysret_code
+	mccall
+	depth
+	exit
 end_op

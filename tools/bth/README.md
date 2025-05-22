@@ -14,10 +14,26 @@ Opcodes are subject to change and can be used in `.bla` files by including `bth.
 
 | Opcode | Name | Stack Effect | Description |
 |----|----|----|----|
-| 0x80 | asrt | ( t/f -- ) | Assert top of stack is true |
-| 0x81 | asrteq | ( a b -- ) | Assert a and b are eq |
-| 0x82 | asrtne | ( a b -- ) | Assert a and b are not eq |
+| 0x80 | tst | ( -- a ) | Push addr of TAP output's start |
+| 0x81 | thr | ( -- a ) | Push addr of TAP output's here |
+| 0x82 | thrM | ( -- a ) | Push addr of TAP output's here modification point |
+| 0x83 | setthr | ( a -- ) | Set addr of TAP output's here |
+| 0x84 | endl | ( a -- ) | End line of output and set TAP output's here |
+| 0x85 | wokA | ( a -- ) | Write ok line to addr |
+| 0x86 | wprep | ( -- ) | Preps the write system call |
+| 0x87 | wlen | ( -- ) | Buffer length for the write system call |
+| 0x88 | waddr | ( -- ) | Addr of the buffer for the write system call |
+| 0x89 | sysret | ( -- ) | System call and return for mccall |
+| 0x8A | test | ( w -- ) | Initialize a test suite |
+| 0x8B | plan | ( w -- ) | Plan w tests where w is two ascii characters such as '03' |
+| 0x8C | ok | ( -- ) | Write ok line to TAP output's here |
+| 0x8D | notok | ( -- ) | Write not ok line to TAP output's here |
+| 0x8E | okif | ( t/f -- ) | Ok if top of stack is true |
+| 0x8F | okeq | ( a b -- ) | Ok if a and b are eq |
+| 0x90 | okne | ( a b -- ) | Ok if a and b are not eq |
+| 0x91 | done | ( -- ) | Writes TAP output to stdout and exits with depth as status |
 
 ## TODOs
 
-1. TAP?
+1. Output plan from `done` without need to call `plan`
+1. Print "TAP version 14" when testing begins
