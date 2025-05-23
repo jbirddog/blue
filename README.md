@@ -172,14 +172,12 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ## TODOs
 
-1. setq, etc stack effects are backwards
-   1. see swap in op_setvarq, etc
-1. Add fasm2 dep in Makefile to git submodule init
-1. Add setvar{b,w,d,q} op that if op is used as var, sets its lit{b,w,d,q}
-   1. See setthr in bth ops_low.bla
-1. Use setvarq for here/sethere
-1. Use setvarq for ip/setip
 1. Expose argv/c via opcodes
+1. Add fasm2 dep in Makefile to git submodule init
+1. setq, etc stack effects feel backwards when not in test code
+   1. see swap in op_setvarq, etc
+1. Use setvarq for here/sethere?
+1. Use setvarq for ip/setip?
 1. Bring back a simpiler version of the `blue` language
 1. See about re-arranging >r order in op_compile_begin to simplify it and op_compile_end
 1. Grok more fasmg magic to improve blasm syntax
