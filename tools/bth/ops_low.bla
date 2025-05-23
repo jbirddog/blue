@@ -14,18 +14,9 @@ opBI	op_thr, 1, 0	;	( -- a )	Push addr of TAP output's here
 	ret
 end_op
 
-opBI	op_thrM, 1, 0	;	( -- a )	Push addr of TAP output's here modification point
-	litb	op_thr_code
-	op
-	litb	0x03
-	add
-	ret
-end_op
-
 opBI	op_setthr, 1, 0	;	( a -- )	Set addr of TAP output's here
-	callop	op_thrM_code
-	swap
-	setq
+	litb	op_thr_code
+	callop	setvarq.code
 	ret
 end_op
 
