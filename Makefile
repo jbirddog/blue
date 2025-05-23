@@ -25,6 +25,9 @@ clean: $(LANGS) $(TOOLS)
 bin obj:
 	mkdir $@
 
+$(FASM2):
+	git submodule update --init
+	
 $(BLUEVM): bluevm.asm $(INCS) $(FASM2) | bin
 	$(FASM2) $< $@
 
