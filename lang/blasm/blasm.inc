@@ -12,14 +12,14 @@ iterate <opname, opsize>, \
 	ret, 1, \
 	comp, 1, \
 	endcomp, 1, \
-	ip, 1, \
-	setip, 1, \
 	op, 1, \
 	oph, 1, \
 	setvarb, 1, \
 	setvarw, 1, \
 	setvard, 1, \
 	setvarq, 1, \
+	ip, 1, \
+	setip, 1, \
 	start, 1, \
 	here, 1, \
 	sethere, 1, \

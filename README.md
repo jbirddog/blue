@@ -105,14 +105,14 @@ Opcodes are subject to change.
 | 0x08 | ret | ( -- ) | Pops value from return stack and sets the instruction pointer |
 | 0x09 | comp | ( -- ) | Begin compiling bytecode |
 | 0x0A | endcomp | ( -- a ) | Append ret and end compilation, push addr where compilation started |
-| 0x0B | ip | ( -- a ) | Push location of the instruction pointer |
-| 0x0C | setip | ( a -- ) | Set the location of the instruction pointer |
-| 0x0D | op | ( b -- a ) | Push addr of the offset into the op table for the opcode |
-| 0x0E | oph | ( -- a ) | Push addr of the opcode handler |
-| 0x0F | setvarb | ( b b -- ) | Set litb value of var op |
-| 0x10 | setvarw | ( w b -- ) | Set litw value of var op |
-| 0x11 | setvard | ( d b -- ) | Set litd value of var op |
-| 0x12 | setvarq | ( q b -- ) | Set litq value of var op |
+| 0x0B | op | ( b -- a ) | Push addr of the offset into the op table for the opcode |
+| 0x0C | oph | ( -- a ) | Push addr of the opcode handler |
+| 0x0D | setvarb | ( b b -- ) | Set litb value of var op |
+| 0x0E | setvarw | ( w b -- ) | Set litw value of var op |
+| 0x0F | setvard | ( d b -- ) | Set litd value of var op |
+| 0x10 | setvarq | ( q b -- ) | Set litq value of var op |
+| 0x11 | ip | ( -- a ) | Push location of the instruction pointer |
+| 0x12 | setip | ( a -- ) | Set the location of the instruction pointer |
 | 0x13 | start | ( -- a ) | Push addr of the code buffer's start |
 | 0x14 | here | ( -- a ) | Push addr of the code buffer's here |
 | 0x15 | sethere | ( a -- ) | Set addr of the code buffer's here |

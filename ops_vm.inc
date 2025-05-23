@@ -57,20 +57,6 @@ end_op
 opN	op_comp, 1, OPCODE_ENTRY_FLAG_IMMEDIATE	;	( -- )	Begin compiling bytecode
 opN	op_endcomp, 1, OPCODE_ENTRY_FLAG_IMMEDIATE	;	( -- a )	Append ret and end compilation, push addr where compilation started
 
-opNI	op_ip, 1, 0	;	( -- a )	Push location of the instruction pointer
-	mov	rax, [instruction_pointer]
-	call	data_stack_push
-
-	ret
-end_op
-
-opNI	op_setip, 1, 0	;	( a -- )	Set the location of the instruction pointer
-	call	data_stack_pop
-	mov	[instruction_pointer], rax
-
-	ret
-end_op
-
 opN	op_op, 1, 0	;	( b -- a )	Push addr of the offset into the op table for the opcode
 
 opNI	op_oph, 1, 0	;	( -- a )	Push addr of the opcode handler
@@ -94,6 +80,20 @@ end_op
 
 opBI	op_setvarq, 1, 0	;	( q b -- )	Set litq value of var op
 	db op_op_code, op_litb_code, 0x03, op_add_code, op_swap_code, op_setq_code, op_ret_code
+end_op
+
+opNI	op_ip, 1, 0	;	( -- a )	Push location of the instruction pointer
+	mov	rax, [instruction_pointer]
+	call	data_stack_push
+
+	ret
+end_op
+
+opNI	op_setip, 1, 0	;	( a -- )	Set the location of the instruction pointer
+	call	data_stack_pop
+	mov	[instruction_pointer], rax
+
+	ret
 end_op
 
 opBI	op_start, 1, 0	;	( -- a )	Push addr of the code buffer's start
