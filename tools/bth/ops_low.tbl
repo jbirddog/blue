@@ -2,7 +2,7 @@ tst	1	( -- a )	Push addr of TAP output's start
 thr	1	( -- a )	Push addr of TAP output's here
 setthr	1	( a -- )	Set addr of TAP output's here
 endl	1	( a -- )	End line of output and set TAP output's here
-wokA	1	( a -- )	Write ok line to addr
+woka	1	( a -- )	Write ok line to addr
 wprep	1	( -- )	Preps the write system call
 wlen	1	( -- )	Buffer length for the write system call
 waddr	1	( -- )	Addr of the buffer for the write system call
