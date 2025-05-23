@@ -12,5 +12,7 @@ jobs:
     steps:
     - name: checkout repo
       uses: actions/checkout@main
+      with:
+        submodules: recursive
     - name: make
       run: make
