@@ -174,7 +174,6 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ## TODOs
 
-1. Add fasm2 dep in Makefile to git submodule init
 1. setq, etc stack effects feel backwards when not in test code
    1. see swap in op_setvarq, etc
 1. Better name for `op_oph` since opcode handler has different meaning in the vm
