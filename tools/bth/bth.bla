@@ -5,7 +5,7 @@ argc
 litb 0x02
 eq
 comp
-	litb	0x33
+	litb	0x01
 	exit
 endcomp
 ifnot
