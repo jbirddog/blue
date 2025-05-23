@@ -33,8 +33,9 @@ Opcodes are subject to change and can be used in `.bla` files by including `bth.
 | 0x90 | ok0 | ( n -- ) | Ok if top of stack is 0 |
 | 0x91 | okn0 | ( n -- ) | Ok if top of stack is not 0 |
 | 0x92 | done | ( -- ) | Writes TAP output to stdout and exits with depth as status |
+| 0x93 | ifnot | ( t/f fa -- ? ) | Call fa if t/f is false |
 
 ## TODOs
 
-1. Output plan from `done` without need to call `plan`
 1. Print "TAP version 14" when testing begins
+1. Support test description in output "ok - add two numbers"

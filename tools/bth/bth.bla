@@ -1,0 +1,14 @@
+; todo: remove when ifnot is moved
+include "bth.inc"
+
+argc
+litb 0x02
+eq
+comp
+	litb	0x33
+	exit
+endcomp
+ifnot
+
+depth
+exit
