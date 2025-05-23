@@ -7,6 +7,8 @@ iterate <opname, opsize>, \
 	true, 1, \
 	false, 1, \
 	ifelse, 1, \
+	if, 1, \
+	ifnot, 1, \
 	mccall, 1, \
 	call, 1, \
 	tor, 1, \

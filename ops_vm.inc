@@ -31,6 +31,14 @@ end_op
 
 opN	op_ifelse, 1, 0	;	( t/f ta fa -- ? )	Call ta if t/f is true else call fa
 
+opBI	op_if, 1, 0	;	( t/f ta -- ? )	Call ta if t/f is true
+	db op_comp_code, op_endcomp_code, op_ifelse_code, op_ret_code
+end_op
+
+opBI	op_ifnot, 1, 0	;	( t/f fa -- ? )	Call fa if t/f is false
+	db op_comp_code, op_endcomp_code, op_swap_code, op_ifelse_code, op_ret_code
+end_op
+
 opNI	op_mccall, 1, 0	;	( a -- ? )	Call machine code at address
 	call	data_stack_pop
 	call	rax
