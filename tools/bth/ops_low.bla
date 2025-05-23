@@ -158,15 +158,3 @@ opBI	op_done, 1, 0	;	( -- )	Writes TAP output to stdout and exits with depth as 
 	depth
 	exit
 end_op
-
-;
-; move to bluevm
-;
-
-opBI	op_ifnot, 1, 0	;	( t/f fa -- ? )	Call fa if t/f is false
-	comp
-	endcomp
-	swap
-	ifelse
-	ret
-end_op

@@ -17,4 +17,3 @@ okne	1	( a b -- )	Ok if a and b are not eq
 ok0	1	( n -- )	Ok if top of stack is 0
 okn0	1	( n -- )	Ok if top of stack is not 0
 done	1	( -- )	Writes TAP output to stdout and exits with depth as status
-ifnot	1	( t/f fa -- ? )	Call fa if t/f is false
