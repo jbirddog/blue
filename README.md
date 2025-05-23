@@ -109,43 +109,47 @@ Opcodes are subject to change.
 | 0x0C | setip | ( a -- ) | Set the location of the instruction pointer |
 | 0x0D | op | ( b -- a ) | Push addr of the offset into the op table for the opcode |
 | 0x0E | oph | ( -- a ) | Push addr of the opcode handler |
-| 0x0F | start | ( -- a ) | Push addr of the code buffer's start |
-| 0x10 | here | ( -- a ) | Push addr of the code buffer's here |
-| 0x11 | sethere | ( a -- ) | Set addr of the code buffer's here |
-| 0x12 | atincb | ( a -- b a' ) | Push byte value found at addr, increment and push addr |
-| 0x13 | atincw | ( a -- w a' ) | Push word value found at addr, increment and push addr |
-| 0x14 | atincd | ( a -- d a' ) | Push dword value found at addr, increment and push addr |
-| 0x15 | atincq | ( a -- q a' ) | Push qword value found at addr, increment and push addr |
-| 0x16 | atb | ( a -- b ) | Push byte value found at addr |
-| 0x17 | atw | ( a -- d ) | Push word value found at addr |
-| 0x18 | atd | ( a -- w ) | Push dword value found at addr |
-| 0x19 | atq | ( a -- q ) | Push qword value found at addr |
-| 0x1A | setincb | ( a b -- 'a ) | Write byte value to, increment and push addr |
-| 0x1B | setincw | ( a w -- 'a ) | Write word value to, increment and push addr |
-| 0x1C | setincd | ( a d -- 'a ) | Write dword value to, increment and push addr |
-| 0x1D | setincq | ( a q -- 'a ) | Write qword value to, increment and push addr |
-| 0x1E | setb | ( a b -- ) | Write byte value to addr |
-| 0x1F | setw | ( a w -- ) | Write word value to addr |
-| 0x20 | setd | ( a d -- ) | Write dword value to addr |
-| 0x21 | setq | ( a q -- ) | Write qword value to addr |
-| 0x22 | cb | ( b -- ) | Write byte value to and increment here |
-| 0x23 | cw | ( w -- ) | Write word value to and increment here |
-| 0x24 | cd | ( d -- ) | Write dword value to and increment here |
-| 0x25 | cq | ( q -- ) | Write qword value to and increment here |
-| 0x26 | litb | ( -- b ) | Push next byte from and increment instruction pointer |
-| 0x27 | litw | ( -- w ) | Push next word from and increment instruction pointer |
-| 0x28 | litd | ( -- d ) | Push next dword from and increment instruction pointer |
-| 0x29 | litq | ( -- q ) | Push next qword from and increment instruction pointer |
-| 0x2A | depth | ( -- n ) | Push depth of the data stack |
-| 0x2B | dup | ( x -- ) | Drops top of the data stack |
-| 0x2C | drop | ( a -- a a ) | Duplicate top of stack |
-| 0x2D | swap | ( a b -- b a ) | Swap top two values on the data stack |
-| 0x2E | not | ( x -- 'x ) | Bitwise not top of the data stack |
-| 0x2F | eq | ( a b -- t/f ) | Check top two items for equality and push result |
-| 0x30 | add | ( a b -- n ) | Push a + b |
-| 0x31 | sub | ( a b -- n ) | Push a - b |
-| 0x32 | shl | ( x n -- 'x ) | Push x shl n |
-| 0x33 | shr | ( x n -- 'x ) | Push x shr n |
+| 0x0F | setvarb | ( b b -- ) | Set litb value of var op |
+| 0x10 | setvarw | ( w b -- ) | Set litw value of var op |
+| 0x11 | setvard | ( d b -- ) | Set litd value of var op |
+| 0x12 | setvarq | ( q b -- ) | Set litq value of var op |
+| 0x13 | start | ( -- a ) | Push addr of the code buffer's start |
+| 0x14 | here | ( -- a ) | Push addr of the code buffer's here |
+| 0x15 | sethere | ( a -- ) | Set addr of the code buffer's here |
+| 0x16 | atincb | ( a -- b a' ) | Push byte value found at addr, increment and push addr |
+| 0x17 | atincw | ( a -- w a' ) | Push word value found at addr, increment and push addr |
+| 0x18 | atincd | ( a -- d a' ) | Push dword value found at addr, increment and push addr |
+| 0x19 | atincq | ( a -- q a' ) | Push qword value found at addr, increment and push addr |
+| 0x1A | atb | ( a -- b ) | Push byte value found at addr |
+| 0x1B | atw | ( a -- d ) | Push word value found at addr |
+| 0x1C | atd | ( a -- w ) | Push dword value found at addr |
+| 0x1D | atq | ( a -- q ) | Push qword value found at addr |
+| 0x1E | setincb | ( a b -- 'a ) | Write byte value to, increment and push addr |
+| 0x1F | setincw | ( a w -- 'a ) | Write word value to, increment and push addr |
+| 0x20 | setincd | ( a d -- 'a ) | Write dword value to, increment and push addr |
+| 0x21 | setincq | ( a q -- 'a ) | Write qword value to, increment and push addr |
+| 0x22 | setb | ( a b -- ) | Write byte value to addr |
+| 0x23 | setw | ( a w -- ) | Write word value to addr |
+| 0x24 | setd | ( a d -- ) | Write dword value to addr |
+| 0x25 | setq | ( a q -- ) | Write qword value to addr |
+| 0x26 | cb | ( b -- ) | Write byte value to and increment here |
+| 0x27 | cw | ( w -- ) | Write word value to and increment here |
+| 0x28 | cd | ( d -- ) | Write dword value to and increment here |
+| 0x29 | cq | ( q -- ) | Write qword value to and increment here |
+| 0x2A | litb | ( -- b ) | Push next byte from and increment instruction pointer |
+| 0x2B | litw | ( -- w ) | Push next word from and increment instruction pointer |
+| 0x2C | litd | ( -- d ) | Push next dword from and increment instruction pointer |
+| 0x2D | litq | ( -- q ) | Push next qword from and increment instruction pointer |
+| 0x2E | depth | ( -- n ) | Push depth of the data stack |
+| 0x2F | dup | ( x -- ) | Drops top of the data stack |
+| 0x30 | drop | ( a -- a a ) | Duplicate top of stack |
+| 0x31 | swap | ( a b -- b a ) | Swap top two values on the data stack |
+| 0x32 | not | ( x -- 'x ) | Bitwise not top of the data stack |
+| 0x33 | eq | ( a b -- t/f ) | Check top two items for equality and push result |
+| 0x34 | add | ( a b -- n ) | Push a + b |
+| 0x35 | sub | ( a b -- n ) | Push a - b |
+| 0x36 | shl | ( x n -- 'x ) | Push x shl n |
+| 0x37 | shr | ( x n -- 'x ) | Push x shr n |
 
 ### Extended Low/High
 
@@ -168,10 +172,12 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ## TODOs
 
-1. Add fasm2 dep in Makefile to git submodule init
-1. Add setvar{b,w,d,q} op that if op is used as var, sets its lit{b,w,d,q}
-   1. See setthr in bth ops_low.bla
 1. Expose argv/c via opcodes
+1. Add fasm2 dep in Makefile to git submodule init
+1. setq, etc stack effects feel backwards when not in test code
+   1. see swap in op_setvarq, etc
+1. Use setvarq for here/sethere?
+1. Use setvarq for ip/setip?
 1. Bring back a simpiler version of the `blue` language
 1. See about re-arranging >r order in op_compile_begin to simplify it and op_compile_end
 1. Grok more fasmg magic to improve blasm syntax

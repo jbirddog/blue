@@ -1,0 +1,149 @@
+
+include "../tools/bth/bth.inc"
+
+test
+
+litw	'08'
+plan
+
+;
+; implement extended opcode 0xFF to be used as a varb
+;
+
+litb	0xFF
+op
+
+; set flags and size
+litb	OPCODE_ENTRY_FLAG_BYTECODE or OPCODE_ENTRY_FLAG_INLINED
+setincb
+litb	0x01
+setincb
+
+; compile bytecode into the opcode table
+litb	litb.code
+setincb
+litb	0x00
+setincb
+litb	ret.code
+setb
+
+; call ext opcode to check initial value is 0
+callop	0xFF
+ok0
+
+; set its value
+litb	0x11
+dup
+litb	0xFF
+setvarb
+
+; call ext opcode to check updated value
+callop	0xFF
+okeq
+
+;
+; implement extended opcode 0xFF to be used as a varw
+;
+
+litb	0xFF
+op
+
+; set flags and size
+litb	OPCODE_ENTRY_FLAG_BYTECODE or OPCODE_ENTRY_FLAG_INLINED
+setincb
+litb	0x01
+setincb
+
+; compile bytecode into the opcode table
+litb	litw.code
+setincb
+litb	0x00
+setincw
+litb	ret.code
+setb
+
+; call ext opcode to check initial value is 0
+callop	0xFF
+ok0
+
+; set its value
+litw	0x1122
+dup
+litb	0xFF
+setvarw
+
+; call ext opcode to check updated value
+callop	0xFF
+okeq
+
+;
+; implement extended opcode 0xFF to be used as a vard
+;
+
+litb	0xFF
+op
+
+; set flags and size
+litb	OPCODE_ENTRY_FLAG_BYTECODE or OPCODE_ENTRY_FLAG_INLINED
+setincb
+litb	0x01
+setincb
+
+; compile bytecode into the opcode table
+litb	litd.code
+setincb
+litb	0x00
+setincd
+litb	ret.code
+setb
+
+; call ext opcode to check initial value is 0
+callop	0xFF
+ok0
+
+; set its value
+litd	0x11223344
+dup
+litb	0xFF
+setvard
+
+; call ext opcode to check updated value
+callop	0xFF
+okeq
+
+;
+; implement extended opcode 0xFF to be used as a varq
+;
+
+litb	0xFF
+op
+
+; set flags and size
+litb	OPCODE_ENTRY_FLAG_BYTECODE or OPCODE_ENTRY_FLAG_INLINED
+setincb
+litb	0x01
+setincb
+
+; compile bytecode into the opcode table
+litb	litq.code
+setincb
+litb	0x00
+setincq
+litb	ret.code
+setb
+
+; call ext opcode to check initial value is 0
+callop	0xFF
+ok0
+
+; set its value
+litq	0x1122334455667788
+dup
+litb	0xFF
+setvarq
+
+; call ext opcode to check updated value
+callop	0xFF
+okeq
+
+done

@@ -3,7 +3,7 @@ include "../tools/bth/bth.inc"
 
 test
 
-litw	'01'
+litw	'02'
 plan
 
 ;
@@ -14,7 +14,7 @@ litb	0xFF
 op
 
 ; set flags and size
-litb	0x04
+litb	OPCODE_ENTRY_FLAG_BYTECODE
 setincb
 litb	0x01
 setincb
@@ -36,5 +36,34 @@ depth
 litb	0x00
 eq
 callop	0xFF
+
+;
+; implement extended opcode 0xFF to add 7 to the top of the stack
+;
+
+litb	0xFF
+op
+
+; set flags and size
+litb	OPCODE_ENTRY_FLAG_BYTECODE or OPCODE_ENTRY_FLAG_INLINED
+setincb
+litb	0x01
+setincb
+
+; compile bytecode into the opcode table
+litb	litb.code
+setincb
+litb	0x07
+setincb
+litb	add.code
+setincb
+litb	ret.code
+setb
+
+; call ext opcode to check initial value is 0
+litb	0x03
+callop	0xFF
+litb	0x0A
+okeq
 
 done

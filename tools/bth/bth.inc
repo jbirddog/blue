@@ -3,7 +3,6 @@
 iterate <opname, opsize>, \
 	tst, 1, \
 	thr, 1, \
-	thrM, 1, \
 	setthr, 1, \
 	endl, 1, \
 	wokA, 1, \

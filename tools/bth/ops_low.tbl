@@ -1,6 +1,5 @@
 tst	1	( -- a )	Push addr of TAP output's start
 thr	1	( -- a )	Push addr of TAP output's here
-thrM	1	( -- a )	Push addr of TAP output's here modification point
 setthr	1	( a -- )	Set addr of TAP output's here
 endl	1	( a -- )	End line of output and set TAP output's here
 wokA	1	( a -- )	Write ok line to addr
