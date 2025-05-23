@@ -1,5 +1,5 @@
-; todo: remove when ifnot is moved
-include "bth.inc"
+
+SYS_OPEN = 2
 
 argc
 litb 0x02
@@ -9,6 +9,51 @@ comp
 	exit
 endcomp
 ifnot
+
+; mark addr of machine code
+here
+
+;
+; open system call
+;
+
+; movabs rdi, _addr of argv[1]_
+litb	0x48
+cb
+litb	0xBF
+cb
+argv
+litb 0x08
+add
+atq
+cq
+
+; xor esi, esi (flags = READ_ONLY)
+litb	0x31
+cb
+litb	0xF6
+cb
+
+; mov eax, 2
+litb	0xB8
+cb
+litb	0x02
+cd
+
+; syscall
+litb	0x0F
+cb
+litb	0x05
+cb
+
+;;;;;;;
+
+; ret
+litb	0xC3
+cb
+
+; call machine code
+mccall
 
 depth
 exit

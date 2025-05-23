@@ -20,5 +20,6 @@ To build `blasm` run `make` after `make` has been run in the root of the repo.
 ## TODOs
 
 1. Add `blasm2` for `.bla2` files that uses `fasm2` for mixed x8664 and blasm
+   1. Will need something like asm endasm to jmp over non litb'd code
 1. Follow bluevm convention of `op_name_code` instead of `name.code`, see `op_setthr` in `bth`
 1. Rename `callop` to something like `opnum` or `litop`
