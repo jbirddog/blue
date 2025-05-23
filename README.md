@@ -105,14 +105,14 @@ Opcodes are subject to change.
 | 0x08 | ret | ( -- ) | Pops value from return stack and sets the instruction pointer |
 | 0x09 | comp | ( -- ) | Begin compiling bytecode |
 | 0x0A | endcomp | ( -- a ) | Append ret and end compilation, push addr where compilation started |
-| 0x0B | ip | ( -- a ) | Push location of the instruction pointer |
-| 0x0C | setip | ( a -- ) | Set the location of the instruction pointer |
-| 0x0D | op | ( b -- a ) | Push addr of the offset into the op table for the opcode |
-| 0x0E | oph | ( -- a ) | Push addr of the opcode handler |
-| 0x0F | setvarb | ( b b -- ) | Set litb value of var op |
-| 0x10 | setvarw | ( w b -- ) | Set litw value of var op |
-| 0x11 | setvard | ( d b -- ) | Set litd value of var op |
-| 0x12 | setvarq | ( q b -- ) | Set litq value of var op |
+| 0x0B | op | ( b -- a ) | Push addr of the offset into the op table for the opcode |
+| 0x0C | oph | ( -- a ) | Push addr of the opcode handler |
+| 0x0D | setvarb | ( b b -- ) | Set litb value of var op |
+| 0x0E | setvarw | ( w b -- ) | Set litw value of var op |
+| 0x0F | setvard | ( d b -- ) | Set litd value of var op |
+| 0x10 | setvarq | ( q b -- ) | Set litq value of var op |
+| 0x11 | ip | ( -- a ) | Push location of the instruction pointer |
+| 0x12 | setip | ( a -- ) | Set the location of the instruction pointer |
 | 0x13 | start | ( -- a ) | Push addr of the code buffer's start |
 | 0x14 | here | ( -- a ) | Push addr of the code buffer's here |
 | 0x15 | sethere | ( a -- ) | Set addr of the code buffer's here |
@@ -176,8 +176,7 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. Add fasm2 dep in Makefile to git submodule init
 1. setq, etc stack effects feel backwards when not in test code
    1. see swap in op_setvarq, etc
-1. Use setvarq for here/sethere?
-1. Use setvarq for ip/setip?
+1. Better name for `op_oph` since opcode handler has different meaning in the vm
 1. Bring back a simpiler version of the `blue` language
 1. See about re-arranging >r order in op_compile_begin to simplify it and op_compile_end
 1. Grok more fasmg magic to improve blasm syntax
