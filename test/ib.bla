@@ -1,0 +1,15 @@
+
+include "../tools/bth/bth.inc"
+
+test
+
+litw	'01'
+plan
+
+ib
+start
+litw	0x800
+sub
+okeq
+
+done
