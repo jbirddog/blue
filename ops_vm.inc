@@ -80,6 +80,18 @@ opNI	op_oph, 1, 0	;	( -- a )	Push addr of the opcode handler
 	ret
 end_op
 
+opBI	op_setvarb, 1, 0	;	( b b -- )	Set litb value of var op
+	db op_op_code, op_litb_code, 0x03, op_add_code, op_swap_code, op_setb_code, op_ret_code
+end_op
+
+opBI	op_setvarw, 1, 0	;	( w b -- )	Set litw value of var op
+	db op_op_code, op_litb_code, 0x03, op_add_code, op_swap_code, op_setw_code, op_ret_code
+end_op
+
+opBI	op_setvard, 1, 0	;	( d b -- )	Set litd value of var op
+	db op_op_code, op_litb_code, 0x03, op_add_code, op_swap_code, op_setd_code, op_ret_code
+end_op
+
 opBI	op_setvarq, 1, 0	;	( q b -- )	Set litq value of var op
 	db op_op_code, op_litb_code, 0x03, op_add_code, op_swap_code, op_setq_code, op_ret_code
 end_op

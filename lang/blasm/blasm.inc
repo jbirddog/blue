@@ -16,6 +16,9 @@ iterate <opname, opsize>, \
 	setip, 1, \
 	op, 1, \
 	oph, 1, \
+	setvarb, 1, \
+	setvarw, 1, \
+	setvard, 1, \
 	setvarq, 1, \
 	start, 1, \
 	here, 1, \
