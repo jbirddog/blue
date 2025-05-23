@@ -23,15 +23,7 @@ include "interpreter.inc"
 ; expects status in edi
 exit:
 	mov	eax, 60
-
-syscall_or_die:
 	syscall
-	
-	test	rax, rax
-	cmovs	edi, eax
-	js	exit
-
-	ret
 
 read_boot_code:
 	mov	rsi, input_buffer
@@ -42,11 +34,11 @@ read_boot_code:
 
 	mov	edx, INPUT_BUFFER_SIZE
 	xor	edi, edi
-	call	syscall_or_die
-
-	test	eax, eax
-	cmovz	edi, eax
-	jz	exit
+	syscall
+	
+	test	rax, rax
+	cmovng	edi, eax
+	jng	exit
 
 .done:
 	ret

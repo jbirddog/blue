@@ -174,7 +174,6 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ## TODOs
 
-1. Inline syscall_or_die
 1. Add fasm2 dep in Makefile to git submodule init
 1. setq, etc stack effects feel backwards when not in test code
    1. see swap in op_setvarq, etc
@@ -184,4 +183,4 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. Grok more fasmg magic to improve blasm syntax
 1. Add bytecode op if/if-not
 1. Add opcodes for litb, etc
-1. Print error messages to disambiguate exit status_
+1. Print error messages to disambiguate exit status
