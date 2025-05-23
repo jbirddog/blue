@@ -32,7 +32,7 @@ syscall_or_die:
 	js	exit
 
 	ret
-	
+
 read_boot_code:
 	mov	rsi, input_buffer
 	xor	eax, eax
@@ -52,6 +52,9 @@ read_boot_code:
 	ret
 
 entry $
+	mov	rax, [rsp]
+	mov	[argc], rax
+	
 	call	read_boot_code	
 	call	interpreter
 

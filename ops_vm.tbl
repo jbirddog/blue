@@ -1,4 +1,5 @@
 exit	1	( b -- )	Exit with status from top of stack
+argc	1	( -- q )	Push argc
 true	1	( -- t )	Push true value
 false	1	( -- f )	Push false value
 ifelse	1	( t/f ta fa -- ? )	Call ta if t/f is true else call fa

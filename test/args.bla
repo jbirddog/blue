@@ -1,0 +1,13 @@
+
+include "../tools/bth/bth.inc"
+
+test
+
+litw	'01'
+plan
+
+argc
+litb 0x01
+okeq
+
+done

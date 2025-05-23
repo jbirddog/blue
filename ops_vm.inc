@@ -4,6 +4,12 @@ opNI	op_exit, 1, 0	;	( b -- )	Exit with status from top of stack
 	mov	edi, eax
 	jmp	exit
 end_op
+	
+opBI	op_argc, 1, 0	;	( -- q )	Push argc
+	db op_litq_code
+	argc dq 0x00
+	db op_ret_code
+end_op
 
 opNI	op_true, 1, 0	;	( -- t )	Push true value
 	xor	eax, eax
