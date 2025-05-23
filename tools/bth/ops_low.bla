@@ -133,9 +133,17 @@ opBI	op_okne, 1, 0	;	( a b -- )	Ok if a and b are not eq
 	ret
 end_op
 
-opBI	op_ok0, 1, 0	;	( n -- )	Ok top of stack is 0
+opBI	op_ok0, 1, 0	;	( n -- )	Ok if top of stack is 0
 	litb	0x00
 	eq
+	callop	op_okif_code
+	ret
+end_op
+
+opBI	op_okn0, 1, 0	;	( n -- )	Ok if top of stack is not 0
+	litb	0x00
+	eq
+	not
 	callop	op_okif_code
 	ret
 end_op

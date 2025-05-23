@@ -3,11 +3,16 @@ include "../tools/bth/bth.inc"
 
 test
 
-litw	'01'
+litw	'02'
 plan
 
 argc
-litb 0x01
+litb	0x01
 okeq
+
+argv
+atq
+atq
+okn0
 
 done

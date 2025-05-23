@@ -18,6 +18,7 @@ iterate <opname, opsize>, \
 	okeq, 1, \
 	okne, 1, \
 	ok0, 1, \
+	okn0, 1, \
 	done, 1, \
 
 	#opname.code = % - 1

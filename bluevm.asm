@@ -54,6 +54,8 @@ read_boot_code:
 entry $
 	mov	rax, [rsp]
 	mov	[argc], rax
+	lea	rax, [rsp+8]
+	mov	[argv], rax
 	
 	call	read_boot_code	
 	call	interpreter

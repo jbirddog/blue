@@ -14,5 +14,6 @@ notok	1	( -- )	Write not ok line to TAP output's here
 okif	1	( t/f -- )	Ok if top of stack is true
 okeq	1	( a b -- )	Ok if a and b are eq
 okne	1	( a b -- )	Ok if a and b are not eq
-ok0	1	( n -- )	Ok top of stack is 0
+ok0	1	( n -- )	Ok if top of stack is 0
+okn0	1	( n -- )	Ok if top of stack is not 0
 done	1	( -- )	Writes TAP output to stdout and exits with depth as status
