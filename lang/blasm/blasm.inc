@@ -7,6 +7,8 @@ iterate <opname, opsize>, \
 	true, 1, \
 	false, 1, \
 	ifelse, 1, \
+	if, 1, \
+	ifnot, 1, \
 	mccall, 1, \
 	call, 1, \
 	tor, 1, \
@@ -20,6 +22,7 @@ iterate <opname, opsize>, \
 	setvarw, 1, \
 	setvard, 1, \
 	setvarq, 1, \
+	ib, 1, \
 	ip, 1, \
 	setip, 1, \
 	start, 1, \
