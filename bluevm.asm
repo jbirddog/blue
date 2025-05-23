@@ -14,7 +14,6 @@ opcode_handler_invalid dq OPCODE_HANDLER_INVALID
 
 return_stack_here dq return_stack
 data_stack_here dq data_stack
-code_buffer_here dq code_buffer
 
 include "bluevm_defs.inc"
 include "stack.inc"

@@ -96,25 +96,20 @@ opBI	op_setvarq, 1, 0	;	( q b -- )	Set litq value of var op
 	db op_op_code, op_litb_code, 0x03, op_add_code, op_swap_code, op_setq_code, op_ret_code
 end_op
 
-opNI	op_start, 1, 0	;	( -- a )	Push addr of the code buffer's start
-	mov	rax, code_buffer
-	call	data_stack_push
-	
-	ret
+opBI	op_start, 1, 0	;	( -- a )	Push addr of the code buffer's start
+	db op_litq_code
+	dq code_buffer
+	db op_ret_code
 end_op
 	
-opNI	op_here, 1, 0	;	( -- a )	Push addr of the code buffer's here
-	mov	rax, [code_buffer_here]
-	call	data_stack_push
-
-	ret
+opBI	op_here, 1, 0	;	( -- a )	Push addr of the code buffer's here
+	db op_litq_code
+	code_buffer_here dq code_buffer
+	db op_ret_code
 end_op
 
-opNI	op_sethere, 1, 0	;	( a -- )	Set addr of the code buffer's here
-	call	data_stack_pop
-	mov	[code_buffer_here], rax
-
-	ret
+opBI	op_sethere, 1, 0	;	( a -- )	Set addr of the code buffer's here
+	db op_litb_code, op_here_code, op_setvarq_code, op_ret_code
 end_op
 
 opNI	op_atincb, 1, 0	;	( a -- b a' )	Push byte value found at addr, increment and push addr
