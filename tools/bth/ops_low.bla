@@ -16,7 +16,7 @@ end_op
 
 opBI	op_setthr, 1, 0	;	( a -- )	Set addr of TAP output's here
 	litb	op_thr_code
-	callop	setvarq.code
+	setvarq
 	ret
 end_op
 
