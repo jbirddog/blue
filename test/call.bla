@@ -132,25 +132,23 @@ start
 litw	0x0800
 add
 dup
-sethere
 
 litb	ok.code
-cb
+setincb
 
 litb	ret.code
-cb
+setb
 
 call
 
 ib
 dup
-sethere
 
 litb	ok.code
-cb
+setincb
 
 litb	ret.code
-cb
+setb
 
 call
 
