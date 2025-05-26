@@ -18,7 +18,7 @@ Opcodes are subject to change and can be used in `.bla` files by including `bth.
 | 0x81 | thr | ( -- a ) | Push addr of TAP output's here |
 | 0x82 | setthr | ( a -- ) | Set addr of TAP output's here |
 | 0x83 | endl | ( a -- ) | End line of output and set TAP output's here |
-| 0x84 | wokA | ( a -- ) | Write ok line to addr |
+| 0x84 | woka | ( a -- ) | Write ok line to addr |
 | 0x85 | wprep | ( -- ) | Preps the write system call |
 | 0x86 | wlen | ( -- ) | Buffer length for the write system call |
 | 0x87 | waddr | ( -- ) | Addr of the buffer for the write system call |

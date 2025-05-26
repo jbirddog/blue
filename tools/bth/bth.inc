@@ -5,7 +5,7 @@ iterate <opname, opsize>, \
 	thr, 1, \
 	setthr, 1, \
 	endl, 1, \
-	wokA, 1, \
+	woka, 1, \
 	wprep, 1, \
 	wlen, 1, \
 	waddr, 1, \

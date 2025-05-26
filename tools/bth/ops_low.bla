@@ -27,7 +27,7 @@ opBI	op_endl, 1, 0	;	( a -- )	End line of output and set TAP output's here
 	ret
 end_op
 
-opBI	op_wokA, 1, 0	;	( a -- )	Write ok line to addr
+opBI	op_woka, 1, 0	;	( a -- )	Write ok line to addr
 	litw	'ok'
 	setincw
 	callop	op_endl_code
@@ -97,7 +97,7 @@ end_op
 
 opBI	op_ok, 1, 0	;	( -- )	Write ok line to TAP output's here
 	callop	op_thr_code
-	callop	op_wokA_code
+	callop	op_woka_code
 	ret
 end_op
 
@@ -105,7 +105,7 @@ opBI	op_notok, 1, 0	;	( -- )	Write not ok line to TAP output's here
 	callop	op_thr_code
 	litd	'not '
 	setincd
-	callop	op_wokA_code
+	callop	op_woka_code
 	ret
 end_op
 
