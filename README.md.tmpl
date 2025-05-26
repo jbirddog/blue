@@ -115,6 +115,9 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ## TODOs
 
+1. Drop `ib` and `start` for `blk` that returns and addr for, eg `4 blk`
+1. Rename blocks 7-10 to something more generic like `Application Block`
+1. Drop here/sethere, some merging of `cb`, `setb`, `clitb`, etc
 1. Add an opcode to ops_vm that is kinda high up and `make` fails until `make clean`
 1. setq, etc stack effects feel backwards when not in test code
    1. see swap in op_setvarq, etc
@@ -122,5 +125,5 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. Bring back a simpiler version of the `blue` language
 1. See about re-arranging >r order in op_compile_begin to simplify it and op_compile_end
 1. Grok more fasmg magic to improve blasm syntax
-1. Add opcodes for litb, etc
+1. Add opcodes for `clitb`, etc
 1. Print error messages to disambiguate exit status

@@ -3,7 +3,7 @@ include "../tools/bth/bth.inc"
 
 test
 
-litw	'09'
+litw	'11'
 plan
 
 ;
@@ -126,6 +126,32 @@ comp
 	endcomp
 	call
 endcomp
+call
+
+start
+litw	0x0800
+add
+dup
+sethere
+
+litb	ok.code
+cb
+
+litb	ret.code
+cb
+
+call
+
+ib
+dup
+sethere
+
+litb	ok.code
+cb
+
+litb	ret.code
+cb
+
 call
 
 done
