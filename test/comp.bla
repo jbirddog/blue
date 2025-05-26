@@ -1,0 +1,50 @@
+
+include "../tools/bth/bth.inc"
+
+test
+
+litw	'05'
+plan
+
+;
+; test compiling bytecode
+;
+
+comp
+endcomp
+depth
+litb 0x01
+okeq
+drop
+
+comp
+endcomp
+atb
+litb ret.code
+okeq
+
+comp
+endcomp
+litb 0x01
+sub
+atb
+litb setip.code
+okeq
+
+comp
+endcomp
+litb 0x0A
+sub
+atb
+litb litq.code
+okeq
+
+comp
+endcomp
+here
+swap
+call
+here
+okeq
+
+done

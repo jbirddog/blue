@@ -3,39 +3,12 @@ include "../tools/bth/bth.inc"
 
 test
 
-litw	'14'
+litw	'09'
 plan
 
 ;
-; test compiling and calling bytecode
+; test calling bytecode
 ;
-
-comp
-endcomp
-depth
-litb 0x01
-eq
-comp
-	ok
-endcomp
-comp
-	notok
-endcomp
-ifelse
-drop
-
-comp
-endcomp
-atb
-litb ret.code
-eq
-comp
-	ok
-endcomp
-comp
-	notok
-endcomp
-ifelse
 
 comp
 	ok
@@ -112,39 +85,6 @@ comp
 endcomp
 call
 
-comp
-endcomp
-dup
-litb 0x01
-sub
-atb
-litb setip.code
-eq
-comp
-	ok
-endcomp
-comp
-	notok
-endcomp
-ifelse
-dup
-litb 0x0A
-sub
-atb
-litb litq.code
-eq
-comp
-	ok
-endcomp
-comp
-	notok
-endcomp
-ifelse
-comp
-	drop
-endcomp
-call
-
 litb 0x01
 litb 0x02
 comp
@@ -153,14 +93,7 @@ endcomp
 call
 
 litb 0x03
-eq
-comp
-	ok
-endcomp
-comp
-	notok
-endcomp
-ifelse
+okeq
 
 litb 0x04
 litb 0x05
@@ -176,14 +109,7 @@ endcomp
 call
 
 litb 0x09
-eq
-comp
-	ok
-endcomp
-comp
-	notok
-endcomp
-ifelse
+okeq
 
 litb 0x01
 comp
@@ -201,20 +127,5 @@ comp
 	call
 endcomp
 call
-
-comp
-endcomp
-here
-swap
-call
-here
-eq
-comp
-	ok
-endcomp
-comp
-	notok
-endcomp
-ifelse
 
 done
