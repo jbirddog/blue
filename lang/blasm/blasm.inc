@@ -23,7 +23,6 @@ iterate <opname, opsize>, \
 	setvarw, 1, \
 	setvard, 1, \
 	setvarq, 1, \
-	ib, 1, \
 	ip, 1, \
 	setip, 1, \
 	start, 1, \

@@ -141,7 +141,8 @@ setb
 
 call
 
-ib
+litb	0x05
+blk
 dup
 
 litb	ok.code

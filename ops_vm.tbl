@@ -20,7 +20,6 @@ setvarb	1	( b b -- )	Set litb value of var op
 setvarw	1	( w b -- )	Set litw value of var op
 setvard	1	( d b -- )	Set litd value of var op
 setvarq	1	( q b -- )	Set litq value of var op
-ib	1	( -- a )	Push addr of the input buffer
 ip	1	( -- a )	Push location of the instruction pointer
 setip	1	( a -- )	Set the location of the instruction pointer
 start	1	( -- a )	Push addr of the code buffer's start

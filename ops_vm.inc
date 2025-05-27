@@ -108,12 +108,6 @@ opBI	op_setvarq, 1, 0	;	( q b -- )	Set litq value of var op
 	db op_op_code, op_litb_code, 0x03, op_add_code, op_swap_code, op_setq_code, op_ret_code
 end_op
 
-opBI	op_ib, 1, 0	;	( -- a )	Push addr of the input buffer
-	db op_litq_code
-	dq input_buffer
-	db op_ret_code
-end_op
-
 opNI	op_ip, 1, 0	;	( -- a )	Push location of the instruction pointer
 	mov	rax, [instruction_pointer]
 	call	data_stack_push
