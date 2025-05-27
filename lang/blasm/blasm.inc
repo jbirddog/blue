@@ -4,6 +4,7 @@ iterate <opname, opsize>, \
 	exit, 1, \
 	argc, 1, \
 	argv, 1, \
+	blk, 1, \
 	true, 1, \
 	false, 1, \
 	ifelse, 1, \
@@ -22,10 +23,8 @@ iterate <opname, opsize>, \
 	setvarw, 1, \
 	setvard, 1, \
 	setvarq, 1, \
-	ib, 1, \
 	ip, 1, \
 	setip, 1, \
-	start, 1, \
 	here, 1, \
 	sethere, 1, \
 	atincb, 1, \

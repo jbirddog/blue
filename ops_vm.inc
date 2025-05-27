@@ -17,6 +17,12 @@ opBI	op_argv, 1, 0	;	( -- a )	Push addr of argv
 	db op_ret_code
 end_op
 
+opBI	op_blk, 1, 0	;	( b -- a )	Push addr of block number b
+	db op_litb_code, 0x0A, op_shl_code, op_litq_code
+	dq BLK_0
+	db op_add_code, op_ret_code
+end_op
+
 opNI	op_true, 1, 0	;	( -- t )	Push true value
 	xor	eax, eax
 	not	rax
@@ -102,12 +108,6 @@ opBI	op_setvarq, 1, 0	;	( q b -- )	Set litq value of var op
 	db op_op_code, op_litb_code, 0x03, op_add_code, op_swap_code, op_setq_code, op_ret_code
 end_op
 
-opBI	op_ib, 1, 0	;	( -- a )	Push addr of the input buffer
-	db op_litq_code
-	dq input_buffer
-	db op_ret_code
-end_op
-
 opNI	op_ip, 1, 0	;	( -- a )	Push location of the instruction pointer
 	mov	rax, [instruction_pointer]
 	call	data_stack_push
@@ -122,12 +122,6 @@ opNI	op_setip, 1, 0	;	( a -- )	Set the location of the instruction pointer
 	ret
 end_op
 
-opBI	op_start, 1, 0	;	( -- a )	Push addr of the code buffer's start
-	db op_litq_code
-	dq code_buffer
-	db op_ret_code
-end_op
-	
 opBI	op_here, 1, 0	;	( -- a )	Push addr of the code buffer's here
 	db op_litq_code
 	code_buffer_here dq code_buffer

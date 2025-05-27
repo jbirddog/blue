@@ -6,22 +6,27 @@ test
 litw	'03'
 plan
 
-start
+litb	0x07
+blk
 here
 sub
 ok0
 
-start
+litb	0x07
+blk
 litb 0x05
 add
 sethere
-start
+litb	0x07
+blk
 here
 okne
 
-start
+litb	0x07
+blk
 sethere
-start
+litb	0x07
+blk
 here
 okeq
 

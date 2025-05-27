@@ -1,6 +1,8 @@
 
 format ELF64 executable 3
 
+BLK_0 = $$ - ELF_HEADERS_SIZE
+
 OPCODE_HANDLER_COMPILE = opcode_handler_compile
 OPCODE_HANDLER_INTERPRET = opcode_handler_interpret
 OPCODE_HANDLER_INVALID = _opcode_handler_invalid

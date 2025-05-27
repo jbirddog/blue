@@ -128,9 +128,8 @@ comp
 endcomp
 call
 
-start
-litw	0x0800
-add
+litb	0x09
+blk
 dup
 
 litb	ok.code
@@ -141,7 +140,8 @@ setb
 
 call
 
-ib
+litb	0x05
+blk
 dup
 
 litb	ok.code

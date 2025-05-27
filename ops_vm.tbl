@@ -1,6 +1,7 @@
 exit	1	( b -- )	Exit with status from top of stack
 argc	1	( -- q )	Push argc
 argv	1	( -- a )	Push addr of argv
+blk	1	( b -- a )	Push addr of block number b
 true	1	( -- t )	Push true value
 false	1	( -- f )	Push false value
 ifelse	1	( t/f ta fa -- ? )	Call ta if t/f is true else call fa
@@ -19,10 +20,8 @@ setvarb	1	( b b -- )	Set litb value of var op
 setvarw	1	( w b -- )	Set litw value of var op
 setvard	1	( d b -- )	Set litd value of var op
 setvarq	1	( q b -- )	Set litq value of var op
-ib	1	( -- a )	Push addr of the input buffer
 ip	1	( -- a )	Push location of the instruction pointer
 setip	1	( a -- )	Set the location of the instruction pointer
-start	1	( -- a )	Push addr of the code buffer's start
 here	1	( -- a )	Push addr of the code buffer's here
 sethere	1	( a -- )	Set addr of the code buffer's here
 atincb	1	( a -- b a' )	Push byte value found at addr, increment and push addr
