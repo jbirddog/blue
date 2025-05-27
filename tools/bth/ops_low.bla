@@ -9,6 +9,11 @@ opBI	op_tst, 1, 0	;	( -- a )	Push addr of TAP output's start
 	ret
 end_op
 
+opBI	op_tfd, 1, 0	;	( -- d )	Push fd of test input file
+	litd	0x00
+	ret
+end_op
+
 opBI	op_thr, 1, 0	;	( -- a )	Push addr of TAP output's here
 	litq	0x00
 	ret

@@ -1,0 +1,70 @@
+include "bth.inc"
+
+SYS_OPEN = 0x02
+
+argc
+litb	0x02
+eq
+comp
+	litb	0x01
+	exit
+endcomp
+ifnot
+
+; compile machine code to open argv[1] into `tfd`
+here
+
+; movabs rdi, _addr of argv[1]_
+litb	0x48
+cb
+litb	0xBF
+cb
+argv
+litb	0x08
+add
+atq
+cq
+
+; xor esi, esi (flags = READ_ONLY)
+litb	0x31
+cb
+litb	0xF6
+cb
+
+; mov eax, SYS_OPEN
+litb	0xB8
+cb
+litb	SYS_OPEN
+cd
+
+; syscall
+litb	0x0F
+cb
+litb	0x05
+cb
+
+; movabs rdi, _addr of tfd's litd_
+litb	0x48
+cb
+litb	0xBF
+cb
+
+litb	tfd.code
+op
+litb	0x03
+add
+cq
+
+; stosd
+litb	0xAB
+cb
+
+; ret
+litb	0xC3
+cb
+
+mccall
+
+tfd
+exit
+

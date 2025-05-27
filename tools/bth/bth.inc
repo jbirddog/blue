@@ -2,6 +2,7 @@
 
 iterate <opname, opsize>, \
 	tst, 1, \
+	tfd, 1, \
 	thr, 1, \
 	setthr, 1, \
 	endl, 1, \
