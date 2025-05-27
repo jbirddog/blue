@@ -1,3 +1,4 @@
+chkargc	1	( -- )	Check that argc is 2
 tfd	1	( -- d )	Push fd of test input file
 oblk	1	( -- a )	Push addr of TAP output's start
 thr	1	( -- a )	Push addr of TAP output's here

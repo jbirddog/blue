@@ -5,6 +5,18 @@ TEST_OUTPUT_BLK = 0x0A
 opcode_tbl:
 .offset = 0x80
 
+opBI	op_chkargc, 1, 0	;	( -- )	Check that argc is 2
+	argc
+	litb	0x02
+	eq
+	comp
+		litb	0x01
+		exit
+	endcomp
+	ifnot
+	ret
+end_op
+
 opBI	op_tfd, 1, 0	;	( -- d )	Push fd of test input file
 	litd	0x00
 	ret

@@ -5,14 +5,7 @@ TEST_INPUT_BLK = 0x09
 
 SYS_OPEN = 0x02
 
-argc
-litb	0x02
-eq
-comp
-	litb	0x01
-	exit
-endcomp
-ifnot
+chkargc
 
 ; compile machine code to open argv[1] into `tfd`
 here
