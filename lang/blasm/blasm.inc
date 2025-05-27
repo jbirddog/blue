@@ -26,7 +26,6 @@ iterate <opname, opsize>, \
 	ip, 1, \
 	setip, 1, \
 	here, 1, \
-	sethere, 1, \
 	atincb, 1, \
 	atincw, 1, \
 	atincd, 1, \

@@ -128,10 +128,6 @@ opBI	op_here, 1, 0	;	( -- a )	Push addr of the code buffer's here
 	db op_ret_code
 end_op
 
-opBI	op_sethere, 1, 0	;	( a -- )	Set addr of the code buffer's here
-	db op_litb_code, op_here_code, op_setvarq_code, op_ret_code
-end_op
-
 opNI	op_atincb, 1, 0	;	( a -- b a' )	Push byte value found at addr, increment and push addr
 	call	_atinc_pre
 	lodsb

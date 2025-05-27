@@ -14,9 +14,10 @@ ok0
 
 litb	0x07
 blk
-litb 0x05
+litb	0x05
 add
-sethere
+litb	here.code
+setvarq
 litb	0x07
 blk
 here
@@ -24,7 +25,8 @@ okne
 
 litb	0x07
 blk
-sethere
+litb	here.code
+setvarq
 litb	0x07
 blk
 here
