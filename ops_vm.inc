@@ -17,6 +17,12 @@ opBI	op_argv, 1, 0	;	( -- a )	Push addr of argv
 	db op_ret_code
 end_op
 
+opBI	op_blk, 1, 0	;	( b -- a )	Push addr of block number b
+	db op_litb_code, 0x0A, op_shl_code, op_litq_code
+	dq BLK_0
+	db op_add_code, op_ret_code
+end_op
+
 opNI	op_true, 1, 0	;	( -- t )	Push true value
 	xor	eax, eax
 	not	rax

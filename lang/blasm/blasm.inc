@@ -4,6 +4,7 @@ iterate <opname, opsize>, \
 	exit, 1, \
 	argc, 1, \
 	argv, 1, \
+	blk, 1, \
 	true, 1, \
 	false, 1, \
 	ifelse, 1, \

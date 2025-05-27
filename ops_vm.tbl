@@ -1,6 +1,7 @@
 exit	1	( b -- )	Exit with status from top of stack
 argc	1	( -- q )	Push argc
 argv	1	( -- a )	Push addr of argv
+blk	1	( b -- a )	Push addr of block number b
 true	1	( -- t )	Push true value
 false	1	( -- f )	Push false value
 ifelse	1	( t/f ta fa -- ? )	Call ta if t/f is true else call fa
