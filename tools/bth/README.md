@@ -37,5 +37,7 @@ Opcodes are subject to change and can be used in `.bla` files by including `bth.
 
 ## TODOs
 
-1. Output plan from `done` without need to call `plan`
 1. Print "TAP version 14" when testing begins
+1. Split ops_low.bla into ops_pri.bla and ops_pub.bla
+   1. Separate ops tables in README, etc
+   1. Separate includes
