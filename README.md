@@ -32,10 +32,10 @@ The BlueVM binary consists of six blocks (1024 bytes each) in rwx memory:
 BlueVM also reserves space for the following blocks in rwx memory:
 
 6. Return and Data stack
-6. Application Block
-6. Application Block
-6. Application Block
-6. Application Block
+6. Code buffer
+6. Application block
+6. Application block
+6. Application block
 
 BlueVM itself performs no allocations once it is loaded into memory.
 
@@ -175,7 +175,8 @@ Along with the code for BlueVM this repository also contains some tools and exam
 ## TODOs
 
 1. Rename `op_op` to `op_opent` or similar
-1. Add an opcode to ops_vm that is kinda high up and `make` fails until `make clean`
+1. Remove if/ifnot, ip/setip
+1. Bug: Add an opcode to ops_vm that is kinda high up and `make` fails until `make clean`
 1. setq, etc stack effects feel backwards when not in test code
    1. see swap in op_setvarq, op_cb, etc
 1. Consider here, some merging of `cb`, `setb`, `clitb`, etc
