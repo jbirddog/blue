@@ -1,8 +1,8 @@
 ; Generated from bth.inc.tmpl
 
 iterate <opname, opsize>, \
-	oblk, 1, \
 	tfd, 1, \
+	oblk, 1, \
 	thr, 1, \
 	setthr, 1, \
 	endl, 1, \
