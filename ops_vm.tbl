@@ -23,7 +23,6 @@ setvarq	1	( q b -- )	Set litq value of var op
 ip	1	( -- a )	Push location of the instruction pointer
 setip	1	( a -- )	Set the location of the instruction pointer
 here	1	( -- a )	Push addr of the code buffer's here
-sethere	1	( a -- )	Set addr of the code buffer's here
 atincb	1	( a -- b a' )	Push byte value found at addr, increment and push addr
 atincw	1	( a -- w a' )	Push word value found at addr, increment and push addr
 atincd	1	( a -- d a' )	Push dword value found at addr, increment and push addr

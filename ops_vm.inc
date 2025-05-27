@@ -128,10 +128,6 @@ opBI	op_here, 1, 0	;	( -- a )	Push addr of the code buffer's here
 	db op_ret_code
 end_op
 
-opBI	op_sethere, 1, 0	;	( a -- )	Set addr of the code buffer's here
-	db op_litb_code, op_here_code, op_setvarq_code, op_ret_code
-end_op
-
 opNI	op_atincb, 1, 0	;	( a -- b a' )	Push byte value found at addr, increment and push addr
 	call	_atinc_pre
 	lodsb
@@ -222,19 +218,19 @@ opBI	op_setq, 1, 0	;	( a q -- )	Write qword value to addr
 end_op
 
 opBI	op_cb, 1, 0	;	( b -- )	Write byte value to and increment here
-	db op_here_code, op_swap_code, op_setincb_code, op_sethere_code, op_ret_code
+	cx	b
 end_op
 
 opBI	op_cw, 1, 0	;	( w -- )	Write word value to and increment here
-	db op_here_code, op_swap_code, op_setincw_code, op_sethere_code, op_ret_code
+	cx	w
 end_op
 
 opBI	op_cd, 1, 0	;	( d -- )	Write dword value to and increment here
-	db op_here_code, op_swap_code, op_setincd_code, op_sethere_code, op_ret_code
+	cx	d
 end_op
 
 opBI	op_cq, 1, 0	;	( q -- )	Write qword value to and increment here
-	db op_here_code, op_swap_code, op_setincq_code, op_sethere_code, op_ret_code
+	cx	q
 end_op
 
 opNI	op_litb, 2, 0	;	( -- b )	Push next byte from and increment instruction pointer
