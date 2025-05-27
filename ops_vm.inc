@@ -122,12 +122,6 @@ opNI	op_setip, 1, 0	;	( a -- )	Set the location of the instruction pointer
 	ret
 end_op
 
-opBI	op_start, 1, 0	;	( -- a )	Push addr of the code buffer's start
-	db op_litq_code
-	dq code_buffer
-	db op_ret_code
-end_op
-	
 opBI	op_here, 1, 0	;	( -- a )	Push addr of the code buffer's here
 	db op_litq_code
 	code_buffer_here dq code_buffer

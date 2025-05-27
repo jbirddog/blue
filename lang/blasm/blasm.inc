@@ -25,7 +25,6 @@ iterate <opname, opsize>, \
 	setvarq, 1, \
 	ip, 1, \
 	setip, 1, \
-	start, 1, \
 	here, 1, \
 	sethere, 1, \
 	atincb, 1, \

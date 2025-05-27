@@ -32,10 +32,10 @@ The BlueVM binary consists of six blocks (1024 bytes each) in rwx memory:
 BlueVM also reserves space for the following blocks in rwx memory:
 
 6. Return and Data stack
-6. Application Code Buffer
-6. Application Code Buffer
-6. Application Code Buffer
-6. Application Code Buffer
+6. Application Block
+6. Application Block
+6. Application Block
+6. Application Block
 
 BlueVM itself performs no allocations once it is loaded into memory.
 
@@ -118,43 +118,42 @@ Opcodes are subject to change.
 | 0x15 | setvarq | ( q b -- ) | Set litq value of var op |
 | 0x16 | ip | ( -- a ) | Push location of the instruction pointer |
 | 0x17 | setip | ( a -- ) | Set the location of the instruction pointer |
-| 0x18 | start | ( -- a ) | Push addr of the code buffer's start |
-| 0x19 | here | ( -- a ) | Push addr of the code buffer's here |
-| 0x1A | sethere | ( a -- ) | Set addr of the code buffer's here |
-| 0x1B | atincb | ( a -- b a' ) | Push byte value found at addr, increment and push addr |
-| 0x1C | atincw | ( a -- w a' ) | Push word value found at addr, increment and push addr |
-| 0x1D | atincd | ( a -- d a' ) | Push dword value found at addr, increment and push addr |
-| 0x1E | atincq | ( a -- q a' ) | Push qword value found at addr, increment and push addr |
-| 0x1F | atb | ( a -- b ) | Push byte value found at addr |
-| 0x20 | atw | ( a -- d ) | Push word value found at addr |
-| 0x21 | atd | ( a -- w ) | Push dword value found at addr |
-| 0x22 | atq | ( a -- q ) | Push qword value found at addr |
-| 0x23 | setincb | ( a b -- 'a ) | Write byte value to, increment and push addr |
-| 0x24 | setincw | ( a w -- 'a ) | Write word value to, increment and push addr |
-| 0x25 | setincd | ( a d -- 'a ) | Write dword value to, increment and push addr |
-| 0x26 | setincq | ( a q -- 'a ) | Write qword value to, increment and push addr |
-| 0x27 | setb | ( a b -- ) | Write byte value to addr |
-| 0x28 | setw | ( a w -- ) | Write word value to addr |
-| 0x29 | setd | ( a d -- ) | Write dword value to addr |
-| 0x2A | setq | ( a q -- ) | Write qword value to addr |
-| 0x2B | cb | ( b -- ) | Write byte value to and increment here |
-| 0x2C | cw | ( w -- ) | Write word value to and increment here |
-| 0x2D | cd | ( d -- ) | Write dword value to and increment here |
-| 0x2E | cq | ( q -- ) | Write qword value to and increment here |
-| 0x2F | litb | ( -- b ) | Push next byte from and increment instruction pointer |
-| 0x30 | litw | ( -- w ) | Push next word from and increment instruction pointer |
-| 0x31 | litd | ( -- d ) | Push next dword from and increment instruction pointer |
-| 0x32 | litq | ( -- q ) | Push next qword from and increment instruction pointer |
-| 0x33 | depth | ( -- n ) | Push depth of the data stack |
-| 0x34 | dup | ( x -- ) | Drops top of the data stack |
-| 0x35 | drop | ( a -- a a ) | Duplicate top of stack |
-| 0x36 | swap | ( a b -- b a ) | Swap top two values on the data stack |
-| 0x37 | not | ( x -- 'x ) | Bitwise not top of the data stack |
-| 0x38 | eq | ( a b -- t/f ) | Check top two items for equality and push result |
-| 0x39 | add | ( a b -- n ) | Push a + b |
-| 0x3A | sub | ( a b -- n ) | Push a - b |
-| 0x3B | shl | ( x n -- 'x ) | Push x shl n |
-| 0x3C | shr | ( x n -- 'x ) | Push x shr n |
+| 0x18 | here | ( -- a ) | Push addr of the code buffer's here |
+| 0x19 | sethere | ( a -- ) | Set addr of the code buffer's here |
+| 0x1A | atincb | ( a -- b a' ) | Push byte value found at addr, increment and push addr |
+| 0x1B | atincw | ( a -- w a' ) | Push word value found at addr, increment and push addr |
+| 0x1C | atincd | ( a -- d a' ) | Push dword value found at addr, increment and push addr |
+| 0x1D | atincq | ( a -- q a' ) | Push qword value found at addr, increment and push addr |
+| 0x1E | atb | ( a -- b ) | Push byte value found at addr |
+| 0x1F | atw | ( a -- d ) | Push word value found at addr |
+| 0x20 | atd | ( a -- w ) | Push dword value found at addr |
+| 0x21 | atq | ( a -- q ) | Push qword value found at addr |
+| 0x22 | setincb | ( a b -- 'a ) | Write byte value to, increment and push addr |
+| 0x23 | setincw | ( a w -- 'a ) | Write word value to, increment and push addr |
+| 0x24 | setincd | ( a d -- 'a ) | Write dword value to, increment and push addr |
+| 0x25 | setincq | ( a q -- 'a ) | Write qword value to, increment and push addr |
+| 0x26 | setb | ( a b -- ) | Write byte value to addr |
+| 0x27 | setw | ( a w -- ) | Write word value to addr |
+| 0x28 | setd | ( a d -- ) | Write dword value to addr |
+| 0x29 | setq | ( a q -- ) | Write qword value to addr |
+| 0x2A | cb | ( b -- ) | Write byte value to and increment here |
+| 0x2B | cw | ( w -- ) | Write word value to and increment here |
+| 0x2C | cd | ( d -- ) | Write dword value to and increment here |
+| 0x2D | cq | ( q -- ) | Write qword value to and increment here |
+| 0x2E | litb | ( -- b ) | Push next byte from and increment instruction pointer |
+| 0x2F | litw | ( -- w ) | Push next word from and increment instruction pointer |
+| 0x30 | litd | ( -- d ) | Push next dword from and increment instruction pointer |
+| 0x31 | litq | ( -- q ) | Push next qword from and increment instruction pointer |
+| 0x32 | depth | ( -- n ) | Push depth of the data stack |
+| 0x33 | dup | ( x -- ) | Drops top of the data stack |
+| 0x34 | drop | ( a -- a a ) | Duplicate top of stack |
+| 0x35 | swap | ( a b -- b a ) | Swap top two values on the data stack |
+| 0x36 | not | ( x -- 'x ) | Bitwise not top of the data stack |
+| 0x37 | eq | ( a b -- t/f ) | Check top two items for equality and push result |
+| 0x38 | add | ( a b -- n ) | Push a + b |
+| 0x39 | sub | ( a b -- n ) | Push a - b |
+| 0x3A | shl | ( x n -- 'x ) | Push x shl n |
+| 0x3B | shr | ( x n -- 'x ) | Push x shr n |
 
 ### Extended Low/High
 
@@ -177,12 +176,10 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ## TODOs
 
-1. Drop `ib` and `start` for `blk` that returns and addr for, eg `4 blk`
-1. Rename blocks 7-10 to something more generic like `Application Block`
-1. Drop here/sethere, some merging of `cb`, `setb`, `clitb`, etc
 1. Add an opcode to ops_vm that is kinda high up and `make` fails until `make clean`
 1. setq, etc stack effects feel backwards when not in test code
-   1. see swap in op_setvarq, etc
+   1. see swap in op_setvarq, op_cb, etc
+1. Consider here/sethere, some merging of `cb`, `setb`, `clitb`, etc
 1. Better name for `op_oph` since opcode handler has different meaning in the vm
 1. Bring back a simpiler version of the `blue` language
 1. See about re-arranging >r order in op_compile_begin to simplify it and op_compile_end
