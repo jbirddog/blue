@@ -90,13 +90,13 @@ cq
 ; mov edx, 0x0400
 litb	0xBA
 cb
-litw	0x0400
+litw	0x400
 cd
 
 ; xor eax, eax
 litb	0x31
 cb
-litb	0xC9
+litb	0xC0
 cb
 
 ; syscall
