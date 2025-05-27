@@ -4,8 +4,8 @@ opcode_tbl:
 .offset = 0x80
 
 opBI	op_tst, 1, 0	;	( -- a )	Push addr of TAP output's start
-	litb	0xC0
-	op
+	litb	0x0A
+	blk
 	ret
 end_op
 

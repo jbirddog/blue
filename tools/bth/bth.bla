@@ -1,6 +1,8 @@
 include "bth.inc"
 
-INPUT_BLK = 0x08
+CODE_BLK = 0x07
+TEST_INPUT_BLK = 0x09
+TEST_OUTPUT_BLK = 0x0A
 
 SYS_OPEN = 0x02
 
@@ -83,7 +85,7 @@ litb	0x48
 cb
 litb	0xBE
 cb
-litb	INPUT_BLK
+litb	TEST_INPUT_BLK
 blk
 cq
 
@@ -111,9 +113,15 @@ cb
 
 mccall
 
-litb	INPUT_BLK
+litb	CODE_BLK
+blk
+litb	here.code
+setvarq
+
+litb	TEST_INPUT_BLK
 blk
 call
 
+; this should never run
 litb	0xFF
 exit
