@@ -222,19 +222,19 @@ opBI	op_setq, 1, 0	;	( a q -- )	Write qword value to addr
 end_op
 
 opBI	op_cb, 1, 0	;	( b -- )	Write byte value to and increment here
-	db op_here_code, op_swap_code, op_setincb_code, op_sethere_code, op_ret_code
+	cx	b
 end_op
 
 opBI	op_cw, 1, 0	;	( w -- )	Write word value to and increment here
-	db op_here_code, op_swap_code, op_setincw_code, op_sethere_code, op_ret_code
+	cx	w
 end_op
 
 opBI	op_cd, 1, 0	;	( d -- )	Write dword value to and increment here
-	db op_here_code, op_swap_code, op_setincd_code, op_sethere_code, op_ret_code
+	cx	d
 end_op
 
 opBI	op_cq, 1, 0	;	( q -- )	Write qword value to and increment here
-	db op_here_code, op_swap_code, op_setincq_code, op_sethere_code, op_ret_code
+	cx	q
 end_op
 
 opNI	op_litb, 2, 0	;	( -- b )	Push next byte from and increment instruction pointer
