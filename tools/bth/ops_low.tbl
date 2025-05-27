@@ -1,4 +1,4 @@
-tst	1	( -- a )	Push addr of TAP output's start
+oblk	1	( -- a )	Push addr of TAP output's start
 tfd	1	( -- d )	Push fd of test input file
 thr	1	( -- a )	Push addr of TAP output's here
 setthr	1	( a -- )	Set addr of TAP output's here

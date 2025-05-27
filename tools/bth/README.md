@@ -14,7 +14,7 @@ Opcodes are subject to change and can be used in `.bla` files by including `bth.
 
 | Opcode | Name | Stack Effect | Description |
 |----|----|----|----|
-| 0x80 | tst | ( -- a ) | Push addr of TAP output's start |
+| 0x80 | oblk | ( -- a ) | Push addr of TAP output's start |
 | 0x81 | tfd | ( -- d ) | Push fd of test input file |
 | 0x82 | thr | ( -- a ) | Push addr of TAP output's here |
 | 0x83 | setthr | ( a -- ) | Set addr of TAP output's here |

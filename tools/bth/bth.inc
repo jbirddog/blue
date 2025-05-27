@@ -1,7 +1,7 @@
 ; Generated from bth.inc.tmpl
 
 iterate <opname, opsize>, \
-	tst, 1, \
+	oblk, 1, \
 	tfd, 1, \
 	thr, 1, \
 	setthr, 1, \

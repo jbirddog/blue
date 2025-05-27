@@ -2,7 +2,6 @@ include "bth.inc"
 
 CODE_BLK = 0x07
 TEST_INPUT_BLK = 0x09
-TEST_OUTPUT_BLK = 0x0A
 
 SYS_OPEN = 0x02
 

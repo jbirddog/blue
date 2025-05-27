@@ -1,10 +1,12 @@
 ; low ops used for testing and producing TAP output
 
+TEST_OUTPUT_BLK = 0x0A
+
 opcode_tbl:
 .offset = 0x80
 
-opBI	op_tst, 1, 0	;	( -- a )	Push addr of TAP output's start
-	litb	0x0A
+opBI	op_oblk, 1, 0	;	( -- a )	Push addr of TAP output's start
+	litb	TEST_OUTPUT_BLK
 	blk
 	ret
 end_op
@@ -57,7 +59,7 @@ opBI	op_wlen, 1, 0	;	( -- )	Buffer length for the write system call
 	litb	0xBA
 	cb
 	callop	op_thr_code
-	callop	op_tst_code
+	callop	op_oblk_code
 	sub
 	cd
 	ret
@@ -67,7 +69,7 @@ opBI	op_waddr, 1, 0	;	( -- )	Addr of the buffer for the write system call
 	; movabs rsi, _addr of string_
 	litw	0xBE48
 	cw
-	callop	op_tst_code
+	callop	op_oblk_code
 	cq
 	ret
 end_op
@@ -83,7 +85,7 @@ opBI	op_sysret, 1, 0	;	( -- )	System call and return for mccall
 end_op
 
 opBI	op_test, 1, 0	;	( w -- )	Initialize a test suite
-	callop	op_tst_code
+	callop	op_oblk_code
 	callop	op_setthr_code
 	ret
 end_op
