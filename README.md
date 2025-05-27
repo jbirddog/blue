@@ -175,11 +175,12 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ## TODOs
 
+1. Remove `op_oph`, not very practical as is
+1. Rename `op_op` to `op_opent` or similar
 1. Add an opcode to ops_vm that is kinda high up and `make` fails until `make clean`
 1. setq, etc stack effects feel backwards when not in test code
    1. see swap in op_setvarq, op_cb, etc
-1. Consider here/sethere, some merging of `cb`, `setb`, `clitb`, etc
-1. Better name for `op_oph` since opcode handler has different meaning in the vm
+1. Consider here, some merging of `cb`, `setb`, `clitb`, etc
 1. Bring back a simpiler version of the `blue` language
 1. See about re-arranging >r order in op_compile_begin to simplify it and op_compile_end
 1. Grok more fasmg magic to improve blasm syntax
