@@ -15,7 +15,6 @@ ret	1	( -- )	Pops value from return stack and sets the instruction pointer
 comp	1	( -- )	Begin compiling bytecode
 endcomp	1	( -- a )	Append ret and end compilation, push addr where compilation started
 op	1	( b -- a )	Push addr of the offset into the op table for the opcode
-oph	1	( -- a )	Push addr of the opcode handler
 setvarb	1	( b b -- )	Set litb value of var op
 setvarw	1	( w b -- )	Set litw value of var op
 setvard	1	( d b -- )	Set litd value of var op

@@ -111,48 +111,47 @@ Opcodes are subject to change.
 | 0x0E | comp | ( -- ) | Begin compiling bytecode |
 | 0x0F | endcomp | ( -- a ) | Append ret and end compilation, push addr where compilation started |
 | 0x10 | op | ( b -- a ) | Push addr of the offset into the op table for the opcode |
-| 0x11 | oph | ( -- a ) | Push addr of the opcode handler |
-| 0x12 | setvarb | ( b b -- ) | Set litb value of var op |
-| 0x13 | setvarw | ( w b -- ) | Set litw value of var op |
-| 0x14 | setvard | ( d b -- ) | Set litd value of var op |
-| 0x15 | setvarq | ( q b -- ) | Set litq value of var op |
-| 0x16 | ip | ( -- a ) | Push location of the instruction pointer |
-| 0x17 | setip | ( a -- ) | Set the location of the instruction pointer |
-| 0x18 | here | ( -- a ) | Push addr of the code buffer's here |
-| 0x19 | atincb | ( a -- b a' ) | Push byte value found at addr, increment and push addr |
-| 0x1A | atincw | ( a -- w a' ) | Push word value found at addr, increment and push addr |
-| 0x1B | atincd | ( a -- d a' ) | Push dword value found at addr, increment and push addr |
-| 0x1C | atincq | ( a -- q a' ) | Push qword value found at addr, increment and push addr |
-| 0x1D | atb | ( a -- b ) | Push byte value found at addr |
-| 0x1E | atw | ( a -- d ) | Push word value found at addr |
-| 0x1F | atd | ( a -- w ) | Push dword value found at addr |
-| 0x20 | atq | ( a -- q ) | Push qword value found at addr |
-| 0x21 | setincb | ( a b -- 'a ) | Write byte value to, increment and push addr |
-| 0x22 | setincw | ( a w -- 'a ) | Write word value to, increment and push addr |
-| 0x23 | setincd | ( a d -- 'a ) | Write dword value to, increment and push addr |
-| 0x24 | setincq | ( a q -- 'a ) | Write qword value to, increment and push addr |
-| 0x25 | setb | ( a b -- ) | Write byte value to addr |
-| 0x26 | setw | ( a w -- ) | Write word value to addr |
-| 0x27 | setd | ( a d -- ) | Write dword value to addr |
-| 0x28 | setq | ( a q -- ) | Write qword value to addr |
-| 0x29 | cb | ( b -- ) | Write byte value to and increment here |
-| 0x2A | cw | ( w -- ) | Write word value to and increment here |
-| 0x2B | cd | ( d -- ) | Write dword value to and increment here |
-| 0x2C | cq | ( q -- ) | Write qword value to and increment here |
-| 0x2D | litb | ( -- b ) | Push next byte from and increment instruction pointer |
-| 0x2E | litw | ( -- w ) | Push next word from and increment instruction pointer |
-| 0x2F | litd | ( -- d ) | Push next dword from and increment instruction pointer |
-| 0x30 | litq | ( -- q ) | Push next qword from and increment instruction pointer |
-| 0x31 | depth | ( -- n ) | Push depth of the data stack |
-| 0x32 | dup | ( x -- ) | Drops top of the data stack |
-| 0x33 | drop | ( a -- a a ) | Duplicate top of stack |
-| 0x34 | swap | ( a b -- b a ) | Swap top two values on the data stack |
-| 0x35 | not | ( x -- 'x ) | Bitwise not top of the data stack |
-| 0x36 | eq | ( a b -- t/f ) | Check top two items for equality and push result |
-| 0x37 | add | ( a b -- n ) | Push a + b |
-| 0x38 | sub | ( a b -- n ) | Push a - b |
-| 0x39 | shl | ( x n -- 'x ) | Push x shl n |
-| 0x3A | shr | ( x n -- 'x ) | Push x shr n |
+| 0x11 | setvarb | ( b b -- ) | Set litb value of var op |
+| 0x12 | setvarw | ( w b -- ) | Set litw value of var op |
+| 0x13 | setvard | ( d b -- ) | Set litd value of var op |
+| 0x14 | setvarq | ( q b -- ) | Set litq value of var op |
+| 0x15 | ip | ( -- a ) | Push location of the instruction pointer |
+| 0x16 | setip | ( a -- ) | Set the location of the instruction pointer |
+| 0x17 | here | ( -- a ) | Push addr of the code buffer's here |
+| 0x18 | atincb | ( a -- b a' ) | Push byte value found at addr, increment and push addr |
+| 0x19 | atincw | ( a -- w a' ) | Push word value found at addr, increment and push addr |
+| 0x1A | atincd | ( a -- d a' ) | Push dword value found at addr, increment and push addr |
+| 0x1B | atincq | ( a -- q a' ) | Push qword value found at addr, increment and push addr |
+| 0x1C | atb | ( a -- b ) | Push byte value found at addr |
+| 0x1D | atw | ( a -- d ) | Push word value found at addr |
+| 0x1E | atd | ( a -- w ) | Push dword value found at addr |
+| 0x1F | atq | ( a -- q ) | Push qword value found at addr |
+| 0x20 | setincb | ( a b -- 'a ) | Write byte value to, increment and push addr |
+| 0x21 | setincw | ( a w -- 'a ) | Write word value to, increment and push addr |
+| 0x22 | setincd | ( a d -- 'a ) | Write dword value to, increment and push addr |
+| 0x23 | setincq | ( a q -- 'a ) | Write qword value to, increment and push addr |
+| 0x24 | setb | ( a b -- ) | Write byte value to addr |
+| 0x25 | setw | ( a w -- ) | Write word value to addr |
+| 0x26 | setd | ( a d -- ) | Write dword value to addr |
+| 0x27 | setq | ( a q -- ) | Write qword value to addr |
+| 0x28 | cb | ( b -- ) | Write byte value to and increment here |
+| 0x29 | cw | ( w -- ) | Write word value to and increment here |
+| 0x2A | cd | ( d -- ) | Write dword value to and increment here |
+| 0x2B | cq | ( q -- ) | Write qword value to and increment here |
+| 0x2C | litb | ( -- b ) | Push next byte from and increment instruction pointer |
+| 0x2D | litw | ( -- w ) | Push next word from and increment instruction pointer |
+| 0x2E | litd | ( -- d ) | Push next dword from and increment instruction pointer |
+| 0x2F | litq | ( -- q ) | Push next qword from and increment instruction pointer |
+| 0x30 | depth | ( -- n ) | Push depth of the data stack |
+| 0x31 | dup | ( x -- ) | Drops top of the data stack |
+| 0x32 | drop | ( a -- a a ) | Duplicate top of stack |
+| 0x33 | swap | ( a b -- b a ) | Swap top two values on the data stack |
+| 0x34 | not | ( x -- 'x ) | Bitwise not top of the data stack |
+| 0x35 | eq | ( a b -- t/f ) | Check top two items for equality and push result |
+| 0x36 | add | ( a b -- n ) | Push a + b |
+| 0x37 | sub | ( a b -- n ) | Push a - b |
+| 0x38 | shl | ( x n -- 'x ) | Push x shl n |
+| 0x39 | shr | ( x n -- 'x ) | Push x shr n |
 
 ### Extended Low/High
 
@@ -175,7 +174,6 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ## TODOs
 
-1. Remove `op_oph`, not very practical as is
 1. Rename `op_op` to `op_opent` or similar
 1. Add an opcode to ops_vm that is kinda high up and `make` fails until `make clean`
 1. setq, etc stack effects feel backwards when not in test code

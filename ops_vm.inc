@@ -85,13 +85,6 @@ opN	op_endcomp, 1, OPCODE_ENTRY_FLAG_IMMEDIATE	;	( -- a )	Append ret and end com
 
 opN	op_op, 1, 0	;	( b -- a )	Push addr of the offset into the op table for the opcode
 
-opNI	op_oph, 1, 0	;	( -- a )	Push addr of the opcode handler
-	mov	rax, opcode_handler_call
-	call	data_stack_push
-	
-	ret
-end_op
-
 opBI	op_setvarb, 1, 0	;	( b b -- )	Set litb value of var op
 	db op_op_code, op_litb_code, 0x03, op_add_code, op_swap_code, op_setb_code, op_ret_code
 end_op
