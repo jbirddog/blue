@@ -14,6 +14,8 @@ Opcodes are subject to change and can be used in `.bla` files by including `bth.
 
 ### Internal Opcodes
 
+These internal opcodes are used by bth itself and should not be considered stable for external use.
+
 | Opcode | Name | Stack Effect | Description |
 |----|----|----|----|
 | 0x80 | atq | ( a -- q ) | Push qword value found at addr |
@@ -48,6 +50,9 @@ Opcodes are subject to change and can be used in `.bla` files by including `bth.
 | 0x9D | waddr | ( -- ) | Addr of the buffer for the write system call |
 
 ### TAP Opcodes
+
+Public opcodes that can be used in tests to produce TAP output. Test files written in `blasm` can include `tap.inc`
+from this repository. For an example test file see `test/bth.bla`.
 
 | Opcode | Name | Stack Effect | Description |
 |----|----|----|----|
