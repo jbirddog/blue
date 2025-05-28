@@ -1,0 +1,9 @@
+
+iterate <opname, opsize>, \
+_TAP_OPS_
+	op_##opname##_code = % - 1 + 0xC0 
+
+	calminstruction #opname
+		emit 1, % - 1 + 0xC0
+	end calminstruction
+end iterate

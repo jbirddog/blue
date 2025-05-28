@@ -46,22 +46,21 @@ Opcodes are subject to change and can be used in `.bla` files by including `bth.
 | 0x9B | wprep | ( -- ) | Preps the write system call |
 | 0x9C | wlen | ( -- ) | Buffer length for the write system call |
 | 0x9D | waddr | ( -- ) | Addr of the buffer for the write system call |
-| 0x9E | test | ( w -- ) | Initialize a test suite |
-| 0x9F | plan | ( w -- ) | Plan w tests where w is two ascii characters such as '03' |
-| 0xA0 | ok | ( -- ) | Write ok line to TAP output's here |
-| 0xA1 | notok | ( -- ) | Write not ok line to TAP output's here |
-| 0xA2 | okif | ( t/f -- ) | Ok if top of stack is true |
-| 0xA3 | okeq | ( a b -- ) | Ok if a and b are eq |
-| 0xA4 | okne | ( a b -- ) | Ok if a and b are not eq |
-| 0xA5 | ok0 | ( n -- ) | Ok if top of stack is 0 |
-| 0xA6 | okn0 | ( n -- ) | Ok if top of stack is not 0 |
-| 0xA7 | done | ( -- ) | Writes TAP output to stdout and exits with depth as status |
 
 ### TAP Opcodes
 
 | Opcode | Name | Stack Effect | Description |
 |----|----|----|----|
-
+| 0xC0 | test | ( w -- ) | Initialize a test suite |
+| 0xC1 | plan | ( w -- ) | Plan w tests where w is two ascii characters such as '03' |
+| 0xC2 | ok | ( -- ) | Write ok line to TAP output's here |
+| 0xC3 | notok | ( -- ) | Write not ok line to TAP output's here |
+| 0xC4 | okif | ( t/f -- ) | Ok if top of stack is true |
+| 0xC5 | okeq | ( a b -- ) | Ok if a and b are eq |
+| 0xC6 | okne | ( a b -- ) | Ok if a and b are not eq |
+| 0xC7 | ok0 | ( n -- ) | Ok if top of stack is 0 |
+| 0xC8 | okn0 | ( n -- ) | Ok if top of stack is not 0 |
+| 0xC9 | done | ( -- ) | Writes TAP output to stdout and exits with depth as status |
 
 ## TODOs
 
@@ -70,3 +69,4 @@ Opcodes are subject to change and can be used in `.bla` files by including `bth.
    1. Separate ops tables in README, etc
    1. Separate includes
 1. Redo wprep, wlen, waddr to use cxord, cmovd, etc
+1. bth.inc and tap.inc tmpl/sh files could be merged
