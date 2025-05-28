@@ -2,7 +2,7 @@ _This file is generated from README.md.tmpl_
 
 # BlueVM Test Harness
 
-Standalone executable to run BlueVM bytecode test files and produce TAP output.
+Standalone executable to run BlueVM bytecode test files and produce [TAP](https://testanything.org/) output.
 
 ## Building
 
@@ -18,7 +18,7 @@ been done, running `make` in this directory will build just `bth`.
 ## Opcodes
 
 Public opcodes that can be used in tests to produce TAP output. Test files written in `blasm` can include `tap.inc`
-from this repository. For an example test file see `test/bth.bla`. The BlueVM test suite uses `bth` and contains
+from this directory. For an example test file see `test/bth.bla`. The BlueVM test suite uses `bth` and contains
 test files in `../../test`.
 
 | Opcode | Name | Stack Effect | Description |
@@ -36,7 +36,7 @@ test files in `../../test`.
 
 ### Internal Opcodes
 
-These internal opcodes are used by bth itself and should not be considered stable for external use.
+These internal opcodes are used by `bth` itself and should not be considered stable for external use.
 
 | Opcode | Name | Stack Effect | Description |
 |----|----|----|----|
@@ -76,5 +76,4 @@ These internal opcodes are used by bth itself and should not be considered stabl
 1. Print "TAP version 14" when testing begins
 1. Redo wprep, wlen, waddr to use cxord, cmovd, etc
 1. bth.inc and tap.inc tmpl/sh files could be merged
-1. Add link to TAP website
 1. See about getting listed as a TAP producer
