@@ -79,7 +79,8 @@ opN	op_op, 1, 0	;	( b -- a )	Push addr of the offset into the op table for the o
 
 macro setvarx x
 	db op_op_code, op_litb_code, 0x03, op_add_code
-	db op_swap_code, op_setinc##x##_code, op_drop_code, op_ret_code
+	db op_swap_code, op_setinc##x##_code, op_drop_code
+	db op_ret_code
 end macro
 
 opBI	op_setvarb, 1, 0	;	( b b -- )	Set litb value of var op
