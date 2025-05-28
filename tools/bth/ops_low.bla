@@ -76,29 +76,6 @@ opBI	op_cxord, 1, 0	;	( b -- )	Compile xor b, b
 	ret
 end_op
 
-opBI	op_cdstarg, 1, 0	;	( -- )	Compile movabs rdi, _addr of argv[1]_
-	argv
-	litb	0x08
-	add
-	atq
-	litb	RDI
-	callop	op_cmovq_code
-	ret
-end_op
-
-opBI	op_flgsro, 1, 0	;	( -- )	Compile xor esi, esi (flags = READ_ONLY)_
-	litb	ESI
-	callop	op_cxord_code
-	ret
-end_op
-
-opBI	op_scopen, 1, 0	;	( -- )	Compile mov eax, SYS_OPEN (0x02)_
-	litb	SYS_OPEN
-	litb	EAX
-	callop	op_cmovd_code
-	ret
-end_op
-
 opBI	op_tfd, 1, 0	;	( -- d )	Push fd of test input file
 	litd	0x00
 	ret
@@ -118,6 +95,39 @@ end_op
 opBI	op_setthr, 1, 0	;	( a -- )	Set addr of TAP output's here
 	litb	op_thr_code
 	setvarq
+	ret
+end_op
+
+opBI	op_cdstarg, 1, 0	;	( -- )	Compile movabs rdi, _addr of argv[1]_
+	argv
+	litb	0x08
+	add
+	atq
+	litb	RDI
+	callop	op_cmovq_code
+	ret
+end_op
+
+opBI	op_cflgsro, 1, 0	;	( -- )	Compile xor esi, esi (flags = READ_ONLY)_
+	litb	ESI
+	callop	op_cxord_code
+	ret
+end_op
+
+opBI	op_csopen, 1, 0	;	( -- )	Compile mov eax, SYS_OPEN (0x02)_
+	litb	SYS_OPEN
+	litb	EAX
+	callop	op_cmovd_code
+	ret
+end_op
+
+opBI	op_dsttfd, 1, 0	;	( -- )	Compile movabs rdi, _addr of tfd's litd_
+	litb	op_tfd_code
+	op
+	litb	0x03
+	add
+	litb	RDI
+	callop	op_cmovq_code
 	ret
 end_op
 

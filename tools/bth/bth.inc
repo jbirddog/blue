@@ -8,13 +8,14 @@ iterate <opname, opsize>, \
 	cstosd, 1, \
 	csys, 1, \
 	cxord, 1, \
-	cdstarg, 1, \
-	flgsro, 1, \
-	scopen, 1, \
 	tfd, 1, \
 	oblk, 1, \
 	thr, 1, \
 	setthr, 1, \
+	cdstarg, 1, \
+	cflgsro, 1, \
+	csopen, 1, \
+	dsttfd, 1, \
 	endl, 1, \
 	woka, 1, \
 	wprep, 1, \

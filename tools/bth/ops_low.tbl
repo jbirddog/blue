@@ -5,13 +5,14 @@ cret	1	( -- )	Compile ret
 cstosd	1	( -- )	Compile stosd
 csys	1	( -- )	Compile syscall
 cxord	1	( b -- )	Compile xor b, b
-cdstarg	1	( -- )	Compile movabs rdi, _addr of argv[1]_
-flgsro	1	( -- )	Compile xor esi, esi (flags = READ_ONLY)_
-scopen	1	( -- )	Compile mov eax, SYS_OPEN (0x02)_
 tfd	1	( -- d )	Push fd of test input file
 oblk	1	( -- a )	Push addr of TAP output's start
 thr	1	( -- a )	Push addr of TAP output's here
 setthr	1	( a -- )	Set addr of TAP output's here
+cdstarg	1	( -- )	Compile movabs rdi, _addr of argv[1]_
+cflgsro	1	( -- )	Compile xor esi, esi (flags = READ_ONLY)_
+csopen	1	( -- )	Compile mov eax, SYS_OPEN (0x02)_
+dsttfd	1	( -- )	Compile movabs rdi, _addr of tfd's litd_
 endl	1	( a -- )	End line of output and set TAP output's here
 woka	1	( a -- )	Write ok line to addr
 wprep	1	( -- )	Preps the write system call

@@ -19,19 +19,13 @@ chkargc
 here
 
 cdstarg
-flgsro
-scopen
+cflgsro
+csopen
 
 ; syscall
 csys
 
-; movabs rdi, _addr of tfd's litd_
-litb	tfd.code
-op
-litb	0x03
-add
-litb	RDI
-cmovq
+dsttfd
 
 ; stosd
 cstosd
