@@ -13,7 +13,7 @@ been done, running `make` in this directory will build just `bth`.
 
 `./bin/bth path/to/test/file.bs0` will execute a test file and print its TAP output.
 
-`prove -e ./bin/bth --ext bs0 path/to/tost` will use `prove` to run test files.
+`prove -e ./bin/bth --ext bs0 path/to/tosts` will use `prove` to run test file(s).
 
 ## Opcodes
 
