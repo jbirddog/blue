@@ -203,7 +203,7 @@ end_op
 opBI	op_runtst, 1, 0	;	( -- )	Run the test in the test input block
 	litb	BLK_CODE
 	blk
-	litb	here.code
+	litb	op_here_code
 	setvarq
 
 	litb	BLK_TEST_INPUT

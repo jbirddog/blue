@@ -1,7 +1,7 @@
 
 iterate <opname, opsize>, \
 _LOW_OPS_
-	#opname.code = % - 1 + 0x80
+	op_##opname##_code = % - 1 + 0x80 
 
 	match =1, opsize
 		calminstruction #opname

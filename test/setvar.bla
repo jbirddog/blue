@@ -20,11 +20,11 @@ litb	0x01
 setincb
 
 ; compile bytecode into the opcode table
-litb	litb.code
+litb	op_litb_code
 setincb
 litb	0x00
 setincb
-litb	ret.code
+litb	op_ret_code
 setb
 
 ; call ext opcode to check initial value is 0
@@ -55,11 +55,11 @@ litb	0x01
 setincb
 
 ; compile bytecode into the opcode table
-litb	litw.code
+litb	op_litw_code
 setincb
 litb	0x00
 setincw
-litb	ret.code
+litb	op_ret_code
 setb
 
 ; call ext opcode to check initial value is 0
@@ -90,11 +90,11 @@ litb	0x01
 setincb
 
 ; compile bytecode into the opcode table
-litb	litd.code
+litb	op_litd_code
 setincb
 litb	0x00
 setincd
-litb	ret.code
+litb	op_ret_code
 setb
 
 ; call ext opcode to check initial value is 0
@@ -125,11 +125,11 @@ litb	0x01
 setincb
 
 ; compile bytecode into the opcode table
-litb	litq.code
+litb	op_litq_code
 setincb
 litb	0x00
 setincq
-litb	ret.code
+litb	op_ret_code
 setb
 
 ; call ext opcode to check initial value is 0

@@ -51,13 +51,13 @@ litb	0x01
 setincb
 
 ; compile bytecode into the opcode table
-litb	litb.code
+litb	op_litb_code
 setincb
 litb	0x07
 setincb
-litb	add.code
+litb	op_add_code
 setincb
-litb	ret.code
+litb	op_ret_code
 setb
 
 ; call ext opcode to check initial value is 0
