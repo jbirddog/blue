@@ -10,9 +10,12 @@ oblk	1	( -- a )	Push addr of TAP output's start
 thr	1	( -- a )	Push addr of TAP output's here
 setthr	1	( a -- )	Set addr of TAP output's here
 cdstarg	1	( -- )	Compile movabs rdi, _addr of argv[1]_
-cflgsro	1	( -- )	Compile xor esi, esi (flags = READ_ONLY)_
-csopen	1	( -- )	Compile mov eax, SYS_OPEN (0x02)_
-dsttfd	1	( -- )	Compile movabs rdi, _addr of tfd's litd_
+cflgsro	1	( -- )	Compile xor esi, esi (flags = READ_ONLY)
+csopen	1	( -- )	Compile mov eax, SYS_OPEN (0x02)
+cdsttfd	1	( -- )	Compile movabs rdi, _addr of tfd's litd_
+cfrmtfd	1	( -- )	Compile mov edi, _tfd_
+csrctib	1	( -- )	Compile mov rsi, _addr of _test input block_
+cblklen	1	( -- )	Compile mov edx, 0x0400
 opentst	1	( -- )	Open argv[1] and set tfd
 endl	1	( a -- )	End line of output and set TAP output's here
 woka	1	( a -- )	Write ok line to addr

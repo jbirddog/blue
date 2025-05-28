@@ -15,26 +15,13 @@ chkargc
 
 opentst
 
-; TODO: check fd
 
 ; compile machine code to read block from `tfd` into _input block_
 here
 
-; mov edi, _tfd
-tfd
-litb	EDI
-cmovd
-
-; mov rsi, _addr of _input block_
-litb	TEST_INPUT_BLK
-blk
-litb	RSI
-cmovq
-
-; mov edx, 0x0400
-litw	0x400
-litb	EDX
-cmovd
+cfrmtfd
+csrctib
+cblklen
 
 ; xor eax, eax
 litb	EAX

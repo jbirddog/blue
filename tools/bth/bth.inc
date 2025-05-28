@@ -15,7 +15,10 @@ iterate <opname, opsize>, \
 	cdstarg, 1, \
 	cflgsro, 1, \
 	csopen, 1, \
-	dsttfd, 1, \
+	cdsttfd, 1, \
+	cfrmtfd, 1, \
+	csrctib, 1, \
+	cblklen, 1, \
 	opentst, 1, \
 	endl, 1, \
 	woka, 1, \
