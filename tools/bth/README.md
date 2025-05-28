@@ -57,6 +57,12 @@ Opcodes are subject to change and can be used in `.bla` files by including `bth.
 | 0xA6 | okn0 | ( n -- ) | Ok if top of stack is not 0 |
 | 0xA7 | done | ( -- ) | Writes TAP output to stdout and exits with depth as status |
 
+### TAP Opcodes
+
+| Opcode | Name | Stack Effect | Description |
+|----|----|----|----|
+
+
 ## TODOs
 
 1. Print "TAP version 14" when testing begins
