@@ -10,7 +10,21 @@ To build `bth` run `make` after `make` has been run in the root of the repo.
 
 ## Opcodes
 
-Opcodes are subject to change and can be used in `.bla` files by including `bth.inc`.
+Public opcodes that can be used in tests to produce TAP output. Test files written in `blasm` can include `tap.inc`
+from this repository. For an example test file see `test/bth.bla`.
+
+| Opcode | Name | Stack Effect | Description |
+|----|----|----|----|
+| 0xC0 | test | ( w -- ) | Initialize a test suite |
+| 0xC1 | plan | ( w -- ) | Plan w tests where w is two ascii characters such as '03' |
+| 0xC2 | ok | ( -- ) | Write ok line to TAP output's here |
+| 0xC3 | notok | ( -- ) | Write not ok line to TAP output's here |
+| 0xC4 | okif | ( t/f -- ) | Ok if top of stack is true |
+| 0xC5 | okeq | ( a b -- ) | Ok if a and b are eq |
+| 0xC6 | okne | ( a b -- ) | Ok if a and b are not eq |
+| 0xC7 | ok0 | ( n -- ) | Ok if top of stack is 0 |
+| 0xC8 | okn0 | ( n -- ) | Ok if top of stack is not 0 |
+| 0xC9 | done | ( -- ) | Writes TAP output to stdout and exits with depth as status |
 
 ### Internal Opcodes
 
@@ -48,24 +62,6 @@ These internal opcodes are used by bth itself and should not be considered stabl
 | 0x9B | wprep | ( -- ) | Preps the write system call |
 | 0x9C | wlen | ( -- ) | Buffer length for the write system call |
 | 0x9D | waddr | ( -- ) | Addr of the buffer for the write system call |
-
-### TAP Opcodes
-
-Public opcodes that can be used in tests to produce TAP output. Test files written in `blasm` can include `tap.inc`
-from this repository. For an example test file see `test/bth.bla`.
-
-| Opcode | Name | Stack Effect | Description |
-|----|----|----|----|
-| 0xC0 | test | ( w -- ) | Initialize a test suite |
-| 0xC1 | plan | ( w -- ) | Plan w tests where w is two ascii characters such as '03' |
-| 0xC2 | ok | ( -- ) | Write ok line to TAP output's here |
-| 0xC3 | notok | ( -- ) | Write not ok line to TAP output's here |
-| 0xC4 | okif | ( t/f -- ) | Ok if top of stack is true |
-| 0xC5 | okeq | ( a b -- ) | Ok if a and b are eq |
-| 0xC6 | okne | ( a b -- ) | Ok if a and b are not eq |
-| 0xC7 | ok0 | ( n -- ) | Ok if top of stack is 0 |
-| 0xC8 | okn0 | ( n -- ) | Ok if top of stack is not 0 |
-| 0xC9 | done | ( -- ) | Writes TAP output to stdout and exits with depth as status |
 
 ## TODOs
 
