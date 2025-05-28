@@ -2,11 +2,18 @@ _This file is generated from README.md.tmpl_
 
 # BlueVM Test Harness
 
-Patched version of the BlueVM with extended opcodes to facilitate testing.
+Standalone executable to run BlueVM bytecode test files and produce TAP output.
 
 ## Building
 
-To build `bth` run `make` after `make` has been run in the root of the repo.
+Run `make` at the root of this repository to build `bth` and its dependencies (`BlueVM` and `blasm`). Once that has
+been done, running `make` in this directory will build just `bth`.
+
+## Running
+
+`./bin/bth test/bth.bs0` will execute a test file and print its TAP output.
+
+`prove -e ./bin/bth --ext bs0 test` will use `prove` to run test files.
 
 ## Opcodes
 
