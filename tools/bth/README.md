@@ -15,6 +15,10 @@ been done, running `make` in this directory will build just `bth`.
 
 `prove -e ./bin/bth --ext bs0 path/to/tosts` will use `prove` to run test file(s).
 
+## BlueVM Block Usage
+
+`bth` uses `BlueVM` block 9 for test input and block 10 for test ouput.
+
 ## Opcodes
 
 Public opcodes that can be used in tests to produce TAP output. Test files written in `blasm` can include `tap.inc`
