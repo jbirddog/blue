@@ -1,39 +1,12 @@
 include "bth.inc"
 
-EAX = 0x00
-EDX = 0x02
-ESI = 0x06
-EDI = 0x07
-
-RSI = ESI
-RDI = EDI
-
 CODE_BLK = 0x07
 TEST_INPUT_BLK = 0x09
 
 chkargc
 
 opentst
-
-
-; compile machine code to read block from `tfd` into _input block_
-here
-
-cfrmtfd
-csrctib
-cblklen
-
-; xor eax, eax
-litb	EAX
-cxord
-
-; syscall
-csys
-
-; ret
-cret
-
-mccall
+readtst
 
 litb	CODE_BLK
 blk

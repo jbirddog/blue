@@ -19,7 +19,9 @@ iterate <opname, opsize>, \
 	cfrmtfd, 1, \
 	csrctib, 1, \
 	cblklen, 1, \
+	csread, 1, \
 	opentst, 1, \
+	readtst, 1, \
 	endl, 1, \
 	woka, 1, \
 	wprep, 1, \

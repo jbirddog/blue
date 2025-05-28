@@ -10,6 +10,7 @@ RDI = EDI
 
 SYS_OPEN = 0x02
 
+BLK_CODE = 0x07
 BLK_TEST_INPUT = 0x09
 BLK_TEST_OUTPUT = 0x0A
 
@@ -115,7 +116,7 @@ opBI	op_cflgsro, 1, 0	;	( -- )	Compile xor esi, esi (flags = READ_ONLY)
 	ret
 end_op
 
-opBI	op_csopen, 1, 0	;	( -- )	Compile mov eax, SYS_OPEN (0x02)
+opBI	op_csopen, 1, 0	;	( -- )	Compile mov eax, 0x02 (sys_open); syscall
 	litb	SYS_OPEN
 	litb	EAX
 	callop	op_cmovd_code
@@ -155,6 +156,13 @@ opBI	op_cblklen, 1, 0	;	( -- )	Compile mov edx, 0x0400
 	ret
 end_op
 
+opBI	op_csread, 1, 0	;	( -- )	Compile xor eax, eax; syscall
+	litb	EAX
+	callop	op_cxord_code
+	callop	op_csys_code
+	ret
+end_op
+
 opBI	op_opentst, 1, 0	;	( -- )	Open argv[1] and set tfd
 	here
 	
@@ -168,6 +176,19 @@ opBI	op_opentst, 1, 0	;	( -- )	Open argv[1] and set tfd
 
 	mccall
 	; TODO: check fd
+	ret
+end_op
+
+opBI	op_readtst, 1, 0	;	( -- )	Read block from tfd into the test input block
+	here
+
+	callop	op_cfrmtfd_code
+	callop	op_csrctib_code
+	callop	op_cblklen_code
+	callop	op_csread_code
+	callop	op_cret_code
+
+	mccall
 	ret
 end_op
 
