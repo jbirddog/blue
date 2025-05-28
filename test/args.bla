@@ -1,5 +1,5 @@
 
-include "../tools/bth/bth.inc"
+include "../tools/bth/tap.inc"
 
 test
 
@@ -11,8 +11,10 @@ litb	0x02
 okeq
 
 argv
-atq
-atq
+atincq
+drop
+atincq
+drop
 okn0
 
 done
