@@ -59,9 +59,3 @@ macro end_op
 	end repeat
 	assert ($ - latest_op) = (CELL_SIZE * 2)
 end macro
-
-macro cx w
-	db op_here_code, op_swap_code, op_setinc##w##_code
-	db op_litb_code, op_here_code, op_setvarq_code
-	db op_ret_code
-end macro

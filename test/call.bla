@@ -136,7 +136,8 @@ litb	op_ok_code
 setincb
 
 litb	op_ret_code
-setb
+setincb
+drop
 
 call
 
@@ -148,7 +149,8 @@ litb	op_ok_code
 setincb
 
 litb	op_ret_code
-setb
+setincb
+drop
 
 call
 

@@ -1,6 +1,7 @@
 ; Generated from bth.inc.tmpl
 
 iterate <opname, opsize>, \
+	atq, 1, \
 	ifnot, 1, \
 	chkargc, 1, \
 	cmovd, 1, \
@@ -13,6 +14,7 @@ iterate <opname, opsize>, \
 	oblk, 1, \
 	thr, 1, \
 	setthr, 1, \
+	argv1, 1, \
 	cdstarg, 1, \
 	cflgsro, 1, \
 	csopen, 1, \

@@ -25,7 +25,8 @@ setincb
 litb	0x00
 setincb
 litb	op_ret_code
-setb
+setincb
+drop
 
 ; call ext opcode to check initial value is 0
 litop	0xFF
@@ -60,7 +61,8 @@ setincb
 litb	0x00
 setincw
 litb	op_ret_code
-setb
+setincb
+drop
 
 ; call ext opcode to check initial value is 0
 litop	0xFF
@@ -95,7 +97,8 @@ setincb
 litb	0x00
 setincd
 litb	op_ret_code
-setb
+setincb
+drop
 
 ; call ext opcode to check initial value is 0
 litop	0xFF
@@ -130,7 +133,8 @@ setincb
 litb	0x00
 setincq
 litb	op_ret_code
-setb
+setincb
+drop
 
 ; call ext opcode to check initial value is 0
 litop	0xFF

@@ -17,6 +17,12 @@ BLK_TEST_OUTPUT = 0x0A
 opcode_tbl:
 .offset = 0x80
 
+opBI	op_atq, 1, 0	;	( a -- q )	Push qword value found at addr
+	atincq
+	drop
+	ret
+end_op
+
 opBI	op_ifnot, 1, 0	;	( t/f fa -- ? )	Call fa if t/f is false
 	comp
 	endcomp
@@ -103,11 +109,16 @@ opBI	op_setthr, 1, 0	;	( a -- )	Set addr of TAP output's here
 	ret
 end_op
 
-opBI	op_cdstarg, 1, 0	;	( -- )	Compile movabs rdi, _addr of argv[1]_
+opBI	op_argv1, 1, 0	;	( -- a )	Push argv[1]_
 	argv
 	litb	0x08
 	add
-	atq
+	litop	op_atq_code
+	ret
+end_op
+
+opBI	op_cdstarg, 1, 0	;	( -- )	Compile movabs rdi, _addr of argv[1]_
+	litop	op_argv1_code
 	litb	RDI
 	litop	op_cmovq_code
 	ret

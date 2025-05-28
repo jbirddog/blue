@@ -77,20 +77,26 @@ opN	op_endcomp, 1, OPCODE_ENTRY_FLAG_IMMEDIATE	;	( -- a )	Append ret and end com
 
 opN	op_op, 1, 0	;	( b -- a )	Push addr of the offset into the op table for the opcode
 
+macro setvarx x
+	db op_op_code, op_litb_code, 0x03, op_add_code
+	db op_swap_code, op_setinc##x##_code, op_drop_code
+	db op_ret_code
+end macro
+
 opBI	op_setvarb, 1, 0	;	( b b -- )	Set litb value of var op
-	db op_op_code, op_litb_code, 0x03, op_add_code, op_swap_code, op_setb_code, op_ret_code
+	setvarx b
 end_op
 
 opBI	op_setvarw, 1, 0	;	( w b -- )	Set litw value of var op
-	db op_op_code, op_litb_code, 0x03, op_add_code, op_swap_code, op_setw_code, op_ret_code
+	setvarx w
 end_op
 
 opBI	op_setvard, 1, 0	;	( d b -- )	Set litd value of var op
-	db op_op_code, op_litb_code, 0x03, op_add_code, op_swap_code, op_setd_code, op_ret_code
+	setvarx d
 end_op
 
 opBI	op_setvarq, 1, 0	;	( q b -- )	Set litq value of var op
-	db op_op_code, op_litb_code, 0x03, op_add_code, op_swap_code, op_setq_code, op_ret_code
+	setvarx q
 end_op
 
 opNI	op_ip, 1, 0	;	( -- a )	Push location of the instruction pointer
@@ -141,22 +147,6 @@ opNI	op_atincq, 1, 0	;	( a -- q a' )	Push qword value found at addr, increment a
 	jmp	_atinc_post
 end_op
 
-opBI	op_atb, 1, 0	;	( a -- b )	Push byte value found at addr
-	db op_atincb_code, op_drop_code, op_ret_code
-end_op
-
-opBI	op_atw, 1, 0	;	( a -- d )	Push word value found at addr
-	db op_atincw_code, op_drop_code, op_ret_code
-end_op
-
-opBI	op_atd, 1, 0	;	( a -- w )	Push dword value found at addr
-	db op_atincd_code, op_drop_code, op_ret_code
-end_op
-	
-opBI	op_atq, 1, 0	;	( a -- q )	Push qword value found at addr
-	db op_atincq_code, op_drop_code, op_ret_code
-end_op	
-
 opNI	op_setincb, 1, 0	;	( a b -- 'a )	Write byte value to, increment and push addr
 	call 	_set_pre
 	stosb
@@ -186,21 +176,11 @@ opNI	op_setincq, 1, 0	;	( a q -- 'a )	Write qword value to, increment and push a
 	jmp	_set_post
 end_op
 
-opBI	op_setb, 1, 0	;	( a b -- )	Write byte value to addr
-	db op_setincb_code, op_drop_code, op_ret_code
-end_op
-
-opBI	op_setw, 1, 0	;	( a w -- )	Write word value to addr
-	db op_setincw_code, op_drop_code, op_ret_code
-end_op
-
-opBI	op_setd, 1, 0	;	( a d -- )	Write dword value to addr
-	db op_setincd_code, op_drop_code, op_ret_code
-end_op
-
-opBI	op_setq, 1, 0	;	( a q -- )	Write qword value to addr
-	db op_setincq_code, op_drop_code, op_ret_code
-end_op
+macro cx x
+	db op_here_code, op_swap_code, op_setinc##x##_code
+	db op_litb_code, op_here_code, op_setvarq_code
+	db op_ret_code
+end macro
 
 opBI	op_cb, 1, 0	;	( b -- )	Write byte value to and increment here
 	cx	b
