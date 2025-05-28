@@ -21,25 +21,28 @@ Opcodes are subject to change and can be used in `.bla` files by including `bth.
 | 0x84 | cstosd | ( -- ) | Compile stosd |
 | 0x85 | csys | ( -- ) | Compile syscall |
 | 0x86 | cxord | ( b -- ) | Compile xor b, b |
-| 0x87 | tfd | ( -- d ) | Push fd of test input file |
-| 0x88 | oblk | ( -- a ) | Push addr of TAP output's start |
-| 0x89 | thr | ( -- a ) | Push addr of TAP output's here |
-| 0x8A | setthr | ( a -- ) | Set addr of TAP output's here |
-| 0x8B | endl | ( a -- ) | End line of output and set TAP output's here |
-| 0x8C | woka | ( a -- ) | Write ok line to addr |
-| 0x8D | wprep | ( -- ) | Preps the write system call |
-| 0x8E | wlen | ( -- ) | Buffer length for the write system call |
-| 0x8F | waddr | ( -- ) | Addr of the buffer for the write system call |
-| 0x90 | test | ( w -- ) | Initialize a test suite |
-| 0x91 | plan | ( w -- ) | Plan w tests where w is two ascii characters such as '03' |
-| 0x92 | ok | ( -- ) | Write ok line to TAP output's here |
-| 0x93 | notok | ( -- ) | Write not ok line to TAP output's here |
-| 0x94 | okif | ( t/f -- ) | Ok if top of stack is true |
-| 0x95 | okeq | ( a b -- ) | Ok if a and b are eq |
-| 0x96 | okne | ( a b -- ) | Ok if a and b are not eq |
-| 0x97 | ok0 | ( n -- ) | Ok if top of stack is 0 |
-| 0x98 | okn0 | ( n -- ) | Ok if top of stack is not 0 |
-| 0x99 | done | ( -- ) | Writes TAP output to stdout and exits with depth as status |
+| 0x87 | cdstarg | ( -- ) | Compile movabs rdi, _addr of argv[1]_ |
+| 0x88 | flgsro | ( -- ) | Compile xor esi, esi (flags = READ_ONLY)_ |
+| 0x89 | scopen | ( -- ) | Compile mov eax, SYS_OPEN (0x02)_ |
+| 0x8A | tfd | ( -- d ) | Push fd of test input file |
+| 0x8B | oblk | ( -- a ) | Push addr of TAP output's start |
+| 0x8C | thr | ( -- a ) | Push addr of TAP output's here |
+| 0x8D | setthr | ( a -- ) | Set addr of TAP output's here |
+| 0x8E | endl | ( a -- ) | End line of output and set TAP output's here |
+| 0x8F | woka | ( a -- ) | Write ok line to addr |
+| 0x90 | wprep | ( -- ) | Preps the write system call |
+| 0x91 | wlen | ( -- ) | Buffer length for the write system call |
+| 0x92 | waddr | ( -- ) | Addr of the buffer for the write system call |
+| 0x93 | test | ( w -- ) | Initialize a test suite |
+| 0x94 | plan | ( w -- ) | Plan w tests where w is two ascii characters such as '03' |
+| 0x95 | ok | ( -- ) | Write ok line to TAP output's here |
+| 0x96 | notok | ( -- ) | Write not ok line to TAP output's here |
+| 0x97 | okif | ( t/f -- ) | Ok if top of stack is true |
+| 0x98 | okeq | ( a b -- ) | Ok if a and b are eq |
+| 0x99 | okne | ( a b -- ) | Ok if a and b are not eq |
+| 0x9A | ok0 | ( n -- ) | Ok if top of stack is 0 |
+| 0x9B | okn0 | ( n -- ) | Ok if top of stack is not 0 |
+| 0x9C | done | ( -- ) | Writes TAP output to stdout and exits with depth as status |
 
 ## TODOs
 
@@ -47,3 +50,4 @@ Opcodes are subject to change and can be used in `.bla` files by including `bth.
 1. Split ops_low.bla into ops_pri.bla and ops_pub.bla
    1. Separate ops tables in README, etc
    1. Separate includes
+1. Redo wprep, wlen, waddr to use cxord, cmovd, etc

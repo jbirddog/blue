@@ -8,6 +8,9 @@ iterate <opname, opsize>, \
 	cstosd, 1, \
 	csys, 1, \
 	cxord, 1, \
+	cdstarg, 1, \
+	flgsro, 1, \
+	scopen, 1, \
 	tfd, 1, \
 	oblk, 1, \
 	thr, 1, \

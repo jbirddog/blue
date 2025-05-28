@@ -18,22 +18,9 @@ chkargc
 ; compile machine code to open argv[1] into `tfd`
 here
 
-; movabs rdi, _addr of argv[1]_
-argv
-litb	0x08
-add
-atq
-litb	RDI
-cmovq
-
-; xor esi, esi (flags = READ_ONLY)
-litb	ESI
-cxord
-
-; mov eax, SYS_OPEN
-litb	SYS_OPEN
-litb	EAX
-cmovd
+cdstarg
+flgsro
+scopen
 
 ; syscall
 csys
