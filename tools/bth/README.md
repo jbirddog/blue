@@ -15,27 +15,28 @@ Opcodes are subject to change and can be used in `.bla` files by including `bth.
 | Opcode | Name | Stack Effect | Description |
 |----|----|----|----|
 | 0x80 | chkargc | ( -- ) | Exit with error unless argc is 2 |
-| 0x81 | cmovq | ( q b -- ) | Compile mov of qword into register b |
-| 0x82 | tfd | ( -- d ) | Push fd of test input file |
-| 0x83 | oblk | ( -- a ) | Push addr of TAP output's start |
-| 0x84 | thr | ( -- a ) | Push addr of TAP output's here |
-| 0x85 | setthr | ( a -- ) | Set addr of TAP output's here |
-| 0x86 | endl | ( a -- ) | End line of output and set TAP output's here |
-| 0x87 | woka | ( a -- ) | Write ok line to addr |
-| 0x88 | wprep | ( -- ) | Preps the write system call |
-| 0x89 | wlen | ( -- ) | Buffer length for the write system call |
-| 0x8A | waddr | ( -- ) | Addr of the buffer for the write system call |
-| 0x8B | sysret | ( -- ) | System call and return for mccall |
-| 0x8C | test | ( w -- ) | Initialize a test suite |
-| 0x8D | plan | ( w -- ) | Plan w tests where w is two ascii characters such as '03' |
-| 0x8E | ok | ( -- ) | Write ok line to TAP output's here |
-| 0x8F | notok | ( -- ) | Write not ok line to TAP output's here |
-| 0x90 | okif | ( t/f -- ) | Ok if top of stack is true |
-| 0x91 | okeq | ( a b -- ) | Ok if a and b are eq |
-| 0x92 | okne | ( a b -- ) | Ok if a and b are not eq |
-| 0x93 | ok0 | ( n -- ) | Ok if top of stack is 0 |
-| 0x94 | okn0 | ( n -- ) | Ok if top of stack is not 0 |
-| 0x95 | done | ( -- ) | Writes TAP output to stdout and exits with depth as status |
+| 0x81 | cmovd | ( d b -- ) | Compile mov of dword into register b |
+| 0x82 | cmovq | ( q b -- ) | Compile mov of qword into register b |
+| 0x83 | tfd | ( -- d ) | Push fd of test input file |
+| 0x84 | oblk | ( -- a ) | Push addr of TAP output's start |
+| 0x85 | thr | ( -- a ) | Push addr of TAP output's here |
+| 0x86 | setthr | ( a -- ) | Set addr of TAP output's here |
+| 0x87 | endl | ( a -- ) | End line of output and set TAP output's here |
+| 0x88 | woka | ( a -- ) | Write ok line to addr |
+| 0x89 | wprep | ( -- ) | Preps the write system call |
+| 0x8A | wlen | ( -- ) | Buffer length for the write system call |
+| 0x8B | waddr | ( -- ) | Addr of the buffer for the write system call |
+| 0x8C | sysret | ( -- ) | System call and return for mccall |
+| 0x8D | test | ( w -- ) | Initialize a test suite |
+| 0x8E | plan | ( w -- ) | Plan w tests where w is two ascii characters such as '03' |
+| 0x8F | ok | ( -- ) | Write ok line to TAP output's here |
+| 0x90 | notok | ( -- ) | Write not ok line to TAP output's here |
+| 0x91 | okif | ( t/f -- ) | Ok if top of stack is true |
+| 0x92 | okeq | ( a b -- ) | Ok if a and b are eq |
+| 0x93 | okne | ( a b -- ) | Ok if a and b are not eq |
+| 0x94 | ok0 | ( n -- ) | Ok if top of stack is 0 |
+| 0x95 | okn0 | ( n -- ) | Ok if top of stack is not 0 |
+| 0x96 | done | ( -- ) | Writes TAP output to stdout and exits with depth as status |
 
 ## TODOs
 
