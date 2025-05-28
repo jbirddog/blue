@@ -12,6 +12,8 @@ To build `bth` run `make` after `make` has been run in the root of the repo.
 
 Opcodes are subject to change and can be used in `.bla` files by including `bth.inc`.
 
+### Internal Opcodes
+
 | Opcode | Name | Stack Effect | Description |
 |----|----|----|----|
 | 0x80 | atq | ( a -- q ) | Push qword value found at addr |

@@ -7,7 +7,7 @@ BLUEVM_NOEXT = obj/bluevm_noext
 BTH = bin/bth
 BTH_INC = bth.inc
 
-OPS = ops_low.bla ops_high.bla
+OPS = ops_internal.bla ops_tap.bla
 OP_OBJS = $(OPS:%.bla=obj/%.bs0)
 OP_TBLS = $(OPS:%.bla=%.tbl)
 
@@ -47,5 +47,5 @@ obj/test_%.bs0: test/%.bla $(BTH) | obj
 test:
 	$(PROVE) obj/test_*
 	
-$(README): $(README).sh $(README).tmpl ops_low.tbl
+$(README): $(README).sh $(README).tmpl $(OP_TBLS)
 	./$< > $@
