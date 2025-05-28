@@ -13,30 +13,30 @@ plan
 comp
 endcomp
 depth
-litb 0x01
+litb	0x01
 okeq
 drop
 
 comp
 endcomp
 atb
-litb ret.code
+litb	op_ret_code
 okeq
 
 comp
 endcomp
-litb 0x01
+litb	0x01
 sub
 atb
-litb setip.code
+litb	op_setip_code
 okeq
 
 comp
 endcomp
-litb 0x0A
+litb	0x0A
 sub
 atb
-litb litq.code
+litb	op_litq_code
 okeq
 
 comp

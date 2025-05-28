@@ -20,15 +20,15 @@ litb	0x01
 setincb
 
 ; compile bytecode into the opcode table
-litb	litb.code
+litb	op_litb_code
 setincb
 litb	0x00
 setincb
-litb	ret.code
+litb	op_ret_code
 setb
 
 ; call ext opcode to check initial value is 0
-callop	0xFF
+litop	0xFF
 ok0
 
 ; set its value
@@ -38,7 +38,7 @@ litb	0xFF
 setvarb
 
 ; call ext opcode to check updated value
-callop	0xFF
+litop	0xFF
 okeq
 
 ;
@@ -55,15 +55,15 @@ litb	0x01
 setincb
 
 ; compile bytecode into the opcode table
-litb	litw.code
+litb	op_litw_code
 setincb
 litb	0x00
 setincw
-litb	ret.code
+litb	op_ret_code
 setb
 
 ; call ext opcode to check initial value is 0
-callop	0xFF
+litop	0xFF
 ok0
 
 ; set its value
@@ -73,7 +73,7 @@ litb	0xFF
 setvarw
 
 ; call ext opcode to check updated value
-callop	0xFF
+litop	0xFF
 okeq
 
 ;
@@ -90,15 +90,15 @@ litb	0x01
 setincb
 
 ; compile bytecode into the opcode table
-litb	litd.code
+litb	op_litd_code
 setincb
 litb	0x00
 setincd
-litb	ret.code
+litb	op_ret_code
 setb
 
 ; call ext opcode to check initial value is 0
-callop	0xFF
+litop	0xFF
 ok0
 
 ; set its value
@@ -108,7 +108,7 @@ litb	0xFF
 setvard
 
 ; call ext opcode to check updated value
-callop	0xFF
+litop	0xFF
 okeq
 
 ;
@@ -125,15 +125,15 @@ litb	0x01
 setincb
 
 ; compile bytecode into the opcode table
-litb	litq.code
+litb	op_litq_code
 setincb
 litb	0x00
 setincq
-litb	ret.code
+litb	op_ret_code
 setb
 
 ; call ext opcode to check initial value is 0
-callop	0xFF
+litop	0xFF
 ok0
 
 ; set its value
@@ -143,7 +143,7 @@ litb	0xFF
 setvarq
 
 ; call ext opcode to check updated value
-callop	0xFF
+litop	0xFF
 okeq
 
 done

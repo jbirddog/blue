@@ -8,8 +8,7 @@ plan
 
 ; call address that immediately returns
 here
-litb	0xC3
-cb
+clitb	0xC3
 mccall
 ok
 

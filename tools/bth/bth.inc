@@ -40,7 +40,7 @@ iterate <opname, opsize>, \
 	okn0, 1, \
 	done, 1, \
 
-	#opname.code = % - 1 + 0x80
+	op_##opname##_code = % - 1 + 0x80 
 
 	match =1, opsize
 		calminstruction #opname

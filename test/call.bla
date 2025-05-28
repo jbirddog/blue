@@ -132,10 +132,10 @@ litb	0x09
 blk
 dup
 
-litb	ok.code
+litb	op_ok_code
 setincb
 
-litb	ret.code
+litb	op_ret_code
 setb
 
 call
@@ -144,10 +144,10 @@ litb	0x05
 blk
 dup
 
-litb	ok.code
+litb	op_ok_code
 setincb
 
-litb	ret.code
+litb	op_ret_code
 setb
 
 call

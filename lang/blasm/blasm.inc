@@ -60,7 +60,7 @@ iterate <opname, opsize>, \
 	shl, 1, \
 	shr, 1, \
 
-	#opname.code = % - 1
+	op_##opname##_code = % - 1 
 
 	match =1, opsize
 		calminstruction #opname
@@ -74,7 +74,28 @@ iterate <opname, opsize>, \
 	end match
 end iterate
 
-calminstruction callop op
+macro clitX x, val
+	lit##x val
+	c##x
+end macro
+
+macro clitb val
+	clitX b, val
+end macro
+
+macro clitw val
+	clitX w, val
+end macro
+
+macro clitd val
+	clitX d, val
+end macro
+
+macro clitq val
+	clitX q, val
+end macro
+
+calminstruction litop op
 	emit 1, op
 end calminstruction
 

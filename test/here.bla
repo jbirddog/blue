@@ -16,7 +16,7 @@ litb	0x07
 blk
 litb	0x05
 add
-litb	here.code
+litb	op_here_code
 setvarq
 litb	0x07
 blk
@@ -25,7 +25,7 @@ okne
 
 litb	0x07
 blk
-litb	here.code
+litb	op_here_code
 setvarq
 litb	0x07
 blk

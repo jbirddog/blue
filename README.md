@@ -182,5 +182,4 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. Bring back a simpiler version of the `blue` language
 1. See about re-arranging >r order in op_compile_begin to simplify it and op_compile_end
 1. Grok more fasmg magic to improve blasm syntax
-1. Add opcodes for `clitb`, etc
 1. Print error messages to disambiguate exit status
