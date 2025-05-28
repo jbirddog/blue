@@ -150,8 +150,10 @@ Opcodes are subject to change.
 | 0x35 | eq | ( a b -- t/f ) | Check top two items for equality and push result |
 | 0x36 | add | ( a b -- n ) | Push a + b |
 | 0x37 | sub | ( a b -- n ) | Push a - b |
-| 0x38 | shl | ( x n -- 'x ) | Push x shl n |
-| 0x39 | shr | ( x n -- 'x ) | Push x shr n |
+| 0x38 | and | ( a b -- n ) | Push logical and of a and b |
+| 0x39 | or | ( a b -- n ) | Push logical inclusive or of a and b |
+| 0x3A | shl | ( x n -- 'x ) | Push x shl n |
+| 0x3B | shr | ( x n -- 'x ) | Push x shr n |
 
 ### Extended Low/High
 
@@ -176,7 +178,7 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 1. Rename `op_op` to `op_opent` or similar
 1. Remove if/ifnot, ip/setip
-1. Bug: Add an opcode to ops_vm that is kinda high up and `make` fails until `make clean`
+1. Bug: add/remove ops and `make` fails until `make clean`
 1. setq, etc stack effects feel backwards when not in test code
    1. see swap in op_setvarq, op_cb, etc
 1. Consider here, some merging of `cb`, `setb`, `clitb`, etc

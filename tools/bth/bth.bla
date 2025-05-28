@@ -1,0 +1,11 @@
+include "bth.inc"
+
+chkargc
+
+opentst
+readtst
+runtst
+
+; this should never run
+litb	0xFF
+exit

@@ -312,6 +312,22 @@ opNI	op_sub, 1, 0	;	( a b -- n )	Push a - b
 	ret
 end_op
 
+opNI	op_and, 1, 0	;	( a b -- n )	Push logical and of a and b
+	call	data_stack_pop2a
+	and	rax, rcx
+	call	data_stack_push
+
+	ret
+end_op
+
+opNI	op_or, 1, 0	;	( a b -- n )	Push logical inclusive or of a and b
+	call	data_stack_pop2a
+	or	rax, rcx
+	call	data_stack_push
+
+	ret
+end_op
+
 opNI	op_shl, 1, 0	;	( x n -- 'x )	Push x shl n
 	call	data_stack_pop2a
 	shl	rax, cl

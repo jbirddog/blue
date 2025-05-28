@@ -7,7 +7,7 @@ litw	'02'
 plan
 
 argc
-litb	0x01
+litb	0x02
 okeq
 
 argv

@@ -1,11 +1,91 @@
 ; low ops used for testing and producing TAP output
 
+EAX = 0x00
+EDX = 0x02
+ESI = 0x06
+EDI = 0x07
+
+RSI = ESI
+RDI = EDI
+
+SYS_OPEN = 0x02
+
+BLK_CODE = 0x07
+BLK_TEST_INPUT = 0x09
+BLK_TEST_OUTPUT = 0x0A
+
 opcode_tbl:
 .offset = 0x80
 
-opBI	op_tst, 1, 0	;	( -- a )	Push addr of TAP output's start
+opBI	op_chkargc, 1, 0	;	( -- )	Exit with error unless argc is 2
+	argc
+	litb	0x02
+	eq
+	comp
+		litb	0x01
+		exit
+	endcomp
+	ifnot
+	ret
+end_op
+
+opBI	op_cmovd, 1, 0	;	( d b -- )	Compile mov b, dword
+	litb	0xB8
+	or
+	cb
+	cd
+	ret
+end_op
+
+opBI	op_cmovq, 1, 0	;	( q b -- )	Compile mov b, qword
+	litb	0x48
+	cb
+	litb	0xB8
+	or
+	cb
+	cq
+	ret
+end_op
+
+opBI	op_cret, 1, 0	;	( -- )	Compile ret
+	litb	0xC3
+	cb
+	ret
+end_op
+
+opBI	op_cstosd, 1, 0	;	( -- )	Compile stosd
+	litb	0xAB
+	cb
+	ret
+end_op
+
+opBI	op_csys, 1, 0	;	( -- )	Compile syscall
+	litw	0x050F
+	cw
+	ret
+end_op
+
+opBI	op_cxord, 1, 0	;	( b -- )	Compile xor b, b
+	litb	0x31
+	cb
+	dup
+	litb	0x03
+	shl
+	or
 	litb	0xC0
-	op
+	or
+	cb
+	ret
+end_op
+
+opBI	op_tfd, 1, 0	;	( -- d )	Push fd of test input file
+	litd	0x00
+	ret
+end_op
+
+opBI	op_oblk, 1, 0	;	( -- a )	Push addr of TAP output's start
+	litb	BLK_TEST_OUTPUT
+	blk
 	ret
 end_op
 
@@ -20,8 +100,112 @@ opBI	op_setthr, 1, 0	;	( a -- )	Set addr of TAP output's here
 	ret
 end_op
 
+opBI	op_cdstarg, 1, 0	;	( -- )	Compile movabs rdi, _addr of argv[1]_
+	argv
+	litb	0x08
+	add
+	atq
+	litb	RDI
+	callop	op_cmovq_code
+	ret
+end_op
+
+opBI	op_cflgsro, 1, 0	;	( -- )	Compile xor esi, esi (flags = READ_ONLY)
+	litb	ESI
+	callop	op_cxord_code
+	ret
+end_op
+
+opBI	op_csopen, 1, 0	;	( -- )	Compile mov eax, 0x02 (sys_open); syscall
+	litb	SYS_OPEN
+	litb	EAX
+	callop	op_cmovd_code
+	callop	op_csys_code
+	ret
+end_op
+
+opBI	op_cdsttfd, 1, 0	;	( -- )	Compile movabs rdi, _addr of tfd's litd_
+	litb	op_tfd_code
+	op
+	litb	0x03
+	add
+	litb	RDI
+	callop	op_cmovq_code
+	ret
+end_op
+
+opBI	op_cfrmtfd, 1, 0	;	( -- )	Compile mov edi, _tfd_
+	callop	op_tfd_code
+	litb	EDI
+	callop	op_cmovd_code
+	ret
+end_op
+
+opBI	op_csrctib, 1, 0	;	( -- )	Compile mov rsi, _addr of _test input block_
+	litb	BLK_TEST_INPUT
+	blk
+	litb	RSI
+	callop	op_cmovq_code
+	ret
+end_op
+
+opBI	op_cblklen, 1, 0	;	( -- )	Compile mov edx, 0x0400
+	litw	0x400
+	litb	EDX
+	callop	op_cmovd_code
+	ret
+end_op
+
+opBI	op_csread, 1, 0	;	( -- )	Compile xor eax, eax; syscall
+	litb	EAX
+	callop	op_cxord_code
+	callop	op_csys_code
+	ret
+end_op
+
+opBI	op_opentst, 1, 0	;	( -- )	Open argv[1] and set tfd
+	here
+	
+	callop	op_cdstarg_code
+	callop	op_cflgsro_code
+	callop	op_csopen_code
+
+	callop	op_cdsttfd_code
+	callop	op_cstosd_code
+	callop	op_cret_code
+
+	mccall
+	; TODO: check fd
+	ret
+end_op
+
+opBI	op_readtst, 1, 0	;	( -- )	Read block from tfd into the test input block
+	here
+
+	callop	op_cfrmtfd_code
+	callop	op_csrctib_code
+	callop	op_cblklen_code
+	callop	op_csread_code
+	callop	op_cret_code
+
+	mccall
+	ret
+end_op
+
+opBI	op_runtst, 1, 0	;	( -- )	Run the test in the test input block
+	litb	BLK_CODE
+	blk
+	litb	here.code
+	setvarq
+
+	litb	BLK_TEST_INPUT
+	blk
+	call
+	ret
+end_op
+
 opBI	op_endl, 1, 0	;	( a -- )	End line of output and set TAP output's here
-	litb	10
+	litb	0x0A
 	setincb
 	callop	op_setthr_code
 	ret
@@ -52,7 +236,7 @@ opBI	op_wlen, 1, 0	;	( -- )	Buffer length for the write system call
 	litb	0xBA
 	cb
 	callop	op_thr_code
-	callop	op_tst_code
+	callop	op_oblk_code
 	sub
 	cd
 	ret
@@ -62,23 +246,15 @@ opBI	op_waddr, 1, 0	;	( -- )	Addr of the buffer for the write system call
 	; movabs rsi, _addr of string_
 	litw	0xBE48
 	cw
-	callop	op_tst_code
+	callop	op_oblk_code
 	cq
 	ret
 end_op
 
-opBI	op_sysret, 1, 0	;	( -- )	System call and return for mccall
-	; syscall
-	litw	0x050F
-	cw
-	; ret
-	litb	0xC3
-	cb
-	ret
-end_op
+;;;
 
 opBI	op_test, 1, 0	;	( w -- )	Initialize a test suite
-	callop	op_tst_code
+	callop	op_oblk_code
 	callop	op_setthr_code
 	ret
 end_op
@@ -153,7 +329,8 @@ opBI	op_done, 1, 0	;	( -- )	Writes TAP output to stdout and exits with depth as 
 	callop	op_wprep_code
 	callop	op_wlen_code
 	callop	op_waddr_code
-	callop	op_sysret_code
+	callop	op_csys_code
+	callop	op_cret_code
 	mccall
 	depth
 	exit

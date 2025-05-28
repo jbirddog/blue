@@ -14,27 +14,48 @@ Opcodes are subject to change and can be used in `.bla` files by including `bth.
 
 | Opcode | Name | Stack Effect | Description |
 |----|----|----|----|
-| 0x80 | tst | ( -- a ) | Push addr of TAP output's start |
-| 0x81 | thr | ( -- a ) | Push addr of TAP output's here |
-| 0x82 | setthr | ( a -- ) | Set addr of TAP output's here |
-| 0x83 | endl | ( a -- ) | End line of output and set TAP output's here |
-| 0x84 | woka | ( a -- ) | Write ok line to addr |
-| 0x85 | wprep | ( -- ) | Preps the write system call |
-| 0x86 | wlen | ( -- ) | Buffer length for the write system call |
-| 0x87 | waddr | ( -- ) | Addr of the buffer for the write system call |
-| 0x88 | sysret | ( -- ) | System call and return for mccall |
-| 0x89 | test | ( w -- ) | Initialize a test suite |
-| 0x8A | plan | ( w -- ) | Plan w tests where w is two ascii characters such as '03' |
-| 0x8B | ok | ( -- ) | Write ok line to TAP output's here |
-| 0x8C | notok | ( -- ) | Write not ok line to TAP output's here |
-| 0x8D | okif | ( t/f -- ) | Ok if top of stack is true |
-| 0x8E | okeq | ( a b -- ) | Ok if a and b are eq |
-| 0x8F | okne | ( a b -- ) | Ok if a and b are not eq |
-| 0x90 | ok0 | ( n -- ) | Ok if top of stack is 0 |
-| 0x91 | okn0 | ( n -- ) | Ok if top of stack is not 0 |
-| 0x92 | done | ( -- ) | Writes TAP output to stdout and exits with depth as status |
+| 0x80 | chkargc | ( -- ) | Exit with error unless argc is 2 |
+| 0x81 | cmovd | ( d b -- ) | Compile mov b, dword |
+| 0x82 | cmovq | ( q b -- ) | Compile mov b, qword |
+| 0x83 | cret | ( -- ) | Compile ret |
+| 0x84 | cstosd | ( -- ) | Compile stosd |
+| 0x85 | csys | ( -- ) | Compile syscall |
+| 0x86 | cxord | ( b -- ) | Compile xor b, b |
+| 0x87 | tfd | ( -- d ) | Push fd of test input file |
+| 0x88 | oblk | ( -- a ) | Push addr of TAP output's start |
+| 0x89 | thr | ( -- a ) | Push addr of TAP output's here |
+| 0x8A | setthr | ( a -- ) | Set addr of TAP output's here |
+| 0x8B | cdstarg | ( -- ) | Compile movabs rdi, _addr of argv[1]_ |
+| 0x8C | cflgsro | ( -- ) | Compile xor esi, esi (flags = READ_ONLY) |
+| 0x8D | csopen | ( -- ) | Compile mov eax, 0x02 (sys_open); syscall |
+| 0x8E | cdsttfd | ( -- ) | Compile movabs rdi, _addr of tfd's litd_ |
+| 0x8F | cfrmtfd | ( -- ) | Compile mov edi, _tfd_ |
+| 0x90 | csrctib | ( -- ) | Compile mov rsi, _addr of _test input block_ |
+| 0x91 | cblklen | ( -- ) | Compile mov edx, 0x0400 |
+| 0x92 | csread | ( -- ) | Compile xor eax, eax; syscall |
+| 0x93 | opentst | ( -- ) | Open argv[1] and set tfd |
+| 0x94 | readtst | ( -- ) | Read block from tfd into the test input block |
+| 0x95 | runtst | ( -- ) | Run the test in the test input block |
+| 0x96 | endl | ( a -- ) | End line of output and set TAP output's here |
+| 0x97 | woka | ( a -- ) | Write ok line to addr |
+| 0x98 | wprep | ( -- ) | Preps the write system call |
+| 0x99 | wlen | ( -- ) | Buffer length for the write system call |
+| 0x9A | waddr | ( -- ) | Addr of the buffer for the write system call |
+| 0x9B | test | ( w -- ) | Initialize a test suite |
+| 0x9C | plan | ( w -- ) | Plan w tests where w is two ascii characters such as '03' |
+| 0x9D | ok | ( -- ) | Write ok line to TAP output's here |
+| 0x9E | notok | ( -- ) | Write not ok line to TAP output's here |
+| 0x9F | okif | ( t/f -- ) | Ok if top of stack is true |
+| 0xA0 | okeq | ( a b -- ) | Ok if a and b are eq |
+| 0xA1 | okne | ( a b -- ) | Ok if a and b are not eq |
+| 0xA2 | ok0 | ( n -- ) | Ok if top of stack is 0 |
+| 0xA3 | okn0 | ( n -- ) | Ok if top of stack is not 0 |
+| 0xA4 | done | ( -- ) | Writes TAP output to stdout and exits with depth as status |
 
 ## TODOs
 
-1. Output plan from `done` without need to call `plan`
 1. Print "TAP version 14" when testing begins
+1. Split ops_low.bla into ops_pri.bla and ops_pub.bla
+   1. Separate ops tables in README, etc
+   1. Separate includes
+1. Redo wprep, wlen, waddr to use cxord, cmovd, etc

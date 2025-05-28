@@ -54,5 +54,7 @@ not	1	( x -- 'x )	Bitwise not top of the data stack
 eq	1	( a b -- t/f )	Check top two items for equality and push result
 add	1	( a b -- n )	Push a + b
 sub	1	( a b -- n )	Push a - b
+and	1	( a b -- n )	Push logical and of a and b
+or	1	( a b -- n )	Push logical inclusive or of a and b
 shl	1	( x n -- 'x )	Push x shl n
 shr	1	( x n -- 'x )	Push x shr n

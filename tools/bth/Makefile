@@ -38,10 +38,7 @@ $(BTH_INC): $(BTH_INC).sh $(BTH_INC).tmpl $(OP_TBLS)
 obj/%.bs0: %.bla $(BTH_INC) | obj
 	$(BLASM) -n $< $@
 
-obj/blk_%.bs0: $(BLUEVM) | obj
-	$(DD) if=$(BLUEVM) of=$@ skip=$* count=1
-	
-$(BTH): $(BLUEVM_NOEXT) $(OP_OBJS) obj/blk_5.bs0 | bin
+$(BTH): $(BLUEVM_NOEXT) $(OP_OBJS) obj/bth.bs0 | bin
 	cat $^ > $@ && chmod +x $@
 
 obj/test_%.bs0: test/%.bla $(BTH) | obj
