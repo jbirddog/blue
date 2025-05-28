@@ -46,8 +46,7 @@ opBI	op_cmovd, 1, 0	;	( d b -- )	Compile mov b, dword
 end_op
 
 opBI	op_cmovq, 1, 0	;	( q b -- )	Compile mov b, qword
-	litb	0x48
-	cb
+	clitb	0x48
 	litb	0xB8
 	or
 	cb
@@ -56,26 +55,22 @@ opBI	op_cmovq, 1, 0	;	( q b -- )	Compile mov b, qword
 end_op
 
 opBI	op_cret, 1, 0	;	( -- )	Compile ret
-	litb	0xC3
-	cb
+	clitb	0xC3
 	ret
 end_op
 
 opBI	op_cstosd, 1, 0	;	( -- )	Compile stosd
-	litb	0xAB
-	cb
+	clitb	0xAB
 	ret
 end_op
 
 opBI	op_csys, 1, 0	;	( -- )	Compile syscall
-	litw	0x050F
-	cw
+	clitw	0x050F
 	ret
 end_op
 
 opBI	op_cxord, 1, 0	;	( b -- )	Compile xor b, b
-	litb	0x31
-	cb
+	clitb	0x31
 	dup
 	litb	0x03
 	shl
@@ -230,19 +225,15 @@ opBI	op_wprep, 1, 0	;	( -- )	Preps the write system call
 	; xor eax, eax
 	; inc eax
 	; mov edi, eax
-	litw	0xC031
-	cw
-	litw	0xC0FF
-	cw
-	litw	0xC789
-	cw
+	clitw	0xC031
+	clitw	0xC0FF
+	clitw	0xC789
 	ret
 end_op
 
 opBI	op_wlen, 1, 0	;	( -- )	Buffer length for the write system call
 	; mov edx, _buffer len_
-	litb	0xBA
-	cb
+	clitb	0xBA
 	litop	op_thr_code
 	litop	op_oblk_code
 	sub
@@ -252,8 +243,7 @@ end_op
 
 opBI	op_waddr, 1, 0	;	( -- )	Addr of the buffer for the write system call
 	; movabs rsi, _addr of string_
-	litw	0xBE48
-	cw
+	clitw	0xBE48
 	litop	op_oblk_code
 	cq
 	ret
