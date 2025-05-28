@@ -21,3 +21,4 @@ To build `blasm` run `make` after `make` has been run in the root of the repo.
 
 1. Add `blasm2` for `.bla2` files that uses `fasm2` for mixed x8664 and blasm
 1. Look at `opBI` etc label generation doing what blasm.inc does, so local ops don't need `litop op_XXX_code`
+1. Convert clit* macros to calminstructions
