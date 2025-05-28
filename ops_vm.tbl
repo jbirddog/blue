@@ -5,8 +5,6 @@ blk	1	( b -- a )	Push addr of block number b
 true	1	( -- t )	Push true value
 false	1	( -- f )	Push false value
 ifelse	1	( t/f ta fa -- ? )	Call ta if t/f is true else call fa
-if	1	( t/f ta -- ? )	Call ta if t/f is true
-ifnot	1	( t/f fa -- ? )	Call fa if t/f is false
 mccall	1	( a -- ? )	Call machine code at address
 call	1	( a -- ? )	Call bytecode located at address
 tor	1	( a -- )	Move top of data stack to return stack

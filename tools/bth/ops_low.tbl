@@ -1,3 +1,4 @@
+ifnot	1	( t/f fa -- ? )	Call fa if t/f is false
 chkargc	1	( -- )	Exit with error unless argc is 2
 cmovd	1	( d b -- )	Compile mov b, dword
 cmovq	1	( q b -- )	Compile mov b, qword

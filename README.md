@@ -101,59 +101,57 @@ Opcodes are subject to change.
 | 0x04 | true | ( -- t ) | Push true value |
 | 0x05 | false | ( -- f ) | Push false value |
 | 0x06 | ifelse | ( t/f ta fa -- ? ) | Call ta if t/f is true else call fa |
-| 0x07 | if | ( t/f ta -- ? ) | Call ta if t/f is true |
-| 0x08 | ifnot | ( t/f fa -- ? ) | Call fa if t/f is false |
-| 0x09 | mccall | ( a -- ? ) | Call machine code at address |
-| 0x0A | call | ( a -- ? ) | Call bytecode located at address |
-| 0x0B | tor | ( a -- ) | Move top of data stack to return stack |
-| 0x0C | fromr | ( -- a ) | Move top of return stacl to data stack |
-| 0x0D | ret | ( -- ) | Pops value from return stack and sets the instruction pointer |
-| 0x0E | comp | ( -- ) | Begin compiling bytecode |
-| 0x0F | endcomp | ( -- a ) | Append ret and end compilation, push addr where compilation started |
-| 0x10 | op | ( b -- a ) | Push addr of the offset into the op table for the opcode |
-| 0x11 | setvarb | ( b b -- ) | Set litb value of var op |
-| 0x12 | setvarw | ( w b -- ) | Set litw value of var op |
-| 0x13 | setvard | ( d b -- ) | Set litd value of var op |
-| 0x14 | setvarq | ( q b -- ) | Set litq value of var op |
-| 0x15 | ip | ( -- a ) | Push location of the instruction pointer |
-| 0x16 | setip | ( a -- ) | Set the location of the instruction pointer |
-| 0x17 | here | ( -- a ) | Push addr of the code buffer's here |
-| 0x18 | atincb | ( a -- b a' ) | Push byte value found at addr, increment and push addr |
-| 0x19 | atincw | ( a -- w a' ) | Push word value found at addr, increment and push addr |
-| 0x1A | atincd | ( a -- d a' ) | Push dword value found at addr, increment and push addr |
-| 0x1B | atincq | ( a -- q a' ) | Push qword value found at addr, increment and push addr |
-| 0x1C | atb | ( a -- b ) | Push byte value found at addr |
-| 0x1D | atw | ( a -- d ) | Push word value found at addr |
-| 0x1E | atd | ( a -- w ) | Push dword value found at addr |
-| 0x1F | atq | ( a -- q ) | Push qword value found at addr |
-| 0x20 | setincb | ( a b -- 'a ) | Write byte value to, increment and push addr |
-| 0x21 | setincw | ( a w -- 'a ) | Write word value to, increment and push addr |
-| 0x22 | setincd | ( a d -- 'a ) | Write dword value to, increment and push addr |
-| 0x23 | setincq | ( a q -- 'a ) | Write qword value to, increment and push addr |
-| 0x24 | setb | ( a b -- ) | Write byte value to addr |
-| 0x25 | setw | ( a w -- ) | Write word value to addr |
-| 0x26 | setd | ( a d -- ) | Write dword value to addr |
-| 0x27 | setq | ( a q -- ) | Write qword value to addr |
-| 0x28 | cb | ( b -- ) | Write byte value to and increment here |
-| 0x29 | cw | ( w -- ) | Write word value to and increment here |
-| 0x2A | cd | ( d -- ) | Write dword value to and increment here |
-| 0x2B | cq | ( q -- ) | Write qword value to and increment here |
-| 0x2C | litb | ( -- b ) | Push next byte from and increment instruction pointer |
-| 0x2D | litw | ( -- w ) | Push next word from and increment instruction pointer |
-| 0x2E | litd | ( -- d ) | Push next dword from and increment instruction pointer |
-| 0x2F | litq | ( -- q ) | Push next qword from and increment instruction pointer |
-| 0x30 | depth | ( -- n ) | Push depth of the data stack |
-| 0x31 | dup | ( x -- ) | Drops top of the data stack |
-| 0x32 | drop | ( a -- a a ) | Duplicate top of stack |
-| 0x33 | swap | ( a b -- b a ) | Swap top two values on the data stack |
-| 0x34 | not | ( x -- 'x ) | Bitwise not top of the data stack |
-| 0x35 | eq | ( a b -- t/f ) | Check top two items for equality and push result |
-| 0x36 | add | ( a b -- n ) | Push a + b |
-| 0x37 | sub | ( a b -- n ) | Push a - b |
-| 0x38 | and | ( a b -- n ) | Push logical and of a and b |
-| 0x39 | or | ( a b -- n ) | Push logical inclusive or of a and b |
-| 0x3A | shl | ( x n -- 'x ) | Push x shl n |
-| 0x3B | shr | ( x n -- 'x ) | Push x shr n |
+| 0x07 | mccall | ( a -- ? ) | Call machine code at address |
+| 0x08 | call | ( a -- ? ) | Call bytecode located at address |
+| 0x09 | tor | ( a -- ) | Move top of data stack to return stack |
+| 0x0A | fromr | ( -- a ) | Move top of return stacl to data stack |
+| 0x0B | ret | ( -- ) | Pops value from return stack and sets the instruction pointer |
+| 0x0C | comp | ( -- ) | Begin compiling bytecode |
+| 0x0D | endcomp | ( -- a ) | Append ret and end compilation, push addr where compilation started |
+| 0x0E | op | ( b -- a ) | Push addr of the offset into the op table for the opcode |
+| 0x0F | setvarb | ( b b -- ) | Set litb value of var op |
+| 0x10 | setvarw | ( w b -- ) | Set litw value of var op |
+| 0x11 | setvard | ( d b -- ) | Set litd value of var op |
+| 0x12 | setvarq | ( q b -- ) | Set litq value of var op |
+| 0x13 | ip | ( -- a ) | Push location of the instruction pointer |
+| 0x14 | setip | ( a -- ) | Set the location of the instruction pointer |
+| 0x15 | here | ( -- a ) | Push addr of the code buffer's here |
+| 0x16 | atincb | ( a -- b a' ) | Push byte value found at addr, increment and push addr |
+| 0x17 | atincw | ( a -- w a' ) | Push word value found at addr, increment and push addr |
+| 0x18 | atincd | ( a -- d a' ) | Push dword value found at addr, increment and push addr |
+| 0x19 | atincq | ( a -- q a' ) | Push qword value found at addr, increment and push addr |
+| 0x1A | atb | ( a -- b ) | Push byte value found at addr |
+| 0x1B | atw | ( a -- d ) | Push word value found at addr |
+| 0x1C | atd | ( a -- w ) | Push dword value found at addr |
+| 0x1D | atq | ( a -- q ) | Push qword value found at addr |
+| 0x1E | setincb | ( a b -- 'a ) | Write byte value to, increment and push addr |
+| 0x1F | setincw | ( a w -- 'a ) | Write word value to, increment and push addr |
+| 0x20 | setincd | ( a d -- 'a ) | Write dword value to, increment and push addr |
+| 0x21 | setincq | ( a q -- 'a ) | Write qword value to, increment and push addr |
+| 0x22 | setb | ( a b -- ) | Write byte value to addr |
+| 0x23 | setw | ( a w -- ) | Write word value to addr |
+| 0x24 | setd | ( a d -- ) | Write dword value to addr |
+| 0x25 | setq | ( a q -- ) | Write qword value to addr |
+| 0x26 | cb | ( b -- ) | Write byte value to and increment here |
+| 0x27 | cw | ( w -- ) | Write word value to and increment here |
+| 0x28 | cd | ( d -- ) | Write dword value to and increment here |
+| 0x29 | cq | ( q -- ) | Write qword value to and increment here |
+| 0x2A | litb | ( -- b ) | Push next byte from and increment instruction pointer |
+| 0x2B | litw | ( -- w ) | Push next word from and increment instruction pointer |
+| 0x2C | litd | ( -- d ) | Push next dword from and increment instruction pointer |
+| 0x2D | litq | ( -- q ) | Push next qword from and increment instruction pointer |
+| 0x2E | depth | ( -- n ) | Push depth of the data stack |
+| 0x2F | dup | ( x -- ) | Drops top of the data stack |
+| 0x30 | drop | ( a -- a a ) | Duplicate top of stack |
+| 0x31 | swap | ( a b -- b a ) | Swap top two values on the data stack |
+| 0x32 | not | ( x -- 'x ) | Bitwise not top of the data stack |
+| 0x33 | eq | ( a b -- t/f ) | Check top two items for equality and push result |
+| 0x34 | add | ( a b -- n ) | Push a + b |
+| 0x35 | sub | ( a b -- n ) | Push a - b |
+| 0x36 | and | ( a b -- n ) | Push logical and of a and b |
+| 0x37 | or | ( a b -- n ) | Push logical inclusive or of a and b |
+| 0x38 | shl | ( x n -- 'x ) | Push x shl n |
+| 0x39 | shr | ( x n -- 'x ) | Push x shr n |
 
 ### Extended Low/High
 
@@ -177,7 +175,6 @@ Along with the code for BlueVM this repository also contains some tools and exam
 ## TODOs
 
 1. Rename `op_op` to `op_opent` or similar
-1. Remove if/ifnot, ip/setip
 1. Bug: add/remove ops and `make` fails until `make clean`
 1. setq, etc stack effects feel backwards when not in test code
    1. see swap in op_setvarq, op_cb, etc

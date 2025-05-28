@@ -17,6 +17,14 @@ BLK_TEST_OUTPUT = 0x0A
 opcode_tbl:
 .offset = 0x80
 
+opBI	op_ifnot, 1, 0	;	( t/f fa -- ? )	Call fa if t/f is false
+	comp
+	endcomp
+	swap
+	ifelse
+	ret
+end_op
+
 opBI	op_chkargc, 1, 0	;	( -- )	Exit with error unless argc is 2
 	argc
 	litb	0x02
@@ -25,7 +33,7 @@ opBI	op_chkargc, 1, 0	;	( -- )	Exit with error unless argc is 2
 		litb	0x01
 		exit
 	endcomp
-	ifnot
+	callop	op_ifnot_code
 	ret
 end_op
 

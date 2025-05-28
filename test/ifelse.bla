@@ -3,7 +3,7 @@ include "../tools/bth/bth.inc"
 
 test
 
-litw	'04'
+litw	'02'
 plan
 
 true
@@ -23,17 +23,5 @@ comp
 	ok
 endcomp
 ifelse
-
-true
-comp
-	ok
-endcomp
-if
-
-false
-comp
-	ok
-endcomp
-ifnot
 
 done
