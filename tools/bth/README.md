@@ -11,14 +11,15 @@ been done, running `make` in this directory will build just `bth`.
 
 ## Running
 
-`./bin/bth test/bth.bs0` will execute a test file and print its TAP output.
+`./bin/bth path/to/test/file.bs0` will execute a test file and print its TAP output.
 
-`prove -e ./bin/bth --ext bs0 test` will use `prove` to run test files.
+`prove -e ./bin/bth --ext bs0 path/to/tost` will use `prove` to run test files.
 
 ## Opcodes
 
 Public opcodes that can be used in tests to produce TAP output. Test files written in `blasm` can include `tap.inc`
-from this repository. For an example test file see `test/bth.bla`.
+from this repository. For an example test file see `test/bth.bla`. The BlueVM test suite uses `bth` and contains
+test files in `../../test`.
 
 | Opcode | Name | Stack Effect | Description |
 |----|----|----|----|
@@ -76,3 +77,5 @@ These internal opcodes are used by bth itself and should not be considered stabl
 1. Redo wprep, wlen, waddr to use cxord, cmovd, etc
 1. bth.inc and tap.inc tmpl/sh files could be merged
 1. ops_tap.bla can call internal ops directly
+1. Add link to TAP website
+1. See about getting listed as a TAP producer
