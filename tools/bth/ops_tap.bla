@@ -6,34 +6,34 @@ opcode_tbl:
 .offset = 0xC0
 
 opBI	op_test, 1, 0	;	( w -- )	Initialize a test suite
-	litop	op_oblk_code
-	litop	op_setthr_code
+	oblk
+	setthr
 	ret
 end_op
 
 opBI	op_plan, 1, 0	;	( w -- )	Plan w tests where w is two ascii characters such as '03'
-	litop	op_thr_code
+	thr
 	litw	'1.'
 	setincw
 	litb	'.'
 	setincb
 	swap
 	setincw
-	litop	op_endl_code
+	endl
 	ret
 end_op
 
 opBI	op_ok, 1, 0	;	( -- )	Write ok line to TAP output's here
-	litop	op_thr_code
-	litop	op_woka_code
+	thr
+	woka
 	ret
 end_op
 
 opBI	op_notok, 1, 0	;	( -- )	Write not ok line to TAP output's here
-	litop	op_thr_code
+	thr
 	litd	'not '
 	setincd
-	litop	op_woka_code
+	woka
 	ret
 end_op
 
@@ -78,11 +78,11 @@ end_op
 
 opBI	op_done, 1, 0	;	( -- )	Writes TAP output to stdout and exits with depth as status
 	here
-	litop	op_wprep_code
-	litop	op_wlen_code
-	litop	op_waddr_code
-	litop	op_csys_code
-	litop	op_cret_code
+	wprep
+	wlen
+	waddr
+	csys
+	cret
 	mccall
 	depth
 	exit
