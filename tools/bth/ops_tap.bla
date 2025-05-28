@@ -1,0 +1,89 @@
+; public ops used by tests to produce test output
+
+include "internal.inc"
+
+opcode_tbl:
+.offset = 0xC0
+
+opBI	op_test, 1, 0	;	( w -- )	Initialize a test suite
+	oblk
+	setthr
+	ret
+end_op
+
+opBI	op_plan, 1, 0	;	( w -- )	Plan w tests where w is two ascii characters such as '03'
+	thr
+	litw	'1.'
+	setincw
+	litb	'.'
+	setincb
+	swap
+	setincw
+	endl
+	ret
+end_op
+
+opBI	op_ok, 1, 0	;	( -- )	Write ok line to TAP output's here
+	thr
+	woka
+	ret
+end_op
+
+opBI	op_notok, 1, 0	;	( -- )	Write not ok line to TAP output's here
+	thr
+	litd	'not '
+	setincd
+	woka
+	ret
+end_op
+
+opBI	op_okif, 1, 0	;	( t/f -- )	Ok if top of stack is true
+	comp
+		litop	op_ok_code
+	endcomp
+	comp
+		litop	op_notok_code
+	endcomp
+	ifelse
+	ret
+end_op
+
+opBI	op_okeq, 1, 0	;	( a b -- )	Ok if a and b are eq
+	eq
+	litop	op_okif_code
+	ret
+end_op
+
+opBI	op_okne, 1, 0	;	( a b -- )	Ok if a and b are not eq
+	eq
+	not
+	litop	op_okif_code
+	ret
+end_op
+
+opBI	op_ok0, 1, 0	;	( n -- )	Ok if top of stack is 0
+	litb	0x00
+	eq
+	litop	op_okif_code
+	ret
+end_op
+
+opBI	op_okn0, 1, 0	;	( n -- )	Ok if top of stack is not 0
+	litb	0x00
+	eq
+	not
+	litop	op_okif_code
+	ret
+end_op
+
+opBI	op_done, 1, 0	;	( -- )	Writes TAP output to stdout and exits with depth as status
+	here
+	wprep
+	wlen
+	waddr
+	csys
+	cret
+	mccall
+	depth
+	exit
+end_op

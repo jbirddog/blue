@@ -1,5 +1,5 @@
 
-include "../tools/bth/bth.inc"
+include "../tools/bth/tap.inc"
 
 test
 

@@ -1,23 +1,43 @@
 # BlueVM Test Harness
 
-Patched version of the BlueVM with extended opcodes to facilitate testing.
+Standalone executable to run BlueVM bytecode test files and produce [TAP](https://testanything.org/) output.
 
 ## Building
 
-To build `bth` run `make` after `make` has been run in the root of the repo.
+Run `make` at the root of this repository to build `bth` and its dependencies (`BlueVM` and `blasm`). Once that has
+been done, running `make` in this directory will build just `bth`.
+
+## Running
+
+`./bin/bth path/to/test/file.bs0` will execute a test file and print its TAP output.
+
+`prove -e ./bin/bth --ext bs0 path/to/tosts` will use `prove` to run test file(s).
+
+## BlueVM Block Usage
+
+`bth` uses `BlueVM` block 9 for test input and block 10 for test ouput.
 
 ## Opcodes
 
-Opcodes are subject to change and can be used in `.bla` files by including `bth.inc`.
+Public opcodes that can be used in tests to produce TAP output. Test files written in `blasm` can include `tap.inc`
+from this directory. For an example test file see `test/bth.bla`. The BlueVM test suite uses `bth` and contains
+test files in `../../test`.
 
 | Opcode | Name | Stack Effect | Description |
 |----|----|----|----|
-_OPCODE_TABLE_
+_TAP_OPS_TBL_
+
+### Internal Opcodes
+
+These internal opcodes are used by `bth` itself and should not be considered stable for external use.
+
+| Opcode | Name | Stack Effect | Description |
+|----|----|----|----|
+_INTERNAL_OPS_TBL_
 
 ## TODOs
 
 1. Print "TAP version 14" when testing begins
-1. Split ops_low.bla into ops_pri.bla and ops_pub.bla
-   1. Separate ops tables in README, etc
-   1. Separate includes
 1. Redo wprep, wlen, waddr to use cxord, cmovd, etc
+1. bth.inc and tap.inc tmpl/sh files could be merged
+1. See about getting listed as a TAP producer
