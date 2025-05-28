@@ -17,7 +17,7 @@ opBI	op_chkargc, 1, 0	;	( -- )	Exit with error unless argc is 2
 	ret
 end_op
 
-opBI	op_cmovd, 1, 0	;	( d b -- )	Compile mov of dword into register b
+opBI	op_cmovd, 1, 0	;	( d b -- )	Compile mov b, dword
 	litb	0xB8
 	or
 	cb
@@ -25,13 +25,26 @@ opBI	op_cmovd, 1, 0	;	( d b -- )	Compile mov of dword into register b
 	ret
 end_op
 
-opBI	op_cmovq, 1, 0	;	( q b -- )	Compile mov of qword into register b
+opBI	op_cmovq, 1, 0	;	( q b -- )	Compile mov b, qword
 	litb	0x48
 	cb
 	litb	0xB8
 	or
 	cb
 	cq
+	ret
+end_op
+
+opBI	op_cxord, 1, 0	;	( b -- )	Compile xor b, b
+	litb	0x31
+	cb
+	dup
+	litb	0x03
+	shl
+	or
+	litb	0xC0
+	or
+	cb
 	ret
 end_op
 

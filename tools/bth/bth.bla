@@ -27,10 +27,8 @@ litb	RDI
 cmovq
 
 ; xor esi, esi (flags = READ_ONLY)
-litb	0x31
-cb
-litb	0xF6
-cb
+litb	ESI
+cxord
 
 ; mov eax, SYS_OPEN
 litb	SYS_OPEN
@@ -83,10 +81,8 @@ litb	EDX
 cmovd
 
 ; xor eax, eax
-litb	0x31
-cb
-litb	0xC0
-cb
+litb	EAX
+cxord
 
 ; syscall
 litb	0x0F

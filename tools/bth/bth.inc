@@ -4,6 +4,7 @@ iterate <opname, opsize>, \
 	chkargc, 1, \
 	cmovd, 1, \
 	cmovq, 1, \
+	cxord, 1, \
 	tfd, 1, \
 	oblk, 1, \
 	thr, 1, \
