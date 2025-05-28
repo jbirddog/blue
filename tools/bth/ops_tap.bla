@@ -1,6 +1,6 @@
 ; public ops used by tests to produce test output
 
-include "bth.inc"
+include "internal.inc"
 
 opcode_tbl:
 .offset = 0xC0

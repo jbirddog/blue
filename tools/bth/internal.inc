@@ -1,4 +1,4 @@
-; Generated from bth.inc.tmpl
+; Generated from internal.inc.tmpl
 
 iterate <opname, opsize>, \
 	atq, 1, \

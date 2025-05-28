@@ -5,7 +5,7 @@ include $(BASE_DIR)/common.mk
 BLUEVM_NOEXT = obj/bluevm_noext
 
 BTH = bin/bth
-BTH_INC = bth.inc
+INTERNAL_INC = internal.inc
 TAP_INC = tap.inc
 
 OPS = ops_internal.bla ops_tap.bla
@@ -15,7 +15,7 @@ OP_TBLS = $(OPS:%.bla=%.tbl)
 TESTS = $(wildcard test/*.bla)
 TEST_OBJS = $(TESTS:test/%.bla=obj/test_%.bs0)
 
-GEN_FILES = $(BTH_INC) $(TAP_INC) $(OP_TBLS) $(README)
+GEN_FILES = $(INTERNAL_INC) $(TAP_INC) $(OP_TBLS) $(README)
 
 .PHONY: all clean test
 
@@ -33,13 +33,13 @@ $(BLUEVM_NOEXT): $(BLUEVM) | obj
 ops_%.tbl: ops_%.bla
 	$(SED_TBL) $< > $@
 
-$(BTH_INC): $(BTH_INC).sh $(BTH_INC).tmpl $(OP_TBLS)
+$(INTERNAL_INC): $(INTERNAL_INC).sh $(INTERNAL_INC).tmpl $(OP_TBLS)
 	./$< > $@
 
 $(TAP_INC): $(TAP_INC).sh $(TAP_INC).tmpl $(OP_TBLS)
 	./$< > $@
 
-obj/%.bs0: %.bla $(BTH_INC) | obj
+obj/%.bs0: %.bla $(INTERNAL_INC) | obj
 	$(BLASM) -n $< $@
 
 $(BTH): $(BLUEVM_NOEXT) $(OP_OBJS) obj/bth.bs0 | bin
