@@ -1,7 +1,11 @@
 include "bth.inc"
 
-RSI = 0x06
-RDI = 0x07
+EAX = 0x00
+ESI = 0x06
+EDI = 0x07
+
+RSI = ESI
+RDI = EDI
 
 CODE_BLK = 0x07
 TEST_INPUT_BLK = 0x09
@@ -14,16 +18,6 @@ chkargc
 here
 
 ; movabs rdi, _addr of argv[1]_
-;litb	0x48
-;cb
-;litb	0xBF
-;cb
-;argv
-;litb	0x08
-;add
-;atq
-;cq
-
 argv
 litb	0x08
 add
@@ -50,16 +44,12 @@ litb	0x05
 cb
 
 ; movabs rdi, _addr of tfd's litd_
-litb	0x48
-cb
-litb	0xBF
-cb
-
 litb	tfd.code
 op
 litb	0x03
 add
-cq
+litb	RDI
+cmovq
 
 ; stosd
 litb	0xAB
@@ -83,13 +73,10 @@ tfd
 cd
 
 ; mov rsi, _addr of _input block_
-litb	0x48
-cb
-litb	0xBE
-cb
 litb	TEST_INPUT_BLK
 blk
-cq
+litb	RSI
+cmovq
 
 ; mov edx, 0x0400
 litb	0xBA
