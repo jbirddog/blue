@@ -29,7 +29,7 @@ Opcodes are subject to change and can be used in `.bla` files by including `bth.
 | 0x8C | cflgsro | ( -- ) | Compile xor esi, esi (flags = READ_ONLY)_ |
 | 0x8D | csopen | ( -- ) | Compile mov eax, SYS_OPEN (0x02)_ |
 | 0x8E | dsttfd | ( -- ) | Compile movabs rdi, _addr of tfd's litd_ |
-| 0x8F | opentfd | ( -- ) | Open argv[1] and set tfd |
+| 0x8F | opentst | ( -- ) | Open argv[1] and set tfd |
 | 0x90 | endl | ( a -- ) | End line of output and set TAP output's here |
 | 0x91 | woka | ( a -- ) | Write ok line to addr |
 | 0x92 | wprep | ( -- ) | Preps the write system call |

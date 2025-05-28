@@ -13,7 +13,7 @@ TEST_INPUT_BLK = 0x09
 
 chkargc
 
-opentfd
+opentst
 
 ; TODO: check fd
 

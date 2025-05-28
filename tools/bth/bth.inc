@@ -16,7 +16,7 @@ iterate <opname, opsize>, \
 	cflgsro, 1, \
 	csopen, 1, \
 	dsttfd, 1, \
-	opentfd, 1, \
+	opentst, 1, \
 	endl, 1, \
 	woka, 1, \
 	wprep, 1, \
