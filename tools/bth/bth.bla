@@ -11,29 +11,9 @@ RDI = EDI
 CODE_BLK = 0x07
 TEST_INPUT_BLK = 0x09
 
-SYS_OPEN = 0x02
-
 chkargc
 
-; compile machine code to open argv[1] into `tfd`
-here
-
-cdstarg
-cflgsro
-csopen
-
-; syscall
-csys
-
-dsttfd
-
-; stosd
-cstosd
-
-; ret
-cret
-
-mccall
+opentfd
 
 ; TODO: check fd
 

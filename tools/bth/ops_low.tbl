@@ -13,6 +13,7 @@ cdstarg	1	( -- )	Compile movabs rdi, _addr of argv[1]_
 cflgsro	1	( -- )	Compile xor esi, esi (flags = READ_ONLY)_
 csopen	1	( -- )	Compile mov eax, SYS_OPEN (0x02)_
 dsttfd	1	( -- )	Compile movabs rdi, _addr of tfd's litd_
+opentfd	1	( -- )	Open argv[1] and set tfd
 endl	1	( a -- )	End line of output and set TAP output's here
 woka	1	( a -- )	Write ok line to addr
 wprep	1	( -- )	Preps the write system call

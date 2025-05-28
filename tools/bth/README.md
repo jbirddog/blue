@@ -29,21 +29,22 @@ Opcodes are subject to change and can be used in `.bla` files by including `bth.
 | 0x8C | cflgsro | ( -- ) | Compile xor esi, esi (flags = READ_ONLY)_ |
 | 0x8D | csopen | ( -- ) | Compile mov eax, SYS_OPEN (0x02)_ |
 | 0x8E | dsttfd | ( -- ) | Compile movabs rdi, _addr of tfd's litd_ |
-| 0x8F | endl | ( a -- ) | End line of output and set TAP output's here |
-| 0x90 | woka | ( a -- ) | Write ok line to addr |
-| 0x91 | wprep | ( -- ) | Preps the write system call |
-| 0x92 | wlen | ( -- ) | Buffer length for the write system call |
-| 0x93 | waddr | ( -- ) | Addr of the buffer for the write system call |
-| 0x94 | test | ( w -- ) | Initialize a test suite |
-| 0x95 | plan | ( w -- ) | Plan w tests where w is two ascii characters such as '03' |
-| 0x96 | ok | ( -- ) | Write ok line to TAP output's here |
-| 0x97 | notok | ( -- ) | Write not ok line to TAP output's here |
-| 0x98 | okif | ( t/f -- ) | Ok if top of stack is true |
-| 0x99 | okeq | ( a b -- ) | Ok if a and b are eq |
-| 0x9A | okne | ( a b -- ) | Ok if a and b are not eq |
-| 0x9B | ok0 | ( n -- ) | Ok if top of stack is 0 |
-| 0x9C | okn0 | ( n -- ) | Ok if top of stack is not 0 |
-| 0x9D | done | ( -- ) | Writes TAP output to stdout and exits with depth as status |
+| 0x8F | opentfd | ( -- ) | Open argv[1] and set tfd |
+| 0x90 | endl | ( a -- ) | End line of output and set TAP output's here |
+| 0x91 | woka | ( a -- ) | Write ok line to addr |
+| 0x92 | wprep | ( -- ) | Preps the write system call |
+| 0x93 | wlen | ( -- ) | Buffer length for the write system call |
+| 0x94 | waddr | ( -- ) | Addr of the buffer for the write system call |
+| 0x95 | test | ( w -- ) | Initialize a test suite |
+| 0x96 | plan | ( w -- ) | Plan w tests where w is two ascii characters such as '03' |
+| 0x97 | ok | ( -- ) | Write ok line to TAP output's here |
+| 0x98 | notok | ( -- ) | Write not ok line to TAP output's here |
+| 0x99 | okif | ( t/f -- ) | Ok if top of stack is true |
+| 0x9A | okeq | ( a b -- ) | Ok if a and b are eq |
+| 0x9B | okne | ( a b -- ) | Ok if a and b are not eq |
+| 0x9C | ok0 | ( n -- ) | Ok if top of stack is 0 |
+| 0x9D | okn0 | ( n -- ) | Ok if top of stack is not 0 |
+| 0x9E | done | ( -- ) | Writes TAP output to stdout and exits with depth as status |
 
 ## TODOs
 

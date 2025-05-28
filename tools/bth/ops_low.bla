@@ -131,6 +131,22 @@ opBI	op_dsttfd, 1, 0	;	( -- )	Compile movabs rdi, _addr of tfd's litd_
 	ret
 end_op
 
+opBI	op_opentfd, 1, 0	;	( -- )	Open argv[1] and set tfd
+	here
+	
+	callop	op_cdstarg_code
+	callop	op_cflgsro_code
+	callop	op_csopen_code
+	callop	op_csys_code
+
+	callop	op_dsttfd_code
+	callop	op_cstosd_code
+	callop	op_cret_code
+
+	mccall
+	ret
+end_op
+
 opBI	op_endl, 1, 0	;	( a -- )	End line of output and set TAP output's here
 	litb	0x0A
 	setincb
