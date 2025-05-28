@@ -1,5 +1,8 @@
 include "bth.inc"
 
+RSI = 0x06
+RDI = 0x07
+
 CODE_BLK = 0x07
 TEST_INPUT_BLK = 0x09
 
@@ -11,15 +14,22 @@ chkargc
 here
 
 ; movabs rdi, _addr of argv[1]_
-litb	0x48
-cb
-litb	0xBF
-cb
+;litb	0x48
+;cb
+;litb	0xBF
+;cb
+;argv
+;litb	0x08
+;add
+;atq
+;cq
+
 argv
 litb	0x08
 add
 atq
-cq
+litb	RDI
+cmovq
 
 ; xor esi, esi (flags = READ_ONLY)
 litb	0x31

@@ -1,4 +1,5 @@
-chkargc	1	( -- )	Check that argc is 2
+chkargc	1	( -- )	Exit with error unless argc is 2
+cmovq	1	( q b -- )	Compile mov of qword into register b
 tfd	1	( -- d )	Push fd of test input file
 oblk	1	( -- a )	Push addr of TAP output's start
 thr	1	( -- a )	Push addr of TAP output's here

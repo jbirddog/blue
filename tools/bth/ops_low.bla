@@ -5,7 +5,7 @@ TEST_OUTPUT_BLK = 0x0A
 opcode_tbl:
 .offset = 0x80
 
-opBI	op_chkargc, 1, 0	;	( -- )	Check that argc is 2
+opBI	op_chkargc, 1, 0	;	( -- )	Exit with error unless argc is 2
 	argc
 	litb	0x02
 	eq
@@ -14,6 +14,16 @@ opBI	op_chkargc, 1, 0	;	( -- )	Check that argc is 2
 		exit
 	endcomp
 	ifnot
+	ret
+end_op
+
+opBI	op_cmovq, 1, 0	;	( q b -- )	Compile mov of qword into register b
+	litb	0x48
+	cb
+	litb	0xB8
+	or
+	cb
+	cq
 	ret
 end_op
 

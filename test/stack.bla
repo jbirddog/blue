@@ -3,7 +3,7 @@ include "../tools/bth/bth.inc"
 
 test
 
-litw	'11'
+litw	'13'
 plan
 
 ; stack has 0 depth at start
@@ -48,6 +48,20 @@ litb	0x07
 litb	0x02
 add
 litb	0x09
+okeq
+
+; and
+litb	0x01
+litb	0x02
+and
+litb	0x00
+okeq
+
+; or
+litb	0x01
+litb	0x02
+or
+litb	0x03
 okeq
 
 ; shl/shr

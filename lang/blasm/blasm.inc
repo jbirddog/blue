@@ -57,6 +57,8 @@ iterate <opname, opsize>, \
 	eq, 1, \
 	add, 1, \
 	sub, 1, \
+	and, 1, \
+	or, 1, \
 	shl, 1, \
 	shr, 1, \
 
