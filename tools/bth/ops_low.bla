@@ -33,7 +33,7 @@ opBI	op_chkargc, 1, 0	;	( -- )	Exit with error unless argc is 2
 		litb	0x01
 		exit
 	endcomp
-	callop	op_ifnot_code
+	litop	op_ifnot_code
 	ret
 end_op
 
@@ -114,21 +114,21 @@ opBI	op_cdstarg, 1, 0	;	( -- )	Compile movabs rdi, _addr of argv[1]_
 	add
 	atq
 	litb	RDI
-	callop	op_cmovq_code
+	litop	op_cmovq_code
 	ret
 end_op
 
 opBI	op_cflgsro, 1, 0	;	( -- )	Compile xor esi, esi (flags = READ_ONLY)
 	litb	ESI
-	callop	op_cxord_code
+	litop	op_cxord_code
 	ret
 end_op
 
 opBI	op_csopen, 1, 0	;	( -- )	Compile mov eax, 0x02 (sys_open); syscall
 	litb	SYS_OPEN
 	litb	EAX
-	callop	op_cmovd_code
-	callop	op_csys_code
+	litop	op_cmovd_code
+	litop	op_csys_code
 	ret
 end_op
 
@@ -138,14 +138,14 @@ opBI	op_cdsttfd, 1, 0	;	( -- )	Compile movabs rdi, _addr of tfd's litd_
 	litb	0x03
 	add
 	litb	RDI
-	callop	op_cmovq_code
+	litop	op_cmovq_code
 	ret
 end_op
 
 opBI	op_cfrmtfd, 1, 0	;	( -- )	Compile mov edi, _tfd_
-	callop	op_tfd_code
+	litop	op_tfd_code
 	litb	EDI
-	callop	op_cmovd_code
+	litop	op_cmovd_code
 	ret
 end_op
 
@@ -153,34 +153,34 @@ opBI	op_csrctib, 1, 0	;	( -- )	Compile mov rsi, _addr of _test input block_
 	litb	BLK_TEST_INPUT
 	blk
 	litb	RSI
-	callop	op_cmovq_code
+	litop	op_cmovq_code
 	ret
 end_op
 
 opBI	op_cblklen, 1, 0	;	( -- )	Compile mov edx, 0x0400
 	litw	0x400
 	litb	EDX
-	callop	op_cmovd_code
+	litop	op_cmovd_code
 	ret
 end_op
 
 opBI	op_csread, 1, 0	;	( -- )	Compile xor eax, eax; syscall
 	litb	EAX
-	callop	op_cxord_code
-	callop	op_csys_code
+	litop	op_cxord_code
+	litop	op_csys_code
 	ret
 end_op
 
 opBI	op_opentst, 1, 0	;	( -- )	Open argv[1] and set tfd
 	here
 	
-	callop	op_cdstarg_code
-	callop	op_cflgsro_code
-	callop	op_csopen_code
+	litop	op_cdstarg_code
+	litop	op_cflgsro_code
+	litop	op_csopen_code
 
-	callop	op_cdsttfd_code
-	callop	op_cstosd_code
-	callop	op_cret_code
+	litop	op_cdsttfd_code
+	litop	op_cstosd_code
+	litop	op_cret_code
 
 	mccall
 	; TODO: check fd
@@ -190,11 +190,11 @@ end_op
 opBI	op_readtst, 1, 0	;	( -- )	Read block from tfd into the test input block
 	here
 
-	callop	op_cfrmtfd_code
-	callop	op_csrctib_code
-	callop	op_cblklen_code
-	callop	op_csread_code
-	callop	op_cret_code
+	litop	op_cfrmtfd_code
+	litop	op_csrctib_code
+	litop	op_cblklen_code
+	litop	op_csread_code
+	litop	op_cret_code
 
 	mccall
 	ret
@@ -215,14 +215,14 @@ end_op
 opBI	op_endl, 1, 0	;	( a -- )	End line of output and set TAP output's here
 	litb	0x0A
 	setincb
-	callop	op_setthr_code
+	litop	op_setthr_code
 	ret
 end_op
 
 opBI	op_woka, 1, 0	;	( a -- )	Write ok line to addr
 	litw	'ok'
 	setincw
-	callop	op_endl_code
+	litop	op_endl_code
 	ret
 end_op
 
@@ -243,8 +243,8 @@ opBI	op_wlen, 1, 0	;	( -- )	Buffer length for the write system call
 	; mov edx, _buffer len_
 	litb	0xBA
 	cb
-	callop	op_thr_code
-	callop	op_oblk_code
+	litop	op_thr_code
+	litop	op_oblk_code
 	sub
 	cd
 	ret
@@ -254,7 +254,7 @@ opBI	op_waddr, 1, 0	;	( -- )	Addr of the buffer for the write system call
 	; movabs rsi, _addr of string_
 	litw	0xBE48
 	cw
-	callop	op_oblk_code
+	litop	op_oblk_code
 	cq
 	ret
 end_op
@@ -262,43 +262,43 @@ end_op
 ;;;
 
 opBI	op_test, 1, 0	;	( w -- )	Initialize a test suite
-	callop	op_oblk_code
-	callop	op_setthr_code
+	litop	op_oblk_code
+	litop	op_setthr_code
 	ret
 end_op
 
 opBI	op_plan, 1, 0	;	( w -- )	Plan w tests where w is two ascii characters such as '03'
-	callop	op_thr_code
+	litop	op_thr_code
 	litw	'1.'
 	setincw
 	litb	'.'
 	setincb
 	swap
 	setincw
-	callop	op_endl_code
+	litop	op_endl_code
 	ret
 end_op
 
 opBI	op_ok, 1, 0	;	( -- )	Write ok line to TAP output's here
-	callop	op_thr_code
-	callop	op_woka_code
+	litop	op_thr_code
+	litop	op_woka_code
 	ret
 end_op
 
 opBI	op_notok, 1, 0	;	( -- )	Write not ok line to TAP output's here
-	callop	op_thr_code
+	litop	op_thr_code
 	litd	'not '
 	setincd
-	callop	op_woka_code
+	litop	op_woka_code
 	ret
 end_op
 
 opBI	op_okif, 1, 0	;	( t/f -- )	Ok if top of stack is true
 	comp
-		callop	op_ok_code
+		litop	op_ok_code
 	endcomp
 	comp
-		callop	op_notok_code
+		litop	op_notok_code
 	endcomp
 	ifelse
 	ret
@@ -306,21 +306,21 @@ end_op
 
 opBI	op_okeq, 1, 0	;	( a b -- )	Ok if a and b are eq
 	eq
-	callop	op_okif_code
+	litop	op_okif_code
 	ret
 end_op
 
 opBI	op_okne, 1, 0	;	( a b -- )	Ok if a and b are not eq
 	eq
 	not
-	callop	op_okif_code
+	litop	op_okif_code
 	ret
 end_op
 
 opBI	op_ok0, 1, 0	;	( n -- )	Ok if top of stack is 0
 	litb	0x00
 	eq
-	callop	op_okif_code
+	litop	op_okif_code
 	ret
 end_op
 
@@ -328,17 +328,17 @@ opBI	op_okn0, 1, 0	;	( n -- )	Ok if top of stack is not 0
 	litb	0x00
 	eq
 	not
-	callop	op_okif_code
+	litop	op_okif_code
 	ret
 end_op
 
 opBI	op_done, 1, 0	;	( -- )	Writes TAP output to stdout and exits with depth as status
 	here
-	callop	op_wprep_code
-	callop	op_wlen_code
-	callop	op_waddr_code
-	callop	op_csys_code
-	callop	op_cret_code
+	litop	op_wprep_code
+	litop	op_wlen_code
+	litop	op_waddr_code
+	litop	op_csys_code
+	litop	op_cret_code
 	mccall
 	depth
 	exit

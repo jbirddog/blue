@@ -28,7 +28,7 @@ litb	ret.code
 setb
 
 ; call ext opcode to check initial value is 0
-callop	0xFF
+litop	0xFF
 ok0
 
 ; set its value
@@ -38,7 +38,7 @@ litb	0xFF
 setvarb
 
 ; call ext opcode to check updated value
-callop	0xFF
+litop	0xFF
 okeq
 
 ;
@@ -63,7 +63,7 @@ litb	ret.code
 setb
 
 ; call ext opcode to check initial value is 0
-callop	0xFF
+litop	0xFF
 ok0
 
 ; set its value
@@ -73,7 +73,7 @@ litb	0xFF
 setvarw
 
 ; call ext opcode to check updated value
-callop	0xFF
+litop	0xFF
 okeq
 
 ;
@@ -98,7 +98,7 @@ litb	ret.code
 setb
 
 ; call ext opcode to check initial value is 0
-callop	0xFF
+litop	0xFF
 ok0
 
 ; set its value
@@ -108,7 +108,7 @@ litb	0xFF
 setvard
 
 ; call ext opcode to check updated value
-callop	0xFF
+litop	0xFF
 okeq
 
 ;
@@ -133,7 +133,7 @@ litb	ret.code
 setb
 
 ; call ext opcode to check initial value is 0
-callop	0xFF
+litop	0xFF
 ok0
 
 ; set its value
@@ -143,7 +143,7 @@ litb	0xFF
 setvarq
 
 ; call ext opcode to check updated value
-callop	0xFF
+litop	0xFF
 okeq
 
 done

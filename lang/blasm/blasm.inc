@@ -74,7 +74,7 @@ iterate <opname, opsize>, \
 	end match
 end iterate
 
-calminstruction callop op
+calminstruction litop op
 	emit 1, op
 end calminstruction
 

@@ -35,7 +35,7 @@ setq
 depth
 litb	0x00
 eq
-callop	0xFF
+litop	0xFF
 
 ;
 ; implement extended opcode 0xFF to add 7 to the top of the stack
@@ -62,7 +62,7 @@ setb
 
 ; call ext opcode to check initial value is 0
 litb	0x03
-callop	0xFF
+litop	0xFF
 litb	0x0A
 okeq
 
