@@ -19,6 +19,7 @@ cblklen	1	( -- )	Compile mov edx, 0x0400
 csread	1	( -- )	Compile xor eax, eax; syscall
 opentst	1	( -- )	Open argv[1] and set tfd
 readtst	1	( -- )	Read block from tfd into the test input block
+runtst	1	( -- )	Run the test in the test input block
 endl	1	( a -- )	End line of output and set TAP output's here
 woka	1	( a -- )	Write ok line to addr
 wprep	1	( -- )	Preps the write system call

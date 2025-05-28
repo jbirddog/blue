@@ -1,21 +1,10 @@
 include "bth.inc"
 
-CODE_BLK = 0x07
-TEST_INPUT_BLK = 0x09
-
 chkargc
 
 opentst
 readtst
-
-litb	CODE_BLK
-blk
-litb	here.code
-setvarq
-
-litb	TEST_INPUT_BLK
-blk
-call
+runtst
 
 ; this should never run
 litb	0xFF

@@ -192,6 +192,18 @@ opBI	op_readtst, 1, 0	;	( -- )	Read block from tfd into the test input block
 	ret
 end_op
 
+opBI	op_runtst, 1, 0	;	( -- )	Run the test in the test input block
+	litb	BLK_CODE
+	blk
+	litb	here.code
+	setvarq
+
+	litb	BLK_TEST_INPUT
+	blk
+	call
+	ret
+end_op
+
 opBI	op_endl, 1, 0	;	( a -- )	End line of output and set TAP output's here
 	litb	0x0A
 	setincb

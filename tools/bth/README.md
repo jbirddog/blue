@@ -35,21 +35,22 @@ Opcodes are subject to change and can be used in `.bla` files by including `bth.
 | 0x92 | csread | ( -- ) | Compile xor eax, eax; syscall |
 | 0x93 | opentst | ( -- ) | Open argv[1] and set tfd |
 | 0x94 | readtst | ( -- ) | Read block from tfd into the test input block |
-| 0x95 | endl | ( a -- ) | End line of output and set TAP output's here |
-| 0x96 | woka | ( a -- ) | Write ok line to addr |
-| 0x97 | wprep | ( -- ) | Preps the write system call |
-| 0x98 | wlen | ( -- ) | Buffer length for the write system call |
-| 0x99 | waddr | ( -- ) | Addr of the buffer for the write system call |
-| 0x9A | test | ( w -- ) | Initialize a test suite |
-| 0x9B | plan | ( w -- ) | Plan w tests where w is two ascii characters such as '03' |
-| 0x9C | ok | ( -- ) | Write ok line to TAP output's here |
-| 0x9D | notok | ( -- ) | Write not ok line to TAP output's here |
-| 0x9E | okif | ( t/f -- ) | Ok if top of stack is true |
-| 0x9F | okeq | ( a b -- ) | Ok if a and b are eq |
-| 0xA0 | okne | ( a b -- ) | Ok if a and b are not eq |
-| 0xA1 | ok0 | ( n -- ) | Ok if top of stack is 0 |
-| 0xA2 | okn0 | ( n -- ) | Ok if top of stack is not 0 |
-| 0xA3 | done | ( -- ) | Writes TAP output to stdout and exits with depth as status |
+| 0x95 | runtst | ( -- ) | Run the test in the test input block |
+| 0x96 | endl | ( a -- ) | End line of output and set TAP output's here |
+| 0x97 | woka | ( a -- ) | Write ok line to addr |
+| 0x98 | wprep | ( -- ) | Preps the write system call |
+| 0x99 | wlen | ( -- ) | Buffer length for the write system call |
+| 0x9A | waddr | ( -- ) | Addr of the buffer for the write system call |
+| 0x9B | test | ( w -- ) | Initialize a test suite |
+| 0x9C | plan | ( w -- ) | Plan w tests where w is two ascii characters such as '03' |
+| 0x9D | ok | ( -- ) | Write ok line to TAP output's here |
+| 0x9E | notok | ( -- ) | Write not ok line to TAP output's here |
+| 0x9F | okif | ( t/f -- ) | Ok if top of stack is true |
+| 0xA0 | okeq | ( a b -- ) | Ok if a and b are eq |
+| 0xA1 | okne | ( a b -- ) | Ok if a and b are not eq |
+| 0xA2 | ok0 | ( n -- ) | Ok if top of stack is 0 |
+| 0xA3 | okn0 | ( n -- ) | Ok if top of stack is not 0 |
+| 0xA4 | done | ( -- ) | Writes TAP output to stdout and exits with depth as status |
 
 ## TODOs
 

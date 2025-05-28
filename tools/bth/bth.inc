@@ -22,6 +22,7 @@ iterate <opname, opsize>, \
 	csread, 1, \
 	opentst, 1, \
 	readtst, 1, \
+	runtst, 1, \
 	endl, 1, \
 	woka, 1, \
 	wprep, 1, \
