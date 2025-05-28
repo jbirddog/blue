@@ -47,7 +47,8 @@ cb
 here
 litb	0x01
 sub
-atb
+atincb
+drop
 litb	0xC3
 okeq
 
@@ -61,7 +62,8 @@ cd
 here
 litb	0x04
 sub
-atb
+atincb
+drop
 litb	0xC3
 okeq
 
@@ -75,7 +77,8 @@ cq
 here
 litb	0x08
 sub
-atb
+atincb
+drop
 litb	0xC3
 okeq
 

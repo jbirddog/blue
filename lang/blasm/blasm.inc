@@ -27,10 +27,6 @@ iterate <opname, opsize>, \
 	atincw, 1, \
 	atincd, 1, \
 	atincq, 1, \
-	atb, 1, \
-	atw, 1, \
-	atd, 1, \
-	atq, 1, \
 	setincb, 1, \
 	setincw, 1, \
 	setincd, 1, \

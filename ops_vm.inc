@@ -141,22 +141,6 @@ opNI	op_atincq, 1, 0	;	( a -- q a' )	Push qword value found at addr, increment a
 	jmp	_atinc_post
 end_op
 
-opBI	op_atb, 1, 0	;	( a -- b )	Push byte value found at addr
-	db op_atincb_code, op_drop_code, op_ret_code
-end_op
-
-opBI	op_atw, 1, 0	;	( a -- d )	Push word value found at addr
-	db op_atincw_code, op_drop_code, op_ret_code
-end_op
-
-opBI	op_atd, 1, 0	;	( a -- w )	Push dword value found at addr
-	db op_atincd_code, op_drop_code, op_ret_code
-end_op
-	
-opBI	op_atq, 1, 0	;	( a -- q )	Push qword value found at addr
-	db op_atincq_code, op_drop_code, op_ret_code
-end_op	
-
 opNI	op_setincb, 1, 0	;	( a b -- 'a )	Write byte value to, increment and push addr
 	call 	_set_pre
 	stosb
@@ -201,6 +185,12 @@ end_op
 opBI	op_setq, 1, 0	;	( a q -- )	Write qword value to addr
 	db op_setincq_code, op_drop_code, op_ret_code
 end_op
+
+macro cx w
+	db op_here_code, op_swap_code, op_setinc##w##_code
+	db op_litb_code, op_here_code, op_setvarq_code
+	db op_ret_code
+end macro
 
 opBI	op_cb, 1, 0	;	( b -- )	Write byte value to and increment here
 	cx	b
