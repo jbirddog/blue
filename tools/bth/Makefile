@@ -45,7 +45,7 @@ obj/%.bs0: %.bla $(INTERNAL_INC) | obj
 $(BTH): $(BLUEVM_NOEXT) $(OP_OBJS) obj/bth.bs0 | bin
 	cat $^ > $@ && chmod +x $@
 
-obj/test_%.bs0: test/%.bla $(BTH) | obj
+obj/test_%.bs0: test/%.bla $(BTH) $(TAP_INC) | obj
 	$(BLASM) -n $< $@
 
 test:
