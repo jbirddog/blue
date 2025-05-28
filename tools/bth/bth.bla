@@ -36,10 +36,7 @@ litb	EAX
 cmovd
 
 ; syscall
-litb	0x0F
-cb
-litb	0x05
-cb
+csys
 
 ; movabs rdi, _addr of tfd's litd_
 litb	tfd.code
@@ -50,12 +47,10 @@ litb	RDI
 cmovq
 
 ; stosd
-litb	0xAB
-cb
+cstosd
 
 ; ret
-litb	0xC3
-cb
+cret
 
 mccall
 
@@ -85,14 +80,10 @@ litb	EAX
 cxord
 
 ; syscall
-litb	0x0F
-cb
-litb	0x05
-cb
+csys
 
 ; ret
-litb	0xC3
-cb
+cret
 
 mccall
 

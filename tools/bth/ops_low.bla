@@ -35,6 +35,24 @@ opBI	op_cmovq, 1, 0	;	( q b -- )	Compile mov b, qword
 	ret
 end_op
 
+opBI	op_cret, 1, 0	;	( -- )	Compile ret
+	litb	0xC3
+	cb
+	ret
+end_op
+
+opBI	op_cstosd, 1, 0	;	( -- )	Compile stosd
+	litb	0xAB
+	cb
+	ret
+end_op
+
+opBI	op_csys, 1, 0	;	( -- )	Compile syscall
+	litw	0x050F
+	cw
+	ret
+end_op
+
 opBI	op_cxord, 1, 0	;	( b -- )	Compile xor b, b
 	litb	0x31
 	cb
