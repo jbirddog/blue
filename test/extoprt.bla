@@ -29,7 +29,8 @@ comp
 	endcomp
 	ifelse
 endcomp
-setq
+setincq
+drop
 
 ; call ext opcode to check that stack depth is 0
 depth
@@ -58,7 +59,8 @@ setincb
 litb	op_add_code
 setincb
 litb	op_ret_code
-setb
+setincb
+drop
 
 ; call ext opcode to check initial value is 0
 litb	0x03

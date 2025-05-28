@@ -124,30 +124,26 @@ Opcodes are subject to change.
 | 0x1B | setincw | ( a w -- 'a ) | Write word value to, increment and push addr |
 | 0x1C | setincd | ( a d -- 'a ) | Write dword value to, increment and push addr |
 | 0x1D | setincq | ( a q -- 'a ) | Write qword value to, increment and push addr |
-| 0x1E | setb | ( a b -- ) | Write byte value to addr |
-| 0x1F | setw | ( a w -- ) | Write word value to addr |
-| 0x20 | setd | ( a d -- ) | Write dword value to addr |
-| 0x21 | setq | ( a q -- ) | Write qword value to addr |
-| 0x22 | cb | ( b -- ) | Write byte value to and increment here |
-| 0x23 | cw | ( w -- ) | Write word value to and increment here |
-| 0x24 | cd | ( d -- ) | Write dword value to and increment here |
-| 0x25 | cq | ( q -- ) | Write qword value to and increment here |
-| 0x26 | litb | ( -- b ) | Push next byte from and increment instruction pointer |
-| 0x27 | litw | ( -- w ) | Push next word from and increment instruction pointer |
-| 0x28 | litd | ( -- d ) | Push next dword from and increment instruction pointer |
-| 0x29 | litq | ( -- q ) | Push next qword from and increment instruction pointer |
-| 0x2A | depth | ( -- n ) | Push depth of the data stack |
-| 0x2B | dup | ( x -- ) | Drops top of the data stack |
-| 0x2C | drop | ( a -- a a ) | Duplicate top of stack |
-| 0x2D | swap | ( a b -- b a ) | Swap top two values on the data stack |
-| 0x2E | not | ( x -- 'x ) | Bitwise not top of the data stack |
-| 0x2F | eq | ( a b -- t/f ) | Check top two items for equality and push result |
-| 0x30 | add | ( a b -- n ) | Push a + b |
-| 0x31 | sub | ( a b -- n ) | Push a - b |
-| 0x32 | and | ( a b -- n ) | Push logical and of a and b |
-| 0x33 | or | ( a b -- n ) | Push logical inclusive or of a and b |
-| 0x34 | shl | ( x n -- 'x ) | Push x shl n |
-| 0x35 | shr | ( x n -- 'x ) | Push x shr n |
+| 0x1E | cb | ( b -- ) | Write byte value to and increment here |
+| 0x1F | cw | ( w -- ) | Write word value to and increment here |
+| 0x20 | cd | ( d -- ) | Write dword value to and increment here |
+| 0x21 | cq | ( q -- ) | Write qword value to and increment here |
+| 0x22 | litb | ( -- b ) | Push next byte from and increment instruction pointer |
+| 0x23 | litw | ( -- w ) | Push next word from and increment instruction pointer |
+| 0x24 | litd | ( -- d ) | Push next dword from and increment instruction pointer |
+| 0x25 | litq | ( -- q ) | Push next qword from and increment instruction pointer |
+| 0x26 | depth | ( -- n ) | Push depth of the data stack |
+| 0x27 | dup | ( x -- ) | Drops top of the data stack |
+| 0x28 | drop | ( a -- a a ) | Duplicate top of stack |
+| 0x29 | swap | ( a b -- b a ) | Swap top two values on the data stack |
+| 0x2A | not | ( x -- 'x ) | Bitwise not top of the data stack |
+| 0x2B | eq | ( a b -- t/f ) | Check top two items for equality and push result |
+| 0x2C | add | ( a b -- n ) | Push a + b |
+| 0x2D | sub | ( a b -- n ) | Push a - b |
+| 0x2E | and | ( a b -- n ) | Push logical and of a and b |
+| 0x2F | or | ( a b -- n ) | Push logical inclusive or of a and b |
+| 0x30 | shl | ( x n -- 'x ) | Push x shl n |
+| 0x31 | shr | ( x n -- 'x ) | Push x shr n |
 
 ### Extended Low/High
 
@@ -170,7 +166,8 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ## TODOs
 
-1. Rename `op_op` to `op_opent` or similar
+1. Rename `op_op` to `op_opaddr`
+1. Reorder opcodes again
 1. Bug: add/remove ops and `make` fails until `make clean`
 1. setq, etc stack effects feel backwards when not in test code
    1. see swap in op_setvarq, op_cb, etc

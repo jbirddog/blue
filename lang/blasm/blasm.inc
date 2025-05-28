@@ -31,10 +31,6 @@ iterate <opname, opsize>, \
 	setincw, 1, \
 	setincd, 1, \
 	setincq, 1, \
-	setb, 1, \
-	setw, 1, \
-	setd, 1, \
-	setq, 1, \
 	cb, 1, \
 	cw, 1, \
 	cd, 1, \
