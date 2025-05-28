@@ -17,7 +17,6 @@ iterate <opname, opsize>, \
 	wprep, 1, \
 	wlen, 1, \
 	waddr, 1, \
-	sysret, 1, \
 	test, 1, \
 	plan, 1, \
 	ok, 1, \
