@@ -16,7 +16,7 @@ extension.
 
 ## Building
 
-To build the BlueVM, tools and examples run `make`. Submodules need to be initialized prior to building.
+To build the BlueVM, tools and examples run `make`.
 
 ## Block Structure
 
@@ -57,8 +57,7 @@ The input buffer will serve as the bootstrap for the host and is interpreted unt
 
 ## Execution
 
-BlueVM follows a simple byte oriented execution strategy. Using the values from the BlueVM data portion of memory
-it begins the outer interpreter:
+BlueVM follows a simple byte oriented execution strategy:
 
 1. Read byte from and increment instruction pointer
 1. Locate the opcode entry in the opcode map
@@ -168,10 +167,10 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 1. Rename `op_op` to `op_opaddr`
 1. Reorder opcodes again
+1. Get some writing about BlueVM, blasm, bth
 1. Bug: add/remove ops and `make` fails until `make clean`
-1. setq, etc stack effects feel backwards when not in test code
-   1. see swap in op_setvarq, op_cb, etc
-1. Consider here, some merging of `cb`, `setb`, `clitb`, etc
+1. setincq, etc stack effects feel backwards when not in test code
+   1. see swap in macros setvarx, cx, etc
 1. Bring back a simpiler version of the `blue` language
 1. See about re-arranging >r order in op_compile_begin to simplify it and op_compile_end
 1. Grok more fasmg magic to improve blasm syntax
