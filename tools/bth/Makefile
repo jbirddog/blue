@@ -33,8 +33,8 @@ $(BLUEVM_NOEXT): $(BLUEVM) | obj
 ops_%.tbl: ops_%.bla
 	$(SED_TBL) $< > $@
 
-$(INTERNAL_INC): $(INTERNAL_INC).sh $(INTERNAL_INC).tmpl $(OP_TBLS)
-	./$< > $@
+$(INTERNAL_INC): inc.sh inc.tmpl ops_internal.tbl
+	WHICH="internal" ./$< > $@
 
 $(TAP_INC): $(TAP_INC).sh $(TAP_INC).tmpl $(OP_TBLS)
 	./$< > $@
