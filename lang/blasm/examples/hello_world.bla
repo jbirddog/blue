@@ -5,15 +5,11 @@
 here
 dup
 
-; Hello, w
-litq	0x57202C6F6C6C6548
-cq
+clitq	"Hello, w"
+clitd	"orld"
 
-; orld!\n
-litd	0x646C726F
-cd
-litw	0x0A21
-cw
+; !\n
+clitw	0x0A21
 
 ; string len
 here
@@ -26,32 +22,25 @@ here
 ; xor eax, eax
 ; inc eax
 ; mov edi, eax
-litw	0xC031
-cw
-litw	0xC0FF
-cw
-litw	0xC789
-cw
+clitw	0xC031
+clitw	0xC0FF
+clitw	0xC789
 
 ; mov edx, _string len_
 swap
-litb	0xBA
-cb
+clitb	0xBA
 cd
 
 ; movabs rsi, _addr of string_
 swap
-litw	0xBE48
-cw
+clitw	0xBE48
 cq
 
 ; syscall
-litw	0x050F
-cw
+clitw	0x050F
 
 ; ret
-litb	0xC3
-cb
+clitb	0xC3
 
 ; call the compiled machine code
 mccall
