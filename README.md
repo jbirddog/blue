@@ -166,11 +166,8 @@ Along with the code for BlueVM this repository also contains some tools and exam
 ## TODOs
 
 1. Rename `op_op` to `op_opaddr`
-1. Reorder opcodes again
 1. Get some writing about BlueVM, blasm, bth
 1. Bug: add/remove ops and `make` fails until `make clean`
-1. setincq, etc stack effects feel backwards when not in test code
-   1. see swap in macros setvarx, cx, etc
 1. Bring back a simpiler version of the `blue` language
 1. See about re-arranging >r order in op_compile_begin to simplify it and op_compile_end
 1. Grok more fasmg magic to improve blasm syntax

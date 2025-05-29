@@ -233,29 +233,27 @@ opBI	op_woka, 1, 0	;	( a -- )	Write ok line to addr
 end_op
 
 opBI	op_wprep, 1, 0	;	( -- )	Preps the write system call
-	; xor eax, eax
+	litb	EAX
+	litop	op_cxord_code
 	; inc eax
 	; mov edi, eax
-	clitw	0xC031
 	clitw	0xC0FF
 	clitw	0xC789
 	ret
 end_op
 
 opBI	op_wlen, 1, 0	;	( -- )	Buffer length for the write system call
-	; mov edx, _buffer len_
-	clitb	0xBA
 	litop	op_thr_code
 	litop	op_oblk_code
 	sub
-	cd
+	litb	EDX
+	litop	op_cmovd_code
 	ret
 end_op
 
 opBI	op_waddr, 1, 0	;	( -- )	Addr of the buffer for the write system call
-	; movabs rsi, _addr of string_
-	clitw	0xBE48
 	litop	op_oblk_code
-	cq
+	litb	RSI
+	litop	op_cmovq_code
 	ret
 end_op

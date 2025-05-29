@@ -78,6 +78,5 @@ These internal opcodes are used by `bth` itself and should not be considered sta
 ## TODOs
 
 1. Print "TAP version 14" when testing begins
-1. Redo wprep, wlen, waddr to use cxord, cmovd, etc
 1. bth.inc and tap.inc tmpl/sh files could be merged
 1. See about getting listed as a TAP producer
