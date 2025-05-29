@@ -35,6 +35,6 @@ iterate <opname, opsize>, \
 	op_##opname##_code = % - 1 + 0x80
 
 	calminstruction #opname
-		emit 1, % - 1 + 0x80
+		emit 1, op_##opname##_code
 	end calminstruction
 end iterate

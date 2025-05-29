@@ -1,4 +1,4 @@
-; Generated from tap.inc.tmpl
+; Generated from inc.tmpl
 
 iterate <opname, opsize>, \
 	test, 1, \
@@ -12,9 +12,9 @@ iterate <opname, opsize>, \
 	okn0, 1, \
 	done, 1, \
 
-	op_##opname##_code = % - 1 + 0xC0 
+	op_##opname##_code = % - 1 + 0xC0
 
 	calminstruction #opname
-		emit 1, % - 1 + 0xC0
+		emit 1, op_##opname##_code
 	end calminstruction
 end iterate

@@ -36,8 +36,8 @@ ops_%.tbl: ops_%.bla
 $(INTERNAL_INC): inc.sh inc.tmpl ops_internal.tbl
 	WHICH="internal" OFFSET="0x80" ./$< > $@
 
-$(TAP_INC): $(TAP_INC).sh $(TAP_INC).tmpl $(OP_TBLS)
-	./$< > $@
+$(TAP_INC): inc.sh inc.tmpl ops_tap.tbl
+	WHICH="tap" OFFSET="0xC0" ./$< > $@
 
 obj/%.bs0: %.bla $(INTERNAL_INC) | obj
 	$(BLASM) -n $< $@
