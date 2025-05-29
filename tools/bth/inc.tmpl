@@ -1,9 +1,9 @@
 
 iterate <opname, opsize>, \
 _OPS_
-	op_##opname##_code = % - 1 + 0x80 
+	op_##opname##_code = % - 1 + _OFFSET_
 
 	calminstruction #opname
-		emit 1, % - 1 + 0x80
+		emit 1, % - 1 + _OFFSET_
 	end calminstruction
 end iterate
