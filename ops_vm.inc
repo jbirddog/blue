@@ -58,7 +58,7 @@ opNI	op_tor, 1, 0	;	( a -- )	Move top of data stack to return stack
 	ret
 end_op
 
-opNI	op_fromr, 1, 0	;	( -- a )	Move top of return stacl to data stack
+opNI	op_fromr, 1, 0	;	( -- a )	Move top of return stack to data stack
 	call	return_stack_pop
 	call	data_stack_push
 

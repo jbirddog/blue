@@ -8,7 +8,7 @@ ifelse	1	( t/f ta fa -- ? )	Call ta if t/f is true else call fa
 mccall	1	( a -- ? )	Call machine code at address
 call	1	( a -- ? )	Call bytecode located at address
 tor	1	( a -- )	Move top of data stack to return stack
-fromr	1	( -- a )	Move top of return stacl to data stack
+fromr	1	( -- a )	Move top of return stack to data stack
 ret	1	( -- )	Pops value from return stack and sets the instruction pointer
 comp	1	( -- )	Begin compiling bytecode
 endcomp	1	( -- a )	Append ret and end compilation, push addr where compilation started

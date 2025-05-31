@@ -103,7 +103,7 @@ Opcodes are subject to change.
 | 0x07 | mccall | ( a -- ? ) | Call machine code at address |
 | 0x08 | call | ( a -- ? ) | Call bytecode located at address |
 | 0x09 | tor | ( a -- ) | Move top of data stack to return stack |
-| 0x0A | fromr | ( -- a ) | Move top of return stacl to data stack |
+| 0x0A | fromr | ( -- a ) | Move top of return stack to data stack |
 | 0x0B | ret | ( -- ) | Pops value from return stack and sets the instruction pointer |
 | 0x0C | comp | ( -- ) | Begin compiling bytecode |
 | 0x0D | endcomp | ( -- a ) | Append ret and end compilation, push addr where compilation started |
@@ -160,12 +160,14 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ### Ideas for more tools/examples
 
+1. Tool to create a .bs0 block from an ops tbl file, used to patch a disassembler
 1. Write a bs0->blasm (msalb) decompiler by overwriting opcode map/handler
 1. Tool to patch a BlueVM binary with custom ext ops and/or input buffer
 
 ## TODOs
 
 1. Rename `op_op` to `op_opaddr`
+1. Rename code buffer to output buffer
 1. Get some writing about BlueVM, blasm, bth
 1. Bug: add/remove ops and `make` fails until `make clean`
 1. Bring back a simpiler version of the `blue` language
