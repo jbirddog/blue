@@ -11,7 +11,7 @@ plan
 ;
 
 litb	0xFF
-op
+opentry
 
 ; set flags and size
 litb	OPCODE_ENTRY_FLAG_BYTECODE
@@ -43,7 +43,7 @@ litop	0xFF
 ;
 
 litb	0xFF
-op
+opentry
 
 ; set flags and size
 litb	OPCODE_ENTRY_FLAG_BYTECODE or OPCODE_ENTRY_FLAG_INLINED

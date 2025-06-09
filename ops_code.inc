@@ -19,7 +19,7 @@ op_ifelse:
 
 	ret
 
-op_op:
+op_opentry:
 	call	data_stack_pop
 	shl	eax, 4
 	add	rax, opcode_tbl

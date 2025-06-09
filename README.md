@@ -107,7 +107,7 @@ Opcodes are subject to change.
 | 0x0B | ret | ( -- ) | Pops value from return stack and sets the instruction pointer |
 | 0x0C | comp | ( -- ) | Begin compiling bytecode |
 | 0x0D | endcomp | ( -- a ) | Append ret and end compilation, push addr where compilation started |
-| 0x0E | op | ( b -- a ) | Push addr of the offset into the op table for the opcode |
+| 0x0E | opentry | ( b -- a ) | Push addr of the entry in the op table for the opcode |
 | 0x0F | setvarb | ( b b -- ) | Set litb value of var op |
 | 0x10 | setvarw | ( w b -- ) | Set litw value of var op |
 | 0x11 | setvard | ( d b -- ) | Set litd value of var op |
@@ -167,7 +167,6 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ## TODOs
 
-1. Rename `op_op` to `op_opentry`
 1. Rename code buffer to output buffer
 1. Get some writing about BlueVM, blasm, bth
 1. Bug: add/remove ops and `make` fails until `make clean`

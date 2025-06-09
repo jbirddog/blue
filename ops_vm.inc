@@ -75,10 +75,10 @@ end_op
 opN	op_comp, 1, OPCODE_ENTRY_FLAG_IMMEDIATE	;	( -- )	Begin compiling bytecode
 opN	op_endcomp, 1, OPCODE_ENTRY_FLAG_IMMEDIATE	;	( -- a )	Append ret and end compilation, push addr where compilation started
 
-opN	op_op, 1, 0	;	( b -- a )	Push addr of the offset into the op table for the opcode
+opN	op_opentry, 1, 0	;	( b -- a )	Push addr of the entry in the op table for the opcode
 
 macro setvarx x
-	db op_op_code, op_litb_code, 0x03, op_add_code
+	db op_opentry_code, op_litb_code, 0x03, op_add_code
 	db op_swap_code, op_setinc##x##_code, op_drop_code
 	db op_ret_code
 end macro

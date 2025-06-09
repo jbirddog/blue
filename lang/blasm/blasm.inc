@@ -15,7 +15,7 @@ iterate <opname, opsize>, \
 	ret, 1, \
 	comp, 1, \
 	endcomp, 1, \
-	op, 1, \
+	opentry, 1, \
 	setvarb, 1, \
 	setvarw, 1, \
 	setvard, 1, \

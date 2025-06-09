@@ -140,7 +140,7 @@ end_op
 
 opBI	op_cdsttfd, 1, 0	;	( -- )	Compile movabs rdi, _addr of tfd's litd_
 	litb	op_tfd_code
-	op
+	opentry
 	litb	0x03
 	add
 	litb	RDI
