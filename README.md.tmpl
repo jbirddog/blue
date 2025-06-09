@@ -109,13 +109,14 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ### Ideas for more tools/examples
 
-1. Tool to create a .bs0 block from an ops tbl file, used to patch a disassembler
-1. Write a bs0->blasm (msalb) decompiler by overwriting opcode map/handler
+1. bldis - bs0->bla disassembler
+1. Tool to create string file from an ops tbl file, to be used by bldis
 1. Tool to patch a BlueVM binary with custom ext ops and/or input buffer
+1. Tool to check stack effects
 
 ## TODOs
 
-1. Rename `op_op` to `op_opaddr`
+1. Rename `op_op` to `op_opentry`
 1. Rename code buffer to output buffer
 1. Get some writing about BlueVM, blasm, bth
 1. Bug: add/remove ops and `make` fails until `make clean`
