@@ -60,9 +60,9 @@ The input buffer will serve as the bootstrap for the host and is interpreted unt
 BlueVM follows a simple byte oriented execution strategy:
 
 1. Read byte from and increment instruction pointer
-1. Locate the opcode entry in the opcode map
-   1. If code address is 0 push the opcode on the data stack and call invalid opcode handler
-1. Push the code address and flags on the data stack and call the opcode handler
+1. Locate the opcode entry in the opcode table
+   1. If interpreting, call the opcode entry's code address
+   1. If compiling, copy N bytes into the code buffer and advance `here` (N = the opcode entry's length)
 1. Goto 1
 
 Because of this "late binding" approach, the host can change the values that the BlueVM uses to execute. The outer
@@ -77,13 +77,6 @@ Each entry in the opcode map is 16 bytes.
 1. Code (14 bytes)
    1. Either 8 bytes for addr and 6 empty
    1. Or 14 bytes available for byte or machine code
-
-## Opcode Handler
-
-Once an opcode entry is located in the opcode map the opcode handler is called. The BlueVM has two opcode handlers,
-interpret (default) and compile. The interpret handler calls the code address specified in the opcode entry. The
-compile handler finds the opcode length in the opcode entry and copies that many bytes, including the opcode, into
-the code buffer and advances the code buffer's here.
 
 ## Opcodes
 
@@ -167,9 +160,6 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ## TODOs
 
-1. Simplify opcode handler
-   1. Drop invalid opcode handler, let it crash
-   1. Don't believe setting a custom opcode handler will really be beneficial in practice
 1. Rename code buffer to output buffer
 1. Get some writing about BlueVM, blasm, bth
 1. Bug: add/remove ops and `make` fails until `make clean`
