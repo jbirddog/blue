@@ -44,26 +44,16 @@ opcode_tbl_entry:
 	
 	ret
 
-; expects opcode in rax
-opcode_handler_call:
-	push	rax
-	call	opcode_tbl_entry
-
-	pop	rax
-	call	[opcode_handler]
-	
-	ret
-
-read_byte:
+interpreter:
 	mov	rsi, [instruction_pointer]
 	xor	eax, eax
 	lodsb
 	mov	[instruction_pointer], rsi
 
-	ret
+	push	rax
+	call	opcode_tbl_entry
 
-interpreter:
-	call	read_byte
-	call	opcode_handler_call
+	pop	rax
+	call	[opcode_handler]
 	
 	jmp	interpreter
