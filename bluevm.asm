@@ -54,7 +54,10 @@ entry $
 	call	read_boot_code	
 	call	interpreter
 
-times (VM_CODE_SIZE - ($ - $$)) db 0
+BLK_0_PADDING = VM_CODE_SIZE - ($ - $$)
+show "Bytes left in block 0: ", BLK_0_PADDING
+
+times BLK_0_PADDING db 0
 
 opcode_tbl:
 .offset = 0x00

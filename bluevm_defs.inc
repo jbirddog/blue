@@ -59,3 +59,10 @@ macro end_op
 	end repeat
 	assert ($ - latest_op) = (CELL_SIZE * 2)
 end macro
+
+; from https://flatassembler.net/docs.php?article=fasmg_manual
+macro show description,value
+	repeat 1, d:value
+		display description,`d,13,10
+	end repeat
+end macro
