@@ -70,7 +70,7 @@ op_comp:
 	mov	rax, rdi
 	call	return_stack_push
 
-	mov	rax, OPCODE_HANDLER_COMPILE
+	mov	rax, opcode_handler_compile
 	xchg	[opcode_handler], rax
 	call	return_stack_push
 
@@ -92,7 +92,7 @@ op_endcomp:
 	call	return_stack_pop
 	mov	[opcode_handler], rax
 
-	cmp	rax, OPCODE_HANDLER_INTERPRET
+	cmp	rax, opcode_handler_interpret
 	je	.outer
 	
 .nested:

@@ -167,6 +167,9 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ## TODOs
 
+1. Simplify opcode handler
+   1. Drop invalid opcode handler, let it crash
+   1. Don't believe setting a custom opcode handler will really be beneficial in practice
 1. Rename code buffer to output buffer
 1. Get some writing about BlueVM, blasm, bth
 1. Bug: add/remove ops and `make` fails until `make clean`

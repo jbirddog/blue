@@ -30,11 +30,6 @@ opcode_handler_compile:
 	ret
 
 ; expects opcode in rax
-_opcode_handler_invalid:
-	mov	edi, eax
-	jmp	exit
-
-; expects opcode in rax
 opcode_tbl_entry:
 	mov	edx, eax
 	shl	eax, 4
@@ -54,21 +49,9 @@ opcode_handler_call:
 	push	rax
 	call	opcode_tbl_entry
 
-	test	rdi, rdi
-	jz	.invalid
-
-	; TODO: if the host set the opcode handler data_stack_push rdi, rcx, rax and call it
 	pop	rax
 	call	[opcode_handler]
-
-	jmp	.done
-
-.invalid:
-	; TODO: if the host set the opcode invalid handler data_stack_push rax and call it
-	pop	rax
-	call	[opcode_handler_invalid]
 	
-.done:
 	ret
 
 read_byte:
