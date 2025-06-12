@@ -3,16 +3,10 @@ format ELF64 executable 3
 
 BLK_0 = $$ - ELF_HEADERS_SIZE
 
-OPCODE_HANDLER_COMPILE = opcode_handler_compile
-OPCODE_HANDLER_INTERPRET = opcode_handler_interpret
-OPCODE_HANDLER_INVALID = _opcode_handler_invalid
-
 segment readable writeable executable
 
 instruction_pointer dq input_buffer
-
-opcode_handler dq OPCODE_HANDLER_INTERPRET
-opcode_handler_invalid dq OPCODE_HANDLER_INVALID
+opcode_handler dq opcode_handler_interpret
 
 return_stack_here dq return_stack
 data_stack_here dq data_stack
