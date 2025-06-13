@@ -51,6 +51,7 @@ iterate <opname, opsize>, \
 	or, 1, \
 	shl, 1, \
 	shr, 1, \
+	scall1, 1, \
 
 	op_##opname##_code = % - 1 
 

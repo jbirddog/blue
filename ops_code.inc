@@ -136,3 +136,33 @@ _post_lit:
 	mov	[instruction_pointer], rsi
 
 	ret
+
+SYSCALL_DSH_REG = rbp
+
+_syscall6:
+	mov	r9, [SYSCALL_DSH_REG - (CELL_SIZE * 6)]
+
+_syscall5:
+	mov	r8, [SYSCALL_DSH_REG - (CELL_SIZE * 5)]
+	
+_syscall4:
+	mov	r10, [SYSCALL_DSH_REG - (CELL_SIZE * 4)]
+	
+_syscall3:
+	mov	rdx, [SYSCALL_DSH_REG - (CELL_SIZE * 3)]
+	
+_syscall2:
+	mov	rsi, [SYSCALL_DSH_REG - (CELL_SIZE * 2)]
+	
+_syscall1:
+	mov	rdi, [SYSCALL_DSH_REG - (CELL_SIZE * 1)]
+
+_syscall:
+	mov	eax, dword [SYSCALL_DSH_REG]
+	syscall
+	pop	rcx
+	sub	qword [SYSCALL_DSH_REG], rcx
+	
+	call	data_stack_push
+	
+	ret

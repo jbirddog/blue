@@ -136,6 +136,7 @@ Opcodes are subject to change.
 | 0x2F | or | ( a b -- n ) | Push logical inclusive or of a and b |
 | 0x30 | shl | ( x n -- 'x ) | Push x shl n |
 | 0x31 | shr | ( x n -- 'x ) | Push x shr n |
+| 0x32 | scall1 | ( arg0 n -- q ) | Make syscall n with one argument |
 
 ### Extended Low/High
 
@@ -160,6 +161,7 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ## TODOs
 
+1. What if data_stack_here was always in, say rbp?
 1. Rename code buffer to output buffer
 1. Get some writing about BlueVM, blasm, bth
 1. Bug: add/remove ops and `make` fails until `make clean`
