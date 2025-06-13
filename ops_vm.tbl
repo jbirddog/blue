@@ -48,4 +48,4 @@ and	1	( a b -- n )	Push logical and of a and b
 or	1	( a b -- n )	Push logical inclusive or of a and b
 shl	1	( x n -- 'x )	Push x shl n
 shr	1	( x n -- 'x )	Push x shr n
-scall1	1	( arg0 n -- q )	Make syscall n with one argument
+scall1	1	( q d -- q )	Make syscall _d_ with one argument

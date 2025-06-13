@@ -136,7 +136,7 @@ Opcodes are subject to change.
 | 0x2F | or | ( a b -- n ) | Push logical inclusive or of a and b |
 | 0x30 | shl | ( x n -- 'x ) | Push x shl n |
 | 0x31 | shr | ( x n -- 'x ) | Push x shr n |
-| 0x32 | scall1 | ( arg0 n -- q ) | Make syscall n with one argument |
+| 0x32 | scall1 | ( q d -- q ) | Make syscall _d_ with one argument |
 
 ### Extended Low/High
 

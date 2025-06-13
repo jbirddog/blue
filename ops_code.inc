@@ -140,29 +140,28 @@ _post_lit:
 SYSCALL_DSH_REG = rbp
 
 _syscall6:
-	mov	r9, [SYSCALL_DSH_REG - (CELL_SIZE * 6)]
+	mov	r9, [SYSCALL_DSH_REG - (CELL_SIZE * 7)]
 
 _syscall5:
-	mov	r8, [SYSCALL_DSH_REG - (CELL_SIZE * 5)]
+	mov	r8, [SYSCALL_DSH_REG - (CELL_SIZE * 6)]
 	
 _syscall4:
-	mov	r10, [SYSCALL_DSH_REG - (CELL_SIZE * 4)]
+	mov	r10, [SYSCALL_DSH_REG - (CELL_SIZE * 5)]
 	
 _syscall3:
-	mov	rdx, [SYSCALL_DSH_REG - (CELL_SIZE * 3)]
+	mov	rdx, [SYSCALL_DSH_REG - (CELL_SIZE * 4)]
 	
 _syscall2:
-	mov	rsi, [SYSCALL_DSH_REG - (CELL_SIZE * 2)]
+	mov	rsi, [SYSCALL_DSH_REG - (CELL_SIZE * 3)]
 	
 _syscall1:
-	mov	rdi, [SYSCALL_DSH_REG - (CELL_SIZE * 1)]
+	mov	rdi, [SYSCALL_DSH_REG - (CELL_SIZE * 2)]
 
 _syscall:
-	mov	eax, dword [SYSCALL_DSH_REG]
+	mov	rax, [SYSCALL_DSH_REG - (CELL_SIZE * 1)]
 	syscall
 	pop	rcx
-	sub	qword [SYSCALL_DSH_REG], rcx
-	
-	call	data_stack_push
+	sub	[SYSCALL_DSH_REG], rcx
+	mov	[SYSCALL_DSH_REG - (CELL_SIZE * 1)], rax
 	
 	ret

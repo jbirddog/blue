@@ -1,8 +1,10 @@
 
-opNI	op_exit, 1, 0	;	( b -- )	Exit with status from top of stack
-	call	data_stack_pop
-	mov	edi, eax
-	jmp	exit
+;opNI	op_exit, 1, 0	;	( b -- )	Exit with status from top of stack
+;	call	data_stack_pop
+;	mov	edi, eax
+;	jmp	exit
+opBI	op_exit, 1, 0	;	( b -- )	Exit with status from top of stack
+	db op_litb_code, 0x3C, op_scall1_code
 end_op
 
 opBI	op_argc, 1, 0	;	( -- q )	Push argc
