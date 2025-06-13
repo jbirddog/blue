@@ -11,13 +11,13 @@ tfd	1	( -- d )	Push fd of test input file
 oblk	1	( -- a )	Push addr of TAP output's start
 thr	1	( -- a )	Push addr of TAP output's here
 setthr	1	( a -- )	Set addr of TAP output's here
-argv1	1	( -- a )	Push argv[1]_
+argv1	1	( -- a )	Push _argv[1]_
 cdstarg	1	( -- )	Compile movabs rdi, _addr of argv[1]_
 cflgsro	1	( -- )	Compile xor esi, esi (flags = READ_ONLY)
 csopen	1	( -- )	Compile mov eax, 0x02 (sys_open); syscall
 cdsttfd	1	( -- )	Compile movabs rdi, _addr of tfd's litd_
 cfrmtfd	1	( -- )	Compile mov edi, _tfd_
-csrctib	1	( -- )	Compile mov rsi, _addr of _test input block_
+csrctib	1	( -- )	Compile mov rsi, _addr of test input block_
 cblklen	1	( -- )	Compile mov edx, 0x0400
 csread	1	( -- )	Compile xor eax, eax; syscall
 opentst	1	( -- )	Open argv[1] and set tfd

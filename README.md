@@ -62,10 +62,10 @@ BlueVM follows a simple byte oriented execution strategy:
 1. Read byte from and increment instruction pointer
 1. Locate the opcode entry in the opcode table
    1. If interpreting, call the opcode entry's code address
-   1. If compiling, copy N bytes into the code buffer and advance `here` (N = the opcode entry's length)
+   1. If compiling, copy number of bytes equal to the opcode entry's length to the code buffer and advance `here`
 1. Goto 1
 
-Because of this "late binding" approach, the host can change the values that the BlueVM uses to execute. The outer
+Because of this "late binding" approach, the host can change the values that the BlueVM uses to execute. The
 interpreter requires that the host termintes execution properly. One way to do this is with the `exit` opcode.
 
 ## Opcode Map Structure

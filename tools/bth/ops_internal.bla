@@ -109,7 +109,7 @@ opBI	op_setthr, 1, 0	;	( a -- )	Set addr of TAP output's here
 	ret
 end_op
 
-opBI	op_argv1, 1, 0	;	( -- a )	Push argv[1]_
+opBI	op_argv1, 1, 0	;	( -- a )	Push _argv[1]_
 	argv
 	litb	0x08
 	add
@@ -155,7 +155,7 @@ opBI	op_cfrmtfd, 1, 0	;	( -- )	Compile mov edi, _tfd_
 	ret
 end_op
 
-opBI	op_csrctib, 1, 0	;	( -- )	Compile mov rsi, _addr of _test input block_
+opBI	op_csrctib, 1, 0	;	( -- )	Compile mov rsi, _addr of test input block_
 	litb	BLK_TEST_INPUT
 	blk
 	litb	RSI

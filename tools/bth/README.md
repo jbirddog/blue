@@ -57,13 +57,13 @@ These internal opcodes are used by `bth` itself and should not be considered sta
 | 0x8A | oblk | ( -- a ) | Push addr of TAP output's start |
 | 0x8B | thr | ( -- a ) | Push addr of TAP output's here |
 | 0x8C | setthr | ( a -- ) | Set addr of TAP output's here |
-| 0x8D | argv1 | ( -- a ) | Push argv[1]_ |
+| 0x8D | argv1 | ( -- a ) | Push _argv[1]_ |
 | 0x8E | cdstarg | ( -- ) | Compile movabs rdi, _addr of argv[1]_ |
 | 0x8F | cflgsro | ( -- ) | Compile xor esi, esi (flags = READ_ONLY) |
 | 0x90 | csopen | ( -- ) | Compile mov eax, 0x02 (sys_open); syscall |
 | 0x91 | cdsttfd | ( -- ) | Compile movabs rdi, _addr of tfd's litd_ |
 | 0x92 | cfrmtfd | ( -- ) | Compile mov edi, _tfd_ |
-| 0x93 | csrctib | ( -- ) | Compile mov rsi, _addr of _test input block_ |
+| 0x93 | csrctib | ( -- ) | Compile mov rsi, _addr of test input block_ |
 | 0x94 | cblklen | ( -- ) | Compile mov edx, 0x0400 |
 | 0x95 | csread | ( -- ) | Compile xor eax, eax; syscall |
 | 0x96 | opentst | ( -- ) | Open argv[1] and set tfd |
