@@ -1,6 +1,6 @@
 
-opBI	op_exit, 1, 0	;	( b -- )	Exit with status from top of stack
-	db op_litb_code, 0x3C, op_scall1_code
+opBI	op_halt, 1, 0	;	( -- )	Exit with status of 0
+	db op_litb_code, 0x00, op_litb_code, 0x3C, op_scall1_code
 end_op
 
 opBI	op_argc, 1, 0	;	( -- q )	Push argc

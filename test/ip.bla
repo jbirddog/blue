@@ -6,13 +6,14 @@ test
 litw	'01'
 plan
 
-; jump over litb 07 exit
+; jump over litb 0x07 litb 0x3C scall1
 ip
-litb	0x07
+litb	0x09
 add
 setip
 litb	0x07
-exit
+litb	0x3C
+scall1
 ok
 
 done

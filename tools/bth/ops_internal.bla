@@ -33,7 +33,8 @@ opBI	op_chkargc, 1, 0	;	( -- )	Exit with error unless argc is 2
 	eq
 	comp
 		litb	0x01
-		exit
+		litb	0x3C
+		scall1
 	endcomp
 	litop	op_ifnot_code
 	ret

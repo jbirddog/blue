@@ -1,4 +1,4 @@
-exit	1	( b -- )	Exit with status from top of stack
+halt	1	( -- )	Exit with status of 0
 argc	1	( -- q )	Push argc
 argv	1	( -- a )	Push addr of argv
 scall0	1	( d -- q )	Make syscall _d_ with no arguments

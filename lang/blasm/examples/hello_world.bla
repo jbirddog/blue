@@ -45,5 +45,7 @@ clitb	0xC3
 ; call the compiled machine code
 mccall
 
+; make sure nothing is on the stack when we exit
 depth
-exit
+litb	0x3C
+scall1

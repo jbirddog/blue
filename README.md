@@ -66,7 +66,7 @@ BlueVM follows a simple byte oriented execution strategy:
 1. Goto 1
 
 Because of this "late binding" approach, the host can change the values that the BlueVM uses to execute. The
-interpreter requires that the host termintes execution properly. One way to do this is with the `exit` opcode.
+interpreter requires that the host termintes execution properly. One way to do this is with the `halt` opcode.
 
 ## Opcode Map Structure
 
@@ -86,7 +86,7 @@ Opcodes are subject to change.
 
 | Opcode | Name | Stack Effect | Description |
 |----|----|----|----|
-| 0x00 | exit | ( b -- ) | Exit with status from top of stack |
+| 0x00 | halt | ( -- ) | Exit with status of 0 |
 | 0x01 | argc | ( -- q ) | Push argc |
 | 0x02 | argv | ( -- a ) | Push addr of argv |
 | 0x03 | scall0 | ( d -- q ) | Make syscall _d_ with no arguments |
@@ -169,7 +169,7 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ## TODOs
 
-1. Make opcode 0 `halt ( -- )` instead of `exit ( n -- )` 
+1. Add `parse ( b -- a w )` to parse until delim, push addr and length
 1. What if data_stack_here was always in, say rbp?
    1. Would remove the double dereference
    1. Double dereference causes suboptimal code when cleaning up the stack after `scall`s

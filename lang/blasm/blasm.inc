@@ -1,7 +1,7 @@
 ; Generated from blasm.inc.tmpl
 
 iterate <opname, opsize>, \
-	exit, 1, \
+	halt, 1, \
 	argc, 1, \
 	argv, 1, \
 	scall0, 1, \

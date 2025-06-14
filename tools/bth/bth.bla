@@ -8,4 +8,5 @@ runtst
 
 ; this should never run
 litb	0xFF
-exit
+litb	0x3C
+scall1

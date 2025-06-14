@@ -79,5 +79,6 @@ end_op
 opBI	op_done, 1, 0	;	( -- )	Writes TAP output to stdout and exits with depth as status
 	tapout
 	depth
-	exit
+	litb	0x3C
+	scall1
 end_op
