@@ -5,7 +5,7 @@ data_stack_push:
 stack_push:
 	mov	rdi, [rdx]
 	stosq
-	add	qword [rdx], CELL_SIZE
+	mov	[rdx], rdi
 	
 	ret
 
@@ -51,9 +51,11 @@ data_stack_pop2a:
 	ret
 
 return_stack_push:
-	mov	rdx, return_stack_here
-	jmp	stack_push
+	mov	[RS_REG], rax
+	add	RS_REG, CELL_SIZE
+	ret
 
 return_stack_pop:
-	mov	rdx, return_stack_here
-	jmp	stack_pop
+	sub	RS_REG, CELL_SIZE
+	mov	rax, [RS_REG]
+	ret

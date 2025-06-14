@@ -137,8 +137,6 @@ _post_lit:
 
 	ret
 
-SYSCALL_DSH_REG = rbp
-
 _syscall6:
 	mov	r9, [SYSCALL_DSH_REG - (CELL_SIZE * 7)]
 
