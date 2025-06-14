@@ -1,6 +1,3 @@
 litb	0x00
 litb	0x3C
 scall1
-
-litb	0x00
-exit

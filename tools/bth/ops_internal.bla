@@ -178,6 +178,16 @@ opBI	op_csread, 1, 0	;	( -- )	Compile xor eax, eax; syscall
 end_op
 
 opBI	op_opentst, 1, 0	;	( -- )	Open argv[1] and set tfd
+	litb	0x00
+	litop	op_argv1_code
+	litb	SYS_OPEN
+	scall2
+	
+	litb	op_tfd_code
+	setvard
+	ret
+
+if 0
 	here
 	
 	litop	op_cdstarg_code
@@ -191,6 +201,7 @@ opBI	op_opentst, 1, 0	;	( -- )	Open argv[1] and set tfd
 	mccall
 	; TODO: check fd
 	ret
+end if
 end_op
 
 opBI	op_readtst, 1, 0	;	( -- )	Read block from tfd into the test input block
