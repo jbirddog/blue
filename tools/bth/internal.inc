@@ -31,6 +31,7 @@ iterate <opname, opsize>, \
 	wprep, 1, \
 	wlen, 1, \
 	waddr, 1, \
+	tapout, 1, \
 
 	op_##opname##_code = % - 1 + 0x80
 

@@ -171,13 +171,15 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 1. Order of scall ops
 1. Update bth to use syscall ops
-   1. Remove dead internal ops
+   1. Remove dead internal ops/consts
+   1. Factor out some ops like `openro`, `stdout`, etc
 
 ## TODOs
 
 1. Make opcode 0 `halt ( -- )` instead of `exit ( n -- )` 
 1. What if data_stack_here was always in, say rbp?
    1. Would remove the double dereference
+   1. Double dereference causes suboptimal code when cleaning up the stack after `scall`s
 1. Move boot code to bytecode, or maybe better drop it all together
    1. If dropped, need to change tests that `bluevm < test`
 1. Rename code buffer to output buffer

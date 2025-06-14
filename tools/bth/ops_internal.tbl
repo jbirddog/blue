@@ -28,3 +28,4 @@ woka	1	( a -- )	Write ok line to addr
 wprep	1	( -- )	Preps the write system call
 wlen	1	( -- )	Buffer length for the write system call
 waddr	1	( -- )	Addr of the buffer for the write system call
+tapout	1	( -- )	Write TAP output to stdout

@@ -74,6 +74,7 @@ These internal opcodes are used by `bth` itself and should not be considered sta
 | 0x9B | wprep | ( -- ) | Preps the write system call |
 | 0x9C | wlen | ( -- ) | Buffer length for the write system call |
 | 0x9D | waddr | ( -- ) | Addr of the buffer for the write system call |
+| 0x9E | tapout | ( -- ) | Write TAP output to stdout |
 
 ## TODOs
 

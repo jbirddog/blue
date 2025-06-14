@@ -77,6 +77,7 @@ opBI	op_okn0, 1, 0	;	( n -- )	Ok if top of stack is not 0
 end_op
 
 opBI	op_done, 1, 0	;	( -- )	Writes TAP output to stdout and exits with depth as status
+if 0
 	here
 	wprep
 	wlen
@@ -84,6 +85,11 @@ opBI	op_done, 1, 0	;	( -- )	Writes TAP output to stdout and exits with depth as 
 	csys
 	cret
 	mccall
+	depth
+	exit
+end if
+
+	tapout
 	depth
 	exit
 end_op

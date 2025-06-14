@@ -8,6 +8,10 @@ EDI = 0x07
 RSI = ESI
 RDI = EDI
 
+STDOUT = 0x01
+
+SYS_READ = 0x00
+SYS_WRITE = 0x01
 SYS_OPEN = 0x02
 
 BLK_CODE = 0x07
@@ -186,34 +190,17 @@ opBI	op_opentst, 1, 0	;	( -- )	Open argv[1] and set tfd
 	litb	op_tfd_code
 	setvard
 	ret
-
-if 0
-	here
-	
-	litop	op_cdstarg_code
-	litop	op_cflgsro_code
-	litop	op_csopen_code
-
-	litop	op_cdsttfd_code
-	litop	op_cstosd_code
-	litop	op_cret_code
-
-	mccall
-	; TODO: check fd
-	ret
-end if
 end_op
 
 opBI	op_readtst, 1, 0	;	( -- )	Read block from tfd into the test input block
-	here
-
-	litop	op_cfrmtfd_code
-	litop	op_csrctib_code
-	litop	op_cblklen_code
-	litop	op_csread_code
-	litop	op_cret_code
-
-	mccall
+	litw	0x0400
+	litb	BLK_TEST_INPUT
+	blk
+	litop	op_tfd_code
+	litb	SYS_READ
+	scall3
+	drop
+	
 	ret
 end_op
 
@@ -266,5 +253,18 @@ opBI	op_waddr, 1, 0	;	( -- )	Addr of the buffer for the write system call
 	litop	op_oblk_code
 	litb	RSI
 	litop	op_cmovq_code
+	ret
+end_op
+
+opBI	op_tapout, 1, 0	;	( -- )	Write TAP output to stdout
+	litop	op_thr_code
+	litop	op_oblk_code
+	sub
+	litop	op_oblk_code
+	litb	STDOUT
+	litb	SYS_WRITE
+	scall3
+	drop
+	
 	ret
 end_op
