@@ -320,7 +320,7 @@ end_op
 
 opNI	op_scall1, 1, 0	;	( q d -- q )	Make syscall _d_ with one argument
 	mov	SYSCALL_DSH_REG, [data_stack_here]
-	push	((1 + 1) shl 3)
+	push	1 shl 3
 	jmp	_syscall1
 end_op
 

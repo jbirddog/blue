@@ -156,16 +156,20 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 1. bldis - bs0->bla disassembler
 1. Tool to create string file from an ops tbl file, to be used by bldis
-1. Tool to patch a BlueVM binary with custom ext ops and/or input buffer
+1. Tool to patch a BlueVM binary with custom blocks
+   1. Would also change binary size in elf headers
+   1. Remove the reserved blocks from the binary
 1. Tool to check stack effects
 
 ## TODOs
 
 1. What if data_stack_here was always in, say rbp?
+   1. Would remove the double dereference
+1. Move boot code to bytecode, or maybe better drop it all together
+   1. If dropped, need to change tests that `bluevm < test`
 1. Rename code buffer to output buffer
 1. Get some writing about BlueVM, blasm, bth
 1. Bug: add/remove ops and `make` fails until `make clean`
 1. Bring back a simpiler version of the `blue` language
 1. See about re-arranging >r order in op_compile_begin to simplify it and op_compile_end
 1. Grok more fasmg magic to improve blasm syntax
-1. Print error messages to disambiguate exit status
