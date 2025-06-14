@@ -4,6 +4,13 @@ iterate <opname, opsize>, \
 	exit, 1, \
 	argc, 1, \
 	argv, 1, \
+	scall0, 1, \
+	scall1, 1, \
+	scall2, 1, \
+	scall3, 1, \
+	scall4, 1, \
+	scall5, 1, \
+	scall6, 1, \
 	blk, 1, \
 	true, 1, \
 	false, 1, \
@@ -51,13 +58,6 @@ iterate <opname, opsize>, \
 	or, 1, \
 	shl, 1, \
 	shr, 1, \
-	scall0, 1, \
-	scall1, 1, \
-	scall2, 1, \
-	scall3, 1, \
-	scall4, 1, \
-	scall5, 1, \
-	scall6, 1, \
 
 	op_##opname##_code = % - 1 
 

@@ -63,3 +63,4 @@ These internal opcodes are used by `bth` itself and should not be considered sta
 
 1. Print "TAP version 14" when testing begins
 1. See about getting listed as a TAP producer
+1. Factor out some words related to the `scall`s

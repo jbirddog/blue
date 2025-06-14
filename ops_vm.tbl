@@ -1,6 +1,13 @@
 exit	1	( b -- )	Exit with status from top of stack
 argc	1	( -- q )	Push argc
 argv	1	( -- a )	Push addr of argv
+scall0	1	( d -- q )	Make syscall _d_ with no arguments
+scall1	1	( q0 d -- q )	Make syscall _d_ with one argument
+scall2	1	( q1 q0 d -- q )	Make syscall _d_ with arguments q0...q1
+scall3	1	( q2 q1 q0 d -- q )	Make syscall _d_ with arguments q0...q2
+scall4	1	( q3 q2 q1 q0 d -- q )	Make syscall _d_ with arguments q0...q3
+scall5	1	( q4 q3 q2 q1 q0 d -- q )	Make syscall _d_ with arguments q0...q4
+scall6	1	( q5 q4 q3 q2 q1 q0 d -- q )	Make syscall _d_ with arguments q0...q5
 blk	1	( b -- a )	Push addr of block number b
 true	1	( -- t )	Push true value
 false	1	( -- f )	Push false value
@@ -48,10 +55,3 @@ and	1	( a b -- n )	Push logical and of a and b
 or	1	( a b -- n )	Push logical inclusive or of a and b
 shl	1	( x n -- 'x )	Push x shl n
 shr	1	( x n -- 'x )	Push x shr n
-scall0	1	( d -- q )	Make syscall _d_ with no arguments
-scall1	1	( q0 d -- q )	Make syscall _d_ with one argument
-scall2	1	( q1 q0 d -- q )	Make syscall _d_ with arguments q0...q1
-scall3	1	( q2 q1 q0 d -- q )	Make syscall _d_ with arguments q0...q2
-scall4	1	( q3 q2 q1 q0 d -- q )	Make syscall _d_ with arguments q0...q3
-scall5	1	( q4 q3 q2 q1 q0 d -- q )	Make syscall _d_ with arguments q0...q4
-scall6	1	( q5 q4 q3 q2 q1 q0 d -- q )	Make syscall _d_ with arguments q0...q5
