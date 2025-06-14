@@ -86,7 +86,7 @@ macro setvarx x
 end macro
 
 opBI	op_setvarb, 1, 0	;	( b b -- )	Set litb value of var op
-	setvarx b
+	setvarx	b
 end_op
 
 opBI	op_setvarw, 1, 0	;	( w b -- )	Set litw value of var op
@@ -318,10 +318,38 @@ opNI	op_shr, 1, 0	;	( x n -- 'x )	Push x shr n
 	ret
 end_op
 
-opNI	op_scall1, 1, 0	;	( q d -- q )	Make syscall _d_ with one argument
+macro scallx x
 	mov	SYSCALL_DSH_REG, [data_stack_here]
-	push	1 shl 3
-	jmp	_syscall1
+	push	x shl 3
+	jmp	_syscall##x
+end macro
+
+opNI	op_scall0, 1, 0	;	( d -- q )	Make syscall _d_ with no arguments
+	scallx	0
+end_op
+
+opNI	op_scall1, 1, 0	;	( q0 d -- q )	Make syscall _d_ with one argument
+	scallx	1
+end_op
+
+opNI	op_scall2, 1, 0	;	( q1 q0 d -- q )	Make syscall _d_ with arguments q0...q1
+	scallx	2
+end_op
+
+opNI	op_scall3, 1, 0	;	( q2 q1 q0 d -- q )	Make syscall _d_ with arguments q0...q2
+	scallx	3
+end_op
+
+opNI	op_scall4, 1, 0	;	( q3 q2 q1 q0 d -- q )	Make syscall _d_ with arguments q0...q3
+	scallx	4
+end_op
+
+opNI	op_scall5, 1, 0	;	( q4 q3 q2 q1 q0 d -- q )	Make syscall _d_ with arguments q0...q4
+	scallx	5
+end_op
+
+opNI	op_scall6, 1, 0	;	( q5 q4 q3 q2 q1 q0 d -- q )	Make syscall _d_ with arguments q0...q5
+	scallx	6
 end_op
 
 

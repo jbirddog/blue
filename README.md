@@ -136,7 +136,13 @@ Opcodes are subject to change.
 | 0x2F | or | ( a b -- n ) | Push logical inclusive or of a and b |
 | 0x30 | shl | ( x n -- 'x ) | Push x shl n |
 | 0x31 | shr | ( x n -- 'x ) | Push x shr n |
-| 0x32 | scall1 | ( q d -- q ) | Make syscall _d_ with one argument |
+| 0x32 | scall0 | ( d -- q ) | Make syscall _d_ with no arguments |
+| 0x33 | scall1 | ( q0 d -- q ) | Make syscall _d_ with one argument |
+| 0x34 | scall2 | ( q1 q0 d -- q ) | Make syscall _d_ with arguments q0...q1 |
+| 0x35 | scall3 | ( q2 q1 q0 d -- q ) | Make syscall _d_ with arguments q0...q2 |
+| 0x36 | scall4 | ( q3 q2 q1 q0 d -- q ) | Make syscall _d_ with arguments q0...q3 |
+| 0x37 | scall5 | ( q4 q3 q2 q1 q0 d -- q ) | Make syscall _d_ with arguments q0...q4 |
+| 0x38 | scall6 | ( q5 q4 q3 q2 q1 q0 d -- q ) | Make syscall _d_ with arguments q0...q5 |
 
 ### Extended Low/High
 
@@ -163,6 +169,7 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ## TODOs
 
+1. Make opcode 0 `halt ( -- )` instead of `exit ( n -- )` 
 1. What if data_stack_here was always in, say rbp?
    1. Would remove the double dereference
 1. Move boot code to bytecode, or maybe better drop it all together

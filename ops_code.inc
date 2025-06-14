@@ -157,7 +157,7 @@ _syscall2:
 _syscall1:
 	mov	rdi, [SYSCALL_DSH_REG - (CELL_SIZE * 2)]
 
-_syscall:
+_syscall0:
 	mov	rax, [SYSCALL_DSH_REG - (CELL_SIZE * 1)]
 	syscall
 	pop	rcx
