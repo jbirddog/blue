@@ -167,10 +167,6 @@ Along with the code for BlueVM this repository also contains some tools and exam
    1. Remove the reserved blocks from the binary
 1. Tool to check stack effects
 
-## Before Merge
-
-1. Order of scall ops
-
 ## TODOs
 
 1. Make opcode 0 `halt ( -- )` instead of `exit ( n -- )` 
