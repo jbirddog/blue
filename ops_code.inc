@@ -158,13 +158,9 @@ _syscall1:
 _syscall0:
 	mov	rax, [DS_REG - CELL_SIZE]
 	syscall
+	
 	pop	rcx
-	push	rax
+	sub	DS_REG, rcx
 
-.drop:
-	call	data_stack_pop
-	loop	.drop
-
-	pop	rax
 	call	data_stack_push
 	ret
