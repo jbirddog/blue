@@ -16,7 +16,7 @@ opBI	op_argv, 1, 0	;	( -- a )	Push addr of argv
 end_op
 
 macro scallx x
-	push	CELL_SIZE * (x + 1)
+	push	CELL_SIZE * x
 	jmp	_syscall##x
 end macro
 

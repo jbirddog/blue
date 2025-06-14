@@ -161,6 +161,6 @@ _syscall0:
 	
 	pop	rcx
 	sub	DS_REG, rcx
-
-	call	data_stack_push
+	mov	[DS_REG - CELL_SIZE], rax
+	
 	ret

@@ -8,9 +8,6 @@ segment readable writeable executable
 instruction_pointer dq input_buffer
 opcode_handler dq opcode_handler_interpret
 
-; TODO: remove
-data_stack_here dq data_stack
-
 DS_REG = r12
 RS_REG = r13
 
