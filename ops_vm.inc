@@ -16,7 +16,6 @@ opBI	op_argv, 1, 0	;	( -- a )	Push addr of argv
 end_op
 
 macro scallx x
-	mov	SYSCALL_DSH_REG, [data_stack_here]
 	push	(x + 1)
 	jmp	_syscall##x
 end macro

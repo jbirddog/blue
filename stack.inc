@@ -1,47 +1,39 @@
-data_stack_push:
-	mov	rdx, data_stack_here
 
-; expects stack in rdx, value to push in rax
-stack_push:
-	mov	rdi, [rdx]
-	stosq
-	mov	[rdx], rdi
-	
+macro stack_push name, reg
+name##_stack_push:
+	mov	[reg], rax
+	add	reg, CELL_SIZE
 	ret
+end macro
 
-data_stack_pop:
-	mov	rdx, data_stack_here
-
-; expects stack in rdx
-stack_pop:
-	sub	qword [rdx], CELL_SIZE
-	mov	rdx, [rdx]
-	mov	rax, [rdx]
-
+macro stack_pop name, reg
+name##_stack_pop:
+	sub	reg, CELL_SIZE
+	mov	rax, [reg]
 	ret
+end macro
+
+stack_push	data, DS_REG
+stack_pop	data, DS_REG
 
 data_stack_depth:
-	mov	rcx, [data_stack_here]
+	mov	rcx, DS_REG
 	sub	rcx, data_stack
 	shr	ecx, 3
 	
 	ret
 
 data_stack_push2:
-	mov	rdx, data_stack_here
-	mov	rdi, [rdx]
-	mov	[rdi], rcx
-	mov	[rdi + CELL_SIZE], rax
-	add	qword [rdx], (CELL_SIZE * 2)
+	mov	[DS_REG], rcx
+	mov	[DS_REG + CELL_SIZE], rax
+	add	DS_REG, (CELL_SIZE * 2)
 
 	ret
 
 data_stack_pop2:
-	mov	rdx, data_stack_here
-	mov	rsi, [rdx]
-	mov	rax, [rsi - CELL_SIZE]
-	mov	rcx, [rsi - (CELL_SIZE * 2)]
-	sub	qword [rdx], (CELL_SIZE * 2)
+	mov	rax, [DS_REG - CELL_SIZE]
+	mov	rcx, [DS_REG - (CELL_SIZE * 2)]
+	sub	DS_REG, (CELL_SIZE * 2)
 	
 	ret
 
@@ -50,12 +42,5 @@ data_stack_pop2a:
 	xchg	rax, rcx
 	ret
 
-return_stack_push:
-	mov	[RS_REG], rax
-	add	RS_REG, CELL_SIZE
-	ret
-
-return_stack_pop:
-	sub	RS_REG, CELL_SIZE
-	mov	rax, [RS_REG]
-	ret
+stack_push	return, RS_REG
+stack_pop	return, RS_REG

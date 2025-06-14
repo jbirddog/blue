@@ -8,11 +8,11 @@ segment readable writeable executable
 instruction_pointer dq input_buffer
 opcode_handler dq opcode_handler_interpret
 
+; TODO: remove
 data_stack_here dq data_stack
-return_stack_here dq return_stack
 
+DS_REG = r12
 RS_REG = r13
-SYSCALL_DSH_REG = rbp
 
 include "bluevm_defs.inc"
 include "stack.inc"
@@ -43,6 +43,7 @@ read_boot_code:
 	ret
 
 entry $
+	mov	DS_REG, data_stack
 	mov	RS_REG, return_stack
 	
 	mov	rax, [rsp]
