@@ -1,8 +1,4 @@
 
-;opNI	op_exit, 1, 0	;	( b -- )	Exit with status from top of stack
-;	call	data_stack_pop
-;	mov	edi, eax
-;	jmp	exit
 opBI	op_exit, 1, 0	;	( b -- )	Exit with status from top of stack
 	db op_litb_code, 0x3C, op_scall1_code
 end_op
@@ -124,15 +120,15 @@ opBI	op_setvarb, 1, 0	;	( b b -- )	Set litb value of var op
 end_op
 
 opBI	op_setvarw, 1, 0	;	( w b -- )	Set litw value of var op
-	setvarx w
+	setvarx	w
 end_op
 
 opBI	op_setvard, 1, 0	;	( d b -- )	Set litd value of var op
-	setvarx d
+	setvarx	d
 end_op
 
 opBI	op_setvarq, 1, 0	;	( q b -- )	Set litq value of var op
-	setvarx q
+	setvarx	q
 end_op
 
 opNI	op_ip, 1, 0	;	( -- a )	Push location of the instruction pointer
