@@ -1,8 +1,6 @@
 
-opNI	op_exit, 1, 0	;	( b -- )	Exit with status from top of stack
-	call	data_stack_pop
-	mov	edi, eax
-	jmp	exit
+opBI	op_exit, 1, 0	;	( b -- )	Exit with status from top of stack
+	db op_litb_code, 0x3C, op_scall1_code
 end_op
 
 opBI	op_argc, 1, 0	;	( -- q )	Push argc
@@ -15,6 +13,40 @@ opBI	op_argv, 1, 0	;	( -- a )	Push addr of argv
 	db op_litq_code
 	argv dq 0x00
 	db op_ret_code
+end_op
+
+macro scallx x
+	mov	SYSCALL_DSH_REG, [data_stack_here]
+	push	(x + 1)
+	jmp	_syscall##x
+end macro
+
+opNI	op_scall0, 1, 0	;	( d -- q )	Make syscall _d_ with no arguments
+	scallx	0
+end_op
+
+opNI	op_scall1, 1, 0	;	( q0 d -- q )	Make syscall _d_ with one argument
+	scallx	1
+end_op
+
+opNI	op_scall2, 1, 0	;	( q1 q0 d -- q )	Make syscall _d_ with arguments q0...q1
+	scallx	2
+end_op
+
+opNI	op_scall3, 1, 0	;	( q2 q1 q0 d -- q )	Make syscall _d_ with arguments q0...q2
+	scallx	3
+end_op
+
+opNI	op_scall4, 1, 0	;	( q3 q2 q1 q0 d -- q )	Make syscall _d_ with arguments q0...q3
+	scallx	4
+end_op
+
+opNI	op_scall5, 1, 0	;	( q4 q3 q2 q1 q0 d -- q )	Make syscall _d_ with arguments q0...q4
+	scallx	5
+end_op
+
+opNI	op_scall6, 1, 0	;	( q5 q4 q3 q2 q1 q0 d -- q )	Make syscall _d_ with arguments q0...q5
+	scallx	6
 end_op
 
 opBI	op_blk, 1, 0	;	( b -- a )	Push addr of block number b
@@ -84,19 +116,19 @@ macro setvarx x
 end macro
 
 opBI	op_setvarb, 1, 0	;	( b b -- )	Set litb value of var op
-	setvarx b
+	setvarx	b
 end_op
 
 opBI	op_setvarw, 1, 0	;	( w b -- )	Set litw value of var op
-	setvarx w
+	setvarx	w
 end_op
 
 opBI	op_setvard, 1, 0	;	( d b -- )	Set litd value of var op
-	setvarx d
+	setvarx	d
 end_op
 
 opBI	op_setvarq, 1, 0	;	( q b -- )	Set litq value of var op
-	setvarx q
+	setvarx	q
 end_op
 
 opNI	op_ip, 1, 0	;	( -- a )	Push location of the instruction pointer

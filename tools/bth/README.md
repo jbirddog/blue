@@ -47,35 +47,20 @@ These internal opcodes are used by `bth` itself and should not be considered sta
 | 0x80 | atq | ( a -- q ) | Push qword value found at addr |
 | 0x81 | ifnot | ( t/f fa -- ? ) | Call fa if t/f is false |
 | 0x82 | chkargc | ( -- ) | Exit with error unless argc is 2 |
-| 0x83 | cmovd | ( d b -- ) | Compile mov b, dword |
-| 0x84 | cmovq | ( q b -- ) | Compile mov b, qword |
-| 0x85 | cret | ( -- ) | Compile ret |
-| 0x86 | cstosd | ( -- ) | Compile stosd |
-| 0x87 | csys | ( -- ) | Compile syscall |
-| 0x88 | cxord | ( b -- ) | Compile xor b, b |
-| 0x89 | tfd | ( -- d ) | Push fd of test input file |
-| 0x8A | oblk | ( -- a ) | Push addr of TAP output's start |
-| 0x8B | thr | ( -- a ) | Push addr of TAP output's here |
-| 0x8C | setthr | ( a -- ) | Set addr of TAP output's here |
-| 0x8D | argv1 | ( -- a ) | Push _argv[1]_ |
-| 0x8E | cdstarg | ( -- ) | Compile movabs rdi, _addr of argv[1]_ |
-| 0x8F | cflgsro | ( -- ) | Compile xor esi, esi (flags = READ_ONLY) |
-| 0x90 | csopen | ( -- ) | Compile mov eax, 0x02 (sys_open); syscall |
-| 0x91 | cdsttfd | ( -- ) | Compile movabs rdi, _addr of tfd's litd_ |
-| 0x92 | cfrmtfd | ( -- ) | Compile mov edi, _tfd_ |
-| 0x93 | csrctib | ( -- ) | Compile mov rsi, _addr of test input block_ |
-| 0x94 | cblklen | ( -- ) | Compile mov edx, 0x0400 |
-| 0x95 | csread | ( -- ) | Compile xor eax, eax; syscall |
-| 0x96 | opentst | ( -- ) | Open argv[1] and set tfd |
-| 0x97 | readtst | ( -- ) | Read block from tfd into the test input block |
-| 0x98 | runtst | ( -- ) | Run the test in the test input block |
-| 0x99 | endl | ( a -- ) | End line of output and set TAP output's here |
-| 0x9A | woka | ( a -- ) | Write ok line to addr |
-| 0x9B | wprep | ( -- ) | Preps the write system call |
-| 0x9C | wlen | ( -- ) | Buffer length for the write system call |
-| 0x9D | waddr | ( -- ) | Addr of the buffer for the write system call |
+| 0x83 | tfd | ( -- d ) | Push fd of test input file |
+| 0x84 | oblk | ( -- a ) | Push addr of TAP output's start |
+| 0x85 | thr | ( -- a ) | Push addr of TAP output's here |
+| 0x86 | setthr | ( a -- ) | Set addr of TAP output's here |
+| 0x87 | argv1 | ( -- a ) | Push _argv[1]_ |
+| 0x88 | opentst | ( -- ) | Open argv[1] and set tfd |
+| 0x89 | readtst | ( -- ) | Read block from tfd into the test input block |
+| 0x8A | runtst | ( -- ) | Run the test in the test input block |
+| 0x8B | endl | ( a -- ) | End line of output and set TAP output's here |
+| 0x8C | woka | ( a -- ) | Write ok line to addr |
+| 0x8D | tapout | ( -- ) | Write TAP output to stdout |
 
 ## TODOs
 
 1. Print "TAP version 14" when testing begins
 1. See about getting listed as a TAP producer
+1. Factor out some words related to the `scall`s

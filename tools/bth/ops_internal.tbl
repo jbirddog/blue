@@ -1,30 +1,14 @@
 atq	1	( a -- q )	Push qword value found at addr
 ifnot	1	( t/f fa -- ? )	Call fa if t/f is false
 chkargc	1	( -- )	Exit with error unless argc is 2
-cmovd	1	( d b -- )	Compile mov b, dword
-cmovq	1	( q b -- )	Compile mov b, qword
-cret	1	( -- )	Compile ret
-cstosd	1	( -- )	Compile stosd
-csys	1	( -- )	Compile syscall
-cxord	1	( b -- )	Compile xor b, b
 tfd	1	( -- d )	Push fd of test input file
 oblk	1	( -- a )	Push addr of TAP output's start
 thr	1	( -- a )	Push addr of TAP output's here
 setthr	1	( a -- )	Set addr of TAP output's here
 argv1	1	( -- a )	Push _argv[1]_
-cdstarg	1	( -- )	Compile movabs rdi, _addr of argv[1]_
-cflgsro	1	( -- )	Compile xor esi, esi (flags = READ_ONLY)
-csopen	1	( -- )	Compile mov eax, 0x02 (sys_open); syscall
-cdsttfd	1	( -- )	Compile movabs rdi, _addr of tfd's litd_
-cfrmtfd	1	( -- )	Compile mov edi, _tfd_
-csrctib	1	( -- )	Compile mov rsi, _addr of test input block_
-cblklen	1	( -- )	Compile mov edx, 0x0400
-csread	1	( -- )	Compile xor eax, eax; syscall
 opentst	1	( -- )	Open argv[1] and set tfd
 readtst	1	( -- )	Read block from tfd into the test input block
 runtst	1	( -- )	Run the test in the test input block
 endl	1	( a -- )	End line of output and set TAP output's here
 woka	1	( a -- )	Write ok line to addr
-wprep	1	( -- )	Preps the write system call
-wlen	1	( -- )	Buffer length for the write system call
-waddr	1	( -- )	Addr of the buffer for the write system call
+tapout	1	( -- )	Write TAP output to stdout

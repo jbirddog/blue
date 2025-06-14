@@ -1,13 +1,9 @@
 ; internal ops used by bth
 
-EAX = 0x00
-EDX = 0x02
-ESI = 0x06
-EDI = 0x07
+STDOUT = 0x01
 
-RSI = ESI
-RDI = EDI
-
+SYS_READ = 0x00
+SYS_WRITE = 0x01
 SYS_OPEN = 0x02
 
 BLK_CODE = 0x07
@@ -43,50 +39,6 @@ opBI	op_chkargc, 1, 0	;	( -- )	Exit with error unless argc is 2
 	ret
 end_op
 
-opBI	op_cmovd, 1, 0	;	( d b -- )	Compile mov b, dword
-	litb	0xB8
-	or
-	cb
-	cd
-	ret
-end_op
-
-opBI	op_cmovq, 1, 0	;	( q b -- )	Compile mov b, qword
-	clitb	0x48
-	litb	0xB8
-	or
-	cb
-	cq
-	ret
-end_op
-
-opBI	op_cret, 1, 0	;	( -- )	Compile ret
-	clitb	0xC3
-	ret
-end_op
-
-opBI	op_cstosd, 1, 0	;	( -- )	Compile stosd
-	clitb	0xAB
-	ret
-end_op
-
-opBI	op_csys, 1, 0	;	( -- )	Compile syscall
-	clitw	0x050F
-	ret
-end_op
-
-opBI	op_cxord, 1, 0	;	( b -- )	Compile xor b, b
-	clitb	0x31
-	dup
-	litb	0x03
-	shl
-	or
-	litb	0xC0
-	or
-	cb
-	ret
-end_op
-
 opBI	op_tfd, 1, 0	;	( -- d )	Push fd of test input file
 	litd	0x00
 	ret
@@ -117,92 +69,26 @@ opBI	op_argv1, 1, 0	;	( -- a )	Push _argv[1]_
 	ret
 end_op
 
-opBI	op_cdstarg, 1, 0	;	( -- )	Compile movabs rdi, _addr of argv[1]_
-	litop	op_argv1_code
-	litb	RDI
-	litop	op_cmovq_code
-	ret
-end_op
-
-opBI	op_cflgsro, 1, 0	;	( -- )	Compile xor esi, esi (flags = READ_ONLY)
-	litb	ESI
-	litop	op_cxord_code
-	ret
-end_op
-
-opBI	op_csopen, 1, 0	;	( -- )	Compile mov eax, 0x02 (sys_open); syscall
-	litb	SYS_OPEN
-	litb	EAX
-	litop	op_cmovd_code
-	litop	op_csys_code
-	ret
-end_op
-
-opBI	op_cdsttfd, 1, 0	;	( -- )	Compile movabs rdi, _addr of tfd's litd_
-	litb	op_tfd_code
-	opentry
-	litb	0x03
-	add
-	litb	RDI
-	litop	op_cmovq_code
-	ret
-end_op
-
-opBI	op_cfrmtfd, 1, 0	;	( -- )	Compile mov edi, _tfd_
-	litop	op_tfd_code
-	litb	EDI
-	litop	op_cmovd_code
-	ret
-end_op
-
-opBI	op_csrctib, 1, 0	;	( -- )	Compile mov rsi, _addr of test input block_
-	litb	BLK_TEST_INPUT
-	blk
-	litb	RSI
-	litop	op_cmovq_code
-	ret
-end_op
-
-opBI	op_cblklen, 1, 0	;	( -- )	Compile mov edx, 0x0400
-	litw	0x400
-	litb	EDX
-	litop	op_cmovd_code
-	ret
-end_op
-
-opBI	op_csread, 1, 0	;	( -- )	Compile xor eax, eax; syscall
-	litb	EAX
-	litop	op_cxord_code
-	litop	op_csys_code
-	ret
-end_op
-
 opBI	op_opentst, 1, 0	;	( -- )	Open argv[1] and set tfd
-	here
+	litb	0x00
+	litop	op_argv1_code
+	litb	SYS_OPEN
+	scall2
 	
-	litop	op_cdstarg_code
-	litop	op_cflgsro_code
-	litop	op_csopen_code
-
-	litop	op_cdsttfd_code
-	litop	op_cstosd_code
-	litop	op_cret_code
-
-	mccall
-	; TODO: check fd
+	litb	op_tfd_code
+	setvard
 	ret
 end_op
 
 opBI	op_readtst, 1, 0	;	( -- )	Read block from tfd into the test input block
-	here
-
-	litop	op_cfrmtfd_code
-	litop	op_csrctib_code
-	litop	op_cblklen_code
-	litop	op_csread_code
-	litop	op_cret_code
-
-	mccall
+	litw	0x0400
+	litb	BLK_TEST_INPUT
+	blk
+	litop	op_tfd_code
+	litb	SYS_READ
+	scall3
+	drop
+	
 	ret
 end_op
 
@@ -232,28 +118,15 @@ opBI	op_woka, 1, 0	;	( a -- )	Write ok line to addr
 	ret
 end_op
 
-opBI	op_wprep, 1, 0	;	( -- )	Preps the write system call
-	litb	EAX
-	litop	op_cxord_code
-	; inc eax
-	; mov edi, eax
-	clitw	0xC0FF
-	clitw	0xC789
-	ret
-end_op
-
-opBI	op_wlen, 1, 0	;	( -- )	Buffer length for the write system call
+opBI	op_tapout, 1, 0	;	( -- )	Write TAP output to stdout
 	litop	op_thr_code
 	litop	op_oblk_code
 	sub
-	litb	EDX
-	litop	op_cmovd_code
-	ret
-end_op
-
-opBI	op_waddr, 1, 0	;	( -- )	Addr of the buffer for the write system call
 	litop	op_oblk_code
-	litb	RSI
-	litop	op_cmovq_code
+	litb	STDOUT
+	litb	SYS_WRITE
+	scall3
+	drop
+	
 	ret
 end_op

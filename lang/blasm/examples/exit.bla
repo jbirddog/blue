@@ -1,2 +1,3 @@
 litb	0x00
-exit
+litb	0x3C
+scall1
