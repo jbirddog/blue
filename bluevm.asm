@@ -8,6 +8,7 @@ segment readable writeable executable
 instruction_pointer dq input_buffer
 opcode_handler dq opcode_handler_interpret
 
+; these registers have app lifetime
 DS_REG = r12
 RS_REG = r13
 

@@ -2,7 +2,10 @@ _This file is generated from README.md.tmpl_
 
 # BlueVM
 
-Minimalistic 64 bit virtual machine inspired by Forth and Factor. The BlueVM aims to:
+Minimalistic 64 bit virtual machine inspired by Forth and Factor. This is the reference implementation for
+x86_64 Linux.
+
+The BlueVM aims to:
 
 1. Have a reasonably small, simplistic and hackable codebase
 1. Support execution of any previously compiled machine or bytecode
@@ -149,6 +152,15 @@ Opcodes are subject to change.
 Host applications are free to implement their own opcodes which can be spliced into a BlueVM binary. For an example
 see `tools/bth`.
 
+## Machine Code Contract
+
+If compiling/executing machine code with BlueVM, take note of the reserved registers:
+
+| Register | Purpose |
+|----|----|
+| r12 | Top of Data Stack |
+| r13 | Top of Return Stack |
+
 ## Tools/Examples
 
 Along with the code for BlueVM this repository also contains some tools and examples that can be used as reference:
@@ -169,10 +181,7 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ## TODOs
 
-1. Add `parse ( b -- a w )` to parse until delim, push addr and length
-1. What if data_stack_here was always in, say rbp?
-   1. Would remove the double dereference
-   1. Double dereference causes suboptimal code when cleaning up the stack after `scall`s
+1. See about dedicated registers for ip, here like data/return stack
 1. Move boot code to bytecode, or maybe better drop it all together
    1. If dropped, need to change tests that `bluevm < test`
 1. Rename code buffer to output buffer
