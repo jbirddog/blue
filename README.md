@@ -171,6 +171,7 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 1. Order of scall ops
 1. Update bth to use syscall ops
+   1. Remove dead internal ops
 
 ## TODOs
 

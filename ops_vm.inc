@@ -320,7 +320,7 @@ end_op
 
 macro scallx x
 	mov	SYSCALL_DSH_REG, [data_stack_here]
-	push	x shl 3
+	push	(x + 1)
 	jmp	_syscall##x
 end macro
 

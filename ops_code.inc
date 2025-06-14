@@ -158,10 +158,15 @@ _syscall1:
 	mov	rdi, [SYSCALL_DSH_REG - (CELL_SIZE * 2)]
 
 _syscall0:
-	mov	rax, [SYSCALL_DSH_REG - (CELL_SIZE * 1)]
+	mov	rax, [SYSCALL_DSH_REG - CELL_SIZE]
 	syscall
 	pop	rcx
-	sub	[SYSCALL_DSH_REG], rcx
-	mov	[SYSCALL_DSH_REG - (CELL_SIZE * 1)], rax
-	
+	push	rax
+
+.drop:
+	call	data_stack_pop
+	loop	.drop
+
+	pop	rax
+	call	data_stack_push
 	ret
