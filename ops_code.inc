@@ -1,6 +1,6 @@
 
 _call:
-	xchg	[instruction_pointer], rax
+	xchg	IP_REG, rax
 	call	return_stack_push
 
 	ret
@@ -125,15 +125,16 @@ _set_post:
 
 	ret
 
+; TODO: maybe can inline now?
 _pre_lit:
-	mov	rsi, [instruction_pointer]
+	mov	rsi, IP_REG
 	xor	eax, eax
 
 	ret
 
 _post_lit:
 	call	data_stack_push
-	mov	[instruction_pointer], rsi
+	mov	IP_REG, rsi
 
 	ret
 

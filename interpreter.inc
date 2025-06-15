@@ -19,13 +19,13 @@ opcode_handler_compile:
 	and	ecx, 0xFF
 
 	mov	rdi, [code_buffer_here]
-	mov	rsi, [instruction_pointer]
+	mov	rsi, IP_REG
 	dec	rsi
 
 	rep	movsb
 
 	mov	[code_buffer_here], rdi
-	mov	[instruction_pointer], rsi
+	mov	IP_REG, rsi
 
 	ret
 
@@ -45,10 +45,11 @@ opcode_tbl_entry:
 	ret
 
 interpreter:
-	mov	rsi, [instruction_pointer]
+	; TODO: mov byte and inc
+	mov	rsi, IP_REG
 	xor	eax, eax
 	lodsb
-	mov	[instruction_pointer], rsi
+	mov	IP_REG, rsi
 
 	push	rax
 	call	opcode_tbl_entry
