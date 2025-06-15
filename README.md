@@ -184,22 +184,26 @@ Along with the code for BlueVM this repository also contains some tools and exam
 ## TODOs
 
 1. Believe that compiling can be simplified by
-   1. Pushing ip
    1. Skipping bytes instead of copying to code buffer
-   1. Handling ret inside endcomp
+   1. No implicit `ret`s
    1. This will help phase out the explict code buffer
    1. Also fix the issue of writing non user code to a block
-1. Use more dedicated registers like data/return stack
-   1. here
-1. Consider phasing out Code Buffer in favor of user specified blocks
+   1. Nesting comp/endcomp is what prevents simplification
+      1. No need to compile in jumps, manage ip
+      1. comp/endcomp still needed but will just set flags
+      1. Will drop the nod to Factor once this is removed
+   1. See how things need to work for the Blue Language
+      1. Previous versions showed keeoing frontend concerns in the frontend was good
+1. Phase out Code Buffer in favor of user specified blocks
    1. here/sethere can be removed
    1. What does this mean for comp/setcomp (simplify with labels?)
    1. cx can be removed in favor of setincx
    1. Remove clitx macros from blasm
-1. Consider phasing out Input Buffer in favor of user specified blocks
-   1. Move boot code to bytecode, or maybe better drop it all together
-   1. If dropped, need to change tests that `bluevm < test`
-   1. Or could just be inlined into the empty default input block?
+1. Phase out Input Buffer in favor of user specified blocks
+   1. Merge Input Buffer and Return/Data Stack blocks
+      1. Half the size of the stacks and put into the low half of the block
+      1. Top half of the block is 512 bytes for the "boot sector"
+   1. Move `read_boot_code` to bytecode in the boot sector
 1. Get some writing about BlueVM, blasm, bth
 1. Bug: add/remove ops and `make` fails until `make clean`
 1. Bring back a simpiler version of the `blue` language
