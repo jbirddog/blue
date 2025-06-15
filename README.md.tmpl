@@ -96,12 +96,13 @@ see `tools/bth`.
 
 ## Machine Code Contract
 
-If compiling/executing machine code with BlueVM, take note of the reserved registers:
+If executing machine code with BlueVM, take note of the reserved registers:
 
 | Register | Purpose |
 |----|----|
 | r12 | Top of Data Stack |
 | r13 | Top of Return Stack |
+| r14 | Instruction Pointer |
 
 ## Tools/Examples
 
@@ -123,10 +124,18 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ## TODOs
 
-1. See about dedicated registers for ip, here like data/return stack
-1. Move boot code to bytecode, or maybe better drop it all together
+1. Use more dedicated registers like data/return stack
+   1. opcode handler
+   1. here
+1. Consider phasing out Code Buffer in favor of user specified blocks
+   1. here/sethere can be removed
+   1. What does this mean for comp/setcomp
+   1. cx can be removed in favor of setincx
+   1. Remove clitx macros from blasm
+1. Consider phasing out Input Buffer in favor of user specified blocks
+   1. Move boot code to bytecode, or maybe better drop it all together
    1. If dropped, need to change tests that `bluevm < test`
-1. Rename code buffer to output buffer
+   1. Or could just be inlined into the empty default input block?
 1. Get some writing about BlueVM, blasm, bth
 1. Bug: add/remove ops and `make` fails until `make clean`
 1. Bring back a simpiler version of the `blue` language

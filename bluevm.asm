@@ -5,12 +5,12 @@ BLK_0 = $$ - ELF_HEADERS_SIZE
 
 segment readable writeable executable
 
-instruction_pointer dq input_buffer
 opcode_handler dq opcode_handler_interpret
 
 ; these registers have app lifetime
 DS_REG = r12
 RS_REG = r13
+IP_REG = r14
 
 include "bluevm_defs.inc"
 include "stack.inc"
@@ -43,13 +43,14 @@ read_boot_code:
 entry $
 	mov	DS_REG, data_stack
 	mov	RS_REG, return_stack
+	mov	IP_REG, input_buffer
 	
 	mov	rax, [rsp]
 	mov	[argc], rax
 	lea	rax, [rsp+8]
 	mov	[argv], rax
 	
-	call	read_boot_code	
+	call	read_boot_code
 	call	interpreter
 
 BLK_0_PADDING = VM_CODE_SIZE - ($ - $$)
