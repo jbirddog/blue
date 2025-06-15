@@ -125,13 +125,6 @@ _set_post:
 
 	ret
 
-; TODO: maybe can inline now?
-_pre_lit:
-	mov	rsi, IP_REG
-	xor	eax, eax
-
-	ret
-
 _post_lit:
 	call	data_stack_push
 	mov	IP_REG, rsi

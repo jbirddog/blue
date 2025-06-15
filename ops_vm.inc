@@ -229,32 +229,28 @@ opBI	op_cq, 1, 0	;	( q -- )	Write qword value to and increment here
 	cx	q
 end_op
 
-opNI	op_litb, 2, 0	;	( -- b )	Push next byte from and increment instruction pointer
-	call	_pre_lit
-	lodsb
+macro litx x
+	mov	rsi, IP_REG
+	xor	eax, eax
+	lods##x
 
 	jmp	_post_lit
+end macro
+
+opNI	op_litb, 2, 0	;	( -- b )	Push next byte from and increment instruction pointer
+	litx	b
 end_op
 
 opNI	op_litw, 3, 0	;	( -- w )	Push next word from and increment instruction pointer
-	call	_pre_lit
-	lodsw
-
-	jmp	_post_lit
+	litx	w
 end_op
 
 opNI	op_litd, 5, 0	;	( -- d )	Push next dword from and increment instruction pointer
-	call	_pre_lit
-	lodsd
-
-	jmp	_post_lit
+	litx	d
 end_op
 
 opNI	op_litq, 9, 0	;	( -- q )	Push next qword from and increment instruction pointer
-	call	_pre_lit
-	lodsq
-
-	jmp	_post_lit
+	litx	q
 end_op
 
 ;
