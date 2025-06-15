@@ -154,7 +154,7 @@ see `tools/bth`.
 
 ## Machine Code Contract
 
-If compiling/executing machine code with BlueVM, take note of the reserved registers:
+If executing machine code with BlueVM, take note of the reserved registers:
 
 | Register | Purpose |
 |----|----|
@@ -183,9 +183,8 @@ Along with the code for BlueVM this repository also contains some tools and exam
 ## TODOs
 
 1. Use more dedicated registers like data/return stack
-   1. ip
-   1. here
    1. opcode handler
+   1. here
 1. Consider phasing out Code Buffer in favor of user specified blocks
    1. here/sethere can be removed
    1. What does this mean for comp/setcomp
