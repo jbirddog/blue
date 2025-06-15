@@ -67,6 +67,8 @@ input_buffer: times INPUT_BUFFER_SIZE db 0
 
 return_stack rb RETURN_STACK_SIZE
 data_stack rb DATA_STACK_SIZE
+rb STACK_PADDING_SIZE
+
 code_buffer rb CODE_BUFFER_SIZE
 
 assert ($ - $$) = VM_MEM_SIZE

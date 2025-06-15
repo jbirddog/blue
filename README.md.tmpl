@@ -143,8 +143,7 @@ Along with the code for BlueVM this repository also contains some tools and exam
    1. Remove clitx macros from blasm
 1. Phase out Input Buffer in favor of user specified blocks
    1. Merge Input Buffer and Return/Data Stack blocks
-      1. Half the size of the stacks and put into the low half of the block
-      1. Top half of the block is 512 bytes for the "boot sector"
+   1. Top half of the block is 512 bytes for the "boot sector"
    1. Move `read_boot_code` to bytecode in the boot sector
 1. Get some writing about BlueVM, blasm, bth
 1. Bug: add/remove ops and `make` fails until `make clean`
