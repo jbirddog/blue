@@ -45,11 +45,9 @@ opcode_tbl_entry:
 	ret
 
 interpreter:
-	; TODO: mov byte and inc
-	mov	rsi, IP_REG
 	xor	eax, eax
-	lodsb
-	mov	IP_REG, rsi
+	mov	al, byte [IP_REG]
+	inc	IP_REG
 
 	push	rax
 	call	opcode_tbl_entry
