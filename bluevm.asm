@@ -5,12 +5,11 @@ BLK_0 = $$ - ELF_HEADERS_SIZE
 
 segment readable writeable executable
 
-opcode_handler dq opcode_handler_interpret
-
 ; these registers have app lifetime
 DS_REG = r12
 RS_REG = r13
 IP_REG = r14
+OP_REG = r15
 
 include "bluevm_defs.inc"
 include "stack.inc"
@@ -44,6 +43,7 @@ entry $
 	mov	DS_REG, data_stack
 	mov	RS_REG, return_stack
 	mov	IP_REG, input_buffer
+	mov	OP_REG, opcode_handler_interpret
 	
 	mov	rax, [rsp]
 	mov	[argc], rax

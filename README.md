@@ -161,6 +161,7 @@ If executing machine code with BlueVM, take note of the reserved registers:
 | r12 | Top of Data Stack |
 | r13 | Top of Return Stack |
 | r14 | Instruction Pointer |
+| r15 | Opcode Handler |
 
 ## Tools/Examples
 
@@ -187,7 +188,7 @@ Along with the code for BlueVM this repository also contains some tools and exam
    1. here
 1. Consider phasing out Code Buffer in favor of user specified blocks
    1. here/sethere can be removed
-   1. What does this mean for comp/setcomp
+   1. What does this mean for comp/setcomp (simplify with labels?)
    1. cx can be removed in favor of setincx
    1. Remove clitx macros from blasm
 1. Consider phasing out Input Buffer in favor of user specified blocks

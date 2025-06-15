@@ -53,6 +53,6 @@ interpreter:
 	call	opcode_tbl_entry
 
 	pop	rax
-	call	[opcode_handler]
+	call	OP_REG
 	
 	jmp	interpreter
