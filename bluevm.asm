@@ -17,20 +17,6 @@ include "stack.inc"
 include "ops_code.inc"
 include "interpreter.inc"
 
-read_boot_code:
-	mov	rsi, boot_sector
-	xor	eax, eax
-
-	cmp	[rsi], rax
-	jne	.done
-
-	mov	edx, BOOT_SECTOR_SIZE
-	xor	edi, edi
-	syscall
-
-.done:
-	ret
-
 entry $
 	mov	DS_REG, data_stack
 	mov	RS_REG, return_stack
@@ -42,7 +28,6 @@ entry $
 	lea	rax, [rsp+8]
 	mov	[argv], rax
 	
-	call	read_boot_code
 	call	interpreter
 
 BLK_0_PADDING = VM_CODE_SIZE - ($ - $$)
@@ -58,7 +43,20 @@ times (OPCODE_TBL_SIZE - ($ - opcode_tbl)) db 0
 
 ; Block 5
 boot_sector:
+	db	op_litw_code
+	dw	BLOCK_SIZE
+	db	op_litb_code, 0x06
+	db	op_blk_code
+	db	op_litb_code, 0x00
+	db	op_dup_code
+	db	op_scall3_code
+	db	op_drop_code
+	db	op_litb_code, 0x06
+	db	op_blk_code
+	db	op_setip_code
+
 times (BOOT_SECTOR_SIZE - ($ - boot_sector)) db 0
+
 return_stack: times RETURN_STACK_SIZE db 0
 data_stack: times DATA_STACK_SIZE db 0
 

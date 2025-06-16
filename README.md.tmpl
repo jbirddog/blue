@@ -53,8 +53,9 @@ Hello, World!
 
 ## Boot
 
-If the first 8 bytes of the boot sector are zero then 512 bytes will be read from stdin into the input buffer.
-The input buffer will serve as the bootstrap for the host and is interpreted until the host stops execution.
+The default boot sector reads a block from stdin into Block 6 and `setip`s to that location. A custom boot sector
+can be spliced in to your binary if the default one does not suffice. For example, `tools/bth` reads a file from
+`argv[1]` instead of stdin.
 
 ## Execution
 
