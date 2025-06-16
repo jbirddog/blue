@@ -30,11 +30,11 @@ The BlueVM binary consists of six blocks (1024 bytes each) in rwx memory:
 0. BlueVM Opcodes 0x40 - 0x7F
 0. Extended Opcodes 0x80 - 0xBF
 0. Extended Opcodes 0xC0 - 0xFF
-0. Input buffer
+0. Boot sector (512 bytes), Return Stack (256 bytes), Data Stack (256 bytes)
 
 BlueVM also reserves space for the following blocks in rwx memory:
 
-6. Return and Data stack
+6. Input buffer
 6. Code buffer
 6. Application block
 6. Application block
@@ -55,7 +55,7 @@ Hello, World!
 
 ## Boot
 
-If the first 8 bytes of the input buffer are zero then 1024 bytes will be read from stdin into the input buffer.
+If the first 8 bytes of the boot sector are zero then 512 bytes will be read from stdin into the input buffer.
 The input buffer will serve as the bootstrap for the host and is interpreted until the host stops execution.
 
 ## Execution
@@ -201,7 +201,7 @@ Along with the code for BlueVM this repository also contains some tools and exam
    1. Remove clitx macros from blasm
 1. Phase out Input Buffer in favor of user specified blocks
    1. Merge Input Buffer and Return/Data Stack blocks
-   1. Top half of the block is 512 bytes for the "boot sector"
+   1. Low half of the block is 512 bytes for the "boot sector"
    1. Move `read_boot_code` to bytecode in the boot sector
 1. Get some writing about BlueVM, blasm, bth
 1. Bug: add/remove ops and `make` fails until `make clean`

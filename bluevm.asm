@@ -1,4 +1,5 @@
 
+; Block 0
 format ELF64 executable 3
 
 BLK_0 = $$ - ELF_HEADERS_SIZE
@@ -22,13 +23,13 @@ exit:
 	syscall
 
 read_boot_code:
-	mov	rsi, input_buffer
+	mov	rsi, boot_sector
 	xor	eax, eax
 
 	cmp	[rsi], rax
 	jne	.done
 
-	mov	edx, INPUT_BUFFER_SIZE
+	mov	edx, BOOT_SECTOR_SIZE
 	xor	edi, edi
 	syscall
 	
@@ -42,7 +43,7 @@ read_boot_code:
 entry $
 	mov	DS_REG, data_stack
 	mov	RS_REG, return_stack
-	mov	IP_REG, input_buffer
+	mov	IP_REG, boot_sector
 	mov	OP_REG, opcode_handler_interpret
 	
 	mov	rax, [rsp]
@@ -58,17 +59,21 @@ show "Bytes left in block 0: ", BLK_0_PADDING
 
 times BLK_0_PADDING db 0
 
+; Blocks 1 - 4
 opcode_tbl:
 .offset = 0x00
 include "ops_vm.inc"
 times (OPCODE_TBL_SIZE - ($ - opcode_tbl)) db 0
 
+; Block 5
+boot_sector: times BOOT_SECTOR_SIZE db 0
+return_stack: times RETURN_STACK_SIZE db 0
+data_stack: times DATA_STACK_SIZE db 0
+
+; Block 6
 input_buffer: times INPUT_BUFFER_SIZE db 0
 
-return_stack rb RETURN_STACK_SIZE
-data_stack rb DATA_STACK_SIZE
-rb STACK_PADDING_SIZE
-
+; Blocks 7 - 10
 code_buffer rb CODE_BUFFER_SIZE
 
 assert ($ - $$) = VM_MEM_SIZE
