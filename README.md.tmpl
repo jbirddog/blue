@@ -55,7 +55,7 @@ Hello, World!
 
 The default boot sector reads a block from stdin into Block 6 and `setip`s to that location. A custom boot sector
 can be spliced in to your binary if the default one does not suffice. For example, `tools/bth` reads a file from
-`argv[1]` instead of stdin, runs the supplied code and produces `TAP` output.
+`argv[1]`, runs the supplied tests and produces `TAP` output.
 
 ## Execution
 
