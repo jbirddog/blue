@@ -61,7 +61,7 @@ return_stack: times RETURN_STACK_SIZE db 0
 data_stack: times DATA_STACK_SIZE db 0
 
 ; Block 6
-input_buffer: times INPUT_BUFFER_SIZE db 0
+input_buffer rb INPUT_BUFFER_SIZE
 
 ; Blocks 7 - 10
 code_buffer rb CODE_BUFFER_SIZE
