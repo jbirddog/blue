@@ -17,11 +17,6 @@ include "stack.inc"
 include "ops_code.inc"
 include "interpreter.inc"
 
-; expects status in edi
-exit:
-	mov	eax, 60
-	syscall
-
 read_boot_code:
 	mov	rsi, boot_sector
 	xor	eax, eax
@@ -32,10 +27,6 @@ read_boot_code:
 	mov	edx, BOOT_SECTOR_SIZE
 	xor	edi, edi
 	syscall
-	
-	test	rax, rax
-	cmovng	edi, eax
-	jng	exit
 
 .done:
 	ret
@@ -66,7 +57,8 @@ include "ops_vm.inc"
 times (OPCODE_TBL_SIZE - ($ - opcode_tbl)) db 0
 
 ; Block 5
-boot_sector: times BOOT_SECTOR_SIZE db 0
+boot_sector:
+times (BOOT_SECTOR_SIZE - ($ - boot_sector)) db 0
 return_stack: times RETURN_STACK_SIZE db 0
 data_stack: times DATA_STACK_SIZE db 0
 
