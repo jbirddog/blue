@@ -34,7 +34,7 @@ The BlueVM binary consists of six blocks (1024 bytes each) in rwx memory:
 
 BlueVM also reserves space for the following blocks in rwx memory:
 
-6. Input buffer
+6. Application block
 6. Code buffer
 6. Application block
 6. Application block
@@ -57,7 +57,7 @@ Hello, World!
 
 The default boot sector reads a block from stdin into Block 6 and `setip`s to that location. A custom boot sector
 can be spliced in to your binary if the default one does not suffice. For example, `tools/bth` reads a file from
-`argv[1]` instead of stdin.
+`argv[1]` instead of stdin, runs the supplied code and produces `TAP` output.
 
 ## Execution
 
@@ -200,7 +200,6 @@ Along with the code for BlueVM this repository also contains some tools and exam
    1. What does this mean for comp/setcomp (simplify with labels?)
    1. cx can be removed in favor of setincx
    1. Remove clitx macros from blasm
-1. Phase out Input Buffer in favor of user specified blocks
 1. Get some writing about BlueVM, blasm, bth
 1. Bug: add/remove ops and `make` fails until `make clean`
 1. Bring back a simpiler version of the `blue` language
