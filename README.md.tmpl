@@ -120,7 +120,7 @@ Along with the code for BlueVM this repository also contains some tools and exam
 1. bldis - bs0->bla disassembler
 1. Tool to create string file from an ops tbl file, to be used by bldis
 1. Tool to patch a BlueVM binary with custom blocks
-   1. Would also change binary size in elf headers
+   1. Would also change binary/reserved size in elf headers
    1. Remove the reserved blocks from the binary
 1. Tool to check stack effects
 
@@ -138,10 +138,13 @@ Along with the code for BlueVM this repository also contains some tools and exam
    1. See how things need to work for the Blue Language
       1. Previous versions showed keeoing frontend concerns in the frontend was good
 1. Phase out Code Buffer in favor of user specified blocks
-   1. here/sethere can be removed
-   1. What does this mean for comp/setcomp (simplify with labels?)
+   1. change here to dst
+   1. change ip to here
+   1. change setip to jmp
+   1. setincx uses dst instead of stack
    1. cx can be removed in favor of setincx
    1. Remove clitx macros from blasm
+1. If dst works out, add src for use with atincx, cpincx
 1. Get some writing about BlueVM, blasm, bth
 1. Bug: add/remove ops and `make` fails until `make clean`
 1. Bring back a simpiler version of the `blue` language
