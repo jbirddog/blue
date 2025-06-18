@@ -91,24 +91,7 @@ op_endcomp:
 
 	call	return_stack_pop
 	mov	OP_REG, rax
-
-	cmp	rax, opcode_handler_interpret
-	je	.outer
 	
-.nested:
-	call	return_stack_pop
-	push	rax
-	
-	mov	rdi, [code_buffer_here]
-	mov	al, op_litq_code
-	stosb
-	pop	rax
-	stosq
-	mov	[code_buffer_here], rdi
-	
-	ret
-
-.outer:
 	call	op_fromr.impl
 	
 	ret
