@@ -3,7 +3,7 @@ include "../tools/bth/tap.inc"
 
 test
 
-litw	'05'
+litw	'04'
 plan
 
 ;
@@ -16,13 +16,6 @@ depth
 litb	0x01
 okeq
 drop
-
-comp
-endcomp
-atincb
-drop
-litb	op_ret_code
-okeq
 
 comp
 endcomp
@@ -43,6 +36,7 @@ litb	op_litq_code
 okeq
 
 comp
+	ret
 endcomp
 here
 swap

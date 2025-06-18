@@ -21,6 +21,7 @@ end_op
 
 opBI	op_ifnot, 1, 0	;	( t/f fa -- ? )	Call fa if t/f is false
 	comp
+		ret
 	endcomp
 	swap
 	ifelse

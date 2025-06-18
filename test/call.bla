@@ -12,6 +12,7 @@ plan
 
 comp
 	ok
+	ret
 endcomp
 call
 
@@ -19,6 +20,7 @@ litb 0x01
 litb 0x02
 comp
 	add
+	ret
 endcomp
 call
 

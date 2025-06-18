@@ -23,6 +23,7 @@ setincb
 comp
 	litb	0x07
 	add
+	ret
 endcomp
 setincq
 drop

@@ -9,18 +9,22 @@ plan
 true
 comp
 	ok
+	ret
 endcomp
 comp
 	notok
+	ret
 endcomp
 ifelse
 
 false
 comp
 	notok
+	ret
 endcomp
 comp
 	ok
+	ret
 endcomp
 ifelse
 

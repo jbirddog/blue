@@ -77,13 +77,9 @@ op_comp:
 	ret
 
 op_endcomp:
-	mov	rdi, [code_buffer_here]
-	mov	al, op_ret_code
-	stosb
-	mov	[code_buffer_here], rdi
-
 	; patch the addr for setip that was compiled in before the compilation
 	call	return_stack_pop
+	mov	rdi, [code_buffer_here]
 	mov	[rax], rdi
 
 	mov	OP_REG, opcode_handler_interpret
