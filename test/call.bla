@@ -3,7 +3,7 @@ include "../tools/bth/tap.inc"
 
 test
 
-litw	'11'
+litw	'03'
 plan
 
 ;
@@ -12,76 +12,6 @@ plan
 
 comp
 	ok
-endcomp
-call
-
-comp
-	comp
-		ok
-	endcomp
-	call
-endcomp
-call
-
-comp
-	comp
-		comp
-			ok
-		endcomp
-		call
-	endcomp
-	call
-endcomp
-call
-
-comp
-	comp
-		comp
-			comp
-				ok
-			endcomp
-			call
-		endcomp
-		call
-	endcomp
-	call
-endcomp
-call
-
-comp
-	comp
-		comp
-			comp
-				comp
-					ok
-				endcomp
-				call
-			endcomp
-			call
-		endcomp
-		call
-	endcomp
-	call
-endcomp
-call
-
-comp
-	comp
-		comp
-			comp
-				comp
-					comp
-						ok
-					endcomp
-					call
-				endcomp
-				call
-			endcomp
-			call
-		endcomp
-		call
-	endcomp
-	call
 endcomp
 call
 
@@ -95,53 +25,7 @@ call
 litb 0x03
 okeq
 
-litb 0x04
-litb 0x05
-comp
-	comp
-		comp
-			add
-		endcomp
-		call
-	endcomp
-	call
-endcomp
-call
-
-litb 0x09
-okeq
-
-litb 0x01
-comp
-	litb 0x03
-	eq
-	comp
-		comp
-			notok
-		endcomp
-		comp
-			ok
-		endcomp
-		ifelse
-	endcomp
-	call
-endcomp
-call
-
 litb	0x09
-blk
-dup
-
-litb	op_ok_code
-setincb
-
-litb	op_ret_code
-setincb
-drop
-
-call
-
-litb	0x05
 blk
 dup
 

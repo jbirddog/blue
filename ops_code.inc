@@ -56,7 +56,6 @@ _atinc_post:
 	ret
 
 op_comp:
-	; TODO: only need to do this if nested
 	mov	rdi, [code_buffer_here]
 	mov	al, op_litq_code
 	stosb
@@ -70,9 +69,7 @@ op_comp:
 	mov	rax, rdi
 	call	return_stack_push
 
-	mov	rax, opcode_handler_compile
-	xchg	OP_REG, rax
-	call	return_stack_push
+	mov	OP_REG, opcode_handler_compile
 
 	pop	rax
 	call	return_stack_push
@@ -85,30 +82,12 @@ op_endcomp:
 	stosb
 	mov	[code_buffer_here], rdi
 
-	; patch the addr for ip! that was compiled in before the compilation
+	; patch the addr for setip that was compiled in before the compilation
 	call	return_stack_pop
 	mov	[rax], rdi
 
-	call	return_stack_pop
-	mov	OP_REG, rax
-
-	cmp	rax, opcode_handler_interpret
-	je	.outer
+	mov	OP_REG, opcode_handler_interpret
 	
-.nested:
-	call	return_stack_pop
-	push	rax
-	
-	mov	rdi, [code_buffer_here]
-	mov	al, op_litq_code
-	stosb
-	pop	rax
-	stosq
-	mov	[code_buffer_here], rdi
-	
-	ret
-
-.outer:
 	call	op_fromr.impl
 	
 	ret
