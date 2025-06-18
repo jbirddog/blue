@@ -190,9 +190,10 @@ Along with the code for BlueVM this repository also contains some tools and exam
    1. This will help phase out the explict code buffer
    1. Also fix the issue of writing non user code to a block
    1. Nesting comp/endcomp is what prevents simplification
-      1. No need to compile in jumps, manage ip
-      1. comp/endcomp still needed but will just set flags
       1. Will drop the nod to Factor once this is removed
+   1. No need to compile in jumps, manage ip
+      1. Can remove opcode_handler and just have flag
+   1. comp/endcomp still needed but will just set flags
    1. See how things need to work for the Blue Language
       1. Previous versions showed keeoing frontend concerns in the frontend was good
 1. Phase out Code Buffer in favor of user specified blocks
