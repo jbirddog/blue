@@ -56,34 +56,15 @@ _atinc_post:
 	ret
 
 op_comp:
-	mov	rdi, [code_buffer_here]
-	mov	al, op_litq_code
-	stosb
-	push	rdi
-	xor	eax, eax
-	stosq
-	mov	al, op_setip_code
-	stosb
-	mov	[code_buffer_here], rdi
-
-	mov	rax, rdi
+	mov	rax, IP_REG
 	call	return_stack_push
 
 	mov	OP_REG, opcode_handler_compile
-
-	pop	rax
-	call	return_stack_push
 	
 	ret
 
 op_endcomp:
-	; patch the addr for setip that was compiled in before the compilation
-	call	return_stack_pop
-	mov	rdi, [code_buffer_here]
-	mov	[rax], rdi
-
-	mov	OP_REG, opcode_handler_interpret
-	
+	mov	OP_REG, opcode_handler_interpret	
 	call	op_fromr.impl
 	
 	ret

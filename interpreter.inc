@@ -17,15 +17,8 @@ opcode_handler_compile:
 
 	shr	ecx, 8
 	and	ecx, 0xFF
-
-	mov	rdi, [code_buffer_here]
-	mov	rsi, IP_REG
-	dec	rsi
-
-	rep	movsb
-
-	mov	[code_buffer_here], rdi
-	mov	IP_REG, rsi
+	dec	ecx
+	add	IP_REG, rcx
 
 	ret
 

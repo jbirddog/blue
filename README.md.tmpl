@@ -124,15 +124,6 @@ Along with the code for BlueVM this repository also contains some tools and exam
 
 ## TODOs
 
-1. Believe that compiling can be simplified by
-   1. Skipping bytes instead of copying to code buffer
-   1. This will help phase out the explict code buffer
-   1. Also fix the issue of writing non user code to a block
-   1. comp/endcomp still needed but will just set flags
-      1. No need to compile in jumps, manage ip
-      1. Can remove opcode_handler
-   1. See how things need to work for the Blue Language
-      1. Previous versions showed keeoing frontend concerns in the frontend was good
 1. Phase out Code Buffer in favor of user specified blocks
    1. change here to dst
    1. change ip to here

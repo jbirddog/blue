@@ -3,7 +3,7 @@ include "../tools/bth/tap.inc"
 
 test
 
-litw	'04'
+litw	'02'
 plan
 
 ;
@@ -16,24 +16,6 @@ depth
 litb	0x01
 okeq
 drop
-
-comp
-endcomp
-litb	0x01
-sub
-atincb
-drop
-litb	op_setip_code
-okeq
-
-comp
-endcomp
-litb	0x0A
-sub
-atincb
-drop
-litb	op_litq_code
-okeq
 
 comp
 	ret
