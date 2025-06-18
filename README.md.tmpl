@@ -1,7 +1,6 @@
 # BlueVM
 
-Minimalistic 64 bit virtual machine inspired by Forth and Factor. This is the reference implementation for
-x86_64 Linux.
+Minimalistic 64 bit virtual machine inspired by Forth. This is the reference implementation for x86_64 Linux.
 
 The BlueVM aims to:
 
@@ -9,7 +8,6 @@ The BlueVM aims to:
 1. Support execution of any previously compiled machine or bytecode
 1. Provide a minimal set of opcodes that can be extended by the host
 1. Serve as the basis for minimalistic handcrafted applications
-1. Allow the host full control
 1. Bring some fun back into the world
 
 BlueVM bytecode is stored in block sized (1024 byte) files that, by convention, have a `.bs0` (BlueVM Stage 0)
@@ -55,7 +53,7 @@ Hello, World!
 
 The default boot sector reads a block from stdin into Block 6 and `setip`s to that location. A custom boot sector
 can be spliced in to your binary if the default one does not suffice. For example, `tools/bth` reads a file from
-`argv[1]`, runs the supplied tests and produces `TAP` output.
+`argv[1]`, runs the supplied tests and writes `TAP` output.
 
 ## Execution
 
@@ -131,11 +129,9 @@ Along with the code for BlueVM this repository also contains some tools and exam
    1. No implicit `ret`s
    1. This will help phase out the explict code buffer
    1. Also fix the issue of writing non user code to a block
-   1. Nesting comp/endcomp is what prevents simplification
-      1. Will drop the nod to Factor once this is removed
-   1. No need to compile in jumps, manage ip
-      1. Can remove opcode_handler and just have flag
    1. comp/endcomp still needed but will just set flags
+      1. No need to compile in jumps, manage ip
+      1. Can remove opcode_handler
    1. See how things need to work for the Blue Language
       1. Previous versions showed keeoing frontend concerns in the frontend was good
 1. Phase out Code Buffer in favor of user specified blocks

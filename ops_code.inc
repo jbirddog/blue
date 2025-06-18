@@ -82,7 +82,7 @@ op_endcomp:
 	stosb
 	mov	[code_buffer_here], rdi
 
-	; patch the addr for ip! that was compiled in before the compilation
+	; patch the addr for setip that was compiled in before the compilation
 	call	return_stack_pop
 	mov	[rax], rdi
 
