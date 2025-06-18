@@ -203,6 +203,11 @@ Along with the code for BlueVM this repository also contains some tools and exam
    1. cx can be removed in favor of setincx
    1. Remove clitx macros from blasm
 1. If dst works out, add src for use with atincx, cpincx
+1. Tweak calls
+   1. Rename call to calla
+   1. Rename mccall to callma
+   1. Add callr
+   1. Add callmr
 1. Get some writing about BlueVM, blasm, bth
 1. Bug: add/remove ops and `make` fails until `make clean`
 1. Bring back a simpiler version of the `blue` language
