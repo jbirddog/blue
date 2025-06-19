@@ -15,27 +15,6 @@ _OPS_
 	end match
 end iterate
 
-macro clitX x, val
-	lit##x val
-	c##x
-end macro
-
-macro clitb val
-	clitX b, val
-end macro
-
-macro clitw val
-	clitX w, val
-end macro
-
-macro clitd val
-	clitX d, val
-end macro
-
-macro clitq val
-	clitX q, val
-end macro
-
 calminstruction litop op
 	emit 1, op
 end calminstruction

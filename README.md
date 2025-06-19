@@ -188,7 +188,6 @@ Along with the code for BlueVM this repository also contains some tools and exam
    1. change setip to jmp
    1. setincx uses dst instead of stack
    1. cx can be removed in favor of setincx
-   1. Remove clitx macros from blasm
 1. If dst works out, add src for use with atincx, cpincx
 1. Tweak calls
    1. Rename call to calla
