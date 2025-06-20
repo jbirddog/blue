@@ -9,19 +9,22 @@ macro show description,value
 	end repeat
 end macro
 
+CELL_SIZE = 8
+
+
 ;;
 _tbl:
 _0:
 	movsb
 	ret
-	times (8 - ($-_0)) db 0
+	times (CELL_SIZE - ($-_0)) db 0
 _1:
 	movsd
 	ret
-	times (8 - ($-_1)) db 0
+	times (CELL_SIZE - ($-_1)) db 0
 _2:
 	jmp	_dst
-	times (8 - ($-_2)) db 0
+	times (CELL_SIZE - ($-_2)) db 0
 ;;
 
 entry $
@@ -30,10 +33,10 @@ entry $
 
 .loop:
 	xor	eax, eax
+	
 	lodsb
-	shl	al, 3
-	add	rax, _tbl
-	call	rax
+	lea	rdx, [_tbl+(rax*CELL_SIZE)]
+	call	rdx
 
 	jmp	.loop
 
