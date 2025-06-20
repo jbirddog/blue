@@ -2,6 +2,8 @@ include common.mk
 
 INCS = $(wildcard *.inc)
 
+ONEX = bin/onex
+
 TESTS = $(wildcard test/*.bla)
 TEST_OBJS = $(TESTS:test/%.bla=obj/test_%.bs0)
 
@@ -12,7 +14,7 @@ TOOLS = tools/bth
 
 .PHONY: all clean test $(LANGS) $(TOOLS)
 
-all: $(BLUEVM) \
+all: $(ONEX) $(BLUEVM) \
 	$(GEN_FILES) \
 	$(LANGS) \
 	$(TOOLS) \
@@ -27,6 +29,9 @@ bin obj:
 
 $(FASM2):
 	git submodule update --init
+	
+$(ONEX): onex.asm $(FASM2) | bin
+	$(FASM2) $< $@
 	
 $(BLUEVM): bluevm.asm $(INCS) $(FASM2) | bin
 	$(FASM2) $< $@
