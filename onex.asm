@@ -27,16 +27,13 @@ core_xt:
 	push	REG_LAST
 .find:
 	cmp	rax, [REG_LAST]
-	je	.found
+	mov	rax, [REG_LAST + 8]
+	je	.done
 
 	sub	REG_LAST, 16
-	mov	rax, [REG_LAST]
 	test	rax, rax
-	jz	.done
-	jmp	.find
+	jnz	.find
 
-.found:
-	mov	rax, [REG_LAST + 8]
 .done:
 	pop	REG_LAST
 	ret
