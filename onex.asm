@@ -5,6 +5,7 @@
 ; * Move SIZE_ prefix to suffix
 ; * Remove BC_ constants and inline bytecode
 ; * Add length bits so BC_COMP_BYTE is BC_COMP_NUM | BYTES_1
+; * Get prototype editor screen working
 ;
 
 format ELF64 executable 3
@@ -93,7 +94,6 @@ entry $
 	jmp	.loop
 
 .exit:
-	;call _dst
 	sub rdi, _dst
 	mov eax, 60
 	syscall
