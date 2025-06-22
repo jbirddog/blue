@@ -2,7 +2,9 @@ format ELF64 executable 3
 
 segment readable writeable executable
 
-BC_EXEC_WORD = 0x00
+BC_FIN = 0x00
+BC_EXEC_WORD = 0x01
+BC_COMP_BYTE = 0x02
 
 REG_SRC = rsi
 REG_DST = rdi
@@ -16,11 +18,6 @@ macro show description,value
 		display description,`d,13,10
 	end repeat
 end macro
-
-core_fin:
-	mov	edi, 17
-	mov	eax, 60
-	syscall
 
 core_cpb:
 	movsb
@@ -52,47 +49,77 @@ bc_exec_word_impl:
 	call	rax
 	ret
 
+bc_comp_byte_impl:
+	movsb
+	ret
+
 bc_tbl:
+dq	0x00
 dq	bc_exec_word_impl
+dq	bc_comp_byte_impl
 
 entry $
 	mov	REG_SRC, _src
 	mov	REG_DST, _dst
 	mov	REG_LAST, dict.last
 
+.loop:
 	xor	eax, eax
 	lodsb
-	call	qword [bc_tbl + (rax * 8)]
 
-	call _dst
-
-	xor	eax, eax
-	lodsb
+	test	al, al
+	jz	.exit
+	
 	call	qword [bc_tbl + (rax * 8)]
+	jmp	.loop
 
 .exit:
-	mov edi, 9
+	call _dst
+	sub rdi, _dst
 	mov eax, 60
 	syscall
 
 show "code size: ", ($ - $$)
 
 _src:
+; 31 c0			xor    eax,eax
+db	BC_COMP_BYTE
+db	0x31
+db	BC_COMP_BYTE
+db	0xC0
+
+; b0 3c                   mov    al,0x3c
+db	BC_COMP_BYTE
+db	0xB0
+db	BC_COMP_BYTE
+db	0x3C
+
+; 40 b7 03                mov    dil,0x3
+db	BC_COMP_BYTE
+db	0x40
+db	BC_COMP_BYTE
+db	0xB7
+db	BC_COMP_BYTE
+db	0x03
+
+; 0f 05                   syscall
+db	BC_COMP_BYTE
+db	0x0F
+db	BC_COMP_BYTE
+db	0x05
+
 ; ret
-db	BC_EXEC_WORD
-dq	"cpb"
+db	BC_COMP_BYTE
 db	0xC3
 
-db	BC_EXEC_WORD
-dq	"fin"
+times (SIZE_BLK - ($ - _src)) db 0
 
 _dst:
 times (SIZE_BLK - ($ - _dst)) db 0
 
 dict:
 dq	0, 0
-dq	"cpb", core_cpb
 .last:
-dq	"fin", core_fin
+dq	"cpb", core_cpb
 
 times (SIZE_BLK - ($ - dict)) db 0
