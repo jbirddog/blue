@@ -22,18 +22,27 @@ core_fin:
 	mov	eax, 60
 	syscall
 
+core_cpb:
+	movsb
+	ret
+	
 core_xt:
 	lodsq
 	push	REG_LAST
 .find:
-	cmp	rax, [REG_LAST]
-	mov	rax, [REG_LAST + 8]
-	je	.done
+	mov	rbx, [REG_LAST]
+	cmp	rax, rbx
+	je	.found
 
+	test	rbx, rbx
+	jz	.done
+	
 	sub	REG_LAST, 16
-	test	rax, rax
-	jnz	.find
+	jmp	.find
 
+.found:
+	mov	rax, [REG_LAST + 8]
+	
 .done:
 	pop	REG_LAST
 	ret
@@ -55,6 +64,12 @@ entry $
 	lodsb
 	call	qword [bc_tbl + (rax * 8)]
 
+	call _dst
+
+	xor	eax, eax
+	lodsb
+	call	qword [bc_tbl + (rax * 8)]
+
 .exit:
 	mov edi, 9
 	mov eax, 60
@@ -63,6 +78,11 @@ entry $
 show "code size: ", ($ - $$)
 
 _src:
+; ret
+db	BC_EXEC_WORD
+dq	"cpb"
+db	0xC3
+
 db	BC_EXEC_WORD
 dq	"fin"
 
@@ -71,6 +91,7 @@ times (SIZE_BLK - ($ - _dst)) db 0
 
 dict:
 dq	0, 0
+dq	"cpb", core_cpb
 .last:
 dq	"fin", core_fin
 
