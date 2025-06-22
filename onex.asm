@@ -1,6 +1,20 @@
+;
+; TODOs:
+;
+; * If the 0x00 dict entry has a `not_found` addr in cell 2, not found could be handled like found
+; * Move SIZE_ prefix to suffix
+; * Remove BC_ constants and inline bytecode
+; * Add length bits so BC_COMP_BYTE is BC_COMP_NUM | BYTES_1
+;
+
 format ELF64 executable 3
 
 segment readable writeable executable
+
+BC_FIN = 0x00
+BC_DEFINE_WORD = 0x01
+BC_EXEC_WORD = 0x02
+BC_COMP_BYTE = 0x03
 
 REG_SRC = rsi
 REG_DST = rdi
@@ -11,14 +25,21 @@ SIZE_CELL = 8
 SIZE_DICT_ENTRY = SIZE_CELL * 2
 SIZE_ELF_HEADERS = 120
 
-BLK_0 = $$ - SIZE_ELF_HEADERS
-
 ; from https://flatassembler.net/docs.php?article=fasmg_manual
 macro show description,value
 	repeat 1, d:value
 		display description,`d,13,10
 	end repeat
 end macro
+
+core_define:
+	lodsq
+	
+	add	REG_LAST, SIZE_DICT_ENTRY
+	mov	[REG_LAST], rax
+	mov	[REG_LAST + SIZE_CELL], rdi
+	
+	ret
 
 core_xt:
 	lodsq
@@ -52,6 +73,7 @@ bc_comp_byte_impl:
 
 bc_tbl:
 dq	0x00
+dq	core_define
 dq	bc_exec_word_impl
 dq	bc_comp_byte_impl
 
@@ -71,16 +93,16 @@ entry $
 	jmp	.loop
 
 .exit:
-	call _dst
+	;call _dst
 	sub rdi, _dst
 	mov eax, 60
 	syscall
 
 show "code size: ", ($ - $$)
-times (SIZE_BLK - ($ - BLK_0)) db 0
+times (SIZE_BLK - ($ - $$ + SIZE_ELF_HEADERS)) db 0
 
 dict:
-dq	0, 0
+dq	0x00, 0x00
 .last:
 dq	"??", 0x00
 
@@ -88,9 +110,8 @@ times (SIZE_BLK - ($ - dict)) db 0
 
 _src:
 
-BC_FIN = 0x00
-BC_EXEC_WORD = 0x01
-BC_COMP_BYTE = 0x02
+db	BC_DEFINE_WORD
+dq	"exit"
 
 ; 31 c0			xor    eax,eax
 db	BC_COMP_BYTE
@@ -118,9 +139,9 @@ db	0x0F
 db	BC_COMP_BYTE
 db	0x05
 
-; ret
-db	BC_COMP_BYTE
-db	0xC3
+; call previously defined word
+db	BC_EXEC_WORD
+dq	"exit"
 
 times (SIZE_BLK - ($ - _src)) db 0
 
