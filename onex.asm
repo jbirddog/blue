@@ -2,11 +2,13 @@ format ELF64 executable 3
 
 segment readable writeable executable
 
-SIZE_BLK = 1024
+BC_EXEC_WORD = 0x00
 
 REG_SRC = rsi
 REG_DST = rdi
 REG_LAST = r12
+
+SIZE_BLK = 1024
 
 ; from https://flatassembler.net/docs.php?article=fasmg_manual
 macro show description,value
@@ -18,12 +20,12 @@ end macro
 entry $
 	mov	REG_SRC, _src
 	mov	REG_DST, _dst
-	mov	REG_LAST, _last
+	mov	REG_LAST, dict.last
 
 	; TODO: check byte for what to do
 	lodsb
 	lodsq
-	
+
 	push	REG_LAST
 .find:
 	cmp	rax, [REG_LAST]
@@ -33,7 +35,7 @@ entry $
 	test	rax, rax
 	jz	.not_found
 	jmp	.find
-	
+
 .call:
 	call	qword [REG_LAST + 8]
 	pop	REG_LAST
@@ -47,7 +49,7 @@ entry $
 show "code size: ", ($ - $$)
 
 _src:
-db	0x00
+db	BC_EXEC_WORD
 dq	"fin"
 
 _dst:
@@ -58,9 +60,9 @@ _core_fin:
 	
 times (SIZE_BLK - ($ - _dst)) db 0
 
-_lookup:
+dict:
 dq	0, 0
-_last:
+.last:
 dq	"fin", _core_fin
 
-times (SIZE_BLK - ($ - _lookup)) db 0
+times (SIZE_BLK - ($ - dict)) db 0
