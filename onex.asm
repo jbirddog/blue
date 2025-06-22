@@ -38,13 +38,13 @@ core_xt:
 	pop	REG_LAST
 	ret
 
-bc_exec_word:
+bc_exec_word_impl:
 	call	core_xt
 	call	rax
 	ret
 
 bc_tbl:
-dq	bc_exec_word
+dq	bc_exec_word_impl
 
 entry $
 	mov	REG_SRC, _src
