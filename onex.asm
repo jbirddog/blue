@@ -17,30 +17,46 @@ macro show description,value
 	end repeat
 end macro
 
+core_fin:
+	mov	edi, 17
+	mov	eax, 60
+	syscall
+
+core_xt:
+	lodsq
+	push	REG_LAST
+.find:
+	cmp	rax, [REG_LAST]
+	je	.found
+
+	mov	rax, [REG_LAST]
+	test	rax, rax
+	jz	.done
+	jmp	.find
+
+.found:
+	mov	rax, [REG_LAST + 8]
+.done:
+	pop	REG_LAST
+	ret
+
+bc_exec_word:
+	call	core_xt
+	call	rax
+	ret
+
+bc_tbl:
+dq	bc_exec_word
+
 entry $
 	mov	REG_SRC, _src
 	mov	REG_DST, _dst
 	mov	REG_LAST, dict.last
 
-	; TODO: check byte for what to do
+	xor	eax, eax
 	lodsb
-	lodsq
+	call	qword [bc_tbl + (rax * 8)]
 
-	push	REG_LAST
-.find:
-	cmp	rax, [REG_LAST]
-	je	.call
-
-	mov	rax, [REG_LAST]
-	test	rax, rax
-	jz	.not_found
-	jmp	.find
-
-.call:
-	call	qword [REG_LAST + 8]
-	pop	REG_LAST
-
-.not_found:
 .exit:
 	mov edi, 9
 	mov eax, 60
@@ -53,16 +69,11 @@ db	BC_EXEC_WORD
 dq	"fin"
 
 _dst:
-_core_fin:
-	mov	edi, 17
-	mov	eax, 60
-	syscall
-	
 times (SIZE_BLK - ($ - _dst)) db 0
 
 dict:
 dq	0, 0
 .last:
-dq	"fin", _core_fin
+dq	"fin", core_fin
 
 times (SIZE_BLK - ($ - dict)) db 0
