@@ -2,15 +2,16 @@ format ELF64 executable 3
 
 segment readable writeable executable
 
-BC_FIN = 0x00
-BC_EXEC_WORD = 0x01
-BC_COMP_BYTE = 0x02
-
 REG_SRC = rsi
 REG_DST = rdi
 REG_LAST = r12
 
 SIZE_BLK = 1024
+SIZE_CELL = 8
+SIZE_DICT_ENTRY = SIZE_CELL * 2
+SIZE_ELF_HEADERS = 120
+
+BLK_0 = $$ - SIZE_ELF_HEADERS
 
 ; from https://flatassembler.net/docs.php?article=fasmg_manual
 macro show description,value
@@ -19,10 +20,6 @@ macro show description,value
 	end repeat
 end macro
 
-core_cpb:
-	movsb
-	ret
-	
 core_xt:
 	lodsq
 	push	REG_LAST
@@ -34,11 +31,11 @@ core_xt:
 	test	rbx, rbx
 	jz	.done
 	
-	sub	REG_LAST, 16
+	sub	REG_LAST, SIZE_DICT_ENTRY
 	jmp	.find
 
 .found:
-	mov	rax, [REG_LAST + 8]
+	mov	rax, [REG_LAST + SIZE_CELL]
 	
 .done:
 	pop	REG_LAST
@@ -70,7 +67,7 @@ entry $
 	test	al, al
 	jz	.exit
 	
-	call	qword [bc_tbl + (rax * 8)]
+	call	qword [bc_tbl + (rax * SIZE_CELL)]
 	jmp	.loop
 
 .exit:
@@ -80,8 +77,21 @@ entry $
 	syscall
 
 show "code size: ", ($ - $$)
+times (SIZE_BLK - ($ - BLK_0)) db 0
+
+dict:
+dq	0, 0
+.last:
+dq	"??", 0x00
+
+times (SIZE_BLK - ($ - dict)) db 0
 
 _src:
+
+BC_FIN = 0x00
+BC_EXEC_WORD = 0x01
+BC_COMP_BYTE = 0x02
+
 ; 31 c0			xor    eax,eax
 db	BC_COMP_BYTE
 db	0x31
@@ -116,10 +126,3 @@ times (SIZE_BLK - ($ - _src)) db 0
 
 _dst:
 times (SIZE_BLK - ($ - _dst)) db 0
-
-dict:
-dq	0, 0
-.last:
-dq	"cpb", core_cpb
-
-times (SIZE_BLK - ($ - dict)) db 0
