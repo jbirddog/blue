@@ -29,6 +29,7 @@ core_xt:
 	cmp	rax, [REG_LAST]
 	je	.found
 
+	sub	REG_LAST, 16
 	mov	rax, [REG_LAST]
 	test	rax, rax
 	jz	.done
