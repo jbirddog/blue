@@ -2,7 +2,11 @@ format ELF64 executable 3
 
 segment readable writeable executable
 
-OP_SIZE = 8
+SIZE_BLK = 1024
+
+REG_SRC = rsi
+REG_DST = rdi
+REG_LAST = r12
 
 ; from https://flatassembler.net/docs.php?article=fasmg_manual
 macro show description,value
@@ -11,67 +15,52 @@ macro show description,value
 	end repeat
 end macro
 
-;;
-
-op_tbl:
-
-macro op n
-op_##n = $ - op_tbl
-end macro
-
-macro end_op
-	times (OP_SIZE - (($ - op_tbl) mod OP_SIZE)) db 0
-end macro
-
-op	cpb	;	( -- )	copy byte from src to dst
-	movsb
-	ret
-end_op
-
-op	cpd	;	( -- )	copy dword from src to dst
-	movsd
-	ret
-end_op
-
-op	fin	;	( -- )	TMP
-	jmp	_dst
-end_op
-
-assert (($ - op_tbl) mod OP_SIZE) = 0
-;;
-
 entry $
-	mov	rsi, _src
-	mov	rdi, _dst
+	mov	REG_SRC, _src
+	mov	REG_DST, _dst
+	mov	REG_LAST, _last
 
-.loop:
-	xor	eax, eax
-	
+	; TODO: check byte for what to do
 	lodsb
-	add	rax, op_tbl
-	call	rax
+	lodsq
+	
+	push	REG_LAST
+.find:
+	cmp	rax, [REG_LAST]
+	je	.call
 
-	jmp	.loop
+	mov	rax, [REG_LAST]
+	test	rax, rax
+	jz	.not_found
+	jmp	.find
+	
+.call:
+	call	qword [REG_LAST + 8]
+	pop	REG_LAST
 
-show "onex code size: ", ($ - $$)
+.not_found:
+.exit:
+	mov edi, 9
+	mov eax, 60
+	syscall
+
+show "code size: ", ($ - $$)
 
 _src:
+db	0x00
+dq	"fin"
 
-; mov eax, 0x3C
-db	op_cpb, 0xB8
-db	op_cpd, 0x3C, 0x00, 0x00, 0x00
+_dst:
+_core_fin:
+	mov	edi, 17
+	mov	eax, 60
+	syscall
+	
+times (SIZE_BLK - ($ - _dst)) db 0
 
-; mov edi, 0x0B
-db	op_cpb, 0xBF
-db	op_cpd, 0x0B, 0x00, 0x00, 0x00
+_lookup:
+dq	0, 0
+_last:
+dq	"fin", _core_fin
 
-; syscalll
-db	op_cpb, 0x0F
-db	op_cpb, 0x05
-
-; fin
-db	op_fin
-
-show "bytecode size: ", ($ - _src)
-
-_dst rb 1024
+times (SIZE_BLK - ($ - _lookup)) db 0
