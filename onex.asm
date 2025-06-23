@@ -4,8 +4,9 @@
 ; * If the 0x00 dict entry has a `not_found` addr in cell 2, not found could be handled like found
 ; * Move SIZE_ prefix to suffix
 ; * Remove BC_ constants and inline bytecode
-; * Add length bits so BC_COMP_BYTE is BC_COMP_NUM | BYTES_1
+; * Need BC_EXEC_NUM
 ; * Get prototype editor screen working
+; * Once editor is prototyped, port to onex
 ;
 
 format ELF64 executable 3
