@@ -13,11 +13,6 @@ format ELF64 executable 3
 
 segment readable writeable executable
 
-BC_FIN = 0x00
-BC_DEFINE_WORD = 0x01
-BC_EXEC_WORD = 0x02
-BC_COMP_BYTE = 0x03
-
 REG_SRC = rsi
 REG_DST = rdi
 REG_LAST = r12
@@ -111,38 +106,7 @@ times (SIZE_BLK - ($ - dict)) db 0
 
 _src:
 
-db	BC_DEFINE_WORD
-dq	"exit"
-
-; 31 c0			xor    eax,eax
-db	BC_COMP_BYTE
-db	0x31
-db	BC_COMP_BYTE
-db	0xC0
-
-; b0 3c                   mov    al,0x3c
-db	BC_COMP_BYTE
-db	0xB0
-db	BC_COMP_BYTE
-db	0x3C
-
-; 40 b7 03                mov    dil,0x3
-db	BC_COMP_BYTE
-db	0x40
-db	BC_COMP_BYTE
-db	0xB7
-db	BC_COMP_BYTE
-db	0x03
-
-; 0f 05                   syscall
-db	BC_COMP_BYTE
-db	0x0F
-db	BC_COMP_BYTE
-db	0x05
-
-; call previously defined word
-db	BC_EXEC_WORD
-dq	"exit"
+file "test.blk"
 
 times (SIZE_BLK - ($ - _src)) db 0
 
