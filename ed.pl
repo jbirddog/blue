@@ -12,13 +12,6 @@ use constant {
 	BC_COMP_BYTE => 0x03,
 };
 
-sub zero_pad {
-	my $str = shift(@_);
-	my $len = shift(@_);
-
-	return $str . ("\x00" x ($len - length($str)));
-}
-
 my @bc_lens = (
 	0,
 	8,
@@ -32,6 +25,12 @@ my @bc_fmts = (
 	"\x1B[33;1m%s ",
 	"\x1B[32;1m%02X ",
 );
+
+sub zero_pad {
+	my ($str, $len) = @_;
+
+	return $str . ("\x00" x ($len - length($str)));
+}
 
 my $bc_file = "test.blk";
 my $bc = "";
@@ -71,11 +70,15 @@ $bc = zero_pad($bc, BLK_SIZE);
 
 =cut
 
-my $cursor = 0;
+my $cursor = 15;
 my $here = 0;
+
+my $cursor_display = "\x1B[37;1m>\x1B[0m";
 my $display = "\x1B[2J";
 
 while ($here < length($bc)) {
+	$display .= $cursor_display if $cursor == $here;
+	
 	my $b = ord(substr($bc, $here, 1));
 	++$here;
 	last if $b == BC_FIN;
