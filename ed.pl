@@ -2,6 +2,7 @@
 
 use autodie;
 use strict;
+use warnings;
 
 use constant {
 	BLK_SIZE => 1024,
@@ -26,13 +27,7 @@ my @bc_fmts = (
 	"\x1B[32;1m%02X ",
 );
 
-sub zero_pad {
-	my ($str, $len) = @_;
-
-	return $str . ("\x00" x ($len - length($str)));
-}
-
-my $bc_file = "test.blk";
+my $bc_file = $ARGV[0];
 my $bc = "";
 
 if (-e $bc_file) {
@@ -42,6 +37,12 @@ if (-e $bc_file) {
 }
 
 =pod
+
+sub zero_pad {
+	my ($str, $len) = @_;
+
+	return $str . ("\x00" x ($len - length($str)));
+}
 
 $bc = "";
 $bc .= chr(BC_DEFINE_WORD) . zero_pad("exit", 8);
@@ -70,7 +71,7 @@ $bc = zero_pad($bc, BLK_SIZE);
 
 =cut
 
-my $cursor = 15;
+my $cursor = 0;
 my $here = 0;
 
 my $cursor_display = "\x1B[37;1m>\x1B[0m";
