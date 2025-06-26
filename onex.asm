@@ -2,11 +2,10 @@
 ; TODOs:
 ;
 ; * If the 0x00 dict entry has a `not_found` addr in cell 2, not found could be handled like found
+; * bc_tbl 0x00 entry can be `break` that `xor ecx, ecx` if `loop` is used during `load`
 ; * Limit dict entry cell 1 values to 7 chars, use 1 byte for flags, etc
 ; * Need BC_EXEC_NUM
-; * Mmap dict (rw)
-; * Block 0 doesn't need to be writable if use registers/stack as storage
-;   - Start with argv, argc on stack
+; * Start with argv, argc on stack
 ; * Get prototype editor screen working
 ; * Once editor is prototyped, port to onex
 ; * Port bth to onex
@@ -43,7 +42,7 @@ SYS_MMAP = 9
 
 BLK_SIZE = 1024
 CELL_SIZE = 8
-DICT_ENRTY_SIZE = CELL_SIZE * 2
+DICT_ENTRY_SIZE = CELL_SIZE * 2
 ELF_HEADERS_SIZE = 120
 PAGE_SIZE = 4096
 
@@ -54,47 +53,10 @@ macro show description,value
 	end repeat
 end macro
 
-syscall_or_die:
-	syscall
-
-	cmp	rax, 0
-	jge	.done
-	
-	neg	rax
-	mov	edi, eax
-	jmp	exit
-
-.done:
-	ret
-
-;
-; expects
-;	- status in edi
-exit:
-	mov	eax, SYS_EXIT
-	syscall
-
-;
-; expects
-;	- buffer prot flags in edx
-; returns
-;	- addr in rax
-;
-mmap_buffer:
-	xor	edi, edi
-	mov	esi, PAGE_SIZE
-	mov	r10d, MAP_ANONYMOUS or MAP_PRIVATE
-	mov	r8d, -1
-	xor	r9d, r9d
-	mov	eax, SYS_MMAP
-	call	syscall_or_die
-
-	ret
-
 core_define:
 	lodsq
 	
-	add	REG_LAST, DICT_ENRTY_SIZE
+	add	REG_LAST, DICT_ENTRY_SIZE
 	mov	[REG_LAST], rax
 	mov	[REG_LAST + CELL_SIZE], rdi
 	
@@ -111,7 +73,7 @@ core_xt:
 	test	rbx, rbx
 	jz	.done
 	
-	sub	REG_LAST, DICT_ENRTY_SIZE
+	sub	REG_LAST, DICT_ENTRY_SIZE
 	jmp	.find
 
 .found:
@@ -137,12 +99,18 @@ dq	bc_exec_word
 dq	bc_comp_byte
 
 entry $
-	mov	REG_LAST, dict.last
-
+	xor	edi, edi
+	mov	esi, PAGE_SIZE
 	mov	edx, PROT_RWX
-	call	mmap_buffer
-	mov	REG_DST, rax
+	mov	r10d, MAP_ANONYMOUS or MAP_PRIVATE
+	mov	r8d, -1
+	xor	r9d, r9d
+	mov	eax, SYS_MMAP
+	syscall
 	
+	mov	REG_DST, rax
+	lea	REG_LAST, [rax + (BLK_SIZE shl 1)]
+
 	mov	REG_SRC, _src
 
 .loop:
@@ -155,19 +123,13 @@ entry $
 	call	qword [bc_tbl + (rax * CELL_SIZE)]
 	jmp	.loop
 
-.exit:
 	xor	edi, edi
-	jmp	exit
+.exit:
+	mov	eax, SYS_EXIT
+	syscall
 	
 show "code size: ", ($ - $$)
 times (BLK_SIZE - ($ - $$ + ELF_HEADERS_SIZE)) db 0
-
-dict:
-dq	0x00, 0x00
-.last:
-dq	"??", 0x00
-
-times (BLK_SIZE - ($ - dict)) db 0
 
 _src:
 
