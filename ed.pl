@@ -72,32 +72,44 @@ $bc = zero_pad($bc, BLK_SIZE);
 =cut
 
 my $cursor = 0;
-my $here = 0;
-
 my $cursor_display = "\x1B[37;1m>\x1B[0m";
-my $display = "\x1B[2J";
 
-while ($here < length($bc)) {
-	$display .= $cursor_display if $cursor == $here;
+sub render {
+	my $display = "\x1B[2J";
+	my $here = 0;
 	
-	my $b = ord(substr($bc, $here, 1));
-	++$here;
-	last if $b == BC_FIN;
-
-	my $fmt = @bc_fmts[$b];
-	my $len = @bc_lens[$b];
-
-	my $data = substr($bc, $here, $len);
-	$here += $len;
+	while ($here < length($bc)) {
+		$display .= $cursor_display if $cursor == $here;
 	
-	$data = ord($data) if $len == 1;
-	
-	$display .= sprintf($fmt, $data);
-};
+		my $b = ord(substr($bc, $here, 1));
+		++$here;
+		last if $b == BC_FIN;
 
-$display .= "\x1B[0m\n";
+		my $fmt = $bc_fmts[$b];
+		my $len = $bc_lens[$b];
 
-print $display;
+		my $data = substr($bc, $here, $len);
+		$here += $len;
+
+		$data = ord($data) if $len == 1;
+
+		$display .= sprintf($fmt, $data);
+	};
+
+	$display .= "\x1B[0m\n\n";
+
+	print $display;
+}
+
+while (1) {
+	render();
+
+	print "> ";
+	my $input = <STDIN>;
+	chomp $input;
+
+	last if $input eq "q";
+}
 
 open my $out, ">:raw", $bc_file;
 print $out $bc;
