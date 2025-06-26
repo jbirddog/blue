@@ -113,8 +113,7 @@ show "code size: ", ($ - $$)
 times (BLK_SIZE - ($ - $$ + ELF_HEADERS_SIZE)) db 0
 
 _src:
-file "test.blk"
-assert  $ - _src = BLK_SIZE
+times BLK_SIZE db 0
 
 _dict rb BLK_SIZE
 _dst rb BLK_SIZE
