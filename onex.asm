@@ -1,6 +1,7 @@
 ;
 ; TODOs:
 ;
+; * Dict entry 0x00 can have not found handler
 ; * Limit dict entry cell 1 values to 7 chars, use 1 byte for flags, etc
 ; * Need BC_EXEC_NUM
 ; * Start with argv, argc on stack
@@ -80,7 +81,7 @@ core_xt:
 .find:
 	mov	rbx, [REG_LAST]
 	cmp	rax, rbx
-	je	.found
+	je	.done
 
 	test	rbx, rbx
 	jz	.done
@@ -88,11 +89,10 @@ core_xt:
 	sub	REG_LAST, DICT_ENTRY_SIZE
 	jmp	.find
 
-.found:
-	mov	rax, [REG_LAST + CELL_SIZE]
-	
 .done:
+	mov	rax, [REG_LAST + CELL_SIZE]
 	pop	REG_LAST
+	
 	ret
 
 bc_exec_word:
@@ -121,7 +121,7 @@ entry $
 	syscall
 	
 	mov	REG_DST, rax
-	lea	REG_LAST, [rax + (BLK_SIZE shl 1)]
+	lea	REG_LAST, [rax + ((BLK_SIZE shl 1) + DICT_ENTRY_SIZE)]
 	mov	REG_SRC, _src
 
 	call	core_load
