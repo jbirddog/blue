@@ -1,8 +1,6 @@
 ;
 ; TODOs:
 ;
-; * If the 0x00 dict entry has a `not_found` addr in cell 2, not found could be handled like found
-; * bc_tbl 0x00 entry can be `break` that `xor ecx, ecx` if `loop` is used during `load`
 ; * Limit dict entry cell 1 values to 7 chars, use 1 byte for flags, etc
 ; * Need BC_EXEC_NUM
 ; * Start with argv, argc on stack
@@ -15,7 +13,7 @@
 ;
 ; - Keep in mind there is no ip - just compiling byte code top to bottom
 ; - Control flow happens via compiled machine code
-; - An outbut binary can optional build on Block 0 to opt-in to the onex "runtime"
+; - An outbut binary can chose to build on Block 0 to opt-in to the onex "runtime"
 ; - Return stack is rsp
 ;
 
@@ -52,6 +50,20 @@ macro show description,value
 		display description,`d,13,10
 	end repeat
 end macro
+
+core_load:
+.loop:
+	xor	eax, eax
+	lodsb
+
+	test	al, al
+	jz	.exit
+	
+	call	qword [bc_tbl + (rax * CELL_SIZE)]
+	jmp	.loop
+
+.exit:
+	ret
 
 core_define:
 	lodsq
@@ -110,21 +122,11 @@ entry $
 	
 	mov	REG_DST, rax
 	lea	REG_LAST, [rax + (BLK_SIZE shl 1)]
-
 	mov	REG_SRC, _src
 
-.loop:
-	xor	eax, eax
-	lodsb
-
-	test	al, al
-	jz	.exit
+	call	core_load
 	
-	call	qword [bc_tbl + (rax * CELL_SIZE)]
-	jmp	.loop
-
 	xor	edi, edi
-.exit:
 	mov	eax, SYS_EXIT
 	syscall
 	
