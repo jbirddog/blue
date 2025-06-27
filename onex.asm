@@ -1,17 +1,11 @@
 ;
 ; TODOs:
 ;
-; * In spirit of simplist approach drop the mmap (again)
-;   - rwx binary
-;   - block 0 is onex "runtime"
-;     - split between machine code and bytecode for core defines (blk, if, dup, etc)
-;   - block 1 is src
-;   - block 2 (reserved) is dictionary
-;   - block 3 (reserved) is dst
-;   - block 4-7 (reserved)
+; * Move to just having one number type, 8 bytes editor change choose how to display
+;   - BC_COMP_BYTE/bc_comp_byte -> comp_num
 ;
 ; * BC_EXEC_NUM
-; * Put data stack in mmap'd page
+; * Put data stack in block 0
 ; * Top of stack always in rax?
 ;
 ; * Dict entry 0x00 can have not found handler
@@ -33,7 +27,7 @@
 
 format ELF64 executable 3
 
-segment readable executable
+segment readable writeable executable
 
 BLK_SIZE = 1024
 CELL_SIZE = 8
@@ -47,22 +41,11 @@ BC_EXEC_WORD = 0x02
 BC_COMP_BYTE = 0x03
 BC_ED_NL = 0x04
 
-MAP_ANONYMOUS = 32
-MAP_PRIVATE = 2
-
-PROT_READ = 1
-PROT_WRITE = 2
-PROT_EXEC = 4
-
-PROT_RW = PROT_READ or PROT_WRITE
-PROT_RWX = PROT_RW or PROT_EXEC
-
 REG_SRC = rsi
 REG_DST = rdi
 REG_LAST = r12
 
 SYS_EXIT = 60
-SYS_MMAP = 9
 
 ; from https://flatassembler.net/docs.php?article=fasmg_manual
 macro show description,value
@@ -134,18 +117,9 @@ dq	bc_comp_byte
 dq	bc_ed_nop
 
 entry $
-	xor	edi, edi
-	mov	esi, PAGE_SIZE
-	mov	edx, PROT_RWX
-	mov	r10d, MAP_ANONYMOUS or MAP_PRIVATE
-	mov	r8d, -1
-	xor	r9d, r9d
-	mov	eax, SYS_MMAP
-	syscall
-	
-	mov	REG_DST, rax
-	lea	REG_LAST, [rax + ((BLK_SIZE shl 1) + DICT_ENTRY_SIZE)]
-	mov	REG_SRC, _src
+	mov	REG_SRC, block_1
+	lea	REG_LAST, [REG_SRC + BLK_SIZE]
+	lea	REG_DST, [REG_SRC + (BLK_SIZE * 2)]
 
 	call	core_load
 	
@@ -156,7 +130,7 @@ entry $
 show "code size: ", ($ - $$)
 times (BLK_SIZE - ($ - $$ + ELF_HEADERS_SIZE)) db 0
 
-_src:
+block_1:
 
 ; bth port
 ; - define words
@@ -201,5 +175,7 @@ db	BC_COMP_BYTE, 0x05
 db	BC_EXEC_WORD
 dq	"exit"
 
-show "_src size: ", ($ - _src)
-times (BLK_SIZE - ($ - _src)) db 0
+show "block_1 size: ", ($ - block_1)
+times (BLK_SIZE - ($ - block_1)) db 0
+
+rb (BLK_SIZE * 6)
