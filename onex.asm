@@ -1,12 +1,25 @@
 ;
 ; TODOs:
 ;
+; * In spirit of simplist approach drop the mmap (again)
+;   - rwx binary
+;   - block 0 is onex "runtime"
+;     - split between machine code and bytecode for core defines (blk, if, dup, etc)
+;   - block 1 is src
+;   - block 2 (reserved) is dictionary
+;   - block 3 (reserved) is dst
+;   - block 4-7 (reserved)
+;
+; * BC_EXEC_NUM
 ; * Put data stack in mmap'd page
+; * Top of stack always in rax?
+;
 ; * Dict entry 0x00 can have not found handler
 ; * Limit dict entry cell 1 values to 7 chars, use 1 byte for flags, etc
-; * Need BC_EXEC_NUM
+;
 ; * Get prototype editor screen working
 ; * Once editor is prototyped, port to onex
+;
 ; * Port bth to onex
 ;   - Block 1 for bth logic
 ;   - Concat with block 0, mmap file from argv[1] and set src
@@ -144,6 +157,26 @@ show "code size: ", ($ - $$)
 times (BLK_SIZE - ($ - $$ + ELF_HEADERS_SIZE)) db 0
 
 _src:
+
+; bth port
+; - define words
+;   - plan
+;   - ok
+;   - notok
+;   - done
+; - open argv[1]
+; - read test input block into buffer
+; - set dst to output buffer
+; - load test input block from buffer
+; - write output buffer to stdout
+;
+; - prove sample test with plan '01'; ok; done
+
+;
+; - will be using the onex block 0 so can use its allocations
+; - block 1 is bth source
+; - 
+;
 
 db	BC_DEFINE_WORD
 dq	"exit"
