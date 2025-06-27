@@ -22,6 +22,18 @@ format ELF64 executable 3
 
 segment readable executable
 
+BLK_SIZE = 1024
+CELL_SIZE = 8
+DICT_ENTRY_SIZE = CELL_SIZE * 2
+ELF_HEADERS_SIZE = 120
+PAGE_SIZE = 4096
+
+BC_FIN = 0x00
+BC_DEFINE_WORD = 0x01
+BC_EXEC_WORD = 0x02
+BC_COMP_BYTE = 0x03
+BC_ED_NL = 0x04
+
 MAP_ANONYMOUS = 32
 MAP_PRIVATE = 2
 
@@ -38,12 +50,6 @@ REG_LAST = r12
 
 SYS_EXIT = 60
 SYS_MMAP = 9
-
-BLK_SIZE = 1024
-CELL_SIZE = 8
-DICT_ENTRY_SIZE = CELL_SIZE * 2
-ELF_HEADERS_SIZE = 120
-PAGE_SIZE = 4096
 
 ; from https://flatassembler.net/docs.php?article=fasmg_manual
 macro show description,value
@@ -104,11 +110,15 @@ bc_comp_byte:
 	movsb
 	ret
 
+bc_ed_nop:
+	ret
+
 bc_tbl:
 dq	0x00
 dq	core_define
 dq	bc_exec_word
 dq	bc_comp_byte
+dq	bc_ed_nop
 
 entry $
 	xor	edi, edi
@@ -135,6 +145,28 @@ times (BLK_SIZE - ($ - $$ + ELF_HEADERS_SIZE)) db 0
 
 _src:
 
-file "test.blk"
+db	BC_DEFINE_WORD
+dq	"exit"
 
+; 31 c0			xor    eax,eax
+db	BC_COMP_BYTE, 0x31
+db	BC_COMP_BYTE, 0xC0
+
+; b0 3c			mov    al,0x3c
+db	BC_COMP_BYTE, 0xB0
+db	BC_COMP_BYTE, 0x3C
+
+; 40 b7 03		mov    dil,0x3
+db	BC_COMP_BYTE, 0x40
+db	BC_COMP_BYTE, 0xB7
+db	BC_COMP_BYTE, 0x03
+
+; 0f 05			syscall
+db	BC_COMP_BYTE, 0x0F
+db	BC_COMP_BYTE, 0x05
+
+db	BC_EXEC_WORD
+dq	"exit"
+
+show "_src size: ", ($ - _src)
 times (BLK_SIZE - ($ - _src)) db 0

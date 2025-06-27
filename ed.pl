@@ -11,6 +11,7 @@ use constant {
 	BC_DEFINE_WORD => 0x01,
 	BC_EXEC_WORD => 0x02,
 	BC_COMP_BYTE => 0x03,
+	BC_ED_NL => 0x04,
 };
 
 my @bc_lens = (
@@ -25,6 +26,7 @@ my @bc_fmts = (
 	"\x1B[31m%s ",
 	"\x1B[33;1m%s ",
 	"\x1B[32;1m%02X ",
+	"\n",
 );
 
 my $bc_file = $ARGV[0];
@@ -36,7 +38,7 @@ if (-e $bc_file) {
 	close $in;
 }
 
-=pod
+#=pod
 
 sub zero_pad {
 	my ($str, $len) = @_;
@@ -45,6 +47,9 @@ sub zero_pad {
 }
 
 $bc = "";
+$bc .= chr(BC_DEFINE_WORD) . zero_pad("xor", 8);
+$bc .= chr(BC_ED_NL);
+
 $bc .= chr(BC_DEFINE_WORD) . zero_pad("exit", 8);
 
 # 31 c0			xor    eax,eax
@@ -64,12 +69,16 @@ $bc .= chr(BC_COMP_BYTE) . chr(0x03);
 $bc .= chr(BC_COMP_BYTE) . chr(0x0F);
 $bc .= chr(BC_COMP_BYTE) . chr(0x05);
 
+# editor formatting
+$bc .= chr(BC_ED_NL);
+$bc .= chr(BC_ED_NL);
+
 # call exit
 $bc .= chr(BC_EXEC_WORD) . zero_pad("exit", 8);
 
 $bc = zero_pad($bc, BLK_SIZE);
 
-=cut
+#=cut
 
 my $cursor = 0;
 my $cursor_display = "\x1B[37;1m>\x1B[0m";
@@ -78,7 +87,7 @@ sub render {
 	my $display = "\x1B[2J";
 	my $here = 0;
 	
-	while ($here < length($bc)) {
+	while (1) {
 		$display .= $cursor_display if $cursor == $here;
 	
 		my $b = ord(substr($bc, $here, 1));
@@ -103,6 +112,7 @@ sub render {
 
 while (1) {
 	render();
+	last;
 
 	print "> ";
 	my $input = <STDIN>;
@@ -111,6 +121,6 @@ while (1) {
 	last if $input eq "q";
 }
 
-open my $out, ">:raw", $bc_file;
-print $out $bc;
-close $out;
+#open my $out, ">:raw", $bc_file;
+#print $out $bc;
+#close $out;
