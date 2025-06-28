@@ -9,6 +9,7 @@
 ; * Top of stack always in rax?
 ;
 ; * Dict entry 0x00 can have not found handler
+;   - Maybe also link to another dictionary
 ; * Limit dict entry cell 1 values to 7 chars, use 1 byte for flags, etc
 ;
 ; * Get prototype editor screen working
@@ -19,10 +20,15 @@
 ;   - Concat with block 0, mmap file from argv[1] and set src
 ;   - Mmap for test output
 ;
-; - Keep in mind there is no ip - just compiling byte code top to bottom
-; - Control flow happens via compiled machine code
-; - An outbut binary can chose to build on Block 0 to opt-in to the onex "runtime"
-; - Return stack is rsp
+; * Keep in mind
+;   - There is no ip - just compiling byte code top to bottom
+;   - Control flow happens via compiled machine code
+;   - An outbut binary can chose to build on Block 0 to opt-in to the onex "runtime"
+;   - Return stack is rsp
+;   - Stiching binaries still seems like the overall simplist approach
+;     - Maybe it should be stiching together block files
+;     - Easier edit/saving?
+;     - Combination of both depending on the use
 ;
 
 format ELF64 executable 3
@@ -149,7 +155,8 @@ block_1:
 ;
 ; - will be using the onex block 0 so can use its allocations
 ; - block 1 is bth source
-; - 
+; - block 4 is test input
+; - block 5 is test output
 ;
 
 db	BC_DEFINE_WORD
