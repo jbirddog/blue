@@ -1,55 +1,17 @@
-include common.mk
-
 INCS = $(wildcard *.inc)
 
+FASM2 = ../fasm2/fasm2
 ONEX = bin/onex
 
-TESTS = $(wildcard test/*.bla)
-TEST_OBJS = $(TESTS:test/%.bla=obj/test_%.bs0)
+.PHONY: all clean
 
-GEN_FILES = $(BLUEVM_OPS_TBL) $(README)
+all: $(ONEX)
 
-LANGS = lang/blasm
-TOOLS = tools/bth
-
-.PHONY: all clean test $(LANGS) $(TOOLS)
-
-all: $(ONEX) $(BLUEVM) \
-	$(GEN_FILES) \
-	$(LANGS) \
-	$(TOOLS) \
-	$(TEST_OBJS) \
-	test
-
-clean: $(LANGS) $(TOOLS)
-	rm -rf bin obj $(GEN_FILES)
+clean:
+	rm -rf bin obj
 
 bin obj:
 	mkdir $@
-
-$(FASM2):
-	git submodule update --init
 	
-$(ONEX): onex.asm $(FASM2) | bin
-	$(FASM2) $< $@
-	
-$(BLUEVM): bluevm.asm $(INCS) $(FASM2) | bin
-	$(FASM2) $< $@
-
-$(BLUEVM_OPS_TBL): $(BLUEVM_OPS_INC)
-	$(SED_TBL) $< > $@
-
-$(LANGS) $(TOOLS):
-	$(MAKE) -C $@ $(MAKECMDGOALS) || exit
-
-obj/test_%.bs0: test/%.bla $(BLASM) | obj
-	$(BLASM) -n $< $@
-
-test: $(TOOLS)
-	$(PROVE) obj/test_*
-	
-$(README): $(README).sh $(README).tmpl $(BLUEVM_OPS_TBL)
-	./$< > $@
-	
-scratch: scratch.asm $(FASM2)
+$(ONEX): onex.asm | bin
 	$(FASM2) $< $@
