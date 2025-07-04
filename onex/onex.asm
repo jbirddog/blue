@@ -1,35 +1,3 @@
-;
-; TODOs:
-;
-; * Move to just having one number type, 8 bytes editor change choose how to display
-;   - BC_COMP_BYTE/bc_comp_byte -> comp_num
-;
-; * BC_EXEC_NUM
-; * Put data stack in block 0
-; * Top of stack always in rax?
-;
-; * Dict entry 0x00 can have not found handler
-;   - Maybe also link to another dictionary
-; * Limit dict entry cell 1 values to 7 chars, use 1 byte for flags, etc
-;
-; * Get prototype editor screen working
-; * Once editor is prototyped, port to onex
-;
-; * Port bth to onex
-;   - Block 1 for bth logic
-;   - Concat with block 0, mmap file from argv[1] and set src
-;   - Mmap for test output
-;
-; * Keep in mind
-;   - There is no ip - just compiling byte code top to bottom
-;   - Control flow happens via compiled machine code
-;   - An outbut binary can chose to build on Block 0 to opt-in to the onex "runtime"
-;   - Return stack is rsp
-;   - Stiching binaries still seems like the overall simplist approach
-;     - Maybe it should be stiching together block files
-;     - Easier edit/saving?
-;     - Combination of both depending on the use
-;
 
 format ELF64 executable 3
 
@@ -59,6 +27,39 @@ macro show description,value
 		display description,`d,13,10
 	end repeat
 end macro
+
+entry $
+	mov	REG_SRC, block_1
+	lea	REG_LAST, [REG_SRC + BLK_SIZE]
+	lea	REG_DST, [REG_SRC + (BLK_SIZE * 2)]
+
+	push	REG_DST
+
+	call	core_load
+	
+	push	REG_DST
+
+	; write elf headers
+	xor	edi, edi
+	inc	edi
+	lea	rsi, [block_1 - BLK_SIZE]
+	mov	edx, 120
+	mov	eax, edi
+	syscall
+
+	; write assembled code
+	pop	rdx
+	pop	rsi
+	
+	xor	edi, edi
+	inc	edi
+	sub	rdx, rsi
+	mov	eax, edi
+	syscall
+	
+	xor	edi, edi
+	mov	eax, SYS_EXIT
+	syscall
 
 core_load:
 .loop:
@@ -121,17 +122,6 @@ dq	core_define
 dq	bc_exec_word
 dq	bc_comp_byte
 dq	bc_ed_nop
-
-entry $
-	mov	REG_SRC, block_1
-	lea	REG_LAST, [REG_SRC + BLK_SIZE]
-	lea	REG_DST, [REG_SRC + (BLK_SIZE * 2)]
-
-	call	core_load
-	
-	xor	edi, edi
-	mov	eax, SYS_EXIT
-	syscall
 	
 show "code size: ", ($ - $$)
 times (BLK_SIZE - ($ - $$ + ELF_HEADERS_SIZE)) db 0
@@ -179,10 +169,9 @@ db	BC_COMP_BYTE, 0x03
 db	BC_COMP_BYTE, 0x0F
 db	BC_COMP_BYTE, 0x05
 
-db	BC_EXEC_WORD
-dq	"exit"
+;db	BC_EXEC_WORD
+;dq	"exit"
 
-show "block_1 size: ", ($ - block_1)
 times (BLK_SIZE - ($ - block_1)) db 0
 
 rb (BLK_SIZE * 6)
