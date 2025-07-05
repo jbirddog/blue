@@ -15,9 +15,12 @@ REG_DST = rdi
 REG_LAST = r12
 
 entry $
+	call	mmap_rwx_buf
+
 	mov	REG_SRC, block_1
-	lea	REG_LAST, [REG_SRC + BLK_SIZE]
-	lea	REG_DST, [REG_SRC + (BLK_SIZE * 2)]
+	
+	mov	REG_LAST, rax
+	lea	REG_DST, [rax + (BLK_SIZE * 2)]
 
 	push	REG_DST
 
@@ -133,7 +136,7 @@ db	BC_COMP_BYTE, 0x3C
 ; 40 b7 03		mov    dil,0x3
 db	BC_COMP_BYTE, 0x40
 db	BC_COMP_BYTE, 0xB7
-db	BC_COMP_BYTE, 0x03
+db	BC_COMP_BYTE, 0x33
 
 ; 0f 05			syscall
 db	BC_COMP_BYTE, 0x0F

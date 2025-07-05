@@ -14,15 +14,29 @@ PROT_RWX = PROT_RW or PROT_EXEC
 SYS_EXIT = 60
 SYS_MMAP = 9
 
-mmap_rwx_buf:
-	mov	esi, PAGE_SIZE
-	mov	edx, PROT_RWX
-	
-	xor	edi, edi
-	mov	r8d, -1
-	xor	r9d, r9d
-	mov	r10d, MAP_ANONYMOUS or MAP_PRIVATE
-	mov	eax, SYS_MMAP
+syscall_or_die:
 	syscall
 
+	test	rax, rax
+	jna	.die
+	
 	ret
+
+.die:
+	neg	eax
+	mov	edi, eax
+	
+exit:
+	mov	eax, SYS_EXIT
+	syscall
+	
+mmap_rwx_buf:
+	xor	edi, edi
+	mov	esi, PAGE_SIZE
+	mov	edx, PROT_RWX
+	mov	r10d, MAP_ANONYMOUS or MAP_PRIVATE
+	mov	r8d, -1
+	xor	r9d, r9d
+	mov	eax, SYS_MMAP
+	
+	jmp	syscall_or_die
