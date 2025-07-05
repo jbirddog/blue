@@ -3,22 +3,25 @@ format ELF64 executable 3
 
 segment readable writeable executable
 
-BLK_SIZE = 1024
 CELL_SIZE = 8
 DICT_ENTRY_SIZE = CELL_SIZE * 2
 ELF_HEADERS_SIZE = 120
-PAGE_SIZE = 4096
+
+DICT_SIZE = DICT_ENTRY_SIZE * 64
+DST_SIZE = 1024
+SRC_SIZE = 1024
 
 REG_SRC = rsi
 REG_DST = rdi
 REG_LAST = r12
 
-SYS_EXIT	= 60
+SYS_EXIT = 60
 
 entry $
+	; read at most a block of bytecode from stdin
 	xor	edi, edi
 	mov	rsi, _src
-	mov	edx, BLK_SIZE
+	mov	edx, SRC_SIZE
 	xor	eax, eax
 	syscall
 
@@ -28,7 +31,7 @@ entry $
 
 	push	REG_DST
 
-	call	core_load
+	call	interpret
 	
 	push	REG_DST
 
@@ -55,18 +58,18 @@ entry $
 	syscall
 
 
-core_load:
+interpret:
 .loop:
 	xor	eax, eax
 	lodsb
 
 	test	al, al
-	jz	.exit
+	jz	.done
 	
 	call	qword [bc_tbl + (rax * CELL_SIZE)]
 	jmp	.loop
 
-.exit:
+.done:
 	ret
 
 core_define:
@@ -117,6 +120,6 @@ dq	bc_exec_word
 dq	bc_comp_byte
 dq	bc_ed_nop
 
-_dict: rb BLK_SIZE
-_dst: rb BLK_SIZE
-_src: rb BLK_SIZE
+_dict: rb DICT_SIZE
+_dst: rb DST_SIZE
+_src: rb SRC_SIZE
