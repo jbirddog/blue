@@ -26,4 +26,4 @@ obj/%.1x: %.1x.asm $(FASM2) | obj
 	$(FASM2) $< $@
 
 bin/%: obj/%.1x $(ONEX) | bin
-	$(ONEX) $< > $@ && chmod +x $@
+	$(ONEX) < $< > $@ && chmod +x $@

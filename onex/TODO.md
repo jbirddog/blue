@@ -25,9 +25,5 @@
 
 ## Next
 
-1. Go back to mmap for dict/dst, remove rb's at bottom
-1. Mmap 1x file from argv[1], remove block_1 contents
-1. Remove block size padding
 1. Remove bc include from onex.asm
-1. Write dst to file from argv[2], make executable
-1, bin/exit should exit with 7
+1. Remove linux.inc
