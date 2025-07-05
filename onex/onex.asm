@@ -3,14 +3,16 @@ format ELF64 executable 3
 
 segment readable writeable executable
 
-include "defs.inc"
+include "bc.inc"
 
-; from https://flatassembler.net/docs.php?article=fasmg_manual
-macro show description,value
-	repeat 1, d:value
-		display description,`d,10
-	end repeat
-end macro
+BLK_SIZE = 1024
+CELL_SIZE = 8
+DICT_ENTRY_SIZE = CELL_SIZE * 2
+ELF_HEADERS_SIZE = 120
+
+REG_SRC = rsi
+REG_DST = rdi
+REG_LAST = r12
 
 entry $
 	mov	REG_SRC, block_1
@@ -44,6 +46,12 @@ entry $
 	xor	edi, edi
 	mov	eax, SYS_EXIT
 	syscall
+
+;;;;
+
+include "linux.inc"
+
+;;;;
 
 core_load:
 .loop:
@@ -107,7 +115,6 @@ dq	bc_exec_word
 dq	bc_comp_byte
 dq	bc_ed_nop
 	
-show "code size: ", ($ - $$)
 times (BLK_SIZE - ($ - $$ + ELF_HEADERS_SIZE)) db 0
 
 block_1:

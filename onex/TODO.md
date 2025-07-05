@@ -1,22 +1,33 @@
 # TODOs
 
-* Move to just having one number type, 8 bytes
-* BC_EXEC_NUM
-* Put data stack in block 0
-* Top of stack always in rax?
-* Dict entry 0x00 can have not found handler
-* Maybe also link to another dictionary
-* Limit dict entry cell 1 values to 7 chars, use 1 byte for flags, etc
+1. Move to just having one number type, 8 bytes
+1. BC_EXEC_NUM
+1. Put data stack in block 0
+1. Top of stack always in rax?
+1. Dict entry 0x00 can have not found handler
+1. Maybe also link to another dictionary
+1. Limit dict entry cell 1 values to 7 chars, use 1 byte for flags, etc
+1. Remove BC_FIN
+1. Likely go back to fasm for build time speed
+1. Once `entry` can be set for the output, move include files above entry
 
 ## Keep in Mind
 
-* There is no ip - just compiling byte code top to bottom
-* Control flow happens via compiled machine code
-* Return stack is rsp
+1. There is no ip - just compiling byte code top to bottom
+1. Control flow happens via compiled machine code
+1. Return stack is rsp
 
-## Milestone
+## Elf Bytecode
 
-* Need to set binary size in elf header
-* Need to set entry in elf header
-* Can likely mutate the values in block 0
+1. Need to set binary size in elf header
+1. Need to set entry in elf header
+1. Can likely mutate the values in block 0
 
+## Next
+
+1. Go back to mmap for dict/dst, remove rb's at bottom
+1. Mmap 1x file from argv[1], remove block_1 contents
+1. Remove block size padding
+1. Remove bc include from onex.asm
+1. Write dst to file from argv[2], make executable
+1, bin/exit should exit with 7

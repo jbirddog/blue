@@ -1,4 +1,4 @@
-include "defs.inc"
+include "bc.inc"
 
 db	BC_DEFINE_WORD
 dq	"exit"
@@ -11,10 +11,10 @@ db	BC_COMP_BYTE, 0xC0
 db	BC_COMP_BYTE, 0xB0
 db	BC_COMP_BYTE, 0x3C
 
-; 40 b7 03		mov    dil,0x3
+; 40 b7 03		mov    dil,0x7
 db	BC_COMP_BYTE, 0x40
 db	BC_COMP_BYTE, 0xB7
-db	BC_COMP_BYTE, 0x03
+db	BC_COMP_BYTE, 0x07
 
 ; 0f 05			syscall
 db	BC_COMP_BYTE, 0x0F
@@ -22,3 +22,5 @@ db	BC_COMP_BYTE, 0x05
 
 ;db	BC_EXEC_WORD
 ;dq	"exit"
+
+db	BC_FIN
