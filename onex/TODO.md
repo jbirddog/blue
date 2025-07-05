@@ -14,15 +14,9 @@
 * Control flow happens via compiled machine code
 * Return stack is rsp
 
-## Milestone 1
-
-* Output binary to stdout that exits with status
-  * Straight line assembly, no calls in the binary
-* Copy elf headers from block 0
-  * Set onex entry at the top for now
-
-## Milestone 2
+## Milestone
 
 * Need to set binary size in elf header
 * Need to set entry in elf header
 * Can likely mutate the values in block 0
+
