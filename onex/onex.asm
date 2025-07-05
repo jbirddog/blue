@@ -3,28 +3,12 @@ format ELF64 executable 3
 
 segment readable writeable executable
 
-BLK_SIZE = 1024
-CELL_SIZE = 8
-DICT_ENTRY_SIZE = CELL_SIZE * 2
-ELF_HEADERS_SIZE = 120
-PAGE_SIZE = 4096
-
-BC_FIN = 0x00
-BC_DEFINE_WORD = 0x01
-BC_EXEC_WORD = 0x02
-BC_COMP_BYTE = 0x03
-BC_ED_NL = 0x04
-
-REG_SRC = rsi
-REG_DST = rdi
-REG_LAST = r12
-
-SYS_EXIT = 60
+include "defs.inc"
 
 ; from https://flatassembler.net/docs.php?article=fasmg_manual
 macro show description,value
 	repeat 1, d:value
-		display description,`d,13,10
+		display description,`d,10
 	end repeat
 end macro
 
@@ -127,27 +111,6 @@ show "code size: ", ($ - $$)
 times (BLK_SIZE - ($ - $$ + ELF_HEADERS_SIZE)) db 0
 
 block_1:
-
-; bth port
-; - define words
-;   - plan
-;   - ok
-;   - notok
-;   - done
-; - open argv[1]
-; - read test input block into buffer
-; - set dst to output buffer
-; - load test input block from buffer
-; - write output buffer to stdout
-;
-; - prove sample test with plan '01'; ok; done
-
-;
-; - will be using the onex block 0 so can use its allocations
-; - block 1 is bth source
-; - block 4 is test input
-; - block 5 is test output
-;
 
 db	BC_DEFINE_WORD
 dq	"exit"
