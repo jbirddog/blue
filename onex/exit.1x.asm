@@ -14,7 +14,7 @@ db	BC_COMP_BYTE, 0x3C
 ; 40 b7 03		mov    dil,0x7
 db	BC_COMP_BYTE, 0x40
 db	BC_COMP_BYTE, 0xB7
-db	BC_COMP_BYTE, 0x07
+db	BC_COMP_BYTE, 0x09
 
 ; 0f 05			syscall
 db	BC_COMP_BYTE, 0x0F
