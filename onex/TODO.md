@@ -17,8 +17,14 @@
 ## Next
 
 1. Move elf header logic into its own bytecode file
-1. Mutate the values in block 0
+1. Includes writing of elf headers to stdout
+   1. Default action is just writing dst to stdout
+1. Mutate the values in onex's own elf headers
    1. Need to set binary size in elf header
+      1. qword at +0x60
    1. Need to set reserved size in elf header
+      1. qword at +0x68 (size + reserved)
    1. Need to set entry in elf header
+      1. dword at +0x18
+      1. 0x400000 + 120 + offset from _dst
 

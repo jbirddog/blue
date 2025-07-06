@@ -6,6 +6,9 @@ segment readable writeable executable
 CELL_SIZE = 8
 DICT_ENTRY_SIZE = CELL_SIZE * 2
 ELF_HEADERS_SIZE = 120
+ELF_HEADERS_LOC = $$ - ELF_HEADERS_SIZE
+
+assert ELF_HEADERS_LOC = 0x400000
 
 DICT_SIZE = DICT_ENTRY_SIZE * 64
 DST_SIZE = 1024
@@ -18,7 +21,7 @@ REG_LAST = r12
 SYS_EXIT = 60
 
 entry $
-	; read at most a block of bytecode from stdin
+	; read at most a SRC_SIZE of bytecode from stdin
 	xor	edi, edi
 	mov	rsi, _src
 	mov	edx, SRC_SIZE
@@ -38,7 +41,7 @@ entry $
 	; write elf headers
 	xor	edi, edi
 	inc	edi
-	mov	rsi, $$ - ELF_HEADERS_SIZE
+	mov	rsi, ELF_HEADERS_LOC
 	mov	edx, ELF_HEADERS_SIZE
 	mov	eax, edi
 	syscall
