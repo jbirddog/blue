@@ -38,6 +38,11 @@ entry $
 	
 	push	REG_DST
 
+	; tmp - generalize and move to elf bytecode
+	mov	qword [ELF_HEADERS_LOC + 0x18], ELF_HEADERS_LOC + ELF_HEADERS_SIZE + 0 ; entry
+	mov	qword [ELF_HEADERS_LOC + 0x60], 129 ; binary size in file
+	mov	qword [ELF_HEADERS_LOC + 0x68], 129 ; binary size in memory
+
 	; write elf headers
 	xor	edi, edi
 	inc	edi
