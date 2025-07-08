@@ -1,8 +1,8 @@
 include "bc.inc"
 
-;	entry - qword at +0x18 (0x400000 + 120 + offset from _dst)
-;	size in binary - qword at +0x60
-;	size in memory - qword at +0x68 (size + reserved)
+;	entry - qword at +0x18 (0x400000 + offset from _dst)
+;	size in binary - qword at +0x60 (offset from _dst)
+;	size in memory - qword at +0x68 (offset from _dst + reserved)
 
 ;	0000000 457f 464c 0102 0301 0000 0000 0000 0000
 db	BC_COMP_QWORD
