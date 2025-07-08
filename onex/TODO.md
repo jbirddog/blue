@@ -23,6 +23,8 @@
 
 ## Next
 
+1. Create 1xo files - partial bytecode files
+1. exit.1x is cat elf.1xo exit.1xo
 1. ed.pl needs better parsing of values for bytecodes
 1. Need variables
    1. Just define a word
