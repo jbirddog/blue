@@ -1,5 +1,4 @@
 include "bc.inc"
-include "elf.1x.asm"
 
 db	BC_DEFINE_WORD
 dq	"exit"

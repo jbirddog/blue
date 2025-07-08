@@ -23,8 +23,6 @@
 
 ## Next
 
-1. Don't build a bin/elf
-1. bin/exit needs cat obj/elf.1x obj/exit.1x
 1. ed.pl needs better parsing of values for bytecodes
 1. Need variables
    1. Just define a word
