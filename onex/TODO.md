@@ -14,9 +14,18 @@
 1. Control flow happens via compiled machine code
 1. Return stack is rsp
 
+## Words
+
+1. Call word at compile time
+1. Compile runtime call to word
+1. Push compile time addr of word
+1. Push run time addr of word
+
 ## Next
 
 1. Move elf header logic into its own bytecode file
+
+
 1. Includes writing of elf headers to stdout
    1. Default action is just writing dst to stdout
 1. Mutate the values in onex's own elf headers
@@ -27,4 +36,7 @@
    1. Need to set entry in elf header
       1. dword at +0x18
       1. 0x400000 + 120 + offset from _dst
-
+1. Need variables
+   1. Just define a word
+   1. New opcode to get address of word
+   1. 

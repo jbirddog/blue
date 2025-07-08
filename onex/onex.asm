@@ -35,24 +35,9 @@ entry $
 	push	REG_DST
 
 	call	interpret
-	
-	push	REG_DST
-
-	; tmp - generalize and move to elf bytecode
-	mov	qword [ELF_HEADERS_LOC + 0x18], ELF_HEADERS_LOC + ELF_HEADERS_SIZE + 0 ; entry
-	mov	qword [ELF_HEADERS_LOC + 0x60], 129 ; binary size in file
-	mov	qword [ELF_HEADERS_LOC + 0x68], 129 ; binary size in memory
-
-	; write elf headers
-	xor	edi, edi
-	inc	edi
-	mov	rsi, ELF_HEADERS_LOC
-	mov	edx, ELF_HEADERS_SIZE
-	mov	eax, edi
-	syscall
 
 	; write assembled code
-	pop	rdx
+	mov	rdx, REG_DST
 	pop	rsi
 	
 	xor	edi, edi
@@ -118,6 +103,10 @@ bc_comp_byte:
 	movsb
 	ret
 
+bc_comp_qword:
+	movsq
+	ret
+
 bc_ed_nop:
 	ret
 
@@ -126,6 +115,7 @@ dq	0x00
 dq	core_define
 dq	bc_exec_word
 dq	bc_comp_byte
+dq	bc_comp_qword
 dq	bc_ed_nop
 
 _dict: rb DICT_SIZE
