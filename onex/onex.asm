@@ -5,9 +5,13 @@ segment readable writeable executable
 
 CELL_SIZE = 8
 DICT_ENTRY_SIZE = CELL_SIZE * 2
+DS_ENTRIES = 16
+DS_SIZE = DS_ENTRIES * CELL_SIZE
+DSI_MASK = DS_ENTRIES - 1
 ELF_HEADERS_SIZE = 120
 ELF_HEADERS_LOC = $$ - ELF_HEADERS_SIZE
 
+assert DS_ENTRIES and DSI_MASK = 0
 assert ELF_HEADERS_LOC = 0x400000
 
 DICT_SIZE = DICT_ENTRY_SIZE * 64
@@ -17,10 +21,12 @@ SRC_SIZE = 1024
 REG_SRC = rsi
 REG_DST = rdi
 REG_LAST = r12
+REG_DSI = r13
 
 SYS_EXIT = 60
 
 entry $
+
 	; read at most a SRC_SIZE of bytecode from stdin
 	xor	edi, edi
 	mov	rsi, _src
@@ -30,7 +36,7 @@ entry $
 
 	mov	REG_SRC, _src
 	mov	REG_DST, _dst
-	mov	REG_LAST, _dict
+	mov	REG_LAST, _dict.last
 
 	push	REG_DST
 
@@ -94,6 +100,20 @@ core_xt:
 	
 	ret
 
+k_dspush:
+	;lea	rbx, [_ds + (REG_DSI * CELL_SIZE)]
+	;mov	[rbx], rax
+	mov	[_ds + (REG_DSI * CELL_SIZE)], rax
+	inc	REG_DSI
+	and	REG_DSI, DSI_MASK
+
+	ret
+
+k_dstsz:
+	mov	rax, REG_DST
+	sub	rax, _dst
+	jmp	k_dspush
+
 bc_exec_word:
 	call	core_xt
 	call	rax
@@ -118,6 +138,13 @@ dq	bc_comp_byte
 dq	bc_comp_qword
 dq	bc_ed_nop
 
-_dict: rb DICT_SIZE
+_ds: times DS_SIZE db 0
+
+_dict:
+.last:
+dq	"dstsz", k_dstsz
+
+rb (DICT_SIZE - ($ - _dict))
+
 _dst: rb DST_SIZE
 _src: rb SRC_SIZE
