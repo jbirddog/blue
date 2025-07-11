@@ -1,5 +1,7 @@
 # TODOs
 
+1. Rename `core_` and `bc_` to `k_`
+1. Align 128 for ds and just wrap addr with no index
 1. BC_EXEC_NUM
 1. Top of stack always in rax?
 1. Allocate data via sub rsp, 128

@@ -101,8 +101,6 @@ core_xt:
 	ret
 
 k_dspush:
-	;lea	rbx, [_ds + (REG_DSI * CELL_SIZE)]
-	;mov	[rbx], rax
 	mov	[_ds + (REG_DSI * CELL_SIZE)], rax
 	inc	REG_DSI
 	and	REG_DSI, DSI_MASK
@@ -130,10 +128,15 @@ bc_comp_qword:
 bc_ed_nop:
 	ret
 
+k_ref_word:
+	call	core_xt
+	jmp	k_dspush
+
 bc_tbl:
 dq	0x00
 dq	core_define
 dq	bc_exec_word
+dq	k_ref_word
 dq	bc_comp_byte
 dq	bc_comp_qword
 dq	bc_ed_nop
