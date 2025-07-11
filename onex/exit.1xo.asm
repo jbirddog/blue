@@ -1,5 +1,7 @@
 include "bc.inc"
 
+db	BC_ED_NL
+
 db	BC_DEFINE_WORD
 dq	"exit"
 
@@ -19,6 +21,9 @@ db	BC_COMP_BYTE, 0x07
 ; 0f 05			syscall
 db	BC_COMP_BYTE, 0x0F
 db	BC_COMP_BYTE, 0x05
+
+db	BC_ED_NL
+db	BC_ED_NL
 
 db	BC_EXEC_WORD
 dq	"dstsz"
