@@ -31,4 +31,7 @@ dq	"dstsz"
 db	BC_REF_WORD
 dq	"elfbsz"
 
+db	BC_EXEC_WORD
+dq	"!"
+
 db	BC_FIN

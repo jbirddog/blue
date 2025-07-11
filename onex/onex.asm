@@ -107,6 +107,13 @@ k_dspush:
 
 	ret
 
+k_dspop:
+	dec	REG_DSI
+	and	REG_DSI, DSI_MASK
+	mov	rax, [_ds + (REG_DSI * CELL_SIZE)]
+
+	ret
+
 k_dstsz:
 	mov	rax, REG_DST
 	sub	rax, _dst
@@ -132,6 +139,14 @@ k_ref_word:
 	call	core_xt
 	jmp	k_dspush
 
+k_setq:
+	call	k_dspop
+	mov	rbx, rax
+	call	k_dspop
+	mov	[rbx], rax
+	
+	ret
+
 bc_tbl:
 dq	0x00
 dq	core_define
@@ -144,6 +159,7 @@ dq	bc_ed_nop
 _ds: times DS_SIZE db 0
 
 _dict:
+dq	"!", k_setq
 .last:
 dq	"dstsz", k_dstsz
 

@@ -53,7 +53,7 @@ db	BC_ED_NL
 db	BC_DEFINE_WORD
 dq	"elfbsz"
 db	BC_COMP_QWORD
-dq	0x0000'0000'0000'0081
+dq	0x00
 
 db	BC_DEFINE_WORD
 dq	"elfmsz"
