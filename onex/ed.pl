@@ -63,7 +63,7 @@ sub render {
 		$here += $len;
 
 		$data = ord($data) if $len == 1;
-		$data = unpack("Q", $data) if $len == 8 && $b != BC_DEFINE_WORD;
+		$data = unpack("Q", $data) if $b == BC_COMP_QWORD;
 
 		$display .= sprintf($fmt, $data);
 	};

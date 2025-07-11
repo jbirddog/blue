@@ -20,7 +20,7 @@ db	BC_COMP_BYTE, 0x07
 db	BC_COMP_BYTE, 0x0F
 db	BC_COMP_BYTE, 0x05
 
-;db	BC_EXEC_WORD
-;dq	"exit"
+db	BC_EXEC_WORD
+dq	"dstsz"
 
 db	BC_FIN

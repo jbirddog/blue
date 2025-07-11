@@ -24,13 +24,10 @@
 
 ## Next
 
-1. Core word `dstsz` to push size of dst
 1. New opcode to get compile time address of word
 1. Core word `!`
 1. Set `elfbsz` and `elfmsz` at compile time in `exit.1xo.asm`
 1. Make `elfbsz` and `elfmsz` have 0x00 values in `elf.1xo.asm`
-
-1. Do the same for `entry`
 
 1. ed.pl needs better parsing of values for bytecodes
 1. ed.pl needs colors for compile time word address
