@@ -5,25 +5,49 @@ segment readable writeable executable
 
 CELL_SIZE = 8
 DICT_ENTRY_SIZE = CELL_SIZE * 2
-DS_ENTRIES = 16
-DS_SIZE = DS_ENTRIES * CELL_SIZE
-DSI_MASK = DS_ENTRIES - 1
-ELF_HEADERS_SIZE = 120
-ELF_HEADERS_LOC = $$ - ELF_HEADERS_SIZE
-
-assert DS_ENTRIES and DSI_MASK = 0
-assert ELF_HEADERS_LOC = 0x400000
-
 DICT_SIZE = DICT_ENTRY_SIZE * 64
+DS_SIZE = CELL_SIZE * 16
 DST_SIZE = 1024
 SRC_SIZE = 1024
+
+assert DS_SIZE and (DS_SIZE - 1) = 0
+
+SYS_EXIT = 60
 
 REG_SRC = rsi
 REG_DST = rdi
 REG_LAST = r12
-REG_DSI = r13
+REG_DS = r13
 
-SYS_EXIT = 60
+;
+;
+;
+
+_pre_ds_align:
+align DS_SIZE
+assert $ - _pre_ds_align <= 8
+
+_ds: times DS_SIZE db 0
+
+DS_MASK = _ds or (DS_SIZE - 1)
+
+ds_push:
+	mov	[REG_DS], rax
+	add	REG_DS, CELL_SIZE
+	and	REG_DS, DS_MASK
+
+	ret
+
+ds_pop:
+	sub	REG_DS, CELL_SIZE
+	and	REG_DS, DS_MASK
+	mov	rax, [REG_DS]
+
+	ret
+
+;
+;
+;
 
 entry $
 
@@ -36,6 +60,7 @@ entry $
 
 	mov	REG_SRC, _src
 	mov	REG_DST, _dst
+	mov	REG_DS, _ds
 	mov	REG_LAST, _dict.last
 
 	push	REG_DST
@@ -71,7 +96,7 @@ interpret:
 .done:
 	ret
 
-core_define:
+k_define:
 	lodsq
 	
 	add	REG_LAST, DICT_ENTRY_SIZE
@@ -100,24 +125,10 @@ core_xt:
 	
 	ret
 
-k_dspush:
-	mov	[_ds + (REG_DSI * CELL_SIZE)], rax
-	inc	REG_DSI
-	and	REG_DSI, DSI_MASK
-
-	ret
-
-k_dspop:
-	dec	REG_DSI
-	and	REG_DSI, DSI_MASK
-	mov	rax, [_ds + (REG_DSI * CELL_SIZE)]
-
-	ret
-
 k_dstsz:
 	mov	rax, REG_DST
 	sub	rax, _dst
-	jmp	k_dspush
+	jmp	ds_push
 
 bc_exec_word:
 	call	core_xt
@@ -137,26 +148,24 @@ bc_ed_nop:
 
 k_ref_word:
 	call	core_xt
-	jmp	k_dspush
+	jmp	ds_push
 
 k_setq:
-	call	k_dspop
+	call	ds_pop
 	mov	rbx, rax
-	call	k_dspop
+	call	ds_pop
 	mov	[rbx], rax
 	
 	ret
 
 bc_tbl:
 dq	0x00
-dq	core_define
+dq	k_define
 dq	bc_exec_word
 dq	k_ref_word
 dq	bc_comp_byte
 dq	bc_comp_qword
 dq	bc_ed_nop
-
-_ds: times DS_SIZE db 0
 
 _dict:
 dq	"!", k_setq

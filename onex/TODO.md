@@ -1,10 +1,10 @@
 # TODOs
 
 1. Rename `core_` and `bc_` to `k_`
-1. Align 128 for ds and just wrap addr with no index
+1. Add `dup`
+1. Add `dstout`
 1. BC_EXEC_NUM
 1. Top of stack always in rax?
-1. Allocate data via sub rsp, 128
 1. Dict entry 0x00 can have not found handler
 1. Maybe also link to another dictionary
 1. Limit dict entry cell 1 values to 7 chars, use 1 byte for flags, etc
@@ -25,11 +25,6 @@
 1. Push run time addr of word
 
 ## Next
-
-1. New opcode to get compile time address of word
-1. Core word `!`
-1. Set `elfbsz` and `elfmsz` at compile time in `exit.1xo.asm`
-1. Make `elfbsz` and `elfmsz` have 0x00 values in `elf.1xo.asm`
 
 1. ed.pl needs better parsing of values for bytecodes
 1. ed.pl needs colors for compile time word address
