@@ -1,6 +1,5 @@
 # TODOs
 
-1. Changes to `bc.inc` require `make clean` for 1x files
 1. Add `dup`
 1. Add `dstout`
 1. Add `bye`, remove BC_FIN
@@ -26,5 +25,3 @@
 
 ## Next
 
-1. ed.pl needs better parsing of values for bytecodes
-1. ed.pl needs colors for compile time word address

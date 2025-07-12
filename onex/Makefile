@@ -20,7 +20,7 @@ bin obj:
 $(ONEX): onex.asm $(FASM2) | bin
 	$(FASM2) $< $@
 
-obj/%.1xo: %.1xo.asm $(FASM2) | obj
+obj/%.1xo: %.1xo.asm $(FASM2) bc.inc | obj
 	$(FASM2) $< $@
 
 obj/exit.1x: obj/elf.1xo obj/exit.1xo | obj
