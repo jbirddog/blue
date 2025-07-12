@@ -1,10 +1,12 @@
 include "bc.inc"
 
-;	entry - qword at +0x18 (0x400000 + offset from _dst)
-;	size in binary - qword at +0x60 (offset from _dst)
-;	size in memory - qword at +0x68 (offset from _dst + reserved)
+;	entry - qword at +0x18 (0x400000 + 120 + offset)
+;	size in binary - qword at +0x60
+;	size in memory - qword at +0x68
 
 ;	0000000 457f 464c 0102 0301 0000 0000 0000 0000
+db	BC_DEFINE_WORD
+dq	"elfhdrs"
 db	BC_COMP_NUM
 dq	0x0301'0102'464C'457F
 db	BC_COMP_NUM
