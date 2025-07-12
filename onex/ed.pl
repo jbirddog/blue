@@ -11,8 +11,8 @@ use constant {
 	BC_DEFINE_WORD => 0x01,
 	BC_EXEC_WORD => 0x02,
 	BC_REF_WORD => 0x03,
-	BC_COMP_BYTE => 0x04,
-	BC_COMP_QWORD => 0x05,
+	BC_COMP_NUM => 0x04,
+	BC_EXEC_NUM => 0x05,
 	BC_ED_NL => 0x06,
 };
 
@@ -21,7 +21,7 @@ my @bc_lens = (
 	8,
 	8,
 	8,
-	1,
+	8,
 	8,
 	0,
 );
@@ -32,7 +32,7 @@ my @bc_fmts = (
 	"\x1B[33;1m%s ",
 	"\x1B[35;1m%s ",
 	"\x1B[32;1m%02X ",
-	"\x1B[32;1m%08X ",
+	"\x1B[33;1m%02X ",
 	"\n",
 );
 
@@ -66,7 +66,7 @@ sub render {
 		$here += $len;
 
 		$data = ord($data) if $len == 1;
-		$data = unpack("Q", $data) if $b == BC_COMP_QWORD;
+		$data = unpack("Q", $data) if $b == BC_COMP_NUM || $b == BC_EXEC_NUM;
 
 		$display .= sprintf($fmt, $data);
 	};

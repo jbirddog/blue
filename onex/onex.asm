@@ -20,17 +20,16 @@ REG_DS = r13
 ; data stack
 ;
 
-DS_CELLS = 16
-DS_SIZE = CELL_SIZE * DS_CELLS
+DS_SIZE = CELL_SIZE * 16
+DS_MASK = DS_SIZE - 1
 
-assert DS_SIZE and (DS_SIZE - 1) = 0
+assert DS_SIZE and DS_MASK = 0
 
 align DS_SIZE
 
 DS_BASE = $ - DS_SIZE
-DS_MASK = DS_SIZE - 1
 
-assert DS_BASE and (DS_SIZE - 1) = 0
+assert DS_BASE and DS_MASK = 0
 
 macro chk_ds_wrap i, w
 	assert (((DS_BASE + (i shl 3)) and DS_MASK) or DS_BASE) = DS_BASE + (w shl 3)
@@ -61,7 +60,25 @@ ds_pop:
 	ret
 
 ;
-; 
+; interpreter
+;
+
+interpret:
+.loop:
+	xor	eax, eax
+	lodsb
+
+	test	al, al
+	jz	.done
+	
+	call	qword [bc_tbl + (rax * CELL_SIZE)]
+	jmp	.loop
+
+.done:
+	ret
+
+;
+; main
 ;
 
 entry $
@@ -97,20 +114,6 @@ entry $
 	syscall
 
 
-interpret:
-.loop:
-	xor	eax, eax
-	lodsb
-
-	test	al, al
-	jz	.done
-	
-	call	qword [bc_tbl + (rax * CELL_SIZE)]
-	jmp	.loop
-
-.done:
-	ret
-
 k_define:
 	lodsq
 	
@@ -120,7 +123,7 @@ k_define:
 	
 	ret
 
-core_xt:
+k_xt:
 	lodsq
 	push	REG_LAST
 .find:
@@ -145,26 +148,38 @@ k_dstsz:
 	sub	rax, _dst
 	jmp	ds_push
 
-bc_exec_word:
-	call	core_xt
+k_exec_word:
+	call	k_xt
 	call	rax
 	ret
 
-bc_comp_byte:
-	movsb
-	ret
+k_exec_num:
+	lodsq
+	jmp	ds_push
 
-bc_comp_qword:
+k_comp_num:
 	movsq
 	ret
 
-bc_ed_nop:
+k_nop:
 	ret
 
 k_ref_word:
-	call	core_xt
+	call	k_xt
 	jmp	ds_push
 
+b_comma:
+	call	ds_pop
+	stosb
+
+	ret
+
+w_comma:
+	call	ds_pop
+	stosw
+
+	ret
+	
 k_setq:
 	call	ds_pop
 	mov	rbx, rax
@@ -176,14 +191,16 @@ k_setq:
 bc_tbl:
 dq	0x00
 dq	k_define
-dq	bc_exec_word
+dq	k_exec_word
 dq	k_ref_word
-dq	bc_comp_byte
-dq	bc_comp_qword
-dq	bc_ed_nop
+dq	k_comp_num
+dq	k_exec_num
+dq	k_nop
 
 _dict:
 dq	"!", k_setq
+dq	"b,", b_comma
+dq	"w,", w_comma
 .last:
 dq	"dstsz", k_dstsz
 
