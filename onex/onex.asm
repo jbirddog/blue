@@ -114,7 +114,7 @@ entry $
 	syscall
 
 
-k_define:
+def_word:
 	lodsq
 	
 	add	REG_LAST, DICT_ENTRY_SIZE
@@ -123,7 +123,7 @@ k_define:
 	
 	ret
 
-k_xt:
+xt:
 	lodsq
 	push	REG_LAST
 .find:
@@ -149,7 +149,7 @@ k_dstsz:
 	jmp	ds_push
 
 k_exec_word:
-	call	k_xt
+	call	xt
 	call	rax
 	ret
 
@@ -165,7 +165,7 @@ k_nop:
 	ret
 
 k_ref_word:
-	call	k_xt
+	call	xt
 	jmp	ds_push
 
 b_comma:
@@ -190,7 +190,7 @@ k_setq:
 
 bc_tbl:
 dq	0x00
-dq	k_define
+dq	def_word
 dq	k_exec_word
 dq	k_ref_word
 dq	k_comp_num
