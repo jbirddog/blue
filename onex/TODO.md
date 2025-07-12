@@ -3,6 +3,7 @@
 1. Rename `core_` and `bc_` to `k_`
 1. Add `dup`
 1. Add `dstout`
+1. Add `bye`, remove BC_FIN
 1. BC_EXEC_NUM
 1. Top of stack always in rax?
 1. Dict entry 0x00 can have not found handler

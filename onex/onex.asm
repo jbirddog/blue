@@ -6,12 +6,8 @@ segment readable writeable executable
 CELL_SIZE = 8
 DICT_ENTRY_SIZE = CELL_SIZE * 2
 DICT_SIZE = DICT_ENTRY_SIZE * 64
-DS_CELLS = 16
-DS_SIZE = CELL_SIZE * DS_CELLS
 DST_SIZE = 1024
 SRC_SIZE = 1024
-
-assert DS_SIZE and (DS_SIZE - 1) = 0
 
 SYS_EXIT = 60
 
@@ -23,6 +19,11 @@ REG_DS = r13
 ;
 ; data stack
 ;
+
+DS_CELLS = 16
+DS_SIZE = CELL_SIZE * DS_CELLS
+
+assert DS_SIZE and (DS_SIZE - 1) = 0
 
 align DS_SIZE
 
