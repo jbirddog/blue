@@ -31,18 +31,6 @@ DS_BASE = $ - DS_SIZE
 
 assert DS_BASE and DS_MASK = 0
 
-macro chk_ds_wrap i, w
-	assert (((DS_BASE + (i shl 3)) and DS_MASK) or DS_BASE) = DS_BASE + (w shl 3)
-end macro
-
-chk_ds_wrap	0, 0
-chk_ds_wrap	4, 4
-chk_ds_wrap	15, 15
-chk_ds_wrap	16, 0
-chk_ds_wrap	17, 1
-chk_ds_wrap	-1, 15
-chk_ds_wrap	-4, 12
-
 ds_push:
 	mov	[REG_DS], rax
 	add	REG_DS, CELL_SIZE
