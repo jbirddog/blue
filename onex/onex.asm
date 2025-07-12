@@ -6,7 +6,8 @@ segment readable writeable executable
 CELL_SIZE = 8
 DICT_ENTRY_SIZE = CELL_SIZE * 2
 DICT_SIZE = DICT_ENTRY_SIZE * 64
-DS_SIZE = CELL_SIZE * 16
+DS_CELLS = 16
+DS_SIZE = CELL_SIZE * DS_CELLS
 DST_SIZE = 1024
 SRC_SIZE = 1024
 
@@ -20,33 +21,46 @@ REG_LAST = r12
 REG_DS = r13
 
 ;
-;
+; data stack
 ;
 
-_pre_ds_align:
 align DS_SIZE
-assert $ - _pre_ds_align <= 8
 
-_ds: times DS_SIZE db 0
+DS_BASE = $ - DS_SIZE
+DS_MASK = DS_SIZE - 1
 
-DS_MASK = _ds or (DS_SIZE - 1)
+assert DS_BASE and (DS_SIZE - 1) = 0
+
+macro chk_ds_wrap i, w
+	assert (((DS_BASE + (i shl 3)) and DS_MASK) or DS_BASE) = DS_BASE + (w shl 3)
+end macro
+
+chk_ds_wrap	0, 0
+chk_ds_wrap	4, 4
+chk_ds_wrap	15, 15
+chk_ds_wrap	16, 0
+chk_ds_wrap	17, 1
+chk_ds_wrap	-1, 15
+chk_ds_wrap	-4, 12
 
 ds_push:
 	mov	[REG_DS], rax
 	add	REG_DS, CELL_SIZE
 	and	REG_DS, DS_MASK
+	or	REG_DS, DS_BASE
 
 	ret
 
 ds_pop:
 	sub	REG_DS, CELL_SIZE
 	and	REG_DS, DS_MASK
+	or	REG_DS, DS_BASE
 	mov	rax, [REG_DS]
 
 	ret
 
 ;
-;
+; 
 ;
 
 entry $
@@ -60,7 +74,7 @@ entry $
 
 	mov	REG_SRC, _src
 	mov	REG_DST, _dst
-	mov	REG_DS, _ds
+	mov	REG_DS, DS_BASE
 	mov	REG_LAST, _dict.last
 
 	push	REG_DST
