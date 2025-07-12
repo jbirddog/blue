@@ -1,7 +1,6 @@
 # TODOs
 
 1. Changes to `bc.inc` require `make clean` for 1x files
-1. Drop `k_` prefix
 1. Add `dup`
 1. Add `dstout`
 1. Add `bye`, remove BC_FIN

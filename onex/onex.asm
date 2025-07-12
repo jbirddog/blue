@@ -143,28 +143,28 @@ xt:
 	
 	ret
 
-k_dstsz:
+dstsz:
 	mov	rax, REG_DST
 	sub	rax, _dst
 	jmp	ds_push
 
-k_exec_word:
+exec_word:
 	call	xt
 	call	rax
 	ret
 
-k_exec_num:
+exec_num:
 	lodsq
 	jmp	ds_push
 
-k_comp_num:
+comp_num:
 	movsq
 	ret
 
-k_nop:
+ed_nop:
 	ret
 
-k_ref_word:
+ref_word:
 	call	xt
 	jmp	ds_push
 
@@ -180,7 +180,7 @@ w_comma:
 
 	ret
 	
-k_setq:
+setq:
 	call	ds_pop
 	mov	rbx, rax
 	call	ds_pop
@@ -191,18 +191,18 @@ k_setq:
 bc_tbl:
 dq	0x00
 dq	def_word
-dq	k_exec_word
-dq	k_ref_word
-dq	k_comp_num
-dq	k_exec_num
-dq	k_nop
+dq	exec_word
+dq	ref_word
+dq	comp_num
+dq	exec_num
+dq	ed_nop
 
 _dict:
-dq	"!", k_setq
+dq	"!", setq
 dq	"b,", b_comma
 dq	"w,", w_comma
 .last:
-dq	"dstsz", k_dstsz
+dq	"dstsz", dstsz
 
 rb (DICT_SIZE - ($ - _dict))
 
