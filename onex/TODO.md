@@ -1,7 +1,5 @@
 # TODOs
 
-1. Factor `$ elfhdrs - 0x400000 + entry !` into `entry!` defined in elf.1xo
-
 ## Maybe
 
 1. Add `dstout`
@@ -29,3 +27,16 @@
 
 ## Next
 
+1. Add elf.fin.1xo
+   1. `elfhdrs $$ !`
+   1. Setting of `elfbsz`, `elfmsz`
+
+## Future
+
+1. Factor `$ elfhdrs - 0x400000 + entry !` into `entry!` defined in elf.1xo
+1. Make onex.1x so onex can be written in onex and bootstrapped from fasm version
+
+## kernel.1xo
+
+1. Move logic to read _src from stdin
+   1. Words + exec `read`

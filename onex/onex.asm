@@ -3,6 +3,9 @@ format ELF64 executable 3
 
 segment readable writeable executable
 
+id:	dd "onex"
+ver:	dd 0
+
 CELL_SIZE = 8
 DICT_ENTRY_SIZE = CELL_SIZE * 2
 DICT_SIZE = DICT_ENTRY_SIZE * 64
@@ -22,13 +25,9 @@ REG_DS = r13
 
 DS_SIZE = CELL_SIZE * 16
 DS_MASK = DS_SIZE - 1
-
-assert DS_SIZE and DS_MASK = 0
-
-align DS_SIZE
-
 DS_BASE = $ - DS_SIZE
 
+assert DS_SIZE and DS_MASK = 0
 assert DS_BASE and DS_MASK = 0
 
 ds_push:
@@ -50,6 +49,8 @@ ds_pop:
 ;
 ; kernel
 ;
+
+dollar_dollar: dq _dst
 
 dollar:
 	mov	rax, REG_DST
@@ -110,13 +111,11 @@ entry $
 	mov	REG_DS, DS_BASE
 	mov	REG_LAST, _dict.last
 
-	push	REG_DST
-
 	call	interpret
 
 	; write assembled code
 	mov	rdx, REG_DST
-	pop	rsi
+	mov	rsi, [dollar_dollar]
 	
 	xor	edi, edi
 	inc	edi
@@ -219,6 +218,7 @@ dq	"w,", w_comma
 dq	"+", plus
 dq	"-", minus
 dq	"dup", dup
+dq	"$$", dollar_dollar
 .last:
 dq	"$", dollar
 
