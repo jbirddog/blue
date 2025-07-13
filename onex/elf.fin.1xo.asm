@@ -1,5 +1,7 @@
 include "bc.inc"
 
+db	BC_ED_NL
+
 db	BC_EXEC_WORD
 dq	"$"
 db	BC_REF_WORD

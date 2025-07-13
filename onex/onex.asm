@@ -3,7 +3,7 @@ format ELF64 executable 3
 
 segment readable writeable executable
 
-id:	dd "onex"
+name:	dd "onex"
 ver:	dd 0
 
 CELL_SIZE = 8
@@ -11,8 +11,6 @@ DICT_ENTRY_SIZE = CELL_SIZE * 2
 DICT_SIZE = DICT_ENTRY_SIZE * 64
 DST_SIZE = 1024
 SRC_SIZE = 1024
-
-SYS_EXIT = 60
 
 REG_SRC = rsi
 REG_DST = rdi
@@ -50,10 +48,15 @@ ds_pop:
 ; kernel
 ;
 
-dollar_dollar: dq _dst
+dollar_dollar	dq _dst
 
 dollar:
 	mov	rax, REG_DST
+	jmp	ds_push
+
+dup:
+	call	ds_pop
+	call	ds_push
 	jmp	ds_push
 
 plus:
@@ -70,63 +73,35 @@ minus:
 	sub	rax, rcx
 	jmp	ds_push
 
-dup:
+b_comma:
 	call	ds_pop
-	call	ds_push
-	jmp	ds_push
+	stosb
 
-;
-; interpreter
-;
-
-interpret:
-.loop:
-	xor	eax, eax
-	lodsb
-
-	test	al, al
-	jz	.done
-	
-	call	qword [bc_tbl + (rax * CELL_SIZE)]
-	jmp	.loop
-
-.done:
 	ret
 
-;
-; main
-;
+w_comma:
+	call	ds_pop
+	stosw
 
-entry $
+	ret
 
-	; read at most a SRC_SIZE of bytecode from stdin
-	xor	edi, edi
-	mov	rsi, _src
-	mov	edx, SRC_SIZE
-	xor	eax, eax
-	syscall
-
-	mov	REG_SRC, _src
-	mov	REG_DST, _dst
-	mov	REG_DS, DS_BASE
-	mov	REG_LAST, _dict.last
-
-	call	interpret
-
-	; write assembled code
-	mov	rdx, REG_DST
-	mov	rsi, [dollar_dollar]
+set:
+	call	ds_pop
+	mov	rbx, rax
+	call	ds_pop
+	mov	[rbx], rax
 	
-	xor	edi, edi
-	inc	edi
-	sub	rdx, rsi
-	mov	eax, edi
-	syscall
-	
-	xor	edi, edi
-	mov	eax, SYS_EXIT
-	syscall
+	ret
 
+exec_num:
+	lodsq
+	jmp	ds_push
+
+comp_num:
+	movsq
+	
+ed_nop:
+	ret
 
 def_word:
 	lodsq
@@ -157,53 +132,36 @@ xt:
 	
 	ret
 
-dstsz:
-	mov	rax, REG_DST
-	sub	rax, _dst
-	jmp	ds_push
-
 exec_word:
 	call	xt
 	call	rax
-	ret
-
-exec_num:
-	lodsq
-	jmp	ds_push
-
-comp_num:
-	movsq
-	ret
-
-ed_nop:
+	
 	ret
 
 ref_word:
 	call	xt
 	jmp	ds_push
 
-b_comma:
-	call	ds_pop
-	stosb
-
-	ret
-
-w_comma:
-	call	ds_pop
-	stosw
-
-	ret
+fin:
+	mov	rdx, REG_DST
+	mov	rsi, [dollar_dollar]
 	
-setq:
-	call	ds_pop
-	mov	rbx, rax
-	call	ds_pop
-	mov	[rbx], rax
+	xor	edi, edi
+	inc	edi
+	sub	rdx, rsi
+	mov	eax, edi
+	syscall
 	
-	ret
+	xor	edi, edi
+	mov	eax, 60
+	syscall
+
+;
+; bytecode table
+;
 
 bc_tbl:
-dq	0x00
+dq	fin
 dq	def_word
 dq	exec_word
 dq	ref_word
@@ -211,8 +169,39 @@ dq	comp_num
 dq	exec_num
 dq	ed_nop
 
+;
+; main
+;
+
+entry $
+	xor	edi, edi
+	mov	rsi, _src
+	mov	edx, SRC_SIZE
+	xor	eax, eax
+	syscall
+
+	mov	REG_SRC, _src
+	mov	REG_DST, _dst
+	mov	REG_DS, DS_BASE
+	mov	REG_LAST, _dict.last
+
+;
+; interpreter
+;
+
+interpret:
+	xor	eax, eax
+	lodsb
+	
+	call	qword [bc_tbl + (rax * CELL_SIZE)]
+	jmp	interpret
+
+;
+; dictionary
+;
+
 _dict:
-dq	"!", setq
+dq	"!", set
 dq	"b,", b_comma
 dq	"w,", w_comma
 dq	"+", plus

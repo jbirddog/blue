@@ -1,49 +1,5 @@
 include "bc.inc"
 
-if 0
-db	BC_ED_NL
-
-db	BC_EXEC_WORD
-dq	"$"
-db	BC_REF_WORD
-dq	"elfhdrs"
-db	BC_EXEC_WORD
-dq	"-"
-db	BC_EXEC_NUM
-dq	0x400000
-db	BC_EXEC_WORD
-dq	"+"
-
-db	BC_REF_WORD
-dq	"entry"
-db	BC_EXEC_WORD
-dq	"!"
-
-db	BC_ED_NL
-end if
-
-if 0
-db	BC_ED_NL
-db	BC_DEFINE_WORD
-dq	"dil!"
-
-; 40 b7 07		mov    dil,0x7
-db	BC_EXEC_NUM
-dq	0xB740
-db	BC_EXEC_WORD
-dq	"w,"
-
-db	BC_ED_NL
-db	BC_DEFINE_WORD
-dq	"status"
-
-db	BC_EXEC_NUM
-dq	0x07
-db	BC_EXEC_WORD
-dq	"b,"
-end if
-
-db	BC_ED_NL
 db	BC_DEFINE_WORD
 dq	"exit"
 
@@ -64,5 +20,4 @@ dq	0x050F
 db	BC_EXEC_WORD
 dq	"w,"
 
-db	BC_ED_NL
 db	BC_ED_NL

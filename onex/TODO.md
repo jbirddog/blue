@@ -2,7 +2,7 @@
 
 ## Maybe
 
-1. Add `bye`, remove BC_FIN, remove test in interpret
+1. Add `bye`, remove BC_FIN
 1. Top of stack always in rax?
 1. Dict entry 0x00 can have not found handler
 1. Maybe also link to another dictionary
@@ -26,13 +26,27 @@
 
 ## Next
 
+1. hello.1x
+   1. Need run time addr of word
+
 ## Future
 
+1. Change xt to find
 1. Factor `$ elfhdrs - 0x400000 + entry !` into `entry!` defined in elf.1xo
 1. Make onex.1x so onex can be written in onex and bootstrapped from fasm version
 
-## kernel.1xo
+## rt
+
+How many files to include as `rt`?
+
+### asm.1xo
+
+### kernel.1xo
 
 1. `$ $$ !`
 1. Move logic to read _src from stdin
    1. Words + exec `read`
+
+### kernel.fin.1xo
+
+1. `out bye`
