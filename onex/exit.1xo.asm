@@ -1,5 +1,28 @@
 include "bc.inc"
 
+if 0
+db	BC_ED_NL
+
+db	BC_EXEC_WORD
+dq	"$"
+db	BC_REF_WORD
+dq	"elfhdrs"
+db	BC_EXEC_WORD
+dq	"-"
+db	BC_EXEC_NUM
+dq	0x400000
+db	BC_EXEC_WORD
+dq	"+"
+
+db	BC_REF_WORD
+dq	"entry"
+db	BC_EXEC_WORD
+dq	"!"
+
+db	BC_ED_NL
+end if
+
+if 0
 db	BC_ED_NL
 db	BC_DEFINE_WORD
 dq	"dil!"
@@ -18,6 +41,7 @@ db	BC_EXEC_NUM
 dq	0x07
 db	BC_EXEC_WORD
 dq	"b,"
+end if
 
 db	BC_ED_NL
 db	BC_DEFINE_WORD
@@ -44,21 +68,28 @@ db	BC_ED_NL
 db	BC_ED_NL
 
 db	BC_EXEC_WORD
-dq	"dstsz"
+dq	"$"
+db	BC_REF_WORD
+dq	"elfhdrs"
+db	BC_EXEC_WORD
+dq	"-"
+
 
 db	BC_REF_WORD
 dq	"elfbsz"
-
 db	BC_EXEC_WORD
 dq	"!"
 db	BC_ED_NL
 
 db	BC_EXEC_WORD
-dq	"dstsz"
+dq	"$"
+db	BC_REF_WORD
+dq	"elfhdrs"
+db	BC_EXEC_WORD
+dq	"-"
 
 db	BC_REF_WORD
 dq	"elfmsz"
-
 db	BC_EXEC_WORD
 dq	"!"
 

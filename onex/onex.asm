@@ -48,6 +48,28 @@ ds_pop:
 	ret
 
 ;
+; kernel
+;
+
+dollar:
+	mov	rax, REG_DST
+	jmp	ds_push
+
+plus:
+	call	ds_pop
+	mov	rcx, rax
+	call	ds_pop
+	add	rax, rcx
+	jmp	ds_push
+
+minus:
+	call	ds_pop
+	mov	rcx, rax
+	call	ds_pop
+	sub	rax, rcx
+	jmp	ds_push
+
+;
 ; interpreter
 ;
 
@@ -189,8 +211,10 @@ _dict:
 dq	"!", setq
 dq	"b,", b_comma
 dq	"w,", w_comma
+dq	"+", plus
+dq	"-", minus
 .last:
-dq	"dstsz", dstsz
+dq	"$", dollar
 
 rb (DICT_SIZE - ($ - _dict))
 

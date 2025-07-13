@@ -1,5 +1,6 @@
 # TODOs
 
+1. Factor `$ elfhdrs - 0x400000 + entry !` into `entry!` defined in elf.1xo
 1. Add `dup`
 1. Add `dstout`
 1. Add `bye`, remove BC_FIN, remove test in interpret
@@ -18,9 +19,10 @@
 
 ## Words
 
-1. Call word at compile time
-1. Compile runtime call to word
-1. Push compile time addr of word
+1. Run word at compile time - bytecode
+1. Call word at compile time - machine code (done)
+1. Call word at run time
+1. Push compile time addr of word (done)
 1. Push run time addr of word
 
 ## Next
