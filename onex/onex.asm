@@ -69,6 +69,11 @@ minus:
 	sub	rax, rcx
 	jmp	ds_push
 
+dup:
+	call	ds_pop
+	call	ds_push
+	jmp	ds_push
+
 ;
 ; interpreter
 ;
@@ -213,6 +218,7 @@ dq	"b,", b_comma
 dq	"w,", w_comma
 dq	"+", plus
 dq	"-", minus
+dq	"dup", dup
 .last:
 dq	"$", dollar
 

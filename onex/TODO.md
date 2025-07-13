@@ -1,7 +1,9 @@
 # TODOs
 
 1. Factor `$ elfhdrs - 0x400000 + entry !` into `entry!` defined in elf.1xo
-1. Add `dup`
+
+## Maybe
+
 1. Add `dstout`
 1. Add `bye`, remove BC_FIN, remove test in interpret
 1. Top of stack always in rax?
@@ -19,7 +21,7 @@
 
 ## Words
 
-1. Run word at compile time - bytecode
+1. Interpret word at compile time - bytecode
 1. Call word at compile time - machine code (done)
 1. Call word at run time
 1. Push compile time addr of word (done)
