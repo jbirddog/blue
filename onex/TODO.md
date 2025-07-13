@@ -2,7 +2,6 @@
 
 ## Maybe
 
-1. Add `dstout`
 1. Add `bye`, remove BC_FIN, remove test in interpret
 1. Top of stack always in rax?
 1. Dict entry 0x00 can have not found handler
@@ -27,10 +26,6 @@
 
 ## Next
 
-1. Add elf.fin.1xo
-   1. `elfhdrs $$ !`
-   1. Setting of `elfbsz`, `elfmsz`
-
 ## Future
 
 1. Factor `$ elfhdrs - 0x400000 + entry !` into `entry!` defined in elf.1xo
@@ -38,5 +33,6 @@
 
 ## kernel.1xo
 
+1. `$ $$ !`
 1. Move logic to read _src from stdin
    1. Words + exec `read`

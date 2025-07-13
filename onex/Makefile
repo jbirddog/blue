@@ -23,7 +23,7 @@ $(ONEX): onex.asm $(FASM2) | bin
 obj/%.1xo: %.1xo.asm $(FASM2) bc.inc | obj
 	$(FASM2) $< $@
 
-obj/exit.1x: obj/elf.1xo obj/exit.1xo | obj
+obj/exit.1x: obj/elf.1xo obj/exit.1xo obj/elf.fin.1xo | obj
 	cat $^ > $@
 	
 bin/exit: obj/exit.1x $(ONEX) | bin
