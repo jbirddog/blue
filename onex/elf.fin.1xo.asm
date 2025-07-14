@@ -22,13 +22,4 @@ dq	"elfmsz"
 db	BC_EXEC_WORD
 dq	"!"
 
-db	BC_ED_NL
-
-db	BC_REF_WORD
-dq	"elfhdrs"
-db	BC_REF_WORD
-dq	"$$"
-db	BC_EXEC_WORD
-dq	"!"
-
 db	BC_FIN

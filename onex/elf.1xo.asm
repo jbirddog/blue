@@ -18,6 +18,15 @@ include "bc.inc"
 ;
 db	BC_DEFINE_WORD
 dq	"elfhdrs"
+db	BC_EXEC_WORD
+dq	"$"
+db	BC_REF_WORD
+dq	"$$"
+db	BC_EXEC_WORD
+dq	"!"
+
+db	BC_ED_NL
+
 db	BC_COMP_NUM
 dq	0x0301'0102'464C'457F
 db	BC_COMP_NUM

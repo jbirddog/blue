@@ -5,8 +5,6 @@
 1. Add `bye`, remove BC_FIN
 1. Top of stack always in rax?
 1. Dict entry 0x00 can have not found handler
-1. Maybe also link to another dictionary
-1. Limit dict entry cell 1 values to 7 chars, use 1 byte for flags, etc
 1. Likely go back to fasm for build time speed
 
 ## Keep in Mind
@@ -18,16 +16,17 @@
 
 ## Words
 
-1. Interpret word at compile time - bytecode
-1. Call word at compile time - machine code (done)
-1. Call word at run time
-1. Push compile time addr of word (done)
-1. Push run time addr of word
+1. Interpret word at compile time (cyan)
+1. Call word at compile time (yellow - done)
+1. Call word at run time (green)
+1. Push compile time addr of word (magenta - done)
+1. Push run time addr of word (gray)
 
 ## Next
 
-1. hello.1x
-   1. Need run time addr of word for `buf !`
+1. Add `org` var like `$$`, default is 0x400000
+1. elf.1x needs to use `org` for 2 qwords before `elfbsz`
+1. Need run time addr of word for `buf !` in hello.1x
 
 ## Future
 
