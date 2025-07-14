@@ -48,6 +48,7 @@ ds_pop:
 ; kernel
 ;
 
+k_org		dq DS_BASE
 dollar_dollar	dq _dst
 
 dollar:
@@ -237,6 +238,7 @@ interpret:
 ;
 
 _dict:
+dq	"org", k_org
 dq	"b!", b_set
 dq	"w!", w_set
 dq	"d!", d_set

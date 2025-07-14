@@ -25,7 +25,8 @@
 ## Next
 
 1. Add `org` var like `$$`, default is 0x400000
-1. elf.1x needs to use `org` for 2 qwords before `elfbsz`
+1. Add `@` variants
+1. elf.1x needs to use `org @ dup , ,` for 2 qwords before `elfbsz`
 1. Need run time addr of word for `buf !` in hello.1x
 
 ## Future
