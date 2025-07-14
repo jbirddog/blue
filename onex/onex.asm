@@ -33,7 +33,6 @@ ds_push:
 	add	REG_DS, CELL_SIZE
 	and	REG_DS, DS_MASK
 	or	REG_DS, DS_BASE
-
 	ret
 
 ds_pop:
@@ -41,7 +40,6 @@ ds_pop:
 	and	REG_DS, DS_MASK
 	or	REG_DS, DS_BASE
 	mov	rax, [REG_DS]
-
 	ret
 
 ;
@@ -77,33 +75,53 @@ minus:
 b_comma:
 	call	ds_pop
 	stosb
-
 	ret
 
 w_comma:
 	call	ds_pop
 	stosw
-
 	ret
 
 d_comma:
 	call	ds_pop
 	stosd
-
 	ret
 
 comma:
 	call	ds_pop
 	stosq
-
 	ret
+
+b_fetch:
+	call	ds_pop
+	mov	rbx, rax
+	xor	eax, eax
+	mov	al, byte [rbx]
+	jmp	ds_push
+
+w_fetch:
+	call	ds_pop
+	mov	rbx, rax
+	xor	eax, eax
+	mov	ax, word [rbx]
+	jmp	ds_push
+
+d_fetch:
+	call	ds_pop
+	mov	rbx, rax
+	mov	eax, dword [rbx]
+	jmp	ds_push
+
+fetch:
+	call	ds_pop
+	mov	rax, [rax]
+	jmp	ds_push
 
 b_set:
 	call	ds_pop
 	mov	rbx, rax
 	call	ds_pop
 	mov	byte [rbx], al
-	
 	ret
 
 w_set:
@@ -111,7 +129,6 @@ w_set:
 	mov	rbx, rax
 	call	ds_pop
 	mov	word [rbx], ax
-	
 	ret
 
 d_set:
@@ -119,7 +136,6 @@ d_set:
 	mov	rbx, rax
 	call	ds_pop
 	mov	dword [rbx], eax
-	
 	ret
 
 set:
@@ -127,26 +143,14 @@ set:
 	mov	rbx, rax
 	call	ds_pop
 	mov	[rbx], rax
-	
 	ret
 
-exec_num:
+num_exec:
 	lodsq
 	jmp	ds_push
 
-comp_num:
+num_comp:
 	movsq
-
-k_nop:
-	ret
-
-def_word:
-	lodsq
-	
-	add	REG_LAST, DICT_ENTRY_SIZE
-	mov	[REG_LAST], rax
-	mov	[REG_LAST + CELL_SIZE], rdi
-	
 	ret
 
 xt:
@@ -166,23 +170,26 @@ xt:
 .done:
 	mov	rax, [REG_LAST + CELL_SIZE]
 	pop	REG_LAST
-	
 	ret
 
-exec_word:
+word_define:
+	lodsq
+	add	REG_LAST, DICT_ENTRY_SIZE
+	mov	[REG_LAST], rax
+	mov	[REG_LAST + CELL_SIZE], rdi
+	ret
+
+word_exec:
 	call	xt
 	call	rax
-	
 	ret
 
-ref_word:
+word_caddr:
 	call	xt
 	jmp	ds_push
 
-fetch:
-	call	ds_pop
-	mov	rax, [rax]
-	jmp	ds_push
+ed_nl:
+	ret
 	
 fin:
 	mov	rdx, REG_DST
@@ -204,12 +211,12 @@ fin:
 
 bc_tbl:
 dq	fin
-dq	def_word
-dq	exec_word
-dq	ref_word
-dq	comp_num
-dq	exec_num
-dq	k_nop
+dq	word_define
+dq	word_exec
+dq	word_caddr
+dq	num_comp
+dq	num_exec
+dq	ed_nl
 
 ;
 ; main
@@ -244,10 +251,15 @@ interpret:
 
 _dict:
 dq	"org", k_org
+dq	"$$", dollar_dollar
+dq	"$", dollar
 dq	"b!", b_set
 dq	"w!", w_set
 dq	"d!", d_set
 dq	"!", set
+dq	"b@", fetch
+dq	"w@", fetch
+dq	"d@", fetch
 dq	"@", fetch
 dq	"b,", b_comma
 dq	"w,", w_comma
@@ -255,10 +267,8 @@ dq	"d,", d_comma
 dq	",", comma
 dq	"+", plus
 dq	"-", minus
-dq	"dup", dup
-dq	"$$", dollar_dollar
 .last:
-dq	"$", dollar
+dq	"dup", dup
 
 rb (DICT_SIZE - ($ - _dict))
 

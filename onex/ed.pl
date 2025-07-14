@@ -8,11 +8,11 @@ use constant {
 	BLK_SIZE => 1024,
 
 	BC_FIN => 0x00,
-	BC_DEFINE_WORD => 0x01,
-	BC_EXEC_WORD => 0x02,
-	BC_REF_WORD => 0x03,
-	BC_COMP_NUM => 0x04,
-	BC_EXEC_NUM => 0x05,
+	BC_WORD_DEFINE => 0x01,
+	BC_WORD_EXEC => 0x02,
+	BC_WORD_CADDR => 0x03,
+	BC_NUM_COMP => 0x04,
+	BC_NUM_EXEC => 0x05,
 	BC_ED_NL => 0x06,
 };
 
@@ -66,7 +66,7 @@ sub render {
 		$here += $len;
 
 		$data = ord($data) if $len == 1;
-		$data = unpack("Q", $data) if $b == BC_COMP_NUM || $b == BC_EXEC_NUM;
+		$data = unpack("Q", $data) if $b == BC_NUM_COMP || $b == BC_NUM_EXEC;
 
 		$display .= sprintf($fmt, $data);
 	};
