@@ -24,15 +24,12 @@
 
 ## Next
 
-1. Double size of dict, dst, src
-
 ## Future
 
 1. Show `BC_FIN` in ed output (white?)
 1. Try having `bc_tbl` be `dd`
 1. Change xt to find
 1. Factor Makefile a bit for multiple ouput binaries
-1. Factor `$ elfhdrs - 0x400000 + entry !` into `entry!` defined in elf.1xo
 1. Make onex.1x so onex can be written in onex and bootstrapped from fasm version
 
 ## rt
