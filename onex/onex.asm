@@ -85,6 +85,42 @@ w_comma:
 
 	ret
 
+d_comma:
+	call	ds_pop
+	stosd
+
+	ret
+
+comma:
+	call	ds_pop
+	stosq
+
+	ret
+
+b_set:
+	call	ds_pop
+	mov	rbx, rax
+	call	ds_pop
+	mov	byte [rbx], al
+	
+	ret
+
+w_set:
+	call	ds_pop
+	mov	rbx, rax
+	call	ds_pop
+	mov	word [rbx], ax
+	
+	ret
+
+d_set:
+	call	ds_pop
+	mov	rbx, rax
+	call	ds_pop
+	mov	dword [rbx], eax
+	
+	ret
+
 set:
 	call	ds_pop
 	mov	rbx, rax
@@ -201,9 +237,14 @@ interpret:
 ;
 
 _dict:
+dq	"b!", b_set
+dq	"w!", w_set
+dq	"d!", d_set
 dq	"!", set
 dq	"b,", b_comma
 dq	"w,", w_comma
+dq	"d,", d_comma
+dq	",", comma
 dq	"+", plus
 dq	"-", minus
 dq	"dup", dup
