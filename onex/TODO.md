@@ -20,12 +20,10 @@
 1. Call word at compile time (yellow - done)
 1. Call word at run time (green)
 1. Push compile time addr of word (magenta - done)
-1. Push run time addr of word (gray?)
+1. Push run time addr of word (white - done)
 
 ## Next
 
-1. Need run time addr of word for `buf !` in hello.1x
-   1. BC_WORD_RADDR
 1. Double size of dict, dst, src
 
 ## Future

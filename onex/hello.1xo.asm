@@ -102,16 +102,8 @@ db	"orld!  ", 10
 
 db	BC_ED_NL
 
-db	BC_WORD_CADDR
+db	BC_WORD_RADDR
 dq	"msg"
-db	BC_WORD_CADDR
-dq	"elfhdrs"
-db	BC_WORD_EXEC
-dq	"-"
-db	BC_NUM_EXEC
-dq	0x400000
-db	BC_WORD_EXEC
-dq	"+"
 db	BC_WORD_CADDR
 dq	"buf"
 db	BC_WORD_EXEC

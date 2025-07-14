@@ -188,6 +188,12 @@ word_caddr:
 	call	xt
 	jmp	ds_push
 
+word_raddr:
+	call	xt
+	sub	rax, [dollar_dollar]
+	add	rax, [k_org]
+	jmp	ds_push
+
 ed_nl:
 	ret
 	
@@ -214,6 +220,7 @@ dq	fin
 dq	word_define
 dq	word_exec
 dq	word_caddr
+dq	word_raddr
 dq	num_comp
 dq	num_exec
 dq	ed_nl
