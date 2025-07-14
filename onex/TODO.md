@@ -20,17 +20,20 @@
 1. Call word at compile time (yellow - done)
 1. Call word at run time (green)
 1. Push compile time addr of word (magenta - done)
-1. Push run time addr of word (gray)
+1. Push run time addr of word (gray?)
 
 ## Next
 
-1. Add `org` var like `$$`, default is 0x400000
 1. Add `@` variants
 1. elf.1x needs to use `org @ dup , ,` for 2 qwords before `elfbsz`
 1. Need run time addr of word for `buf !` in hello.1x
+   1. BC_WORD_RADDR
+1. Change `BC_REF_WORD` to `BC_WORD_CADDR`
 
 ## Future
 
+1. Show `BC_FIN` in ed output (white?)
+1. Try having `bc_tbl` be `dd`
 1. Double size of dict, dst, src
 1. Change xt to find
 1. Factor Makefile a bit for multiple ouput binaries

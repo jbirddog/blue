@@ -136,8 +136,8 @@ exec_num:
 
 comp_num:
 	movsq
-	
-ed_nop:
+
+k_nop:
 	ret
 
 def_word:
@@ -179,6 +179,11 @@ ref_word:
 	call	xt
 	jmp	ds_push
 
+fetch:
+	call	ds_pop
+	mov	rax, [rax]
+	jmp	ds_push
+	
 fin:
 	mov	rdx, REG_DST
 	mov	rsi, [dollar_dollar]
@@ -204,7 +209,7 @@ dq	exec_word
 dq	ref_word
 dq	comp_num
 dq	exec_num
-dq	ed_nop
+dq	k_nop
 
 ;
 ; main
@@ -243,6 +248,7 @@ dq	"b!", b_set
 dq	"w!", w_set
 dq	"d!", d_set
 dq	"!", set
+dq	"@", fetch
 dq	"b,", b_comma
 dq	"w,", w_comma
 dq	"d,", d_comma

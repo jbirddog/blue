@@ -76,8 +76,16 @@ dq	0x00
 ;
 db	BC_COMP_NUM
 dq	0x0000'0000'0040'0000
-db	BC_COMP_NUM
-dq	0x0000'0000'0040'0000
+
+db	BC_REF_WORD
+dq	"org"
+db	BC_EXEC_WORD
+dq	"@"
+db	BC_EXEC_WORD
+dq	","
+
+;db	BC_COMP_NUM
+;dq	0x0000'0000'0040'0000
 
 db	BC_ED_NL
 
