@@ -7,7 +7,7 @@ name:	dd "onex"
 ver:	dd 0
 
 CELL_SIZE = 8
-DICT_ENTRY_SIZE = CELL_SIZE * 2
+DICT_ENTRY_SIZE = CELL_SIZE * 3
 DICT_SIZE = DICT_ENTRY_SIZE * 128
 DST_SIZE = 4096
 SRC_SIZE = 4096
@@ -187,6 +187,7 @@ word_define:
 	add	REG_LAST, DICT_ENTRY_SIZE
 	mov	[REG_LAST], rax
 	mov	[REG_LAST + CELL_SIZE], rdi
+	mov	[REG_LAST + (CELL_SIZE * 2)], rsi
 	jmp	interpret
 
 word_exec:
@@ -268,25 +269,25 @@ entry $
 ;
 
 _dict:
-dq	"org", k_org
-dq	"$$", dollar_dollar
-dq	"$", dollar
-dq	"b!", b_set
-dq	"w!", w_set
-dq	"d!", d_set
-dq	"!", set
-dq	"b@", fetch
-dq	"w@", fetch
-dq	"d@", fetch
-dq	"@", fetch
-dq	"b,", b_comma
-dq	"w,", w_comma
-dq	"d,", d_comma
-dq	",", comma
-dq	"+", plus
-dq	"-", minus
+dq	"org", k_org, 0
+dq	"$$", dollar_dollar, 0
+dq	"$", dollar, 0
+dq	"b!", b_set, 0
+dq	"w!", w_set, 0
+dq	"d!", d_set, 0
+dq	"!", set, 0
+dq	"b@", fetch, 0
+dq	"w@", fetch, 0
+dq	"d@", fetch, 0
+dq	"@", fetch, 0
+dq	"b,", b_comma, 0
+dq	"w,", w_comma, 0
+dq	"d,", d_comma, 0
+dq	",", comma, 0
+dq	"+", plus, 0
+dq	"-", minus, 0
 .last:
-dq	"dup", dup
+dq	"dup", dup, 0
 
 rb (DICT_SIZE - ($ - _dict))
 
