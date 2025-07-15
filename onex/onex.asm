@@ -31,10 +31,6 @@ REG_DS = r13
 k_org		dq DS_BASE
 dollar_dollar	dq _dst
 
-dollar:
-	mov	rax, REG_DST
-	jmp	ds_push
-
 ds_push:
 	mov	[REG_DS], rax
 	add	REG_DS, CELL_SIZE
@@ -68,19 +64,13 @@ find:
 	pop	REG_LAST
 	ret
 
-xt:
-	call	find
-	mov	rax, [rax + CELL_SIZE]
-	ret
-
-next:
-	xor	eax, eax
-	lodsb
-	jmp	qword [bc_tbl + (rax * CELL_SIZE)]
-
 ;
 ; core words
 ;
+
+dollar:
+	mov	rax, REG_DST
+	jmp	ds_push
 	
 dup:
 	call	ds_pop
@@ -174,9 +164,28 @@ set:
 	mov	[rbx], rax
 	ret
 
+xt:
+	call	find
+	mov	rax, [rax + CELL_SIZE]
+	ret
+
 ;
 ; bytecode handlers
 ;
+
+fin:
+	mov	rdx, REG_DST
+	mov	rsi, [dollar_dollar]
+	
+	xor	edi, edi
+	inc	edi
+	sub	rdx, rsi
+	mov	eax, edi
+	syscall
+	
+	xor	edi, edi
+	mov	eax, 60
+	syscall
 
 word_define:
 	lodsq
@@ -214,33 +223,14 @@ num_exec:
 ed_nl:
 	jmp	next
 
-fin:
-	mov	rdx, REG_DST
-	mov	rsi, [dollar_dollar]
-	
-	xor	edi, edi
-	inc	edi
-	sub	rdx, rsi
-	mov	eax, edi
-	syscall
-	
-	xor	edi, edi
-	mov	eax, 60
-	syscall
-
 ;
-; bytecode table
+; interpreter
 ;
-
-bc_tbl:
-dq	fin
-dq	word_define
-dq	word_exec
-dq	word_caddr
-dq	word_raddr
-dq	num_comp
-dq	num_exec
-dq	ed_nl
+	
+next:
+	xor	eax, eax
+	lodsb
+	jmp	qword [bc_tbl + (rax * CELL_SIZE)]
 
 ;
 ; main
@@ -259,6 +249,20 @@ entry $
 	mov	REG_LAST, _dict.last
 
 	jmp	next
+
+;
+; bytecode table
+;
+
+bc_tbl:
+dq	fin
+dq	word_define
+dq	word_exec
+dq	word_caddr
+dq	word_raddr
+dq	num_comp
+dq	num_exec
+dq	ed_nl
 
 ;
 ; dictionary

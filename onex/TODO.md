@@ -31,8 +31,6 @@
 
 ## Future
 
-1. Merge data stack into kernel comment section
-1. Split core words from kernel comment section
 1. Start getting the README.md together
 1. Tracking src in dict is more of a reason to move more things to `1xo` files
    1. Functionality and binary size-wise
