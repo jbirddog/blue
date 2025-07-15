@@ -17,7 +17,7 @@
 
 ## Words
 
-1. Interpret word at compile time (cyan)
+1. Interpret word at compile time (cyan - done)
 1. Call word at compile time (yellow - done)
 1. Call word at run time (green)
 1. Push compile time addr of word (magenta - done)
@@ -25,11 +25,8 @@
 
 ## Next
 
-1. Add BC_WORD_INTERP (cyan/36)
-   1. push rsi, find, mov rsi, [entry + (CELL_SIZE * 2)]
-   1. How to know when to pop rsi?
-   1. `;` tests var for 0, if > dec var and pop rsi
-   1. `;` needs to be BC_WORD_END
+1. Call word at run time
+1. Top level handling of `;`
 
 ## Future
 

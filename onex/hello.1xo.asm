@@ -52,12 +52,17 @@ dq	"d,"
 
 db	BC_ED_NL
 
+db	BC_WORD_INTERP
+dq	"syscall"
+
+if 0
 db	BC_WORD_DEFINE
 dq	"syscall"
 db	BC_NUM_EXEC
 dq	0x050F
 db	BC_WORD_EXEC
 dq	"w,"
+end if
 
 db	BC_ED_NL
 db	BC_ED_NL
@@ -81,6 +86,10 @@ dq	"w,"
 
 db	BC_ED_NL
 
+db	BC_WORD_INTERP
+dq	"syscall"
+
+if 0
 db	BC_WORD_DEFINE
 dq	"syscall"
 
@@ -89,6 +98,7 @@ db	BC_NUM_EXEC
 dq	0x050F
 db	BC_WORD_EXEC
 dq	"w,"
+end if
 
 db	BC_ED_NL
 db	BC_ED_NL
