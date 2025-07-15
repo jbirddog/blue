@@ -145,14 +145,6 @@ set:
 	mov	[rbx], rax
 	ret
 
-num_exec:
-	lodsq
-	jmp	ds_push
-
-num_comp:
-	movsq
-	ret
-
 xt:
 	lodsq
 	push	REG_LAST
@@ -172,31 +164,54 @@ xt:
 	pop	REG_LAST
 	ret
 
+;
+; interpreter
+;
+
+interpret:
+	xor	eax, eax
+	lodsb
+	jmp	qword [bc_tbl + (rax * CELL_SIZE)]
+
+;
+; bytecode handlers
+;
+
 word_define:
 	lodsq
 	add	REG_LAST, DICT_ENTRY_SIZE
 	mov	[REG_LAST], rax
 	mov	[REG_LAST + CELL_SIZE], rdi
-	ret
+	jmp	interpret
 
 word_exec:
 	call	xt
 	call	rax
-	ret
+	jmp	interpret
 
 word_caddr:
 	call	xt
-	jmp	ds_push
+	call	ds_push
+	jmp	interpret
 
 word_raddr:
 	call	xt
 	sub	rax, [dollar_dollar]
 	add	rax, [k_org]
-	jmp	ds_push
+	call	ds_push
+	jmp	interpret
+
+num_comp:
+	movsq
+	jmp	interpret
+
+num_exec:
+	lodsq
+	call	ds_push
 
 ed_nl:
-	ret
-	
+	jmp	interpret
+
 fin:
 	mov	rdx, REG_DST
 	mov	rsi, [dollar_dollar]
@@ -241,15 +256,6 @@ entry $
 	mov	REG_DS, DS_BASE
 	mov	REG_LAST, _dict.last
 
-;
-; interpreter
-;
-
-interpret:
-	xor	eax, eax
-	lodsb
-	
-	call	qword [bc_tbl + (rax * CELL_SIZE)]
 	jmp	interpret
 
 ;

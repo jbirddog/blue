@@ -2,6 +2,7 @@
 
 ## Maybe
 
+1. Show `BC_FIN` in ed output (white?)
 1. Add `bye`, remove BC_FIN
 1. Top of stack always in rax?
 1. Dict entry 0x00 can have not found handler
@@ -24,11 +25,18 @@
 
 ## Next
 
+1. Cyan/36 word for the second `syscall` of `hello.1xo`
+   1. Add BC_WORD_INTERP
+   1. Track src location in dict
+   1. Would be ideal to push rsi, set rsi to src
+   1. How to know when to pop rsi?
+
 ## Future
 
-1. Show `BC_FIN` in ed output (white?)
-1. Try having `bc_tbl` be `dd`
-1. Change xt to find
+1. Start getting the README.md together
+1. Factor `find` from `xt`
+1. Tracking src in dict is more of a reason to move more things to `1xo` files
+1. Back out the `org @ dup , ,` change in elf.1xo
 1. Factor Makefile a bit for multiple ouput binaries
 1. Make onex.1x so onex can be written in onex and bootstrapped from fasm version
 
