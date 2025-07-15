@@ -12,21 +12,28 @@ DICT_SIZE = DICT_ENTRY_SIZE * 128
 DST_SIZE = 4096
 SRC_SIZE = 4096
 
-REG_SRC = rsi
-REG_DST = rdi
-REG_LAST = r12
-REG_DS = r13
-
-;
-; data stack
-;
-
 DS_SIZE = CELL_SIZE * 16
 DS_MASK = DS_SIZE - 1
 DS_BASE = $ - DS_SIZE
 
 assert DS_SIZE and DS_MASK = 0
 assert DS_BASE and DS_MASK = 0
+
+REG_SRC = rsi
+REG_DST = rdi
+REG_LAST = r12
+REG_DS = r13
+
+;
+; kernel
+;
+
+k_org		dq DS_BASE
+dollar_dollar	dq _dst
+
+dollar:
+	mov	rax, REG_DST
+	jmp	ds_push
 
 ds_push:
 	mov	[REG_DS], rax
@@ -42,17 +49,39 @@ ds_pop:
 	mov	rax, [REG_DS]
 	ret
 
+find:
+	lodsq
+	push	REG_LAST
+.loop:
+	mov	rbx, [REG_LAST]
+	cmp	rax, rbx
+	je	.done
+
+	test	rbx, rbx
+	jz	.done
+	
+	sub	REG_LAST, DICT_ENTRY_SIZE
+	jmp	.loop
+
+.done:
+	mov	rax, REG_LAST
+	pop	REG_LAST
+	ret
+
+xt:
+	call	find
+	mov	rax, [rax + CELL_SIZE]
+	ret
+
+next:
+	xor	eax, eax
+	lodsb
+	jmp	qword [bc_tbl + (rax * CELL_SIZE)]
+
 ;
-; kernel
+; core words
 ;
-
-k_org		dq DS_BASE
-dollar_dollar	dq _dst
-
-dollar:
-	mov	rax, REG_DST
-	jmp	ds_push
-
+	
 dup:
 	call	ds_pop
 	call	ds_push
@@ -144,35 +173,6 @@ set:
 	call	ds_pop
 	mov	[rbx], rax
 	ret
-
-find:
-	lodsq
-	push	REG_LAST
-.loop:
-	mov	rbx, [REG_LAST]
-	cmp	rax, rbx
-	je	.done
-
-	test	rbx, rbx
-	jz	.done
-	
-	sub	REG_LAST, DICT_ENTRY_SIZE
-	jmp	.loop
-
-.done:
-	mov	rax, REG_LAST
-	pop	REG_LAST
-	ret
-
-xt:
-	call	find
-	mov	rax, [rax + CELL_SIZE]
-	ret
-
-next:
-	xor	eax, eax
-	lodsb
-	jmp	qword [bc_tbl + (rax * CELL_SIZE)]
 
 ;
 ; bytecode handlers
