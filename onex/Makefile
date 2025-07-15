@@ -30,7 +30,7 @@ obj/exit.1x: obj/elf.1xo obj/exit.1xo obj/elf.fin.1xo | obj
 bin/exit: obj/exit.1x $(ONEX) | bin
 	 $(ONEX) < $< > $@ && chmod +x $@
 
-obj/hello.1x: obj/elf.1xo obj/hello.1xo obj/elf.fin.1xo | obj
+obj/hello.1x: obj/hello.macros.1xo obj/elf.1xo obj/hello.1xo obj/elf.fin.1xo | obj
 	cat $^ > $@
 	
 bin/hello: obj/hello.1x $(ONEX) | bin

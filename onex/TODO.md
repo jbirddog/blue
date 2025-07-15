@@ -2,7 +2,7 @@
 
 ## Maybe
 
-1. Show `BC_FIN` in ed output (white?)
+1. Consider magenta + italics for runtime addr (like fin/; are yellow + italics)
 1. Add `bye`, remove BC_FIN
 1. Top of stack always in rax?
 1. Dict entry 0x00 can have not found handler
@@ -28,12 +28,16 @@
 1. Add BC_WORD_INTERP (cyan/36)
    1. push rsi, find, mov rsi, [entry + (CELL_SIZE * 2)]
    1. How to know when to pop rsi?
+   1. `;` tests var for 0, if > dec var and pop rsi
+   1. `;` needs to be BC_WORD_END
 
 ## Future
 
+1. `;` needs to perform TCO
 1. Start getting the README.md together
 1. Tracking src in dict is more of a reason to move more things to `1xo` files
    1. Functionality and binary size-wise
+   1. Basically anything but bytecode handlers/ds_push/ds_pop in bytecode
 1. Factor Makefile a bit for multiple ouput binaries
 1. Make onex.1x so onex can be written in onex and bootstrapped from fasm version
 

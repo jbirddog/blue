@@ -22,4 +22,8 @@ dq	"elfmsz"
 db	BC_WORD_EXEC
 dq	"!"
 
+
+db	BC_ED_NL
+db	BC_ED_NL
+
 db	BC_FIN

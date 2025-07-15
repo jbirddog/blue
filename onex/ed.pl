@@ -29,7 +29,7 @@ my @bc_lens = (
 );
 
 my @bc_fmts = (
-	"",
+	"\x1B[33;1;3mfin ",
 	"\x1B[31;1m%s ",
 	"\x1B[33;1m%s ",
 	"\x1B[35;1m%s ",
@@ -60,7 +60,6 @@ sub render {
 	
 		my $b = ord(substr($bc, $here, 1));
 		++$here;
-		last if $b == BC_FIN;
 
 		my $fmt = $bc_fmts[$b];
 		my $len = $bc_lens[$b];
@@ -72,6 +71,8 @@ sub render {
 		$data = unpack("Q", $data) if $b == BC_NUM_COMP || $b == BC_NUM_EXEC;
 
 		$display .= sprintf($fmt, $data);
+		
+		last if $b == BC_FIN;
 	};
 
 	$display .= "\x1B[0m\n\n";
