@@ -38,67 +38,21 @@ dq	"d,"
 
 db	BC_ED_NL
 
-db	BC_WORD_DEFINE
+db	BC_WORD_INTERP
 dq	"write"
-; b8 01 00 00 00          mov    eax,0x1
-db	BC_NUM_EXEC
-dq	0xB8
-db	BC_WORD_EXEC
-dq	"b,"
-db	BC_NUM_EXEC
-dq	0x01
-db	BC_WORD_EXEC
-dq	"d,"
-
-db	BC_ED_NL
-
 db	BC_WORD_INTERP
 dq	"syscall"
 
-if 0
-db	BC_WORD_DEFINE
-dq	"syscall"
-db	BC_NUM_EXEC
-dq	0x050F
-db	BC_WORD_EXEC
-dq	"w,"
-end if
-
 db	BC_ED_NL
-db	BC_ED_NL
-
-; 31 ff                   xor    edi,edi
-db	BC_NUM_EXEC
-dq	0xFF31
-db	BC_WORD_EXEC
-dq	"w,"
-
 db	BC_ED_NL
 
 db	BC_WORD_DEFINE
+dq	"bye"
+db	BC_WORD_INTERP
+dq	"xoredi"
+db	BC_WORD_INTERP
 dq	"exit"
-
-; b0 3c			mov    al,0x3c
-db	BC_NUM_EXEC
-dq	0x3CB0
-db	BC_WORD_EXEC
-dq	"w,"
-
-db	BC_ED_NL
-
-db	BC_WORD_INTERP
-dq	"syscall"
-
-if 0
-db	BC_WORD_DEFINE
-dq	"syscall"
-
-; 0f 05			syscall
-db	BC_NUM_EXEC
-dq	0x050F
-db	BC_WORD_EXEC
-dq	"w,"
-end if
+db	BC_WORD_END
 
 db	BC_ED_NL
 db	BC_ED_NL

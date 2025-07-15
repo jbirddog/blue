@@ -25,11 +25,14 @@
 
 ## Next
 
-1. Call word at run time
 1. Top level handling of `;`
+1. Call word at run time
+1. Factor more in `hello.1xo` - `bye`
+   1. Need or, shl
 
 ## Future
 
+1. ed is always showing `fin`
 1. `;` needs to perform TCO
 1. Start getting the README.md together
 1. Tracking src in dict is more of a reason to move more things to `1xo` files
@@ -42,7 +45,13 @@
 
 How many files to include as `rt`?
 
-### asm.1xo
+### x8664.1xo
+
+1. See things in `hello.macros.1xo`
+
+### linux.1xo
+
+1. See things in `hello.macros.1xo`
 
 ### kernel.1xo
 
