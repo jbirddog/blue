@@ -169,11 +169,7 @@ xt:
 	mov	rax, [rax + CELL_SIZE]
 	ret
 
-;
-; interpreter
-;
-
-interpret:
+next:
 	xor	eax, eax
 	lodsb
 	jmp	qword [bc_tbl + (rax * CELL_SIZE)]
@@ -188,35 +184,35 @@ word_define:
 	mov	[REG_LAST], rax
 	mov	[REG_LAST + CELL_SIZE], rdi
 	mov	[REG_LAST + (CELL_SIZE * 2)], rsi
-	jmp	interpret
+	jmp	next
 
 word_exec:
 	call	xt
 	call	rax
-	jmp	interpret
+	jmp	next
 
 word_caddr:
 	call	xt
 	call	ds_push
-	jmp	interpret
+	jmp	next
 
 word_raddr:
 	call	xt
 	sub	rax, [dollar_dollar]
 	add	rax, [k_org]
 	call	ds_push
-	jmp	interpret
+	jmp	next
 
 num_comp:
 	movsq
-	jmp	interpret
+	jmp	next
 
 num_exec:
 	lodsq
 	call	ds_push
 
 ed_nl:
-	jmp	interpret
+	jmp	next
 
 fin:
 	mov	rdx, REG_DST
@@ -262,7 +258,7 @@ entry $
 	mov	REG_DS, DS_BASE
 	mov	REG_LAST, _dict.last
 
-	jmp	interpret
+	jmp	next
 
 ;
 ; dictionary
