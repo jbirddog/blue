@@ -195,6 +195,9 @@ word_define:
 	mov	[REG_LAST + (CELL_SIZE * 2)], rsi
 	jmp	next
 
+word_end:
+	jmp	next
+	
 word_exec:
 	call	xt
 	call	rax
@@ -251,12 +254,13 @@ entry $
 	jmp	next
 
 ;
-; bytecode table
+; bytecode handler table
 ;
 
 bc_tbl:
 dq	fin
 dq	word_define
+dq	word_end
 dq	word_exec
 dq	word_caddr
 dq	word_raddr

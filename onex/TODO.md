@@ -2,7 +2,7 @@
 
 ## Maybe
 
-1. Consider magenta + italics for runtime addr (like fin/; are yellow + italics)
+1. Consider magenta + italics for runtime addr (like fin/; are yellow + italics if that holds)
 1. Add `bye`, remove BC_FIN
 1. Top of stack always in rax?
 1. Dict entry 0x00 can have not found handler
