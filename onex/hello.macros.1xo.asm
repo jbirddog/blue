@@ -49,12 +49,12 @@ db	BC_WORD_EXEC
 dq	"w,"
 db	BC_WORD_END
 
-db	BC_ED_NL
-
 db	BC_WORD_DEFINE
 dq	"write"
 db	BC_NUM_EXEC
 dq	0x01
+db	BC_WORD_INTERP
+dq	"syscall"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE

@@ -40,8 +40,6 @@ db	BC_ED_NL
 
 db	BC_WORD_INTERP
 dq	"write"
-db	BC_WORD_INTERP
-dq	"syscall"
 
 db	BC_ED_NL
 db	BC_ED_NL
