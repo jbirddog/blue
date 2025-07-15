@@ -145,10 +145,10 @@ set:
 	mov	[rbx], rax
 	ret
 
-xt:
+find:
 	lodsq
 	push	REG_LAST
-.find:
+.loop:
 	mov	rbx, [REG_LAST]
 	cmp	rax, rbx
 	je	.done
@@ -157,11 +157,16 @@ xt:
 	jz	.done
 	
 	sub	REG_LAST, DICT_ENTRY_SIZE
-	jmp	.find
+	jmp	.loop
 
 .done:
-	mov	rax, [REG_LAST + CELL_SIZE]
+	mov	rax, REG_LAST
 	pop	REG_LAST
+	ret
+
+xt:
+	call	find
+	mov	rax, [rax + CELL_SIZE]
 	ret
 
 ;

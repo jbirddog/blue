@@ -25,16 +25,16 @@
 
 ## Next
 
-1. Cyan/36 word for the second `syscall` of `hello.1xo`
-   1. Add BC_WORD_INTERP
-   1. Track src location in dict
-   1. Would be ideal to push rsi, set rsi to src
+1. Track src location in dict
+1. Add BC_WORD_INTERP (cyan/36)
+   1. push rsi, find mov rsi, [entry + (CELL_SIZE * 3)]
    1. How to know when to pop rsi?
 
 ## Future
 
+1. Merge data stack into kernel comment section
+1. Split core words from kernel comment section
 1. Start getting the README.md together
-1. Factor `find` from `xt`
 1. Tracking src in dict is more of a reason to move more things to `1xo` files
 1. Back out the `org @ dup , ,` change in elf.1xo
 1. Factor Makefile a bit for multiple ouput binaries
