@@ -69,10 +69,6 @@ find:
 ;
 ; core words
 ;
-
-dollar:
-	mov	rax, REG_DST
-	jmp	ds_push
 	
 dup:
 	call	ds_pop
@@ -263,6 +259,11 @@ k_shl:
 ed_nl:
 	jmp	next
 
+cdollar:
+	mov	rax, REG_DST
+	call	ds_push
+	jmp	next
+	
 ;
 ; interpreter
 ;
@@ -310,6 +311,8 @@ dq	k_or
 dq	k_shl
 dq	ed_nl
 
+dq	cdollar
+
 ;
 ; dictionary
 ;
@@ -317,7 +320,6 @@ dq	ed_nl
 _dict:
 dq	"org", k_org, 0
 dq	"$$", dollar_dollar, 0
-dq	"$", dollar, 0
 dq	"b!", b_set, 0
 dq	"w!", w_set, 0
 dq	"d!", d_set, 0

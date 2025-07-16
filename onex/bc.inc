@@ -14,3 +14,4 @@ BC_OR = 0x0B
 BC_SHL = 0x0C
 BC_ED_NL = 0x0D
 
+BC_CDOLLAR = 0x0E

@@ -21,6 +21,8 @@ use constant {
 	BC_OR => 0x0B,
 	BC_SHL => 0x0C,
 	BC_ED_NL => 0x0D,
+	
+	BC_CDOLLAR => 0x0E,
 };
 
 my @bc_lens = (
@@ -37,6 +39,8 @@ my @bc_lens = (
 	0,
 	0,
 	0,
+	0,
+
 	0,
 );
 
@@ -55,6 +59,8 @@ my @bc_fmts = (
 	"\x1B[33;1;3mor\x1B[0m ",
 	"\x1B[33;1;3mshl\x1B[0m ",
 	"\n",
+
+	"\x1B[33;1;3m\$\x1B[0m ",
 );
 
 my $bc_file = $ARGV[0];
