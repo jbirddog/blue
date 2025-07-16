@@ -95,51 +95,10 @@ comma:
 	stosq
 	ret
 
-b_fetch:
-	call	ds_pop
-	mov	rbx, rax
-	xor	eax, eax
-	mov	al, byte [rbx]
-	jmp	ds_push
-
-w_fetch:
-	call	ds_pop
-	mov	rbx, rax
-	xor	eax, eax
-	mov	ax, word [rbx]
-	jmp	ds_push
-
-d_fetch:
-	call	ds_pop
-	mov	rbx, rax
-	mov	eax, dword [rbx]
-	jmp	ds_push
-
 fetch:
 	call	ds_pop
 	mov	rax, [rax]
 	jmp	ds_push
-
-b_set:
-	call	ds_pop
-	mov	rbx, rax
-	call	ds_pop
-	mov	byte [rbx], al
-	ret
-
-w_set:
-	call	ds_pop
-	mov	rbx, rax
-	call	ds_pop
-	mov	word [rbx], ax
-	ret
-
-d_set:
-	call	ds_pop
-	mov	rbx, rax
-	call	ds_pop
-	mov	dword [rbx], eax
-	ret
 
 set:
 	call	ds_pop
@@ -318,22 +277,16 @@ dq	cdollar
 ;
 
 _dict:
-dq	"org", k_org, 0
-dq	"$$", dollar_dollar, 0
-dq	"b!", b_set, 0
-dq	"w!", w_set, 0
-dq	"d!", d_set, 0
 dq	"!", set, 0
-dq	"b@", fetch, 0
-dq	"w@", fetch, 0
-dq	"d@", fetch, 0
 dq	"@", fetch, 0
 dq	"b,", b_comma, 0
 dq	"w,", w_comma, 0
 dq	"d,", d_comma, 0
 dq	",", comma, 0
-.last:
 dq	"dup", dup, 0
+dq	"org", k_org, 0
+.last:
+dq	"$$", dollar_dollar, 0
 
 rb (DICT_SIZE - ($ - _dict))
 
