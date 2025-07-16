@@ -28,17 +28,22 @@
 1. Top level handling of `;`
 1. Call word at run time
 
-## Future
+## Futuren
 
+1. Release as blue
+   1. Tag main as v5
+   1. Make v6
+   1. Change binary, asm file names
+   1. Move to root, remove all old code (include bak)
+   1. .1xo -> .bo, .1x -> .b
 1. Reorder bytecodes after migration from dict
-1. Check magic before `next`ing bytecode
 1. ed is always showing `fin`
    1. Length check needs to happen, ord(substr is returning 0
 1. ed has some display cap
 1. `;` needs to perform TCO
 1. Start getting the README.md together
 1. Factor Makefile a bit for multiple ouput binaries
-1. Make onex.1x so onex can be written in onex and bootstrapped from fasm version
+1. Make onex.1x, onex written in onex and bootstrapped from fasm version
 
 ## rt
 

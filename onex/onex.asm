@@ -4,8 +4,8 @@ format ELF64 executable 3
 segment readable writeable executable
 
 magic:
-.name:	dd "onex"
-.ver:	dd 0
+.name:	dd "blue"
+.ver:	dd 6
 
 CELL_SIZE = 8
 DICT_ENTRY_SIZE = CELL_SIZE * 3
@@ -20,7 +20,7 @@ DS_BASE = $ - DS_SIZE
 assert DS_SIZE and DS_MASK = 0
 assert DS_BASE and DS_MASK = 0
 
-REG_IND = ebp
+REG_LVL = ebp
 REG_SRC = rsi
 REG_DST = rdi
 REG_LAST = r12
@@ -98,10 +98,10 @@ word_define:
 	jmp	next
 
 word_end:
-	test	REG_IND, REG_IND
+	test	REG_LVL, REG_LVL
 	jz	.top_level
 
-	dec	REG_IND
+	dec	REG_LVL
 	pop	REG_SRC
 	jmp	.done
 
@@ -117,7 +117,7 @@ word_exec:
 word_interp:
 	call	find
 	push	REG_SRC
-	inc	REG_IND
+	inc	REG_LVL
 	mov	REG_SRC, [rax + (CELL_SIZE * 2)]
 	jmp	next
 
