@@ -326,7 +326,6 @@ dq	"b,", b_comma, 0
 dq	"w,", w_comma, 0
 dq	"d,", d_comma, 0
 dq	",", comma, 0
-dq	"+", plus, 0
 dq	"-", minus, 0
 .last:
 dq	"dup", dup, 0

@@ -3,12 +3,6 @@ include "bc.inc"
 ; x8664
 
 db	BC_WORD_DEFINE
-dq	"eax"
-db	BC_NUM_EXEC
-dq	0x00
-db	BC_WORD_END
-
-db	BC_WORD_DEFINE
 dq	"al!"
 db	BC_NUM_EXEC
 dq	0xB0
