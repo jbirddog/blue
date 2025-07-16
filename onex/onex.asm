@@ -90,11 +90,6 @@ comma:
 	stosq
 	ret
 
-fetch:
-	call	ds_pop
-	mov	rax, [rax]
-	jmp	ds_push
-
 xt:
 	call	find
 	mov	rax, [rax + CELL_SIZE]
@@ -223,6 +218,12 @@ set:
 	call	ds_pop
 	mov	[rbx], rax
 	jmp	next
+
+fetch:
+	call	ds_pop
+	mov	rax, [rax]
+	call	ds_push
+	jmp	next
 	
 ;
 ; interpreter
@@ -274,13 +275,13 @@ dq	ed_nl
 dq	dollar_caddr
 dq	dup
 dq	set
+dq	fetch
 
 ;
 ; dictionary
 ;
 
 _dict:
-dq	"@", fetch, 0
 dq	"b,", b_comma, 0
 dq	"w,", w_comma, 0
 dq	"d,", d_comma, 0
