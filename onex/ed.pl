@@ -30,6 +30,7 @@ use constant {
 	BC_COMMA_W => 0x13,
 	BC_COMMA_D => 0x14,
 	BC_COMMA => 0x15,
+	BC_WORD_RCALL => 0x16,
 };
 
 my @bc_lens = (
@@ -56,6 +57,7 @@ my @bc_lens = (
 	0,
 	0,
 	0,
+	8,
 );
 
 my @bc_fmts = (
@@ -82,6 +84,7 @@ my @bc_fmts = (
 	"\x1B[33;1;3mw,\x1B[0m ",
 	"\x1B[33;1;3md,\x1B[0m ",
 	"\x1B[33;1;3m,\x1B[0m ",
+	"\x1B[32;1m%s ",
 );
 
 my $bc_file = $ARGV[0];

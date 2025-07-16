@@ -108,10 +108,13 @@ word_end:
 .top_level:
 .done:
 	jmp	next
-	
-word_exec:
+
+word_ccall:
 	call	xt
 	call	rax
+	jmp	next
+
+word_rcall:
 	jmp	next
 
 word_interp:
@@ -137,7 +140,7 @@ num_comp:
 	movsq
 	jmp	next
 
-num_exec:
+num_push:
 	lodsq
 	call	ds_push
 	jmp	next
@@ -256,12 +259,12 @@ bc_tbl:
 dq	fin
 dq	word_define
 dq	word_end
-dq	word_exec
+dq	word_ccall
 dq	word_interp
 dq	word_caddr
 dq	word_raddr
 dq	num_comp
-dq	num_exec
+dq	num_push
 dq	k_add
 dq	k_sub
 dq	k_or
@@ -276,6 +279,7 @@ dq	comma_b
 dq	comma_w
 dq	comma_d
 dq	comma
+dq	word_rcall
 
 ;
 ; dictionary

@@ -26,9 +26,9 @@
 ## Next
 
 1. Top level handling of `;`
-1. Call word at run time
+1. Call word at run time (BC_WORD_RCALL)
 
-## Futuren
+## Future
 
 1. Release as blue
    1. Tag main as v5
@@ -36,6 +36,7 @@
    1. Change binary, asm file names
    1. Move to root, remove all old code (include bak)
    1. .1xo -> .bo, .1x -> .b
+   1. Update CI job
 1. Reorder bytecodes after migration from dict
 1. ed is always showing `fin`
    1. Length check needs to happen, ord(substr is returning 0
