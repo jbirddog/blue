@@ -16,7 +16,9 @@ use constant {
 	BC_WORD_RADDR => 0x06,
 	BC_NUM_COMP => 0x07,
 	BC_NUM_EXEC => 0x08,
-	BC_ED_NL => 0x09,
+	BC_OR => 0x09,
+	BC_SHL => 0x0A,
+	BC_ED_NL => 0x0B,
 };
 
 my @bc_lens = (
@@ -30,6 +32,8 @@ my @bc_lens = (
 	8,
 	8,
 	0,
+	0,
+	0,
 );
 
 my @bc_fmts = (
@@ -42,6 +46,8 @@ my @bc_fmts = (
 	"\x1B[37;1m%s ",
 	"\x1B[32;1m%02X ",
 	"\x1B[33;1m%02X ",
+	"\x1B[33;1;3mor\x1B[0m ",
+	"\x1B[33;1;3mshl\x1B[0m ",
 	"\n",
 );
 

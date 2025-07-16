@@ -38,6 +38,11 @@
 1. Tracking src in dict is more of a reason to move more things to `1xo` files
    1. Functionality and binary size-wise
    1. Basically anything but bytecode handlers/ds_push/ds_pop in bytecode
+   1. Also look at making some things bytecode (like or, shl)
+      1. This has the advantage of knowing you can't `interp` it, etc
+      1. -, +, `b,`, dup...
+      1. ^ this
+      1. binary and 1x* files are smaller
 1. Factor Makefile a bit for multiple ouput binaries
 1. Make onex.1x so onex can be written in onex and bootstrapped from fasm version
 

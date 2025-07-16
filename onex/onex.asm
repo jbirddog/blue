@@ -186,7 +186,7 @@ fin:
 	syscall
 	
 	xor	edi, edi
-	mov	eax, 60
+	mov	al, 60
 	syscall
 
 word_define:
@@ -240,6 +240,23 @@ num_comp:
 num_exec:
 	lodsq
 	call	ds_push
+	jmp	next
+
+k_or:
+	call	ds_pop
+	mov	rcx, rax
+	call	ds_pop
+	or	rax, rcx
+	call	ds_push
+	jmp	next
+
+k_shl:
+	call	ds_pop
+	mov	cl, al
+	call	ds_pop
+	shl	rax, cl
+	call	ds_push
+	jmp	next
 
 ed_nl:
 	jmp	next
@@ -285,6 +302,8 @@ dq	word_caddr
 dq	word_raddr
 dq	num_comp
 dq	num_exec
+dq	k_or
+dq	k_shl
 dq	ed_nl
 
 ;
