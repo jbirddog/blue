@@ -2,7 +2,7 @@ include "bc.inc"
 
 db	BC_ED_NL
 
-db	BC_CDOLLAR
+db	BC_DOLLAR_CADDR
 db	BC_WORD_CADDR
 dq	"elfhdrs"
 db	BC_SUB

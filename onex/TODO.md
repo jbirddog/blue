@@ -28,6 +28,7 @@
 1. Top level handling of `;`
 1. Call word at run time
 1. Move more things out of `dict` and into bytecode
+   1. All but `org`, `$$`
 
 ## Future
 

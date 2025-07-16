@@ -18,7 +18,7 @@ include "bc.inc"
 ;
 db	BC_WORD_DEFINE
 dq	"elfhdrs"
-db	BC_CDOLLAR
+db	BC_DOLLAR_CADDR
 db	BC_WORD_CADDR
 dq	"$$"
 db	BC_WORD_EXEC

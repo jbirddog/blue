@@ -14,7 +14,7 @@ db	BC_WORD_DEFINE
 dq	"greet"
 db	BC_WORD_RADDR
 dq	"msg"
-db	BC_CDOLLAR
+db	BC_DOLLAR_CADDR
 db	BC_WORD_CADDR
 dq	"msg"
 db	BC_SUB

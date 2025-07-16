@@ -218,7 +218,7 @@ k_shl:
 ed_nl:
 	jmp	next
 
-cdollar:
+dollar_caddr:
 	mov	rax, REG_DST
 	call	ds_push
 	jmp	next
@@ -270,7 +270,7 @@ dq	k_or
 dq	k_shl
 dq	ed_nl
 
-dq	cdollar
+dq	dollar_caddr
 
 ;
 ; dictionary
@@ -284,6 +284,7 @@ dq	"w,", w_comma, 0
 dq	"d,", d_comma, 0
 dq	",", comma, 0
 dq	"dup", dup, 0
+;
 dq	"org", k_org, 0
 .last:
 dq	"$$", dollar_dollar, 0

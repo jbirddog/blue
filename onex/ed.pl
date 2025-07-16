@@ -22,7 +22,7 @@ use constant {
 	BC_SHL => 0x0C,
 	BC_ED_NL => 0x0D,
 	
-	BC_CDOLLAR => 0x0E,
+	BC_DOLLAR_CADDR => 0x0E,
 };
 
 my @bc_lens = (
