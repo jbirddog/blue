@@ -27,11 +27,11 @@
 
 1. Top level handling of `;`
 1. Call word at run time
-1. Factor more in `hello.1xo`
 
 ## Future
 
 1. ed is always showing `fin`
+1. ed has some display cap
 1. `;` needs to perform TCO
 1. Start getting the README.md together
 1. Tracking src in dict is more of a reason to move more things to `1xo` files
