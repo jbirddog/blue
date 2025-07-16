@@ -9,9 +9,9 @@ include "bc.inc"
 ;	entry $
 ;	```
 ;
-;	entry - main entry point - qword at +0x18 (0x400000 + 120 + code offset)
-;	elfbsz - size in binary - qword at +0x60
-;	elfmsz - size in memory - qword at +0x68
+;	entry: main entry point - qword at +0x18 (0x400000 + 120 + code offset)
+;	elfbsz: size in binary - qword at +0x60
+;	elfmsz: size in memory - qword at +0x68
 
 ;
 ;	0000000 457f 464c 0102 0301 0000 0000 0000 0000

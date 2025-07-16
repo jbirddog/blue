@@ -6,8 +6,7 @@ db	BC_WORD_EXEC
 dq	"$"
 db	BC_WORD_CADDR
 dq	"elfhdrs"
-db	BC_WORD_EXEC
-dq	"-"
+db	BC_SUB
 
 db	BC_WORD_EXEC
 dq	"dup"

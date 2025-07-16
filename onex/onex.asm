@@ -79,20 +79,6 @@ dup:
 	call	ds_push
 	jmp	ds_push
 
-plus:
-	call	ds_pop
-	mov	rcx, rax
-	call	ds_pop
-	add	rax, rcx
-	jmp	ds_push
-
-minus:
-	call	ds_pop
-	mov	rcx, rax
-	call	ds_pop
-	sub	rax, rcx
-	jmp	ds_push
-
 b_comma:
 	call	ds_pop
 	stosb
@@ -242,6 +228,22 @@ num_exec:
 	call	ds_push
 	jmp	next
 
+k_add:
+	call	ds_pop
+	mov	rcx, rax
+	call	ds_pop
+	add	rax, rcx
+	call	ds_push
+	jmp	next
+
+k_sub:
+	call	ds_pop
+	mov	rcx, rax
+	call	ds_pop
+	sub	rax, rcx
+	call	ds_push
+	jmp	next
+
 k_or:
 	call	ds_pop
 	mov	rcx, rax
@@ -302,6 +304,8 @@ dq	word_caddr
 dq	word_raddr
 dq	num_comp
 dq	num_exec
+dq	k_add
+dq	k_sub
 dq	k_or
 dq	k_shl
 dq	ed_nl
@@ -326,7 +330,6 @@ dq	"b,", b_comma, 0
 dq	"w,", w_comma, 0
 dq	"d,", d_comma, 0
 dq	",", comma, 0
-dq	"-", minus, 0
 .last:
 dq	"dup", dup, 0
 
