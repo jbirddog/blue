@@ -69,11 +69,6 @@ find:
 ;
 ; core words
 ;
-	
-dup:
-	call	ds_pop
-	call	ds_push
-	jmp	ds_push
 
 b_comma:
 	call	ds_pop
@@ -223,6 +218,12 @@ dollar_caddr:
 	call	ds_push
 	jmp	next
 	
+dup:
+	call	ds_pop
+	call	ds_push
+	call	ds_push
+	jmp	next
+	
 ;
 ; interpreter
 ;
@@ -271,6 +272,7 @@ dq	k_shl
 dq	ed_nl
 
 dq	dollar_caddr
+dq	dup
 
 ;
 ; dictionary
@@ -283,7 +285,6 @@ dq	"b,", b_comma, 0
 dq	"w,", w_comma, 0
 dq	"d,", d_comma, 0
 dq	",", comma, 0
-dq	"dup", dup, 0
 ;
 dq	"org", k_org, 0
 .last:

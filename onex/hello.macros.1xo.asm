@@ -92,16 +92,14 @@ db	BC_WORD_END
 
 db	BC_WORD_DEFINE
 dq	"!0"
-db	BC_WORD_EXEC
-dq	"dup"
+db	BC_DUP
 db	BC_WORD_INTERP
 dq	"xor"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
 dq	"!1"
-db	BC_WORD_EXEC
-dq	"dup"
+db	BC_DUP
 db	BC_WORD_INTERP
 dq	"!0"
 db	BC_WORD_INTERP
