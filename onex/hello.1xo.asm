@@ -1,14 +1,7 @@
 include "bc.inc"
 
-;bf 01 00 00 00          mov    edi,0x1
-db	BC_NUM_EXEC
-dq	0xBF
-db	BC_WORD_EXEC
-dq	"b,"
-db	BC_NUM_EXEC
-dq	0x01
-db	BC_WORD_EXEC
-dq	"d,"
+db	BC_WORD_INTERP
+dq	"stdout"
 
 db	BC_ED_NL
 
