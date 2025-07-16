@@ -47,7 +47,7 @@ db	BC_ED_NL
 db	BC_WORD_DEFINE
 dq	"bye"
 db	BC_WORD_INTERP
-dq	"xoredi"
+dq	"ok"
 db	BC_WORD_INTERP
 dq	"exit"
 db	BC_WORD_END

@@ -25,9 +25,12 @@ dq	0x07
 db	BC_WORD_END
 
 db	BC_ED_NL
+db	BC_ED_NL
+
+; linux
 
 db	BC_WORD_DEFINE
-dq	"xoredi"
+dq	"ok"
 db	BC_NUM_EXEC
 dq	0xFF31
 db	BC_WORD_EXEC
@@ -35,9 +38,6 @@ dq	"w,"
 db	BC_WORD_END
 
 db	BC_ED_NL
-db	BC_ED_NL
-
-; linux
 
 db	BC_WORD_DEFINE
 dq	"syscall"
