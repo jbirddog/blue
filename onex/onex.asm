@@ -66,30 +66,6 @@ find:
 	pop	REG_LAST
 	ret
 
-;
-; core words
-;
-
-b_comma:
-	call	ds_pop
-	stosb
-	ret
-
-w_comma:
-	call	ds_pop
-	stosw
-	ret
-
-d_comma:
-	call	ds_pop
-	stosd
-	ret
-
-comma:
-	call	ds_pop
-	stosq
-	ret
-
 xt:
 	call	find
 	mov	rax, [rax + CELL_SIZE]
@@ -224,7 +200,27 @@ fetch:
 	mov	rax, [rax]
 	call	ds_push
 	jmp	next
-	
+
+comma_b:
+	call	ds_pop
+	stosb
+	jmp	next
+
+comma_w:
+	call	ds_pop
+	stosw
+	jmp	next
+
+comma_d:
+	call	ds_pop
+	stosd
+	jmp	next
+
+comma:
+	call	ds_pop
+	stosq
+	jmp	next
+
 ;
 ; interpreter
 ;
@@ -276,17 +272,16 @@ dq	dollar_caddr
 dq	dup
 dq	set
 dq	fetch
+dq	comma_b
+dq	comma_w
+dq	comma_d
+dq	comma
 
 ;
 ; dictionary
 ;
 
 _dict:
-dq	"b,", b_comma, 0
-dq	"w,", w_comma, 0
-dq	"d,", d_comma, 0
-dq	",", comma, 0
-;;;;
 dq	"org", k_org, 0
 .last:
 dq	"$$", dollar_dollar, 0

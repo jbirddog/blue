@@ -38,24 +38,20 @@ db	BC_WORD_DEFINE
 dq	"xor"
 db	BC_NUM_EXEC
 dq	0x31
-db	BC_WORD_EXEC
-dq	"b,"
+db	BC_COMMA_B
 db	BC_WORD_INTERP
 dq	"/r"
-db	BC_WORD_EXEC
-dq	"b,"
+db	BC_COMMA_B
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
 dq	"inc"
 db	BC_NUM_EXEC
 dq	0xFF
-db	BC_WORD_EXEC
-dq	"b,"
+db	BC_COMMA_B
 db	BC_WORD_INTERP
 dq	"/0"
-db	BC_WORD_EXEC
-dq	"b,"
+db	BC_COMMA_B
 db	BC_WORD_END
 
 db	BC_ED_NL
@@ -64,30 +60,24 @@ db	BC_WORD_DEFINE
 dq	"al!"
 db	BC_NUM_EXEC
 dq	0xB0
-db	BC_WORD_EXEC
-dq	"b,"
-db	BC_WORD_EXEC
-dq	"b,"
+db	BC_COMMA_B
+db	BC_COMMA_B
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
 dq	"edx!"
 db	BC_NUM_EXEC
 dq	0xBA
-db	BC_WORD_EXEC
-dq	"b,"
-db	BC_WORD_EXEC
-dq	"d,"
+db	BC_COMMA_B
+db	BC_COMMA_D
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
 dq	"rsi!"
 db	BC_NUM_EXEC
 dq	0xBE48
-db	BC_WORD_EXEC
-dq	"w,"
-db	BC_WORD_EXEC
-dq	","
+db	BC_COMMA_W
+db	BC_COMMA
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
@@ -117,8 +107,7 @@ db	BC_WORD_INTERP
 dq	"al!"
 db	BC_NUM_EXEC
 dq	0x050F
-db	BC_WORD_EXEC
-dq	"w,"
+db	BC_COMMA_W
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE

@@ -26,6 +26,10 @@ use constant {
 	BC_DUP => 0x0F,
 	BC_SET => 0x10,
 	BC_FETCH => 0x11,
+	BC_COMMA_B => 0x12,
+	BC_COMMA_W => 0x13,
+	BC_COMMA_D => 0x14,
+	BC_COMMA => 0x15,
 };
 
 my @bc_lens = (
@@ -44,6 +48,10 @@ my @bc_lens = (
 	0,
 	0,
 
+	0,
+	0,
+	0,
+	0,
 	0,
 	0,
 	0,
@@ -70,6 +78,10 @@ my @bc_fmts = (
 	"\x1B[33;1;3mdup\x1B[0m ",
 	"\x1B[33;1;3m!\x1B[0m ",
 	"\x1B[33;1;3m@\x1B[0m ",
+	"\x1B[33;1;3mb,\x1B[0m ",
+	"\x1B[33;1;3mw,\x1B[0m ",
+	"\x1B[33;1;3md,\x1B[0m ",
+	"\x1B[33;1;3m,\x1B[0m ",
 );
 
 my $bc_file = $ARGV[0];

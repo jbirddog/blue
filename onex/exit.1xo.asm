@@ -6,8 +6,7 @@ dq	"exit"
 ; b0 3c			mov    al,0x3c
 db	BC_NUM_EXEC
 dq	0x3CB0
-db	BC_WORD_EXEC
-dq	"w,"
+db	BC_COMMA_W
 
 db	BC_ED_NL
 
@@ -17,7 +16,6 @@ dq	"syscall"
 ; 0f 05			syscall
 db	BC_NUM_EXEC
 dq	0x050F
-db	BC_WORD_EXEC
-dq	"w,"
+db	BC_COMMA_W
 
 db	BC_ED_NL
