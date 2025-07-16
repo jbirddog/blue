@@ -95,13 +95,6 @@ fetch:
 	mov	rax, [rax]
 	jmp	ds_push
 
-set:
-	call	ds_pop
-	mov	rbx, rax
-	call	ds_pop
-	mov	[rbx], rax
-	ret
-
 xt:
 	call	find
 	mov	rax, [rax + CELL_SIZE]
@@ -223,6 +216,13 @@ dup:
 	call	ds_push
 	call	ds_push
 	jmp	next
+
+set:
+	call	ds_pop
+	mov	rbx, rax
+	call	ds_pop
+	mov	[rbx], rax
+	jmp	next
 	
 ;
 ; interpreter
@@ -273,19 +273,19 @@ dq	ed_nl
 
 dq	dollar_caddr
 dq	dup
+dq	set
 
 ;
 ; dictionary
 ;
 
 _dict:
-dq	"!", set, 0
 dq	"@", fetch, 0
 dq	"b,", b_comma, 0
 dq	"w,", w_comma, 0
 dq	"d,", d_comma, 0
 dq	",", comma, 0
-;
+;;;;
 dq	"org", k_org, 0
 .last:
 dq	"$$", dollar_dollar, 0

@@ -24,6 +24,7 @@ use constant {
 	
 	BC_DOLLAR_CADDR => 0x0E,
 	BC_DUP => 0x0F,
+	BC_SET => 0x10,
 };
 
 my @bc_lens = (
@@ -42,6 +43,7 @@ my @bc_lens = (
 	0,
 	0,
 
+	0,
 	0,
 	0,
 );
@@ -64,6 +66,7 @@ my @bc_fmts = (
 
 	"\x1B[33;1;3m\$\x1B[0m ",
 	"\x1B[33;1;3mdup\x1B[0m ",
+	"\x1B[33;1;3m!\x1B[0m ",
 );
 
 my $bc_file = $ARGV[0];

@@ -11,14 +11,11 @@ db	BC_DUP
 
 db	BC_WORD_CADDR
 dq	"elfbsz"
-db	BC_WORD_EXEC
-dq	"!"
+db	BC_SET
 
 db	BC_WORD_CADDR
 dq	"elfmsz"
-db	BC_WORD_EXEC
-dq	"!"
-
+db	BC_SET
 
 db	BC_ED_NL
 db	BC_ED_NL

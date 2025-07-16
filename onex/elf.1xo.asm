@@ -21,8 +21,7 @@ dq	"elfhdrs"
 db	BC_DOLLAR_CADDR
 db	BC_WORD_CADDR
 dq	"$$"
-db	BC_WORD_EXEC
-dq	"!"
+db	BC_SET
 
 db	BC_ED_NL
 

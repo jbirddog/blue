@@ -37,7 +37,6 @@ db	BC_WORD_RADDR
 dq	"greet"
 db	BC_WORD_CADDR
 dq	"entry"
-db	BC_WORD_EXEC
-dq	"!"
+db	BC_SET
 
 db	BC_ED_NL

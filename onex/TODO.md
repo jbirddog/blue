@@ -27,11 +27,11 @@
 
 1. Top level handling of `;`
 1. Call word at run time
-1. Move more things out of `dict` and into bytecode
-   1. All but `org`, `$$`
+1. Move all but `org`, `$$` out of `dict` and into bytecode
 
 ## Future
 
+1. Reorder bytecodes after migration from dict
 1. Check magic before `next`ing bytecode
 1. ed is always showing `fin`
    1. Length check needs to happen, ord(substr is returning 0
