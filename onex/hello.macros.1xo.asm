@@ -114,24 +114,6 @@ db	BC_ED_NL
 ; linux
 
 db	BC_WORD_DEFINE
-dq	"ok"
-db	BC_WORD_INTERP
-dq	"edi"
-db	BC_WORD_INTERP
-dq	"!0"
-db	BC_WORD_END
-
-db	BC_WORD_DEFINE
-dq	"stdout"
-db	BC_WORD_INTERP
-dq	"edi"
-db	BC_WORD_INTERP
-dq	"!1"
-db	BC_WORD_END
-
-db	BC_ED_NL
-
-db	BC_WORD_DEFINE
 dq	"syscall"
 db	BC_WORD_INTERP
 dq	"al!"
@@ -158,6 +140,22 @@ dq	"syscall"
 db	BC_WORD_END
 
 db	BC_ED_NL
+
+db	BC_WORD_DEFINE
+dq	"ok"
+db	BC_WORD_INTERP
+dq	"edi"
+db	BC_WORD_INTERP
+dq	"!0"
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"stdout"
+db	BC_WORD_INTERP
+dq	"edi"
+db	BC_WORD_INTERP
+dq	"!1"
+db	BC_WORD_END
 
 db	BC_WORD_DEFINE
 dq	"print"
