@@ -27,8 +27,7 @@
 
 1. Top level handling of `;`
 1. Call word at run time
-1. Factor more in `hello.1xo` - `bye`
-   1. Need or, shl
+1. Factor more in `hello.1xo`
 
 ## Future
 

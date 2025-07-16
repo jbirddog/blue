@@ -1,5 +1,8 @@
 include "bc.inc"
 
+db	BC_WORD_DEFINE
+dq	"greet"
+
 db	BC_WORD_INTERP
 dq	"stdout"
 
@@ -44,6 +47,15 @@ dq	"ok"
 db	BC_WORD_INTERP
 dq	"exit"
 db	BC_WORD_END
+
+db	BC_ED_NL
+
+db	BC_WORD_RADDR
+dq	"greet"
+db	BC_WORD_CADDR
+dq	"entry"
+db	BC_WORD_EXEC
+dq	"!"
 
 db	BC_ED_NL
 db	BC_ED_NL
