@@ -69,7 +69,7 @@ xt:
 	mov	rax, [rax + CELL_SIZE]
 	ret
 
-;;; bytecode handlers
+;;; opcode handlers
 
 fin:
 	mov	rdx, REG_DST
@@ -89,8 +89,8 @@ word_define:
 	lodsq
 	add	REG_LAST, DICT_ENTRY_SIZE
 	mov	[REG_LAST], rax
-	mov	[REG_LAST + CELL_SIZE], rdi
-	mov	[REG_LAST + (CELL_SIZE * 2)], rsi
+	mov	[REG_LAST + CELL_SIZE], REG_DST
+	mov	[REG_LAST + (CELL_SIZE * 2)], REG_SRC
 	jmp	next
 
 word_end:
@@ -252,7 +252,7 @@ entry $
 
 	jmp	next
 
-;;; bytecode handler table
+;;; opcode table
 
 bc_tbl:
 dq	fin
@@ -275,6 +275,8 @@ dq	"org", k_org, 0
 dq	"$$", dollar_dollar, 0
 
 rb (DICT_SIZE - ($ - _dict))
+
+;;; buffers
 
 _dst: rb DST_SIZE
 _src: rb SRC_SIZE

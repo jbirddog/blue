@@ -96,6 +96,7 @@ if (-e $bc_file) {
 	close $in;
 }
 
+my $bc_len = length($bc);
 my $cursor = 0;
 my $cursor_display = "\x1B[37;1m>\x1B[0m";
 
@@ -103,7 +104,7 @@ sub render {
 	my $display = "\x1B[2J";
 	my $here = 0;
 	
-	while (1) {
+	while ($here < $bc_len) {
 		$display .= $cursor_display if $cursor == $here;
 	
 		my $b = ord(substr($bc, $here, 1));
