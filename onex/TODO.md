@@ -18,13 +18,12 @@
 ## Next
 
 1. `;` needs to perform TCO
-1. WORD_CCALL is broken
+1. WORD_CCALL is broken for user defined words
 
 ## Future
 
 1. Release as blue
    1. Tag main as v5
-   1. Make v6
    1. Change binary, asm file names
    1. Move to root, remove all old code (include bak)
    1. .1xo -> .bo, .1x -> .b
