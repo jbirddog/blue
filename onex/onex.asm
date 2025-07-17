@@ -26,9 +26,7 @@ REG_DST = rdi
 REG_LAST = r12
 REG_DS = r13
 
-;
-; kernel
-;
+;;; kernel
 
 k_org		dq DS_BASE
 dollar_dollar	dq _dst
@@ -71,9 +69,7 @@ xt:
 	mov	rax, [rax + CELL_SIZE]
 	ret
 
-;
-; bytecode handlers
-;
+;;; bytecode handlers
 
 fin:
 	mov	rdx, REG_DST
@@ -233,18 +229,14 @@ comma:
 	stosq
 	jmp	next
 
-;
-; interpreter
-;
+;;; interpreter
 	
 next:
 	xor	eax, eax
 	lodsb
 	jmp	qword [bc_tbl + (rax * CELL_SIZE)]
 
-;
-; main
-;
+;;; main
 
 entry $
 	xor	edi, edi
@@ -260,39 +252,22 @@ entry $
 
 	jmp	next
 
-;
-; bytecode handler table
-;
+;;; bytecode handler table
 
 bc_tbl:
 dq	fin
-dq	word_define
-dq	word_end
-dq	word_ccall
-dq	word_interp
-dq	word_caddr
-dq	word_raddr
-dq	num_comp
-dq	num_push
-dq	k_add
-dq	k_sub
-dq	k_or
-dq	k_shl
+dq	word_define, word_end, word_ccall, word_interp, word_caddr, word_raddr
+dq	num_comp, num_push
+dq	k_add, k_sub, k_or, k_shl
 dq	ed_nl
 
 dq	dollar_caddr
 dq	dup
-dq	set
-dq	fetch
-dq	comma_b
-dq	comma_w
-dq	comma_d
-dq	comma
+dq	set, fetch
+dq	comma_b, comma_w, comma_d, comma
 dq	word_rcall
 
-;
-; dictionary
-;
+;;; dictionary
 
 _dict:
 dq	"org", k_org, 0
