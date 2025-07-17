@@ -20,6 +20,7 @@ dq	"msg"
 db	BC_SUB
 db	BC_WORD_INTERP
 dq	"print"
+db	BC_WORD_END
 
 db	BC_ED_NL
 
@@ -29,14 +30,25 @@ db	BC_WORD_INTERP
 dq	"ok"
 db	BC_WORD_INTERP
 dq	"exit"
+db	BC_WORD_END
+
+db	BC_ED_NL
+db	BC_ED_NL
+
+db	BC_WORD_DEFINE
+dq	"main"
+db	BC_WORD_RCALL
+dq	"greet"
+db	BC_WORD_RCALL
+dq	"bye"
+db	BC_WORD_END
 
 db	BC_ED_NL
 db	BC_ED_NL
 
 db	BC_WORD_RADDR
-dq	"greet"
+dq	"main"
 db	BC_WORD_CADDR
 dq	"entry"
 db	BC_SET
 
-db	BC_ED_NL

@@ -19,14 +19,11 @@
 
 1. Interpret word at compile time (cyan - done)
 1. Call word at compile time (yellow - done)
-1. Call word at run time (green)
+1. Call word at run time (green - done)
 1. Push compile time addr of word (magenta - done)
 1. Push run time addr of word (white - done)
 
 ## Next
-
-1. Top level handling of `;`
-1. Call word at run time (BC_WORD_RCALL)
 
 ## Future
 

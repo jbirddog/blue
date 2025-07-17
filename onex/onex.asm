@@ -106,6 +106,9 @@ word_end:
 	jmp	.done
 
 .top_level:
+	mov	al, 0xC3
+	stosb
+
 .done:
 	jmp	next
 
@@ -115,6 +118,12 @@ word_ccall:
 	jmp	next
 
 word_rcall:
+	mov	al, 0xE8
+	stosb
+	call	xt
+	sub	rax, REG_DST
+	sub	rax, 4
+	stosd
 	jmp	next
 
 word_interp:
