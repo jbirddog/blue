@@ -17,7 +17,6 @@
 
 ## Next
 
-1. Reorder bytecodes after migration from dict
 1. `;` needs to perform TCO
 1. WORD_CCALL is broken
 
