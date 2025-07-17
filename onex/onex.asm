@@ -102,6 +102,11 @@ word_end:
 	jmp	.done
 
 .top_level:
+	cmp	byte [REG_DST - 5], 0xE8
+	jne	.cret
+	inc	byte [REG_DST - 5]
+
+.cret:
 	mov	al, 0xC3
 	stosb
 

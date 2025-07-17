@@ -17,9 +17,6 @@
 
 ## Next
 
-1. `;` needs to perform TCO
-1. WORD_CCALL is broken for user defined words
-
 ## Future
 
 1. Release as blue
@@ -39,6 +36,7 @@ How many files to include as `rt`?
 ### x8664.1xo
 
 1. See things in `hello.macros.1xo`
+1. Have syscall set eax instead of al
 
 ### linux.1xo
 
