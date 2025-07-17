@@ -256,7 +256,7 @@ entry $
 
 bc_tbl:
 dq	fin
-dq	word_define, word_end, word_ccall, word_interp, word_caddr, word_raddr
+dq	word_define, word_end, word_ccall, word_rcall, word_interp, word_caddr, word_raddr
 dq	num_comp, num_push
 dq	k_add, k_sub, k_or, k_shl
 dq	ed_nl
@@ -265,7 +265,6 @@ dq	dollar_caddr
 dq	dup
 dq	set, fetch
 dq	comma_b, comma_w, comma_d, comma
-dq	word_rcall
 
 ;;; dictionary
 

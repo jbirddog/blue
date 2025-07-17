@@ -8,45 +8,42 @@ use constant {
 	BLK_SIZE => 1024,
 
 	BC_FIN => 0x00,
+	
 	BC_WORD_DEFINE => 0x01,
 	BC_WORD_END => 0x02,
 	BC_WORD_CCALL => 0x03,
-	BC_WORD_INTERP => 0x04,
-	BC_WORD_CADDR => 0x05,
-	BC_WORD_RADDR => 0x06,
-	BC_NUM_COMP => 0x07,
-	BC_NUM_PUSH => 0x08,
-	BC_ADD => 0x09,
-	BC_SUB => 0x0A,
-	BC_OR => 0x0B,
-	BC_SHL => 0x0C,
-	BC_ED_NL => 0x0D,
+	BC_WORD_RCALL => 0x04,
 	
-	BC_DOLLAR_CADDR => 0x0E,
-	BC_DUP => 0x0F,
-	BC_SET => 0x10,
-	BC_FETCH => 0x11,
-	BC_COMMA_B => 0x12,
-	BC_COMMA_W => 0x13,
-	BC_COMMA_D => 0x14,
-	BC_COMMA => 0x15,
-	BC_WORD_RCALL => 0x16,
+	BC_WORD_INTERP => 0x05,
+	BC_WORD_CADDR => 0x06,
+	BC_WORD_RADDR => 0x07,
+
+	BC_NUM_COMP => 0x08,
+	BC_NUM_PUSH => 0x09,
+
+	BC_ADD => 0x0A,
+	BC_SUB => 0x0B,
+	BC_OR => 0x0C,
+	BC_SHL => 0x0D,
+
+	BC_ED_NL => 0x0E,
+
+	
+	BC_DOLLAR_CADDR => 0x0F,
+	BC_DUP => 0x10,
+	BC_SET => 0x11,
+	BC_FETCH => 0x12,
+	BC_COMMA_B => 0x13,
+	BC_COMMA_W => 0x14,
+	BC_COMMA_D => 0x15,
+	BC_COMMA => 0x16,
 };
 
 my @bc_lens = (
 	0,
-	8,
-	0,
-	8,
-	8,
-	8,
-	8,
-	8,
-	8,
-	0,
-	0,
-	0,
-	0,
+	8, 0, 8, 8, 8, 8, 8,
+	8, 8,
+	0, 0, 0, 0,
 	0,
 
 	0,
@@ -57,7 +54,6 @@ my @bc_lens = (
 	0,
 	0,
 	0,
-	8,
 );
 
 my @bc_fmts = (
@@ -65,6 +61,7 @@ my @bc_fmts = (
 	"\x1B[31;1m%s ",
 	"\x1B[33;1;3m;\x1B[0m ",
 	"\x1B[33;1m%s ",
+	"\x1B[32;1m%s ",
 	"\x1B[36;1m%s ",
 	"\x1B[35;1m%s ",
 	"\x1B[37;1m%s ",
@@ -84,7 +81,6 @@ my @bc_fmts = (
 	"\x1B[33;1;3mw,\x1B[0m ",
 	"\x1B[33;1;3md,\x1B[0m ",
 	"\x1B[33;1;3m,\x1B[0m ",
-	"\x1B[32;1m%s ",
 );
 
 my $bc_file = $ARGV[0];
