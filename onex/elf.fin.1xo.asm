@@ -1,4 +1,4 @@
-include "bc.inc"
+include "b.inc"
 
 db	BC_ED_NL
 

@@ -26,7 +26,6 @@
 1. bvw - port ed.pl to blue
 1. Release as blue
    1. Tag main as v5
-   1. Change binary, asm file names
    1. Move to root, remove all old code (include bak)
    1. .1xo -> .bo, .1x -> .b
    1. Update CI job
