@@ -17,41 +17,18 @@
 
 ## Next
 
-1. Add BC_TOR, BC_FROMR
-1. Add BC_SAVE, BC_RESTORE - or BC_SYSCALL
+1. btv - terminal output (port of ed.pl)
 
 ## Future
 
-1. Start building out lib/rt
-1. bvw - port ed.pl to blue
-1. Release as blue
+1. Add BC_TOR, BC_FROMR
+1. Add BC_SAVE, BC_RESTORE - or BC_SYSCALL
+1. bsv - svg output
+1. bhv - html output
+1. Release as blue after btv
    1. Tag main as v5
    1. Move to root, remove all old code (include bak)
-   1. .1xo -> .bo, .1x -> .b
    1. Update CI job
 1. Start getting the README.md together
 1. Factor Makefile a bit for multiple ouput binaries
 1. Make onex.1x, onex written in onex and bootstrapped from fasm version
-
-## rt
-
-How many files to include as `rt`?
-
-### x8664.1xo
-
-1. See things in `hello.macros.1xo`
-1. Have syscall set eax instead of al
-
-### linux.1xo
-
-1. See things in `hello.macros.1xo`
-
-### kernel.1xo
-
-1. `$ $$ !`
-1. Move logic to read _src from stdin
-   1. Words + exec `read`
-
-### kernel.fin.1xo
-
-1. `out bye`

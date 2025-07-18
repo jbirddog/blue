@@ -1,8 +1,8 @@
 
 FASM2 = ../fasm2/fasm2
 
-BLUE_BC_ASMS = $(wildcard *.1xo.asm)
-BLUE_BC_OBJS = $(ONEX_BC_ASMS:%.1xo.asm=obj/%.1xo)
+BLUE_BC_ASMS = $(wildcard *.bo.asm)
+BLUE_BC_OBJS = $(ONEX_BC_ASMS:%.bo.asm=obj/%.bo)
 
 BLUE = bin/blue
 TOOLS = bin/btv
@@ -20,12 +20,12 @@ bin obj:
 $(BLUE): blue.asm $(FASM2) | bin
 	$(FASM2) $< $@
 
-obj/%.1xo: %.1xo.asm $(FASM2) b.inc | obj
+obj/%.bo: %.bo.asm $(FASM2) b.inc | obj
 	$(FASM2) $< $@
 
-obj/btv.1x: obj/elf.1xo obj/btv.1xo obj/elf.fin.1xo | obj
+obj/btv.b: obj/elf.bo obj/btv.bo obj/elf.fin.bo | obj
 	cat $^ > $@
 	
-bin/%: obj/%.1x $(BLUE) | bin
+bin/%: obj/%.b $(BLUE) | bin
 	 $(BLUE) < $< > $@ && chmod +x $@
 
