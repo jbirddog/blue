@@ -35,8 +35,11 @@ db	BC_WORD_END
 db	BC_ED_NL
 db	BC_ED_NL
 
-db	BC_WORD_DEFINE
-dq	"main"
+db	BC_DOLLAR_RADDR
+db	BC_WORD_CADDR
+dq	"entry"
+db	BC_SET
+
 db	BC_WORD_RCALL
 dq	"greet"
 db	BC_WORD_RCALL
@@ -44,10 +47,3 @@ dq	"bye"
 db	BC_WORD_END
 
 db	BC_ED_NL
-db	BC_ED_NL
-
-db	BC_WORD_RADDR
-dq	"main"
-db	BC_WORD_CADDR
-dq	"entry"
-db	BC_SET

@@ -17,14 +17,12 @@
 
 ## Next
 
-1. Start building out lib/rt
-1. Add BC_DOLLAR_RADDR
-   1. Factor `radder`, using in `word_raddr`
-   1. Drop _DOLLAR_, just BC_CADDR/BC_RADDR
+1. Add BC_TOR, BC_FROMR
 
 ## Future
 
-1. bled - port ed.pl to blue
+1. Start building out lib/rt
+1. bvw - port ed.pl to blue
 1. Release as blue
    1. Tag main as v5
    1. Change binary, asm file names
