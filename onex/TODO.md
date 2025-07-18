@@ -18,6 +18,7 @@
 ## Next
 
 1. Add BC_TOR, BC_FROMR
+1. Add BC_SAVE, BC_RESTORE - or BC_SYSCALL
 
 ## Future
 
