@@ -25,7 +25,7 @@
 1. Add BC_SAVE, BC_RESTORE - or BC_SYSCALL
 1. bsv - svg output
 1. bhv - html output
-1. Release as blue after btv
+1. Release as blue after btv/README.md
    1. Tag main as v5
    1. Move to root, remove all old code (include bak)
    1. Update CI job

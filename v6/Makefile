@@ -7,6 +7,8 @@ BLUE_BC_OBJS = $(ONEX_BC_ASMS:%.bo.asm=obj/%.bo)
 BLUE = bin/blue
 TOOLS = bin/btv
 
+BTV_OBJS = obj/elf.bo obj/btv.bo obj/elf.fin.bo
+
 .PHONY: all clean
 
 all: $(BLUE) $(TOOLS)
@@ -23,7 +25,7 @@ $(BLUE): blue.asm $(FASM2) | bin
 obj/%.bo: %.bo.asm $(FASM2) b.inc | obj
 	$(FASM2) $< $@
 
-obj/btv.b: obj/elf.bo obj/btv.bo obj/elf.fin.bo | obj
+obj/btv.b: $(BTV_OBJS) | obj
 	cat $^ > $@
 	
 bin/%: obj/%.b $(BLUE) | bin
