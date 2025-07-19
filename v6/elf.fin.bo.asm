@@ -1,7 +1,5 @@
 include "b.inc"
 
-db	BC_ED_NL
-
 db	BC_DOLLAR_CADDR
 db	BC_WORD_CADDR
 dq	"elfhdrs"
