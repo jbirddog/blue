@@ -1,11 +1,29 @@
 include "b.inc"
 
 db	BC_WORD_DEFINE
-dq	"next"
-db	BC_WORD_INTERP
-dq	"lodsb"
+dq	"fin"
 db	BC_WORD_INTERP
 dq	"bye"
+db	BC_WORD_END
+
+db	BC_ED_NL
+db	BC_ED_NL
+
+db	BC_WORD_DEFINE
+dq	"lookup"
+db	BC_WORD_RADDR
+dq	"fin"
+db	BC_COMMA
+
+db	BC_ED_NL
+db	BC_ED_NL
+
+db	BC_WORD_DEFINE
+dq	"next"
+db	BC_WORD_INTERP
+dq	"op"
+db	BC_WORD_RCALL
+dq	"fin"
 db	BC_WORD_END
 
 db	BC_ED_NL

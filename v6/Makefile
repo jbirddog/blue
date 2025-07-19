@@ -17,7 +17,7 @@ BTV_OBJS = \
 
 .PHONY: all clean
 
-all: $(BLUE) $(TOOLS)
+all: $(BLUE) $(TOOLS) obj/btv.test.bo
 
 clean:
 	rm -rf bin obj

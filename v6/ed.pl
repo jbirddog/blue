@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 use constant {
-	BLK_SIZE => 1024,
+	SRC_SIZE => 4096,
 
 	BC_FIN => 0x00,
 	BC_NUM_COMP => 0x08,
@@ -58,7 +58,7 @@ my $bc = "";
 
 if (-e $bc_file) {
 	open my $in, "<:raw", $bc_file;
-	read $in, $bc, BLK_SIZE;
+	read $in, $bc, SRC_SIZE;
 	close $in;
 }
 
