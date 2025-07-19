@@ -7,7 +7,12 @@ BLUE_BC_OBJS = $(ONEX_BC_ASMS:%.bo.asm=obj/%.bo)
 BLUE = bin/blue
 TOOLS = bin/btv
 
-BTV_OBJS = obj/elf.bo obj/btv.bo obj/elf.fin.bo
+BTV_OBJS = \
+	obj/x8664.bo \
+	obj/x8664.linux.bo \
+	obj/elf.bo \
+	obj/btv.bo \
+	obj/elf.fin.bo
 
 .PHONY: all clean
 

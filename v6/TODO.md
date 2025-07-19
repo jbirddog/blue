@@ -1,5 +1,10 @@
 # TODOs
 
+## btv
+
+1. Need `rb` support
+1. `elfbsz` is $$ - dollar_caddr `elfmsz` is $$ - dollar_raddr
+
 ## Maybe
 
 1. Consider magenta + italics for runtime addr (like fin/; are yellow + italics if that holds)

@@ -13,6 +13,11 @@ db	BC_WORD_CADDR
 dq	"elfbsz"
 db	BC_SET
 
+db	BC_NUM_PUSH
+dq	8192
+
+db	BC_ADD
+
 db	BC_WORD_CADDR
 dq	"elfmsz"
 db	BC_SET
