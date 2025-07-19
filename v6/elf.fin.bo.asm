@@ -13,8 +13,11 @@ db	BC_WORD_CADDR
 dq	"elfbsz"
 db	BC_SET
 
-db	BC_NUM_PUSH
-dq	8192
+db	BC_WORD_INTERP
+dq	"dstsz"
+db	BC_WORD_INTERP
+dq	"srcsz"
+db	BC_ADD
 
 db	BC_ADD
 

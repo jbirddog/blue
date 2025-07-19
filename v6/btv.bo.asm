@@ -10,10 +10,8 @@ dq	0x00
 db	BC_NUM_PUSH
 dq	0xBA
 db	BC_COMMA_B
-db	BC_WORD_DEFINE
-dq	"insz"
-db	BC_NUM_PUSH
-dq	0x1000
+db	BC_WORD_INTERP
+dq	"srcsz"
 db	BC_COMMA_D
 
 db	BC_WORD_INTERP
@@ -53,8 +51,8 @@ db	BC_SET
 db	BC_ED_NL
 
 db	BC_DOLLAR_RADDR
-db	BC_NUM_PUSH
-dq	0x1000
+db	BC_WORD_INTERP
+dq	"dstsz"
 db	BC_ADD
 db	BC_DUP
 db	BC_WORD_CADDR

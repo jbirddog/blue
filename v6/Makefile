@@ -10,6 +10,7 @@ TOOLS = bin/btv
 BTV_OBJS = \
 	obj/x8664.bo \
 	obj/x8664.linux.bo \
+	obj/btv.macros.bo \
 	obj/elf.bo \
 	obj/btv.bo \
 	obj/elf.fin.bo
