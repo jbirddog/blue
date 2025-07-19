@@ -40,21 +40,55 @@ db	BC_ED_NL
 db	BC_ED_NL
 
 db	BC_WORD_DEFINE
-dq	"define"
+dq	"w_def"
 db	BC_WORD_INTERP
-dq	"word"
+dq	"is"
+db	BC_WORD_INTERP
+dq	"red"
+db	BC_WORD_INTERP
+dq	"and"
+db	BC_WORD_INTERP
+dq	"bold"
+db	BC_WORD_INTERP
+dq	"shows"
+db	BC_WORD_INTERP
+dq	"name"
 db	BC_WORD_END
-
-db	BC_ED_NL
 db	BC_ED_NL
 
 db	BC_WORD_DEFINE
-dq	"lookup"
+dq	"w_end"
+db	BC_WORD_INTERP
+dq	"is"
+db	BC_WORD_INTERP
+dq	"yellow"
+db	BC_WORD_INTERP
+dq	"and"
+db	BC_WORD_INTERP
+dq	"bold"
+db	BC_WORD_INTERP
+dq	"and"
+db	BC_WORD_INTERP
+dq	"italic"
+db	BC_WORD_INTERP
+dq	"shows"
+db	BC_WORD_END
+db	BC_ED_NL
+
+db	BC_ED_NL
+
+db	BC_WORD_DEFINE
+dq	"handler"
+db	BC_ED_NL
 db	BC_WORD_RADDR
 dq	"fin"
 db	BC_COMMA
+db	BC_ED_NL
 db	BC_WORD_RADDR
-dq	"define"
+dq	"w_def"
+db	BC_COMMA
+db	BC_WORD_RADDR
+dq	"w_end"
 db	BC_COMMA
 
 db	BC_ED_NL
@@ -65,9 +99,11 @@ dq	"next"
 db	BC_WORD_INTERP
 dq	"op"
 db	BC_WORD_RADDR
-dq	"lookup"
+dq	"handler"
 db	BC_WORD_INTERP
 dq	"dispatch"
+db	BC_WORD_INTERP
+dq	"reset"
 db	BC_WORD_RCALL
 dq	"next"
 db	BC_WORD_END

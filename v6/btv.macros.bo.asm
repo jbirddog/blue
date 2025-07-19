@@ -12,6 +12,8 @@ db	BC_NUM_PUSH
 dq	0x1000
 db	BC_WORD_END
 
+db	BC_ED_NL
+
 db	BC_WORD_DEFINE
 dq	"op"
 db	BC_WORD_INTERP
@@ -35,12 +37,53 @@ db	BC_WORD_END
 
 db	BC_ED_NL
 
+db	BC_ED_NL
+
 db	BC_WORD_DEFINE
-dq	"word"
+dq	"is"
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"and"
+db	BC_WORD_END
+
+db	BC_ED_NL
+
+db	BC_WORD_DEFINE
+dq	"red"
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"yellow"
+db	BC_WORD_END
+
+db	BC_ED_NL
+
+db	BC_WORD_DEFINE
+dq	"bold"
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"italic"
+db	BC_WORD_END
+
+db	BC_ED_NL
+
+db	BC_WORD_DEFINE
+dq	"shows"
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"reset"
+db	BC_WORD_END
+
+db	BC_ED_NL
+
+db	BC_WORD_DEFINE
+dq	"name"
 db	BC_WORD_INTERP
 dq	"movsq"
 db	BC_WORD_END
 
 db	BC_ED_NL
 db	BC_ED_NL
-
