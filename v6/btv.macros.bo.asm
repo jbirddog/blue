@@ -40,9 +40,21 @@ db	BC_ED_NL
 db	BC_ED_NL
 
 db	BC_WORD_DEFINE
+dq	"reset"
+db	BC_NUM_PUSH
+db	0x1B, "[0m", 0, 0, 0, 0
+db	BC_WORD_INTERP
+dq	"eax!"
+db	BC_WORD_INTERP
+dq	"stosd"
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
 dq	"is"
 db	BC_NUM_PUSH
-db	0x1B, "[0;", 0, 0, 0, 0
+db	0x1B, "[", 0, 0, 0, 0, 0, 0
+db	BC_WORD_INTERP
+dq	"eax!"
 db	BC_WORD_INTERP
 dq	"stosd"
 db	BC_WORD_END
@@ -55,6 +67,12 @@ db	BC_ED_NL
 
 db	BC_WORD_DEFINE
 dq	"red"
+db	BC_NUM_PUSH
+dq	"33"
+db	BC_WORD_INTERP
+dq	"ax!"
+db	BC_WORD_INTERP
+dq	"stosw"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
@@ -75,10 +93,12 @@ db	BC_ED_NL
 
 db	BC_WORD_DEFINE
 dq	"shows"
-db	BC_WORD_END
-
-db	BC_WORD_DEFINE
-dq	"reset"
+db	BC_NUM_PUSH
+dq	"m"
+db	BC_WORD_INTERP
+dq	"al!"
+db	BC_WORD_INTERP
+dq	"stosb"
 db	BC_WORD_END
 
 db	BC_ED_NL

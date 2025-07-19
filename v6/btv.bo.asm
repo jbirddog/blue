@@ -56,6 +56,7 @@ dq	"name"
 db	BC_WORD_END
 db	BC_ED_NL
 
+if 0
 db	BC_WORD_DEFINE
 dq	"w_end"
 db	BC_WORD_INTERP
@@ -74,6 +75,7 @@ db	BC_WORD_INTERP
 dq	"shows"
 db	BC_WORD_END
 db	BC_ED_NL
+end if
 
 db	BC_ED_NL
 
@@ -87,9 +89,11 @@ db	BC_ED_NL
 db	BC_WORD_RADDR
 dq	"w_def"
 db	BC_COMMA
+if 0
 db	BC_WORD_RADDR
 dq	"w_end"
 db	BC_COMMA
+end if
 
 db	BC_ED_NL
 db	BC_ED_NL
@@ -102,8 +106,6 @@ db	BC_WORD_RADDR
 dq	"handler"
 db	BC_WORD_INTERP
 dq	"dispatch"
-db	BC_WORD_INTERP
-dq	"reset"
 db	BC_WORD_RCALL
 dq	"next"
 db	BC_WORD_END

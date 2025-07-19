@@ -103,10 +103,17 @@ db	BC_COMMA_B
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
-dq	"stosd"
+dq	"stosw"
 db	BC_NUM_PUSH
 dq	0x66AB
 db	BC_COMMA_W
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"stosd"
+db	BC_NUM_PUSH
+dq	0xAB
+db	BC_COMMA_B
 db	BC_WORD_END
 
 db	BC_ED_NL
@@ -117,6 +124,14 @@ db	BC_NUM_PUSH
 dq	0xB0
 db	BC_COMMA_B
 db	BC_COMMA_B
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"ax!"
+db	BC_NUM_PUSH
+dq	0xB866
+db	BC_COMMA_W
+db	BC_COMMA_W
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
