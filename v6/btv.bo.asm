@@ -22,8 +22,12 @@ db	BC_WORD_DEFINE
 dq	"next"
 db	BC_WORD_INTERP
 dq	"op"
+db	BC_WORD_RADDR
+dq	"lookup"
+db	BC_WORD_INTERP
+dq	"dispatch"
 db	BC_WORD_RCALL
-dq	"fin"
+dq	"next"
 db	BC_WORD_END
 
 db	BC_ED_NL
