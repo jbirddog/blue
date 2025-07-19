@@ -1,6 +1,11 @@
 include "b.inc"
 
-db	BC_ED_NL
+db	BC_WORD_DEFINE
+dq	"readin"
+db	BC_WORD_INTERP
+dq	"edi"
+db	BC_WORD_INTERP
+dq	"!0"
 db	BC_WORD_DEFINE
 dq	"read"
 db	BC_WORD_INTERP
