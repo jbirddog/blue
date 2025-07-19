@@ -14,7 +14,7 @@ db	BC_WORD_END
 db	BC_ED_NL
 
 db	BC_WORD_DEFINE
-dq	"ok"
+dq	"bye"
 db	BC_WORD_INTERP
 dq	"edi"
 db	BC_WORD_INTERP
