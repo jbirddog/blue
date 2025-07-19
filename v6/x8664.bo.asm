@@ -73,4 +73,46 @@ db	BC_COMMA_W
 db	BC_WORD_END
 
 db	BC_ED_NL
+
+db	BC_WORD_DEFINE
+dq	"eax!"
+db	BC_NUM_PUSH
+dq	0xB8
+db	BC_COMMA_B
+db	BC_COMMA_D
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"edx!"
+db	BC_NUM_PUSH
+dq	0xBA
+db	BC_COMMA_B
+db	BC_COMMA_D
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"rsi!"
+db	BC_NUM_PUSH
+dq	0xBE48
+db	BC_COMMA_W
+db	BC_COMMA
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"!0"
+db	BC_DUP
+db	BC_WORD_INTERP
+dq	"xor"
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"!1"
+db	BC_DUP
+db	BC_WORD_INTERP
+dq	"!0"
+db	BC_WORD_INTERP
+dq	"inc"
+db	BC_WORD_END
+
+db	BC_ED_NL
 db	BC_ED_NL
