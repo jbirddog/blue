@@ -34,5 +34,13 @@ db	BC_COMMA_D
 db	BC_WORD_END
 
 db	BC_ED_NL
+
+db	BC_WORD_DEFINE
+dq	"word"
+db	BC_WORD_INTERP
+dq	"movsq"
+db	BC_WORD_END
+
+db	BC_ED_NL
 db	BC_ED_NL
 
