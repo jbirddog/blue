@@ -15,7 +15,7 @@ db	BC_WORD_END
 db	BC_ED_NL
 
 db	BC_WORD_DEFINE
-dq	"op"
+dq	"opcode"
 db	BC_WORD_INTERP
 dq	"eax"
 db	BC_WORD_INTERP
@@ -41,6 +41,10 @@ db	BC_ED_NL
 
 db	BC_WORD_DEFINE
 dq	"is"
+db	BC_NUM_PUSH
+db	0x1B, "[0;", 0, 0, 0, 0
+db	BC_WORD_INTERP
+dq	"stosd"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE

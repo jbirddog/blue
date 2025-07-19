@@ -72,6 +72,8 @@ dq	0x050F
 db	BC_COMMA_W
 db	BC_WORD_END
 
+db	BC_ED_NL
+
 db	BC_WORD_DEFINE
 dq	"lodsb"
 db	BC_NUM_PUSH
@@ -93,7 +95,29 @@ dq	0xA548
 db	BC_COMMA_W
 db	BC_WORD_END
 
+db	BC_WORD_DEFINE
+dq	"stosb"
+db	BC_NUM_PUSH
+dq	0xAA
+db	BC_COMMA_B
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"stosd"
+db	BC_NUM_PUSH
+dq	0x66AB
+db	BC_COMMA_W
+db	BC_WORD_END
+
 db	BC_ED_NL
+
+db	BC_WORD_DEFINE
+dq	"al!"
+db	BC_NUM_PUSH
+dq	0xB0
+db	BC_COMMA_B
+db	BC_COMMA_B
+db	BC_WORD_END
 
 db	BC_WORD_DEFINE
 dq	"eax!"
@@ -111,13 +135,7 @@ db	BC_COMMA_B
 db	BC_COMMA_D
 db	BC_WORD_END
 
-db	BC_WORD_DEFINE
-dq	"rsi!"
-db	BC_NUM_PUSH
-dq	0xBE48
-db	BC_COMMA_W
-db	BC_COMMA
-db	BC_WORD_END
+db	BC_ED_NL
 
 db	BC_WORD_DEFINE
 dq	"!0"

@@ -97,7 +97,7 @@ db	BC_ED_NL
 db	BC_WORD_DEFINE
 dq	"next"
 db	BC_WORD_INTERP
-dq	"op"
+dq	"opcode"
 db	BC_WORD_RADDR
 dq	"handler"
 db	BC_WORD_INTERP
