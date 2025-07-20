@@ -163,6 +163,14 @@ dq	"wout"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
+dq	"magenta"
+db	BC_NUM_PUSH
+dq	"35"
+db	BC_WORD_INTERP
+dq	"wout"
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
 dq	"cyan"
 db	BC_NUM_PUSH
 dq	"36"

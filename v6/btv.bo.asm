@@ -1,7 +1,7 @@
 include "b.inc"
 
 db	BC_WORD_DEFINE
-dq	"exists"
+dq	"exits"
 db	BC_WORD_INTERP
 dq	"reset"
 db	BC_WORD_INTERP
@@ -33,7 +33,7 @@ dq	"shows"
 db	BC_WORD_INTERP
 dq	'"fin"'
 db	BC_WORD_RCALL
-dq	"exists"
+dq	"exits"
 db	BC_WORD_END
 db	BC_ED_NL
 
@@ -130,6 +130,24 @@ db	BC_WORD_END
 
 db	BC_ED_NL
 
+db	BC_WORD_DEFINE
+dq	"w_caddr"
+db	BC_WORD_INTERP
+dq	"is"
+db	BC_WORD_INTERP
+dq	"magenta"
+db	BC_WORD_INTERP
+dq	"and"
+db	BC_WORD_INTERP
+dq	"bold"
+db	BC_WORD_INTERP
+dq	"shows"
+db	BC_WORD_INTERP
+dq	"name"
+db	BC_WORD_END
+
+db	BC_ED_NL
+
 db	BC_ED_NL
 
 db	BC_WORD_DEFINE
@@ -153,6 +171,9 @@ dq	"w_rcall"
 db	BC_COMMA
 db	BC_WORD_RADDR
 dq	"w_interp"
+db	BC_COMMA
+db	BC_WORD_RADDR
+dq	"w_caddr"
 db	BC_COMMA
 
 db	BC_ED_NL

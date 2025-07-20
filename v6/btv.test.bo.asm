@@ -1,13 +1,15 @@
 include "b.inc"
 
 db	BC_WORD_DEFINE
-dq	"somewor1"
+dq	"someword"
 db	BC_WORD_CCALL
-dq	"somewor1"
+dq	"w_ccall"
 db	BC_WORD_RCALL
-dq	"somewor1"
+dq	"w_rcall"
 db	BC_WORD_INTERP
-dq	"somewor1"
+dq	"w_interp"
+db	BC_WORD_CADDR
+dq	"w_caddr"
 db	BC_WORD_END
 
 db	BC_FIN
