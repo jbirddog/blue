@@ -114,6 +114,14 @@ db	BC_WORD_INTERP
 dq	"bout"
 db	BC_WORD_END
 
+db	BC_WORD_DEFINE
+dq	"shows"
+db	BC_NUM_PUSH
+dq	"m"
+db	BC_WORD_INTERP
+dq	"bout"
+db	BC_WORD_END
+
 db	BC_ED_NL
 
 db	BC_WORD_DEFINE
@@ -146,16 +154,6 @@ db	BC_WORD_DEFINE
 dq	"italic"
 db	BC_NUM_PUSH
 dq	"3"
-db	BC_WORD_INTERP
-dq	"bout"
-db	BC_WORD_END
-
-db	BC_ED_NL
-
-db	BC_WORD_DEFINE
-dq	"shows"
-db	BC_NUM_PUSH
-dq	"m"
 db	BC_WORD_INTERP
 dq	"bout"
 db	BC_WORD_END
