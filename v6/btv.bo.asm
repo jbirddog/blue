@@ -32,6 +32,8 @@ db	BC_COMMA_B
 db	BC_ED_NL
 
 db	BC_WORD_INTERP
+dq	"nl"
+db	BC_WORD_INTERP
 dq	"reset"
 db	BC_WORD_INTERP
 dq	"nl"
@@ -113,6 +115,8 @@ db	BC_WORD_RADDR
 dq	"handler"
 db	BC_WORD_INTERP
 dq	"dispatch"
+db	BC_WORD_INTERP
+dq	"reset"
 db	BC_WORD_RCALL
 dq	"next"
 db	BC_WORD_END
