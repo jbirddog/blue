@@ -88,6 +88,18 @@ db	BC_WORD_INTERP
 dq	"bout"
 db	BC_WORD_END
 
+db	BC_WORD_DEFINE
+dq	'"dup"'
+db	BC_NUM_PUSH
+dq	"du"
+db	BC_WORD_INTERP
+dq	"wout"
+db	BC_NUM_PUSH
+dq	"p"
+db	BC_WORD_INTERP
+dq	"bout"
+db	BC_WORD_END
+
 db	BC_ED_NL
 
 db	BC_WORD_DEFINE

@@ -26,4 +26,6 @@ dq	"TODO: AA"
 db	BC_NUM_PUSH
 dq	"TODO: BB"
 
+db	BC_DUP
+
 db	BC_FIN
