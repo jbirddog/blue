@@ -312,6 +312,50 @@ db	BC_WORD_END
 
 db	BC_ED_NL
 
+db	BC_WORD_DEFINE
+dq	"$_caddr"
+db	BC_WORD_INTERP
+dq	"is"
+db	BC_WORD_INTERP
+dq	"yellow"
+db	BC_WORD_INTERP
+dq	"and"
+db	BC_WORD_INTERP
+dq	"bold"
+db	BC_WORD_INTERP
+dq	"and"
+db	BC_WORD_INTERP
+dq	"italic"
+db	BC_WORD_INTERP
+dq	"shows"
+db	BC_WORD_INTERP
+dq	'"$"'
+db	BC_WORD_END
+
+db	BC_ED_NL
+
+db	BC_WORD_DEFINE
+dq	"$_raddr"
+db	BC_WORD_INTERP
+dq	"is"
+db	BC_WORD_INTERP
+dq	"white"
+db	BC_WORD_INTERP
+dq	"and"
+db	BC_WORD_INTERP
+dq	"bold"
+db	BC_WORD_INTERP
+dq	"and"
+db	BC_WORD_INTERP
+dq	"italic"
+db	BC_WORD_INTERP
+dq	"shows"
+db	BC_WORD_INTERP
+dq	'"$"'
+db	BC_WORD_END
+
+db	BC_ED_NL
+
 db	BC_ED_NL
 
 db	BC_WORD_DEFINE
@@ -364,6 +408,13 @@ dq	"or"
 db	BC_COMMA
 db	BC_WORD_RADDR
 dq	"shl"
+db	BC_COMMA
+db	BC_ED_NL
+db	BC_WORD_RADDR
+dq	"$_caddr"
+db	BC_COMMA
+db	BC_WORD_RADDR
+dq	"$_raddr"
 db	BC_COMMA
 
 db	BC_ED_NL

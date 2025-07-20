@@ -32,4 +32,7 @@ db	BC_SUB
 db	BC_OR
 db	BC_SHL
 
+db	BC_DOLLAR_CADDR
+db	BC_DOLLAR_RADDR
+
 db	BC_FIN
