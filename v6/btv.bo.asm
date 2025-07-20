@@ -1,45 +1,40 @@
 include "b.inc"
 
 db	BC_WORD_DEFINE
-dq	"fin"
-db	BC_ED_NL
-
+dq	"exists"
+db	BC_WORD_INTERP
+dq	"reset"
 db	BC_WORD_INTERP
 dq	'"\n"'
-db	BC_ED_NL
-
-; mov rdx, rdi
-db	BC_NUM_PUSH
-dq	0x8948
-db	BC_COMMA_W
-db	BC_NUM_PUSH
-dq	0xFA
-db	BC_COMMA_B
-db	BC_ED_NL
-
 db	BC_WORD_INTERP
-dq	"rsi="
-db	BC_WORD_DEFINE
-dq	"outbuf"
-db	BC_NUM_COMP
-dq	0x00
-db	BC_ED_NL
-
-; sub rdx, rsi
-db	BC_NUM_PUSH
-dq	0x2948
-db	BC_COMMA_W
-db	BC_NUM_PUSH
-dq	0xF2
-db	BC_COMMA_B
-db	BC_ED_NL
-
-db	BC_WORD_INTERP
-dq	"writeout"
+dq	"writedst"
 db	BC_WORD_INTERP
 dq	"bye"
+db	BC_WORD_END
+db	BC_ED_NL
 
 db	BC_ED_NL
+
+db	BC_WORD_DEFINE
+dq	"fin"
+db	BC_WORD_INTERP
+dq	"is"
+db	BC_WORD_INTERP
+dq	"yellow"
+db	BC_WORD_INTERP
+dq	"and"
+db	BC_WORD_INTERP
+dq	"bold"
+db	BC_WORD_INTERP
+dq	"and"
+db	BC_WORD_INTERP
+dq	"italic"
+db	BC_WORD_INTERP
+dq	"shows"
+db	BC_WORD_INTERP
+dq	'"fin"'
+db	BC_WORD_INTERP
+dq	"exists"
 db	BC_ED_NL
 
 db	BC_WORD_DEFINE

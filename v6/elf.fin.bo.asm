@@ -1,5 +1,7 @@
 include "b.inc"
 
+db	BC_ED_NL
+
 db	BC_DOLLAR_CADDR
 db	BC_WORD_CADDR
 dq	"elfhdrs"
@@ -22,8 +24,5 @@ db	BC_ADD
 db	BC_WORD_CADDR
 dq	"elfmsz"
 db	BC_SET
-
-db	BC_ED_NL
-db	BC_ED_NL
 
 db	BC_FIN
