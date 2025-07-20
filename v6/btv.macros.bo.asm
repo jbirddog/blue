@@ -217,10 +217,8 @@ db	BC_ED_NL
 
 db	BC_WORD_DEFINE
 dq	"num"
-db	BC_NUM_PUSH
-dq	"FF"
 db	BC_WORD_INTERP
-dq	"wout"
+dq	"movsq"
 db	BC_WORD_END
 
 db	BC_ED_NL

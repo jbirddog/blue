@@ -166,6 +166,42 @@ db	BC_WORD_END
 
 db	BC_ED_NL
 
+db	BC_WORD_DEFINE
+dq	"num_comp"
+db	BC_WORD_INTERP
+dq	"is"
+db	BC_WORD_INTERP
+dq	"green"
+db	BC_WORD_INTERP
+dq	"and"
+db	BC_WORD_INTERP
+dq	"bold"
+db	BC_WORD_INTERP
+dq	"shows"
+db	BC_WORD_INTERP
+dq	"num"
+db	BC_WORD_END
+
+db	BC_ED_NL
+
+db	BC_WORD_DEFINE
+dq	"num_push"
+db	BC_WORD_INTERP
+dq	"is"
+db	BC_WORD_INTERP
+dq	"yellow"
+db	BC_WORD_INTERP
+dq	"and"
+db	BC_WORD_INTERP
+dq	"bold"
+db	BC_WORD_INTERP
+dq	"shows"
+db	BC_WORD_INTERP
+dq	"num"
+db	BC_WORD_END
+
+db	BC_ED_NL
+
 db	BC_ED_NL
 
 db	BC_WORD_DEFINE
@@ -195,6 +231,13 @@ dq	"w_caddr"
 db	BC_COMMA
 db	BC_WORD_RADDR
 dq	"w_raddr"
+db	BC_COMMA
+db	BC_ED_NL
+db	BC_WORD_RADDR
+dq	"num_comp"
+db	BC_COMMA
+db	BC_WORD_RADDR
+dq	"num_push"
 db	BC_COMMA
 
 db	BC_ED_NL

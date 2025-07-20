@@ -20,4 +20,10 @@ dq	"w_caddr"
 db	BC_WORD_RADDR
 dq	"w_raddr"
 
+db	BC_NUM_COMP
+dq	"TODO: AA"
+
+db	BC_NUM_PUSH
+dq	"TODO: BB"
+
 db	BC_FIN
