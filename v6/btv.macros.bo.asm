@@ -181,6 +181,26 @@ db	BC_ED_NL
 db	BC_ED_NL
 
 db	BC_WORD_DEFINE
+dq	"readsrc"
+db	BC_WORD_INTERP
+dq	"rsi="
+db	BC_WORD_DEFINE
+dq	"inbuf"
+db	BC_NUM_COMP
+dq	0x00
+db	BC_NUM_PUSH
+dq	0xBA
+db	BC_COMMA_B
+db	BC_WORD_INTERP
+dq	"srcsz"
+db	BC_COMMA_D
+db	BC_WORD_INTERP
+dq	"readin"
+db	BC_WORD_END
+
+db	BC_ED_NL
+
+db	BC_WORD_DEFINE
 dq	"init"
 db	BC_WORD_INTERP
 dq	"rsi="

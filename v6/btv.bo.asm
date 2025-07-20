@@ -122,6 +122,19 @@ db	BC_ED_NL
 db	BC_ED_NL
 
 db	BC_WORD_DEFINE
+dq	"main"
+db	BC_DOLLAR_RADDR
+db	BC_WORD_CADDR
+dq	"entry"
+db	BC_SET
+db	BC_WORD_INTERP
+dq	"readsrc"
+db	BC_WORD_INTERP
+dq	"init"
+
+db	BC_ED_NL
+
+db	BC_WORD_DEFINE
 dq	"next"
 db	BC_WORD_INTERP
 dq	"opcode"
@@ -133,40 +146,6 @@ db	BC_WORD_INTERP
 dq	"reset"
 db	BC_WORD_INTERP
 dq	'" "'
-db	BC_WORD_RCALL
-dq	"next"
-db	BC_WORD_END
-
-db	BC_ED_NL
-db	BC_ED_NL
-
-db	BC_DOLLAR_RADDR
-db	BC_WORD_CADDR
-dq	"entry"
-db	BC_SET
-
-db	BC_ED_NL
-
-db	BC_WORD_INTERP
-dq	"rsi="
-db	BC_WORD_DEFINE
-dq	"inbuf"
-db	BC_NUM_COMP
-dq	0x00
-db	BC_NUM_PUSH
-dq	0xBA
-db	BC_COMMA_B
-db	BC_WORD_INTERP
-dq	"srcsz"
-db	BC_COMMA_D
-
-db	BC_WORD_INTERP
-dq	"readin"
-
-db	BC_ED_NL
-
-db	BC_WORD_INTERP
-dq	"init"
 db	BC_WORD_RCALL
 dq	"next"
 db	BC_WORD_END
