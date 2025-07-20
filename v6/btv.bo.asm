@@ -5,7 +5,7 @@ dq	"fin"
 db	BC_ED_NL
 
 db	BC_WORD_INTERP
-dq	"\n"
+dq	'"\n"'
 db	BC_ED_NL
 
 ; mov rdx, rdi
@@ -76,12 +76,8 @@ db	BC_WORD_INTERP
 dq	"italic"
 db	BC_WORD_INTERP
 dq	"shows"
-db	BC_NUM_PUSH
-dq	";"
 db	BC_WORD_INTERP
-dq	"al!"
-db	BC_WORD_INTERP
-dq	"stosb"
+dq	'";"'
 db	BC_WORD_END
 
 db	BC_ED_NL
