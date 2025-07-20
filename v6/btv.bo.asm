@@ -4,6 +4,10 @@ db	BC_WORD_DEFINE
 dq	"fin"
 db	BC_ED_NL
 
+db	BC_WORD_INTERP
+dq	"\n"
+db	BC_ED_NL
+
 ; mov rdx, rdi
 db	BC_NUM_PUSH
 dq	0x8948
@@ -31,12 +35,6 @@ dq	0xF2
 db	BC_COMMA_B
 db	BC_ED_NL
 
-db	BC_WORD_INTERP
-dq	"nl"
-db	BC_WORD_INTERP
-dq	"reset"
-db	BC_WORD_INTERP
-dq	"nl"
 db	BC_WORD_INTERP
 dq	"writeout"
 db	BC_WORD_INTERP
@@ -117,6 +115,9 @@ db	BC_WORD_INTERP
 dq	"dispatch"
 db	BC_WORD_INTERP
 dq	"reset"
+db	BC_WORD_INTERP
+;dq	"sp"
+dq	'" "'
 db	BC_WORD_RCALL
 dq	"next"
 db	BC_WORD_END

@@ -5,7 +5,7 @@ dq	"somewor1"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
-dq	"somewor2"
+dq	'" "'
 db	BC_WORD_END
 
 db	BC_FIN

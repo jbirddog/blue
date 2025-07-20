@@ -40,9 +40,19 @@ db	BC_ED_NL
 db	BC_ED_NL
 
 db	BC_WORD_DEFINE
-dq	"nl"
+dq	"\n"
 db	BC_NUM_PUSH
 dq	0x0A
+db	BC_WORD_INTERP
+dq	"al!"
+db	BC_WORD_INTERP
+dq	"stosb"
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	'" "'
+db	BC_NUM_PUSH
+dq	" "
 db	BC_WORD_INTERP
 dq	"al!"
 db	BC_WORD_INTERP
