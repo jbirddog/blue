@@ -32,6 +32,10 @@ db	BC_COMMA_B
 db	BC_ED_NL
 
 db	BC_WORD_INTERP
+dq	"reset"
+db	BC_WORD_INTERP
+dq	"nl"
+db	BC_WORD_INTERP
 dq	"writeout"
 db	BC_WORD_INTERP
 dq	"bye"
@@ -183,6 +187,5 @@ db	BC_SET
 db	BC_WORD_CADDR
 dq	"src"
 db	BC_SET
-dq	BC_COMMA_D
 
 db	BC_ED_NL
