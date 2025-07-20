@@ -82,7 +82,7 @@ fin:
 	syscall
 	
 	xor	edi, edi
-	mov	al, 60
+	mov	eax, 60
 	syscall
 
 word_define:

@@ -14,10 +14,13 @@ BTV_OBJS = \
 	obj/elf.bo \
 	obj/btv.bo \
 	obj/elf.fin.bo
+	
+TEST_OBJS = \
+	obj/btv.test.bo
 
 .PHONY: all clean
 
-all: $(BLUE) $(TOOLS) obj/btv.test.bo
+all: $(BLUE) $(TEST_OBJS) $(TOOLS)
 
 clean:
 	rm -rf bin obj
