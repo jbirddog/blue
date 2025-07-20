@@ -159,11 +159,41 @@ dq	"bout"
 db	BC_WORD_END
 
 db	BC_ED_NL
+db	BC_ED_NL
 
 db	BC_WORD_DEFINE
 dq	"name"
 db	BC_WORD_INTERP
 dq	"movsq"
+db	BC_WORD_END
+
+db	BC_ED_NL
+
+db	BC_WORD_DEFINE
+dq	"num"
+db	BC_NUM_PUSH
+dq	"FF"
+db	BC_WORD_INTERP
+dq	"wout"
+db	BC_WORD_END
+
+db	BC_ED_NL
+db	BC_ED_NL
+
+db	BC_WORD_DEFINE
+dq	"init"
+db	BC_WORD_INTERP
+dq	"rsi="
+db	BC_WORD_DEFINE
+dq	"src"
+db	BC_NUM_COMP
+dq	0x00
+db	BC_WORD_INTERP
+dq	"rdi="
+db	BC_WORD_DEFINE
+dq	"dst"
+db	BC_NUM_COMP
+dq	0x00
 db	BC_WORD_END
 
 db	BC_ED_NL

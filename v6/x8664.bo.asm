@@ -119,6 +119,29 @@ db	BC_WORD_END
 db	BC_ED_NL
 
 db	BC_WORD_DEFINE
+dq	"edx="
+db	BC_NUM_PUSH
+dq	0xBA
+db	BC_COMMA_B
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"rsi="
+db	BC_NUM_PUSH
+dq	0xBE48
+db	BC_COMMA_W
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"rdi="
+db	BC_NUM_PUSH
+dq	0xBF48
+db	BC_COMMA_W
+db	BC_WORD_END
+
+db	BC_ED_NL
+
+db	BC_WORD_DEFINE
 dq	"al!"
 db	BC_NUM_PUSH
 dq	0xB0
@@ -144,9 +167,8 @@ db	BC_WORD_END
 
 db	BC_WORD_DEFINE
 dq	"edx!"
-db	BC_NUM_PUSH
-dq	0xBA
-db	BC_COMMA_B
+db	BC_WORD_INTERP
+dq	"edx="
 db	BC_COMMA_D
 db	BC_WORD_END
 

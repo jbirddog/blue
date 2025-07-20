@@ -17,9 +17,8 @@ dq	0xFA
 db	BC_COMMA_B
 db	BC_ED_NL
 
-db	BC_NUM_PUSH
-dq	0xBE48
-db	BC_COMMA_W
+db	BC_WORD_INTERP
+dq	"rsi="
 db	BC_WORD_DEFINE
 dq	"outbuf"
 db	BC_NUM_COMP
@@ -148,9 +147,8 @@ db	BC_SET
 
 db	BC_ED_NL
 
-db	BC_NUM_PUSH
-dq	0xBE48
-db	BC_COMMA_W
+db	BC_WORD_INTERP
+dq	"rsi="
 db	BC_WORD_DEFINE
 dq	"inbuf"
 db	BC_NUM_COMP
@@ -167,21 +165,8 @@ dq	"readin"
 
 db	BC_ED_NL
 
-db	BC_NUM_PUSH
-dq	0xBE48
-db	BC_COMMA_W
-db	BC_WORD_DEFINE
-dq	"src"
-db	BC_NUM_COMP
-dq	0x00
-db	BC_NUM_PUSH
-dq	0xBF48
-db	BC_COMMA_W
-db	BC_WORD_DEFINE
-dq	"dst"
-db	BC_NUM_COMP
-dq	0x00
-db	BC_ED_NL
+db	BC_WORD_INTERP
+dq	"init"
 db	BC_WORD_RCALL
 dq	"next"
 db	BC_WORD_END
