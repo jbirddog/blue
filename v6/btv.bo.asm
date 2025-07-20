@@ -356,6 +356,50 @@ db	BC_WORD_END
 
 db	BC_ED_NL
 
+db	BC_WORD_DEFINE
+dq	"set"
+db	BC_WORD_INTERP
+dq	"is"
+db	BC_WORD_INTERP
+dq	"white"
+db	BC_WORD_INTERP
+dq	"and"
+db	BC_WORD_INTERP
+dq	"bold"
+db	BC_WORD_INTERP
+dq	"and"
+db	BC_WORD_INTERP
+dq	"italic"
+db	BC_WORD_INTERP
+dq	"shows"
+db	BC_WORD_INTERP
+dq	'"!"'
+db	BC_WORD_END
+
+db	BC_ED_NL
+
+db	BC_WORD_DEFINE
+dq	"fetch"
+db	BC_WORD_INTERP
+dq	"is"
+db	BC_WORD_INTERP
+dq	"white"
+db	BC_WORD_INTERP
+dq	"and"
+db	BC_WORD_INTERP
+dq	"bold"
+db	BC_WORD_INTERP
+dq	"and"
+db	BC_WORD_INTERP
+dq	"italic"
+db	BC_WORD_INTERP
+dq	"shows"
+db	BC_WORD_INTERP
+dq	'"@"'
+db	BC_WORD_END
+
+db	BC_ED_NL
+
 db	BC_ED_NL
 
 db	BC_WORD_DEFINE
@@ -415,6 +459,12 @@ dq	"$_caddr"
 db	BC_COMMA
 db	BC_WORD_RADDR
 dq	"$_raddr"
+db	BC_COMMA
+db	BC_WORD_RADDR
+dq	"set"
+db	BC_COMMA
+db	BC_WORD_RADDR
+dq	"fetch"
 db	BC_COMMA
 
 db	BC_ED_NL
