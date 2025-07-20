@@ -33,8 +33,9 @@ db	BC_WORD_INTERP
 dq	"shows"
 db	BC_WORD_INTERP
 dq	'"fin"'
-db	BC_WORD_INTERP
+db	BC_WORD_RCALL
 dq	"exists"
+db	BC_WORD_END
 db	BC_ED_NL
 
 db	BC_WORD_DEFINE
