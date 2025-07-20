@@ -27,5 +27,7 @@ db	BC_NUM_PUSH
 dq	"TODO: BB"
 
 db	BC_DUP
+db	BC_ADD
+db	BC_SUB
 
 db	BC_FIN

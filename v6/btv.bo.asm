@@ -224,6 +224,50 @@ db	BC_WORD_END
 
 db	BC_ED_NL
 
+db	BC_WORD_DEFINE
+dq	"add"
+db	BC_WORD_INTERP
+dq	"is"
+db	BC_WORD_INTERP
+dq	"yellow"
+db	BC_WORD_INTERP
+dq	"and"
+db	BC_WORD_INTERP
+dq	"bold"
+db	BC_WORD_INTERP
+dq	"and"
+db	BC_WORD_INTERP
+dq	"italic"
+db	BC_WORD_INTERP
+dq	"shows"
+db	BC_WORD_INTERP
+dq	'"+"'
+db	BC_WORD_END
+
+db	BC_ED_NL
+
+db	BC_WORD_DEFINE
+dq	"sub"
+db	BC_WORD_INTERP
+dq	"is"
+db	BC_WORD_INTERP
+dq	"yellow"
+db	BC_WORD_INTERP
+dq	"and"
+db	BC_WORD_INTERP
+dq	"bold"
+db	BC_WORD_INTERP
+dq	"and"
+db	BC_WORD_INTERP
+dq	"italic"
+db	BC_WORD_INTERP
+dq	"shows"
+db	BC_WORD_INTERP
+dq	'"-"'
+db	BC_WORD_END
+
+db	BC_ED_NL
+
 db	BC_ED_NL
 
 db	BC_WORD_DEFINE
@@ -264,6 +308,12 @@ db	BC_COMMA
 db	BC_ED_NL
 db	BC_WORD_RADDR
 dq	"dup"
+db	BC_COMMA
+db	BC_WORD_RADDR
+dq	"add"
+db	BC_COMMA
+db	BC_WORD_RADDR
+dq	"sub"
 db	BC_COMMA
 
 db	BC_ED_NL
