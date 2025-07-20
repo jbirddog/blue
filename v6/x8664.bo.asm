@@ -105,7 +105,7 @@ db	BC_WORD_END
 db	BC_WORD_DEFINE
 dq	"stosw"
 db	BC_NUM_PUSH
-dq	0x66AB
+dq	0xAB66
 db	BC_COMMA_W
 db	BC_WORD_END
 

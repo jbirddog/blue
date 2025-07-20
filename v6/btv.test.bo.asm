@@ -29,5 +29,7 @@ dq	"TODO: BB"
 db	BC_DUP
 db	BC_ADD
 db	BC_SUB
+db	BC_OR
+db	BC_SHL
 
 db	BC_FIN
