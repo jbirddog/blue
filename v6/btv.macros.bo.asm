@@ -147,9 +147,25 @@ dq	"wout"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
+dq	"green"
+db	BC_NUM_PUSH
+dq	"32"
+db	BC_WORD_INTERP
+dq	"wout"
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
 dq	"yellow"
 db	BC_NUM_PUSH
 dq	"33"
+db	BC_WORD_INTERP
+dq	"wout"
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"cyan"
+db	BC_NUM_PUSH
+dq	"36"
 db	BC_WORD_INTERP
 dq	"wout"
 db	BC_WORD_END

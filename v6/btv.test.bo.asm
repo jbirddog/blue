@@ -2,11 +2,11 @@ include "b.inc"
 
 db	BC_WORD_DEFINE
 dq	"somewor1"
-db	BC_WORD_END
-
-db	BC_WORD_DEFINE
-dq	'" "'
 db	BC_WORD_CCALL
+dq	"somewor1"
+db	BC_WORD_RCALL
+dq	"somewor1"
+db	BC_WORD_INTERP
 dq	"somewor1"
 db	BC_WORD_END
 

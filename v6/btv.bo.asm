@@ -10,7 +10,6 @@ db	BC_WORD_INTERP
 dq	"writedst"
 db	BC_WORD_INTERP
 dq	"bye"
-db	BC_WORD_END
 db	BC_ED_NL
 
 db	BC_ED_NL
@@ -95,6 +94,42 @@ db	BC_WORD_END
 
 db	BC_ED_NL
 
+db	BC_WORD_DEFINE
+dq	"w_rcall"
+db	BC_WORD_INTERP
+dq	"is"
+db	BC_WORD_INTERP
+dq	"green"
+db	BC_WORD_INTERP
+dq	"and"
+db	BC_WORD_INTERP
+dq	"bold"
+db	BC_WORD_INTERP
+dq	"shows"
+db	BC_WORD_INTERP
+dq	"name"
+db	BC_WORD_END
+
+db	BC_ED_NL
+
+db	BC_WORD_DEFINE
+dq	"w_interp"
+db	BC_WORD_INTERP
+dq	"is"
+db	BC_WORD_INTERP
+dq	"cyan"
+db	BC_WORD_INTERP
+dq	"and"
+db	BC_WORD_INTERP
+dq	"bold"
+db	BC_WORD_INTERP
+dq	"shows"
+db	BC_WORD_INTERP
+dq	"name"
+db	BC_WORD_END
+
+db	BC_ED_NL
+
 db	BC_ED_NL
 
 db	BC_WORD_DEFINE
@@ -112,6 +147,12 @@ dq	"w_end"
 db	BC_COMMA
 db	BC_WORD_RADDR
 dq	"w_ccall"
+db	BC_COMMA
+db	BC_WORD_RADDR
+dq	"w_rcall"
+db	BC_COMMA
+db	BC_WORD_RADDR
+dq	"w_interp"
 db	BC_COMMA
 
 db	BC_ED_NL
