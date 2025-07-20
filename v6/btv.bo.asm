@@ -1,5 +1,5 @@
 include "b.inc"
-
+;940
 db	BC_WORD_DEFINE
 dq	"exits"
 db	BC_WORD_INTERP
@@ -12,12 +12,8 @@ db	BC_WORD_INTERP
 dq	"bye"
 db	BC_ED_NL
 
-db	BC_ED_NL
-
 db	BC_WORD_DEFINE
-dq	"fin"
-db	BC_WORD_INTERP
-dq	"is"
+dq	"vizop"
 db	BC_WORD_INTERP
 dq	"yellow"
 db	BC_WORD_INTERP
@@ -30,6 +26,17 @@ db	BC_WORD_INTERP
 dq	"italic"
 db	BC_WORD_INTERP
 dq	"shows"
+db	BC_WORD_END
+db	BC_ED_NL
+
+db	BC_ED_NL
+
+db	BC_WORD_DEFINE
+dq	"fin"
+db	BC_WORD_INTERP
+dq	"is"
+db	BC_WORD_RCALL
+dq	"vizop"
 db	BC_WORD_INTERP
 dq	'"fin"'
 db	BC_WORD_RCALL
@@ -58,18 +65,8 @@ db	BC_WORD_DEFINE
 dq	"w_end"
 db	BC_WORD_INTERP
 dq	"is"
-db	BC_WORD_INTERP
-dq	"yellow"
-db	BC_WORD_INTERP
-dq	"and"
-db	BC_WORD_INTERP
-dq	"bold"
-db	BC_WORD_INTERP
-dq	"and"
-db	BC_WORD_INTERP
-dq	"italic"
-db	BC_WORD_INTERP
-dq	"shows"
+db	BC_WORD_RCALL
+dq	"vizop"
 db	BC_WORD_INTERP
 dq	'";"'
 db	BC_WORD_END
@@ -206,18 +203,8 @@ db	BC_WORD_DEFINE
 dq	"dup"
 db	BC_WORD_INTERP
 dq	"is"
-db	BC_WORD_INTERP
-dq	"yellow"
-db	BC_WORD_INTERP
-dq	"and"
-db	BC_WORD_INTERP
-dq	"bold"
-db	BC_WORD_INTERP
-dq	"and"
-db	BC_WORD_INTERP
-dq	"italic"
-db	BC_WORD_INTERP
-dq	"shows"
+db	BC_WORD_RCALL
+dq	"vizop"
 db	BC_WORD_INTERP
 dq	'"dup"'
 db	BC_WORD_END
@@ -228,18 +215,8 @@ db	BC_WORD_DEFINE
 dq	"add"
 db	BC_WORD_INTERP
 dq	"is"
-db	BC_WORD_INTERP
-dq	"yellow"
-db	BC_WORD_INTERP
-dq	"and"
-db	BC_WORD_INTERP
-dq	"bold"
-db	BC_WORD_INTERP
-dq	"and"
-db	BC_WORD_INTERP
-dq	"italic"
-db	BC_WORD_INTERP
-dq	"shows"
+db	BC_WORD_RCALL
+dq	"vizop"
 db	BC_WORD_INTERP
 dq	'"+"'
 db	BC_WORD_END
