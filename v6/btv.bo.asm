@@ -38,7 +38,7 @@ db	BC_WORD_END
 db	BC_ED_NL
 
 db	BC_WORD_DEFINE
-dq	"w_def"
+dq	"w_define"
 db	BC_WORD_INTERP
 dq	"is"
 db	BC_WORD_INTERP
@@ -361,7 +361,7 @@ dq	"set"
 db	BC_WORD_INTERP
 dq	"is"
 db	BC_WORD_INTERP
-dq	"white"
+dq	"yellow"
 db	BC_WORD_INTERP
 dq	"and"
 db	BC_WORD_INTERP
@@ -383,7 +383,7 @@ dq	"fetch"
 db	BC_WORD_INTERP
 dq	"is"
 db	BC_WORD_INTERP
-dq	"white"
+dq	"yellow"
 db	BC_WORD_INTERP
 dq	"and"
 db	BC_WORD_INTERP
@@ -410,7 +410,7 @@ dq	"fin"
 db	BC_COMMA
 db	BC_ED_NL
 db	BC_WORD_RADDR
-dq	"w_def"
+dq	"w_define"
 db	BC_COMMA
 db	BC_WORD_RADDR
 dq	"w_end"
