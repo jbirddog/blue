@@ -178,6 +178,14 @@ db	BC_WORD_INTERP
 dq	"wout"
 db	BC_WORD_END
 
+db	BC_WORD_DEFINE
+dq	"white"
+db	BC_NUM_PUSH
+dq	"37"
+db	BC_WORD_INTERP
+dq	"wout"
+db	BC_WORD_END
+
 db	BC_ED_NL
 
 db	BC_WORD_DEFINE

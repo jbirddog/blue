@@ -148,6 +148,24 @@ db	BC_WORD_END
 
 db	BC_ED_NL
 
+db	BC_WORD_DEFINE
+dq	"w_raddr"
+db	BC_WORD_INTERP
+dq	"is"
+db	BC_WORD_INTERP
+dq	"white"
+db	BC_WORD_INTERP
+dq	"and"
+db	BC_WORD_INTERP
+dq	"bold"
+db	BC_WORD_INTERP
+dq	"shows"
+db	BC_WORD_INTERP
+dq	"name"
+db	BC_WORD_END
+
+db	BC_ED_NL
+
 db	BC_ED_NL
 
 db	BC_WORD_DEFINE
@@ -174,6 +192,9 @@ dq	"w_interp"
 db	BC_COMMA
 db	BC_WORD_RADDR
 dq	"w_caddr"
+db	BC_COMMA
+db	BC_WORD_RADDR
+dq	"w_raddr"
 db	BC_COMMA
 
 db	BC_ED_NL
