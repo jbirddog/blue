@@ -299,6 +299,54 @@ db	BC_WORD_END
 
 db	BC_ED_NL
 
+db	BC_WORD_DEFINE
+dq	"comma_b"
+db	BC_WORD_RCALL
+dq	"vizop"
+db	BC_WORD_INTERP
+dq	'"b,"'
+db	BC_WORD_END
+
+db	BC_ED_NL
+
+db	BC_WORD_DEFINE
+dq	"comma_w"
+db	BC_WORD_RCALL
+dq	"vizop"
+db	BC_WORD_INTERP
+dq	'"w,"'
+db	BC_WORD_END
+
+db	BC_ED_NL
+
+db	BC_WORD_DEFINE
+dq	"comma_d"
+db	BC_WORD_RCALL
+dq	"vizop"
+db	BC_WORD_INTERP
+dq	'"d,"'
+db	BC_WORD_END
+
+db	BC_ED_NL
+
+db	BC_WORD_DEFINE
+dq	"comma"
+db	BC_WORD_RCALL
+dq	"vizop"
+db	BC_WORD_INTERP
+dq	'","'
+db	BC_WORD_END
+
+db	BC_ED_NL
+
+db	BC_WORD_DEFINE
+dq	"ed_nl"
+db	BC_WORD_INTERP
+dq	'"\n"'
+db	BC_WORD_END
+
+db	BC_ED_NL
+
 db	BC_ED_NL
 
 db	BC_WORD_DEFINE
@@ -364,6 +412,22 @@ dq	"set"
 db	BC_COMMA
 db	BC_WORD_RADDR
 dq	"fetch"
+db	BC_COMMA
+db	BC_WORD_RADDR
+dq	"comma_b"
+db	BC_COMMA
+db	BC_WORD_RADDR
+dq	"comma_w"
+db	BC_COMMA
+db	BC_WORD_RADDR
+dq	"comma_d"
+db	BC_COMMA
+db	BC_WORD_RADDR
+dq	"comma"
+db	BC_COMMA
+db	BC_ED_NL
+db	BC_WORD_RADDR
+dq	"ed_nl"
 db	BC_COMMA
 
 db	BC_ED_NL

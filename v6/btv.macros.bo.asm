@@ -178,6 +178,38 @@ db	BC_WORD_INTERP
 dq	"bout"
 db	BC_WORD_END
 
+db	BC_WORD_DEFINE
+dq	'"b,"'
+db	BC_NUM_PUSH
+dq	"b,"
+db	BC_WORD_INTERP
+dq	"wout"
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	'"w,"'
+db	BC_NUM_PUSH
+dq	"w,"
+db	BC_WORD_INTERP
+dq	"wout"
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	'"d,"'
+db	BC_NUM_PUSH
+dq	"d,"
+db	BC_WORD_INTERP
+dq	"bout"
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	'","'
+db	BC_NUM_PUSH
+dq	","
+db	BC_WORD_INTERP
+dq	"bout"
+db	BC_WORD_END
+
 db	BC_ED_NL
 
 db	BC_WORD_DEFINE
@@ -294,7 +326,11 @@ db	BC_ED_NL
 db	BC_WORD_DEFINE
 dq	"num"
 db	BC_WORD_INTERP
-dq	"movsq"
+dq	"lodsq"
+db	BC_NUM_PUSH
+dq	"FF"
+db	BC_WORD_INTERP
+dq	"wout"
 db	BC_WORD_END
 
 db	BC_ED_NL
