@@ -2,7 +2,7 @@
 FASM2 = ../fasm2/fasm2
 
 BLUE_BC_ASMS = $(wildcard *.bo.asm)
-BLUE_BC_OBJS = $(ONEX_BC_ASMS:%.bo.asm=obj/%.bo)
+BLUE_BC_OBJS = $(BLUE_BC_ASMS:%.bo.asm=obj/%.bo)
 
 BLUE = bin/blue
 TOOLS = bin/btv
@@ -14,13 +14,10 @@ BTV_OBJS = \
 	obj/elf.bo \
 	obj/btv.bo \
 	obj/elf.fin.bo
-	
-TEST_OBJS = \
-	obj/btv.test.bo
 
 .PHONY: all clean
 
-all: $(BLUE) $(TEST_OBJS) $(TOOLS)
+all: $(BLUE) $(BLUE_BC_OBJS) $(TOOLS)
 
 clean:
 	rm -rf bin obj
