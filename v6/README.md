@@ -10,31 +10,42 @@ Blue aims to:
 
 This is the reference implementation for x86_64 Linux.
 
+## Reading
+
+Some links that may help fill in some back story/knowledge in no particular order:
+
+1. [1x Forth](https://www.ultratechnology.com/1xforth.htm)
+2. [POL](https://colorforth.github.io/POL.htm)
+3. [x86 Instruction Reference](https://www.felixcloutier.com/x86/)
+
+## Building
+
+Blue is built using `fasm2` which is included in this repo as a submodule. To build run `make` or `make -s -j 8`. Once finished `./bin/blue` will be available along with bytecode files in `./obj`.
+
 ## Opcodes
 
-0. fin
-1. define word
-2. end word
-3. call word at compile time
-4. call word at run time
-5. interpret word at compile time
-6. Push the compile time address of word on the data stack
-7. Push the run time address of word on the data stack
-8. Move qword from `src` to `dst`
-9. Push the next qword from `src` on the data stack
-10. Duplicate the top of the data stack
-11. Pop two data stack elements, add them and push the result
-12. Pop two data stack elements, subtract them and push the result
-13. Pop two data stack elements, or them and push the result
-14. Pop two data stack elements, shift the second left the number of times in the first and push the result
-15. Push the compile time address of `dst`
-16. Push the run time address of `dst`
-17. Pop two data stack elements, Set the address in the first to the value in the second and push the result
-18. Pop address from the data stack and push the value of that address
-19. Move a byte from the top of the stack to `dst` 
-19. Move a word from the top of the stack to `dst` 
-19. Move a dword from the top of the stack to `dst` 
-19. Move a qword from the top of the stack to `dst`
-20. Print a newline when visually rendering bytecode
+Opcodes are described in `b.inc` and are subject to change.
+
+## Working With Blue Bytecode
+
+By convention Blue bytecode files have a `.b` extension. A `.bo` file indicates partial bytecode that is meant to be joined into a complete `.b` file. This "linking" step is typically done with `cat`. Breaking code out into separate `.bo` files can facilitate code reuse as well as speed up build times when `make -j 8` or similar is run.
+
+Currently there is no bytecode editor like you would see in a traditional `colorForth` system. I am using `fasm2` to build `.bo` files from `.bo.asm` files. This is likely to change at some point, or I may just write some macros to make this less tedious. 
+
+Running `./ed.pl file.b` or `./ed.pl file.bo` will print the bytecode in a format that is closer to what one would expect when working with a `colorForth` code file.
+
+Running `make` will also build `./bin/btv` the Blue Terminal Viewer. Running `./bin/btv < file.b` or `./bin/btv < file.bo` will print the bytecode much like `ed.pl`. There are some TODOs for `btv` but once finished `ed.pl` will be removed. `btv` is a complete binary written in Blue.
+
+## Running
+
+Blue will read up to 4096 bytes of bytecode from stdin and when finished write its output to stdout.
 
 ## The Structural Dynamics of Flow
+
+Coming Soon...
+
+## TODOs
+
+1. Hex display in btv
+2. Add BC_SAVE, BC_RESTORE
+3. Remove BC_NUM_COMP
