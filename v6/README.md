@@ -16,7 +16,7 @@ Because this is how I like to code.
 
 For many years I been interested in Forth and have dabbled in existing systems as well as written several of my own. When I first saw screenshots of `colorForth` I remembering thinking "cool but looks a little gimmicky." Once I dug into what it really was though, I realized how brutally simple this type of system is compared to a traditional Forth. The fact that this extreme simplification comes without sacrificing power is amazing. This is the genius of Chuck Moore.
 
-To me `colorForth` is not about the colors that are shown on your screen. Those colors are strictly some visual representation of the bytecode - the same bytecode that can be shown in any number of ways. While one may display word definitions in red, others could choose to render a more traditional `: wordname`. Some viewers may render an svg, others ansi terminal escape sequences. Even a hex editor is in play. Currently I `fasm2` to generate flat binaries as a means to edit my bytecode. None of that truly matters. The real focus should be on how simple the underlying interpreter is.
+To me `colorForth` is not about the colors that are shown on your screen. Those colors are strictly some visual representation of the bytecode - the same bytecode that can be shown in any number of ways. While one may display word definitions in red, others could choose to render a more traditional `: wordname`. Some viewers may render an svg, others ansi terminal escape sequences. Even a hex editor is in play. Currently I use `fasm2` to generate flat binaries as a means to edit my bytecode. None of that truly matters. The real focus should be on how simple the underlying interpreter is.
 
 ## Comparison with colorForth
 
