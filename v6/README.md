@@ -10,13 +10,9 @@ Blue aims to:
 
 This is the reference implementation for x86_64 Linux.
 
-## Reading
+## Intentional Brutal Simplicity
 
-Some links that may help fill in some back story/knowledge in no particular order:
-
-1. [1x Forth](https://www.ultratechnology.com/1xforth.htm)
-2. [POL](https://colorforth.github.io/POL.htm)
-3. [x86 Instruction Reference](https://www.felixcloutier.com/x86/)
+It is important to realize that using Blue is agreeing to step into a world of brutal simplicity and minimalism.
 
 ## Building
 
@@ -40,12 +36,18 @@ Running `make` will also build `./bin/btv` the Blue Terminal Viewer. Running `./
 
 Blue will read up to 4096 bytes of bytecode from stdin and when finished write its output to stdout.
 
-## The Structural Dynamics of Flow
+## Reading
 
-Coming Soon...
+Some links that may help fill in some back story/knowledge in no particular order:
+
+1. [1x Forth](https://www.ultratechnology.com/1xforth.htm)
+2. [POL](https://colorforth.github.io/POL.htm)
+3. [x86 Instruction Reference](https://www.felixcloutier.com/x86/)
+4. [fasm](https://flatassembler.net/)
 
 ## TODOs
 
 1. Hex display in btv
 2. Add BC_SAVE, BC_RESTORE
 3. Remove BC_NUM_COMP
+4. Write Blue in Blue
