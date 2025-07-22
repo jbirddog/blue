@@ -10,9 +10,13 @@ Blue aims to:
 
 This is the reference implementation for x86_64 Linux.
 
+## Why a colorForth?
+
+
+
 ## Comparison with colorForth
 
-It is important to note that I have not used or seen the source for an actual `colorForth` system. I do believe I have digested all the (limited) material that is available online. When I say `colorForth` I am likely also describing `arrayForth` or `etherforth` as honestly I lose track of where they overlap/differ. With that being said, this comparison is in good faith but may not end up being 100% correct:
+It is important to note that I have not used or seen the source for an actual `colorForth` system. I do believe I have digested all the (limited) material that is available online. When I say `colorForth` I am likely also describing `arrayForth` or `etherforth`. With that being said, this comparison is in good faith but may not end up being 100% correct:
 
 ### Similarities
 
@@ -23,8 +27,8 @@ It is important to note that I have not used or seen the source for an actual `c
 4. Dictionary is implemented as an array
 5. The use of each word describes its execution semantics (compile/interpret/inline)
    1. Defining a word does not enter compile mode, `;` does not leave compile mode, there is no `]`, `[`, `immediate`, `postpone`, etc
-6. Word definitions do not have to have a `;` - they can fallthrough to the next word
-7. Defined words are available immediately
+6. Word definitions do not require a `;` - they can fallthrough to the next word
+7. Defined words are available immediately - words can call themselves with no trickery
 8. `;` will perform tail-call optimization when preceeded by a call
 9. Any previously defined word can be called or used as a macro
 
@@ -37,5 +41,6 @@ It is important to note that I have not used or seen the source for an actual `c
 5. Block files are not used
 6. Has more opcodes and less pre-defined words
 7. There is no dedicated dictionary for macros
+8. The colors used are different and bold/italics are used
 
 ## The Structural Dynamics of Flow
