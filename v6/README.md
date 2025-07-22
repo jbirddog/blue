@@ -2,6 +2,12 @@
 
 Blue is a single-pass bytecode interpreter for a [colorForth](https://colorforth.github.io/index.html) dialect. It is a single shot application with an intentionally limited scope that focuses on generating output. Like any Forth, an emphasis is placed on building user defined vocabularies to describe the problem at hand.
 
+Blue aims to:
+
+1. Have a reasonably small, simplistic and hackable codebase
+1. Help create minimalistic handcrafted applications
+1. Bring some fun back into the world
+
 This is the reference implementation for x86_64 Linux.
 
 ## Comparison with colorForth
