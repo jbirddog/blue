@@ -20,13 +20,15 @@ It is important to note that I have not used or seen the source for an actual `c
 6. Word definitions do not have to have a `;` - they can fallthrough to the next word
 7. Defined words are available immediately
 8. `;` will perform tail-call optimization when preceeded by a call
+9. Any previously defined word can be called while interpreting
 
 ### Differences
 
-1. Blue is a single shot application (used like `gcc` for instance) instead of a living application (like an `os`/`emacs`)
-3. The bytecode format is not as compact - for instance all numbers are 8 bytes
+1. Blue is a single shot application (used like `gcc`) instead of a living application (like an `os`/`emacs`)
+2. Does not have a custom keyboard mapping
+3. The bytecode format is not the same
 4. There are no comments or shadow blocks
 5. Block files are not used
-6. Adding opcodes is preferred to pre-defined words
+6. Has more opcodes and less pre-defined words
 
 ## The Structural Dynamics of Flow
