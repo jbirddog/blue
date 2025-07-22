@@ -26,7 +26,7 @@ It is important to note that I have not used or seen the source for an actual `c
 6. Word definitions do not have to have a `;` - they can fallthrough to the next word
 7. Defined words are available immediately
 8. `;` will perform tail-call optimization when preceeded by a call
-9. Any previously defined word can be called while interpreting
+9. Any previously defined word can be called or used as a macro
 
 ### Differences
 
