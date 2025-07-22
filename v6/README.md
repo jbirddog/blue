@@ -12,10 +12,10 @@ It is important to note that I have not used or seen the source for an actual `c
 
 1. Concatenative/stack-based
 9. No stack effect declarations
-2. Use of binary bytecode files instead of the more traditional text file as the input
+2. Use of binary bytecode files instead of the more traditional text file as input
 3. Data stack is implemented as a circular buffer
 4. Dictionary is implemented as an array
-5. The use of each word describes its execution semantics (compile/interpret)
+5. The use of each word describes its execution semantics (compile/interpret/inline)
    1. Defining a word does not enter compile mode, `;` does not leave compile mode, there is no `]`, `[`, `immediate`, `postpone`, etc
 6. Word definitions do not have to have a `;` - they can fallthrough to the next word
 7. Defined words are available immediately
@@ -30,5 +30,6 @@ It is important to note that I have not used or seen the source for an actual `c
 4. There are no comments or shadow blocks
 5. Block files are not used
 6. Has more opcodes and less pre-defined words
+7. There is no dedicated dictionary for macros
 
 ## The Structural Dynamics of Flow
