@@ -20,11 +20,11 @@ DS_BASE = $ - DS_SIZE
 assert DS_SIZE and DS_MASK = 0
 assert DS_BASE and DS_MASK = 0
 
-REG_LVL = ebp
-REG_SRC = rsi
-REG_DST = rdi
-REG_LAST = r12
-REG_DS = r13
+REG_LVL equ ebp
+REG_SRC equ rsi
+REG_DST equ rdi
+REG_LAST equ r12
+REG_DS equ r13
 
 ;;; kernel
 
@@ -157,7 +157,7 @@ num_push:
 	call	ds_push
 	jmp	next
 	
-dup:
+k_dup:
 	call	ds_pop
 	call	ds_push
 	call	ds_push
@@ -269,7 +269,7 @@ bc_tbl:
 dq	fin
 dq	word_define, word_end, word_ccall, word_rcall, word_interp, word_caddr, word_raddr
 dq	num_comp, num_push
-dq	dup, k_add, k_sub, k_or, k_shl
+dq	k_dup, k_add, k_sub, k_or, k_shl
 dq	dollar_caddr, dollar_raddr, set, fetch, comma_b, comma_w, comma_d, comma
 dq	ed_nl
 

@@ -1,5 +1,5 @@
 
-FASM2 = ../fasm2/fasm2
+FASM ?= $(shell which fasm)
 
 BLUE_BC_ASMS = $(wildcard *.bo.asm)
 BLUE_BC_OBJS = $(BLUE_BC_ASMS:%.bo.asm=obj/%.bo)
@@ -25,11 +25,11 @@ clean:
 bin obj:
 	mkdir $@
 
-$(BLUE): blue.asm $(FASM2) | bin
-	$(FASM2) $< $@
+$(BLUE): blue.asm $(FASM) | bin
+	$(FASM) $< $@
 
-obj/%.bo: %.bo.asm $(FASM2) b.inc | obj
-	$(FASM2) $< $@
+obj/%.bo: %.bo.asm $(FASM) b.inc | obj
+	$(FASM) $< $@
 
 obj/btv.b: $(BTV_OBJS) | obj
 	cat $^ > $@
