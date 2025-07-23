@@ -12,7 +12,7 @@ This is the reference implementation for x86_64 Linux.
 
 ## Fair Warning
 
-It is important to realize that using Blue is agreeing to step into a world of brutal simplicity and minimalism. There is no `stdlib` - no `malloc`, `printf`, etc. You will not get a helpful error message. Segfaults will happen and debugging often means taking a walk to think about what you've done. To do anything non trivial, hand jitting some machine code will be required. You will be responsible for and understand the role of every byte that lands in the output.
+It is important to realize that using Blue is agreeing to step into a world of brutal simplicity and minimalism. There are zero guardrails. You will not get an error message let alone a helpful one. Segfaults will happen and debugging often means taking a walk to think about what you've done wrong. To do anything non trivial hand jitting some machine code will be required. You will be responsible for, and understand the role of, every byte that lands in the output.
 
 Odds are this either sounds horrifying or exciting. If you are in the later camp, continue reading.
 
