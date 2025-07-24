@@ -5,7 +5,7 @@ segment readable writeable executable
 
 magic:
 .name:	dd "blue"
-.ver:	dd 6
+.ver:	dd 5
 
 CELL_SIZE = 8
 DICT_ENTRY_SIZE = CELL_SIZE * 3

@@ -52,5 +52,4 @@ Some links that may help fill in some back story/knowledge in no particular orde
 1. Hex display in btv
 2. Add BC_SAVE, BC_RESTORE
 1. Add BC_TOR, BC_FROMR
-3. Remove BC_NUM_COMP
 4. Write Blue in Blue

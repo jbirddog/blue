@@ -119,6 +119,15 @@ db	BC_WORD_END
 db	BC_ED_NL
 
 db	BC_WORD_DEFINE
+dq	"xlatb"
+db	BC_NUM_PUSH
+dq	0xD7
+db	BC_COMMA_B
+db	BC_WORD_END
+
+db	BC_ED_NL
+
+db	BC_WORD_DEFINE
 dq	"edx="
 db	BC_NUM_PUSH
 dq	0xBA

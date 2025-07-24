@@ -12,6 +12,7 @@ BTV_OBJS = \
 	obj/x8664.linux.bo \
 	obj/btv.macros.bo \
 	obj/elf.bo \
+	obj/hexnum.bo \
 	obj/btv.bo \
 	obj/elf.fin.bo
 
