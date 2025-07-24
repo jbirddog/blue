@@ -45,6 +45,7 @@ Some links that may help fill in some back story/knowledge in no particular orde
 1. [1x Forth](https://www.ultratechnology.com/1xforth.htm)
 2. [POL](https://colorforth.github.io/POL.htm)
 3. [x86 Instruction Reference](https://www.felixcloutier.com/x86/)
+4. [x86-64 Registers](https://wiki.osdev.org/CPU_Registers_x86-64)
 
 ## TODOs
 
