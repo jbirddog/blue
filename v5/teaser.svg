@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+  <rect width="100%" height="100%" fill="black" />
+  <text x="10" y="30" font-size="20">
+    <tspan fill="red">elfhdrs</tspan>
+    <tspan fill="yellow" font-style="italic">$</tspan>
+    <tspan fill="magenta">$$</tspan>
+    <tspan fill="yellow" font-style="italic">!</tspan>
+  </text>
+  <text x="10" y="60" font-size="20">
+    <tspan fill="lime">3010102464C457F</tspan>
+    <tspan fill="lime">00</tspan>
+    <tspan fill="lime">1003E0002</tspan>
+    <tspan fill="red">entry</tspan>
+    <tspan fill="lime">400078</tspan>
+  </text>
+  <text dominant-baseline="hanging" x="10" y="190" font-size="20">
+    <tspan fill="red">exit</tspan>
+    <tspan fill="yellow">3CB0</tspan>
+    <tspan fill="yellow" font-style="italic">w,</tspan>
+  </text>
+  <text dominant-baseline="hanging" x="10" y="220" font-size="20">
+    <tspan fill="red">syscall</tspan>
+    <tspan fill="yellow">50F</tspan>
+    <tspan fill="yellow" font-style="italic">w,</tspan>
+  </text>
+  <text dominant-baseline="hanging" x="10" y="280" font-size="20">
+    <tspan fill="yellow" font-style="italic">$</tspan>
+    <tspan fill="magenta">elfhdrs</tspan>
+    <tspan fill="yellow" font-style="italic">-</tspan>
+    <tspan fill="yellow" font-style="italic">dup</tspan>
+    <tspan fill="magenta">elfbsz</tspan>
+    <tspan fill="yellow" font-style="italic">!</tspan>
+    <tspan fill="magenta">elfmsz</tspan>
+    <tspan fill="yellow" font-style="italic">!</tspan>
+  </text>
+  <text dominant-baseline="hanging" x="10" y="310" font-size="20">
+    <tspan fill="yellow" font-style="italic">fin</tspan>
+  </text>
+</svg>

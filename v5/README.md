@@ -18,9 +18,9 @@ This is the reference implementation for x86_64 GNU/Linux.
 
 It is important to realize that using Blue is agreeing to step into a world of brutal simplicity and minimalism.
 There are zero guardrails. You will not get an error message let alone a helpful one. Segfaults will happen and
-debugging often means taking a walk to think about what you've done wrong. To do anything non trivial, hand jitting
-some machine code will be required. You will be responsible for, and will understand the role of every byte that
-lands in the output. You will start with virtual nothing and craft exactly what you need, brick by brick.
+debugging often means taking a walk to think about what you've done wrong. Hand jitting some machine code will be
+required to do anything non trivial. You will be responsible for, and will understand the role of every byte that
+lands in the output. You will start with virtually nothing and craft exactly what you need, brick by brick.
 
 ## Building
 
