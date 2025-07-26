@@ -4,8 +4,8 @@ FASM ?= $(shell which fasm)
 BLUE_BC_ASMS = $(wildcard *.bo.asm)
 BLUE_BC_OBJS = $(BLUE_BC_ASMS:%.bo.asm=obj/%.bo)
 
-BLUE = bin/blue
-TOOLS = bin/btv
+BLUE = ./bin/blue
+TOOLS = ./bin/btv
 
 BTV_OBJS = \
 	obj/x8664.bo \
