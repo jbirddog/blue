@@ -71,6 +71,11 @@ db	BC_WORD_RCALL
 dq	"hexchr"
 db	BC_WORD_RCALL
 dq	"hexchr"
+
+db	BC_NUM_PUSH
+dq	0x90
+db	BC_COMMA_B
+
 db	BC_WORD_END
 
 db	BC_ED_NL
@@ -82,6 +87,12 @@ dq	"rbx="
 db	BC_WORD_RADDR
 dq	"hextbl"
 db	BC_COMMA
+
+; b4 00                   mov    ah,0x0
+db	BC_NUM_PUSH
+dq	0x00B4
+db	BC_COMMA_W
+
 db	BC_WORD_RCALL
 dq	"hexdigit"
 db	BC_WORD_RCALL
@@ -96,6 +107,7 @@ db	BC_WORD_RCALL
 dq	"hexdigit"
 db	BC_WORD_RCALL
 dq	"hexdigit"
+
 ; b4 01                   mov    ah,0x1
 db	BC_NUM_PUSH
 dq	0x01B4

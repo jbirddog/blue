@@ -56,13 +56,20 @@ Blue will read up to 8192 bytes of bytecode from stdin and when finished write i
 Some links that may help fill in some back story/knowledge in no particular order:
 
 1. [1x Forth](https://www.ultratechnology.com/1xforth.htm)
-2. [POL](https://colorforth.github.io/POL.htm)
-3. [x86 Instruction Reference](https://www.felixcloutier.com/x86/)
-4. [x86-64 Registers](https://wiki.osdev.org/CPU_Registers_x86-64)
+1. [POL](https://colorforth.github.io/POL.htm)
+1. [x86 Instruction Reference](https://www.felixcloutier.com/x86/)
+1. [x86-64 Registers](https://wiki.osdev.org/CPU_Registers_x86-64)
 
 ## TODOs
 
-1. Hex display in btv
-2. Add BC_SAVE, BC_RESTORE
+1. Add BC_SAVE, BC_RESTORE
 1. Add BC_TOR, BC_FROMR
-4. Write Blue in Blue
+1. Factor hexnum more
+1. Write Blue in Blue
+
+### btv
+
+1. Move ashex to btv
+1. `num ashex` to `hexnum`
+1. Multiple dst writes based on size
+1. That leading space issue
