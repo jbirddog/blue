@@ -1,39 +1,70 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600">
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="260">
   <rect width="100%" height="100%" fill="black" />
   <text x="10" y="30" font-size="20">
-    <tspan fill="red">elfhdrs</tspan>
-    <tspan fill="yellow" font-style="italic">$</tspan>
-    <tspan fill="magenta">$$</tspan>
-    <tspan fill="yellow" font-style="italic">!</tspan>
+    <tspan fill="red">eax</tspan>
+    <tspan fill="yellow">00</tspan>
+    <tspan fill="yellow" font-style="italic">;</tspan>
+    <tspan fill="red">edi</tspan>
+    <tspan fill="yellow">07</tspan>
+    <tspan fill="yellow" font-style="italic">;</tspan>
   </text>
   <text x="10" y="60" font-size="20">
-    <tspan fill="lime">3010102464C457F</tspan>
-    <tspan fill="lime">00</tspan>
-    <tspan fill="lime">1003E0002</tspan>
-    <tspan fill="red">entry</tspan>
-    <tspan fill="lime">400078</tspan>
+    <tspan fill="red">/0</tspan>
+    <tspan fill="yellow">C0</tspan>
+    <tspan fill="yellow" font-style="italic">or</tspan>
+    <tspan fill="yellow" font-style="italic">;</tspan>
+    <tspan fill="red">/r</tspan>
+    <tspan fill="yellow">03</tspan>
+    <tspan fill="yellow" font-style="italic">shl</tspan>
+    <tspan fill="yellow" font-style="italic">or</tspan>
+    <tspan fill="cyan">/0</tspan>
+    <tspan fill="yellow" font-style="italic">;</tspan>
   </text>
-  <text dominant-baseline="hanging" x="10" y="190" font-size="20">
-    <tspan fill="red">exit</tspan>
-    <tspan fill="yellow">3CB0</tspan>
-    <tspan fill="yellow" font-style="italic">w,</tspan>
-  </text>
-  <text dominant-baseline="hanging" x="10" y="220" font-size="20">
+  <text x="10" y="90" font-size="20">
+    <tspan fill="red">xor</tspan>
+    <tspan fill="yellow">31</tspan>
+    <tspan fill="yellow" font-style="italic">b,</tspan>
+    <tspan fill="cyan">/r</tspan>
+    <tspan fill="yellow" font-style="italic">b,</tspan>
+    <tspan fill="yellow" font-style="italic">;</tspan>
     <tspan fill="red">syscall</tspan>
-    <tspan fill="yellow">50F</tspan>
+    <tspan fill="yellow">050F</tspan>
     <tspan fill="yellow" font-style="italic">w,</tspan>
+    <tspan fill="yellow" font-style="italic">;</tspan>
   </text>
-  <text dominant-baseline="hanging" x="10" y="280" font-size="20">
-    <tspan fill="yellow" font-style="italic">$</tspan>
-    <tspan fill="magenta">elfhdrs</tspan>
-    <tspan fill="yellow" font-style="italic">-</tspan>
+  <text x="10" y="150" font-size="20">
+    <tspan fill="red">!0</tspan>
     <tspan fill="yellow" font-style="italic">dup</tspan>
-    <tspan fill="magenta">elfbsz</tspan>
-    <tspan fill="yellow" font-style="italic">!</tspan>
-    <tspan fill="magenta">elfmsz</tspan>
-    <tspan fill="yellow" font-style="italic">!</tspan>
+    <tspan fill="cyan">xor</tspan>
+    <tspan fill="yellow" font-style="italic">;</tspan>
+    <tspan fill="red">eax!</tspan>
+    <tspan fill="yellow">B8</tspan>
+    <tspan fill="yellow" font-style="italic">b,</tspan>
+    <tspan fill="yellow" font-style="italic">d,</tspan>
+    <tspan fill="yellow" font-style="italic">;</tspan>
   </text>
-  <text dominant-baseline="hanging" x="10" y="310" font-size="20">
-    <tspan fill="yellow" font-style="italic">fin</tspan>
+  <text x="10" y="150" font-size="20">
+    <tspan fill="red">!0</tspan>
+    <tspan fill="yellow" font-style="italic">dup</tspan>
+    <tspan fill="cyan">xor</tspan>
+    <tspan fill="yellow" font-style="italic">;</tspan>
+    <tspan fill="red">eax!</tspan>
+    <tspan fill="yellow">B8</tspan>
+    <tspan fill="yellow" font-style="italic">b,</tspan>
+    <tspan fill="yellow" font-style="italic">d,</tspan>
+    <tspan fill="yellow" font-style="italic">;</tspan>
+  </text>
+  <text x="10" y="180" font-size="20">
+    <tspan fill="red">bye</tspan>
+    <tspan fill="cyan">edi</tspan>
+    <tspan fill="cyan">!0</tspan>
+    <tspan fill="red">exit</tspan>
+    <tspan fill="yellow">3C</tspan>
+    <tspan fill="cyan">eax!</tspan>
+    <tspan fill="cyan">syscall</tspan>
+    <tspan fill="yellow" font-style="italic">;</tspan>
+  </text>
+  <text x="10" y="240" font-size="20">
+    <tspan fill="yellow">bye</tspan>
   </text>
 </svg>
