@@ -135,6 +135,13 @@ db	BC_COMMA_B
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
+dq	"rbx="
+db	BC_NUM_PUSH
+dq	0xBB48
+db	BC_COMMA_W
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
 dq	"rsi="
 db	BC_NUM_PUSH
 dq	0xBE48

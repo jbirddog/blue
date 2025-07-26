@@ -10,4 +10,48 @@ db	BC_NUM_COMP
 dq	"89ABCDEF"
 
 db	BC_ED_NL
+
+db	BC_WORD_DEFINE
+dq	"nibble"
+; c0 ca 04                ror    dl,0x4
+db	BC_NUM_PUSH
+dq	0xCAC0
+db	BC_COMMA_W
+db	BC_NUM_PUSH
+dq	0x04
+db	BC_COMMA_B
+; 88 d0                   mov    al,dl
+db	BC_NUM_PUSH
+dq	0xD088
+db	BC_COMMA_W
+; 24 0f                   and    al,0xf
+db	BC_NUM_PUSH
+dq	0x0F24
+db	BC_COMMA_W
+
+db	BC_WORD_END
+
+db	BC_ED_NL
+
+db	BC_WORD_DEFINE
+dq	"hexchr"
+db	BC_WORD_INTERP
+dq	"nibble"
+db	BC_WORD_INTERP
+dq	"xlatb"
+db	BC_WORD_INTERP
+dq	"stosb"
+db	BC_WORD_END
+
+db	BC_ED_NL
+
+db	BC_WORD_DEFINE
+dq	"hexstr"
+db	BC_WORD_INTERP
+dq	"rbx="
+db	BC_WORD_RADDR
+dq	"hextbl"
+db	BC_WORD_END
+
+db	BC_ED_NL
 db	BC_ED_NL
