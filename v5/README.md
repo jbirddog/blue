@@ -22,12 +22,12 @@ debugging often means taking a walk to think about what you've done wrong. Hand 
 required to do anything non trivial. You will be responsible for, and will understand the role of every byte that
 lands in the output. 
 
-## Brick by Brick
+## Fair Warning, Illustrated
 
 When using Blue you will start with virtually nothing and craft exactly what you need, brick by brick. With a 
 small number of definitions your code quickly goes from low to high level. As an example:
 
-<img src="./teaser.svg">
+<img src="./fairwarning.svg">
 
 ## Building
 
