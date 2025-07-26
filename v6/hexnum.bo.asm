@@ -46,11 +46,53 @@ db	BC_WORD_END
 db	BC_ED_NL
 
 db	BC_WORD_DEFINE
+dq	"hexdigit"
+db	BC_WORD_RCALL
+dq	"hexchr"
+db	BC_WORD_RCALL
+dq	"hexchr"
+db	BC_WORD_END
+
+db	BC_ED_NL
+
+db	BC_WORD_DEFINE
 dq	"hexstr"
 db	BC_WORD_INTERP
 dq	"rbx="
 db	BC_WORD_RADDR
 dq	"hextbl"
+db	BC_COMMA
+db	BC_WORD_RCALL
+dq	"hexdigit"
+db	BC_WORD_RCALL
+dq	"hexdigit"
+db	BC_WORD_RCALL
+dq	"hexdigit"
+db	BC_WORD_RCALL
+dq	"hexdigit"
+db	BC_WORD_RCALL
+dq	"hexdigit"
+db	BC_WORD_RCALL
+dq	"hexdigit"
+db	BC_WORD_RCALL
+dq	"hexdigit"
+db	BC_WORD_RCALL
+dq	"hexdigit"
+db	BC_WORD_END
+
+db	BC_ED_NL
+
+db	BC_WORD_DEFINE
+dq	"ashex"
+; 48 89 c2                mov    rdx,rax
+db	BC_NUM_PUSH
+dq	0x8948
+db	BC_COMMA_W
+db	BC_NUM_PUSH
+dq	0xC2
+db	BC_COMMA_B
+db	BC_WORD_RCALL
+dq	"hexstr"
 db	BC_WORD_END
 
 db	BC_ED_NL

@@ -175,6 +175,8 @@ db	BC_WORD_INTERP
 dq	"shows"
 db	BC_WORD_INTERP
 dq	"num"
+db	BC_WORD_RCALL
+dq	"ashex"
 db	BC_WORD_END
 
 db	BC_ED_NL

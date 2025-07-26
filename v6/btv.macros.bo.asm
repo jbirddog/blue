@@ -327,10 +327,6 @@ db	BC_WORD_DEFINE
 dq	"num"
 db	BC_WORD_INTERP
 dq	"lodsq"
-db	BC_NUM_PUSH
-dq	"FF"
-db	BC_WORD_INTERP
-dq	"wout"
 db	BC_WORD_END
 
 db	BC_ED_NL
