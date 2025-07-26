@@ -7,49 +7,49 @@ to describe and solve the problem at hand.
 
 Blue aims to:
 
-1. Have a reasonably small, simplistic and hackable codebase that a single human can completely understand
+1. Have a reasonably small, simplistic and hackable codebase
+1. Be something that a single human can completely understand
 1. Help create minimalistic handcrafted applications
 1. Bring some fun back into the world
 
-This is the reference implementation for x86_64 Linux.
+This is the reference implementation for x86_64 GNU/Linux.
 
 ## Fair Warning
 
 It is important to realize that using Blue is agreeing to step into a world of brutal simplicity and minimalism.
 There are zero guardrails. You will not get an error message let alone a helpful one. Segfaults will happen and
-debugging often means taking a walk to think about what you've done wrong. To do anything non trivial hand jitting
-some machine code will be required. You will be responsible for, and understand the role of, every byte that lands
-in the output.
+debugging often means taking a walk to think about what you've done wrong. To do anything non trivial, hand jitting
+some machine code will be required. You will be responsible for, and will understand the role of every byte that
+lands in the output. You will start with virtual nothing and craft exactly what you need, brick by brick.
 
 ## Building
 
-Blue is built using [fasm](https://flatassembler.net/). To build run `make` or `make -s -j 8`. Once finished
+Blue is built using [fasm](https://flatassembler.net/). To build run `make` or `make -s -j`. Once finished
 `./bin/blue` will be available along with bytecode files in `./obj`.
 
-## Opcodes
+## Running
 
-Opcodes are described in `b.inc` and are subject to change.
+Blue will interpret up to 8192 bytes of bytecode from stdin. When finished it will write up to 8192 bytes of your
+output to stdout.
 
 ## Working With Blue Bytecode
 
 By convention Blue bytecode files have a `.b` extension. A `.bo` file indicates partial bytecode that is meant to
 be joined into a complete `.b` file. This "linking" step is typically done with `cat`. Breaking code out into
-separate `.bo` files can facilitate code reuse and can speed up build times when `make -j 8` or similar is run.
+separate `.bo` files aids in code reuse and can speed up build times when `make -j` or similar is run. The
+`Makefile` shows how bytecode is built/combined and intepreted to build standalone binaries.
 
 Currently there is no bytecode editor like you would see in a traditional `colorForth` system. I am using `fasm`
 to build `.bo` files from `.bo.asm` files. This is likely to change at some point, or I may just write some macros
 to make this less tedious. 
 
-Running `./ed.pl file.b` or `./ed.pl file.bo` will print the bytecode in a format that is closer to what one would
-expect when working with a `colorForth` code file.
+`make` will also build `./bin/btv` the Blue Terminal Viewer. Running `./bin/btv < file.b` or `./bin/btv < file.bo`
+will print the bytecode in a format that one would expect when working with a `colorForth` code file. `btv` is a
+complete binary written in Blue.
 
-Running `make` will also build `./bin/btv` the Blue Terminal Viewer. Running `./bin/btv < file.b` or
-`./bin/btv < file.bo` will print the bytecode much like `ed.pl`. There are some TODOs for `btv` but once finished
-`ed.pl` will be removed. `btv` is a complete binary written in Blue.
+## Opcodes
 
-## Running
-
-Blue will read up to 8192 bytes of bytecode from stdin and when finished write its output to stdout.
+Opcodes are described in `b.inc` and are subject to change.
 
 ## Reading
 
@@ -62,6 +62,7 @@ Some links that may help fill in some back story/knowledge in no particular orde
 
 ## TODOs
 
+1. Generalize elf.fin.bo
 1. Add BC_SAVE, BC_RESTORE
 1. Add BC_TOR, BC_FROMR
 1. Factor hexnum more
@@ -71,5 +72,5 @@ Some links that may help fill in some back story/knowledge in no particular orde
 
 1. Move ashex to btv
 1. `num ashex` to `hexnum`
-1. Multiple dst writes based on size
-1. That leading space issue
+1. Multiple dst writes based on size (needs BC_SAVE/RESTORE)
+1. That trailing space that looks like a leading space issue
