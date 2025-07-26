@@ -38,7 +38,7 @@ exit:
 	mov	eax, 60
 	syscall
 
-call	bye ; except this is run at assemble time
+call	bye	; except this is run at assemble time
 ```
 
 ## Building

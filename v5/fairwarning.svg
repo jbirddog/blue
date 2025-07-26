@@ -62,7 +62,6 @@
     <tspan fill="yellow">3C</tspan>
     <tspan fill="cyan">eax!</tspan>
     <tspan fill="cyan">syscall</tspan>
-    <tspan fill="yellow" font-style="italic">;</tspan>
   </text>
   <text x="10" y="240" font-size="20">
     <tspan fill="yellow">bye</tspan>
