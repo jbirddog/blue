@@ -47,6 +47,13 @@ db	BC_ED_NL
 
 db	BC_WORD_DEFINE
 dq	"hexdigit"
+; 48 c1 c2 08             rol    rdx,0x8
+db	BC_NUM_PUSH
+dq	0xC148
+db	BC_COMMA_W
+db	BC_NUM_PUSH
+dq	0x08C2
+db	BC_COMMA_W
 db	BC_WORD_RCALL
 dq	"hexchr"
 db	BC_WORD_RCALL
