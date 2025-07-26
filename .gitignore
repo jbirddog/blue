@@ -2,4 +2,3 @@ bin
 obj
 scratch*
 __pycache__
-*.blk
