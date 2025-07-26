@@ -54,6 +54,19 @@ db	BC_COMMA_W
 db	BC_NUM_PUSH
 dq	0x08C2
 db	BC_COMMA_W
+; 08 d4                   or     ah,dl
+db	BC_NUM_PUSH
+dq	0xD408
+db	BC_COMMA_W
+; 84 e4                   test   ah,ah
+db	BC_NUM_PUSH
+dq	0xE484
+db	BC_COMMA_W
+; 74 0a                   je     0xc
+db	BC_NUM_PUSH
+dq	0x0A74
+db	BC_COMMA_W
+
 db	BC_WORD_RCALL
 dq	"hexchr"
 db	BC_WORD_RCALL
@@ -83,6 +96,10 @@ db	BC_WORD_RCALL
 dq	"hexdigit"
 db	BC_WORD_RCALL
 dq	"hexdigit"
+; b4 01                   mov    ah,0x1
+db	BC_NUM_PUSH
+dq	0x01B4
+db	BC_COMMA_W
 db	BC_WORD_RCALL
 dq	"hexdigit"
 db	BC_WORD_END
