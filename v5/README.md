@@ -20,7 +20,14 @@ It is important to realize that using Blue is agreeing to step into a world of b
 There are zero guardrails. You will not get an error message let alone a helpful one. Segfaults will happen and
 debugging often means taking a walk to think about what you've done wrong. Hand jitting some machine code will be
 required to do anything non trivial. You will be responsible for, and will understand the role of every byte that
-lands in the output. You will start with virtually nothing and craft exactly what you need, brick by brick.
+lands in the output. 
+
+## Brick by Brick
+
+When using Blue you will start with virtually nothing and craft exactly what you need, brick by brick. With a 
+small number of definitions your code quickly goes from low to high level. As an example:
+
+<img src="./teaser.svg">
 
 ## Building
 
