@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 use constant {
-	SRC_SIZE => 4096,
+	SRC_SIZE => 8192,
 
 	BC_FIN => 0x00,
 	BC_NUM_COMP => 0x08,
