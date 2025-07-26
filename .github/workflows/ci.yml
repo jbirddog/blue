@@ -15,8 +15,8 @@ jobs:
       with:
         submodules: recursive
     - name: Install fasm
-      run: sudo apt-get update && sudo apt-get install -y fasm
+      run: sudo apt-get install -y fasm
     - name: make
       run: make
     - name: make v5
-      run: make -C v5
+      run: cd v5 && make
