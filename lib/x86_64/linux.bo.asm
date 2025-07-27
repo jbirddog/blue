@@ -16,6 +16,14 @@ db	BC_WORD_INTERP
 dq	"syscall"
 db	BC_WORD_END
 
+db	BC_ED_NL
+
+db	BC_WORD_DEFINE
+dq	"print"
+db	BC_WORD_INTERP
+dq	"edx!"
+db	BC_WORD_INTERP
+dq	"rsi!"
 db	BC_WORD_DEFINE
 dq	"writeout"
 db	BC_WORD_INTERP
