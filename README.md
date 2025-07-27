@@ -3,9 +3,8 @@
 Blue is a single-pass bytecode interpreter for a [colorForth](https://colorforth.github.io/index.html) dialect.
 Unlike the traditional `colorForth` system, Blue is a single shot application with a sole focus on generating
 output, which is typically a binary. Its simplistic nature makes it hard to describe, but think of an assembler
-with no target architecture, output format or separate macro syntax where any label can be used as a macro or 
-called at assemble time - as if `colorForth` and [fasmg](https://flatassembler.net/docs.php?article=fasmg) had 
-a baby.
+with no target architecture, output format or separate macro syntax where any label can be called at assemble time
+or used as a macro - as if `colorForth` and [fasmg](https://flatassembler.net/docs.php?article=fasmg) had a baby.
 
 Blue aims to:
 
@@ -56,8 +55,8 @@ all. You can easily write a bytecode viewer that uses any means desired to displ
 above, the yellow `bye` means that word is to be called at assemble time. If yellow is not agreeable, make it pink
 or underlined, or display it as `@bye`. If you like reading verbose code, display it as `callAtAssembleTime(bye)`.
 
-Running `./bin/btv < obj/btv.bo` will show how each opcode is displayed, including its color and styling. This is
-also an example of higher level Blue code.
+Running `./bin/btv < obj/btv/btv.bo` will show how each opcode is displayed, including its color and styling.
+This is also an example of higher level Blue code.
 
 ## Forth Data Structures
 
@@ -71,7 +70,7 @@ Like the dictionary the stacks only exists at assemble time.
 
 ## Building
 
-Install [fasm v1](https://flatassembler.net/) then run `make` or `make -s -j`. Once finished `./bin/blue` will be
+Install [fasm v1](https://flatassembler.net/) then run `make` or `make -s -j 8`. Once finished `./bin/blue` will be
 available along with bytecode files in `./obj`.
 
 ## Running
@@ -83,7 +82,7 @@ output to stdout.
 
 By convention Blue bytecode files have a `.b` extension. A `.bo` file indicates partial bytecode that is meant to
 be joined into a complete `.b` file. This "linking" step is typically done with `cat`. Breaking code out into
-separate `.bo` files aids in code reuse and can speed up build times when `make -j` or similar is run. The
+separate `.bo` files aids in code reuse and can speed up build times when `make -j 8` or similar is run. The
 `Makefile` shows how bytecode is built/combined and intepreted to build standalone binaries.
 
 Currently there is no bytecode editor like you would see in a traditional `colorForth` system. I am using `fasm`
@@ -96,7 +95,7 @@ complete binary written in Blue.
 
 ## Opcodes
 
-Opcodes are described in `b.inc` and are subject to change.
+Opcodes are defined in `b.inc` and are subject to change.
 
 ## Reading
 
@@ -109,15 +108,16 @@ Some links that may help fill in some back story/knowledge in no particular orde
 
 ## TODOs
 
-1. Generalize elf.fin.bo
+1. Generalize btv/elf.fin.bo (needs rb support)
 1. Add BC_SAVE, BC_RESTORE
 1. Add BC_TOR, BC_FROMR
-1. Factor hexnum more
 1. Write Blue in Blue
 
 ### btv
 
-1. Move ashex to btv
-1. `num ashex` to `hexnum`
+1. Add btv/README.md, move this stuff there
+1. Factor `ashex` so `hexnum` can move to lib
+1. Move ansi terminal stuff to lib
+1. Factor hexnum more
 1. Multiple dst writes based on size (needs BC_SAVE/RESTORE)
 1. That trailing space that looks like a leading space issue
