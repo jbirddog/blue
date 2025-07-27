@@ -84,6 +84,8 @@ Install [fasm v1](https://flatassembler.net/) then run `make` or `make -s -j 8`.
 available along with bytecode files in `./obj`. `./bin/btv` can be used to view any file in `./obj` that is passed
 via stdin. `./bin/examples` contains example binaries built with Blue.
 
+It is worth poking around in the `bin` directories and noting the size of the binaries.
+
 ## Running
 
 Blue will interpret up to 8192 bytes of bytecode from stdin. When finished it will write up to 8192 bytes of your

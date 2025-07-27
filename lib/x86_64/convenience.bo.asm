@@ -68,6 +68,13 @@ dq	"edx="
 db	BC_COMMA_D
 db	BC_WORD_END
 
+db	BC_WORD_DEFINE
+dq	"rsi!"
+db	BC_WORD_INTERP
+dq	"rsi="
+db	BC_COMMA
+db	BC_WORD_END
+
 db	BC_ED_NL
 
 db	BC_WORD_DEFINE
