@@ -2,9 +2,10 @@
 
 Blue is a single-pass bytecode interpreter for a [colorForth](https://colorforth.github.io/index.html) dialect.
 Unlike the traditional `colorForth` system, Blue is a single shot application with a sole focus on generating
-output, which is typically a binary. Its simplistic nature makes it hard to describe, but think of an assembler
-with no target architecture, output format or separate macro syntax where any label can be called at assemble time
-or used as a macro - as if `colorForth` and [fasmg](https://flatassembler.net/docs.php?article=fasmg) had a baby.
+output, which is typically an artisanal binary. Its simplistic nature makes it hard to describe, but think of an
+assembler with no target architecture, output format or separate macro syntax where any label can be called at
+assemble time or used as a macro. This is why I think of Blue as a
+`colorForth`/[fasmg](https://flatassembler.net/docs.php?article=fasmg) love child.
 
 Blue aims to:
 
