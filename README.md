@@ -31,8 +31,10 @@ small number of definitions your code quickly goes from low to high level. As an
 
 <img src="./fairwarning.svg">
 
-_The astute reader will realize that the red `eax` is not used and the red `eax!` can be factored out to something
-like `mov/ri4` that is `B8 + b, d, ;`. Then `eax!` becomes `eax mov/ri4`. This is how factoring works._
+> The astute reader will realize that the red `eax` is not used and the red `eax!` can be factored out to
+> something like `mov/ri4` that is `B8 + b, d, ;`. Then `eax!` becomes `eax mov/ri4`. This is how factoring
+> works. Building up a vocabulary to desribe and solve the problem at hand is a common theme with Blue and
+> other [concatenative languages](https://en.wikipedia.org/wiki/Concatenative_programming_language).
 
 Here red defines a new word. Yellow numbers are pushed on the stack at assemble time. Yellow italicized words are
 opcodes that run at assemble time. The `b,` for example will pop a value off the stack and compile a byte to the
