@@ -14,7 +14,20 @@ BLUE = bin/blue
 TOOLS = bin/btv
 EXAMPLES = bin/examples/exit
 
-BTV_OBJS = \
+.PHONY: all clean
+
+all: $(BLUE) $(BLUE_BC_OBJS) $(TOOLS) $(EXAMPLES)
+
+clean:
+	rm -rf bin obj
+
+bin:
+	mkdir $@
+
+$(BLUE): blue.asm $(FASM) | bin
+	$(FASM) $< $@
+
+obj/btv.b: \
 	obj/lib/x86_64/encoding.bo \
 	obj/lib/x86_64/common.bo \
 	obj/lib/x86_64/convenience.bo \
@@ -25,7 +38,7 @@ BTV_OBJS = \
 	obj/btv/btv.bo \
 	obj/btv/elf.fin.bo
 
-EXAMPLES_EXIT_OBJS = \
+obj/examples/exit.b: \
 	obj/lib/x86_64/encoding.bo \
 	obj/lib/x86_64/common.bo \
 	obj/lib/x86_64/convenience.bo \
@@ -34,30 +47,14 @@ EXAMPLES_EXIT_OBJS = \
 	obj/examples/exit/exit.bo \
 	obj/lib/elf/fin.min.bo
 
-.PHONY: all clean
-
-all: $(BLUE) $(BLUE_BC_OBJS) $(TOOLS) $(EXAMPLES)
-
-clean:
-	rm -rf bin obj
-
-bin obj:
-	mkdir $@
-
-$(BLUE): blue.asm $(FASM) | bin
-	$(FASM) $< $@
-
-obj/%.bo: %.bo.asm $(FASM) b.inc | obj
+obj/%.bo: %.bo.asm $(FASM) b.inc
 	@mkdir -p "$(@D)"
 	$(FASM) $< $@
 
-obj/btv.b: $(BTV_OBJS) | obj
-	cat $^ > $@
-
-obj/examples/exit.b: $(EXAMPLES_EXIT_OBJS) | obj
+obj/%.b:
 	cat $^ > $@
 	
-bin/%: obj/%.b $(BLUE) | bin
+bin/%: obj/%.b $(BLUE)
 	@mkdir -p "$(@D)"
 	$(BLUE) < $< > $@ && chmod +x $@
 
