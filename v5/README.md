@@ -30,6 +30,10 @@ small number of definitions your code quickly goes from low to high level. As an
 
 <img src="./fairwarning.svg">
 
+Here red defines a new word. Yellow numbers are pushed on the stack at assemble time. Yellow italicized words are
+opcodes that run at assemble time. The `b,` for example will pop a value off the stack and compile a byte to the
+output. Cyan cause a word to be treated like a macro. Yellow words are called at assemble time.
+
 This example is essentially the same as when you assemble:
 
 ```
@@ -41,11 +45,6 @@ exit:
 
 call	bye	; except this is run at assemble time
 ```
-
-Here red defines a new word. Yellow numbers are pushed on the stack at assemble time. Yellow italicized words are
-opcodes that run at assemble time. The `b,` for example will pop a value off the stack and compile a byte to the
-output. Cyan cause a word to be treated like a macro. Yellow words are called at assemble time. This is not an
-exhaustive list, just what is shown here.
 
 ## On Colors
 
