@@ -66,13 +66,18 @@ for the input and output buffers at the time the word is defined. If the word is
 the input buffer is used, if the word is called its location in the output buffer is used. The dictionary only 
 exists at assemble time.
 
-The `data stack` used by Blue is a circular buffer with a capacity for 16 elements. The `return stack` is `rsp`. 
-Like the dictionary the stacks only exists at assemble time.
+The `data stack` used by Blue is a circular buffer with a capacity for 16 elements. If this is limiting I would
+argue that you are doing something wrong. I have yet to use more than 3 elements in concert at a given time. The
+wrapping stack is very freeing, you don't have to worry about `drop`s as much or over/underflows. This is
+especially relevant when defining macros.
+
+The `return stack` is `rsp`. Like the dictionary the stacks only exist at assemble time.
 
 ## Building
 
 Install [fasm v1](https://flatassembler.net/) then run `make` or `make -s -j 8`. Once finished `./bin/blue` will be
-available along with bytecode files in `./obj`.
+available along with bytecode files in `./obj`. `./bin/btv` can be used to view any file in `./obj` that is passed
+via stdin. `./bin/examples` contains example binaries built with Blue.
 
 ## Running
 
