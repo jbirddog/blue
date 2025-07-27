@@ -47,7 +47,7 @@ call	bye	; except this is run at assemble time
 By default Blue bytecode is visualized using colors (like `colorForth`) and styles, adding another dimension by
 which information can be relayed to the reader. There is no requirement to use these colors or any colors at
 all. You can easily write a bytecode viewer that uses any means desired to display the bytecode. In the example
-above, the yellow `bye` means that word to be called at assemble time. If yellow is not agreeable, make it pink
+above, the yellow `bye` means that word is to be called at assemble time. If yellow is not agreeable, make it pink
 or underlined, or display it as `@bye`. If you like reading verbose code, display it as `callAtAssembleTime(bye)`.
 
 Running `./bin/btv < obj/btv.bo` will show how each opcode is displayed, including its color and styling. This is
