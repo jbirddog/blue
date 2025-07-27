@@ -32,7 +32,8 @@ small number of definitions your code quickly goes from low to high level. As an
 
 Here red defines a new word. Yellow numbers are pushed on the stack at assemble time. Yellow italicized words are
 opcodes that run at assemble time. The `b,` for example will pop a value off the stack and compile a byte to the
-output. Cyan cause a word to be treated like a macro. Yellow words are called at assemble time.
+output. Cyans cause a word to be treated like a macro. Yellow words are called at assemble time. There are more
+colors and styles, these are just what is shown here.
 
 This example is essentially the same as when you assemble:
 
