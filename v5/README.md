@@ -42,6 +42,11 @@ exit:
 call	bye	; except this is run at assemble time
 ```
 
+Here red defines a new word. Yellow numbers are pushed on the stack at assemble time. Yellow italicized words are
+opcodes that run at assemble time. The `b,` for example will pop a value off the stack and compile a byte to the
+output. Cyan cause a word to be treated like a macro. Yellow words are called at assemble time. This is not an
+exhaustive list, just what is shown here.
+
 ## On Colors
 
 By default Blue bytecode is visualized using colors (like `colorForth`) and styles, adding another dimension by
