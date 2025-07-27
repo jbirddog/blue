@@ -5,6 +5,7 @@ BLUE_BC_ASMS = $(wildcard \
 	*.bo.asm \
 	lib/elf/*.bo.asm \
 	lib/x86_64/*.bo.asm \
+	btv/*.bo.asm \
 )
 BLUE_BC_OBJS = $(BLUE_BC_ASMS:%.bo.asm=obj/%.bo)
 
@@ -15,7 +16,7 @@ BTV_OBJS = \
 	obj/lib/x86_64/encoding.bo \
 	obj/x8664.bo \
 	obj/x8664.linux.bo \
-	obj/btv.macros.bo \
+	obj/btv/macros.bo \
 	obj/lib/elf/headers.min.bo \
 	obj/hexnum.bo \
 	obj/btv.bo \

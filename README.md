@@ -109,7 +109,8 @@ Some links that may help fill in some back story/knowledge in no particular orde
 
 ## TODOs
 
-1. Generalize elf.fin.bo
+1. Move more things to lib
+1. Generalize elf.fin.bo (needs rb support)
 1. Add BC_SAVE, BC_RESTORE
 1. Add BC_TOR, BC_FROMR
 1. Factor hexnum more
