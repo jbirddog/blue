@@ -59,6 +59,16 @@ or underlined, or display it as `@bye`. If you like reading verbose code, displa
 Running `./bin/btv < obj/btv.bo` will show how each opcode is displayed, including its color and styling. This is
 also an example of higher level Blue code.
 
+## Forth Data Structures
+
+Blue has a `dictionary` that can hold up to 256 entries. Each entry associates the address of the current location 
+for the input and output buffers at the time the word is defined. If the word is used as a macro its location in 
+the input buffer is used, if the word is called its location in the output buffer is used. The dictionary only 
+exists at assemble time.
+
+The `data stack` used by Blue is a circular buffer with a capacity for 16 elements. The `return stack` is `rsp`. 
+Like the dictionary the stacks only exists at assemble time.
+
 ## Building
 
 Install [fasm v1](https://flatassembler.net/) then run `make` or `make -s -j`. Once finished `./bin/blue` will be
