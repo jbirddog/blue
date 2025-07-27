@@ -2,7 +2,6 @@
 FASM ?= $(shell which fasm)
 
 BLUE_BC_ASMS = $(wildcard \
-	*.bo.asm \
 	lib/elf/*.bo.asm \
 	lib/x86_64/*.bo.asm \
 	btv/*.bo.asm \
@@ -20,9 +19,9 @@ BTV_OBJS = \
 	obj/lib/x86_64/linux.bo \
 	obj/btv/macros.bo \
 	obj/lib/elf/headers.min.bo \
-	obj/hexnum.bo \
+	obj/btv/hexnum.bo \
 	obj/btv/btv.bo \
-	obj/elf.fin.bo
+	obj/btv/elf.fin.bo
 
 .PHONY: all clean
 
