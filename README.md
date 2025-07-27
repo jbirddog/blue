@@ -3,9 +3,8 @@
 Blue is a single-pass bytecode interpreter for a [colorForth](https://colorforth.github.io/index.html) dialect.
 Unlike the traditional `colorForth` system, Blue is a single shot application with a sole focus on generating
 output, which is typically a binary. Its simplistic nature makes it hard to describe, but think of an assembler
-with no target architecture, output format or separate macro syntax where any label can be used as a macro or 
-called at assemble time - as if `colorForth` and [fasmg](https://flatassembler.net/docs.php?article=fasmg) had 
-a baby.
+with no target architecture, output format or separate macro syntax where any label can be called at assemble time
+or used as a macro - as if `colorForth` and [fasmg](https://flatassembler.net/docs.php?article=fasmg) had a baby.
 
 Blue aims to:
 
@@ -109,16 +108,16 @@ Some links that may help fill in some back story/knowledge in no particular orde
 
 ## TODOs
 
-1. Move more things to lib
-1. Generalize elf.fin.bo (needs rb support)
+1. Generalize btv/elf.fin.bo (needs rb support)
 1. Add BC_SAVE, BC_RESTORE
 1. Add BC_TOR, BC_FROMR
-1. Factor hexnum more
 1. Write Blue in Blue
 
 ### btv
 
-1. Move ashex to btv
-1. `num ashex` to `hexnum`
+1. Add btv/README.md, move this stuff there
+1. Factor `ashex` so `hexnum` can move to lib
+1. Move ansi terminal stuff to lib
+1. Factor hexnum more
 1. Multiple dst writes based on size (needs BC_SAVE/RESTORE)
 1. That trailing space that looks like a leading space issue
