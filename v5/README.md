@@ -3,8 +3,8 @@
 Blue is a single-pass bytecode interpreter for a [colorForth](https://colorforth.github.io/index.html) dialect.
 Unlike the traditional `colorForth` system, Blue is a single shot application with a sole focus on generating
 output, which is typically a binary. Its simplistic nature makes it hard to describe, but think of an assembler
-with no target architecture where any label can become a macro or called at assemble time - as if `colorForth`
-and [fasmg](https://flatassembler.net/docs.php?article=fasmg) had a baby.
+with no target architecture or file format where any label can become a macro or called at assemble time - as if
+`colorForth` and [fasmg](https://flatassembler.net/docs.php?article=fasmg) had a baby.
 
 Blue aims to:
 
@@ -42,9 +42,20 @@ exit:
 call	bye	; except this is run at assemble time
 ```
 
+## On Colors
+
+By default Blue bytecode is visualized using colors (like `colorForth`) and styles, adding another dimension by
+which information can be relayed to the reader. There is no requirement to use these colors or any colors at
+all. You can easily write a bytecode viewer that uses any means desired to display the bytecode. In the example
+above, the yellow `bye` means that word to be called at assemble time. If yellow is not agreeable, make it pink
+or underlined, or display it as `@bye`. If you like reading verbose code, display it as `callAtAssembleTime(bye)`.
+
+Running `./bin/btv < obj/btv.bo` will show how each opcode is displayed, including its color and styling. This is
+also an example of higher level Blue code.
+
 ## Building
 
-Install [fasm](https://flatassembler.net/) then run `make` or `make -s -j`. Once finished `./bin/blue` will be
+Install [fasm v1](https://flatassembler.net/) then run `make` or `make -s -j`. Once finished `./bin/blue` will be
 available along with bytecode files in `./obj`.
 
 ## Running
