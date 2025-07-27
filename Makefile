@@ -19,7 +19,7 @@ BTV_OBJS = \
 	obj/btv/macros.bo \
 	obj/lib/elf/headers.min.bo \
 	obj/hexnum.bo \
-	obj/btv.bo \
+	obj/btv/btv.bo \
 	obj/elf.fin.bo
 
 .PHONY: all clean
