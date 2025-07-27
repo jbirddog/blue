@@ -199,7 +199,7 @@ dq	'"d,"'
 db	BC_NUM_PUSH
 dq	"d,"
 db	BC_WORD_INTERP
-dq	"bout"
+dq	"wout"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE

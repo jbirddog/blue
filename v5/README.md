@@ -2,8 +2,9 @@
 
 Blue is a single-pass bytecode interpreter for a [colorForth](https://colorforth.github.io/index.html) dialect.
 Unlike the traditional `colorForth` system, Blue is a single shot application with a sole focus on generating
-output, which is typically a binary. Like any Forth, an emphasis is placed on building user defined vocabularies
-to describe and solve the problem at hand.
+output, which is typically a binary. Its simplistic nature makes it hard to describe, but think of an assembler
+with no target architecture or file format where any label can become a macro or called at assemble time - as if
+`colorForth` and [fasmg](https://flatassembler.net/docs.php?article=fasmg) had a baby.
 
 Blue aims to:
 
@@ -18,14 +19,49 @@ This is the reference implementation for x86_64 GNU/Linux.
 
 It is important to realize that using Blue is agreeing to step into a world of brutal simplicity and minimalism.
 There are zero guardrails. You will not get an error message let alone a helpful one. Segfaults will happen and
-debugging often means taking a walk to think about what you've done wrong. To do anything non trivial, hand jitting
-some machine code will be required. You will be responsible for, and will understand the role of every byte that
-lands in the output. You will start with virtual nothing and craft exactly what you need, brick by brick.
+debugging often means taking a walk to think about what you've done wrong. Hand jitting some machine code will be
+required to do anything non trivial. You will be responsible for and will understand the role of every byte that
+lands in the output.
+
+## Fair Warning, Illustrated
+
+When using Blue you will start with virtually nothing and craft exactly what you need, brick by brick. With a 
+small number of definitions your code quickly goes from low to high level. As an example:
+
+<img src="./fairwarning.svg">
+
+Here red defines a new word. Yellow numbers are pushed on the stack at assemble time. Yellow italicized words are
+opcodes that run at assemble time. The `b,` for example will pop a value off the stack and compile a byte to the
+output. Cyan causes a word to be treated like a macro. Yellow words are called at assemble time. There are more
+colors and styles, these are just what is shown here.
+
+This example is essentially the same as when you assemble:
+
+```
+bye:
+	xor	edi, edi
+exit:
+	mov	eax, 60
+	syscall
+
+call	bye	; except this is run at assemble time
+```
+
+## On Colors
+
+By default Blue bytecode is visualized using colors (like `colorForth`) and styles, adding another dimension by
+which information can be relayed to the reader. There is no requirement to use these colors or any colors at
+all. You can easily write a bytecode viewer that uses any means desired to display the bytecode. In the example
+above, the yellow `bye` means that word is to be called at assemble time. If yellow is not agreeable, make it pink
+or underlined, or display it as `@bye`. If you like reading verbose code, display it as `callAtAssembleTime(bye)`.
+
+Running `./bin/btv < obj/btv.bo` will show how each opcode is displayed, including its color and styling. This is
+also an example of higher level Blue code.
 
 ## Building
 
-Blue is built using [fasm](https://flatassembler.net/). To build run `make` or `make -s -j`. Once finished
-`./bin/blue` will be available along with bytecode files in `./obj`.
+Install [fasm v1](https://flatassembler.net/) then run `make` or `make -s -j`. Once finished `./bin/blue` will be
+available along with bytecode files in `./obj`.
 
 ## Running
 
