@@ -31,6 +31,9 @@ small number of definitions your code quickly goes from low to high level. As an
 
 <img src="./fairwarning.svg">
 
+_The astute reader will realize that the red `eax` is not used and the red `eax!` can be factored out to something
+like `mov/ri4` that is `B8 + b, d, ;`. Then `eax!` becomes `eax mov/ri4`. This is how factoring works._
+
 Here red defines a new word. Yellow numbers are pushed on the stack at assemble time. Yellow italicized words are
 opcodes that run at assemble time. The `b,` for example will pop a value off the stack and compile a byte to the
 output. Cyan causes a word to be treated like a macro. Yellow words are called at assemble time. There are more
