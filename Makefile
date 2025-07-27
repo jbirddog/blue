@@ -4,6 +4,7 @@ FASM ?= $(shell which fasm)
 BLUE_BC_ASMS = $(wildcard \
 	*.bo.asm \
 	rt/elf/*.bo.asm \
+	rt/x86_64/*.bo.asm \
 )
 BLUE_BC_OBJS = $(BLUE_BC_ASMS:%.bo.asm=obj/%.bo)
 
@@ -11,6 +12,7 @@ BLUE = bin/blue
 TOOLS = bin/btv
 
 BTV_OBJS = \
+	obj/rt/x86_64/encoding.bo \
 	obj/x8664.bo \
 	obj/x8664.linux.bo \
 	obj/btv.macros.bo \

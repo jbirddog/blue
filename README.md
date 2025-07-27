@@ -71,7 +71,7 @@ Like the dictionary the stacks only exists at assemble time.
 
 ## Building
 
-Install [fasm v1](https://flatassembler.net/) then run `make` or `make -s -j`. Once finished `./bin/blue` will be
+Install [fasm v1](https://flatassembler.net/) then run `make` or `make -s -j 8`. Once finished `./bin/blue` will be
 available along with bytecode files in `./obj`.
 
 ## Running
@@ -83,7 +83,7 @@ output to stdout.
 
 By convention Blue bytecode files have a `.b` extension. A `.bo` file indicates partial bytecode that is meant to
 be joined into a complete `.b` file. This "linking" step is typically done with `cat`. Breaking code out into
-separate `.bo` files aids in code reuse and can speed up build times when `make -j` or similar is run. The
+separate `.bo` files aids in code reuse and can speed up build times when `make -j 8` or similar is run. The
 `Makefile` shows how bytecode is built/combined and intepreted to build standalone binaries.
 
 Currently there is no bytecode editor like you would see in a traditional `colorForth` system. I am using `fasm`
