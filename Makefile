@@ -1,50 +1,40 @@
-include common.mk
 
-INCS = $(wildcard *.inc)
+FASM ?= $(shell which fasm)
 
-TESTS = $(wildcard test/*.bla)
-TEST_OBJS = $(TESTS:test/%.bla=obj/test_%.bs0)
+BLUE_BC_ASMS = $(wildcard *.bo.asm)
+BLUE_BC_OBJS = $(BLUE_BC_ASMS:%.bo.asm=obj/%.bo)
 
-GEN_FILES = $(BLUEVM_OPS_TBL) $(README)
+BLUE = bin/blue
+TOOLS = bin/btv
 
-LANGS = lang/blasm
-TOOLS = tools/bth
+BTV_OBJS = \
+	obj/x8664.bo \
+	obj/x8664.linux.bo \
+	obj/btv.macros.bo \
+	obj/elf.bo \
+	obj/hexnum.bo \
+	obj/btv.bo \
+	obj/elf.fin.bo
 
-.PHONY: all clean test $(LANGS) $(TOOLS)
+.PHONY: all clean
 
-all: $(BLUEVM) \
-	$(GEN_FILES) \
-	$(LANGS) \
-	$(TOOLS) \
-	$(TEST_OBJS) \
-	test
+all: $(BLUE) $(BLUE_BC_OBJS) $(TOOLS)
 
-clean: $(LANGS) $(TOOLS)
-	rm -rf bin obj $(GEN_FILES)
+clean:
+	rm -rf bin obj
 
 bin obj:
 	mkdir $@
 
-$(FASM2):
-	git submodule update --init
+$(BLUE): blue.asm $(FASM) | bin
+	$(FASM) $< $@
+
+obj/%.bo: %.bo.asm $(FASM) b.inc | obj
+	$(FASM) $< $@
+
+obj/btv.b: $(BTV_OBJS) | obj
+	cat $^ > $@
 	
-$(BLUEVM): bluevm.asm $(INCS) $(FASM2) | bin
-	$(FASM2) $< $@
+bin/%: obj/%.b $(BLUE) | bin
+	 $(BLUE) < $< > $@ && chmod +x $@
 
-$(BLUEVM_OPS_TBL): $(BLUEVM_OPS_INC)
-	$(SED_TBL) $< > $@
-
-$(LANGS) $(TOOLS):
-	$(MAKE) -C $@ $(MAKECMDGOALS) || exit
-
-obj/test_%.bs0: test/%.bla $(BLASM) | obj
-	$(BLASM) -n $< $@
-
-test: $(TOOLS)
-	$(PROVE) obj/test_*
-	
-$(README): $(README).sh $(README).tmpl $(BLUEVM_OPS_TBL)
-	./$< > $@
-	
-scratch: scratch.asm $(FASM2)
-	$(FASM2) $< $@
