@@ -269,7 +269,7 @@ entry $
 	mov	REG_SRC, _src
 	mov	REG_DST, _dst
 	mov	REG_DS, DS_BASE
-	mov	REG_LAST, _dict.last
+	mov	REG_LAST, _dict - DICT_ENTRY_SIZE
 
 	jmp	next
 
@@ -284,15 +284,8 @@ dq	dollar_caddr, dollar_raddr, dst_base, dst_base_set
 dq	set, fetch, comma_b, comma_w, comma_d, comma
 dq	ed_nl
 
-;;; dictionary
+;;; reserved
 
-_dict:
-.last:
-dq	"$$", dst_base, 0
-
-rb (DICT_SIZE - ($ - _dict))
-
-;;; buffers
-
-_dst: rb DST_SIZE
-_src: rb SRC_SIZE
+_dict rb DICT_SIZE
+_dst rb DST_SIZE
+_src rb SRC_SIZE
