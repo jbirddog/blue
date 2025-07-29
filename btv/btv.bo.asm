@@ -432,6 +432,13 @@ db	BC_WORD_RADDR
 dq	"$_raddr"
 db	BC_COMMA
 db	BC_WORD_RADDR
+dq	"dstbase"
+db	BC_COMMA
+db	BC_WORD_RADDR
+dq	"dstbase!"
+db	BC_COMMA
+db	BC_ED_NL
+db	BC_WORD_RADDR
 dq	"set"
 db	BC_COMMA
 db	BC_WORD_RADDR

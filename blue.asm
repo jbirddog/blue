@@ -208,6 +208,12 @@ dollar_raddr:
 	mov	rax, REG_DST
 	jmp	raddr
 
+dollar_gt:
+	jmp	next
+
+dollar_gt_set:
+	jmp	next
+	
 set:
 	call	ds_pop
 	mov	rbx, rax
@@ -271,7 +277,8 @@ dq	fin
 dq	word_define, word_end, word_ccall, word_rcall, word_interp, word_caddr, word_raddr
 dq	num_comp, num_push
 dq	k_dup, k_add, k_sub, k_or, k_shl
-dq	dollar_caddr, dollar_raddr, set, fetch, comma_b, comma_w, comma_d, comma
+dq	dollar_caddr, dollar_raddr, dollar_gt, dollar_gt_set
+dq	set, fetch, comma_b, comma_w, comma_d, comma
 dq	ed_nl
 
 ;;; dictionary
