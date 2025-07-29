@@ -284,6 +284,26 @@ db	BC_WORD_END
 db	BC_ED_NL
 
 db	BC_WORD_DEFINE
+dq	"dstbase"
+db	BC_WORD_RCALL
+dq	"vizop"
+db	BC_WORD_INTERP
+dq	'"$>"'
+db	BC_WORD_END
+
+db	BC_ED_NL
+
+db	BC_WORD_DEFINE
+dq	"dstbase!"
+db	BC_WORD_RCALL
+dq	"vizop"
+db	BC_WORD_INTERP
+dq	'"$>!"'
+db	BC_WORD_END
+
+db	BC_ED_NL
+
+db	BC_WORD_DEFINE
 dq	"set"
 db	BC_WORD_RCALL
 dq	"vizop"

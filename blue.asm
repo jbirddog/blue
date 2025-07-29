@@ -30,7 +30,7 @@ REG_DS equ r13
 
 ;;; kernel
 
-dollar_dollar	dq _dst
+dst_base	dq _dst
 
 ds_push:
 	mov	[REG_DS], rax
@@ -74,7 +74,7 @@ xt:
 
 fin:
 	mov	rdx, REG_DST
-	mov	rsi, [dollar_dollar]
+	mov	rsi, [dst_base]
 	
 	xor	edi, edi
 	inc	edi
@@ -144,7 +144,7 @@ word_caddr:
 word_raddr:
 	call	xt
 raddr:
-	sub	rax, [dollar_dollar]
+	sub	rax, [dst_base]
 	add	rax, K_ORG
 	call	ds_push
 	jmp	next
@@ -278,7 +278,7 @@ dq	ed_nl
 
 _dict:
 .last:
-dq	"$$", dollar_dollar, 0
+dq	"$$", dst_base, 0
 
 rb (DICT_SIZE - ($ - _dict))
 
