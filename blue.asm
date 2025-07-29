@@ -17,6 +17,8 @@ DS_SIZE = CELL_SIZE * 16
 DS_MASK = DS_SIZE - 1
 DS_BASE = $ - DS_SIZE
 
+K_ORG = DS_BASE
+
 assert DS_SIZE and DS_MASK = 0
 assert DS_BASE and DS_MASK = 0
 
@@ -28,7 +30,6 @@ REG_DS equ r13
 
 ;;; kernel
 
-k_org		dq DS_BASE
 dollar_dollar	dq _dst
 
 ds_push:
@@ -144,7 +145,7 @@ word_raddr:
 	call	xt
 raddr:
 	sub	rax, [dollar_dollar]
-	add	rax, [k_org]
+	add	rax, K_ORG
 	call	ds_push
 	jmp	next
 
@@ -276,7 +277,6 @@ dq	ed_nl
 ;;; dictionary
 
 _dict:
-dq	"org", k_org, 0
 .last:
 dq	"$$", dollar_dollar, 0
 
