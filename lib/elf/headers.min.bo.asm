@@ -19,9 +19,7 @@ include "b.inc"
 db	BC_WORD_DEFINE
 dq	"elfhdrs"
 db	BC_DOLLAR_CADDR
-db	BC_WORD_CADDR
-dq	"$$"
-db	BC_SET
+db	BC_DST_BASE_SET
 
 db	BC_ED_NL
 

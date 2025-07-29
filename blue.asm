@@ -30,8 +30,6 @@ REG_DS equ r13
 
 ;;; kernel
 
-dst_base	dq _dst
-
 ds_push:
 	mov	[REG_DS], rax
 	add	REG_DS, CELL_SIZE
@@ -74,7 +72,7 @@ xt:
 
 fin:
 	mov	rdx, REG_DST
-	mov	rsi, [dst_base]
+	mov	rsi, [dst_base.val]
 	
 	xor	edi, edi
 	inc	edi
@@ -144,7 +142,7 @@ word_caddr:
 word_raddr:
 	call	xt
 raddr:
-	sub	rax, [dst_base]
+	sub	rax, [dst_base.val]
 	add	rax, K_ORG
 	call	ds_push
 	jmp	next
@@ -208,10 +206,15 @@ dollar_raddr:
 	mov	rax, REG_DST
 	jmp	raddr
 
-dollar_gt:
+dst_base:
+	mov	rax, [dst_base.val]
+	call	ds_push
 	jmp	next
+.val	dq	_dst
 
-dollar_gt_set:
+dst_base_set:
+	call	ds_pop
+	mov	[dst_base.val], rax
 	jmp	next
 	
 set:
@@ -277,7 +280,7 @@ dq	fin
 dq	word_define, word_end, word_ccall, word_rcall, word_interp, word_caddr, word_raddr
 dq	num_comp, num_push
 dq	k_dup, k_add, k_sub, k_or, k_shl
-dq	dollar_caddr, dollar_raddr, dollar_gt, dollar_gt_set
+dq	dollar_caddr, dollar_raddr, dst_base, dst_base_set
 dq	set, fetch, comma_b, comma_w, comma_d, comma
 dq	ed_nl
 

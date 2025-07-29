@@ -3,8 +3,7 @@ include "b.inc"
 db	BC_ED_NL
 
 db	BC_DOLLAR_CADDR
-db	BC_WORD_CADDR
-dq	"elfhdrs"
+db	BC_DST_BASE
 db	BC_SUB
 
 db	BC_DUP
