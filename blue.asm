@@ -30,8 +30,6 @@ REG_DS equ r13
 
 ;;; kernel
 
-dollar_dollar	dq _dst
-
 ds_push:
 	mov	[REG_DS], rax
 	add	REG_DS, CELL_SIZE
@@ -74,7 +72,7 @@ xt:
 
 fin:
 	mov	rdx, REG_DST
-	mov	rsi, [dollar_dollar]
+	mov	rsi, [dst_base.val]
 	
 	xor	edi, edi
 	inc	edi
@@ -144,7 +142,7 @@ word_caddr:
 word_raddr:
 	call	xt
 raddr:
-	sub	rax, [dollar_dollar]
+	sub	rax, [dst_base.val]
 	add	rax, K_ORG
 	call	ds_push
 	jmp	next
@@ -208,6 +206,17 @@ dollar_raddr:
 	mov	rax, REG_DST
 	jmp	raddr
 
+dst_base:
+	mov	rax, [dst_base.val]
+	call	ds_push
+	jmp	next
+.val	dq	_dst
+
+dst_base_set:
+	call	ds_pop
+	mov	[dst_base.val], rax
+	jmp	next
+	
 set:
 	call	ds_pop
 	mov	rbx, rax
@@ -260,7 +269,7 @@ entry $
 	mov	REG_SRC, _src
 	mov	REG_DST, _dst
 	mov	REG_DS, DS_BASE
-	mov	REG_LAST, _dict.last
+	mov	REG_LAST, _dict - DICT_ENTRY_SIZE
 
 	jmp	next
 
@@ -271,18 +280,12 @@ dq	fin
 dq	word_define, word_end, word_ccall, word_rcall, word_interp, word_caddr, word_raddr
 dq	num_comp, num_push
 dq	k_dup, k_add, k_sub, k_or, k_shl
-dq	dollar_caddr, dollar_raddr, set, fetch, comma_b, comma_w, comma_d, comma
+dq	dollar_caddr, dollar_raddr, dst_base, dst_base_set
+dq	set, fetch, comma_b, comma_w, comma_d, comma
 dq	ed_nl
 
-;;; dictionary
+;;; reserved
 
-_dict:
-.last:
-dq	"$$", dollar_dollar, 0
-
-rb (DICT_SIZE - ($ - _dict))
-
-;;; buffers
-
-_dst: rb DST_SIZE
-_src: rb SRC_SIZE
+_dict rb DICT_SIZE
+_dst rb DST_SIZE
+_src rb SRC_SIZE
