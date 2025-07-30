@@ -121,7 +121,6 @@ Some links that may help fill in some back story/knowledge in no particular orde
 
 ## TODOs
 
-1. Change BC_DOLLAR_CADDR to `$*`, the white vs yellow is hard to distinguish
 1. Make `$>` just push its addr, use `! @` to read/write
 1. Generalize btv/elf.fin.bo (needs rb support)
 1. Add BC_SAVE, BC_RESTORE
