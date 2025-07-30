@@ -163,11 +163,19 @@ dq	"bout"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
-dq	'"$>"'
+dq	'"*"'
 db	BC_NUM_PUSH
-dq	"$>"
+dq	"*"
 db	BC_WORD_INTERP
-dq	"wout"
+dq	"bout"
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	'">"'
+db	BC_NUM_PUSH
+dq	">"
+db	BC_WORD_INTERP
+dq	"bout"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
@@ -179,19 +187,37 @@ dq	"bout"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
-dq	'"$>!"'
-db	BC_WORD_INTERP
-dq	'"$>"'
-db	BC_WORD_INTERP
-dq	'"!"'
-db	BC_WORD_END
-
-db	BC_WORD_DEFINE
 dq	'"@"'
 db	BC_NUM_PUSH
 dq	"@"
 db	BC_WORD_INTERP
 dq	"bout"
+db	BC_WORD_END
+
+db	BC_ED_NL
+
+db	BC_WORD_DEFINE
+dq	'"$*"'
+db	BC_WORD_INTERP
+dq	'"$"'
+db	BC_WORD_INTERP
+dq	'"*"'
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	'"$>"'
+db	BC_WORD_INTERP
+dq	'"$"'
+db	BC_WORD_INTERP
+dq	'">"'
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	'"$>!"'
+db	BC_WORD_INTERP
+dq	'"$>"'
+db	BC_WORD_INTERP
+dq	'"!"'
 db	BC_WORD_END
 
 db	BC_ED_NL
