@@ -309,33 +309,35 @@ db	BC_WORD_END
 db	BC_WORD_DEFINE
 dq	"yellow"
 db	BC_NUM_PUSH
-dq	"33"
+db	0x1B, "[33", 0, 0, 0, 0
 db	BC_WORD_INTERP
-dq	"wout"
+dq	"dout"
 db	BC_WORD_END
+
+db	BC_ED_NL
 
 db	BC_WORD_DEFINE
 dq	"magenta"
 db	BC_NUM_PUSH
-dq	"35"
+db	0x1B, "[35", 0, 0, 0, 0
 db	BC_WORD_INTERP
-dq	"wout"
+dq	"dout"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
 dq	"cyan"
 db	BC_NUM_PUSH
-dq	"36"
+db	0x1B, "[36", 0, 0, 0, 0
 db	BC_WORD_INTERP
-dq	"wout"
+dq	"dout"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
 dq	"white"
 db	BC_NUM_PUSH
-dq	"37"
+db	0x1B, "[37", 0, 0, 0, 0
 db	BC_WORD_INTERP
-dq	"wout"
+dq	"dout"
 db	BC_WORD_END
 
 db	BC_ED_NL

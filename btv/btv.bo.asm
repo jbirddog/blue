@@ -22,17 +22,15 @@ db	BC_ED_NL
 db	BC_WORD_DEFINE
 dq	"vizop"
 db	BC_WORD_INTERP
-dq	"is"
-db	BC_WORD_INTERP
 dq	"yellow"
 db	BC_WORD_INTERP
 dq	"and"
 db	BC_WORD_INTERP
-dq	"bold"
+dq	"italic"
 db	BC_WORD_INTERP
 dq	"and"
 db	BC_WORD_INTERP
-dq	"italic"
+dq	"bold"
 db	BC_WORD_INTERP
 dq	"shows"
 db	BC_WORD_END
@@ -101,8 +99,6 @@ db	BC_ED_NL
 db	BC_WORD_DEFINE
 dq	"w_ccall"
 db	BC_WORD_INTERP
-dq	"is"
-db	BC_WORD_INTERP
 dq	"yellow"
 db	BC_WORD_RCALL
 dq	"word"
@@ -123,8 +119,6 @@ db	BC_ED_NL
 db	BC_WORD_DEFINE
 dq	"w_interp"
 db	BC_WORD_INTERP
-dq	"is"
-db	BC_WORD_INTERP
 dq	"cyan"
 db	BC_WORD_RCALL
 dq	"word"
@@ -135,8 +129,6 @@ db	BC_ED_NL
 db	BC_WORD_DEFINE
 dq	"w_caddr"
 db	BC_WORD_INTERP
-dq	"is"
-db	BC_WORD_INTERP
 dq	"magenta"
 db	BC_WORD_RCALL
 dq	"word"
@@ -146,8 +138,6 @@ db	BC_ED_NL
 
 db	BC_WORD_DEFINE
 dq	"w_raddr"
-db	BC_WORD_INTERP
-dq	"is"
 db	BC_WORD_INTERP
 dq	"white"
 db	BC_WORD_RCALL
@@ -168,8 +158,6 @@ db	BC_ED_NL
 
 db	BC_WORD_DEFINE
 dq	"num_push"
-db	BC_WORD_INTERP
-dq	"is"
 db	BC_WORD_INTERP
 dq	"yellow"
 db	BC_WORD_RCALL
