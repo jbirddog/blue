@@ -293,17 +293,17 @@ db	BC_ED_NL
 db	BC_WORD_DEFINE
 dq	"red"
 db	BC_NUM_PUSH
-dq	"31"
+db	0x1B, "[31", 0, 0, 0, 0
 db	BC_WORD_INTERP
-dq	"wout"
+dq	"dout"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
 dq	"green"
 db	BC_NUM_PUSH
-dq	"32"
+db	0x1B, "[32", 0, 0, 0, 0
 db	BC_WORD_INTERP
-dq	"wout"
+dq	"dout"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE

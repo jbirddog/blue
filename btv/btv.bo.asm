@@ -82,8 +82,6 @@ db	BC_ED_NL
 db	BC_WORD_DEFINE
 dq	"w_define"
 db	BC_WORD_INTERP
-dq	"is"
-db	BC_WORD_INTERP
 dq	"red"
 db	BC_WORD_RCALL
 dq	"word"
@@ -114,8 +112,6 @@ db	BC_ED_NL
 
 db	BC_WORD_DEFINE
 dq	"w_rcall"
-db	BC_WORD_INTERP
-dq	"is"
 db	BC_WORD_INTERP
 dq	"green"
 db	BC_WORD_RCALL
@@ -162,8 +158,6 @@ db	BC_ED_NL
 
 db	BC_WORD_DEFINE
 dq	"num_comp"
-db	BC_WORD_INTERP
-dq	"is"
 db	BC_WORD_INTERP
 dq	"green"
 db	BC_WORD_RCALL
