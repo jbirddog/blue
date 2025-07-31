@@ -9,7 +9,7 @@ db	BC_WORD_END
 db	BC_WORD_DEFINE
 dq	"dstsz"
 db	BC_NUM_PUSH
-dq	0x3000
+dq	0x2000
 db	BC_WORD_END
 
 db	BC_ED_NL
