@@ -129,9 +129,11 @@ Some links that may help fill in some back story/knowledge in no particular orde
 
 ### btv
 
+1. Multiple dst writes based on size (needs btv save/restore)
+   1. Drop `dstsz` back down
+1. Factor enough so that `dstout` calls `print`, remove `writedst`
 1. Add btv/README.md, move this stuff there
 1. Factor `ashex` so `hexnum` can move to lib
 1. Move ansi terminal stuff to lib
 1. Factor hexnum more
-1. Multiple dst writes based on size (needs BC_SAVE/RESTORE)
 1. That trailing space that looks like a leading space issue
