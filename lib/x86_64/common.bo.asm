@@ -27,7 +27,7 @@ dq	0x050F
 db	BC_COMMA_W
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"lodsb"
@@ -71,7 +71,7 @@ dq	0xAB
 db	BC_COMMA_B
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"xlatb"
@@ -80,4 +80,4 @@ dq	0xD7
 db	BC_COMMA_B
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL

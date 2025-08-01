@@ -9,7 +9,7 @@ db	BC_WORD_CADDR
 dq	"dst"
 db	BC_SET
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_DOLLAR_RADDR
 db	BC_WORD_INTERP
@@ -23,5 +23,5 @@ db	BC_WORD_CADDR
 dq	"src"
 db	BC_SET
 
-db	BC_ED_NL
+db	BC_DSP_NL
 

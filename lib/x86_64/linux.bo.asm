@@ -16,7 +16,7 @@ db	BC_WORD_INTERP
 dq	"syscall"
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"print"
@@ -40,7 +40,7 @@ db	BC_WORD_INTERP
 dq	"syscall"
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"bye"
@@ -59,5 +59,5 @@ db	BC_WORD_INTERP
 dq	"syscall"
 db	BC_WORD_END
 
-db	BC_ED_NL
-db	BC_ED_NL
+db	BC_DSP_NL
+db	BC_DSP_NL

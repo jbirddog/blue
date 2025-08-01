@@ -8,7 +8,7 @@ db	BC_NUM_PUSH
 dq	0x2000
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"opcode"
@@ -31,8 +31,8 @@ db	BC_COMMA_B
 db	BC_COMMA_D
 db	BC_WORD_END
 
-db	BC_ED_NL
-db	BC_ED_NL
+db	BC_DSP_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"bout"
@@ -58,7 +58,7 @@ db	BC_WORD_INTERP
 dq	"stosd"
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	'"\n"'
@@ -76,7 +76,7 @@ db	BC_WORD_INTERP
 dq	"bout"
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	'"fin"'
@@ -98,7 +98,7 @@ db	BC_WORD_INTERP
 dq	"bout"
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	'"dup"'
@@ -148,7 +148,7 @@ db	BC_WORD_INTERP
 dq	"bout"
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	'"$"'
@@ -190,7 +190,7 @@ db	BC_WORD_INTERP
 dq	"bout"
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	'"$*"'
@@ -216,7 +216,7 @@ db	BC_WORD_INTERP
 dq	'"!"'
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	'"b,"'
@@ -250,7 +250,7 @@ db	BC_WORD_INTERP
 dq	"bout"
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"reset"
@@ -276,7 +276,7 @@ db	BC_WORD_INTERP
 dq	"bout"
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"red"
@@ -302,7 +302,7 @@ db	BC_WORD_INTERP
 dq	"dout"
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"magenta"
@@ -328,7 +328,7 @@ db	BC_WORD_INTERP
 dq	"dout"
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"bold"
@@ -346,8 +346,8 @@ db	BC_WORD_INTERP
 dq	"bout"
 db	BC_WORD_END
 
-db	BC_ED_NL
-db	BC_ED_NL
+db	BC_DSP_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"name"
@@ -355,7 +355,7 @@ db	BC_WORD_INTERP
 dq	"movsq"
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"num"
@@ -363,8 +363,8 @@ db	BC_WORD_INTERP
 dq	"lodsq"
 db	BC_WORD_END
 
-db	BC_ED_NL
-db	BC_ED_NL
+db	BC_DSP_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"readsrc"
@@ -384,7 +384,7 @@ db	BC_WORD_INTERP
 dq	"readin"
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"init"
@@ -402,7 +402,7 @@ db	BC_NUM_COMP
 dq	0x00
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"writedst"
@@ -433,5 +433,5 @@ db	BC_WORD_INTERP
 dq	"writeout"
 db	BC_WORD_END
 
-db	BC_ED_NL
-db	BC_ED_NL
+db	BC_DSP_NL
+db	BC_DSP_NL

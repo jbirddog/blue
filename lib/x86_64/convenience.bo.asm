@@ -35,7 +35,7 @@ dq	0xBF48
 db	BC_COMMA_W
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"al!"
@@ -75,7 +75,7 @@ dq	"rsi="
 db	BC_COMMA
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"!0"
@@ -93,5 +93,5 @@ db	BC_WORD_INTERP
 dq	"inc"
 db	BC_WORD_END
 
-db	BC_ED_NL
-db	BC_ED_NL
+db	BC_DSP_NL
+db	BC_DSP_NL

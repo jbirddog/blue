@@ -194,7 +194,7 @@ k_shl:
 	call	ds_push
 	jmp	next
 
-ed_nl:
+dsp_nl:
 	jmp	next
 
 dollar_caddr:
@@ -282,7 +282,7 @@ dq	num_comp, num_push
 dq	k_dup, k_add, k_sub, k_or, k_shl
 dq	dollar_caddr, dollar_raddr, dst_base, dst_base_set
 dq	set, fetch, comma_b, comma_w, comma_d, comma
-dq	ed_nl
+dq	dsp_nl
 
 ;;; reserved
 
