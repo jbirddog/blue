@@ -2,10 +2,6 @@ include "b.inc"
 
 db	BC_WORD_DEFINE
 dq	"srcsz"
-db	BC_NUM_PUSH
-dq	0x2000
-db	BC_WORD_END
-
 db	BC_WORD_DEFINE
 dq	"dstsz"
 db	BC_NUM_PUSH
@@ -262,14 +258,6 @@ db	BC_NUM_PUSH
 db	0x1B, "[0m", 0, 0, 0, 0
 db	BC_WORD_INTERP
 dq	"dout"
-db	BC_WORD_END
-
-db	BC_WORD_DEFINE
-dq	"is"
-db	BC_NUM_PUSH
-db	0x1B, "[", 0, 0, 0, 0, 0, 0
-db	BC_WORD_INTERP
-dq	"wout"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE

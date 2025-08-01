@@ -16,7 +16,7 @@ TOOLS = bin/btv
 
 EXAMPLES = \
 	bin/examples/exit \
-	bin/examples/helloworld \
+	bin/examples/helloworld
 
 .PHONY: all clean
 
@@ -40,6 +40,8 @@ obj/btv.b: \
 	obj/lib/elf/headers.min.bo \
 	obj/btv/hexnum.bo \
 	obj/btv/btv.bo \
+	obj/btv/main.bo \
+	obj/btv/fin.bo \
 	obj/btv/elf.fin.bo
 
 obj/examples/exit.b: \
