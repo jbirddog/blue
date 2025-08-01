@@ -9,7 +9,7 @@ dq	"01234567"
 db	BC_NUM_COMP
 dq	"89ABCDEF"
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"nibble"
@@ -31,7 +31,7 @@ db	BC_COMMA_W
 
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"hexchr"
@@ -43,7 +43,7 @@ db	BC_WORD_INTERP
 dq	"stosb"
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"hexdigit"
@@ -78,7 +78,7 @@ db	BC_COMMA_B
 
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"hexstr"
@@ -116,7 +116,7 @@ db	BC_WORD_RCALL
 dq	"hexdigit"
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"ashex"
@@ -131,5 +131,5 @@ db	BC_WORD_RCALL
 dq	"hexstr"
 db	BC_WORD_END
 
-db	BC_ED_NL
-db	BC_ED_NL
+db	BC_DSP_NL
+db	BC_DSP_NL

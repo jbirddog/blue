@@ -1,6 +1,6 @@
 include "b.inc"
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_DOLLAR_CADDR
 db	BC_DST_BASE

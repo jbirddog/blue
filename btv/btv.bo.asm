@@ -5,7 +5,7 @@ dq	"dstout"
 db	BC_WORD_INTERP
 dq	"writedst"
 db	BC_WORD_END
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"exits"
@@ -17,7 +17,7 @@ db	BC_WORD_RCALL
 dq	"dstout"
 db	BC_WORD_INTERP
 dq	"bye"
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"vizop"
@@ -34,7 +34,7 @@ dq	"bold"
 db	BC_WORD_INTERP
 dq	"shows"
 db	BC_WORD_END
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"word"
@@ -47,7 +47,7 @@ dq	"shows"
 db	BC_WORD_INTERP
 dq	"name"
 db	BC_WORD_END
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"hexnum"
@@ -62,9 +62,9 @@ dq	"num"
 db	BC_WORD_INTERP
 dq	"ashex"
 db	BC_WORD_END
-db	BC_ED_NL
+db	BC_DSP_NL
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"fin"
@@ -75,7 +75,7 @@ dq	'"fin"'
 db	BC_WORD_RCALL
 dq	"exits"
 db	BC_WORD_END
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"w_define"
@@ -84,7 +84,7 @@ dq	"red"
 db	BC_WORD_RCALL
 dq	"word"
 db	BC_WORD_END
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"w_end"
@@ -94,7 +94,7 @@ db	BC_WORD_INTERP
 dq	'";"'
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"w_ccall"
@@ -104,7 +104,7 @@ db	BC_WORD_RCALL
 dq	"word"
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"w_rcall"
@@ -114,7 +114,7 @@ db	BC_WORD_RCALL
 dq	"word"
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"w_interp"
@@ -124,7 +124,7 @@ db	BC_WORD_RCALL
 dq	"word"
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"w_caddr"
@@ -134,7 +134,7 @@ db	BC_WORD_RCALL
 dq	"word"
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"w_raddr"
@@ -144,7 +144,7 @@ db	BC_WORD_RCALL
 dq	"word"
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"num_comp"
@@ -154,7 +154,7 @@ db	BC_WORD_RCALL
 dq	"hexnum"
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"num_push"
@@ -164,7 +164,7 @@ db	BC_WORD_RCALL
 dq	"hexnum"
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"dup"
@@ -174,7 +174,7 @@ db	BC_WORD_INTERP
 dq	'"dup"'
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"add"
@@ -184,7 +184,7 @@ db	BC_WORD_INTERP
 dq	'"+"'
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"sub"
@@ -194,7 +194,7 @@ db	BC_WORD_INTERP
 dq	'"-"'
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"or"
@@ -204,7 +204,7 @@ db	BC_WORD_INTERP
 dq	'"or"'
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"shl"
@@ -214,7 +214,7 @@ db	BC_WORD_INTERP
 dq	'"shl"'
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"$_caddr"
@@ -224,7 +224,7 @@ db	BC_WORD_INTERP
 dq	'"$"'
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"$_raddr"
@@ -234,7 +234,7 @@ db	BC_WORD_INTERP
 dq	'"$*"'
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"dstbase"
@@ -244,7 +244,7 @@ db	BC_WORD_INTERP
 dq	'"$>"'
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"dstbase!"
@@ -254,7 +254,7 @@ db	BC_WORD_INTERP
 dq	'"$>!"'
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"set"
@@ -264,7 +264,7 @@ db	BC_WORD_INTERP
 dq	'"!"'
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"fetch"
@@ -274,7 +274,7 @@ db	BC_WORD_INTERP
 dq	'"@"'
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"comma_b"
@@ -284,7 +284,7 @@ db	BC_WORD_INTERP
 dq	'"b,"'
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"comma_w"
@@ -294,7 +294,7 @@ db	BC_WORD_INTERP
 dq	'"w,"'
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"comma_d"
@@ -304,7 +304,7 @@ db	BC_WORD_INTERP
 dq	'"d,"'
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"comma"
@@ -314,7 +314,7 @@ db	BC_WORD_INTERP
 dq	'","'
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"ed_nl"
@@ -322,17 +322,17 @@ db	BC_WORD_INTERP
 dq	'"\n"'
 db	BC_WORD_END
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
-db	BC_ED_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"lookup"
-db	BC_ED_NL
+db	BC_DSP_NL
 db	BC_WORD_RADDR
 dq	"fin"
 db	BC_COMMA
-db	BC_ED_NL
+db	BC_DSP_NL
 db	BC_WORD_RADDR
 dq	"w_define"
 db	BC_COMMA
@@ -354,14 +354,14 @@ db	BC_COMMA
 db	BC_WORD_RADDR
 dq	"w_raddr"
 db	BC_COMMA
-db	BC_ED_NL
+db	BC_DSP_NL
 db	BC_WORD_RADDR
 dq	"num_comp"
 db	BC_COMMA
 db	BC_WORD_RADDR
 dq	"num_push"
 db	BC_COMMA
-db	BC_ED_NL
+db	BC_DSP_NL
 db	BC_WORD_RADDR
 dq	"dup"
 db	BC_COMMA
@@ -377,7 +377,7 @@ db	BC_COMMA
 db	BC_WORD_RADDR
 dq	"shl"
 db	BC_COMMA
-db	BC_ED_NL
+db	BC_DSP_NL
 db	BC_WORD_RADDR
 dq	"$_caddr"
 db	BC_COMMA
@@ -390,7 +390,7 @@ db	BC_COMMA
 db	BC_WORD_RADDR
 dq	"dstbase!"
 db	BC_COMMA
-db	BC_ED_NL
+db	BC_DSP_NL
 db	BC_WORD_RADDR
 dq	"set"
 db	BC_COMMA
@@ -409,10 +409,10 @@ db	BC_COMMA
 db	BC_WORD_RADDR
 dq	"comma"
 db	BC_COMMA
-db	BC_ED_NL
+db	BC_DSP_NL
 db	BC_WORD_RADDR
 dq	"ed_nl"
 db	BC_COMMA
 
-db	BC_ED_NL
-db	BC_ED_NL
+db	BC_DSP_NL
+db	BC_DSP_NL
