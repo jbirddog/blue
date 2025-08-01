@@ -317,7 +317,7 @@ db	BC_WORD_END
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
-dq	"ed_nl"
+dq	"dsp_nl"
 db	BC_WORD_INTERP
 dq	'"\n"'
 db	BC_WORD_END
@@ -411,7 +411,7 @@ dq	"comma"
 db	BC_COMMA
 db	BC_DSP_NL
 db	BC_WORD_RADDR
-dq	"ed_nl"
+dq	"dsp_nl"
 db	BC_COMMA
 
 db	BC_DSP_NL
