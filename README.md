@@ -126,8 +126,6 @@ Some links that may help fill in some back story/knowledge in no particular orde
 
 ## Blue in Blue (bib)
 
-1. Move btv/fin.bo.asm to blue
-1. Move btv/elf.fin.bo.asm to blue
 1. Add tests, start getting them to pass in bib
    1. fin
    1. nl
@@ -140,7 +138,8 @@ Some links that may help fill in some back story/knowledge in no particular orde
 ### btv
 
 1. Multiple dst writes based on size (needs btv save/restore)
-1. Factor enough so that `dstout` calls `print`, remove `writedst`
+1. Look at using blue/fin.bo
+1. Look at using blue/srcdst.bo
 1. Add btv/README.md, move this stuff there
 1. Factor `ashex` so `hexnum` can move to lib
 1. Move ansi terminal stuff to lib
