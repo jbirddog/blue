@@ -4,6 +4,7 @@ FASM ?= $(shell which fasm)
 BLUE_BC_ASMS = $(wildcard \
 	lib/elf/*.bo.asm \
 	lib/x86_64/*.bo.asm \
+	blue/*.bo.asm \
 	btv/*.bo.asm \
 	examples/exit/*.bo.asm \
 	examples/helloworld/*.bo.asm \
@@ -39,7 +40,8 @@ obj/btv.b: \
 	obj/btv/macros.bo \
 	obj/lib/elf/headers.min.bo \
 	obj/btv/hexnum.bo \
-	obj/btv/btv.bo \
+	obj/btv/ops.bo \
+	obj/blue/lookup.bo \
 	obj/btv/main.bo \
 	obj/btv/fin.bo \
 	obj/btv/elf.fin.bo

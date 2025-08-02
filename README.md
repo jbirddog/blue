@@ -61,7 +61,7 @@ all. You can easily write a bytecode viewer that uses any means desired to displ
 above, the yellow `bye` means that word is to be called at assemble time. If yellow is not agreeable, make it pink
 or underlined, or display it as `@bye`. If you like reading verbose code, display it as `callAtAssembleTime(bye)`.
 
-Running `./bin/btv < obj/btv/btv.bo` will show how each opcode is displayed, including its color and styling.
+Running `./bin/btv < obj/btv/ops.bo` will show how each opcode is displayed, including its color and styling.
 This is also an example of higher level Blue code.
 
 ## Forth Data Structures
