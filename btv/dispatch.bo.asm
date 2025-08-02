@@ -13,7 +13,7 @@ db	BC_WORD_END
 db	BC_WORD_DEFINE
 dq	"dispatch"
 db	BC_NUM_PUSH
-dq	0x24FF
+dq	0x14FF
 db	BC_COMMA_W
 db	BC_NUM_PUSH
 dq	0xC5
