@@ -4,6 +4,7 @@ FASM ?= $(shell which fasm)
 BLUE_BC_ASMS = $(wildcard \
 	lib/elf/*.bo.asm \
 	lib/x86_64/*.bo.asm \
+	blue/*.bo.asm \
 	btv/*.bo.asm \
 	examples/exit/*.bo.asm \
 	examples/helloworld/*.bo.asm \
@@ -12,6 +13,7 @@ BLUE_BC_ASMS = $(wildcard \
 BLUE_BC_OBJS = $(BLUE_BC_ASMS:%.bo.asm=obj/%.bo)
 
 BLUE = bin/blue
+BLUE_IN_BLUE = bin/bib
 TOOLS = bin/btv
 
 EXAMPLES = \
@@ -20,7 +22,7 @@ EXAMPLES = \
 
 .PHONY: all clean
 
-all: $(BLUE) $(BLUE_BC_OBJS) $(TOOLS) $(EXAMPLES)
+all: $(BLUE) $(BLUE_BC_OBJS) $(BLUE_IN_BLUE) $(TOOLS) $(EXAMPLES)
 
 clean:
 	rm -rf bin obj
@@ -31,15 +33,30 @@ bin:
 $(BLUE): blue.asm $(FASM) | bin
 	$(FASM) $< $@
 
+obj/bib.b: \
+	obj/lib/x86_64/encoding.bo \
+	obj/lib/x86_64/common.bo \
+	obj/lib/x86_64/convenience.bo \
+	obj/lib/x86_64/linux.bo \
+	obj/blue/dispatch.bo \
+	obj/lib/elf/headers.min.bo \
+	obj/examples/exit/exit.bo \
+	obj/blue/next.bo \
+	obj/blue/ops.bo \
+	obj/blue/lookup.bo \
+	obj/lib/elf/fin.min.bo
+
 obj/btv.b: \
 	obj/lib/x86_64/encoding.bo \
 	obj/lib/x86_64/common.bo \
 	obj/lib/x86_64/convenience.bo \
 	obj/lib/x86_64/linux.bo \
+	obj/btv/dispatch.bo \
 	obj/btv/macros.bo \
 	obj/lib/elf/headers.min.bo \
 	obj/btv/hexnum.bo \
-	obj/btv/btv.bo \
+	obj/btv/ops.bo \
+	obj/blue/lookup.bo \
 	obj/btv/main.bo \
 	obj/btv/fin.bo \
 	obj/btv/elf.fin.bo

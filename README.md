@@ -61,7 +61,7 @@ all. You can easily write a bytecode viewer that uses any means desired to displ
 above, the yellow `bye` means that word is to be called at assemble time. If yellow is not agreeable, make it pink
 or underlined, or display it as `@bye`. If you like reading verbose code, display it as `callAtAssembleTime(bye)`.
 
-Running `./bin/btv < obj/btv/btv.bo` will show how each opcode is displayed, including its color and styling.
+Running `./bin/btv < obj/btv/ops.bo` will show how each opcode is displayed, including its color and styling.
 This is also an example of higher level Blue code.
 
 ## Forth Data Structures
@@ -125,12 +125,21 @@ Some links that may help fill in some back story/knowledge in no particular orde
 1. Generalize btv/elf.fin.bo (needs rb support)
 1. Add BC_SAVE, BC_RESTORE
 1. Add BC_TOR, BC_FROMR
-1. Write Blue in Blue
+
+## Blue in Blue (bib)
+
+1. Add tests, start getting them to pass in bib
+   1. fin
+   1. nl
+   1. num_comp
+1. When all done
+   1. Rename blue.asm to bootstrap.asm
+   1. Rename bib.b to blue.b
+   1. Use bin/bootstrap to build bin/blue from blue.b
 
 ### btv
 
 1. Multiple dst writes based on size (needs btv save/restore)
-   1. Drop `dstsz` back down
 1. Factor enough so that `dstout` calls `print`, remove `writedst`
 1. Add btv/README.md, move this stuff there
 1. Factor `ashex` so `hexnum` can move to lib
