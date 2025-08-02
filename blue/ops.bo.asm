@@ -2,7 +2,8 @@ include "b.inc"
 
 db	BC_WORD_DEFINE
 dq	"fin"
-db	BC_WORD_END
+db	BC_WORD_INTERP
+dq	"bye"
 
 db	BC_DSP_NL
 
