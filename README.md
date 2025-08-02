@@ -126,9 +126,13 @@ Some links that may help fill in some back story/knowledge in no particular orde
 1. Add BC_SAVE, BC_RESTORE
 1. Add BC_TOR, BC_FROMR
 
-## Blue in Blue
+## Blue in Blue (bib)
 
-1. Fin
+1. Add tests, start getting them to pass in bib
+   1. fin
+   1. nl
+   1. num_comp
+1. When all done
    1. Rename blue.asm to bootstrap.asm
    1. Rename bib.b to blue.b
    1. Use bin/bootstrap to build bin/blue from blue.b
