@@ -42,8 +42,7 @@ obj/bib.b: \
 	obj/blue/defs.bo \
 	obj/blue/macros.bo \
 	obj/lib/elf/headers.min.bo \
-	obj/blue/magic.bo \
-	obj/blue/next.bo \
+	obj/blue/kernel.bo \
 	obj/blue/ops.bo \
 	obj/blue/lookup.bo \
 	obj/blue/main.bo \

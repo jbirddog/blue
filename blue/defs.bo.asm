@@ -26,12 +26,6 @@ dq	DICT_SIZE
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
-dq	"dssz"
-db	BC_NUM_PUSH
-dq	DS_SIZE
-db	BC_WORD_END
-
-db	BC_WORD_DEFINE
 dq	"dsmask"
 db	BC_NUM_PUSH
 dq	DS_MASK
