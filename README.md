@@ -125,12 +125,14 @@ Some links that may help fill in some back story/knowledge in no particular orde
 1. Generalize btv/elf.fin.bo (needs rb support)
 1. Add BC_SAVE, BC_RESTORE
 1. Add BC_TOR, BC_FROMR
+
+## Blue in Blue
+
 1. Write Blue in Blue
 
 ### btv
 
 1. Multiple dst writes based on size (needs btv save/restore)
-   1. Drop `dstsz` back down
 1. Factor enough so that `dstout` calls `print`, remove `writedst`
 1. Add btv/README.md, move this stuff there
 1. Factor `ashex` so `hexnum` can move to lib
