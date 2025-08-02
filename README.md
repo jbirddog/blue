@@ -128,8 +128,6 @@ Some links that may help fill in some back story/knowledge in no particular orde
 ## Blue in Blue (bib)
 
 1. Add tests, start getting them to pass in bib
-   1. fin
-   1. nl
    1. num_comp
 1. When all done
    1. Rename blue.asm to bootstrap.asm
