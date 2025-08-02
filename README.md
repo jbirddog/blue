@@ -128,7 +128,10 @@ Some links that may help fill in some back story/knowledge in no particular orde
 
 ## Blue in Blue
 
-1. Write Blue in Blue
+1. Fin
+   1. Rename blue.asm to bootstrap.asm
+   1. Rename bib.b to blue.b
+   1. Use bin/bootstrap to build bin/blue from blue.b
 
 ### btv
 
