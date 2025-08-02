@@ -67,6 +67,8 @@ db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"num_comp"
+db	BC_WORD_INTERP
+dq	"movsq"
 db	BC_WORD_RCALL
 dq	"next"
 db	BC_WORD_END
