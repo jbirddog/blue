@@ -6,6 +6,7 @@ DICT_SIZE = DICT_ENTRY_SIZE * 256
 
 DS_SIZE = CELL_SIZE * 16
 DS_MASK = DS_SIZE - 1
+DS_BASE = 0x400000
 
 db	BC_WORD_DEFINE
 dq	"cellsz"
@@ -23,6 +24,12 @@ db	BC_WORD_DEFINE
 dq	"dictsz"
 db	BC_NUM_PUSH
 dq	DICT_SIZE
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"dsbase"
+db	BC_NUM_PUSH
+dq	DS_BASE
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
