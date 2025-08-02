@@ -121,6 +121,7 @@ Some links that may help fill in some back story/knowledge in no particular orde
 
 ## TODOs
 
+1. mv b{,c}.inc
 1. Make `$>` just push its addr, use `! @` to read/write
 1. Add BC_TOR, BC_FROMR
 

@@ -8,6 +8,7 @@ db	BC_WORD_INTERP
 dq	"initsd"
 db	BC_WORD_RCALL
 dq	"fin"
+db	BC_WORD_END
 
 db	BC_DSP_NL
 db	BC_DSP_NL
