@@ -121,15 +121,14 @@ Some links that may help fill in some back story/knowledge in no particular orde
 
 ## TODOs
 
+1. mv b{,c}.inc
 1. Make `$>` just push its addr, use `! @` to read/write
 1. Add BC_TOR, BC_FROMR
 
 ## Blue in Blue (bib)
 
-1. Add tests, start getting them to pass in bib
-   1. fin
-   1. nl
-   1. num_comp
+1. Add data stack
+1. Add dictionary
 1. When all done
    1. Rename blue.asm to bootstrap.asm
    1. Rename bib.b to blue.b
@@ -138,6 +137,7 @@ Some links that may help fill in some back story/knowledge in no particular orde
 ### btv
 
 1. Multiple dst writes based on size (needs btv save/restore)
+1. Look at using blue/dispatch.bo (call vs jmp, optbl)
 1. Look at using blue/fin.bo
 1. Look at using blue/srcdst.bo
 1. Add btv/README.md, move this stuff there

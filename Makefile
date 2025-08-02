@@ -8,6 +8,7 @@ BLUE_BC_ASMS = $(wildcard \
 	btv/*.bo.asm \
 	examples/exit/*.bo.asm \
 	examples/helloworld/*.bo.asm \
+	tests/bc/*.bo.asm \
 )
 
 BLUE_BC_OBJS = $(BLUE_BC_ASMS:%.bo.asm=obj/%.bo)
