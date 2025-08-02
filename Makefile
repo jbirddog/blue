@@ -42,6 +42,7 @@ obj/bib.b: \
 	obj/blue/dispatch.bo \
 	obj/blue/srcdst.bo \
 	obj/lib/elf/headers.min.bo \
+	obj/blue/magic.bo \
 	obj/blue/next.bo \
 	obj/blue/ops.bo \
 	obj/blue/lookup.bo \
