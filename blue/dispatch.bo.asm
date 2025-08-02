@@ -13,12 +13,12 @@ db	BC_WORD_END
 db	BC_WORD_DEFINE
 dq	"dispatch"
 db	BC_NUM_PUSH
-dq	0x24FF
-db	BC_COMMA_W
-db	BC_NUM_PUSH
-dq	0xC5
-db	BC_COMMA_B
+dq	0xC0C524FF
 db	BC_COMMA_D
+db	BC_WORD_DEFINE
+dq	"optbl"
+db	BC_NUM_COMP
+dq	0x00
 db	BC_WORD_END
 
 db	BC_DSP_NL
