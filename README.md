@@ -122,8 +122,6 @@ Some links that may help fill in some back story/knowledge in no particular orde
 ## TODOs
 
 1. Make `$>` just push its addr, use `! @` to read/write
-1. Generalize btv/elf.fin.bo (needs rb support)
-1. Add BC_SAVE, BC_RESTORE
 1. Add BC_TOR, BC_FROMR
 
 ## Blue in Blue (bib)
@@ -140,7 +138,8 @@ Some links that may help fill in some back story/knowledge in no particular orde
 ### btv
 
 1. Multiple dst writes based on size (needs btv save/restore)
-1. Factor enough so that `dstout` calls `print`, remove `writedst`
+1. Look at using blue/fin.bo
+1. Look at using blue/srcdst.bo
 1. Add btv/README.md, move this stuff there
 1. Factor `ashex` so `hexnum` can move to lib
 1. Move ansi terminal stuff to lib

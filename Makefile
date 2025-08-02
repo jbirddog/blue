@@ -39,12 +39,13 @@ obj/bib.b: \
 	obj/lib/x86_64/convenience.bo \
 	obj/lib/x86_64/linux.bo \
 	obj/blue/dispatch.bo \
+	obj/blue/srcdst.bo \
 	obj/lib/elf/headers.min.bo \
-	obj/examples/exit/exit.bo \
 	obj/blue/next.bo \
 	obj/blue/ops.bo \
 	obj/blue/lookup.bo \
-	obj/lib/elf/fin.min.bo
+	obj/blue/main.bo \
+	obj/blue/fin.bo \
 
 obj/btv.b: \
 	obj/lib/x86_64/encoding.bo \
