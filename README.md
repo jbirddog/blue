@@ -122,12 +122,12 @@ Some links that may help fill in some back story/knowledge in no particular orde
 ## TODOs
 
 1. Make `$>` just push its addr, use `! @` to read/write
-1. Generalize btv/elf.fin.bo (needs rb support)
-1. Add BC_SAVE, BC_RESTORE
 1. Add BC_TOR, BC_FROMR
 
 ## Blue in Blue (bib)
 
+1. Move btv/fin.bo.asm to blue
+1. Move btv/elf.fin.bo.asm to blue
 1. Add tests, start getting them to pass in bib
    1. fin
    1. nl
