@@ -164,4 +164,19 @@ db	BC_COMMA_D
 db	BC_WORD_END
 
 db	BC_DSP_NL
+db	BC_WORD_DEFINE
+dq	"dsinit"
+; 49 c7 c5 00 00 40 00    mov    r13,0x400000
+db	BC_NUM_PUSH
+dq	0xC749
+db	BC_COMMA_W
+db	BC_NUM_PUSH
+dq	0xC5
+db	BC_COMMA_B
+db	BC_WORD_INTERP
+dq	"dsbase"
+db	BC_COMMA_D
+db	BC_WORD_END
+
+db	BC_DSP_NL
 db	BC_DSP_NL

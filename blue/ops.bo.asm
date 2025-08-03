@@ -77,6 +77,10 @@ db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"num_push"
+db	BC_WORD_INTERP
+dq	"lodsq"
+db	BC_WORD_RCALL
+dq	"dspush"
 db	BC_WORD_RCALL
 dq	"next"
 db	BC_WORD_END
