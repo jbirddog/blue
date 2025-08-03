@@ -178,6 +178,10 @@ db	BC_DSP_NL
 db	BC_WORD_DEFINE
 dq	"comma_b"
 db	BC_WORD_RCALL
+dq	"dspop"
+db	BC_WORD_INTERP
+dq	"stosb"
+db	BC_WORD_RCALL
 dq	"next"
 db	BC_WORD_END
 
@@ -186,6 +190,10 @@ db	BC_DSP_NL
 db	BC_WORD_DEFINE
 dq	"comma_w"
 db	BC_WORD_RCALL
+dq	"dspop"
+db	BC_WORD_INTERP
+dq	"stosw"
+db	BC_WORD_RCALL
 dq	"next"
 db	BC_WORD_END
 
@@ -193,6 +201,10 @@ db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"comma_d"
+db	BC_WORD_RCALL
+dq	"dspop"
+db	BC_WORD_INTERP
+dq	"stosd"
 db	BC_WORD_RCALL
 dq	"next"
 db	BC_WORD_END
