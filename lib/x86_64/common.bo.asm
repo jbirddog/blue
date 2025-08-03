@@ -71,6 +71,13 @@ dq	0xAB
 db	BC_COMMA_B
 db	BC_WORD_END
 
+db	BC_WORD_DEFINE
+dq	"stosq"
+db	BC_NUM_PUSH
+dq	0xAB48
+db	BC_COMMA_W
+db	BC_WORD_END
+
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE

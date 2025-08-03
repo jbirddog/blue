@@ -202,6 +202,10 @@ db	BC_DSP_NL
 db	BC_WORD_DEFINE
 dq	"comma"
 db	BC_WORD_RCALL
+dq	"dspop"
+db	BC_WORD_INTERP
+dq	"stosq"
+db	BC_WORD_RCALL
 dq	"next"
 db	BC_WORD_END
 
