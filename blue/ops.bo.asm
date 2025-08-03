@@ -90,6 +90,12 @@ db	BC_DSP_NL
 db	BC_WORD_DEFINE
 dq	"dup"
 db	BC_WORD_RCALL
+dq	"dspop"
+db	BC_WORD_RCALL
+dq	"dspush"
+db	BC_WORD_RCALL
+dq	"dspush"
+db	BC_WORD_RCALL
 dq	"next"
 db	BC_WORD_END
 
