@@ -9,6 +9,28 @@ db	BC_DSP_NL
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
+dq	"dspush"
+db	BC_WORD_INTERP
+dq	"ds!"
+db	BC_WORD_INTERP
+dq	"ds++"
+db	BC_WORD_INTERP
+dq	"dsclamp"
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"dspop"
+db	BC_WORD_INTERP
+dq	"ds--"
+db	BC_WORD_INTERP
+dq	"dsclamp"
+db	BC_WORD_INTERP
+dq	"ds@"
+db	BC_WORD_END
+
+db	BC_DSP_NL
+
+db	BC_WORD_DEFINE
 dq	"next"
 db	BC_WORD_INTERP
 dq	"opcode"

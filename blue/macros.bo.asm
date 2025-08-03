@@ -134,6 +134,9 @@ db	BC_WORD_END
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
+dq	"dsclamp"
+
+db	BC_WORD_DEFINE
 dq	"ds&mask"
 ; 49 83 e5 7f             and    r13,0x7f
 db	BC_NUM_PUSH
@@ -145,6 +148,19 @@ db	BC_COMMA_B
 db	BC_WORD_INTERP
 dq	"dsmask"
 db	BC_COMMA_B
+
+db	BC_WORD_DEFINE
+dq	"ds|base"
+; 49 81 cd 00 00 40 00    or     r13,0x400000
+db	BC_NUM_PUSH
+dq	0x8149
+db	BC_COMMA_W
+db	BC_NUM_PUSH
+dq	0xCD
+db	BC_COMMA_B
+db	BC_WORD_INTERP
+dq	"dsbase"
+db	BC_COMMA_D
 db	BC_WORD_END
 
 db	BC_DSP_NL
