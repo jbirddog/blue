@@ -6,6 +6,8 @@ db	BC_WORD_INTERP
 dq	"readsrc"
 db	BC_WORD_INTERP
 dq	"initsd"
+db	BC_WORD_INTERP
+dq	"dsinit"
 db	BC_WORD_RCALL
 dq	"next"
 db	BC_WORD_END

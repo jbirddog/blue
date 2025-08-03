@@ -39,10 +39,10 @@ obj/bib.b: \
 	obj/lib/x86_64/common.bo \
 	obj/lib/x86_64/convenience.bo \
 	obj/lib/x86_64/linux.bo \
-	obj/blue/dispatch.bo \
-	obj/blue/srcdst.bo \
+	obj/blue/defs.bo \
+	obj/blue/macros.bo \
 	obj/lib/elf/headers.min.bo \
-	obj/blue/next.bo \
+	obj/blue/kernel.bo \
 	obj/blue/ops.bo \
 	obj/blue/lookup.bo \
 	obj/blue/main.bo \
