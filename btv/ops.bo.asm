@@ -167,7 +167,7 @@ db	BC_WORD_END
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
-dq	"dup"
+dq	"ds_dup"
 db	BC_WORD_RCALL
 dq	"vizop"
 db	BC_WORD_INTERP
@@ -177,7 +177,7 @@ db	BC_WORD_END
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
-dq	"add"
+dq	"ds_add"
 db	BC_WORD_RCALL
 dq	"vizop"
 db	BC_WORD_INTERP
@@ -187,7 +187,7 @@ db	BC_WORD_END
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
-dq	"sub"
+dq	"ds_sub"
 db	BC_WORD_RCALL
 dq	"vizop"
 db	BC_WORD_INTERP
@@ -197,7 +197,7 @@ db	BC_WORD_END
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
-dq	"or"
+dq	"ds_or"
 db	BC_WORD_RCALL
 dq	"vizop"
 db	BC_WORD_INTERP
@@ -207,7 +207,7 @@ db	BC_WORD_END
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
-dq	"shl"
+dq	"ds_shl"
 db	BC_WORD_RCALL
 dq	"vizop"
 db	BC_WORD_INTERP
