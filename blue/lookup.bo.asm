@@ -66,10 +66,10 @@ dq	"dstbase!"
 db	BC_COMMA
 db	BC_DSP_NL
 db	BC_WORD_RADDR
-dq	"set"
+dq	"k_set"
 db	BC_COMMA
 db	BC_WORD_RADDR
-dq	"fetch"
+dq	"k_fetch"
 db	BC_COMMA
 db	BC_WORD_RADDR
 dq	"comma_b"

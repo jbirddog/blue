@@ -190,7 +190,7 @@ db	BC_WORD_END
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
-dq	"set"
+dq	"k_set"
 db	BC_WORD_RCALL
 dq	"next"
 db	BC_WORD_END
@@ -198,7 +198,7 @@ db	BC_WORD_END
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
-dq	"fetch"
+dq	"k_fetch"
 db	BC_WORD_RCALL
 dq	"next"
 db	BC_WORD_END
