@@ -44,6 +44,11 @@ ds_pop:
 	mov	rax, [REG_DS]
 	ret
 
+ds_pop2:
+	call	ds_pop
+	mov	rcx, rax
+	jmp	ds_pop
+
 find:
 	lodsq
 	push	REG_LAST
@@ -163,33 +168,25 @@ k_dup:
 	jmp	next
 
 k_add:
-	call	ds_pop
-	mov	rcx, rax
-	call	ds_pop
+	call	ds_pop2
 	add	rax, rcx
 	call	ds_push
 	jmp	next
 
 k_sub:
-	call	ds_pop
-	mov	rcx, rax
-	call	ds_pop
+	call	ds_pop2
 	sub	rax, rcx
 	call	ds_push
 	jmp	next
 
 k_or:
-	call	ds_pop
-	mov	rcx, rax
-	call	ds_pop
+	call	ds_pop2
 	or	rax, rcx
 	call	ds_push
 	jmp	next
 
 k_shl:
-	call	ds_pop
-	mov	cl, al
-	call	ds_pop
+	call	ds_pop2
 	shl	rax, cl
 	call	ds_push
 	jmp	next
