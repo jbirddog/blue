@@ -1,4 +1,4 @@
-include "b.inc"
+include "bc.inc"
 
 db	BC_WORD_DEFINE
 dq	"msg"

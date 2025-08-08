@@ -1,4 +1,4 @@
-include "b.inc"
+include "bc.inc"
 
 db	BC_NUM_COMP
 db	"Blue...", 10

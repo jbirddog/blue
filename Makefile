@@ -81,7 +81,7 @@ obj/examples/helloworld.b: \
 	obj/examples/helloworld/helloworld.bo \
 	obj/lib/elf/fin.min.bo
 
-obj/%.bo: %.bo.asm $(FASM) b.inc
+obj/%.bo: %.bo.asm $(FASM) bc.inc
 	@mkdir -p "$(@D)"
 	$(FASM) $< $@
 
