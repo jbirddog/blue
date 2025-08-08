@@ -118,6 +118,12 @@ db	BC_DSP_NL
 db	BC_WORD_DEFINE
 dq	"ds_sub"
 db	BC_WORD_RCALL
+dq	"dspop2"
+db	BC_WORD_INTERP
+dq	"sub"
+db	BC_WORD_RCALL
+dq	"dspush"
+db	BC_WORD_RCALL
 dq	"next"
 db	BC_WORD_END
 
@@ -126,6 +132,12 @@ db	BC_DSP_NL
 db	BC_WORD_DEFINE
 dq	"ds_or"
 db	BC_WORD_RCALL
+dq	"dspop2"
+db	BC_WORD_INTERP
+dq	"or"
+db	BC_WORD_RCALL
+dq	"dspush"
+db	BC_WORD_RCALL
 dq	"next"
 db	BC_WORD_END
 
@@ -133,6 +145,12 @@ db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"ds_shl"
+db	BC_WORD_RCALL
+dq	"dspop2"
+db	BC_WORD_INTERP
+dq	"shl"
+db	BC_WORD_RCALL
+dq	"dspush"
 db	BC_WORD_RCALL
 dq	"next"
 db	BC_WORD_END
