@@ -193,6 +193,30 @@ db	BC_COMMA_B
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
+dq	"set"
+; 48 89 01                mov    QWORD PTR [rcx],rax
+db	BC_NUM_PUSH
+dq	0x8948
+db	BC_COMMA_W
+db	BC_NUM_PUSH
+dq	0x01
+db	BC_COMMA_B
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"fetch"
+; 48 89 01                mov    QWORD PTR [rcx],rax
+db	BC_NUM_PUSH
+dq	0x8948
+db	BC_COMMA_W
+db	BC_NUM_PUSH
+dq	0x00
+db	BC_COMMA_B
+db	BC_WORD_END
+
+db	BC_DSP_NL
+
+db	BC_WORD_DEFINE
 dq	"add"
 ; 48 01 c8                add    rax,rcx
 db	BC_NUM_PUSH

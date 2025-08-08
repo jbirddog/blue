@@ -192,6 +192,12 @@ db	BC_DSP_NL
 db	BC_WORD_DEFINE
 dq	"k_set"
 db	BC_WORD_RCALL
+dq	"dspop2"
+db	BC_WORD_INTERP
+dq	"set"
+db	BC_WORD_RCALL
+dq	"dspush"
+db	BC_WORD_RCALL
 dq	"next"
 db	BC_WORD_END
 
@@ -199,6 +205,12 @@ db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"k_fetch"
+db	BC_WORD_RCALL
+dq	"dspop"
+db	BC_WORD_INTERP
+dq	"fetch"
+db	BC_WORD_RCALL
+dq	"dspush"
 db	BC_WORD_RCALL
 dq	"next"
 db	BC_WORD_END

@@ -132,6 +132,10 @@ Some links that may help fill in some back story/knowledge in no particular orde
    1. Rename bib.b to blue.b
    1. Use bin/bootstrap to build bin/blue from blue.b
 
+### bib - After Merge
+
+1. Factor macros (keep, set, fetch)
+   
 ### btv
 
 1. Multiple dst writes based on size (needs btv save/restore)
