@@ -1,4 +1,4 @@
-include "b.inc"
+include "bc.inc"
 
 ;
 ;	120 byte minimal elf header. format borrowed from an executable built with fasm2 using:

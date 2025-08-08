@@ -1,4 +1,4 @@
-include "b.inc"
+include "bc.inc"
 
 CELL_SIZE = 8
 DICT_ENTRY_SIZE = CELL_SIZE * 3
