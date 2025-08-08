@@ -28,6 +28,16 @@ db	BC_WORD_INTERP
 dq	"ds@"
 db	BC_WORD_END
 
+db	BC_WORD_DEFINE
+dq	"dspop2"
+db	BC_WORD_INTERP
+dq	"dspop"
+db	BC_WORD_INTERP
+dq	"keep"
+db	BC_WORD_INTERP
+dq	"dspop"
+db	BC_WORD_END
+
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE

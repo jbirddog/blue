@@ -180,3 +180,61 @@ db	BC_WORD_END
 
 db	BC_DSP_NL
 db	BC_DSP_NL
+
+db	BC_WORD_DEFINE
+dq	"keep"
+; 48 89 c1                mov    rcx,rax
+db	BC_NUM_PUSH
+dq	0x8948
+db	BC_COMMA_W
+db	BC_NUM_PUSH
+dq	0xC1
+db	BC_COMMA_B
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"add"
+; 48 01 c8                add    rax,rcx
+db	BC_NUM_PUSH
+dq	0x0148
+db	BC_COMMA_W
+db	BC_NUM_PUSH
+dq	0xC8
+db	BC_COMMA_B
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"sub"
+; 48 29 c8                sub    rax,rcx
+db	BC_NUM_PUSH
+dq	0x2948
+db	BC_COMMA_W
+db	BC_NUM_PUSH
+dq	0xC8
+db	BC_COMMA_B
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"or"
+; 48 09 c8                or    rax,rcx
+db	BC_NUM_PUSH
+dq	0x0948
+db	BC_COMMA_W
+db	BC_NUM_PUSH
+dq	0xC8
+db	BC_COMMA_B
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"shl"
+; 48 d3 e0                shl    rax,cl
+db	BC_NUM_PUSH
+dq	0xD348
+db	BC_COMMA_W
+db	BC_NUM_PUSH
+dq	0xE0
+db	BC_COMMA_B
+db	BC_WORD_END
+
+db	BC_DSP_NL
+db	BC_DSP_NL

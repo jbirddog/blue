@@ -88,7 +88,7 @@ db	BC_WORD_END
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
-dq	"dup"
+dq	"ds_dup"
 db	BC_WORD_RCALL
 dq	"dspop"
 db	BC_WORD_RCALL
@@ -102,23 +102,27 @@ db	BC_WORD_END
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
+dq	"ds_add"
+db	BC_WORD_RCALL
+dq	"dspop2"
+db	BC_WORD_INTERP
 dq	"add"
 db	BC_WORD_RCALL
+dq	"dspush"
+db	BC_WORD_RCALL
 dq	"next"
 db	BC_WORD_END
 
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
+dq	"ds_sub"
+db	BC_WORD_RCALL
+dq	"dspop2"
+db	BC_WORD_INTERP
 dq	"sub"
 db	BC_WORD_RCALL
-dq	"next"
-db	BC_WORD_END
-
-db	BC_DSP_NL
-
-db	BC_WORD_DEFINE
-dq	"or"
+dq	"dspush"
 db	BC_WORD_RCALL
 dq	"next"
 db	BC_WORD_END
@@ -126,7 +130,27 @@ db	BC_WORD_END
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
+dq	"ds_or"
+db	BC_WORD_RCALL
+dq	"dspop2"
+db	BC_WORD_INTERP
+dq	"or"
+db	BC_WORD_RCALL
+dq	"dspush"
+db	BC_WORD_RCALL
+dq	"next"
+db	BC_WORD_END
+
+db	BC_DSP_NL
+
+db	BC_WORD_DEFINE
+dq	"ds_shl"
+db	BC_WORD_RCALL
+dq	"dspop2"
+db	BC_WORD_INTERP
 dq	"shl"
+db	BC_WORD_RCALL
+dq	"dspush"
 db	BC_WORD_RCALL
 dq	"next"
 db	BC_WORD_END
