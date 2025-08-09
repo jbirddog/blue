@@ -47,4 +47,18 @@ dq	0x2000
 db	BC_WORD_END
 
 db	BC_DSP_NL
+
+db	BC_WORD_DEFINE
+dq	"resmemsz"
+db	BC_WORD_INTERP
+dq	"dictsz"
+db	BC_WORD_INTERP
+dq	"dstsz"
+db	BC_ADD
+db	BC_WORD_INTERP
+dq	"srcsz"
+db	BC_ADD
+db	BC_WORD_END
+
+db	BC_DSP_NL
 db	BC_DSP_NL

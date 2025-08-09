@@ -52,11 +52,7 @@ dq	"elfbsz"
 db	BC_SET
 
 db	BC_WORD_INTERP
-dq	"dstsz"
-db	BC_WORD_INTERP
-dq	"srcsz"
-db	BC_ADD
-
+dq	"resmemsz"
 db	BC_ADD
 
 db	BC_WORD_CADDR
