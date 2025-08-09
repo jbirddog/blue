@@ -25,6 +25,7 @@ assert DS_BASE and DS_MASK = 0
 REG_LVL equ ebp
 REG_SRC equ rsi
 REG_DST equ rdi
+REG_DSTB equ r11
 REG_LAST equ r12
 REG_DS equ r13
 
@@ -77,7 +78,7 @@ xt:
 
 fin:
 	mov	rdx, REG_DST
-	mov	rsi, [dst_base.val]
+	mov	rsi, REG_DSTB
 	
 	xor	edi, edi
 	inc	edi
@@ -147,7 +148,7 @@ word_caddr:
 word_raddr:
 	call	xt
 raddr:
-	sub	rax, [dst_base.val]
+	sub	rax, REG_DSTB
 	add	rax, K_ORG
 	call	ds_push
 	jmp	next
@@ -204,14 +205,13 @@ dollar_raddr:
 	jmp	raddr
 
 dst_base:
-	mov	rax, [dst_base.val]
+	mov	rax, REG_DSTB
 	call	ds_push
 	jmp	next
-.val	dq	_dst
 
 dst_base_set:
 	call	ds_pop
-	mov	[dst_base.val], rax
+	mov	REG_DSTB, rax
 	jmp	next
 
 k_set:
