@@ -9,6 +9,13 @@ db	BC_SET
 db	BC_DSP_NL
 
 db	BC_DOLLAR_RADDR
+db	BC_WORD_CADDR
+dq	"dict"
+db	BC_SET
+
+db	BC_DSP_NL
+
+db	BC_DOLLAR_RADDR
 db	BC_WORD_INTERP
 dq	"dstoff"
 db	BC_ADD

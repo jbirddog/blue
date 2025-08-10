@@ -349,6 +349,18 @@ db	BC_COMMA_B
 db	BC_WORD_END
 
 db	BC_DSP_NL
+db	BC_WORD_DEFINE
+dq	"dictinit"
+db	BC_NUM_PUSH
+dq	0xBC49
+db	BC_COMMA_W
+db	BC_WORD_DEFINE
+dq	"dict"
+db	BC_NUM_COMP
+dq	0x00
+db	BC_WORD_END
+
+db	BC_DSP_NL
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
