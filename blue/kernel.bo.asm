@@ -42,14 +42,6 @@ db	BC_DSP_NL
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
-dq	"found"
-db	BC_WORD_INTERP
-dq	"last"
-db	BC_WORD_INTERP
-dq	"r>dst"
-db	BC_WORD_END
-
-db	BC_WORD_DEFINE
 dq	"find"
 db	BC_WORD_INTERP
 dq	"dst>r"
@@ -58,6 +50,17 @@ dq	"lodsq"
 
 db	BC_WORD_DEFINE
 dq	"check"
+db	BC_WORD_INTERP
+dq	"cmpword"
+db	BC_WORD_INTERP
+dq	"eq?"
+db	BC_WORD_INTERP
+dq	"last"
+db	BC_WORD_INTERP
+dq	"r>dst"
+db	BC_WORD_END
+db	BC_WORD_INTERP
+dq	"then"
 db	BC_WORD_INTERP
 dq	"prev"
 db	BC_WORD_RCALL

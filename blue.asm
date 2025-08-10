@@ -278,6 +278,16 @@ dq	dollar_caddr, dollar_raddr, dst_base, dst_base_set
 dq	k_set, k_fetch, comma_b, comma_w, comma_d, comma
 dq	dsp_nl
 
+align 1024
+	jne	prev
+	
+	mov	rax, REG_LAST
+	pop	REG_LAST
+	ret
+
+prev:
+
+
 ;;; reserved
 
 _dict rb DICT_SIZE

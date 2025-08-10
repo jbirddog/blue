@@ -310,3 +310,30 @@ db	BC_WORD_END
 
 db	BC_DSP_NL
 db	BC_DSP_NL
+
+db	BC_WORD_DEFINE
+dq	"cmpword"
+; 4c 39 e0                cmp    rax,r12
+db	BC_NUM_PUSH
+dq	0x394C
+db	BC_COMMA_W
+db	BC_NUM_PUSH
+dq	0xE9
+db	BC_COMMA_B
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"eq?"
+; TODO
+db	BC_NUM_PUSH
+dq	0x0675
+db	BC_COMMA_W
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"then"
+; TODO
+db	BC_WORD_END
+
+db	BC_DSP_NL
+db	BC_DSP_NL
