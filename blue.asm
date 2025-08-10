@@ -53,12 +53,13 @@ ds_pop2:
 find:
 	push	REG_LAST
 	lodsq
-.search:
+
+.check:
 	cmp	rax, [REG_LAST]
 	je	.found
 	
 	sub	REG_LAST, DICT_ENTRY_SIZE
-	jmp	.search
+	jmp	.check
 
 .found:
 	mov	rax, REG_LAST

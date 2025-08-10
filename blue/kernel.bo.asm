@@ -42,11 +42,26 @@ db	BC_DSP_NL
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
+dq	"found"
+db	BC_WORD_INTERP
+dq	"entry"
+db	BC_WORD_INTERP
+dq	"r>dst"
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
 dq	"find"
 db	BC_WORD_INTERP
 dq	"dst>r"
 db	BC_WORD_INTERP
 dq	"lodsq"
+
+db	BC_WORD_DEFINE
+dq	"search"
+db	BC_WORD_INTERP
+dq	"prev"
+db	BC_WORD_RCALL
+dq	"search"
 db	BC_WORD_END
 
 db	BC_DSP_NL

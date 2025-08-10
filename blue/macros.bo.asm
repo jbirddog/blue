@@ -289,5 +289,24 @@ dq	0x08408B48
 db	BC_COMMA_D
 db	BC_WORD_END
 
+db	BC_WORD_DEFINE
+dq	"entry"
+; 4c 89 e0                mov    rax,r12
+db	BC_NUM_PUSH
+dq	0x894C
+db	BC_COMMA_W
+db	BC_NUM_PUSH
+dq	0xE0
+db	BC_COMMA_B
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"prev"
+; 49 83 ec 18             sub    r12,0x18
+db	BC_NUM_PUSH
+dq	0x18EC8349
+db	BC_COMMA_D
+db	BC_WORD_END
+
 db	BC_DSP_NL
 db	BC_DSP_NL
