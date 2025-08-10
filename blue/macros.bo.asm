@@ -364,6 +364,31 @@ db	BC_DSP_NL
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
+dq	"-dstbase"
+; 4c 29 d8                sub    rax,r11
+db	BC_NUM_PUSH
+dq	0x294C
+db	BC_COMMA_W
+db	BC_NUM_PUSH
+dq	0xD8
+db	BC_COMMA_B
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"+org"
+; 48 05 00 00 40 00       add    rax,0x400000
+db	BC_NUM_PUSH
+dq	0x0548
+db	BC_COMMA_W
+db	BC_WORD_INTERP
+dq	"org"
+db	BC_COMMA_D
+db	BC_WORD_END
+
+db	BC_DSP_NL
+db	BC_DSP_NL
+
+db	BC_WORD_DEFINE
 dq	"cmpname"
 ; 49 3b 04 24             cmp    rax,QWORD PTR [r12]
 db	BC_NUM_PUSH

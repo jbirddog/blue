@@ -27,6 +27,8 @@ dq	DICT_SIZE
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
+dq	"org"
+db	BC_WORD_DEFINE
 dq	"dsbase"
 db	BC_NUM_PUSH
 dq	DS_BASE
