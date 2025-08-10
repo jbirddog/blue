@@ -13,6 +13,14 @@ db	BC_WORD_DEFINE
 dq	"w_define"
 db	BC_WORD_INTERP
 dq	"lodsq"
+db	BC_WORD_INTERP
+dq	"denext"
+db	BC_WORD_INTERP
+dq	"name!"
+db	BC_WORD_INTERP
+dq	"codeptr!"
+db	BC_WORD_INTERP
+dq	"srcptr!"
 db	BC_WORD_RCALL
 dq	"next"
 db	BC_WORD_END
