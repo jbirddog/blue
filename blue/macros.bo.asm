@@ -290,7 +290,7 @@ db	BC_COMMA_D
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
-dq	"entry"
+dq	"last"
 ; 4c 89 e0                mov    rax,r12
 db	BC_NUM_PUSH
 dq	0x894C

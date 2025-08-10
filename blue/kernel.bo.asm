@@ -44,7 +44,7 @@ db	BC_DSP_NL
 db	BC_WORD_DEFINE
 dq	"found"
 db	BC_WORD_INTERP
-dq	"entry"
+dq	"last"
 db	BC_WORD_INTERP
 dq	"r>dst"
 db	BC_WORD_END
