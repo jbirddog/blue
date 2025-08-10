@@ -39,6 +39,7 @@ dq	"dspop"
 db	BC_WORD_END
 
 db	BC_DSP_NL
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"find"
@@ -48,6 +49,17 @@ db	BC_WORD_INTERP
 dq	"lodsq"
 db	BC_WORD_END
 
+db	BC_DSP_NL
+
+db	BC_WORD_DEFINE
+dq	"xt"
+db	BC_WORD_RCALL
+dq	"find"
+db	BC_WORD_INTERP
+dq	"codeptr"
+db	BC_WORD_END
+
+db	BC_DSP_NL
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE

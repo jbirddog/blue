@@ -280,4 +280,14 @@ db	BC_COMMA_W
 db	BC_WORD_END
 
 db	BC_DSP_NL
+
+db	BC_WORD_DEFINE
+dq	"codeptr"
+; 48 8b 40 08             mov    rax,QWORD PTR [rax+0x08]
+db	BC_NUM_PUSH
+dq	0x08408B48
+db	BC_COMMA_D
+db	BC_WORD_END
+
+db	BC_DSP_NL
 db	BC_DSP_NL
