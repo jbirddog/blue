@@ -330,7 +330,7 @@ db	BC_WORD_DEFINE
 dq	"codeptr!"
 ; 49 89 7c 24 08          mov    QWORD PTR [r12+0x8],rdi
 db	BC_NUM_PUSH
-dq	0x24088949
+dq	0x247C8949
 db	BC_COMMA_D
 db	BC_NUM_PUSH
 dq	0x08
@@ -341,7 +341,7 @@ db	BC_WORD_DEFINE
 dq	"srcptr!"
 ;  49 89 74 24 10          mov    QWORD PTR [r12+0x10],rsi
 db	BC_NUM_PUSH
-dq	0x24108949
+dq	0x24748949
 db	BC_COMMA_D
 db	BC_NUM_PUSH
 dq	0x10
