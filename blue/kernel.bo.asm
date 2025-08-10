@@ -41,6 +41,16 @@ db	BC_WORD_END
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
+dq	"find"
+db	BC_WORD_INTERP
+dq	"dst>r"
+db	BC_WORD_INTERP
+dq	"lodsq"
+db	BC_WORD_END
+
+db	BC_DSP_NL
+
+db	BC_WORD_DEFINE
 dq	"next"
 db	BC_WORD_INTERP
 dq	"opcode"
