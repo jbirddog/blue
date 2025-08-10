@@ -56,15 +56,15 @@ find:
 
 .check:
 	cmp	rax, [REG_LAST]
-	je	.found
+	jne	.prev
 	
-	sub	REG_LAST, DICT_ENTRY_SIZE
-	jmp	.check
-
-.found:
 	mov	rax, REG_LAST
 	pop	REG_LAST
 	ret
+
+.prev:
+	sub	REG_LAST, DICT_ENTRY_SIZE
+	jmp	.check
 
 xt:
 	call	find

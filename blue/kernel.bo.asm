@@ -57,11 +57,11 @@ db	BC_WORD_INTERP
 dq	"lodsq"
 
 db	BC_WORD_DEFINE
-dq	"search"
+dq	"check"
 db	BC_WORD_INTERP
 dq	"prev"
 db	BC_WORD_RCALL
-dq	"search"
+dq	"check"
 db	BC_WORD_END
 
 db	BC_DSP_NL
