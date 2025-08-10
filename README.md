@@ -126,7 +126,6 @@ Some links that may help fill in some back story/knowledge in no particular orde
 
 ## Blue in Blue (bib)
 
-1. eq? needs to r> addr of byte to set, then needs to set byte (needs b!)
 1. When all done
    1. Rename blue.asm to bootstrap.asm
    1. Rename bib.b to blue.b
@@ -135,6 +134,8 @@ Some links that may help fill in some back story/knowledge in no particular orde
 ### bib - After Merge
 
 1. Factor macros (keep, set, fetch)
+1. eq? needs to r> addr of byte to set, then needs to set byte (needs b!)
+1. Rename dictensz to desz
    
 ### btv
 
