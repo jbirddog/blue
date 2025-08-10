@@ -365,13 +365,10 @@ db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"cmpname"
-; 4c 39 e0                cmp    rax,r12
+; 49 3b 04 24             cmp    rax,QWORD PTR [r12]
 db	BC_NUM_PUSH
-dq	0x394C
-db	BC_COMMA_W
-db	BC_NUM_PUSH
-dq	0xE9
-db	BC_COMMA_B
+dq	0x24043B49
+db	BC_COMMA_D
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
