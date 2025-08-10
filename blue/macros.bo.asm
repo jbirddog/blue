@@ -372,7 +372,7 @@ db	BC_COMMA_D
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
-dq	"eq?"
+dq	"ifeq"
 ; TODO
 db	BC_NUM_PUSH
 dq	0x0675
