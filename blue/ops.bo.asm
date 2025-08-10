@@ -62,6 +62,10 @@ db	BC_DSP_NL
 db	BC_WORD_DEFINE
 dq	"w_caddr"
 db	BC_WORD_RCALL
+dq	"xt"
+db	BC_WORD_RCALL
+dq	"dspush"
+db	BC_WORD_RCALL
 dq	"next"
 db	BC_WORD_END
 

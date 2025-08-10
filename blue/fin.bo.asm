@@ -9,6 +9,9 @@ db	BC_SET
 db	BC_DSP_NL
 
 db	BC_DOLLAR_RADDR
+db	BC_WORD_INTERP
+dq	"dictensz"
+db	BC_SUB
 db	BC_WORD_CADDR
 dq	"dict"
 db	BC_SET
