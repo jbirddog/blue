@@ -9,6 +9,9 @@ db	BC_SET
 db	BC_DSP_NL
 
 db	BC_DOLLAR_RADDR
+db	BC_WORD_INTERP
+dq	"dstoff"
+db	BC_ADD
 db	BC_DUP
 db	BC_WORD_CADDR
 dq	"outbuf"
@@ -21,7 +24,7 @@ db	BC_DSP_NL
 
 db	BC_DOLLAR_RADDR
 db	BC_WORD_INTERP
-dq	"dstsz"
+dq	"srcoff"
 db	BC_ADD
 db	BC_DUP
 db	BC_WORD_CADDR
@@ -52,11 +55,7 @@ dq	"elfbsz"
 db	BC_SET
 
 db	BC_WORD_INTERP
-dq	"dstsz"
-db	BC_WORD_INTERP
-dq	"srcsz"
-db	BC_ADD
-
+dq	"resmemsz"
 db	BC_ADD
 
 db	BC_WORD_CADDR

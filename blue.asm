@@ -51,23 +51,20 @@ ds_pop2:
 	jmp	ds_pop
 
 find:
-	lodsq
 	push	REG_LAST
-.loop:
-	mov	rbx, [REG_LAST]
-	cmp	rax, rbx
-	je	.done
+	lodsq
 
-	test	rbx, rbx
-	jz	.done
+.check:
+	cmp	rax, [REG_LAST]
+	jne	.prev
 	
-	sub	REG_LAST, DICT_ENTRY_SIZE
-	jmp	.loop
-
-.done:
 	mov	rax, REG_LAST
 	pop	REG_LAST
 	ret
+
+.prev:
+	sub	REG_LAST, DICT_ENTRY_SIZE
+	jmp	.check
 
 xt:
 	call	find

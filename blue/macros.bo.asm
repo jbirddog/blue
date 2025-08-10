@@ -262,3 +262,78 @@ db	BC_WORD_END
 
 db	BC_DSP_NL
 db	BC_DSP_NL
+
+db	BC_WORD_DEFINE
+dq	"dst>r"
+; 41 54                   push   r12
+db	BC_NUM_PUSH
+dq	0x5441
+db	BC_COMMA_W
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"r>dst"
+; 41 5c                   pop    r12
+db	BC_NUM_PUSH
+dq	0x5C41
+db	BC_COMMA_W
+db	BC_WORD_END
+
+db	BC_DSP_NL
+
+db	BC_WORD_DEFINE
+dq	"codeptr"
+; 48 8b 40 08             mov    rax,QWORD PTR [rax+0x08]
+db	BC_NUM_PUSH
+dq	0x08408B48
+db	BC_COMMA_D
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"last"
+; 4c 89 e0                mov    rax,r12
+db	BC_NUM_PUSH
+dq	0x894C
+db	BC_COMMA_W
+db	BC_NUM_PUSH
+dq	0xE0
+db	BC_COMMA_B
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"prev"
+; 49 83 ec 18             sub    r12,0x18
+db	BC_NUM_PUSH
+dq	0x18EC8349
+db	BC_COMMA_D
+db	BC_WORD_END
+
+db	BC_DSP_NL
+db	BC_DSP_NL
+
+db	BC_WORD_DEFINE
+dq	"cmpword"
+; 4c 39 e0                cmp    rax,r12
+db	BC_NUM_PUSH
+dq	0x394C
+db	BC_COMMA_W
+db	BC_NUM_PUSH
+dq	0xE9
+db	BC_COMMA_B
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"eq?"
+; TODO
+db	BC_NUM_PUSH
+dq	0x0675
+db	BC_COMMA_W
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"then"
+; TODO
+db	BC_WORD_END
+
+db	BC_DSP_NL
+db	BC_DSP_NL
