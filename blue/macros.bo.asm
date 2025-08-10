@@ -409,5 +409,13 @@ dq	"then"
 ; TODO
 db	BC_WORD_END
 
+db	BC_WORD_DEFINE
+dq	"call"
+; ff d0                   call   rax
+db	BC_NUM_PUSH
+dq	0xD0FF
+db	BC_COMMA_W
+db	BC_WORD_END
+
 db	BC_DSP_NL
 db	BC_DSP_NL
