@@ -51,7 +51,7 @@ dq	"lodsq"
 db	BC_WORD_DEFINE
 dq	"check"
 db	BC_WORD_INTERP
-dq	"cmpword"
+dq	"cmpname"
 db	BC_WORD_INTERP
 dq	"eq?"
 db	BC_WORD_INTERP
@@ -62,7 +62,7 @@ db	BC_WORD_END
 db	BC_WORD_INTERP
 dq	"then"
 db	BC_WORD_INTERP
-dq	"prev"
+dq	"deprev"
 db	BC_WORD_RCALL
 dq	"check"
 db	BC_WORD_END

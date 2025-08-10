@@ -282,14 +282,6 @@ db	BC_WORD_END
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
-dq	"codeptr"
-; 48 8b 40 08             mov    rax,QWORD PTR [rax+0x08]
-db	BC_NUM_PUSH
-dq	0x08408B48
-db	BC_COMMA_D
-db	BC_WORD_END
-
-db	BC_WORD_DEFINE
 dq	"last"
 ; 4c 89 e0                mov    rax,r12
 db	BC_NUM_PUSH
@@ -301,18 +293,78 @@ db	BC_COMMA_B
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
-dq	"prev"
+dq	"deprev"
 ; 49 83 ec 18             sub    r12,0x18
 db	BC_NUM_PUSH
 dq	0x18EC8349
 db	BC_COMMA_D
 db	BC_WORD_END
 
+db	BC_WORD_DEFINE
+dq	"denext"
+; 49 83 c4 18             add    r12,0x18
+db	BC_NUM_PUSH
+dq	0x18C48349
+db	BC_COMMA_D
+db	BC_WORD_END
+
+db	BC_DSP_NL
+
+db	BC_WORD_DEFINE
+dq	"name!"
+; 49 89 04 24             mov    QWORD PTR [r12],rax
+db	BC_NUM_PUSH
+dq	0x24048949
+db	BC_COMMA_D
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"codeptr"
+; 48 8b 40 08             mov    rax,QWORD PTR [rax+0x08]
+db	BC_NUM_PUSH
+dq	0x08408B48
+db	BC_COMMA_D
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"codeptr!"
+; 49 89 7c 24 08          mov    QWORD PTR [r12+0x8],rdi
+db	BC_NUM_PUSH
+dq	0x247C8949
+db	BC_COMMA_D
+db	BC_NUM_PUSH
+dq	0x08
+db	BC_COMMA_B
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"srcptr!"
+;  49 89 74 24 10          mov    QWORD PTR [r12+0x10],rsi
+db	BC_NUM_PUSH
+dq	0x24748949
+db	BC_COMMA_D
+db	BC_NUM_PUSH
+dq	0x10
+db	BC_COMMA_B
+db	BC_WORD_END
+
+db	BC_DSP_NL
+db	BC_WORD_DEFINE
+dq	"dictinit"
+db	BC_NUM_PUSH
+dq	0xBC49
+db	BC_COMMA_W
+db	BC_WORD_DEFINE
+dq	"dict"
+db	BC_NUM_COMP
+dq	0x00
+db	BC_WORD_END
+
 db	BC_DSP_NL
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
-dq	"cmpword"
+dq	"cmpname"
 ; 4c 39 e0                cmp    rax,r12
 db	BC_NUM_PUSH
 dq	0x394C
