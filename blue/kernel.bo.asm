@@ -53,7 +53,7 @@ dq	"check"
 db	BC_WORD_INTERP
 dq	"cmpname"
 db	BC_WORD_INTERP
-dq	"eq?"
+dq	"ifeq"
 db	BC_WORD_INTERP
 dq	"last"
 db	BC_WORD_INTERP

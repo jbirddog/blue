@@ -14,4 +14,11 @@ dq	"sue"
 db	BC_WORD_CADDR
 dq	"bob"
 
+db	BC_WORD_RADDR
+dq	"joe"
+db	BC_WORD_RADDR
+dq	"sue"
+db	BC_WORD_RADDR
+dq	"bob"
+
 db	BC_FIN

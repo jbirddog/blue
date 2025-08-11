@@ -5,7 +5,7 @@ dq	"srcsz"
 db	BC_WORD_DEFINE
 dq	"dstsz"
 db	BC_NUM_PUSH
-dq	0x2000
+dq	0x4000
 db	BC_WORD_END
 
 db	BC_DSP_NL
