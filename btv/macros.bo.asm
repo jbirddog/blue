@@ -427,6 +427,11 @@ dq	"restore"
 db	BC_NUM_PUSH
 dq	0x5E
 db	BC_COMMA_B
+;db	BC_WORD_INTERP
+;dq	"rdi="
+;db	BC_WORD_RADDR
+;dq	"outbuf"
+;db	BC_COMMA
 db	BC_WORD_END
 
 db	BC_DSP_NL

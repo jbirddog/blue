@@ -1,17 +1,17 @@
 include "bc.inc"
 
 db	BC_WORD_DEFINE
-dq	"dstout?"
-db	BC_WORD_INTERP
-dq	"save"
-db	BC_WORD_END
-
-db	BC_WORD_DEFINE
 dq	"dstout"
 db	BC_WORD_INTERP
 dq	"writedst"
 db	BC_WORD_END
 
+db	BC_WORD_DEFINE
+dq	"dstout?"
+db	BC_WORD_INTERP
+dq	"save"
+;db	BC_WORD_RCALL
+;dq	"dstout"
 db	BC_WORD_INTERP
 dq	"restore"
 db	BC_WORD_END
