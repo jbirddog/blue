@@ -412,3 +412,22 @@ db	BC_WORD_END
 
 db	BC_DSP_NL
 db	BC_DSP_NL
+
+db	BC_WORD_DEFINE
+dq	"save"
+; 56                      push   rsi
+db	BC_NUM_PUSH
+dq	0x56
+db	BC_COMMA_B
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"restore"
+; 5e                      pop    rsi
+db	BC_NUM_PUSH
+dq	0x5E
+db	BC_COMMA_B
+db	BC_WORD_END
+
+db	BC_DSP_NL
+db	BC_DSP_NL
