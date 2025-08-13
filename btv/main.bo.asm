@@ -2,10 +2,6 @@ include "bc.inc"
 
 db	BC_WORD_DEFINE
 dq	"main"
-db	BC_DOLLAR_RADDR
-db	BC_WORD_CADDR
-dq	"entry"
-db	BC_SET
 db	BC_WORD_INTERP
 dq	"readsrc"
 db	BC_WORD_INTERP
