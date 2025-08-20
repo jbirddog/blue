@@ -21,8 +21,6 @@ db	BC_WORD_INTERP
 dq	"reset"
 db	BC_WORD_INTERP
 dq	'" "'
-;db	BC_WORD_RCALL
-;dq	"dstout?"
 db	BC_WORD_RCALL
 dq	"next"
 db	BC_WORD_END
