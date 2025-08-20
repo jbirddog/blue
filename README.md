@@ -139,7 +139,6 @@ Some links that may help fill in some back story/knowledge in no particular orde
    
 ### btv
 
-1. Multiple dst writes based on size (needs btv save/restore)
 1. Look at using blue/dispatch.bo (call vs jmp, optbl)
 1. Look at using blue/fin.bo
 1. Look at using blue/srcdst.bo

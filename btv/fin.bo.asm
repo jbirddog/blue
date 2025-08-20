@@ -1,5 +1,13 @@
 include "bc.inc"
 
+db	BC_WORD_RADDR
+dq	"main"
+db	BC_WORD_CADDR
+dq	"entry"
+db	BC_SET
+
+db	BC_DSP_NL
+
 db	BC_DOLLAR_RADDR
 db	BC_DUP
 db	BC_WORD_CADDR

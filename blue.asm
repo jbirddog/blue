@@ -261,7 +261,8 @@ entry $
 	syscall
 
 	mov	REG_SRC, _src
-	mov	REG_DST, _dst
+	mov	REG_DSTB, _dst
+	mov	REG_DST, REG_DSTB
 	mov	REG_DS, DS_BASE
 	mov	REG_LAST, _dict - DICT_ENTRY_SIZE
 
