@@ -7,11 +7,13 @@ dq	"writedst"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
-dq	"dstout?"
+dq	"dstout"
 db	BC_WORD_INTERP
 dq	"save"
 ;db	BC_WORD_RCALL
 ;dq	"dstout"
+db	BC_WORD_INTERP
+dq	"writedst"
 db	BC_WORD_INTERP
 dq	"restore"
 db	BC_WORD_END
@@ -331,6 +333,8 @@ db	BC_WORD_DEFINE
 dq	"dsp_nl"
 db	BC_WORD_INTERP
 dq	'"\n"'
+db	BC_WORD_RCALL
+dq	"dstout"
 db	BC_WORD_END
 
 db	BC_DSP_NL

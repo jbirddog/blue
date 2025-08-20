@@ -377,6 +377,13 @@ db	BC_WORD_DEFINE
 dq	"dst"
 db	BC_NUM_COMP
 dq	0x00
+; 49 89 fb                mov    r11,rdi
+db	BC_NUM_PUSH
+dq	0x8949
+db	BC_COMMA_W
+db	BC_NUM_PUSH
+dq	0xFB
+db	BC_COMMA_B
 db	BC_WORD_END
 
 db	BC_DSP_NL
@@ -419,19 +426,29 @@ dq	"save"
 db	BC_NUM_PUSH
 dq	0x56
 db	BC_COMMA_B
+; 41 53                   push   r11
+db	BC_NUM_PUSH
+dq	0x5341
+db	BC_COMMA_W
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
 dq	"restore"
+; 41 5b                   pop    r11
+db	BC_NUM_PUSH
+dq	0x5B41
+db	BC_COMMA_W
 ; 5e                      pop    rsi
 db	BC_NUM_PUSH
 dq	0x5E
 db	BC_COMMA_B
-;db	BC_WORD_INTERP
-;dq	"rdi="
-;db	BC_WORD_RADDR
-;dq	"outbuf"
-;db	BC_COMMA
+; 4c 89 df                mov    rdi,r11
+db	BC_NUM_PUSH
+dq	0x894C
+db	BC_COMMA_W
+db	BC_NUM_PUSH
+dq	0xDF
+db	BC_COMMA_B
 db	BC_WORD_END
 
 db	BC_DSP_NL
