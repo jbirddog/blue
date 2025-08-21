@@ -69,6 +69,7 @@ db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"writedst"
+if 0
 ; mov rdx, rdi
 db	BC_NUM_PUSH
 dq	0x8948
@@ -76,6 +77,15 @@ db	BC_COMMA_W
 db	BC_NUM_PUSH
 dq	0xFA
 db	BC_COMMA_B
+end if
+db	BC_WORD_INTERP
+dq	"rdx"
+db	BC_WORD_INTERP
+dq	"rdi"
+db	BC_WORD_INTERP
+dq	"rex.w"
+db	BC_WORD_INTERP
+dq	"mov/rr"
 
 db	BC_WORD_INTERP
 dq	"rsi="
@@ -264,7 +274,7 @@ db	BC_DSP_NL
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
-dq	"dst>r"
+dq	"last>r"
 ; 41 54                   push   r12
 db	BC_NUM_PUSH
 dq	0x5441
@@ -272,14 +282,12 @@ db	BC_COMMA_W
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
-dq	"r>dst"
+dq	"r>last"
 ; 41 5c                   pop    r12
 db	BC_NUM_PUSH
 dq	0x5C41
 db	BC_COMMA_W
 db	BC_WORD_END
-
-db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"last"
@@ -291,6 +299,8 @@ db	BC_NUM_PUSH
 dq	0xE0
 db	BC_COMMA_B
 db	BC_WORD_END
+
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"deprev"

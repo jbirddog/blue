@@ -1,6 +1,30 @@
 include "bc.inc"
 
 db	BC_WORD_DEFINE
+dq	"rex.w"
+db	BC_WORD_INTERP
+dq	"rex"
+db	BC_WORD_INTERP
+dq	".w"
+db	BC_OR
+db	BC_COMMA_B
+db	BC_WORD_END
+
+db	BC_DSP_NL
+
+db	BC_WORD_DEFINE
+dq	"mov/rr"
+db	BC_NUM_PUSH
+dq	0x89
+db	BC_COMMA_B
+db	BC_WORD_INTERP
+dq	"/r"
+db	BC_COMMA_B
+db	BC_WORD_END
+
+db	BC_DSP_NL
+
+db	BC_WORD_DEFINE
 dq	"xor"
 db	BC_NUM_PUSH
 dq	0x31
