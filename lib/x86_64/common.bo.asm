@@ -13,7 +13,7 @@ db	BC_WORD_END
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
-dq	"mov/rr"
+dq	"mov"
 db	BC_NUM_PUSH
 dq	0x89
 db	BC_COMMA_B

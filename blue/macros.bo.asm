@@ -69,15 +69,6 @@ db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"writedst"
-if 0
-; mov rdx, rdi
-db	BC_NUM_PUSH
-dq	0x8948
-db	BC_COMMA_W
-db	BC_NUM_PUSH
-dq	0xFA
-db	BC_COMMA_B
-end if
 db	BC_WORD_INTERP
 dq	"rdx"
 db	BC_WORD_INTERP
@@ -85,7 +76,7 @@ dq	"rdi"
 db	BC_WORD_INTERP
 dq	"rex.w"
 db	BC_WORD_INTERP
-dq	"mov/rr"
+dq	"mov"
 
 db	BC_WORD_INTERP
 dq	"rsi="
@@ -193,13 +184,14 @@ db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"keep"
-; 48 89 c1                mov    rcx,rax
-db	BC_NUM_PUSH
-dq	0x8948
-db	BC_COMMA_W
-db	BC_NUM_PUSH
-dq	0xC1
-db	BC_COMMA_B
+db	BC_WORD_INTERP
+dq	"rcx"
+db	BC_WORD_INTERP
+dq	"rax"
+db	BC_WORD_INTERP
+dq	"rex.w"
+db	BC_WORD_INTERP
+dq	"mov"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE

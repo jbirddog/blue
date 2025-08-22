@@ -9,6 +9,14 @@ dq	0x00
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
+dq	"ecx"
+db	BC_WORD_DEFINE
+dq	"rcx"
+db	BC_NUM_PUSH
+dq	0x01
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
 dq	"edx"
 db	BC_WORD_DEFINE
 dq	"rdx"
