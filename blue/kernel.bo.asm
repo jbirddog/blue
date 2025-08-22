@@ -44,7 +44,7 @@ db	BC_DSP_NL
 db	BC_WORD_DEFINE
 dq	"find"
 db	BC_WORD_INTERP
-dq	"dst>r"
+dq	"last>r"
 db	BC_WORD_INTERP
 dq	"lodsq"
 
@@ -57,7 +57,7 @@ dq	"ifeq"
 db	BC_WORD_INTERP
 dq	"last"
 db	BC_WORD_INTERP
-dq	"r>dst"
+dq	"r>last"
 db	BC_WORD_END
 db	BC_WORD_INTERP
 dq	"then"
