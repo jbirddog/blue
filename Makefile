@@ -60,6 +60,7 @@ obj/bnc.b: \
 	obj/lib/bc/view/prefix.bo \
 	obj/lib/elf/headers.min.bo \
 	obj/lib/bc/view/hexnum.bo \
+	obj/lib/bc/view/rt.bo \
 	obj/btv/ops.bo \
 	obj/blue/lookup.bo \
 	obj/btv/main.bo \
@@ -76,6 +77,7 @@ obj/btv.b: \
 	obj/lib/bc/view/ansi.bo \
 	obj/lib/elf/headers.min.bo \
 	obj/lib/bc/view/hexnum.bo \
+	obj/lib/bc/view/rt.bo \
 	obj/btv/ops.bo \
 	obj/blue/lookup.bo \
 	obj/btv/main.bo \
