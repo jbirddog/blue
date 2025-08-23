@@ -57,6 +57,7 @@ obj/bnc.b: \
 	obj/lib/x86_64/linux.bo \
 	obj/btv/dispatch.bo \
 	obj/btv/macros.bo \
+	obj/lib/bc/view/prefix.bo \
 	obj/lib/elf/headers.min.bo \
 	obj/lib/bc/view/hexnum.bo \
 	obj/btv/ops.bo \
@@ -72,6 +73,7 @@ obj/btv.b: \
 	obj/lib/x86_64/linux.bo \
 	obj/btv/dispatch.bo \
 	obj/btv/macros.bo \
+	obj/lib/bc/view/ansi.bo \
 	obj/lib/elf/headers.min.bo \
 	obj/lib/bc/view/hexnum.bo \
 	obj/btv/ops.bo \
