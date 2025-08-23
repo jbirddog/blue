@@ -32,10 +32,12 @@ db	BC_WORD_INTERP
 dq	"++"
 db	BC_WORD_INTERP
 dq	"italic"
+if 0
 db	BC_WORD_INTERP
 dq	"++"
 db	BC_WORD_INTERP
 dq	"bold"
+end if
 db	BC_WORD_INTERP
 dq	"shows"
 db	BC_WORD_END
@@ -43,10 +45,12 @@ db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"word"
+if 0
 db	BC_WORD_INTERP
 dq	"++"
 db	BC_WORD_INTERP
 dq	"bold"
+end if
 db	BC_WORD_INTERP
 dq	"shows"
 db	BC_WORD_INTERP
@@ -56,10 +60,12 @@ db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"hexnum"
+if 0
 db	BC_WORD_INTERP
 dq	"++"
 db	BC_WORD_INTERP
 dq	"bold"
+end if
 db	BC_WORD_INTERP
 dq	"shows"
 db	BC_WORD_INTERP
