@@ -2,9 +2,11 @@
 FASM ?= $(shell which fasm)
 
 BLUE_BC_ASMS = $(wildcard \
+	lib/bc/view/*.bo.asm \
 	lib/elf/*.bo.asm \
 	lib/x86_64/*.bo.asm \
 	blue/*.bo.asm \
+	bnc/*.bo.asm \
 	btv/*.bo.asm \
 	examples/exit/*.bo.asm \
 	examples/helloworld/*.bo.asm \
@@ -15,7 +17,7 @@ BLUE_BC_OBJS = $(BLUE_BC_ASMS:%.bo.asm=obj/%.bo)
 
 BLUE = bin/blue
 BLUE_IN_BLUE = bin/bib
-TOOLS = bin/btv
+TOOLS = bin/bnc bin/btv
 
 EXAMPLES = \
 	bin/examples/exit \
@@ -48,6 +50,21 @@ obj/bib.b: \
 	obj/blue/main.bo \
 	obj/blue/fin.bo \
 
+obj/bnc.b: \
+	obj/lib/x86_64/encoding.bo \
+	obj/lib/x86_64/common.bo \
+	obj/lib/x86_64/convenience.bo \
+	obj/lib/x86_64/linux.bo \
+	obj/btv/dispatch.bo \
+	obj/btv/macros.bo \
+	obj/lib/elf/headers.min.bo \
+	obj/lib/bc/view/hexnum.bo \
+	obj/btv/ops.bo \
+	obj/blue/lookup.bo \
+	obj/btv/main.bo \
+	obj/btv/fin.bo \
+	obj/btv/elf.fin.bo
+
 obj/btv.b: \
 	obj/lib/x86_64/encoding.bo \
 	obj/lib/x86_64/common.bo \
@@ -56,7 +73,7 @@ obj/btv.b: \
 	obj/btv/dispatch.bo \
 	obj/btv/macros.bo \
 	obj/lib/elf/headers.min.bo \
-	obj/btv/hexnum.bo \
+	obj/lib/bc/view/hexnum.bo \
 	obj/btv/ops.bo \
 	obj/blue/lookup.bo \
 	obj/btv/main.bo \

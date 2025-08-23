@@ -29,11 +29,11 @@ dq	"vizop"
 db	BC_WORD_INTERP
 dq	"yellow"
 db	BC_WORD_INTERP
-dq	"and"
+dq	"++"
 db	BC_WORD_INTERP
 dq	"italic"
 db	BC_WORD_INTERP
-dq	"and"
+dq	"++"
 db	BC_WORD_INTERP
 dq	"bold"
 db	BC_WORD_INTERP
@@ -44,7 +44,7 @@ db	BC_DSP_NL
 db	BC_WORD_DEFINE
 dq	"word"
 db	BC_WORD_INTERP
-dq	"and"
+dq	"++"
 db	BC_WORD_INTERP
 dq	"bold"
 db	BC_WORD_INTERP
@@ -57,7 +57,7 @@ db	BC_DSP_NL
 db	BC_WORD_DEFINE
 dq	"hexnum"
 db	BC_WORD_INTERP
-dq	"and"
+dq	"++"
 db	BC_WORD_INTERP
 dq	"bold"
 db	BC_WORD_INTERP

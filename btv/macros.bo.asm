@@ -241,7 +241,7 @@ dq	"dout"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
-dq	"and"
+dq	"++"
 db	BC_NUM_PUSH
 dq	";"
 db	BC_WORD_INTERP
