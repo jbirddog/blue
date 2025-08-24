@@ -137,13 +137,10 @@ Some links that may help fill in some back story/knowledge in no particular orde
 1. ifeq needs to r> addr of byte to set, then needs to set byte (needs b!)
 1. Rename dictensz to desz
    
-### btv
+### viewer
 
 1. Look at using blue/dispatch.bo (call vs jmp, optbl)
 1. Look at using blue/fin.bo
 1. Look at using blue/srcdst.bo
-1. Add btv/README.md, move this stuff there
-1. Factor `ashex` so `hexnum` can move to lib
-1. Move ansi terminal stuff to lib
 1. Factor hexnum more
 1. That trailing space that looks like a leading space issue

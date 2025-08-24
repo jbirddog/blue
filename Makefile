@@ -13,6 +13,7 @@ BLUE_BC_ASMS = $(wildcard \
 	viewer/*.bo.asm \
 	examples/exit/*.bo.asm \
 	examples/helloworld/*.bo.asm \
+	examples/readme/*.bo.asm \
 	tests/bc/*.bo.asm \
 )
 
