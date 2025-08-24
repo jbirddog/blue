@@ -56,13 +56,28 @@ call	bye	; except this is run at assemble time
 ## On Colors
 
 By default Blue bytecode is visualized using colors (like `colorForth`) and styles, adding another dimension by
-which information can be relayed to the reader. There is no requirement to use these colors or any colors at
-all. You can easily write a bytecode viewer that uses any means desired to display the bytecode. In the example
+which information can be relayed to the reader. There is no requirement to use these colors or any colors at all.
+
+You can easily write a bytecode viewer that uses any means desired to display the bytecode. In the example
 above, the yellow `bye` means that word is to be called at assemble time. If yellow is not agreeable, make it pink
 or underlined, or display it as `@bye`. If you like reading verbose code, display it as `callAtAssembleTime(bye)`.
 
-Running `./bin/btv < obj/btv/ops.bo` will show how each opcode is displayed, including its color and styling.
-This is also an example of higher level Blue code.
+Thanks to [input from a kind reddit user](https://www.reddit.com/r/Forth/comments/1mwsgga/comment/na80bqc/)
+Blue also ships with a non color based viewer (./bin/bnc) that uses prefixes instead. Using this viewer the example
+above looks like:
+
+```
+:eax #00 ; :edi #07 ; 
+:/0 #C0 or ; :/r #03 shl or ~/0 ; 
+:xor #31 b, ~/r b, ; :syscall #050F w, ; 
+
+:!0 dup ~xor ; :eax! #B8 b, d, ; 
+:bye ~edi ~!0 :exit #3C ~eax! ~syscall ; 
+
+#bye
+```
+
+Running `./bin/btv < obj/lib/bc/view/ops.bo` will show how each opcode is displayed. This is also an example of higher level Blue code.
 
 ## Forth Data Structures
 
