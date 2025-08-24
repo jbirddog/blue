@@ -36,11 +36,6 @@ small number of definitions your code quickly goes from low to high level. As an
 > works. Building up a vocabulary to desribe and solve the problem at hand is a common theme with Blue and
 > other [concatenative languages](https://en.wikipedia.org/wiki/Concatenative_programming_language).
 
-Here red defines a new word. Yellow numbers are pushed on the stack at assemble time. Yellow italicized words are
-opcodes that run at assemble time. The `b,` for example will pop a value off the stack and compile a byte to the
-output. Cyan causes a word to be treated like a macro. Yellow words are called at assemble time. There are more
-colors, styles and opcodes - these are just what is shown here.
-
 This example is essentially the same as when you assemble:
 
 ```
@@ -52,6 +47,32 @@ exit:
 
 call	bye	; except this is run at assemble time
 ```
+
+## Color Tags and Opcodes
+
+One of the core parts of the `colorForth` bytecode structure is the color tag. This shifts state that used to be 
+managed by the interpreter into the bytecode itself. Words like `immediate`, `postpone`, `]` and `[` are no 
+longer needed. Instead each number and word has an associated color tag that tells the bytecode interpreter 
+how to proceed. This results in a massive simplification of both application and interpreter code. Because of 
+this, it is important to realize that the colors are more than just visual. In addition to color tags, `Blue` 
+also has a small set of opcodes to instruct the bytecode interpreter. These opcodes have a visual representation 
+but are not words defined in the dictionary and therefore have no color tag.
+
+### Color Tags
+
+| Color Tag | Type | Description |
+|----|----|----|
+| Red | Word | Creates a new word in the dictionary using the next 8 bytes as the name |
+| Green | Word | Compile a call to the word named in the next 8 bytes into the output |
+| Green | Number | Copy the next 8 bytes into the output |
+| Yellow | Word | At assemble time, call the word named in the next 8 bytes |
+| Yellow | Number | Push the next 8 bytes on the data stack |
+| Cyan | Word | Macro expand the word named in the next 8 bytes |
+| Magenta | Word | Push the assemble time address of the word named in the next 8 bytes on the data stack |
+| White | Word | Push the run time address of the word named in the next 8 bytes on the data stack |
+
+### Opcodes
+
 
 ## On Colors
 
