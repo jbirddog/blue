@@ -53,6 +53,7 @@ obj/bib.b: \
 	obj/lib/bc/lookup.bo \
 	obj/blue/main.bo \
 	obj/blue/fin.bo \
+	obj/lib/elf/fin.res.bo
 
 obj/bnc.b: \
 	obj/lib/x86_64/encoding.bo \
