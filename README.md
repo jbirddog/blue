@@ -105,6 +105,8 @@ which information can be relayed to the reader. There is no requirement to use t
 You can easily write a bytecode viewer that uses any means desired to display the bytecode. In the example
 above, the yellow `bye` means that word is to be called at assemble time. If yellow is not agreeable, make it pink
 or underlined, or display it as `@bye`. If you like reading verbose code, display it as `callAtAssembleTime(bye)`.
+In the same vein, the visual representation of the opcodes can also be changed. if `@` is too terse, simply have 
+your bytecode viewer display `fetch`.
 
 Thanks to [input from a kind reddit user](https://www.reddit.com/r/Forth/comments/1mwsgga/comment/na80bqc/)
 Blue also ships with a non color based viewer (./bin/bnc) that uses prefixes instead. Using this viewer the example
@@ -121,8 +123,18 @@ above looks like:
 #bye
 ```
 
-In the same vein, the visual representation of the opcodes can also be changed. if `@` is too terse, simply have 
-your bytecode viewer display `fetch`.
+The color tag to prefix mapping used by `./bin/bnc` is:
+
+| Color Tag | Prefix |
+|----|----|----|
+| Red | `:` |
+| Green | No prefix |
+| Yellow | `#` |
+| Cyan | `~` |
+| Magenta | `@` |
+| White | `&` |
+
+Opcodes also have no prefix.
 
 ## Forth Data Structures
 
