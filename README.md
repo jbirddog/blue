@@ -56,13 +56,26 @@ call	bye	; except this is run at assemble time
 ## On Colors
 
 By default Blue bytecode is visualized using colors (like `colorForth`) and styles, adding another dimension by
-which information can be relayed to the reader. There is no requirement to use these colors or any colors at
-all. You can easily write a bytecode viewer that uses any means desired to display the bytecode. In the example
+which information can be relayed to the reader. There is no requirement to use these colors or any colors at all.
+
+You can easily write a bytecode viewer that uses any means desired to display the bytecode. In the example
 above, the yellow `bye` means that word is to be called at assemble time. If yellow is not agreeable, make it pink
 or underlined, or display it as `@bye`. If you like reading verbose code, display it as `callAtAssembleTime(bye)`.
 
-Running `./bin/btv < obj/btv/ops.bo` will show how each opcode is displayed, including its color and styling.
-This is also an example of higher level Blue code.
+Thanks to [input from a kind reddit user](https://www.reddit.com/r/Forth/comments/1mwsgga/comment/na80bqc/)
+Blue also ships with a non color based viewer (./bin/bnc) that uses prefixes instead. Using this viewer the example
+above looks like:
+
+```
+:eax #00 ; :edi #07 ; 
+:/0 #C0 or ; :/r #03 shl or ~/0 ; 
+:xor #31 b, ~/r b, ; :syscall #050F w, ; 
+
+:!0 dup ~xor ; :eax! #B8 b, d, ; 
+:bye ~edi ~!0 :exit #3C ~eax! ~syscall ; 
+
+#bye
+```
 
 ## Forth Data Structures
 
@@ -102,9 +115,19 @@ Currently there is no bytecode editor like you would see in a traditional `color
 to build `.bo` files from `.bo.asm` files. This is likely to change at some point, or I may just write some macros
 to make this less tedious. 
 
-`make` will also build `./bin/btv` the Blue Terminal Viewer. Running `./bin/btv < file.b` or `./bin/btv < file.bo`
-will print the bytecode in a format that one would expect when working with a `colorForth` code file. `btv` is a
-complete binary written in Blue.
+`make` will also build two bytecode viewers:
+
+`./bin/btv`: Blue Terminal Vieiwer prints the bytecode using colors.
+
+`./bin/bnc`: Blue No Color will print the bytecode using prefixes instead of colors.
+
+`btv` and `bnc` are complete binaries written in Blue.
+
+To view byteocde pass a file via stdin. For example to see the words that are called when a given opcode needs to
+be displayed: `./bin/btv < obj/lib/bc/view/ops.bo`. Looking at the various bytecode files in `obj` and how they
+are pieced together in the `Makefile` to create executables should be a good place to start exploring.
+
+To use the non colorized version replace `./bin/btv` with `./bin/bnc`.
 
 ## Opcodes
 
@@ -137,13 +160,10 @@ Some links that may help fill in some back story/knowledge in no particular orde
 1. ifeq needs to r> addr of byte to set, then needs to set byte (needs b!)
 1. Rename dictensz to desz
    
-### btv
+### viewer
 
 1. Look at using blue/dispatch.bo (call vs jmp, optbl)
 1. Look at using blue/fin.bo
 1. Look at using blue/srcdst.bo
-1. Add btv/README.md, move this stuff there
-1. Factor `ashex` so `hexnum` can move to lib
-1. Move ansi terminal stuff to lib
 1. Factor hexnum more
 1. That trailing space that looks like a leading space issue
