@@ -54,9 +54,7 @@ One of the core parts of the `colorForth` bytecode structure is the color tag. T
 managed by the interpreter into the bytecode itself. Words like `immediate`, `postpone`, `]` and `[` are no 
 longer needed. Instead each number and word has an associated color tag that tells the bytecode interpreter 
 how to proceed. This results in a massive simplification of both application and interpreter code. Because of 
-this, it is important to realize that the colors are more than just visual. In addition to color tags, `Blue` 
-also has a small set of opcodes to instruct the bytecode interpreter. These opcodes have a visual representation 
-but are not words defined in the dictionary and therefore have no color tag.
+this, it is important to realize that the colors are more than just visual.
 
 ### Color Tags
 
@@ -73,6 +71,31 @@ but are not words defined in the dictionary and therefore have no color tag.
 
 ### Opcodes
 
+In addition to color tags, `Blue` also has a small set of opcodes to instruct the bytecode interpreter. These 
+opcodes have a visual representation but are not words defined in the dictionary and therefore have no color tag.
+
+Opcode numbers are defined in `bc.inc` and are subject to change.
+
+| Visual | Description |
+|----|----|
+| `fin` | Signals that bytecode is finished and output should be written to stdout |
+| `;` | Mark the end of a word definition, compiles a `ret` or performs tail call optimization if following a green word |
+| `dup` | Duplicate the top item on the data stack |
+| `+` | Pop two data stack items, add them and push the result |
+| `-` | Pop two data stack items, subtract them and push the result |
+| `or` | Pop two data stack items, logical or them and push the result |
+| `shl` | Pop two data stack items, shift the second left the number of times in the first and push the result |
+| `$` | Push assemble time address of the current location in the output buffer |
+| `$*` | Push run time address of the current location in the output buffer |
+| `$>` | Push assemble time address of the output buffer's start |
+| `$>!` | Set assemble time address of the output buffer's start |
+| `!` | Pop two data stack items, store the first in the address specified by the second |
+| `@` | Replace the top of stack with the value stored at the specified address |
+| `b,` | Pop the top of the data stack and compile a byte into the output |
+| `w,` | Pop the top of the data stack and compile a word into the output |
+| `d,` | Pop the top of the data stack and compile a dword into the output |
+| `,` | Pop the top of the data stack and compile a qword into the output |
+| `\n` | Ignored by the interpreter, display a newline when printing bytecode |
 
 ## On Colors
 
@@ -97,6 +120,9 @@ above looks like:
 
 #bye
 ```
+
+In the same vein, the visual representation of the opcodes can also be changed. if `@` is too terse, simply have 
+your bytecode viewer display `fetch`.
 
 ## Forth Data Structures
 
@@ -149,10 +175,6 @@ be displayed: `./bin/btv < obj/lib/bc/view/ops.bo`. Looking at the various bytec
 are pieced together in the `Makefile` to create executables should be a good place to start exploring.
 
 To use the non colorized version replace `./bin/btv` with `./bin/bnc`.
-
-## Opcodes
-
-Opcodes are defined in `b.inc` and are subject to change.
 
 ## Reading
 
