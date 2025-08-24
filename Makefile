@@ -53,6 +53,7 @@ obj/bib.b: \
 	obj/lib/bc/lookup.bo \
 	obj/blue/main.bo \
 	obj/blue/fin.bo \
+	obj/lib/elf/fin.res.bo \
 
 obj/bnc.b: \
 	obj/lib/x86_64/encoding.bo \
@@ -70,7 +71,7 @@ obj/bnc.b: \
 	obj/lib/bc/lookup.bo \
 	obj/viewer/main.bo \
 	obj/viewer/fin.bo \
-	obj/viewer/elf.fin.bo
+	obj/lib/elf/fin.res.bo \
 
 obj/btv.b: \
 	obj/lib/x86_64/encoding.bo \
@@ -88,7 +89,7 @@ obj/btv.b: \
 	obj/lib/bc/lookup.bo \
 	obj/viewer/main.bo \
 	obj/viewer/fin.bo \
-	obj/viewer/elf.fin.bo
+	obj/lib/elf/fin.res.bo \
 
 obj/examples/exit.b: \
 	obj/lib/x86_64/encoding.bo \
@@ -97,7 +98,7 @@ obj/examples/exit.b: \
 	obj/lib/x86_64/linux.bo \
 	obj/lib/elf/headers.min.bo \
 	obj/examples/exit/exit.bo \
-	obj/lib/elf/fin.min.bo
+	obj/lib/elf/fin.min.bo \
 
 obj/examples/helloworld.b: \
 	obj/lib/x86_64/encoding.bo \
@@ -106,7 +107,7 @@ obj/examples/helloworld.b: \
 	obj/lib/x86_64/linux.bo \
 	obj/lib/elf/headers.min.bo \
 	obj/examples/helloworld/helloworld.bo \
-	obj/lib/elf/fin.min.bo
+	obj/lib/elf/fin.min.bo \
 
 obj/%.bo: %.bo.asm $(FASM) bc.inc
 	@mkdir -p "$(@D)"

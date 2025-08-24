@@ -1,7 +1,5 @@
 include "bc.inc"
 
-db	BC_DSP_NL
-
 db	BC_DOLLAR_CADDR
 db	BC_DST_BASE
 db	BC_SUB
@@ -13,11 +11,7 @@ dq	"elfbsz"
 db	BC_SET
 
 db	BC_WORD_INTERP
-dq	"dstsz"
-db	BC_WORD_INTERP
-dq	"srcsz"
-db	BC_ADD
-
+dq	"resmemsz"
 db	BC_ADD
 
 db	BC_WORD_CADDR
