@@ -10,7 +10,7 @@ BLUE_BC_ASMS = $(wildcard \
 	lib/x86_64/*.bo.asm \
 	blue/*.bo.asm \
 	bnc/*.bo.asm \
-	btv/*.bo.asm \
+	viewer/*.bo.asm \
 	examples/exit/*.bo.asm \
 	examples/helloworld/*.bo.asm \
 	tests/bc/*.bo.asm \
@@ -58,8 +58,8 @@ obj/bnc.b: \
 	obj/lib/x86_64/common.bo \
 	obj/lib/x86_64/convenience.bo \
 	obj/lib/x86_64/linux.bo \
-	obj/btv/dispatch.bo \
-	obj/btv/macros.bo \
+	obj/viewer/dispatch.bo \
+	obj/viewer/macros.bo \
 	obj/lib/bc/view/prefix/macros.bo \
 	obj/lib/elf/headers.min.bo \
 	obj/lib/bc/view/hexnum.bo \
@@ -67,17 +67,17 @@ obj/bnc.b: \
 	obj/lib/bc/view/prefix/rt.bo \
 	obj/lib/bc/view/ops.bo \
 	obj/lib/bc/lookup.bo \
-	obj/btv/main.bo \
-	obj/btv/fin.bo \
-	obj/btv/elf.fin.bo
+	obj/viewer/main.bo \
+	obj/viewer/fin.bo \
+	obj/viewer/elf.fin.bo
 
 obj/btv.b: \
 	obj/lib/x86_64/encoding.bo \
 	obj/lib/x86_64/common.bo \
 	obj/lib/x86_64/convenience.bo \
 	obj/lib/x86_64/linux.bo \
-	obj/btv/dispatch.bo \
-	obj/btv/macros.bo \
+	obj/viewer/dispatch.bo \
+	obj/viewer/macros.bo \
 	obj/lib/bc/view/ansi/macros.bo \
 	obj/lib/elf/headers.min.bo \
 	obj/lib/bc/view/hexnum.bo \
@@ -85,9 +85,9 @@ obj/btv.b: \
 	obj/lib/bc/view/ansi/rt.bo \
 	obj/lib/bc/view/ops.bo \
 	obj/lib/bc/lookup.bo \
-	obj/btv/main.bo \
-	obj/btv/fin.bo \
-	obj/btv/elf.fin.bo
+	obj/viewer/main.bo \
+	obj/viewer/fin.bo \
+	obj/viewer/elf.fin.bo
 
 obj/examples/exit.b: \
 	obj/lib/x86_64/encoding.bo \
