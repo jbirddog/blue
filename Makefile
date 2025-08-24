@@ -2,6 +2,7 @@
 FASM ?= $(shell which fasm)
 
 BLUE_BC_ASMS = $(wildcard \
+	lib/bc/*.bo.asm \
 	lib/bc/view/*.bo.asm \
 	lib/bc/view/ansi/*.bo.asm \
 	lib/bc/view/prefix/*.bo.asm \
@@ -48,7 +49,7 @@ obj/bib.b: \
 	obj/lib/elf/headers.min.bo \
 	obj/blue/kernel.bo \
 	obj/blue/ops.bo \
-	obj/blue/lookup.bo \
+	obj/lib/bc/lookup.bo \
 	obj/blue/main.bo \
 	obj/blue/fin.bo \
 
@@ -64,8 +65,8 @@ obj/bnc.b: \
 	obj/lib/bc/view/hexnum.bo \
 	obj/lib/bc/view/rt.bo \
 	obj/lib/bc/view/prefix/rt.bo \
-	obj/btv/ops.bo \
-	obj/blue/lookup.bo \
+	obj/lib/bc/view/ops.bo \
+	obj/lib/bc/lookup.bo \
 	obj/btv/main.bo \
 	obj/btv/fin.bo \
 	obj/btv/elf.fin.bo
@@ -82,8 +83,8 @@ obj/btv.b: \
 	obj/lib/bc/view/hexnum.bo \
 	obj/lib/bc/view/rt.bo \
 	obj/lib/bc/view/ansi/rt.bo \
-	obj/btv/ops.bo \
-	obj/blue/lookup.bo \
+	obj/lib/bc/view/ops.bo \
+	obj/lib/bc/lookup.bo \
 	obj/btv/main.bo \
 	obj/btv/fin.bo \
 	obj/btv/elf.fin.bo
