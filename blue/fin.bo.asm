@@ -73,7 +73,4 @@ db	BC_WORD_CADDR
 dq	"elfmsz"
 db	BC_SET
 
-db	BC_DSP_NL
-db	BC_DSP_NL
-
 db	BC_FIN

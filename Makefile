@@ -70,7 +70,6 @@ obj/bnc.b: \
 	obj/lib/bc/lookup.bo \
 	obj/viewer/main.bo \
 	obj/viewer/fin.bo \
-	obj/viewer/elf.fin.bo
 
 obj/btv.b: \
 	obj/lib/x86_64/encoding.bo \
@@ -88,7 +87,6 @@ obj/btv.b: \
 	obj/lib/bc/lookup.bo \
 	obj/viewer/main.bo \
 	obj/viewer/fin.bo \
-	obj/viewer/elf.fin.bo
 
 obj/examples/exit.b: \
 	obj/lib/x86_64/encoding.bo \
