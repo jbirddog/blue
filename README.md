@@ -118,6 +118,7 @@ to make this less tedious.
 `make` will also build two bytecode viewers:
 
 `./bin/btv`: Blue Terminal Vieiwer prints the bytecode using colors.
+
 `./bin/bnc`: Blue No Color will print the bytecode using prefixes instead of colors.
 
 `btv` and `bnc` are complete binaries written in Blue.
