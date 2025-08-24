@@ -77,8 +77,6 @@ above looks like:
 #bye
 ```
 
-Running `./bin/btv < obj/lib/bc/view/ops.bo` will show how each opcode is displayed. This is also an example of higher level Blue code.
-
 ## Forth Data Structures
 
 Blue has a `dictionary` that can hold up to 256 entries. Each entry associates the address of the current location 
@@ -117,9 +115,18 @@ Currently there is no bytecode editor like you would see in a traditional `color
 to build `.bo` files from `.bo.asm` files. This is likely to change at some point, or I may just write some macros
 to make this less tedious. 
 
-`make` will also build `./bin/btv` the Blue Terminal Viewer. Running `./bin/btv < file.b` or `./bin/btv < file.bo`
-will print the bytecode in a format that one would expect when working with a `colorForth` code file. `btv` is a
-complete binary written in Blue.
+`make` will also build two bytecode viewers:
+
+`./bin/btv`: Blue Terminal Vieiwer prints the bytecode using colors.
+`./bin/bnc`: Blue No Color will print the bytecode using prefixes instead of colors.
+
+`btv` and `bnc` are complete binaries written in Blue.
+
+To view byteocde pass a file via stdin. For example to see the words that are called when a given opcode needs to
+be displayed: `./bin/btv < obj/lib/bc/view/ops.bo`. Looking at the various bytecode files in `obj` and how they
+are pieced together in the `Makefile` to create executables should be a good place to start exploring.
+
+To use the non colorized version replace `./bin/btv` with `./bin/bnc`.
 
 ## Opcodes
 
