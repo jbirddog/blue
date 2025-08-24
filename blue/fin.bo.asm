@@ -10,7 +10,7 @@ db	BC_DSP_NL
 
 db	BC_DOLLAR_RADDR
 db	BC_WORD_INTERP
-dq	"dictensz"
+dq	"desz"
 db	BC_SUB
 db	BC_WORD_CADDR
 dq	"dict"

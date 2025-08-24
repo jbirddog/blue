@@ -15,7 +15,7 @@ dq	CELL_SIZE
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
-dq	"dictensz"
+dq	"desz"
 db	BC_NUM_PUSH
 dq	DICT_ENTRY_SIZE
 db	BC_WORD_END

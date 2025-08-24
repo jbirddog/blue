@@ -158,12 +158,8 @@ Some links that may help fill in some back story/knowledge in no particular orde
 
 1. Factor macros (keep, set, fetch)
 1. ifeq needs to r> addr of byte to set, then needs to set byte (needs b!)
-1. Rename dictensz to desz
    
 ### viewer
 
-1. Look at using blue/dispatch.bo (call vs jmp, optbl)
-1. Look at using blue/fin.bo
-1. Look at using blue/srcdst.bo
 1. Factor hexnum more
 1. That trailing space that looks like a leading space issue
