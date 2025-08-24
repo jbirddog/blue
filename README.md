@@ -126,7 +126,7 @@ above looks like:
 The color tag to prefix mapping used by `./bin/bnc` is:
 
 | Color Tag | Prefix |
-|----|----|----|
+|----|----|
 | Red | `:` |
 | Green | No prefix |
 | Yellow | `#` |
@@ -134,7 +134,7 @@ The color tag to prefix mapping used by `./bin/bnc` is:
 | Magenta | `@` |
 | White | `&` |
 
-Opcodes also have no prefix.
+Opcodes have no prefix and show their default visual representation.
 
 ## Forth Data Structures
 
