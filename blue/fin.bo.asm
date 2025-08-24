@@ -1,6 +1,14 @@
 include "bc.inc"
 
 db	BC_WORD_RADDR
+dq	"main"
+db	BC_WORD_CADDR
+dq	"entry"
+db	BC_SET
+
+db	BC_DSP_NL
+
+db	BC_WORD_RADDR
 dq	"lookup"
 db	BC_WORD_CADDR
 dq	"optbl"
@@ -47,13 +55,6 @@ db	BC_SET
 db	BC_DSP_NL
 db	BC_DSP_NL
 
-db	BC_WORD_RADDR
-dq	"main"
-db	BC_WORD_CADDR
-dq	"entry"
-db	BC_SET
-
-
 db	BC_DOLLAR_CADDR
 db	BC_DST_BASE
 db	BC_SUB
@@ -74,3 +75,5 @@ db	BC_SET
 
 db	BC_DSP_NL
 db	BC_DSP_NL
+
+db	BC_FIN
