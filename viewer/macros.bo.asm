@@ -25,7 +25,7 @@ db	BC_DSP_NL
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
-dq	"bout"
+dq	"b,"
 db	BC_WORD_INTERP
 dq	"al!"
 db	BC_WORD_INTERP
@@ -33,7 +33,7 @@ dq	"stosb"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
-dq	"wout"
+dq	"w,"
 db	BC_WORD_INTERP
 dq	"ax!"
 db	BC_WORD_INTERP
@@ -41,7 +41,7 @@ dq	"stosw"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
-dq	"dout"
+dq	"d,"
 db	BC_WORD_INTERP
 dq	"eax!"
 db	BC_WORD_INTERP
@@ -55,7 +55,7 @@ dq	'"\n"'
 db	BC_NUM_PUSH
 dq	0x0A
 db	BC_WORD_INTERP
-dq	"bout"
+dq	"b,"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
@@ -63,7 +63,7 @@ dq	'" "'
 db	BC_NUM_PUSH
 dq	" "
 db	BC_WORD_INTERP
-dq	"bout"
+dq	"b,"
 db	BC_WORD_END
 
 db	BC_DSP_NL
@@ -73,11 +73,11 @@ dq	'"fin"'
 db	BC_NUM_PUSH
 dq	"fi"
 db	BC_WORD_INTERP
-dq	"wout"
+dq	"w,"
 db	BC_NUM_PUSH
 dq	"n"
 db	BC_WORD_INTERP
-dq	"bout"
+dq	"b,"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
@@ -85,7 +85,7 @@ dq	'";"'
 db	BC_NUM_PUSH
 dq	";"
 db	BC_WORD_INTERP
-dq	"bout"
+dq	"b,"
 db	BC_WORD_END
 
 db	BC_DSP_NL
@@ -95,11 +95,11 @@ dq	'"dup"'
 db	BC_NUM_PUSH
 dq	"du"
 db	BC_WORD_INTERP
-dq	"wout"
+dq	"w,"
 db	BC_NUM_PUSH
 dq	"p"
 db	BC_WORD_INTERP
-dq	"bout"
+dq	"b,"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
@@ -107,7 +107,7 @@ dq	'"+"'
 db	BC_NUM_PUSH
 dq	"+"
 db	BC_WORD_INTERP
-dq	"bout"
+dq	"b,"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
@@ -115,7 +115,7 @@ dq	'"-"'
 db	BC_NUM_PUSH
 dq	"-"
 db	BC_WORD_INTERP
-dq	"bout"
+dq	"b,"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
@@ -123,7 +123,7 @@ dq	'"|"'
 db	BC_NUM_PUSH
 dq	"|"
 db	BC_WORD_INTERP
-dq	"bout"
+dq	"b,"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
@@ -131,7 +131,7 @@ dq	'"<<"'
 db	BC_NUM_PUSH
 dq	"<<"
 db	BC_WORD_INTERP
-dq	"wout"
+dq	"w,"
 db	BC_WORD_END
 
 db	BC_DSP_NL
@@ -141,7 +141,7 @@ dq	'"$"'
 db	BC_NUM_PUSH
 dq	"$"
 db	BC_WORD_INTERP
-dq	"bout"
+dq	"b,"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
@@ -149,7 +149,7 @@ dq	'"*"'
 db	BC_NUM_PUSH
 dq	"*"
 db	BC_WORD_INTERP
-dq	"bout"
+dq	"b,"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
@@ -157,7 +157,7 @@ dq	'">"'
 db	BC_NUM_PUSH
 dq	">"
 db	BC_WORD_INTERP
-dq	"bout"
+dq	"b,"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
@@ -165,7 +165,7 @@ dq	'"!"'
 db	BC_NUM_PUSH
 dq	"!"
 db	BC_WORD_INTERP
-dq	"bout"
+dq	"b,"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
@@ -173,7 +173,7 @@ dq	'"@"'
 db	BC_NUM_PUSH
 dq	"@"
 db	BC_WORD_INTERP
-dq	"bout"
+dq	"b,"
 db	BC_WORD_END
 
 db	BC_DSP_NL
@@ -209,7 +209,7 @@ dq	'"b,"'
 db	BC_NUM_PUSH
 dq	"b,"
 db	BC_WORD_INTERP
-dq	"wout"
+dq	"w,"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
@@ -217,7 +217,7 @@ dq	'"w,"'
 db	BC_NUM_PUSH
 dq	"w,"
 db	BC_WORD_INTERP
-dq	"wout"
+dq	"w,"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
@@ -225,7 +225,7 @@ dq	'"d,"'
 db	BC_NUM_PUSH
 dq	"d,"
 db	BC_WORD_INTERP
-dq	"wout"
+dq	"w,"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
@@ -233,7 +233,7 @@ dq	'","'
 db	BC_NUM_PUSH
 dq	","
 db	BC_WORD_INTERP
-dq	"bout"
+dq	"b,"
 db	BC_WORD_END
 
 db	BC_DSP_NL
