@@ -135,7 +135,7 @@ dq	"ds_or"
 db	BC_WORD_RCALL
 dq	"vizop"
 db	BC_WORD_INTERP
-dq	'"or"'
+dq	'"|"'
 db	BC_WORD_END
 
 db	BC_DSP_NL
