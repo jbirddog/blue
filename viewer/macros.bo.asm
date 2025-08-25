@@ -119,23 +119,19 @@ dq	"bout"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
-dq	'"or"'
+dq	'"|"'
 db	BC_NUM_PUSH
-dq	"or"
+dq	"|"
 db	BC_WORD_INTERP
-dq	"wout"
+dq	"bout"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
-dq	'"shl"'
+dq	'"<<"'
 db	BC_NUM_PUSH
-dq	"sh"
+dq	"<<"
 db	BC_WORD_INTERP
 dq	"wout"
-db	BC_NUM_PUSH
-dq	"l"
-db	BC_WORD_INTERP
-dq	"bout"
 db	BC_WORD_END
 
 db	BC_DSP_NL
