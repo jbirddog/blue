@@ -145,7 +145,7 @@ dq	"ds_shl"
 db	BC_WORD_RCALL
 dq	"vizop"
 db	BC_WORD_INTERP
-dq	'"shl"'
+dq	'"<<"'
 db	BC_WORD_END
 
 db	BC_DSP_NL
