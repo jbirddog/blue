@@ -330,15 +330,6 @@ db	BC_WORD_INTERP
 dq	"rsi"
 db	BC_WORD_INTERP
 dq	"pop"
-if 0
-; 4c 89 df                mov    rdi,r11
-db	BC_NUM_PUSH
-dq	0x894C
-db	BC_COMMA_W
-db	BC_NUM_PUSH
-dq	0xDF
-db	BC_COMMA_B
-end if
 db	BC_WORD_INTERP
 dq	"rdi"
 db	BC_WORD_INTERP

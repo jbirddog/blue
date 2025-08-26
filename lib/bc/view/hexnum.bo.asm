@@ -120,15 +120,6 @@ db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"ashex"
-if 0
-; 48 89 c2                mov    rdx,rax
-db	BC_NUM_PUSH
-dq	0x8948
-db	BC_COMMA_W
-db	BC_NUM_PUSH
-dq	0xC2
-db	BC_COMMA_B
-end if
 db	BC_WORD_INTERP
 dq	"rdx"
 db	BC_WORD_INTERP
