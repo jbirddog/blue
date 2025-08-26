@@ -185,9 +185,9 @@ db	BC_DSP_NL
 db	BC_WORD_DEFINE
 dq	"keep"
 db	BC_WORD_INTERP
-dq	"rcx"
+dq	"reg.tos2"
 db	BC_WORD_INTERP
-dq	"rax"
+dq	"reg.tos"
 db	BC_WORD_INTERP
 dq	"rex.w"
 db	BC_WORD_INTERP
@@ -288,7 +288,7 @@ db	BC_WORD_END
 db	BC_WORD_DEFINE
 dq	"last"
 db	BC_WORD_INTERP
-dq	"rax"
+dq	"reg.tos"
 db	BC_WORD_INTERP
 dq	"reg.last"
 db	BC_WORD_INTERP
