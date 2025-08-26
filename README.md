@@ -114,7 +114,7 @@ above looks like:
 
 ```
 :eax #00 ; :edi #07 ; 
-:/0 #C0 or ; :/r #03 shl or ~/0 ; 
+:/0 #C0 or ; :/r #03 << | ~/0 ; 
 :xor #31 b, ~/r b, ; :syscall #050F w, ; 
 
 :!0 dup ~xor ; :eax! #B8 b, d, ; 
