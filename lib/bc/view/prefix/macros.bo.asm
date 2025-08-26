@@ -5,7 +5,7 @@ dq	"red"
 db	BC_NUM_PUSH
 dq	":"
 db	BC_WORD_INTERP
-dq	"bout"
+dq	"b,"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
@@ -17,7 +17,7 @@ dq	"yellow"
 db	BC_NUM_PUSH
 dq	"#"
 db	BC_WORD_INTERP
-dq	"bout"
+dq	"b,"
 db	BC_WORD_END
 
 db	BC_DSP_NL
@@ -27,7 +27,7 @@ dq	"magenta"
 db	BC_NUM_PUSH
 dq	"@"
 db	BC_WORD_INTERP
-dq	"bout"
+dq	"b,"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
@@ -35,7 +35,7 @@ dq	"cyan"
 db	BC_NUM_PUSH
 dq	"~"
 db	BC_WORD_INTERP
-dq	"bout"
+dq	"b,"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
@@ -43,7 +43,7 @@ dq	"white"
 db	BC_NUM_PUSH
 dq	"&"
 db	BC_WORD_INTERP
-dq	"bout"
+dq	"b,"
 db	BC_WORD_END
 
 db	BC_DSP_NL

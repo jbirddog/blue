@@ -1,17 +1,16 @@
 include "bc.inc"
 
+db	BC_DSP_NL
+
+db	BC_WORD_DEFINE
+dq	"rdx="
+db	BC_WORD_INTERP
+dq	"rex.w"
 db	BC_WORD_DEFINE
 dq	"edx="
 db	BC_NUM_PUSH
 dq	0xBA
 db	BC_COMMA_B
-db	BC_WORD_END
-
-db	BC_WORD_DEFINE
-dq	"rdx="
-db	BC_NUM_PUSH
-dq	0xBA48
-db	BC_COMMA_W
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
@@ -91,6 +90,32 @@ db	BC_WORD_INTERP
 dq	"!0"
 db	BC_WORD_INTERP
 dq	"inc"
+db	BC_WORD_END
+
+db	BC_DSP_NL
+
+db	BC_WORD_DEFINE
+dq	"b,"
+db	BC_WORD_INTERP
+dq	"al!"
+db	BC_WORD_INTERP
+dq	"stosb"
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"w,"
+db	BC_WORD_INTERP
+dq	"ax!"
+db	BC_WORD_INTERP
+dq	"stosw"
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"d,"
+db	BC_WORD_INTERP
+dq	"eax!"
+db	BC_WORD_INTERP
+dq	"stosd"
 db	BC_WORD_END
 
 db	BC_DSP_NL

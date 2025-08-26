@@ -10,6 +10,44 @@ db	BC_OR
 db	BC_COMMA_B
 db	BC_WORD_END
 
+db	BC_WORD_DEFINE
+dq	"rex.b"
+db	BC_WORD_INTERP
+dq	"rex"
+db	BC_WORD_INTERP
+dq	".b"
+db	BC_OR
+db	BC_COMMA_B
+db	BC_WORD_END
+
+db	BC_DSP_NL
+
+db	BC_WORD_DEFINE
+dq	"rex.wr"
+db	BC_WORD_INTERP
+dq	"rex"
+db	BC_WORD_INTERP
+dq	".w"
+db	BC_OR
+db	BC_WORD_INTERP
+dq	".r"
+db	BC_OR
+db	BC_COMMA_B
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"rex.wb"
+db	BC_WORD_INTERP
+dq	"rex"
+db	BC_WORD_INTERP
+dq	".w"
+db	BC_OR
+db	BC_WORD_INTERP
+dq	".b"
+db	BC_OR
+db	BC_COMMA_B
+db	BC_WORD_END
+
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
@@ -97,6 +135,24 @@ db	BC_WORD_DEFINE
 dq	"stosd"
 db	BC_NUM_PUSH
 dq	0xAB
+db	BC_COMMA_B
+db	BC_WORD_END
+
+db	BC_DSP_NL
+
+db	BC_WORD_DEFINE
+dq	"push"
+db	BC_NUM_PUSH
+dq	0x50
+db	BC_ADD
+db	BC_COMMA_B
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"pop"
+db	BC_NUM_PUSH
+dq	0x58
+db	BC_ADD
 db	BC_COMMA_B
 db	BC_WORD_END
 

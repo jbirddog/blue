@@ -79,3 +79,12 @@ db	BC_WORD_END
 
 db	BC_DSP_NL
 db	BC_DSP_NL
+
+db	BC_WORD_DEFINE
+dq	"reg.last"
+db	BC_WORD_INTERP
+dq	"r12"
+db	BC_WORD_END
+
+db	BC_DSP_NL
+db	BC_DSP_NL

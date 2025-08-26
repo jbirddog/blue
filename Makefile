@@ -60,7 +60,7 @@ obj/bnc.b: \
 	obj/lib/x86_64/common.bo \
 	obj/lib/x86_64/convenience.bo \
 	obj/lib/x86_64/linux.bo \
-	obj/viewer/dispatch.bo \
+	obj/viewer/defs.bo \
 	obj/viewer/macros.bo \
 	obj/lib/bc/view/prefix/macros.bo \
 	obj/lib/elf/headers.min.bo \
@@ -78,7 +78,7 @@ obj/btv.b: \
 	obj/lib/x86_64/common.bo \
 	obj/lib/x86_64/convenience.bo \
 	obj/lib/x86_64/linux.bo \
-	obj/viewer/dispatch.bo \
+	obj/viewer/defs.bo \
 	obj/viewer/macros.bo \
 	obj/lib/bc/view/ansi/macros.bo \
 	obj/lib/elf/headers.min.bo \

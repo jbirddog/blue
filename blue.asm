@@ -212,9 +212,7 @@ dst_base_set:
 	jmp	next
 
 k_set:
-	call	ds_pop
-	mov	rcx, rax
-	call	ds_pop
+	call	ds_pop2
 	mov	[rcx], rax
 	jmp	next
 
