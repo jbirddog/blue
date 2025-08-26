@@ -207,9 +207,9 @@ db	BC_WORD_END
 
 db	BC_WORD_DEFINE
 dq	"fetch"
-; 48 89 01                mov    QWORD PTR [rcx],rax  <<<<<----- TODO: needs to be mov rax, [rax]
+; 48 8b 00                mov    rax,QWORD PTR [rax]
 db	BC_NUM_PUSH
-dq	0x8948
+dq	0x8B48
 db	BC_COMMA_W
 db	BC_NUM_PUSH
 dq	0x00
