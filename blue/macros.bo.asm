@@ -290,7 +290,7 @@ dq	"last"
 db	BC_WORD_INTERP
 dq	"rax"
 db	BC_WORD_INTERP
-dq	"r12"
+dq	"reg.last"
 db	BC_WORD_INTERP
 dq	"rex.wr"
 db	BC_WORD_INTERP
