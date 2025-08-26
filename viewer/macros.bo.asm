@@ -261,13 +261,14 @@ db	BC_WORD_DEFINE
 dq	"dst"
 db	BC_NUM_COMP
 dq	0x00
-; 49 89 fb                mov    r11,rdi
-db	BC_NUM_PUSH
-dq	0x8949
-db	BC_COMMA_W
-db	BC_NUM_PUSH
-dq	0xFB
-db	BC_COMMA_B
+db	BC_WORD_INTERP
+dq	"r11"
+db	BC_WORD_INTERP
+dq	"rdi"
+db	BC_WORD_INTERP
+dq	"rex.wb"
+db	BC_WORD_INTERP
+dq	"mov"
 db	BC_WORD_END
 
 db	BC_DSP_NL
