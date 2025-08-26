@@ -320,14 +320,16 @@ db	BC_WORD_END
 
 db	BC_WORD_DEFINE
 dq	"restore"
-; 41 5b                   pop    r11
-db	BC_NUM_PUSH
-dq	0x5B41
-db	BC_COMMA_W
-; 5e                      pop    rsi
-db	BC_NUM_PUSH
-dq	0x5E
-db	BC_COMMA_B
+db	BC_WORD_INTERP
+dq	"r11"
+db	BC_WORD_INTERP
+dq	"rex.b"
+db	BC_WORD_INTERP
+dq	"pop"
+db	BC_WORD_INTERP
+dq	"rsi"
+db	BC_WORD_INTERP
+dq	"pop"
 ; 4c 89 df                mov    rdi,r11
 db	BC_NUM_PUSH
 dq	0x894C
