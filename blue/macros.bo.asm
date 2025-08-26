@@ -267,10 +267,18 @@ db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"last>r"
+if 0
 ; 41 54                   push   r12
 db	BC_NUM_PUSH
 dq	0x5441
 db	BC_COMMA_W
+end if
+db	BC_WORD_INTERP
+dq	"reg.last"
+db	BC_WORD_INTERP
+dq	"rex.b"
+db	BC_WORD_INTERP
+dq	"push"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE

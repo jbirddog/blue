@@ -25,6 +25,12 @@ dq	0x02
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
+dq	"r12"
+db	BC_NUM_PUSH
+dq	0x04
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
 dq	"esi"
 db	BC_WORD_DEFINE
 dq	"rsi"
@@ -69,6 +75,24 @@ db	BC_WORD_DEFINE
 dq	".w"
 db	BC_NUM_PUSH
 dq	0x08
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	".r"
+db	BC_NUM_PUSH
+dq	0x04
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	".x"
+db	BC_NUM_PUSH
+dq	0x02
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	".b"
+db	BC_NUM_PUSH
+dq	0x01
 db	BC_WORD_END
 
 db	BC_DSP_NL
