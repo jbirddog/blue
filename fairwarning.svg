@@ -15,8 +15,8 @@
     <tspan fill="yellow" font-style="italic">;</tspan>
     <tspan fill="red">/r</tspan>
     <tspan fill="yellow">03</tspan>
-    <tspan fill="yellow" font-style="italic">shl</tspan>
-    <tspan fill="yellow" font-style="italic">or</tspan>
+    <tspan fill="yellow" font-style="italic">&lt;&lt;</tspan>
+    <tspan fill="yellow" font-style="italic">|</tspan>
     <tspan fill="cyan">/0</tspan>
     <tspan fill="yellow" font-style="italic">;</tspan>
   </text>
