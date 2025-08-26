@@ -274,13 +274,14 @@ db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"writedst"
-; mov rdx, rdi
-db	BC_NUM_PUSH
-dq	0x8948
-db	BC_COMMA_W
-db	BC_NUM_PUSH
-dq	0xFA
-db	BC_COMMA_B
+db	BC_WORD_INTERP
+dq	"rdx"
+db	BC_WORD_INTERP
+dq	"rdi"
+db	BC_WORD_INTERP
+dq	"rex.w"
+db	BC_WORD_INTERP
+dq	"mov"
 
 db	BC_WORD_INTERP
 dq	"rsi="
