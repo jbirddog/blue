@@ -120,6 +120,14 @@ db	BC_ADD
 db	BC_COMMA_B
 db	BC_WORD_END
 
+db	BC_WORD_DEFINE
+dq	"pop"
+db	BC_NUM_PUSH
+dq	0x58
+db	BC_ADD
+db	BC_COMMA_B
+db	BC_WORD_END
+
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
