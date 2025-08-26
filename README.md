@@ -83,7 +83,7 @@ Opcode numbers are defined in `bc.inc` and are subject to change.
 | `dup` | Duplicate the top item on the data stack |
 | `+` | Pop two data stack items, add them and push the result |
 | `-` | Pop two data stack items, subtract them and push the result |
-| `|` | Pop two data stack items, logical or them and push the result |
+| `\|` | Pop two data stack items, logical or them and push the result |
 | `<<` | Pop two data stack items, shift the second left the number of times in the first and push the result |
 | `$` | Push assemble time address of the current location in the output buffer |
 | `$*` | Push run time address of the current location in the output buffer |
