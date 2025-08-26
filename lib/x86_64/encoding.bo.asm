@@ -25,6 +25,12 @@ dq	0x02
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
+dq	"r11"
+db	BC_NUM_PUSH
+dq	0x03
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
 dq	"r12"
 db	BC_NUM_PUSH
 dq	0x04

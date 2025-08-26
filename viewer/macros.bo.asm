@@ -306,14 +306,16 @@ db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"save"
-; 56                      push   rsi
-db	BC_NUM_PUSH
-dq	0x56
-db	BC_COMMA_B
-; 41 53                   push   r11
-db	BC_NUM_PUSH
-dq	0x5341
-db	BC_COMMA_W
+db	BC_WORD_INTERP
+dq	"rsi"
+db	BC_WORD_INTERP
+dq	"push"
+db	BC_WORD_INTERP
+dq	"r11"
+db	BC_WORD_INTERP
+dq	"rex.b"
+db	BC_WORD_INTERP
+dq	"push"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
