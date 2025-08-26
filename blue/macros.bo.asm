@@ -287,13 +287,14 @@ db	BC_WORD_END
 
 db	BC_WORD_DEFINE
 dq	"last"
-; 4c 89 e0                mov    rax,r12
-db	BC_NUM_PUSH
-dq	0x894C
-db	BC_COMMA_W
-db	BC_NUM_PUSH
-dq	0xE0
-db	BC_COMMA_B
+db	BC_WORD_INTERP
+dq	"rax"
+db	BC_WORD_INTERP
+dq	"r12"
+db	BC_WORD_INTERP
+dq	"rex.wr"
+db	BC_WORD_INTERP
+dq	"mov"
 db	BC_WORD_END
 
 db	BC_DSP_NL
