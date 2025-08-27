@@ -54,10 +54,8 @@ db	BC_WORD_DEFINE
 dq	"mov"
 db	BC_NUM_PUSH
 dq	0x89
-db	BC_COMMA_B
 db	BC_WORD_INTERP
-dq	"/r"
-db	BC_COMMA_B
+dq	"b/r"
 db	BC_WORD_END
 
 db	BC_DSP_NL
@@ -66,10 +64,8 @@ db	BC_WORD_DEFINE
 dq	"xor"
 db	BC_NUM_PUSH
 dq	0x31
-db	BC_COMMA_B
 db	BC_WORD_INTERP
-dq	"/r"
-db	BC_COMMA_B
+dq	"b/r"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
