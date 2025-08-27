@@ -136,6 +136,12 @@ dq	"ds_add"
 db	BC_WORD_RCALL
 dq	"dspop2"
 db	BC_WORD_INTERP
+dq	"reg.tos"
+db	BC_WORD_INTERP
+dq	"reg.tos2"
+db	BC_WORD_INTERP
+dq	"rex.w"
+db	BC_WORD_INTERP
 dq	"add"
 db	BC_WORD_RCALL
 dq	"dspush"

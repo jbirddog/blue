@@ -220,12 +220,11 @@ db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"add"
-; 48 01 c8                add    rax,rcx
 db	BC_NUM_PUSH
-dq	0x0148
-db	BC_COMMA_W
-db	BC_NUM_PUSH
-dq	0xC8
+dq	0x01
+db	BC_COMMA_B
+db	BC_WORD_INTERP
+dq	"/r"
 db	BC_COMMA_B
 db	BC_WORD_END
 
