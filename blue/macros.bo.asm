@@ -236,13 +236,10 @@ db	BC_WORD_END
 
 db	BC_WORD_DEFINE
 dq	"or"
-; 48 09 c8                or    rax,rcx
 db	BC_NUM_PUSH
-dq	0x0948
-db	BC_COMMA_W
-db	BC_NUM_PUSH
-dq	0xC8
-db	BC_COMMA_B
+dq	0x09
+db	BC_WORD_INTERP
+dq	"b/r"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
