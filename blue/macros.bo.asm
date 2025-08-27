@@ -185,9 +185,9 @@ db	BC_DSP_NL
 db	BC_WORD_DEFINE
 dq	"keep"
 db	BC_WORD_INTERP
-dq	"rcx"
+dq	"reg.tos2"
 db	BC_WORD_INTERP
-dq	"rax"
+dq	"reg.tos"
 db	BC_WORD_INTERP
 dq	"rex.w"
 db	BC_WORD_INTERP
@@ -220,35 +220,26 @@ db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"add"
-; 48 01 c8                add    rax,rcx
 db	BC_NUM_PUSH
-dq	0x0148
-db	BC_COMMA_W
-db	BC_NUM_PUSH
-dq	0xC8
-db	BC_COMMA_B
+dq	0x01
+db	BC_WORD_INTERP
+dq	"b/r"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
 dq	"sub"
-; 48 29 c8                sub    rax,rcx
 db	BC_NUM_PUSH
-dq	0x2948
-db	BC_COMMA_W
-db	BC_NUM_PUSH
-dq	0xC8
-db	BC_COMMA_B
+dq	0x29
+db	BC_WORD_INTERP
+dq	"b/r"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
 dq	"or"
-; 48 09 c8                or    rax,rcx
 db	BC_NUM_PUSH
-dq	0x0948
-db	BC_COMMA_W
-db	BC_NUM_PUSH
-dq	0xC8
-db	BC_COMMA_B
+dq	0x09
+db	BC_WORD_INTERP
+dq	"b/r"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
@@ -288,9 +279,9 @@ db	BC_WORD_END
 db	BC_WORD_DEFINE
 dq	"last"
 db	BC_WORD_INTERP
-dq	"rax"
+dq	"reg.tos"
 db	BC_WORD_INTERP
-dq	"r12"
+dq	"reg.last"
 db	BC_WORD_INTERP
 dq	"rex.wr"
 db	BC_WORD_INTERP
