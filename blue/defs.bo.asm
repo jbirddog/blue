@@ -81,6 +81,26 @@ db	BC_DSP_NL
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
+dq	"reg.src"
+db	BC_WORD_INTERP
+dq	"rsi"
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"reg.dst"
+db	BC_WORD_INTERP
+dq	"rdi"
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"reg.dstb"
+db	BC_WORD_INTERP
+dq	"r11"
+db	BC_WORD_END
+
+db	BC_DSP_NL
+
+db	BC_WORD_DEFINE
 dq	"reg.tos"
 db	BC_WORD_INTERP
 dq	"rax"
@@ -91,6 +111,8 @@ dq	"reg.tos2"
 db	BC_WORD_INTERP
 dq	"rcx"
 db	BC_WORD_END
+
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"reg.last"

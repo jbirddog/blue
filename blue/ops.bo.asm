@@ -207,6 +207,16 @@ db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"$_caddr"
+db	BC_WORD_INTERP
+dq	"rax"
+db	BC_WORD_INTERP
+dq	"reg.dstb"
+db	BC_WORD_INTERP
+dq	"rex.wr"
+db	BC_WORD_INTERP
+dq	"mov"
+db	BC_WORD_RCALL
+dq	"dspush"
 db	BC_WORD_RCALL
 dq	"next"
 db	BC_WORD_END
