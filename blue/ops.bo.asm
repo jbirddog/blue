@@ -49,6 +49,23 @@ db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"w_rcall"
+db	BC_NUM_PUSH
+dq	0xE8
+db	BC_WORD_INTERP
+dq	"b,"
+db	BC_WORD_RCALL
+dq	"xt"
+db	BC_WORD_INTERP
+dq	"rax"
+db	BC_WORD_INTERP
+dq	"reg.dst"
+db	BC_WORD_INTERP
+dq	"rex.w"
+db	BC_WORD_INTERP
+dq	"sub"
+; TODO: sub rax, 4
+db	BC_WORD_INTERP
+dq	"stosd"
 db	BC_WORD_RCALL
 dq	"next"
 db	BC_WORD_END
