@@ -199,6 +199,7 @@ Some links that may help fill in some back story/knowledge in no particular orde
 
 ## TODOs
 
+1. Likely need to double the dict size
 1. Make `$>` just push its addr, use `! @` to read/write
 1. Add BC_TOR, BC_FROMR
 
@@ -211,9 +212,9 @@ Some links that may help fill in some back story/knowledge in no particular orde
 
 ### bib - After Merge
 
-1. Factor macros (keep, set, fetch)
+1. Factor macros more
 1. ifeq needs to r> addr of byte to set, then needs to set byte (needs b!)
-   
+
 ### viewer
 
 1. Factor hexnum more
