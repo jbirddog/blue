@@ -138,7 +138,8 @@ db	BC_WORD_DEFINE
 dq	"ds_swap"
 db	BC_WORD_RCALL
 dq	"dspop2"
-; TODO
+db	BC_WORD_INTERP
+dq	"xchg"
 db	BC_WORD_RCALL
 dq	"dspush2"
 db	BC_WORD_RCALL
