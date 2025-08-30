@@ -140,7 +140,7 @@ db	BC_WORD_RCALL
 dq	"dspop2"
 ; TODO
 db	BC_WORD_RCALL
-dq	"dspush"
+dq	"dspush2"
 db	BC_WORD_RCALL
 dq	"next"
 db	BC_WORD_END
