@@ -194,26 +194,30 @@ db	BC_WORD_INTERP
 dq	"mov"
 db	BC_WORD_END
 
+db	BC_DSP_NL
+
 db	BC_WORD_DEFINE
 dq	"set"
-; 48 89 01                mov    QWORD PTR [rcx],rax
-db	BC_NUM_PUSH
-dq	0x8948
-db	BC_COMMA_W
-db	BC_NUM_PUSH
-dq	0x01
-db	BC_COMMA_B
+db	BC_WORD_INTERP
+dq	"reg.tos2"
+db	BC_WORD_INTERP
+dq	"reg.tos"
+db	BC_WORD_INTERP
+dq	"rex.w"
+db	BC_WORD_INTERP
+dq	"mov!"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
 dq	"fetch"
-; 48 8b 00                mov    rax,QWORD PTR [rax]
-db	BC_NUM_PUSH
-dq	0x8B48
-db	BC_COMMA_W
-db	BC_NUM_PUSH
-dq	0x00
-db	BC_COMMA_B
+db	BC_WORD_INTERP
+dq	"reg.tos"
+db	BC_WORD_INTERP
+dq	"reg.tos"
+db	BC_WORD_INTERP
+dq	"rex.w"
+db	BC_WORD_INTERP
+dq	"mov@"
 db	BC_WORD_END
 
 db	BC_DSP_NL
