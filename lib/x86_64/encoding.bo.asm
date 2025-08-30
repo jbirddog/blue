@@ -62,21 +62,19 @@ db	BC_OR
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
-dq	"/r"
+dq	"0/r"
 db	BC_NUM_PUSH
 dq	0x03
 db	BC_SHL
 db	BC_OR
-db	BC_WORD_INTERP
-dq	"/0"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
-dq	"b/r"
-db	BC_COMMA_B
-db	BC_WORD_INTERP
 dq	"/r"
-db	BC_COMMA_B
+db	BC_WORD_INTERP
+dq	"0/r"
+db	BC_WORD_INTERP
+dq	"/0"
 db	BC_WORD_END
 
 db	BC_DSP_NL
