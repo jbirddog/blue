@@ -194,12 +194,16 @@ db	BC_WORD_INTERP
 dq	"mov"
 db	BC_WORD_END
 
+db	BC_DSP_NL
+
 db	BC_WORD_DEFINE
 dq	"set"
 db	BC_WORD_INTERP
 dq	"reg.tos2"
 db	BC_WORD_INTERP
 dq	"reg.tos"
+db	BC_WORD_INTERP
+dq	"rex.w"
 db	BC_WORD_INTERP
 dq	"mov!"
 db	BC_WORD_END
@@ -210,6 +214,8 @@ db	BC_WORD_INTERP
 dq	"reg.tos"
 db	BC_WORD_INTERP
 dq	"reg.tos"
+db	BC_WORD_INTERP
+dq	"rex.w"
 db	BC_WORD_INTERP
 dq	"mov@"
 db	BC_WORD_END
