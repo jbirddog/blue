@@ -135,6 +135,19 @@ db	BC_WORD_END
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
+dq	"ds_swap"
+db	BC_WORD_RCALL
+dq	"dspop2"
+; TODO
+db	BC_WORD_RCALL
+dq	"dspush"
+db	BC_WORD_RCALL
+dq	"next"
+db	BC_WORD_END
+
+db	BC_DSP_NL
+
+db	BC_WORD_DEFINE
 dq	"ds_dup"
 db	BC_WORD_RCALL
 dq	"dspop"

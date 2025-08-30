@@ -101,6 +101,16 @@ db	BC_WORD_END
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
+dq	"ds_swap"
+db	BC_WORD_RCALL
+dq	"vizop"
+db	BC_WORD_INTERP
+dq	'"swap"'
+db	BC_WORD_END
+
+db	BC_DSP_NL
+
+db	BC_WORD_DEFINE
 dq	"ds_dup"
 db	BC_WORD_RCALL
 dq	"vizop"

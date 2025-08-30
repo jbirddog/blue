@@ -41,6 +41,14 @@ db	BC_WORD_END
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
+dq	'"swap"'
+db	BC_NUM_PUSH
+dq	"swap"
+db	BC_WORD_INTERP
+dq	"d,"
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
 dq	'"dup"'
 db	BC_NUM_PUSH
 dq	"du"
@@ -51,6 +59,8 @@ dq	"p"
 db	BC_WORD_INTERP
 dq	"b,"
 db	BC_WORD_END
+
+db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	'"+"'
