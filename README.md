@@ -215,6 +215,7 @@ Some links that may help fill in some back story/knowledge in no particular orde
 ### bib - After Merge
 
 1. Factor macros more
+1. Factor ops more
 1. ifeq needs to r> addr of byte to set, then needs to set byte (needs b!)
 
 ### viewer
