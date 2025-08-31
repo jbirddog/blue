@@ -116,10 +116,12 @@ obj/%.b:
 
 $(BOOTSTRAP): bootstrap.asm $(FASM) | bin
 	$(FASM) $< $@
+
+$(BLUE_IN_BLUE): obj/blue.b $(BOOTSTRAP)
+	$(BOOTSTRAP) < $< > $@ && chmod +x $@
 	
-$(BLUE): obj/blue.b $(BOOTSTRAP) | bin
-	$(BOOTSTRAP) < $< > $(BLUE_IN_BLUE) && chmod +x $(BLUE_IN_BLUE)
-	$(BLUE_IN_BLUE) < $< > $(BLUE) && chmod +x $(BLUE)
+$(BLUE): obj/blue.b $(BLUE_IN_BLUE)
+	$(BLUE_IN_BLUE) < $< > $@ && chmod +x $@
 
 bin/%: obj/%.b $(BLUE)
 	@mkdir -p "$(@D)"
