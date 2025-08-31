@@ -152,11 +152,9 @@ The `return stack` is `rsp`. Like the dictionary the stacks only exist at assemb
 
 ## Building
 
-Install [fasm v1](https://flatassembler.net/) then run `make` or `make -s -j 8`. Once finished `./bin/blue` will be
-available along with bytecode files in `./obj`. `./bin/btv` can be used to view any file in `./obj` that is passed
-via stdin. `./bin/examples` contains example binaries built with Blue.
-
-It is worth poking around in the `bin` directories and noting the size of the binaries.
+Blue is written in Blue and is bootstrapped using fasm. To build install [fasm v1](https://flatassembler.net/) 
+then run `make` or `make -s -j 8`. Once finished `./bin/blue` will be available along with bytecode files in 
+`./obj` and some example binaries in `./bin/examples`.
 
 ## Running
 
