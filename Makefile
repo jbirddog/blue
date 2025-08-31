@@ -115,8 +115,9 @@ obj/%.bo: %.bo.asm $(FASM) bc.inc
 
 obj/%.b:
 	cat $^ > $@
-	
+
 bin/%: obj/%.b $(BLUE)
 	@mkdir -p "$(@D)"
 	$(BLUE) < $< > $@ && chmod +x $@
+	$(BLUE_IN_BLUE) < $< > $@.bib && chmod +x $@.bib
 
