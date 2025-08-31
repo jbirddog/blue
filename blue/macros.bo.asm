@@ -72,18 +72,28 @@ dq	"writedst"
 db	BC_WORD_INTERP
 dq	"rdx"
 db	BC_WORD_INTERP
-dq	"rdi"
+dq	"reg.dst"
 db	BC_WORD_INTERP
 dq	"rex.w"
 db	BC_WORD_INTERP
 dq	"mov"
 
+if 0
 db	BC_WORD_INTERP
 dq	"rsi="
 db	BC_WORD_DEFINE
 dq	"outbuf"
 db	BC_NUM_COMP
 dq	0x00
+end if
+db	BC_WORD_INTERP
+dq	"reg.src"
+db	BC_WORD_INTERP
+dq	"reg.dstb"
+db	BC_WORD_INTERP
+dq	"rex.wr"
+db	BC_WORD_INTERP
+dq	"mov"
 
 ; sub rdx, rsi
 db	BC_NUM_PUSH
@@ -96,6 +106,11 @@ db	BC_COMMA_B
 db	BC_WORD_INTERP
 dq	"writeout"
 db	BC_WORD_END
+;;;
+db	BC_WORD_DEFINE
+dq	"outbuf"
+db	BC_NUM_COMP
+dq	0x00
 
 db	BC_DSP_NL
 db	BC_DSP_NL
