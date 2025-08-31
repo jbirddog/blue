@@ -239,6 +239,18 @@ dq	"b/r"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
+dq	"subi8"
+db	BC_SWAP
+db	BC_NUM_PUSH
+dq	0x83
+db	BC_WORD_INTERP
+dq	"/5,"
+db	BC_COMMA_B
+db	BC_WORD_END
+
+db	BC_DSP_NL
+
+db	BC_WORD_DEFINE
 dq	"or"
 db	BC_NUM_PUSH
 dq	0x09

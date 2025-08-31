@@ -62,6 +62,13 @@ db	BC_OR
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
+dq	"/5"
+db	BC_NUM_PUSH
+dq	0xE8
+db	BC_OR
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
 dq	"0/r"
 db	BC_NUM_PUSH
 dq	0x03

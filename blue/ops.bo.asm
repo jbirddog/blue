@@ -63,7 +63,14 @@ db	BC_WORD_INTERP
 dq	"rex.w"
 db	BC_WORD_INTERP
 dq	"sub"
-; TODO: sub rax, 4
+db	BC_WORD_INTERP
+dq	"rax"
+db	BC_NUM_PUSH
+dq	0x04
+db	BC_WORD_INTERP
+dq	"rex.w"
+db	BC_WORD_INTERP
+dq	"subi8"
 db	BC_WORD_INTERP
 dq	"stosd"
 db	BC_WORD_RCALL
