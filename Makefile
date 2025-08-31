@@ -119,5 +119,4 @@ obj/%.b:
 bin/%: obj/%.b $(BLUE)
 	@mkdir -p "$(@D)"
 	$(BLUE) < $< > $@ && chmod +x $@
-	$(BLUE_IN_BLUE) < $< > $@.bib && chmod +x $@.bib
 
