@@ -207,13 +207,6 @@ Some links that may help fill in some back story/knowledge in no particular orde
 
 ## Blue in Blue (bib)
 
-1. When all done
-   1. Rename blue.asm to bootstrap.asm
-   1. Rename bib.b to blue.b
-   1. Use bin/bootstrap to build bin/blue from blue.b
-
-### bib - After Merge
-
 1. Factor macros more
 1. Factor ops more
 1. ifeq needs to r> addr of byte to set, then needs to set byte (needs b!)
