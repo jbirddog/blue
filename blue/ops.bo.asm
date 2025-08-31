@@ -29,6 +29,39 @@ db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"w_end"
+if 0
+	test	REG_LVL, REG_LVL
+	jz	.top_level
+
+	dec	REG_LVL
+	pop	REG_SRC
+	jmp	.done
+end if
+db	BC_WORD_INTERP
+dq	"reg.lvl"
+db	BC_WORD_INTERP
+dq	"if>0"
+db	BC_WORD_INTERP
+dq	"reg.src"
+db	BC_WORD_INTERP
+dq	"pop"
+db	BC_WORD_RCALL
+dq	"next"
+db	BC_WORD_END
+db	BC_WORD_INTERP
+dq	"then"
+db	BC_DSP_NL
+
+db	BC_WORD_DEFINE
+dq	".toplvl"
+db	BC_DSP_NL
+
+db	BC_WORD_DEFINE
+dq	".cret"
+db	BC_NUM_PUSH
+dq	0xC3
+db	BC_WORD_INTERP
+dq	"b,"
 db	BC_WORD_RCALL
 dq	"next"
 db	BC_WORD_END

@@ -411,11 +411,27 @@ db	BC_COMMA_D
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
+dq	"test"
+db	BC_DUP
+db	BC_NUM_PUSH
+dq	0x85
+db	BC_WORD_INTERP
+dq	"b/r"
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
 dq	"ifeq"
 ; TODO
 db	BC_NUM_PUSH
 dq	0x0675
 db	BC_COMMA_W
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"if>0"
+db	BC_WORD_INTERP
+dq	"test"
+; TODO
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
