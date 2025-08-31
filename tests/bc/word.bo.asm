@@ -2,10 +2,13 @@ include "bc.inc"
 
 db	BC_WORD_DEFINE
 dq	"bob"
+db	BC_WORD_END
 db	BC_WORD_DEFINE
 dq	"sue"
 db	BC_WORD_DEFINE
 dq	"joe"
+
+db	BC_DSP_NL
 
 db	BC_WORD_CADDR
 dq	"joe"
@@ -14,11 +17,15 @@ dq	"sue"
 db	BC_WORD_CADDR
 dq	"bob"
 
+db	BC_DSP_NL
+
 db	BC_WORD_RADDR
 dq	"joe"
 db	BC_WORD_RADDR
 dq	"sue"
 db	BC_WORD_RADDR
 dq	"bob"
+
+db	BC_DSP_NL
 
 db	BC_FIN

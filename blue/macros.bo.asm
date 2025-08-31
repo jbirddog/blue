@@ -457,11 +457,11 @@ dq	"grnword?"
 ; TODO
 ; 80 7f fb e8             cmp    BYTE PTR [rdi-0x5],0xe8
 db	BC_NUM_PUSH
-dq	0x7F80E8FB
+dq	0xE8FB'7F80
 db	BC_COMMA_D
 ; TODO - jne
 db	BC_NUM_PUSH
-dq	0x0975
+dq	0x0875
 db	BC_COMMA_W
 db	BC_WORD_END
 
@@ -469,8 +469,11 @@ db	BC_WORD_DEFINE
 dq	"tco"
 ; TODO
 db	BC_NUM_PUSH
-dq	0x47FE00FB
-db	BC_COMMA_D
+dq	0x47FE
+db	BC_COMMA_W
+db	BC_NUM_PUSH
+dq	0xFB
+db	BC_COMMA_B
 db	BC_WORD_END
 
 db	BC_DSP_NL
