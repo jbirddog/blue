@@ -294,6 +294,3 @@ _dict rb DICT_SIZE
 _dst rb DST_SIZE
 _src rb SRC_SIZE
 
-align 1024
-	mov	REG_SRC, [rax + (CELL_SIZE * 2)]
-
