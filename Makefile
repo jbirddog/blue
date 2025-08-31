@@ -19,8 +19,8 @@ BLUE_BC_ASMS = $(wildcard \
 
 BLUE_BC_OBJS = $(BLUE_BC_ASMS:%.bo.asm=obj/%.bo)
 
+BOOTSTRAP = bin/bootstrap
 BLUE = bin/blue
-BLUE_IN_BLUE = bin/bib
 TOOLS = bin/bnc bin/btv
 
 EXAMPLES = \
@@ -29,7 +29,7 @@ EXAMPLES = \
 
 .PHONY: all clean
 
-all: $(BLUE) $(BLUE_BC_OBJS) $(BLUE_IN_BLUE) $(TOOLS) $(EXAMPLES)
+all: $(BLUE_BC_OBJS) $(BLUE) $(TOOLS) $(EXAMPLES)
 
 clean:
 	rm -rf bin obj
@@ -37,10 +37,7 @@ clean:
 bin:
 	mkdir $@
 
-$(BLUE): blue.asm $(FASM) | bin
-	$(FASM) $< $@
-
-obj/bib.b: \
+obj/blue.b: \
 	obj/lib/x86_64/encoding.bo \
 	obj/lib/x86_64/common.bo \
 	obj/lib/x86_64/convenience.bo \
@@ -116,7 +113,11 @@ obj/%.bo: %.bo.asm $(FASM) bc.inc
 obj/%.b:
 	cat $^ > $@
 
+$(BLUE): bootstrap.asm obj/blue.b $(FASM) | bin
+	$(FASM) bootstrap.asm bin/bootstrap
+	./bin/bootstrap < obj/blue.b > bin/bib && chmod +x bin/bib
+	./bin/bib < obj/blue.b > bin/blue && chmod +x bin/blue
+
 bin/%: obj/%.b $(BLUE)
 	@mkdir -p "$(@D)"
 	$(BLUE) < $< > $@ && chmod +x $@
-
