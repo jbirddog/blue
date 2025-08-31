@@ -131,7 +131,7 @@ db	BC_WORD_INTERP
 dq	"inc"
 ; TODO: 48 8b 70 10             mov    rsi,QWORD PTR [rax+0x10]
 db	BC_NUM_PUSH
-dq	0x8b481070
+dq	0x1070'8b48
 db	BC_COMMA_D
 db	BC_WORD_RCALL
 dq	"next"
