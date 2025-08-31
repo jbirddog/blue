@@ -20,6 +20,7 @@ BLUE_BC_ASMS = $(wildcard \
 BLUE_BC_OBJS = $(BLUE_BC_ASMS:%.bo.asm=obj/%.bo)
 
 BOOTSTRAP = bin/bootstrap
+BLUE_IN_BLUE = bin/bib
 BLUE = bin/blue
 TOOLS = bin/bnc bin/btv
 
@@ -113,10 +114,12 @@ obj/%.bo: %.bo.asm $(FASM) bc.inc
 obj/%.b:
 	cat $^ > $@
 
-$(BLUE): bootstrap.asm obj/blue.b $(FASM) | bin
-	$(FASM) bootstrap.asm bin/bootstrap
-	./bin/bootstrap < obj/blue.b > bin/bib && chmod +x bin/bib
-	./bin/bib < obj/blue.b > bin/blue && chmod +x bin/blue
+$(BOOTSTRAP): bootstrap.asm $(FASM) | bin
+	$(FASM) $< $@
+	
+$(BLUE): obj/blue.b $(BOOTSTRAP) | bin
+	$(BOOTSTRAP) < $< > $(BLUE_IN_BLUE) && chmod +x $(BLUE_IN_BLUE)
+	$(BLUE_IN_BLUE) < $< > $(BLUE) && chmod +x $(BLUE)
 
 bin/%: obj/%.b $(BLUE)
 	@mkdir -p "$(@D)"
