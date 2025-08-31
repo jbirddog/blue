@@ -37,6 +37,12 @@ dq	0x04
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
+dq	"ebp"
+db	BC_NUM_PUSH
+dq	0x05
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
 dq	"esi"
 db	BC_WORD_DEFINE
 dq	"rsi"

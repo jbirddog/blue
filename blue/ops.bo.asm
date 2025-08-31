@@ -83,6 +83,18 @@ db	BC_WORD_DEFINE
 dq	"w_interp"
 db	BC_WORD_RCALL
 dq	"find"
+db	BC_WORD_INTERP
+dq	"reg.src"
+db	BC_WORD_INTERP
+dq	"push"
+db	BC_WORD_INTERP
+dq	"reg.lvl"
+db	BC_WORD_INTERP
+dq	"inc"
+; TODO: 48 8b 70 10             mov    rsi,QWORD PTR [rax+0x10]
+db	BC_NUM_PUSH
+dq	0x8b481070
+db	BC_COMMA_D
 db	BC_WORD_RCALL
 dq	"next"
 db	BC_WORD_END
