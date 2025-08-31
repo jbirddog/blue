@@ -19,6 +19,24 @@ dq	"dsclamp"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
+dq	"dspush2"
+db	BC_WORD_RCALL
+dq	"dspush"
+db	BC_WORD_INTERP
+dq	"reg.tos"
+db	BC_WORD_INTERP
+dq	"reg.tos2"
+db	BC_WORD_INTERP
+dq	"rex.w"
+db	BC_WORD_INTERP
+dq	"mov"
+db	BC_WORD_RCALL
+dq	"dspush"
+db	BC_WORD_END
+
+db	BC_DSP_NL
+
+db	BC_WORD_DEFINE
 dq	"dspop"
 db	BC_WORD_INTERP
 dq	"ds--"
@@ -30,11 +48,11 @@ db	BC_WORD_END
 
 db	BC_WORD_DEFINE
 dq	"dspop2"
-db	BC_WORD_INTERP
+db	BC_WORD_RCALL
 dq	"dspop"
 db	BC_WORD_INTERP
 dq	"keep"
-db	BC_WORD_INTERP
+db	BC_WORD_RCALL
 dq	"dspop"
 db	BC_WORD_END
 

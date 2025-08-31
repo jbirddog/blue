@@ -27,9 +27,10 @@ db	BC_OR
 db	BC_COMMA_B
 
 db	BC_NUM_PUSH
-dq	0x01
-db	BC_NUM_PUSH
 dq	0x06
+db	BC_NUM_PUSH
+dq	0x01
+db	BC_SWAP
 db	BC_SHL
 db	BC_NUM_PUSH
 dq	0x05

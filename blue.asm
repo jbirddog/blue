@@ -38,6 +38,11 @@ ds_push:
 	or	REG_DS, DS_BASE
 	ret
 
+ds_push2:
+	call	ds_push
+	mov	rax, rcx
+	jmp	ds_push
+	
 ds_pop:
 	sub	REG_DS, CELL_SIZE
 	and	REG_DS, DS_MASK
@@ -158,7 +163,13 @@ num_push:
 	lodsq
 	call	ds_push
 	jmp	next
-	
+
+k_swap:
+	call	ds_pop2
+	xchg	rax, rcx
+	call	ds_push2
+	jmp	next
+
 k_dup:
 	call	ds_pop
 	call	ds_push
@@ -272,7 +283,7 @@ bc_tbl:
 dq	fin
 dq	word_define, word_end, word_ccall, word_rcall, word_interp, word_caddr, word_raddr
 dq	num_comp, num_push
-dq	k_dup, k_add, k_sub, k_or, k_shl
+dq	k_swap, k_dup, k_add, k_sub, k_or, k_shl
 dq	dollar_caddr, dollar_raddr, dst_base, dst_base_set
 dq	k_set, k_fetch, comma_b, comma_w, comma_d, comma
 dq	dsp_nl

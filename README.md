@@ -199,6 +199,7 @@ Some links that may help fill in some back story/knowledge in no particular orde
 
 ## TODOs
 
+1. Make lookup names the same for ds_ entries in blue.asm and lookup.bo.asm
 1. Likely need to double the dict size
 1. Rename `b/r` to `/r,`
 1. Make `$>` just push its addr, use `! @` to read/write

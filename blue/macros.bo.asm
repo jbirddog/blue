@@ -420,4 +420,18 @@ db	BC_COMMA_W
 db	BC_WORD_END
 
 db	BC_DSP_NL
+
+db	BC_WORD_DEFINE
+dq	"xchg"
+db	BC_WORD_INTERP
+dq	"rex.w"
+db	BC_NUM_PUSH
+dq	0x90
+db	BC_WORD_INTERP
+dq	"reg.tos2"
+db	BC_ADD
+db	BC_COMMA_B
+db	BC_WORD_END
+
+db	BC_DSP_NL
 db	BC_DSP_NL
