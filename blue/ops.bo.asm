@@ -42,6 +42,10 @@ dq	"reg.lvl"
 db	BC_WORD_INTERP
 dq	"if>0"
 db	BC_WORD_INTERP
+dq	"reg.lvl"
+db	BC_WORD_INTERP
+dq	"dec"
+db	BC_WORD_INTERP
 dq	"reg.src"
 db	BC_WORD_INTERP
 dq	"pop"

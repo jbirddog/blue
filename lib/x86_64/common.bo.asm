@@ -67,6 +67,14 @@ db	BC_COMMA_B
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
+dq	"/1,"
+db	BC_COMMA_B
+db	BC_WORD_INTERP
+dq	"/1"
+db	BC_COMMA_B
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
 dq	"/5,"
 db	BC_COMMA_B
 db	BC_WORD_INTERP
@@ -118,6 +126,14 @@ db	BC_COMMA_B
 db	BC_WORD_INTERP
 dq	"/0"
 db	BC_COMMA_B
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	"dec"
+db	BC_NUM_PUSH
+dq	0xFF
+db	BC_WORD_INTERP
+dq	"/1,"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
