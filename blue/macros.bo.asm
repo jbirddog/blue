@@ -63,6 +63,14 @@ db	BC_WORD_DEFINE
 dq	"dst"
 db	BC_NUM_COMP
 dq	0x00
+db	BC_WORD_INTERP
+dq	"reg.dstb"
+db	BC_WORD_INTERP
+dq	"reg.dst"
+db	BC_WORD_INTERP
+dq	"rex.wb"
+db	BC_WORD_INTERP
+dq	"mov"
 db	BC_WORD_END
 
 db	BC_DSP_NL
@@ -78,14 +86,6 @@ dq	"rex.w"
 db	BC_WORD_INTERP
 dq	"mov"
 
-if 0
-db	BC_WORD_INTERP
-dq	"rsi="
-db	BC_WORD_DEFINE
-dq	"outbuf"
-db	BC_NUM_COMP
-dq	0x00
-end if
 db	BC_WORD_INTERP
 dq	"reg.src"
 db	BC_WORD_INTERP
@@ -106,11 +106,6 @@ db	BC_COMMA_B
 db	BC_WORD_INTERP
 dq	"writeout"
 db	BC_WORD_END
-;;;
-db	BC_WORD_DEFINE
-dq	"outbuf"
-db	BC_NUM_COMP
-dq	0x00
 
 db	BC_DSP_NL
 db	BC_DSP_NL

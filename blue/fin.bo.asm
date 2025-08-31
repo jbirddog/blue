@@ -30,10 +30,6 @@ db	BC_DOLLAR_RADDR
 db	BC_WORD_INTERP
 dq	"dstoff"
 db	BC_ADD
-db	BC_DUP
-db	BC_WORD_CADDR
-dq	"outbuf"
-db	BC_SET
 db	BC_WORD_CADDR
 dq	"dst"
 db	BC_SET
