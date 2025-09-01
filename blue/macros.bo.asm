@@ -237,7 +237,7 @@ dq	"add"
 db	BC_NUM_PUSH
 dq	0x01
 db	BC_WORD_INTERP
-dq	"b/r"
+dq	"/r,"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
@@ -245,7 +245,7 @@ dq	"sub"
 db	BC_NUM_PUSH
 dq	0x29
 db	BC_WORD_INTERP
-dq	"b/r"
+dq	"/r,"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
@@ -265,7 +265,7 @@ dq	"or"
 db	BC_NUM_PUSH
 dq	0x09
 db	BC_WORD_INTERP
-dq	"b/r"
+dq	"/r,"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
@@ -425,7 +425,7 @@ dq	"test"
 db	BC_NUM_PUSH
 dq	0x85
 db	BC_WORD_INTERP
-dq	"b/r"
+dq	"/r,"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
