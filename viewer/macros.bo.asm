@@ -16,6 +16,14 @@ db	BC_WORD_INTERP
 dq	"b,"
 db	BC_WORD_END
 
+db	BC_WORD_DEFINE
+dq	'">"'
+db	BC_NUM_PUSH
+dq	">"
+db	BC_WORD_INTERP
+dq	"b,"
+db	BC_WORD_END
+
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
@@ -97,6 +105,24 @@ db	BC_WORD_END
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
+dq	'">r"'
+db	BC_NUM_PUSH
+dq	">r"
+db	BC_WORD_INTERP
+dq	"w,"
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
+dq	'"r>"'
+db	BC_NUM_PUSH
+dq	"r>"
+db	BC_WORD_INTERP
+dq	"w,"
+db	BC_WORD_END
+
+db	BC_DSP_NL
+
+db	BC_WORD_DEFINE
 dq	'"$"'
 db	BC_NUM_PUSH
 dq	"$"
@@ -108,14 +134,6 @@ db	BC_WORD_DEFINE
 dq	'"*"'
 db	BC_NUM_PUSH
 dq	"*"
-db	BC_WORD_INTERP
-dq	"b,"
-db	BC_WORD_END
-
-db	BC_WORD_DEFINE
-dq	'">"'
-db	BC_NUM_PUSH
-dq	">"
 db	BC_WORD_INTERP
 dq	"b,"
 db	BC_WORD_END

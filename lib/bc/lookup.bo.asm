@@ -37,6 +37,12 @@ dq	"num_push"
 db	BC_COMMA
 db	BC_DSP_NL
 db	BC_WORD_RADDR
+dq	"tor"
+db	BC_COMMA
+db	BC_WORD_RADDR
+dq	"fromr"
+db	BC_COMMA
+db	BC_WORD_RADDR
 dq	"ds_swap"
 db	BC_COMMA
 db	BC_WORD_RADDR

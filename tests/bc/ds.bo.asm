@@ -13,9 +13,11 @@ db	BC_ADD
 db	BC_COMMA_B
 
 db	BC_NUM_PUSH
-dq	0x50
-db	BC_NUM_PUSH
 dq	0x04
+db	BC_TOR
+db	BC_NUM_PUSH
+dq	0x50
+db	BC_FROMR
 db	BC_SUB
 db	BC_COMMA_B
 

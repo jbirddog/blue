@@ -294,6 +294,34 @@ db	BC_WORD_END
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
+dq	"tor"
+db	BC_WORD_RCALL
+dq	"dspop"
+db	BC_WORD_INTERP
+dq	"reg.tos"
+db	BC_WORD_INTERP
+dq	"push"
+db	BC_WORD_RCALL
+dq	"next"
+db	BC_WORD_END
+
+db	BC_DSP_NL
+
+db	BC_WORD_DEFINE
+dq	"fromr"
+db	BC_WORD_INTERP
+dq	"reg.tos"
+db	BC_WORD_INTERP
+dq	"pop"
+db	BC_WORD_RCALL
+dq	"dspush"
+db	BC_WORD_RCALL
+dq	"next"
+db	BC_WORD_END
+
+db	BC_DSP_NL
+
+db	BC_WORD_DEFINE
 dq	"$_caddr"
 db	BC_WORD_INTERP
 dq	"rax"
