@@ -161,6 +161,26 @@ db	BC_WORD_END
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
+dq	"tor"
+db	BC_WORD_RCALL
+dq	"vizop"
+db	BC_WORD_INTERP
+dq	'">r"'
+db	BC_WORD_END
+
+db	BC_DSP_NL
+
+db	BC_WORD_DEFINE
+dq	"fromr"
+db	BC_WORD_RCALL
+dq	"vizop"
+db	BC_WORD_INTERP
+dq	'"r>"'
+db	BC_WORD_END
+
+db	BC_DSP_NL
+
+db	BC_WORD_DEFINE
 dq	"$_caddr"
 db	BC_WORD_RCALL
 dq	"vizop"
