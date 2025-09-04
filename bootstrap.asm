@@ -164,7 +164,7 @@ num_push:
 	call	ds_push
 	jmp	next
 
-k_swap:
+swap:
 	call	ds_pop2
 	xchg	rax, rcx
 	call	ds_push2
@@ -200,9 +200,16 @@ k_shl:
 	call	ds_push
 	jmp	next
 
-dsp_nl:
+tor:
+	call	ds_pop
+	push	rax
 	jmp	next
-
+	
+fromr:
+	pop	rax
+	call	ds_push
+	jmp	next
+	
 dollar_caddr:
 	mov	rax, REG_DST
 	call	ds_push
@@ -253,6 +260,9 @@ comma:
 	stosq
 	jmp	next
 
+dsp_nl:
+	jmp	next
+
 ;;; interpreter
 	
 next:
@@ -283,7 +293,7 @@ bc_tbl:
 dq	fin
 dq	word_define, word_end, word_ccall, word_rcall, word_interp, word_caddr, word_raddr
 dq	num_comp, num_push
-dq	k_swap, k_dup, k_add, k_sub, k_or, k_shl
+dq	swap, k_dup, k_add, k_sub, k_or, k_shl
 dq	dollar_caddr, dollar_raddr, dst_base, dst_base_set
 dq	k_set, k_fetch, comma_b, comma_w, comma_d, comma
 dq	dsp_nl
