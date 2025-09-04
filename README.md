@@ -200,7 +200,6 @@ Some links that may help fill in some back story/knowledge in no particular orde
 1. Make lookup names the same for entries in bootstrap.asm and lookup.bo.asm
 1. Likely need to double the dict size
 1. Make `$>` just push its addr, use `! @` to read/write
-1. Add BC_TOR, BC_FROMR
 
 ## Blue in Blue (bib)
 
