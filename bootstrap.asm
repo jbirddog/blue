@@ -229,12 +229,17 @@ dst_base_set:
 	mov	REG_DSTB, rax
 	jmp	next
 
-k_set:
+set_b:
+	call	ds_pop2
+	mov	byte [rcx], al
+	jmp	next
+
+set:
 	call	ds_pop2
 	mov	[rcx], rax
 	jmp	next
 
-k_fetch:
+fetch:
 	call	ds_pop
 	mov	rax, [rax]
 	call	ds_push
@@ -295,7 +300,7 @@ dq	word_define, word_end, word_ccall, word_rcall, word_interp, word_caddr, word_
 dq	num_comp, num_push
 dq	tor, fromr, swap, k_dup, k_add, k_sub, k_or, k_shl
 dq	dollar_caddr, dollar_raddr, dst_base, dst_base_set
-dq	k_set, k_fetch, comma_b, comma_w, comma_d, comma
+dq	set, fetch, comma_b, comma_w, comma_d, comma
 dq	dsp_nl
 
 ;;; reserved

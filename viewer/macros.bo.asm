@@ -139,6 +139,14 @@ dq	"b,"
 db	BC_WORD_END
 
 db	BC_WORD_DEFINE
+dq	'"b!"'
+db	BC_NUM_PUSH
+dq	"b!"
+db	BC_WORD_INTERP
+dq	"w,"
+db	BC_WORD_END
+
+db	BC_WORD_DEFINE
 dq	'"!"'
 db	BC_NUM_PUSH
 dq	"!"

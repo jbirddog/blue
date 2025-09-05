@@ -392,6 +392,20 @@ db	BC_WORD_END
 db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
+dq	"set_b"
+db	BC_WORD_INTERP
+dq	"reg.tos2"
+db	BC_WORD_INTERP
+dq	"reg.tos"
+db	BC_WORD_INTERP
+dq	"b!"
+db	BC_WORD_RCALL
+dq	"next"
+db	BC_WORD_END
+
+db	BC_DSP_NL
+
+db	BC_WORD_DEFINE
 dq	"k_set"
 db	BC_WORD_RCALL
 dq	"dspop2"
