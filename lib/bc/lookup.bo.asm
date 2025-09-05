@@ -75,6 +75,9 @@ dq	"dstbase!"
 db	BC_COMMA
 db	BC_DSP_NL
 db	BC_WORD_RADDR
+dq	"set_b"
+db	BC_COMMA
+db	BC_WORD_RADDR
 dq	"k_set"
 db	BC_COMMA
 db	BC_WORD_RADDR
