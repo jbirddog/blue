@@ -393,6 +393,8 @@ db	BC_DSP_NL
 
 db	BC_WORD_DEFINE
 dq	"set_b"
+db	BC_WORD_RCALL
+dq	"dspop2"
 db	BC_WORD_INTERP
 dq	"reg.tos2"
 db	BC_WORD_INTERP

@@ -4,7 +4,7 @@ db	BC_NUM_COMP
 dq	0x0
 
 db	BC_NUM_PUSH
-dq	"_lueBLUE"
+dq	"XlueBLUE"
 db	BC_DST_BASE
 db	BC_SET
 
