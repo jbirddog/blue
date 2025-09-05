@@ -283,9 +283,8 @@ db	BC_WORD_DEFINE
 dq	"b!"
 db	BC_NUM_PUSH
 dq	0x88
-db	BC_COMMA_B
 db	BC_WORD_INTERP
-dq	"/r,"
+dq	"0/r,"
 db	BC_WORD_END
 
 db	BC_DSP_NL
