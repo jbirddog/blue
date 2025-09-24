@@ -2,6 +2,7 @@
 FASM ?= $(shell which fasm)
 
 BLUE_BC_ASMS = $(wildcard \
+	lib/aarch64/elf/*.bo.asm \
 	lib/bc/*.bo.asm \
 	lib/bc/view/*.bo.asm \
 	lib/bc/view/ansi/*.bo.asm \
@@ -11,6 +12,7 @@ BLUE_BC_ASMS = $(wildcard \
 	blue/*.bo.asm \
 	bnc/*.bo.asm \
 	viewer/*.bo.asm \
+	examples/aarch64/exit/*.bo.asm \
 	examples/exit/*.bo.asm \
 	examples/helloworld/*.bo.asm \
 	examples/readme/*.bo.asm \
@@ -26,6 +28,7 @@ TOOLS = bin/bnc bin/btv
 
 EXAMPLES = \
 	bin/examples/exit \
+	bin/examples/aarch64/exit \
 	bin/examples/helloworld
 
 .PHONY: all clean
@@ -96,6 +99,12 @@ obj/examples/exit.b: \
 	obj/lib/x86_64/linux.bo \
 	obj/lib/elf/headers.min.bo \
 	obj/examples/exit/exit.bo \
+	obj/lib/elf/fin.min.bo \
+
+obj/examples/aarch64/exit.b: \
+	obj/lib/elf/headers.min.bo \
+	obj/lib/aarch64/elf/headers.min.patch.bo \
+	obj/examples/aarch64/exit/exit.bo \
 	obj/lib/elf/fin.min.bo \
 
 obj/examples/helloworld.b: \
