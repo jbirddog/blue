@@ -194,6 +194,9 @@ Some links that may help fill in some back story/knowledge in no particular orde
 1. [POL](https://colorforth.github.io/POL.htm)
 1. [x86 Instruction Reference](https://www.felixcloutier.com/x86/)
 1. [x86-64 Registers](https://wiki.osdev.org/CPU_Registers_x86-64)
+1. [arm64 Syscall Table](https://arm64.syscall.sh/)
+1. [armv8 Tutorial](https://mariokartwii.com/armv8/)
+1. [a64 Instructions](https://www.scs.stanford.edu/~zyedidia/arm64/index.html)
 
 ## TODOs
 
@@ -211,3 +214,7 @@ Some links that may help fill in some back story/knowledge in no particular orde
 
 1. Factor hexnum more
 1. That trailing space that looks like a leading space issue
+
+### aarch64
+
+1. TCO once more testing has been done
