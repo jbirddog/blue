@@ -12,6 +12,7 @@ BLUE_BC_ASMS = $(wildcard \
 	blue/*.bo.asm \
 	bnc/*.bo.asm \
 	viewer/*.bo.asm \
+	examples/aarch64/*.bo.asm \
 	examples/aarch64/exit/*.bo.asm \
 	examples/exit/*.bo.asm \
 	examples/helloworld/*.bo.asm \
@@ -102,9 +103,10 @@ obj/examples/exit.b: \
 	obj/lib/elf/fin.min.bo \
 
 obj/examples/aarch64/exit.b: \
+	obj/examples/aarch64/macros.bo \
 	obj/lib/elf/headers.min.bo \
-	obj/lib/aarch64/elf/headers.min.patch.bo \
 	obj/examples/aarch64/exit/exit.bo \
+	obj/lib/aarch64/elf/headers.min.patch.bo \
 	obj/lib/elf/fin.min.bo \
 
 obj/examples/helloworld.b: \
