@@ -1,3 +1,5 @@
+_Note: All new development will be hosted on [Codeberg](https://codeberg.org/jbirddog/blue)._
+
 # Blue
 
 Blue is a single-pass bytecode interpreter for a [colorForth](https://colorforth.github.io/index.html) dialect.
